@@ -383,3 +383,62 @@ export async function handleLoanApplication(formData: FormData): Promise<LoanApp
   // Simuler un succès
   return { success: true, applicationId: applicationDetails.applicationId };
 }
+
+
+// Schema for bank transfers
+const ibanRegex = /^[A-Z]{2}[0-9]{2}[A-Z0-9]{4}[0-9]{7}([A-Z0-9]?){0,16}$/;
+const transferFormSchema = z.object({
+  recipientIban: z.string().regex(ibanRegex, "Format de l'IBAN invalide."),
+  recipientName: z.string().min(2, "Le nom du bénéficiaire est requis."),
+  amount: z.coerce
+    .number()
+    .positive("Le montant doit être supérieur à 0.")
+    .multipleOf(0.01, "Le montant ne peut avoir plus de 2 décimales."),
+  reason: z.string().min(3, "Une référence est requise.").max(140, "La référence ne peut dépasser 140 caractères."),
+});
+
+export type TransferFormInput = z.infer<typeof transferFormSchema>;
+export type TransferResult = { success: boolean; error?: string; transactionId?: string };
+
+export async function handleTransfer(
+  formData: TransferFormInput
+): Promise<TransferResult> {
+  // En situation réelle : vérifier l'authentification et le solde du client ici
+  
+  const parsed = transferFormSchema.safeParse(formData);
+
+  if (!parsed.success) {
+    const issues = parsed.error.issues.map((i) => i.message).join(", ");
+    return { success: false, error: `Données de virement invalides: ${issues}` };
+  }
+
+  // Simuler le traitement du virement
+  const transactionDetails = {
+    ...parsed.data,
+    transactionId: `VIR-${Date.now()}-${Math.random().toString(36).substring(2, 9).toUpperCase()}`,
+    status: "Completed",
+    date: new Date().toISOString(),
+  };
+
+  // Simuler un appel à un service bancaire ou webhook
+  if (process.env.TRANSFER_WEBHOOK_URL) {
+    try {
+      await fetch(process.env.TRANSFER_WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(transactionDetails),
+      });
+    } catch (error) {
+      console.error("Erreur lors de l'appel au webhook de virement:", error);
+      // En production, vous pourriez vouloir gérer ce cas différemment
+      // (par ex. mettre le virement en attente de traitement)
+      return { success: false, error: "Le service de virement est momentanément indisponible." };
+    }
+  }
+
+  // Pour le développement local, on logue le virement
+  console.log("Virement initié (aucun webhook configuré):", transactionDetails);
+
+  // Simuler un succès
+  return { success: true, transactionId: transactionDetails.transactionId };
+}
