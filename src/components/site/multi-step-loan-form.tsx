@@ -133,9 +133,9 @@ export default function MultiStepLoanForm() {
       country: "France",
       maritalStatus: "celibataire",
       numberOfChildren: 0,
-      birthDay: undefined,
-      birthMonth: undefined,
-      birthYear: undefined,
+      birthDay: '',
+      birthMonth: '',
+      birthYear: '',
       occupation: "",
       monthlyIncome: 3000,
       monthlyExpenses: 1000,
@@ -533,3 +533,5 @@ export default function MultiStepLoanForm() {
     </Card>
   );
 }
+
+    
