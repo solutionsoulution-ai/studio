@@ -260,13 +260,29 @@ const loanApplicationSchema = z.object({
   postalCode: z.string().min(4, "Le code postal est requis."),
   country: z.string().min(2, "Le pays est requis."),
   maritalStatus: z.enum(["celibataire", "marie", "divorce", "veuf"]),
+  numberOfChildren: z.coerce.number().int().min(0, "Le nombre d'enfants ne peut être négatif."),
+  birthDay: z.coerce.number().int().min(1).max(31),
+  birthMonth: z.coerce.number().int().min(1).max(12),
+  birthYear: z.coerce.number().int().min(1900).max(new Date().getFullYear() - 18),
   
   // Step 3
   occupation: z.string().min(2, "La profession est requise."),
   monthlyIncome: z.coerce.number().positive("Le revenu doit être positif."),
   monthlyExpenses: z.coerce.number().nonnegative("Les charges ne peuvent être négatives."),
   creditScore: z.coerce.number().min(300).max(850),
+}).refine((data) => {
+    try {
+        const date = new Date(data.birthYear, data.birthMonth - 1, data.birthDay);
+        // Check if the date is valid and also if the components match (e.g., handles Feb 30th)
+        return date.getFullYear() === data.birthYear && date.getMonth() === data.birthMonth - 1 && date.getDate() === data.birthDay;
+    } catch (e) {
+        return false;
+    }
+}, {
+    message: "La date de naissance est invalide.",
+    path: ["birthDay"], // Attach error to the first date field
 });
+
 
 export type LoanApplicationInput = z.infer<typeof loanApplicationSchema>;
 export type LoanApplicationResult = { success: boolean; error?: string; applicationId?: string };
@@ -279,8 +295,12 @@ export async function handleLoanApplication(formData: LoanApplicationInput): Pro
     return { success: false, error: `Données du formulaire invalides: ${issues}` };
   }
 
+  const { birthDay, birthMonth, birthYear, ...restOfData } = parsed.data;
+  const dateOfBirth = new Date(birthYear, birthMonth - 1, birthDay).toISOString();
+
   const applicationDetails = {
-    ...parsed.data,
+    ...restOfData,
+    dateOfBirth,
     applicationId: `APP-${Date.now()}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`,
     submissionDate: new Date().toISOString(),
   };
@@ -304,5 +324,3 @@ export async function handleLoanApplication(formData: LoanApplicationInput): Pro
   // Simuler un succès
   return { success: true, applicationId: applicationDetails.applicationId };
 }
-
-    

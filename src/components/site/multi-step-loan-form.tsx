@@ -22,7 +22,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { handleLoanApplication } from "@/app/actions";
-import { Loader2, ArrowRight, ArrowLeft, Send, CheckCircle, FileText, User, Banknote, Home } from "lucide-react";
+import { Loader2, ArrowRight, ArrowLeft, Send, CheckCircle, FileText, User, Banknote } from "lucide-react";
 
 // Schémas de validation pour chaque étape
 const step1Schema = z.object({
@@ -41,6 +41,10 @@ const step2Schema = z.object({
   postalCode: z.string().min(4, "Le code postal est requis."),
   country: z.string().min(2, "Le pays est requis."),
   maritalStatus: z.enum(["celibataire", "marie", "divorce", "veuf"], { required_error: "Veuillez sélectionner votre situation." }),
+  numberOfChildren: z.coerce.number().int().min(0, "Le nombre d'enfants ne peut être négatif."),
+  birthDay: z.coerce.number().int().min(1, "Le jour doit être valide.").max(31),
+  birthMonth: z.coerce.number().int().min(1, "Le mois doit être valide.").max(12),
+  birthYear: z.coerce.number().int().min(1900, "L'année doit être valide.").max(new Date().getFullYear() - 18, "Vous devez avoir au moins 18 ans."),
 });
 
 const step3Schema = z.object({
@@ -52,12 +56,23 @@ const step3Schema = z.object({
 
 
 // Schéma complet pour la soumission finale
-const fullLoanSchema = step1Schema.merge(step2Schema).merge(step3Schema);
+const fullLoanSchema = step1Schema.merge(step2Schema).merge(step3Schema).refine((data) => {
+    try {
+        const date = new Date(data.birthYear, data.birthMonth - 1, data.birthDay);
+        return date.getFullYear() === data.birthYear && date.getMonth() === data.birthMonth - 1 && date.getDate() === data.birthDay;
+    } catch (e) {
+        return false;
+    }
+}, {
+    message: "La date de naissance est invalide.",
+    path: ["birthDay"], // Attach error to the first date field
+});
+
 type FullLoanFormValues = z.infer<typeof fullLoanSchema>;
 
 const steps = [
   { id: "Étape 1", name: "Informations sur le Prêt", schema: step1Schema, icon: FileText },
-  { id: "Étape 2", name: "Coordonnées et Adresse", schema: step2Schema, icon: User },
+  { id: "Étape 2", name: "Informations Personnelles", schema: step2Schema, icon: User },
   { id: "Étape 3", name: "Situation Financière", schema: step3Schema, icon: Banknote },
   { id: "Étape 4", name: "Confirmation", icon: CheckCircle },
 ];
@@ -83,6 +98,10 @@ export default function MultiStepLoanForm() {
       postalCode: "",
       country: "France",
       maritalStatus: "celibataire",
+      numberOfChildren: 0,
+      birthDay: undefined,
+      birthMonth: undefined,
+      birthYear: undefined,
       occupation: "",
       monthlyIncome: 3000,
       monthlyExpenses: 1000,
@@ -92,28 +111,25 @@ export default function MultiStepLoanForm() {
 
   const processForm = async (data: FieldValues) => {
     setIsLoading(true);
-    if (currentStep < steps.length - 2) { 
-        setCurrentStep(currentStep + 1);
-    } else {
-        try {
-            const result = await handleLoanApplication(data as FullLoanFormValues);
-            if (result.success) {
-                setIsSubmitted(true);
-                setCurrentStep(currentStep + 1); 
-            } else {
-                toast({
-                    title: "Erreur lors de la soumission",
-                    description: result.error || "Un problème est survenu.",
-                    variant: "destructive",
-                });
-            }
-        } catch (error) {
-             toast({
-                title: "Erreur inattendue",
-                description: "Impossible de traiter votre demande.",
+    // This is the final submission step
+    try {
+        const result = await handleLoanApplication(data as FullLoanFormValues);
+        if (result.success) {
+            setIsSubmitted(true);
+            setCurrentStep(currentStep + 1); 
+        } else {
+            toast({
+                title: "Erreur lors de la soumission",
+                description: result.error || "Un problème est survenu.",
                 variant: "destructive",
             });
         }
+    } catch (error) {
+            toast({
+            title: "Erreur inattendue",
+            description: "Impossible de traiter votre demande.",
+            variant: "destructive",
+        });
     }
     setIsLoading(false);
   };
@@ -125,12 +141,8 @@ export default function MultiStepLoanForm() {
         if (result) {
            setCurrentStep(currentStep + 1);
         }
-    } else {
-        // For the last step (recap)
-       setCurrentStep(currentStep + 1);
     }
   };
-
 
   const prevStep = () => {
     if (currentStep > 0) {
@@ -150,7 +162,7 @@ export default function MultiStepLoanForm() {
                     <p className="text-muted-foreground">
                         Merci. Votre demande de prêt a été soumise avec succès. Un conseiller vous contactera très prochainement pour discuter des prochaines étapes.
                     </p>
-                    <Button onClick={() => window.location.reload()} className="mt-6">Faire une nouvelle demande</Button>
+                    <Button onClick={() => { form.reset(); setCurrentStep(0); setIsSubmitted(false); }} className="mt-6">Faire une nouvelle demande</Button>
                 </motion.div>
             </CardContent>
         </Card>
@@ -162,7 +174,7 @@ export default function MultiStepLoanForm() {
       <CardContent className="p-6 md:p-8">
         <div className="mb-8">
             <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-medium text-primary">{steps[currentStep].id} / {steps.length - 1}</span>
+                <span className="text-sm font-medium text-primary">{steps[currentStep].id} / {steps.length -1}</span>
                 <span className="text-sm text-muted-foreground">{steps[currentStep].name}</span>
             </div>
           <Progress value={progress} className="h-2" />
@@ -237,6 +249,8 @@ export default function MultiStepLoanForm() {
                             <FormMessage />
                         </FormItem>
                         )} />
+                    </div>
+                     <div className="grid sm:grid-cols-2 gap-4">
                         <FormField control={form.control} name="email" render={({ field }) => (
                         <FormItem>
                             <FormLabel>Email</FormLabel>
@@ -251,7 +265,30 @@ export default function MultiStepLoanForm() {
                             <FormMessage />
                         </FormItem>
                         )} />
-                    </div>
+                     </div>
+                     <div>
+                        <FormLabel>Date de naissance</FormLabel>
+                        <div className="grid grid-cols-3 gap-2">
+                           <FormField control={form.control} name="birthDay" render={({ field }) => (
+                            <FormItem>
+                                <FormControl><Input type="number" placeholder="Jour" {...field} /></FormControl>
+                                <FormMessage />
+                            </FormItem>
+                            )} />
+                             <FormField control={form.control} name="birthMonth" render={({ field }) => (
+                            <FormItem>
+                                <FormControl><Input type="number" placeholder="Mois" {...field} /></FormControl>
+                                <FormMessage />
+                            </FormItem>
+                            )} />
+                             <FormField control={form.control} name="birthYear" render={({ field }) => (
+                            <FormItem>
+                                <FormControl><Input type="number" placeholder="Année" {...field} /></FormControl>
+                                <FormMessage />
+                            </FormItem>
+                            )} />
+                        </div>
+                     </div>
                      <FormField control={form.control} name="address" render={({ field }) => (
                         <FormItem>
                         <FormLabel>Adresse</FormLabel>
@@ -282,25 +319,34 @@ export default function MultiStepLoanForm() {
                             </FormItem>
                         )} />
                     </div>
-                     <FormField control={form.control} name="maritalStatus" render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Situation familiale</FormLabel>
-                         <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Sélectionnez votre situation" />
-                            </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                                <SelectItem value="celibataire">Célibataire</SelectItem>
-                                <SelectItem value="marie">Marié(e)</SelectItem>
-                                <SelectItem value="divorce">Divorcé(e)</SelectItem>
-                                <SelectItem value="veuf">Veuf(ve)</SelectItem>
-                            </SelectContent>
-                        </Select>
-                        <FormMessage />
-                        </FormItem>
-                     )} />
+                     <div className="grid sm:grid-cols-2 gap-4">
+                        <FormField control={form.control} name="maritalStatus" render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Situation familiale</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Sélectionnez votre situation" />
+                                </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                    <SelectItem value="celibataire">Célibataire</SelectItem>
+                                    <SelectItem value="marie">Marié(e)</SelectItem>
+                                    <SelectItem value="divorce">Divorcé(e)</SelectItem>
+                                    <SelectItem value="veuf">Veuf(ve)</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <FormMessage />
+                            </FormItem>
+                        )} />
+                        <FormField control={form.control} name="numberOfChildren" render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Nombre d'enfants</FormLabel>
+                            <FormControl><Input type="number" {...field} /></FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )} />
+                     </div>
                   </div>
                 )}
                 {currentStep === 2 && (
@@ -345,10 +391,13 @@ export default function MultiStepLoanForm() {
                             <p><strong>Montant :</strong> {form.getValues("loanAmount")} € sur {form.getValues("loanTerm")} mois</p>
                             <hr className="my-2" />
                             <p><strong>Nom :</strong> {form.getValues("firstName")} {form.getValues("lastName")}</p>
+                            <p><strong>Date de naissance :</strong> {form.getValues("birthDay")}/{form.getValues("birthMonth")}/{form.getValues("birthYear")}</p>
+                            <p><strong>Email :</strong> {form.getValues("email")}</p>
                              <p><strong>Adresse :</strong> {form.getValues("address")}, {form.getValues("postalCode")} {form.getValues("city")}</p>
                             <hr className="my-2" />
                             <p><strong>Profession :</strong> {form.getValues("occupation")}</p>
                             <p><strong>Revenu mensuel :</strong> {form.getValues("monthlyIncome")} €</p>
+                             <p><strong>Situation familiale :</strong> {form.getValues("maritalStatus")} ({form.getValues("numberOfChildren")} enfant(s))</p>
                         </div>
                         <p className="text-xs text-muted-foreground">En cliquant sur "Envoyer ma demande", vous confirmez que les informations fournies sont exactes et complètes.</p>
                     </div>
@@ -358,19 +407,25 @@ export default function MultiStepLoanForm() {
 
             <div className="flex justify-between pt-4">
               <Button type="button" variant="outline" onClick={prevStep} disabled={currentStep === 0 || isLoading}>
-                <ArrowLeft /> Précédent
+                <ArrowLeft className="mr-2" /> Précédent
               </Button>
-               {currentStep === steps.length - 1 ? (
+               {currentStep === steps.length - 2 ? ( // Penultimate step
+                 <Button type="button" onClick={nextStep} disabled={isLoading}>
+                    {isLoading && <Loader2 className="animate-spin mr-2" />}
+                    Vérifier et soumettre
+                    <ArrowRight className="ml-2" />
+                </Button>
+               ) : currentStep === steps.length - 1 ? ( // Last step (recap)
                  <Button type="submit" disabled={isLoading}>
-                    {isLoading && <Loader2 className="animate-spin" />}
+                    {isLoading && <Loader2 className="animate-spin mr-2" />}
                     Envoyer ma demande
-                    <Send />
+                    <Send className="ml-2" />
                 </Button>
                ) : (
                 <Button type="button" onClick={nextStep} disabled={isLoading}>
-                    {isLoading && <Loader2 className="animate-spin" />}
+                    {isLoading && <Loader2 className="animate-spin mr-2" />}
                     Suivant
-                    <ArrowRight />
+                    <ArrowRight className="ml-2" />
                 </Button>
                )}
             </div>
@@ -380,5 +435,3 @@ export default function MultiStepLoanForm() {
     </Card>
   );
 }
-
-    
