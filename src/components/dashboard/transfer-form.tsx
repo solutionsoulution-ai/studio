@@ -16,8 +16,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { handleTransfer, type TransferFormInput } from "@/app/actions";
-import { Loader2, Send } from "lucide-react";
-import { Textarea } from "../ui/textarea";
+import { Loader2, Send, CheckCircle, RefreshCw } from "lucide-react";
+import { Progress } from "../ui/progress";
 
 const ibanRegex = /^[A-Z]{2}[0-9]{2}[A-Z0-9]{4}[0-9]{7}([A-Z0-9]?){0,16}$/;
 const transferFormSchema = z.object({
@@ -30,9 +30,12 @@ const transferFormSchema = z.object({
   reason: z.string().min(3, "Une référence est requise.").max(140, "La référence ne peut dépasser 140 caractères."),
 });
 
+type TransferState = "idle" | "loading" | "processing" | "success" | "error";
+
 export default function TransferForm() {
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
+  const [transferState, setTransferState] = useState<TransferState>("idle");
+  const [progress, setProgress] = useState(0);
 
   const form = useForm<TransferFormInput>({
     resolver: zodResolver(transferFormSchema),
@@ -45,25 +48,66 @@ export default function TransferForm() {
   });
 
   async function onSubmit(values: TransferFormInput) {
-    setIsLoading(true);
+    setTransferState("loading");
     const result = await handleTransfer(values);
-    setIsLoading(false);
-
+    
     if (result.success) {
-      toast({
-        title: "Virement envoyé !",
-        description: `Le virement de ${values.amount}€ à ${values.recipientName} a été initié.`,
-        variant: "default",
-      });
-      form.reset();
+      setTransferState("processing");
+      
+      // Simulation de la progression du virement
+      const interval = setInterval(() => {
+        setProgress((prev) => {
+          if (prev >= 100) {
+            clearInterval(interval);
+            setTransferState("success");
+            return 100;
+          }
+          return prev + 10;
+        });
+      }, 300);
+
     } else {
        toast({
         title: "Échec du virement",
         description: result.error || "Un problème est survenu. Veuillez réessayer.",
         variant: "destructive",
       });
+      setTransferState("error");
     }
   }
+
+  const resetForm = () => {
+    form.reset();
+    setProgress(0);
+    setTransferState("idle");
+  }
+
+  if (transferState === "processing" || transferState === "success") {
+    return (
+        <div className="text-center p-8 border rounded-lg">
+            {transferState === "processing" ? (
+                <>
+                    <Loader2 className="animate-spin text-primary w-12 h-12 mx-auto mb-4" />
+                    <h3 className="text-xl font-semibold">Virement en cours...</h3>
+                    <p className="text-muted-foreground mb-4">Votre virement est en cours de traitement.</p>
+                    <Progress value={progress} className="w-full" />
+                </>
+            ) : (
+                 <>
+                    <CheckCircle className="text-green-500 w-12 h-12 mx-auto mb-4" />
+                    <h3 className="text-xl font-semibold">Virement Effectué !</h3>
+                    <p className="text-muted-foreground mb-6">Le virement a été initié avec succès.</p>
+                    <Button onClick={resetForm}>
+                        <RefreshCw className="mr-2" />
+                        Effectuer un autre virement
+                    </Button>
+                </>
+            )}
+        </div>
+    )
+  }
+
+  const isLoading = transferState === "loading";
 
   return (
     <Form {...form}>
