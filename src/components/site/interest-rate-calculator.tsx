@@ -11,9 +11,9 @@ type InterestRateCalculatorProps = {
     description?: string;
     defaultLoanAmount?: number;
     defaultRate?: number;
-    defaultTerm?: number;
+    defaultTerm?: number; // Now in months
     maxAmount?: number;
-    maxTerm?: number;
+    maxTerm?: number; // Now in months
 }
 
 export default function InterestRateCalculator({
@@ -21,20 +21,20 @@ export default function InterestRateCalculator({
     description = "Utilisez notre calculateur simple pour estimer vos mensualités. Ajustez les curseurs pour voir comment le montant, le taux et la durée du prêt affectent vos paiements.",
     defaultLoanAmount = 50000,
     defaultRate = 7.5,
-    defaultTerm = 5,
+    defaultTerm = 60, // 5 years in months
     maxAmount = 500000,
-    maxTerm = 30
+    maxTerm = 360 // 30 years in months
 }: InterestRateCalculatorProps) {
   const [loanAmount, setLoanAmount] = useState(defaultLoanAmount);
   const [interestRate, setInterestRate] = useState(defaultRate);
-  const [loanTerm, setLoanTerm] = useState(defaultTerm);
+  const [loanTerm, setLoanTerm] = useState(defaultTerm); // State is in months
 
   const monthlyPayment = useMemo(() => {
     if (loanAmount <= 0 || interestRate <= 0 || loanTerm <= 0) {
       return 0;
     }
     const monthlyRate = interestRate / 100 / 12;
-    const numberOfPayments = loanTerm * 12;
+    const numberOfPayments = loanTerm; // loanTerm is already in months
     const payment =
       loanAmount *
       (monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) /
@@ -93,11 +93,11 @@ export default function InterestRateCalculator({
                         />
                     </div>
                     <div>
-                        <Label htmlFor="loanTerm" className="text-lg">Durée du Prêt</Label>
-                        <p className="text-2xl font-bold text-primary">{loanTerm} {loanTerm > 1 ? 'Ans' : 'An'}</p>
+                        <Label htmlFor="loanTerm" className="text-lg">Durée du Prêt (Mois)</Label>
+                        <p className="text-2xl font-bold text-primary">{loanTerm} Mois</p>
                         <Slider
                             id="loanTerm"
-                            min={1}
+                            min={12}
                             max={maxTerm}
                             step={1}
                             value={[loanTerm]}

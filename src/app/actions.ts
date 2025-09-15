@@ -247,7 +247,7 @@ export async function handleCreateClientAndAccount(formData: CreateClientAndAcco
 const loanApplicationSchema = z.object({
   loanType: z.enum(["immobilier", "consommation", "auto", "entreprise", "rachat"]),
   loanAmount: z.coerce.number(),
-  loanTerm: z.coerce.number(),
+  loanTerm: z.coerce.number(), // This is now in months
   firstName: z.string(),
   lastName: z.string(),
   email: z.string().email(),

@@ -100,10 +100,10 @@ export default function PretPersonnelPage() {
             title="Simulez votre prêt personnel"
             description="Estimez vos remboursements mensuels pour vos projets personnels."
             defaultLoanAmount={10000} 
-            defaultTerm={4} 
+            defaultTerm={48} 
             defaultRate={2} 
             maxAmount={75000}
-            maxTerm={10}
+            maxTerm={120}
           />
         </section>
 

@@ -20,7 +20,7 @@ const immoFaqs = [
   },
   {
     question: "Quelle est la durée maximale pour un prêt immobilier ?",
-    answer: "La durée de remboursement peut aller jusqu'à 25 ans, voire 30 ans dans de très rares cas. Une durée plus courte signifie des mensualités plus élevées mais un coût total du crédit plus faible.",
+    answer: "La durée de remboursement peut aller jusqu'à 25 ans (300 mois), voire 30 ans (360 mois) dans de très rares cas. Une durée plus courte signifie des mensualités plus élevées mais un coût total du crédit plus faible.",
   },
 ];
 
@@ -98,10 +98,10 @@ export default function PretImmobilierPage() {
             title="Calculez votre prêt immobilier"
             description="Simulez les mensualités de votre futur achat immobilier en ajustant le montant et la durée."
             defaultLoanAmount={200000} 
-            defaultTerm={25} 
+            defaultTerm={300} 
             defaultRate={2} 
             maxAmount={1500000}
-            maxTerm={30}
+            maxTerm={360}
           />
         </section>
 

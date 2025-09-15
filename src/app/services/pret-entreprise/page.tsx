@@ -100,7 +100,7 @@ export default function PretEntreprisePage() {
               title="Simulez votre financement professionnel"
               description="Estimez les remboursements pour vos projets d'investissement, de développement ou de trésorerie."
               defaultLoanAmount={100000} 
-              defaultTerm={7} 
+              defaultTerm={84} 
               defaultRate={2} 
               maxAmount={1000000} 
             />

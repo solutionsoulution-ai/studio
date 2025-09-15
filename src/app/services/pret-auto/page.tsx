@@ -99,10 +99,10 @@ export default function PretAutoPage() {
             title="Estimez vos mensualités auto"
             description="Ajustez le montant et la durée pour simuler le remboursement de votre prêt auto."
             defaultLoanAmount={20000} 
-            defaultTerm={5} 
+            defaultTerm={60} 
             defaultRate={2} 
             maxAmount={75000}
-            maxTerm={7}
+            maxTerm={84}
           />
         </section>
 

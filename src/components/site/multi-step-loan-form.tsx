@@ -28,7 +28,7 @@ import { Loader2, ArrowRight, ArrowLeft, Send, CheckCircle, FileText, User, Bank
 const step1Schema = z.object({
   loanType: z.enum(["immobilier", "consommation", "auto", "entreprise", "rachat"], { required_error: "Veuillez sélectionner un type de prêt." }),
   loanAmount: z.coerce.number().positive("Le montant doit être positif."),
-  loanTerm: z.coerce.number().int().min(1, "La durée doit être d'au moins 1 an.").max(30, "La durée ne peut excéder 30 ans."),
+  loanTerm: z.coerce.number().int().min(12, "La durée doit être d'au moins 12 mois.").max(360, "La durée ne peut excéder 360 mois."),
 });
 
 const step2Schema = z.object({
@@ -66,7 +66,7 @@ export default function MultiStepLoanForm() {
     defaultValues: {
       loanType: "immobilier",
       loanAmount: 100000,
-      loanTerm: 20,
+      loanTerm: 240, // 20 years in months
       firstName: "",
       lastName: "",
       email: "",
@@ -200,7 +200,7 @@ export default function MultiStepLoanForm() {
                     )} />
                     <FormField control={form.control} name="loanTerm" render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Durée de remboursement (années)</FormLabel>
+                        <FormLabel>Durée de remboursement (mois)</FormLabel>
                         <FormControl><Input type="number" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
@@ -269,7 +269,7 @@ export default function MultiStepLoanForm() {
                         <h3 className="text-lg font-bold">Récapitulatif de votre demande</h3>
                         <div className="p-4 bg-muted/50 rounded-lg space-y-2">
                             <p><strong>Type de prêt :</strong> {form.getValues("loanType")}</p>
-                            <p><strong>Montant :</strong> {form.getValues("loanAmount")} € sur {form.getValues("loanTerm")} ans</p>
+                            <p><strong>Montant :</strong> {form.getValues("loanAmount")} € sur {form.getValues("loanTerm")} mois</p>
                             <hr className="my-2" />
                             <p><strong>Nom :</strong> {form.getValues("firstName")} {form.getValues("lastName")}</p>
                             <p><strong>Email :</strong> {form.getValues("email")}</p>

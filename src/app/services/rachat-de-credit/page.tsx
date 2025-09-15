@@ -1,4 +1,4 @@
-import SiteHeader from "@/components/site/site-header";
+import SiteHeader from "@/components/site/site-footer";
 import SiteFooter from "@/components/site/site-footer";
 import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
@@ -99,10 +99,10 @@ export default function RachatCreditPage() {
             title="Simulez votre rachat de crédit"
             description="Voyez comment le regroupement de vos prêts peut affecter vos paiements mensuels."
             defaultLoanAmount={40000} 
-            defaultTerm={10} 
+            defaultTerm={120} 
             defaultRate={2} 
             maxAmount={250000}
-            maxTerm={15}
+            maxTerm={180}
           />
         </section>
 
