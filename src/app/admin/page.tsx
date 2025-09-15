@@ -39,6 +39,7 @@ const createClientAndAccountSchema = z.object({
   email: z.string().email({ message: "Veuillez entrer une adresse e-mail valide." }),
   password: z.string().min(8, { message: "Le mot de passe doit comporter au moins 8 caractères." }),
   // Infos Compte Bancaire
+  accountNumber: z.string().min(1, { message: "Le numéro de compte est requis." }),
   iban: z.string().min(1, { message: "L'IBAN est requis." }),
   bic: z.string().min(1, { message: "Le code BIC/SWIFT est requis." }),
   // Infos Prêt (Optionnel)
@@ -124,6 +125,7 @@ const CreateClientAndAccountForm = () => {
     defaultValues: { 
       email: "", 
       password: "", 
+      accountNumber: "",
       iban: "", 
       bic: "",
       loanType: "none",
@@ -197,7 +199,20 @@ const CreateClientAndAccountForm = () => {
             
             <div className="space-y-4 p-4 border rounded-md">
                 <h3 className="font-semibold text-lg">Compte Bancaire Associé</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <FormField
+                        control={form.control}
+                        name="accountNumber"
+                        render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Numéro de Compte</FormLabel>
+                            <FormControl>
+                            <Input placeholder="00012345678" {...field} disabled={isLoading} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                        )}
+                    />
                     <FormField
                         control={form.control}
                         name="iban"
@@ -331,5 +346,3 @@ export default function AdminPage() {
     </main>
   );
 }
-
-    

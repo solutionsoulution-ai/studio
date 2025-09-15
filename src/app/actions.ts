@@ -181,6 +181,7 @@ const createClientAndAccountSchema = z.object({
   email: z.string().email({ message: "Veuillez entrer une adresse e-mail valide." }),
   password: z.string().min(8, { message: "Le mot de passe doit comporter au moins 8 caractères." }),
   // Infos Compte Bancaire
+  accountNumber: z.string().min(1, { message: "Le numéro de compte est requis." }),
   iban: z.string().min(1, { message: "L'IBAN est requis." }),
   bic: z.string().min(1, { message: "Le code BIC/SWIFT est requis." }),
   // Infos Prêt (Optionnel)
@@ -240,5 +241,3 @@ export async function handleCreateClientAndAccount(formData: CreateClientAndAcco
   console.log("Création de client/compte (aucun webhook configuré):", clientDetails);
   return { success: true, details: clientDetails };
 }
-
-    
