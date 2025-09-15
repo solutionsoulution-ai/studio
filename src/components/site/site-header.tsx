@@ -14,7 +14,7 @@ import {
 import { cn } from "@/lib/utils";
 
 const mainNavLinks = [
-  { href: "/#eligibilite", label: "Éligibilité" },
+  { href: "/eligibilite", label: "Éligibilité" },
   { href: "/#calculateur", label: "Calculateur" },
   { href: "/#faq", label: "FAQ" },
   { href: "/#contact", label: "Contact" },

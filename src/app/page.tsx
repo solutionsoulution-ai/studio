@@ -1,10 +1,12 @@
 import SiteHeader from '@/components/site/site-header';
 import HeroSection from '@/components/site/hero-section';
-import EligibilityChecker from '@/components/site/eligibility-checker';
 import InterestRateCalculator from '@/components/site/interest-rate-calculator';
 import FaqSection from '@/components/site/faq-section';
 import ContactForm from '@/components/site/contact-form';
 import SiteFooter from '@/components/site/site-footer';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { Sparkles } from 'lucide-react';
 
 export default function Home() {
   return (
@@ -13,8 +15,21 @@ export default function Home() {
       <main className="flex-1">
         <HeroSection />
 
-        <section id="eligibilite" className="container mx-auto py-16 md:py-24">
-          <EligibilityChecker />
+        <section id="eligibilite" className="container mx-auto py-16 md:py-24 text-center">
+            <div className="mx-auto max-w-3xl">
+                <div className="flex items-center gap-3 justify-center">
+                    <Sparkles className="w-8 h-8 text-primary" />
+                    <h2 className="text-3xl font-bold tracking-tight font-headline">Vérifiez Votre Éligibilité en un Instant</h2>
+                </div>
+                <p className="mt-4 text-lg text-muted-foreground">
+                    Utilisez notre outil d'évaluation par IA pour obtenir une réponse rapide sur votre admissibilité à un prêt. C'est simple, rapide et sans engagement.
+                </p>
+                <div className="mt-8">
+                    <Button size="lg" asChild>
+                        <Link href="/eligibilite">Démarrer la vérification</Link>
+                    </Button>
+                </div>
+            </div>
         </section>
 
         <section id="calculateur" className="w-full py-16 md:py-24 bg-muted/30">

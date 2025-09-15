@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Landmark, Linkedin, Twitter, Facebook } from "lucide-react";
 
 const mainNavLinks = [
-  { href: "/#eligibilite", label: "Éligibilité" },
+  { href: "/eligibilite", label: "Éligibilité" },
   { href: "/#calculateur", label: "Calculateur" },
   { href: "/#faq", label: "FAQ" },
   { href: "/#contact", label: "Contact" },
@@ -17,8 +17,9 @@ const serviceLinks = [
 ];
 
 const legalLinks = [
-    { href: "#", label: "Politique de confidentialité" },
-    { href: "#", label: "Conditions d'utilisation" },
+    { href: "/politique-de-confidentialite", label: "Politique de confidentialité" },
+    { href: "/conditions-generales", label: "Conditions d'utilisation" },
+    { href: "/mentions-legales", label: "Mentions Légales" },
 ];
 
 const socialLinks = [
