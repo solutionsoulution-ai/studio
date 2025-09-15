@@ -1,5 +1,7 @@
 "use server";
 
+import "dotenv/config"; // Force le chargement des variables d'environnement
+
 import {
   assessLoanEligibility,
   type LoanEligibilityInput,
