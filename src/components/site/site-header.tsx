@@ -18,7 +18,7 @@ const mainNavLinks = [
   { href: "/eligibilite", label: "Éligibilité" },
   { href: "/#calculateur", label: "Calculateur" },
   { href: "/#faq", label: "FAQ" },
-  { href: "/#contact", label: "Contact" },
+  { href: "/contact", label: "Contact" },
 ];
 
 const serviceLinks = [

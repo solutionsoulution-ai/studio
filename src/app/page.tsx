@@ -2,7 +2,6 @@ import SiteHeader from '@/components/site/site-header';
 import HeroSection from '@/components/site/hero-section';
 import InterestRateCalculator from '@/components/site/interest-rate-calculator';
 import FaqSection from '@/components/site/faq-section';
-import ContactForm from '@/components/site/contact-form';
 import SiteFooter from '@/components/site/site-footer';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -40,9 +39,6 @@ export default function Home() {
           <FaqSection />
         </section>
 
-        <section id="contact" className="w-full py-16 md:py-24 bg-muted/30">
-          <ContactForm />
-        </section>
       </main>
       <SiteFooter />
     </div>
