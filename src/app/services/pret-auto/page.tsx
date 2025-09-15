@@ -4,7 +4,7 @@ import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { CheckCircle, FilePen, Bot, HandCoins } from "lucide-react";
+import { CheckCircle, FilePen, Search, HandCoins } from "lucide-react";
 import InterestRateCalculator from "@/components/site/interest-rate-calculator";
 import FaqSection from "@/components/site/faq-section";
 import HowItWorksSection, { HowItWorksStep } from "@/components/site/how-it-works-section";
@@ -32,7 +32,7 @@ const howItWorksSteps: HowItWorksStep[] = [
       description: "Faites votre demande en quelques minutes et recevez une réponse de principe immédiate.",
     },
     {
-      icon: "Bot",
+      icon: "Search",
       title: "2. Approbation Intelligente",
       description: "Notre IA analyse votre profil pour vous fournir une offre ferme rapidement, souvent en quelques heures.",
     },

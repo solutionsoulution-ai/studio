@@ -4,7 +4,7 @@ import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { CheckCircle, FilePen, Bot, HandCoins } from "lucide-react";
+import { CheckCircle, FilePen, Search, HandCoins } from "lucide-react";
 import InterestRateCalculator from "@/components/site/interest-rate-calculator";
 import FaqSection from "@/components/site/faq-section";
 import HowItWorksSection, { HowItWorksStep } from "@/components/site/how-it-works-section";
@@ -32,7 +32,7 @@ const howItWorksSteps: HowItWorksStep[] = [
       description: "Simulez votre prêt en ligne pour déterminer le montant et la durée qui vous conviennent.",
     },
     {
-      icon: "Bot",
+      icon: "Search",
       title: "2. Obtenez une réponse",
       description: "Soumettez votre demande en ligne et notre technologie nous permet de vous donner une réponse de principe immédiate.",
     },

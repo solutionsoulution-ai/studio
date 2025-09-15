@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import type { LucideProps } from "lucide-react";
-import { FilePen, DollarSign, HandCoins, Search, Bot } from 'lucide-react';
+import { FilePen, DollarSign, HandCoins, Search } from 'lucide-react';
 import * as React from "react";
 
 // Crée un mappage des noms d'icônes vers les composants d'icônes.
@@ -11,7 +11,6 @@ const iconMap = {
   DollarSign,
   HandCoins,
   Search,
-  Bot,
 };
 
 type IconName = keyof typeof iconMap;
