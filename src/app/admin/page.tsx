@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { handleAdminLogin, handleCreateUser, handleGenerateBankAccount } from "@/app/actions";
+import { handleAdminLogin, handleCreateUser, handleCreateLoanAccount } from "@/app/actions";
 import { Loader2, UserPlus, Shield, Landmark } from "lucide-react";
 
 // Schéma pour le formulaire de connexion admin
@@ -39,13 +39,15 @@ const createUserSchema = z.object({
 });
 type CreateUserValues = z.infer<typeof createUserSchema>;
 
-// Schéma pour la génération de compte bancaire
-const generateBankAccountSchema = z.object({
+// Schéma pour la création de compte de prêt
+const createLoanAccountSchema = z.object({
   clientEmail: z.string().email({ message: "Veuillez entrer une adresse e-mail valide." }),
-  accountType: z.enum(["courant", "epargne"]),
-  initialBalance: z.coerce.number().min(0, "Le solde initial ne peut pas être négatif."),
+  loanType: z.enum(["immobilier", "consommation", "auto"]),
+  loanAmount: z.coerce.number().positive("Le montant du prêt doit être positif."),
+  interestRate: z.coerce.number().min(0, "Le taux d'intérêt ne peut pas être négatif."),
+  loanTerm: z.coerce.number().positive("La durée du prêt doit être positive (en années)."),
 });
-type GenerateBankAccountValues = z.infer<typeof generateBankAccountSchema>;
+type CreateLoanAccountValues = z.infer<typeof createLoanAccountSchema>;
 
 
 const AdminLoginForm = ({ onLoginSuccess }: { onLoginSuccess: () => void }) => {
@@ -181,30 +183,30 @@ const CreateUserForm = () => {
   );
 };
 
-const GenerateBankAccountForm = () => {
+const CreateLoanAccountForm = () => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
-  const form = useForm<GenerateBankAccountValues>({
-    resolver: zodResolver(generateBankAccountSchema),
-    defaultValues: { clientEmail: "", initialBalance: 0 },
+  const form = useForm<CreateLoanAccountValues>({
+    resolver: zodResolver(createLoanAccountSchema),
+    defaultValues: { clientEmail: "" },
   });
 
-  async function onSubmit(values: GenerateBankAccountValues) {
+  async function onSubmit(values: CreateLoanAccountValues) {
     setIsLoading(true);
-    const result = await handleGenerateBankAccount(values);
+    const result = await handleCreateLoanAccount(values);
     setIsLoading(false);
 
     if (result.success) {
       toast({
-        title: "Compte bancaire créé !",
-        description: `Le compte pour ${values.clientEmail} (IBAN: ${result.accountDetails.iban}) a été créé.`,
+        title: "Compte de prêt créé !",
+        description: `Le prêt pour ${values.clientEmail} (ID: ${result.loanDetails.loanId}) a été créé.`,
       });
       form.reset();
     } else {
       toast({
         title: "Erreur",
-        description: result.error || "Impossible de générer le compte bancaire.",
+        description: result.error || "Impossible de créer le compte de prêt.",
         variant: "destructive",
       });
     }
@@ -214,9 +216,9 @@ const GenerateBankAccountForm = () => {
     <Card className="w-full max-w-md shadow-lg">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-xl font-bold">
-          <Landmark /> Générer un Compte Bancaire
+          <Landmark /> Créer un Compte de Prêt
         </CardTitle>
-        <CardDescription>Associez un nouveau compte à un client.</CardDescription>
+        <CardDescription>Créez un nouveau prêt pour un client existant.</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -236,10 +238,10 @@ const GenerateBankAccountForm = () => {
             />
             <FormField
               control={form.control}
-              name="accountType"
+              name="loanType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Type de Compte</FormLabel>
+                  <FormLabel>Type de Prêt</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoading}>
                     <FormControl>
                       <SelectTrigger>
@@ -247,8 +249,9 @@ const GenerateBankAccountForm = () => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="courant">Compte Courant</SelectItem>
-                      <SelectItem value="epargne">Compte Épargne</SelectItem>
+                      <SelectItem value="immobilier">Prêt Immobilier</SelectItem>
+                      <SelectItem value="consommation">Prêt à la Consommation</SelectItem>
+                      <SelectItem value="auto">Prêt Auto</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -257,20 +260,48 @@ const GenerateBankAccountForm = () => {
             />
              <FormField
               control={form.control}
-              name="initialBalance"
+              name="loanAmount"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Solde Initial (€)</FormLabel>
+                  <FormLabel>Montant du Prêt (€)</FormLabel>
                   <FormControl>
-                    <Input type="number" placeholder="0" {...field} disabled={isLoading} />
+                    <Input type="number" placeholder="50000" {...field} disabled={isLoading} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="interestRate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Taux d'intérêt (%)</FormLabel>
+                    <FormControl>
+                      <Input type="number" step="0.1" placeholder="2.5" {...field} disabled={isLoading} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="loanTerm"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Durée (années)</FormLabel>
+                    <FormControl>
+                      <Input type="number" placeholder="20" {...field} disabled={isLoading} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? <Loader2 className="animate-spin" /> : null}
-              Générer le compte
+              Créer le compte de prêt
             </Button>
           </form>
         </Form>
@@ -298,7 +329,7 @@ export default function AdminPage() {
         <p className="text-muted-foreground mb-8">Gérez les comptes clients et leurs produits bancaires.</p>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           <CreateUserForm />
-          <GenerateBankAccountForm />
+          <CreateLoanAccountForm />
         </div>
       </div>
     </main>

@@ -211,44 +211,47 @@ export async function handleLogin(formData: LoginInput): Promise<AuthResult> {
   return { success: false, error: "Service d'authentification non configuré. Identifiants de test non valides." };
 }
 
-// Schema for Bank Account Generation
-const generateBankAccountSchema = z.object({
+// Schema for Loan Account Creation
+const createLoanAccountSchema = z.object({
   clientEmail: z.string().email({ message: "Veuillez entrer une adresse e-mail valide." }),
-  accountType: z.enum(["courant", "epargne"], { required_error: "Veuillez sélectionner un type de compte." }),
-  initialBalance: z.coerce.number().min(0, "Le solde initial ne peut pas être négatif."),
+  loanType: z.enum(["immobilier", "consommation", "auto"], { required_error: "Veuillez sélectionner un type de prêt." }),
+  loanAmount: z.coerce.number().positive("Le montant du prêt doit être positif."),
+  interestRate: z.coerce.number().min(0, "Le taux d'intérêt ne peut pas être négatif."),
+  loanTerm: z.coerce.number().positive("La durée du prêt doit être positive."),
 });
 
-export type GenerateBankAccountInput = z.infer<typeof generateBankAccountSchema>;
-export type GenerateBankAccountResult = { success: boolean; error?: string; accountDetails?: any };
+export type CreateLoanAccountInput = z.infer<typeof createLoanAccountSchema>;
+export type CreateLoanAccountResult = { success: boolean; error?: string; loanDetails?: any };
 
-export async function handleGenerateBankAccount(formData: GenerateBankAccountInput): Promise<GenerateBankAccountResult> {
-  const parsed = generateBankAccountSchema.safeParse(formData);
+export async function handleCreateLoanAccount(formData: CreateLoanAccountInput): Promise<CreateLoanAccountResult> {
+  const parsed = createLoanAccountSchema.safeParse(formData);
 
   if (!parsed.success) {
     const issues = parsed.error.issues.map((i) => i.message).join(", ");
     return { success: false, error: `Données du formulaire invalides: ${issues}` };
   }
 
-  // Generate a mock IBAN for the response
-  const iban = `FR76${Math.floor(Math.random() * 10000)} ${Math.floor(Math.random() * 10000)} ${Math.floor(Math.random() * 10000)} ${Math.floor(Math.random() * 10000)} ${Math.floor(Math.random() * 1000)}`;
-  const accountDetails = { ...parsed.data, iban, creationDate: new Date().toISOString() };
+  const loanDetails = { 
+    ...parsed.data, 
+    loanId: `PRET-${Math.random().toString(36).substring(2, 9).toUpperCase()}`,
+    creationDate: new Date().toISOString() 
+  };
 
-  if (process.env.GENERATE_BANK_ACCOUNT_WEBHOOK_URL) {
+  if (process.env.CREATE_LOAN_ACCOUNT_WEBHOOK_URL) {
     try {
-      await fetch(process.env.GENERATE_BANK_ACCOUNT_WEBHOOK_URL, {
+      await fetch(process.env.CREATE_LOAN_ACCOUNT_WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(accountDetails),
+        body: JSON.stringify(loanDetails),
       });
-      // Assuming the webhook call is successful
-      return { success: true, accountDetails };
+      return { success: true, loanDetails };
     } catch (error) {
-      console.error("Erreur lors de l'appel au webhook de création de compte bancaire:", error);
-      return { success: false, error: "Impossible de contacter le service de création de compte." };
+      console.error("Erreur lors de l'appel au webhook de création de compte de prêt:", error);
+      return { success: false, error: "Impossible de contacter le service de création de prêt." };
     }
   }
 
-  // Logique de secours pour le développement local
-  console.log("Génération de compte bancaire (aucun webhook configuré):", accountDetails);
-  return { success: true, accountDetails };
+  // Fallback for local development
+  console.log("Création de compte de prêt (aucun webhook configuré):", loanDetails);
+  return { success: true, loanDetails };
 }
