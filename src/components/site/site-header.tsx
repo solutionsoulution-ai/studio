@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Landmark, Menu, X, ChevronDown } from "lucide-react";
+import { Landmark, Menu, X, ChevronDown, Briefcase, User, Home, Car, Recycle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
@@ -15,6 +15,7 @@ import {
 import { cn } from "@/lib/utils";
 
 const mainNavLinks = [
+  { href: "/#services", label: "Nos Services" },
   { href: "/eligibilite", label: "Éligibilité" },
   { href: "/#calculateur", label: "Calculateur" },
   { href: "/#faq", label: "FAQ" },
@@ -22,11 +23,11 @@ const mainNavLinks = [
 ];
 
 const serviceLinks = [
-  { href: "/services/pret-entreprise", label: "Prêt Entreprise" },
-  { href: "/services/pret-personnel", label: "Prêt Personnel" },
-  { href: "/services/pret-immo", label: "Prêt Immobilier" },
-  { href: "/services/pret-auto", label: "Prêt Auto" },
-  { href: "/services/rachat-de-credit", label: "Rachat de Crédit" },
+  { href: "/services/pret-entreprise", label: "Prêt Entreprise", icon: Briefcase },
+  { href: "/services/pret-personnel", label: "Prêt Personnel", icon: User },
+  { href: "/services/pret-immo", label: "Prêt Immobilier", icon: Home },
+  { href: "/services/pret-auto", label: "Prêt Auto", icon: Car },
+  { href: "/services/rachat-de-credit", label: "Rachat de Crédit", icon: Recycle },
 ];
 
 export default function SiteHeader() {
@@ -50,15 +51,18 @@ export default function SiteHeader() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              {serviceLinks.map(({ href, label }) => (
+              {serviceLinks.map(({ href, label, icon: Icon }) => (
                 <DropdownMenuItem key={label} asChild>
-                  <Link href={href}>{label}</Link>
+                  <Link href={href} className="flex items-center gap-2">
+                    <Icon className="w-4 h-4 text-muted-foreground" />
+                    {label}
+                  </Link>
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {mainNavLinks.map(({ href, label }) => (
+          {mainNavLinks.slice(1).map(({ href, label }) => ( // slice(1) to avoid duplicating "Nos Services"
             <Link
               key={label}
               href={href}
@@ -112,7 +116,7 @@ export default function SiteHeader() {
                     </Link>
                   ))}
                    <p className="text-sm font-semibold text-muted-foreground pt-4">Menu</p>
-                  {mainNavLinks.map(({ href, label }) => (
+                  {mainNavLinks.slice(1).map(({ href, label }) => (
                     <Link
                       key={label}
                       href={href}

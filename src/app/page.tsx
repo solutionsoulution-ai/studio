@@ -1,5 +1,6 @@
 import SiteHeader from '@/components/site/site-header';
 import HeroSection from '@/components/site/hero-section';
+import ServicesSection from '@/components/site/services-section';
 import InterestRateCalculator from '@/components/site/interest-rate-calculator';
 import FaqSection from '@/components/site/faq-section';
 import SiteFooter from '@/components/site/site-footer';
@@ -13,6 +14,8 @@ export default function Home() {
       <SiteHeader />
       <main className="flex-1">
         <HeroSection />
+        
+        <ServicesSection />
 
         <section id="eligibilite" className="container mx-auto py-16 md:py-24 text-center">
             <div className="mx-auto max-w-3xl">
@@ -31,7 +34,7 @@ export default function Home() {
             </div>
         </section>
 
-        <section id="calculateur" className="w-full py-16 md:py-24 bg-muted/30">
+        <section id="calculateur" className="w-full py-16 md-py-24 bg-muted/30">
           <InterestRateCalculator />
         </section>
 
