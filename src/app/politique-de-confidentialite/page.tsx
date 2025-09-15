@@ -47,7 +47,7 @@ export default function PolitiqueDeConfidentialitePage() {
           
           <h2>5. Sécurité de vos données</h2>
           <p>
-            Nous mettons en œuvre une variété de mesures de sécurité pour préserver la sécurité de vos informations personnelles.
+            Nous mettons en œuvre une variété de mesures de sécurité pour préserver la sécurité de vos informations personnelles. Nous utilisons des technologies de cryptage pour protéger les informations sensibles transmises en ligne.
           </p>
 
           <h2>6. Vos droits</h2>
@@ -57,7 +57,7 @@ export default function PolitiqueDeConfidentialitePage() {
           
           <h2>7. Modifications de notre politique de confidentialité</h2>
           <p>
-            Si nous décidons de changer notre politique de confidentialité, nous publierons ces changements sur cette page.
+            Si nous décidons de changer notre politique de confidentialité, nous publierons ces changements sur cette page. Nous vous encourageons à consulter cette page régulièrement pour rester informé.
           </p>
 
           <h2>8. Nous contacter</h2>

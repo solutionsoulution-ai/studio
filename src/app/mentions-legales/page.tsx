@@ -12,34 +12,41 @@ export default function MentionsLegalesPage() {
 
           <h2>1. Édition du site</h2>
           <p>
-            Le site VylsCapital est édité par la société [Nom de votre société], société [Forme juridique] au capital de [Montant] euros, dont le siège social est situé [Adresse de votre siège social], immatriculée au Registre du Commerce et des Sociétés de [Ville] sous le numéro [Numéro RCS].
-          </p>
-          <p>
-            Numéro de TVA intracommunautaire : [Votre numéro de TVA]
+            <strong>Site :</strong> VylsCapital <br />
+            <strong>Éditeur :</strong> [Nom de votre société] <br />
+            <strong>Forme juridique :</strong> [Forme juridique] <br />
+            <strong>Capital social :</strong> [Montant] euros <br />
+            <strong>Siège social :</strong> [Adresse de votre siège social] <br />
+            <strong>RCS :</strong> [Numéro RCS] <br />
+            <strong>Numéro de TVA intracommunautaire :</strong> [Votre numéro de TVA]
           </p>
           
           <h2>2. Responsable de publication</h2>
           <p>
-            [Nom du responsable de la publication], en sa qualité de [Fonction].
+            <strong>Nom :</strong> [Nom du responsable de la publication] <br />
+            <strong>Fonction :</strong> [Fonction]
           </p>
 
           <h2>3. Hébergement</h2>
           <p>
-            Le site VylsCapital est hébergé par [Nom de l'hébergeur], dont le siège social est situé [Adresse de l'hébergeur].
-          </p>
-          <p>
+            <strong>Hébergeur :</strong> [Nom de l'hébergeur] <br />
+            <strong>Siège social :</strong> [Adresse de l'hébergeur] <br />
             Le stockage des données des utilisateurs est réalisé sur les centres de données de [Nom de l'hébergeur], situés en [Lieu des serveurs, ex: Union Européenne].
           </p>
+          
 
           <h2>4. Nous contacter</h2>
           <ul>
-            <li>Par email : [Votre adresse e-mail de contact]</li>
-            <li>Par courrier : [Votre adresse postale]</li>
+            <li><strong>Par email :</strong> [Votre adresse e-mail de contact]</li>
+            <li><strong>Par courrier :</strong> [Votre adresse postale]</li>
           </ul>
 
           <h2>5. CNIL</h2>
           <p>
-            Les informations recueillies sur ce site font l'objet d'un traitement informatique destiné à [Finalité du traitement]. Conformément à la loi "informatique et libertés" du 6 janvier 1978 modifiée, vous bénéficiez d'un droit d'accès et de rectification aux informations qui vous concernent.
+            Les informations recueillies sur ce site font l'objet d'un traitement informatique destiné à [Finalité du traitement].
+          </p>
+          <p>
+             Conformément à la loi "informatique et libertés" du 6 janvier 1978 modifiée, vous bénéficiez d'un droit d'accès et de rectification aux informations qui vous concernent. Pour exercer ce droit, veuillez nous contacter aux coordonnées indiquées ci-dessus.
           </p>
         </div>
       </main>
