@@ -7,10 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 const navLinks = [
-  { href: "#eligibility", label: "Eligibility" },
-  { href: "#calculator", label: "Calculator" },
-  { href: "#faq", label: "FAQ" },
-  { href: "#contact", label: "Contact" },
+  { href: "/#eligibility", label: "Eligibility" },
+  { href: "/#calculator", label: "Calculator" },
+  { href: "/#faq", label: "FAQ" },
+  { href: "/#contact", label: "Contact" },
 ];
 
 export default function SiteHeader() {
@@ -36,12 +36,7 @@ export default function SiteHeader() {
             </Link>
           ))}
         </nav>
-        <div className="flex flex-1 items-center justify-end space-x-4 md:flex-none">
-           <a href="#eligibility">
-            <Button className="hidden sm:inline-flex bg-accent text-accent-foreground hover:bg-accent/90">
-              Apply for a Loan
-            </Button>
-          </a>
+        <div className="flex flex-1 items-center justify-end space-x-2 md:flex-none">
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="md:hidden">
@@ -75,13 +70,6 @@ export default function SiteHeader() {
                     </Link>
                   ))}
                 </nav>
-                 <div className="mt-auto border-t p-4">
-                    <a href="#eligibility" onClick={closeMobileMenu}>
-                        <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
-                        Apply for a Loan
-                        </Button>
-                    </a>
-                </div>
               </div>
             </SheetContent>
           </Sheet>
