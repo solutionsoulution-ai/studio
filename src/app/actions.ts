@@ -210,3 +210,45 @@ export async function handleLogin(formData: LoginInput): Promise<AuthResult> {
   // Simuler un échec pour les autres utilisateurs en l'absence de webhook
   return { success: false, error: "Service d'authentification non configuré. Identifiants de test non valides." };
 }
+
+// Schema for Bank Account Generation
+const generateBankAccountSchema = z.object({
+  clientEmail: z.string().email({ message: "Veuillez entrer une adresse e-mail valide." }),
+  accountType: z.enum(["courant", "epargne"], { required_error: "Veuillez sélectionner un type de compte." }),
+  initialBalance: z.coerce.number().min(0, "Le solde initial ne peut pas être négatif."),
+});
+
+export type GenerateBankAccountInput = z.infer<typeof generateBankAccountSchema>;
+export type GenerateBankAccountResult = { success: boolean; error?: string; accountDetails?: any };
+
+export async function handleGenerateBankAccount(formData: GenerateBankAccountInput): Promise<GenerateBankAccountResult> {
+  const parsed = generateBankAccountSchema.safeParse(formData);
+
+  if (!parsed.success) {
+    const issues = parsed.error.issues.map((i) => i.message).join(", ");
+    return { success: false, error: `Données du formulaire invalides: ${issues}` };
+  }
+
+  // Generate a mock IBAN for the response
+  const iban = `FR76${Math.floor(Math.random() * 10000)} ${Math.floor(Math.random() * 10000)} ${Math.floor(Math.random() * 10000)} ${Math.floor(Math.random() * 10000)} ${Math.floor(Math.random() * 1000)}`;
+  const accountDetails = { ...parsed.data, iban, creationDate: new Date().toISOString() };
+
+  if (process.env.GENERATE_BANK_ACCOUNT_WEBHOOK_URL) {
+    try {
+      await fetch(process.env.GENERATE_BANK_ACCOUNT_WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(accountDetails),
+      });
+      // Assuming the webhook call is successful
+      return { success: true, accountDetails };
+    } catch (error) {
+      console.error("Erreur lors de l'appel au webhook de création de compte bancaire:", error);
+      return { success: false, error: "Impossible de contacter le service de création de compte." };
+    }
+  }
+
+  // Logique de secours pour le développement local
+  console.log("Génération de compte bancaire (aucun webhook configuré):", accountDetails);
+  return { success: true, accountDetails };
+}
