@@ -22,7 +22,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { handleLoanApplication } from "@/app/actions";
-import { Loader2, ArrowRight, ArrowLeft, Send, CheckCircle, FileText, User, Banknote } from "lucide-react";
+import { Loader2, ArrowRight, ArrowLeft, Send, CheckCircle, FileText, User, Banknote, Home } from "lucide-react";
 
 // Schémas de validation pour chaque étape
 const step1Schema = z.object({
@@ -39,20 +39,31 @@ const step2Schema = z.object({
 });
 
 const step3Schema = z.object({
+  address: z.string().min(5, "L'adresse est requise."),
+  city: z.string().min(2, "La ville est requise."),
+  postalCode: z.string().min(4, "Le code postal est requis."),
+  country: z.string().min(2, "Le pays est requis."),
+  maritalStatus: z.enum(["celibataire", "marie", "divorce", "veuf"], { required_error: "Veuillez sélectionner votre situation." }),
+});
+
+const step4Schema = z.object({
+  occupation: z.string().min(2, "La profession est requise."),
   monthlyIncome: z.coerce.number().positive("Le revenu doit être positif."),
   monthlyExpenses: z.coerce.number().nonnegative("Les charges ne peuvent être négatives."),
   creditScore: z.coerce.number().min(300).max(850),
 });
 
+
 // Schéma complet pour la soumission finale
-const fullLoanSchema = step1Schema.merge(step2Schema).merge(step3Schema);
+const fullLoanSchema = step1Schema.merge(step2Schema).merge(step3Schema).merge(step4Schema);
 type FullLoanFormValues = z.infer<typeof fullLoanSchema>;
 
 const steps = [
   { id: "Étape 1", name: "Informations sur le Prêt", schema: step1Schema, icon: FileText },
   { id: "Étape 2", name: "Informations Personnelles", schema: step2Schema, icon: User },
-  { id: "Étape 3", name: "Situation Financière", schema: step3Schema, icon: Banknote },
-  { id: "Étape 4", name: "Confirmation", icon: CheckCircle },
+  { id: "Étape 3", name: "Adresse et Situation", schema: step3Schema, icon: Home },
+  { id: "Étape 4", name: "Situation Financière", schema: step4Schema, icon: Banknote },
+  { id: "Étape 5", name: "Confirmation", icon: CheckCircle },
 ];
 
 export default function MultiStepLoanForm() {
@@ -66,11 +77,17 @@ export default function MultiStepLoanForm() {
     defaultValues: {
       loanType: "immobilier",
       loanAmount: 100000,
-      loanTerm: 240, // 20 years in months
+      loanTerm: 240,
       firstName: "",
       lastName: "",
       email: "",
       phone: "",
+      address: "",
+      city: "",
+      postalCode: "",
+      country: "France",
+      maritalStatus: "celibataire",
+      occupation: "",
       monthlyIncome: 3000,
       monthlyExpenses: 1000,
       creditScore: 700,
@@ -79,15 +96,14 @@ export default function MultiStepLoanForm() {
 
   const processStep = async (data: FieldValues) => {
     setIsLoading(true);
-    if (currentStep < steps.length - 2) { // Pour toutes les étapes sauf la dernière de formulaire
+    if (currentStep < steps.length - 2) { 
       setCurrentStep(currentStep + 1);
     } else {
-        // Soumission finale
         try {
             const result = await handleLoanApplication(data as FullLoanFormValues);
             if (result.success) {
                 setIsSubmitted(true);
-                setCurrentStep(currentStep + 1); // Aller à l'écran de confirmation
+                setCurrentStep(currentStep + 1); 
             } else {
                 toast({
                     title: "Erreur lors de la soumission",
@@ -149,7 +165,7 @@ export default function MultiStepLoanForm() {
       <CardContent className="p-6 md:p-8">
         <div className="mb-8">
             <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-medium text-primary">{steps[currentStep].id} / {steps.length - 1}</span>
+                <span className="text-sm font-medium text-primary">{steps[currentStep].id} / {steps.length -1}</span>
                 <span className="text-sm text-muted-foreground">{steps[currentStep].name}</span>
             </div>
           <Progress value={progress} className="h-2" />
@@ -239,24 +255,86 @@ export default function MultiStepLoanForm() {
                     )} />
                   </div>
                 )}
-                {currentStep === 2 && (
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <FormField control={form.control} name="monthlyIncome" render={({ field }) => (
+                 {currentStep === 2 && (
+                  <div className="space-y-4">
+                     <FormField control={form.control} name="maritalStatus" render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Situation familiale</FormLabel>
+                         <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Sélectionnez votre situation" />
+                            </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                                <SelectItem value="celibataire">Célibataire</SelectItem>
+                                <SelectItem value="marie">Marié(e)</SelectItem>
+                                <SelectItem value="divorce">Divorcé(e)</SelectItem>
+                                <SelectItem value="veuf">Veuf(ve)</SelectItem>
+                            </SelectContent>
+                        </Select>
+                        <FormMessage />
+                        </FormItem>
+                     )} />
+                    <FormField control={form.control} name="address" render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Adresse</FormLabel>
+                        <FormControl><Input {...field} /></FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )} />
+                    <div className="grid sm:grid-cols-3 gap-4">
+                         <FormField control={form.control} name="city" render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Ville</FormLabel>
+                            <FormControl><Input {...field} /></FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )} />
+                        <FormField control={form.control} name="postalCode" render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Code Postal</FormLabel>
+                            <FormControl><Input {...field} /></FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )} />
+                         <FormField control={form.control} name="country" render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Pays</FormLabel>
+                            <FormControl><Input {...field} /></FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )} />
+                    </div>
+                  </div>
+                )}
+                {currentStep === 3 && (
+                  <div className="space-y-4">
+                     <FormField control={form.control} name="occupation" render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Revenu Mensuel Net (€)</FormLabel>
-                        <FormControl><Input type="number" {...field} /></FormControl>
+                        <FormLabel>Profession</FormLabel>
+                        <FormControl><Input {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
-                     <FormField control={form.control} name="monthlyExpenses" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Charges Mensuelles (€)</FormLabel>
-                        <FormControl><Input type="number" {...field} /></FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
+                    <div className="grid sm:grid-cols-2 gap-4">
+                        <FormField control={form.control} name="monthlyIncome" render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Revenu Mensuel Net (€)</FormLabel>
+                            <FormControl><Input type="number" {...field} /></FormControl>
+                            <FormMessage />
+                        </FormItem>
+                        )} />
+                        <FormField control={form.control} name="monthlyExpenses" render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Charges Mensuelles (€)</FormLabel>
+                            <FormControl><Input type="number" {...field} /></FormControl>
+                            <FormMessage />
+                        </FormItem>
+                        )} />
+                    </div>
                     <FormField control={form.control} name="creditScore" render={({ field }) => (
-                      <FormItem className="sm:col-span-2">
+                      <FormItem>
                         <FormLabel>Score de Crédit (estimation)</FormLabel>
                         <FormControl><Input type="number" min="300" max="850" {...field} /></FormControl>
                         <FormMessage />
@@ -264,7 +342,7 @@ export default function MultiStepLoanForm() {
                     )} />
                   </div>
                 )}
-                {currentStep === 3 && (
+                {currentStep === 4 && (
                     <div className="space-y-4 text-sm">
                         <h3 className="text-lg font-bold">Récapitulatif de votre demande</h3>
                         <div className="p-4 bg-muted/50 rounded-lg space-y-2">
@@ -272,8 +350,9 @@ export default function MultiStepLoanForm() {
                             <p><strong>Montant :</strong> {form.getValues("loanAmount")} € sur {form.getValues("loanTerm")} mois</p>
                             <hr className="my-2" />
                             <p><strong>Nom :</strong> {form.getValues("firstName")} {form.getValues("lastName")}</p>
-                            <p><strong>Email :</strong> {form.getValues("email")}</p>
+                             <p><strong>Adresse :</strong> {form.getValues("address")}, {form.getValues("postalCode")} {form.getValues("city")}</p>
                             <hr className="my-2" />
+                            <p><strong>Profession :</strong> {form.getValues("occupation")}</p>
                             <p><strong>Revenu mensuel :</strong> {form.getValues("monthlyIncome")} €</p>
                         </div>
                         <p className="text-xs text-muted-foreground">En cliquant sur "Envoyer ma demande", vous confirmez que les informations fournies sont exactes et complètes.</p>

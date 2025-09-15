@@ -245,13 +245,26 @@ export async function handleCreateClientAndAccount(formData: CreateClientAndAcco
 
 // Schema for Multi-Step Loan Application
 const loanApplicationSchema = z.object({
+  // Step 1
   loanType: z.enum(["immobilier", "consommation", "auto", "entreprise", "rachat"]),
   loanAmount: z.coerce.number(),
-  loanTerm: z.coerce.number(), // This is now in months
+  loanTerm: z.coerce.number(), // This is in months
+  
+  // Step 2
   firstName: z.string(),
   lastName: z.string(),
   email: z.string().email(),
   phone: z.string(),
+  
+  // Step 3
+  address: z.string().min(5, "L'adresse est requise."),
+  city: z.string().min(2, "La ville est requise."),
+  postalCode: z.string().min(4, "Le code postal est requis."),
+  country: z.string().min(2, "Le pays est requis."),
+  maritalStatus: z.enum(["celibataire", "marie", "divorce", "veuf"]),
+  
+  // Step 4
+  occupation: z.string().min(2, "La profession est requise."),
   monthlyIncome: z.coerce.number(),
   monthlyExpenses: z.coerce.number(),
   creditScore: z.coerce.number(),
