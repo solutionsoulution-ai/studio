@@ -29,6 +29,12 @@
       "description": "Plusieurs cartes de crédit et factures organisées sur un bureau.",
       "imageUrl": "https://picsum.photos/seed/credit-buyback/1200/800",
       "imageHint": "credit cards"
+    },
+    {
+      "id": "pret-entreprise",
+      "description": "Réunion de travail dans un bureau avec des graphiques en arrière-plan.",
+      "imageUrl": "https://picsum.photos/seed/business-loan/1200/800",
+      "imageHint": "business meeting"
     }
   ]
 }

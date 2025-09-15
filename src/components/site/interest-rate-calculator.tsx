@@ -6,10 +6,28 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Calculator } from "lucide-react";
 
-export default function InterestRateCalculator() {
-  const [loanAmount, setLoanAmount] = useState(50000);
-  const [interestRate, setInterestRate] = useState(7.5);
-  const [loanTerm, setLoanTerm] = useState(5);
+type InterestRateCalculatorProps = {
+    title?: string;
+    description?: string;
+    defaultLoanAmount?: number;
+    defaultRate?: number;
+    defaultTerm?: number;
+    maxAmount?: number;
+    maxTerm?: number;
+}
+
+export default function InterestRateCalculator({
+    title = "Calculateur de Remboursement de Prêt",
+    description = "Utilisez notre calculateur simple pour estimer vos mensualités. Ajustez les curseurs pour voir comment le montant, le taux et la durée du prêt affectent vos paiements.",
+    defaultLoanAmount = 50000,
+    defaultRate = 7.5,
+    defaultTerm = 5,
+    maxAmount = 500000,
+    maxTerm = 30
+}: InterestRateCalculatorProps) {
+  const [loanAmount, setLoanAmount] = useState(defaultLoanAmount);
+  const [interestRate, setInterestRate] = useState(defaultRate);
+  const [loanTerm, setLoanTerm] = useState(defaultTerm);
 
   const monthlyPayment = useMemo(() => {
     if (loanAmount <= 0 || interestRate <= 0 || loanTerm <= 0) {
@@ -38,10 +56,10 @@ export default function InterestRateCalculator() {
         <div className="mx-auto max-w-3xl text-center">
             <div className="flex items-center gap-3 justify-center">
                 <Calculator className="w-8 h-8 text-primary" />
-                <h2 className="text-3xl font-bold tracking-tight font-headline">Calculateur de Remboursement de Prêt</h2>
+                <h2 className="text-3xl font-bold tracking-tight font-headline">{title}</h2>
             </div>
             <p className="mt-4 text-lg text-muted-foreground">
-                Utilisez notre calculateur simple pour estimer vos mensualités. Ajustez les curseurs pour voir comment le montant, le taux et la durée du prêt affectent vos paiements.
+                {description}
             </p>
         </div>
 
@@ -54,7 +72,7 @@ export default function InterestRateCalculator() {
                         <Slider
                             id="loanAmount"
                             min={1000}
-                            max={500000}
+                            max={maxAmount}
                             step={1000}
                             value={[loanAmount]}
                             onValueChange={(value) => setLoanAmount(value[0])}
@@ -80,7 +98,7 @@ export default function InterestRateCalculator() {
                         <Slider
                             id="loanTerm"
                             min={1}
-                            max={30}
+                            max={maxTerm}
                             step={1}
                             value={[loanTerm]}
                             onValueChange={(value) => setLoanTerm(value[0])}
@@ -95,7 +113,7 @@ export default function InterestRateCalculator() {
                         {formatCurrency(monthlyPayment)}
                     </p>
                     <p className="mt-4 opacity-80 text-sm">
-                        Ceci est une estimation et ne constitue pas une offre de prêt. Les paiements réels могут varier.
+                        Ceci est une estimation et ne constitue pas une offre de prêt. Les paiements réels peuvent varier.
                     </p>
                 </div>
             </CardContent>

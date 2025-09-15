@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/accordion";
 import { HelpCircle } from "lucide-react";
 
-const faqs = [
+const defaultFaqs = [
   {
     question: "Quelles sont les exigences minimales pour un prêt ?",
     answer: "Généralement, nous recherchons des entreprises avec au moins 1 an d'activité, un score de crédit minimum de 600 et des revenus annuels constants. Cependant, notre vérificateur d'éligibilité IA peut fournir une évaluation plus personnalisée.",
@@ -29,16 +29,31 @@ const faqs = [
   },
 ];
 
-export default function FaqSection() {
+type Faq = {
+    question: string;
+    answer: string;
+}
+
+type FaqSectionProps = {
+    title?: string;
+    description?: string;
+    faqs?: Faq[];
+}
+
+export default function FaqSection({ 
+    title = "Foire Aux Questions",
+    description = "Vous avez des questions ? Nous avons des réponses. Trouvez des informations sur nos services et processus ci-dessous.",
+    faqs = defaultFaqs
+}: FaqSectionProps) {
   return (
     <div className="max-w-3xl mx-auto">
       <div className="text-center mb-10">
         <div className="flex items-center gap-3 justify-center">
             <HelpCircle className="w-8 h-8 text-primary" />
-            <h2 className="text-3xl font-bold tracking-tight font-headline">Foire Aux Questions</h2>
+            <h2 className="text-3xl font-bold tracking-tight font-headline">{title}</h2>
         </div>
         <p className="mt-4 text-lg text-muted-foreground">
-          Vous avez des questions ? Nous avons des réponses. Trouvez des informations sur nos services et processus ci-dessous.
+          {description}
         </p>
       </div>
       <Accordion type="single" collapsible className="w-full">

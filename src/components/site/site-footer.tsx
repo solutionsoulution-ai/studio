@@ -9,6 +9,7 @@ const mainNavLinks = [
 ];
 
 const serviceLinks = [
+  { href: "/services/pret-entreprise", label: "Prêt Entreprise" },
   { href: "/services/pret-personnel", label: "Prêt Personnel" },
   { href: "/services/pret-immo", label: "Prêt Immobilier" },
   { href: "/services/pret-auto", label: "Prêt Auto" },
