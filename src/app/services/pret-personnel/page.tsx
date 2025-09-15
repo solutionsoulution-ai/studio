@@ -4,9 +4,11 @@ import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, FilePen, Bot, HandCoins } from "lucide-react";
 import InterestRateCalculator from "@/components/site/interest-rate-calculator";
 import FaqSection from "@/components/site/faq-section";
+import HowItWorksSection, { HowItWorksStep } from "@/components/site/how-it-works-section";
+
 
 const personalFaqs = [
   {
@@ -21,6 +23,24 @@ const personalFaqs = [
     question: "Le taux du prêt personnel est-il fixe ou variable ?",
     answer: "Nous proposons principalement des prêts personnels à taux fixe. Cela signifie que votre taux d'intérêt et vos mensualités restent les mêmes pendant toute la durée du prêt, pour une meilleure maîtrise de votre budget.",
   },
+];
+
+const howItWorksSteps: HowItWorksStep[] = [
+    {
+      icon: FilePen,
+      title: "1. Définissez votre projet",
+      description: "Simulez votre prêt en ligne pour déterminer le montant et la durée qui vous conviennent.",
+    },
+    {
+      icon: Bot,
+      title: "2. Obtenez une réponse",
+      description: "Soumettez votre demande en ligne et notre technologie nous permet de vous donner une réponse de principe immédiate.",
+    },
+    {
+      icon: HandCoins,
+      title: "3. Recevez les fonds",
+      description: "Après accord définitif, les fonds sont versés sur votre compte bancaire sous 48h pour réaliser vos projets.",
+    },
 ];
 
 
@@ -72,6 +92,8 @@ export default function PretPersonnelPage() {
             </div>
           </div>
         </section>
+
+        <HowItWorksSection steps={howItWorksSteps} />
 
         <section className="w-full py-16 md:py-24 bg-muted/30">
           <InterestRateCalculator 

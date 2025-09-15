@@ -4,9 +4,11 @@ import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { CheckCircle, Landmark } from "lucide-react";
+import { CheckCircle, Landmark, FilePen, Search, HandCoins } from "lucide-react";
 import FaqSection from "@/components/site/faq-section";
 import InterestRateCalculator from "@/components/site/interest-rate-calculator";
+import HowItWorksSection, { HowItWorksStep } from "@/components/site/how-it-works-section";
+
 
 const businessFaqs = [
   {
@@ -21,6 +23,24 @@ const businessFaqs = [
     question: "Quels documents sont nécessaires pour une demande de prêt entreprise ?",
     answer: "Pour une analyse complète, préparez votre Kbis, vos derniers bilans comptables (si existants), un prévisionnel financier, les statuts de la société et les pièces d'identité des dirigeants.",
   },
+];
+
+const howItWorksSteps: HowItWorksStep[] = [
+    {
+      icon: FilePen,
+      title: "1. Demande en Ligne",
+      description: "Remplissez notre formulaire sécurisé avec les informations de votre entreprise et vos besoins de financement.",
+    },
+    {
+      icon: Search,
+      title: "2. Analyse du Dossier",
+      description: "Nos experts analysent votre dossier et la viabilité de votre projet pour vous proposer la meilleure solution.",
+    },
+    {
+      icon: HandCoins,
+      title: "3. Déblocage des Fonds",
+      description: "Après approbation, les fonds sont rapidement transférés sur votre compte professionnel pour lancer vos projets.",
+    },
 ];
 
 export default function PretEntreprisePage() {
@@ -72,6 +92,8 @@ export default function PretEntreprisePage() {
             </div>
           </div>
         </section>
+
+        <HowItWorksSection steps={howItWorksSteps} />
 
         <section className="w-full py-16 md:py-24 bg-muted/30">
            <InterestRateCalculator 

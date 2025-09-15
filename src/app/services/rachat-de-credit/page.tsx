@@ -4,9 +4,11 @@ import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, FilePen, Search, HandCoins } from "lucide-react";
 import InterestRateCalculator from "@/components/site/interest-rate-calculator";
 import FaqSection from "@/components/site/faq-section";
+import HowItWorksSection, { HowItWorksStep } from "@/components/site/how-it-works-section";
+
 
 const creditFaqs = [
   {
@@ -21,6 +23,24 @@ const creditFaqs = [
     question: "Est-ce que le rachat de crédit va vraiment améliorer mon taux d'endettement ?",
     answer: "Oui, c'est l'un des principaux objectifs. En allongeant la durée de remboursement et en négociant un taux unique, nous réduisons le montant total de vos mensualités, ce qui diminue mécaniquement votre taux d'endettement.",
   },
+];
+
+const howItWorksSteps: HowItWorksStep[] = [
+    {
+      icon: FilePen,
+      title: "1. Simulation Gratuite",
+      description: "Listez vos crédits en cours et simulez votre nouvelle mensualité unique en quelques minutes.",
+    },
+    {
+      icon: Search,
+      title: "2. Étude de votre Dossier",
+      description: "Un expert analyse votre situation financière pour construire la meilleure offre de regroupement.",
+    },
+    {
+      icon: HandCoins,
+      title: "3. Simplifiez vos Finances",
+      description: "Nous remboursons vos anciens créanciers. Vous n'avez plus qu'une seule mensualité, plus facile à gérer.",
+    },
 ];
 
 export default function RachatCreditPage() {
@@ -71,6 +91,8 @@ export default function RachatCreditPage() {
             </div>
           </div>
         </section>
+
+        <HowItWorksSection steps={howItWorksSteps} />
 
         <section className="w-full py-16 md:py-24 bg-muted/30">
           <InterestRateCalculator 

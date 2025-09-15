@@ -4,9 +4,11 @@ import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, FilePen, Bot, HandCoins } from "lucide-react";
 import InterestRateCalculator from "@/components/site/interest-rate-calculator";
 import FaqSection from "@/components/site/faq-section";
+import HowItWorksSection, { HowItWorksStep } from "@/components/site/how-it-works-section";
+
 
 const autoFaqs = [
   {
@@ -21,6 +23,24 @@ const autoFaqs = [
     question: "Puis-je faire un remboursement anticipé de mon prêt auto ?",
     answer: "Oui, vous pouvez rembourser tout ou partie de votre prêt auto par anticipation, conformément à la législation en vigueur. Des indemnités peuvent s'appliquer dans certains cas.",
   },
+];
+
+const howItWorksSteps: HowItWorksStep[] = [
+    {
+      icon: FilePen,
+      title: "1. Demande Rapide",
+      description: "Faites votre demande en quelques minutes et recevez une réponse de principe immédiate.",
+    },
+    {
+      icon: Bot,
+      title: "2. Approbation Intelligente",
+      description: "Notre IA analyse votre profil pour vous fournir une offre ferme rapidement, souvent en quelques heures.",
+    },
+    {
+      icon: HandCoins,
+      title: "3. Prenez la Route",
+      description: "Après signature électronique, les fonds sont virés au vendeur et vous pouvez récupérer votre voiture.",
+    },
 ];
 
 export default function PretAutoPage() {
@@ -71,6 +91,8 @@ export default function PretAutoPage() {
             </div>
           </div>
         </section>
+
+        <HowItWorksSection steps={howItWorksSteps} />
 
         <section className="w-full py-16 md:py-24 bg-muted/30">
           <InterestRateCalculator 

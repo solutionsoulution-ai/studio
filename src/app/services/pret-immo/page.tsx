@@ -4,9 +4,10 @@ import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, FilePen, Search, HandCoins } from "lucide-react";
 import InterestRateCalculator from "@/components/site/interest-rate-calculator";
 import FaqSection from "@/components/site/faq-section";
+import HowItWorksSection, { HowItWorksStep } from "@/components/site/how-it-works-section";
 
 const immoFaqs = [
   {
@@ -21,6 +22,24 @@ const immoFaqs = [
     question: "Quelle est la durée maximale pour un prêt immobilier ?",
     answer: "La durée de remboursement peut aller jusqu'à 25 ans, voire 30 ans dans de très rares cas. Une durée plus courte signifie des mensualités plus élevées mais un coût total du crédit plus faible.",
   },
+];
+
+const howItWorksSteps: HowItWorksStep[] = [
+    {
+      icon: FilePen,
+      title: "1. Simulation en Ligne",
+      description: "Utilisez notre calculateur pour estimer votre capacité d'emprunt et vos mensualités en quelques clics.",
+    },
+    {
+      icon: Search,
+      title: "2. Étude Personnalisée",
+      description: "Un conseiller dédié étudie votre projet et négocie pour vous les meilleures conditions auprès de nos partenaires.",
+    },
+    {
+      icon: HandCoins,
+      title: "3. Signature & Acquisition",
+      description: "Après acceptation de l'offre, signez chez le notaire et recevez les clés de votre nouvelle propriété.",
+    },
 ];
 
 export default function PretImmobilierPage() {
@@ -71,6 +90,8 @@ export default function PretImmobilierPage() {
             </div>
           </div>
         </section>
+
+        <HowItWorksSection steps={howItWorksSteps} />
 
         <section className="w-full py-16 md:py-24 bg-muted/30">
           <InterestRateCalculator 
