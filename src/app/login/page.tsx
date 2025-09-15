@@ -53,7 +53,9 @@ export default function LoginPage() {
         description: "Vous allez être redirigé vers votre espace client.",
         variant: "default",
       });
-      router.push("/dashboard");
+      // A l'avenir, on redirigera vers le tableau de bord
+      // router.push("/dashboard");
+       router.push("/");
     } else {
       toast({
         title: "Erreur de connexion",

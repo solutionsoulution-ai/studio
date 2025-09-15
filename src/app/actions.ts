@@ -111,3 +111,92 @@ export async function handleContactForm(
   // Assume success if it passes validation and the attempt to send is made.
   return { success: true };
 }
+
+
+// Schemas and actions for authentication
+
+export type AuthResult = { success: boolean; error?: string };
+
+export async function handleAdminLogin(password: string): Promise<AuthResult> {
+  if (password === process.env.ADMIN_PASSWORD) {
+    return { success: true };
+  }
+  return { success: false, error: "Mot de passe incorrect." };
+}
+
+const createUserSchema = z.object({
+  email: z.string().email({ message: "Veuillez entrer une adresse e-mail valide." }),
+  password: z.string().min(8, { message: "Le mot de passe doit comporter au moins 8 caractères." }),
+});
+export type CreateUserInput = z.infer<typeof createUserSchema>;
+
+export async function handleCreateUser(formData: CreateUserInput): Promise<AuthResult> {
+  const parsed = createUserSchema.safeParse(formData);
+  if (!parsed.success) {
+    const issues = parsed.error.issues.map((i) => i.message).join(", ");
+    return { success: false, error: `Données du formulaire invalides: ${issues}` };
+  }
+
+  if (process.env.CREATE_USER_WEBHOOK_URL) {
+    try {
+      const response = await fetch(process.env.CREATE_USER_WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(parsed.data),
+      });
+      if (!response.ok) {
+        const res = await response.json();
+        return { success: false, error: res.error || "Le service de création a retourné une erreur." };
+      }
+      return { success: true };
+    } catch (error) {
+      console.error("Erreur lors de l'appel au webhook de création d'utilisateur:", error);
+      return { success: false, error: "Impossible de contacter le service de création d'utilisateur." };
+    }
+  }
+
+  console.log("Création d'utilisateur (aucun webhook configuré):", parsed.data);
+  // Simuler le succès en l'absence de webhook pour le développement local
+  return { success: true };
+}
+
+
+const loginSchema = z.object({
+  email: z.string().email({ message: "Veuillez entrer une adresse e-mail valide." }),
+  password: z.string().min(1, { message: "Le mot de passe est requis." }),
+});
+export type LoginInput = z.infer<typeof loginSchema>;
+
+
+export async function handleLogin(formData: LoginInput): Promise<AuthResult> {
+  const parsed = loginSchema.safeParse(formData);
+  if (!parsed.success) {
+     const issues = parsed.error.issues.map((i) => i.message).join(", ");
+    return { success: false, error: `Données du formulaire invalides: ${issues}` };
+  }
+
+  if (process.env.LOGIN_WEBHOOK_URL) {
+    try {
+      const response = await fetch(process.env.LOGIN_WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(parsed.data),
+      });
+      if (!response.ok) {
+        const res = await response.json();
+        return { success: false, error: res.error || "Identifiants incorrects." };
+      }
+      const session = await response.json();
+      // Ici, vous définiriez un cookie ou un token de session.
+      // Pour cet exemple, nous allons simplement retourner un succès.
+      return { success: true };
+    } catch (error) {
+      console.error("Erreur lors de l'appel au webhook de connexion:", error);
+      return { success: false, error: "Impossible de contacter le service de connexion." };
+    }
+  }
+  
+  console.log("Tentative de connexion (aucun webhook configuré):", parsed.data);
+  // Simuler un échec en l'absence de webhook pour le développement local
+  return { success: false, error: "Service d'authentification non configuré." };
+}
