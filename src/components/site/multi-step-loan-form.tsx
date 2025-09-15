@@ -36,9 +36,6 @@ const step2Schema = z.object({
   lastName: z.string().min(2, "Le nom est requis."),
   email: z.string().email("L'adresse e-mail est invalide."),
   phone: z.string().min(10, "Le numéro de téléphone est invalide."),
-});
-
-const step3Schema = z.object({
   address: z.string().min(5, "L'adresse est requise."),
   city: z.string().min(2, "La ville est requise."),
   postalCode: z.string().min(4, "Le code postal est requis."),
@@ -46,24 +43,23 @@ const step3Schema = z.object({
   maritalStatus: z.enum(["celibataire", "marie", "divorce", "veuf"], { required_error: "Veuillez sélectionner votre situation." }),
 });
 
-const step4Schema = z.object({
+const step3Schema = z.object({
   occupation: z.string().min(2, "La profession est requise."),
   monthlyIncome: z.coerce.number().positive("Le revenu doit être positif."),
   monthlyExpenses: z.coerce.number().nonnegative("Les charges ne peuvent être négatives."),
-  creditScore: z.coerce.number().min(300).max(850),
+  creditScore: z.coerce.number().min(300).max(850, "Le score de crédit doit être entre 300 et 850."),
 });
 
 
 // Schéma complet pour la soumission finale
-const fullLoanSchema = step1Schema.merge(step2Schema).merge(step3Schema).merge(step4Schema);
+const fullLoanSchema = step1Schema.merge(step2Schema).merge(step3Schema);
 type FullLoanFormValues = z.infer<typeof fullLoanSchema>;
 
 const steps = [
   { id: "Étape 1", name: "Informations sur le Prêt", schema: step1Schema, icon: FileText },
-  { id: "Étape 2", name: "Informations Personnelles", schema: step2Schema, icon: User },
-  { id: "Étape 3", name: "Adresse et Situation", schema: step3Schema, icon: Home },
-  { id: "Étape 4", name: "Situation Financière", schema: step4Schema, icon: Banknote },
-  { id: "Étape 5", name: "Confirmation", icon: CheckCircle },
+  { id: "Étape 2", name: "Coordonnées et Adresse", schema: step2Schema, icon: User },
+  { id: "Étape 3", name: "Situation Financière", schema: step3Schema, icon: Banknote },
+  { id: "Étape 4", name: "Confirmation", icon: CheckCircle },
 ];
 
 export default function MultiStepLoanForm() {
@@ -94,10 +90,10 @@ export default function MultiStepLoanForm() {
     },
   });
 
-  const processStep = async (data: FieldValues) => {
+  const processForm = async (data: FieldValues) => {
     setIsLoading(true);
     if (currentStep < steps.length - 2) { 
-      setCurrentStep(currentStep + 1);
+        setCurrentStep(currentStep + 1);
     } else {
         try {
             const result = await handleLoanApplication(data as FullLoanFormValues);
@@ -127,10 +123,11 @@ export default function MultiStepLoanForm() {
     if (currentSchema) {
         const result = await form.trigger(Object.keys(currentSchema.shape) as any);
         if (result) {
-            processStep(form.getValues());
+           setCurrentStep(currentStep + 1);
         }
     } else {
-        processStep(form.getValues());
+        // For the last step (recap)
+       setCurrentStep(currentStep + 1);
     }
   };
 
@@ -165,14 +162,14 @@ export default function MultiStepLoanForm() {
       <CardContent className="p-6 md:p-8">
         <div className="mb-8">
             <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-medium text-primary">{steps[currentStep].id} / {steps.length -1}</span>
+                <span className="text-sm font-medium text-primary">{steps[currentStep].id} / {steps.length - 1}</span>
                 <span className="text-sm text-muted-foreground">{steps[currentStep].name}</span>
             </div>
           <Progress value={progress} className="h-2" />
         </div>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(processStep)} className="space-y-6">
+          <form onSubmit={form.handleSubmit(processForm)} className="space-y-6">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentStep}
@@ -224,59 +221,38 @@ export default function MultiStepLoanForm() {
                   </div>
                 )}
                 {currentStep === 1 && (
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <FormField control={form.control} name="firstName" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Prénom</FormLabel>
-                        <FormControl><Input {...field} /></FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
-                    <FormField control={form.control} name="lastName" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Nom</FormLabel>
-                        <FormControl><Input {...field} /></FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
-                    <FormField control={form.control} name="email" render={({ field }) => (
-                      <FormItem className="sm:col-span-2">
-                        <FormLabel>Email</FormLabel>
-                        <FormControl><Input type="email" {...field} /></FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
-                     <FormField control={form.control} name="phone" render={({ field }) => (
-                      <FormItem className="sm:col-span-2">
-                        <FormLabel>Téléphone</FormLabel>
-                        <FormControl><Input type="tel" {...field} /></FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
-                  </div>
-                )}
-                 {currentStep === 2 && (
                   <div className="space-y-4">
-                     <FormField control={form.control} name="maritalStatus" render={({ field }) => (
+                    <div className="grid sm:grid-cols-2 gap-4">
+                        <FormField control={form.control} name="firstName" render={({ field }) => (
                         <FormItem>
-                        <FormLabel>Situation familiale</FormLabel>
-                         <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Sélectionnez votre situation" />
-                            </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                                <SelectItem value="celibataire">Célibataire</SelectItem>
-                                <SelectItem value="marie">Marié(e)</SelectItem>
-                                <SelectItem value="divorce">Divorcé(e)</SelectItem>
-                                <SelectItem value="veuf">Veuf(ve)</SelectItem>
-                            </SelectContent>
-                        </Select>
-                        <FormMessage />
+                            <FormLabel>Prénom</FormLabel>
+                            <FormControl><Input {...field} /></FormControl>
+                            <FormMessage />
                         </FormItem>
-                     )} />
-                    <FormField control={form.control} name="address" render={({ field }) => (
+                        )} />
+                        <FormField control={form.control} name="lastName" render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Nom</FormLabel>
+                            <FormControl><Input {...field} /></FormControl>
+                            <FormMessage />
+                        </FormItem>
+                        )} />
+                        <FormField control={form.control} name="email" render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Email</FormLabel>
+                            <FormControl><Input type="email" {...field} /></FormControl>
+                            <FormMessage />
+                        </FormItem>
+                        )} />
+                        <FormField control={form.control} name="phone" render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Téléphone</FormLabel>
+                            <FormControl><Input type="tel" {...field} /></FormControl>
+                            <FormMessage />
+                        </FormItem>
+                        )} />
+                    </div>
+                     <FormField control={form.control} name="address" render={({ field }) => (
                         <FormItem>
                         <FormLabel>Adresse</FormLabel>
                         <FormControl><Input {...field} /></FormControl>
@@ -306,9 +282,28 @@ export default function MultiStepLoanForm() {
                             </FormItem>
                         )} />
                     </div>
+                     <FormField control={form.control} name="maritalStatus" render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Situation familiale</FormLabel>
+                         <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Sélectionnez votre situation" />
+                            </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                                <SelectItem value="celibataire">Célibataire</SelectItem>
+                                <SelectItem value="marie">Marié(e)</SelectItem>
+                                <SelectItem value="divorce">Divorcé(e)</SelectItem>
+                                <SelectItem value="veuf">Veuf(ve)</SelectItem>
+                            </SelectContent>
+                        </Select>
+                        <FormMessage />
+                        </FormItem>
+                     )} />
                   </div>
                 )}
-                {currentStep === 3 && (
+                {currentStep === 2 && (
                   <div className="space-y-4">
                      <FormField control={form.control} name="occupation" render={({ field }) => (
                       <FormItem>
@@ -342,7 +337,7 @@ export default function MultiStepLoanForm() {
                     )} />
                   </div>
                 )}
-                {currentStep === 4 && (
+                {currentStep === 3 && (
                     <div className="space-y-4 text-sm">
                         <h3 className="text-lg font-bold">Récapitulatif de votre demande</h3>
                         <div className="p-4 bg-muted/50 rounded-lg space-y-2">
@@ -365,12 +360,19 @@ export default function MultiStepLoanForm() {
               <Button type="button" variant="outline" onClick={prevStep} disabled={currentStep === 0 || isLoading}>
                 <ArrowLeft /> Précédent
               </Button>
-              <Button type="button" onClick={nextStep} disabled={isLoading}>
-                {isLoading && <Loader2 className="animate-spin" />}
-                {currentStep === steps.length - 2 ? "Envoyer ma demande" : "Suivant"}
-                {currentStep < steps.length - 2 && <ArrowRight />}
-                {currentStep === steps.length - 2 && <Send />}
-              </Button>
+               {currentStep === steps.length - 1 ? (
+                 <Button type="submit" disabled={isLoading}>
+                    {isLoading && <Loader2 className="animate-spin" />}
+                    Envoyer ma demande
+                    <Send />
+                </Button>
+               ) : (
+                <Button type="button" onClick={nextStep} disabled={isLoading}>
+                    {isLoading && <Loader2 className="animate-spin" />}
+                    Suivant
+                    <ArrowRight />
+                </Button>
+               )}
             </div>
           </form>
         </Form>
@@ -378,3 +380,5 @@ export default function MultiStepLoanForm() {
     </Card>
   );
 }
+
+    

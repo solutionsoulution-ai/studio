@@ -247,27 +247,25 @@ export async function handleCreateClientAndAccount(formData: CreateClientAndAcco
 const loanApplicationSchema = z.object({
   // Step 1
   loanType: z.enum(["immobilier", "consommation", "auto", "entreprise", "rachat"]),
-  loanAmount: z.coerce.number(),
-  loanTerm: z.coerce.number(), // This is in months
+  loanAmount: z.coerce.number().positive("Le montant doit être positif."),
+  loanTerm: z.coerce.number().int().min(12, "La durée doit être d'au moins 12 mois."),
   
   // Step 2
-  firstName: z.string(),
-  lastName: z.string(),
-  email: z.string().email(),
-  phone: z.string(),
-  
-  // Step 3
+  firstName: z.string().min(2, "Le prénom est requis."),
+  lastName: z.string().min(2, "Le nom est requis."),
+  email: z.string().email("L'adresse e-mail est invalide."),
+  phone: z.string().min(10, "Le numéro de téléphone est invalide."),
   address: z.string().min(5, "L'adresse est requise."),
   city: z.string().min(2, "La ville est requise."),
   postalCode: z.string().min(4, "Le code postal est requis."),
   country: z.string().min(2, "Le pays est requis."),
   maritalStatus: z.enum(["celibataire", "marie", "divorce", "veuf"]),
   
-  // Step 4
+  // Step 3
   occupation: z.string().min(2, "La profession est requise."),
-  monthlyIncome: z.coerce.number(),
-  monthlyExpenses: z.coerce.number(),
-  creditScore: z.coerce.number(),
+  monthlyIncome: z.coerce.number().positive("Le revenu doit être positif."),
+  monthlyExpenses: z.coerce.number().nonnegative("Les charges ne peuvent être négatives."),
+  creditScore: z.coerce.number().min(300).max(850),
 });
 
 export type LoanApplicationInput = z.infer<typeof loanApplicationSchema>;
@@ -306,3 +304,5 @@ export async function handleLoanApplication(formData: LoanApplicationInput): Pro
   // Simuler un succès
   return { success: true, applicationId: applicationDetails.applicationId };
 }
+
+    
