@@ -218,6 +218,8 @@ const createLoanAccountSchema = z.object({
   loanAmount: z.coerce.number().positive("Le montant du prêt doit être positif."),
   interestRate: z.coerce.number().min(0, "Le taux d'intérêt ne peut pas être négatif."),
   loanTerm: z.coerce.number().positive("La durée du prêt doit être positive."),
+  iban: z.string().min(1, { message: "L'IBAN est requis." }),
+  bic: z.string().min(1, { message: "Le code BIC/SWIFT est requis." }),
 });
 
 export type CreateLoanAccountInput = z.infer<typeof createLoanAccountSchema>;

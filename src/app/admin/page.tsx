@@ -46,6 +46,8 @@ const createLoanAccountSchema = z.object({
   loanAmount: z.coerce.number().positive("Le montant du prêt doit être positif."),
   interestRate: z.coerce.number().min(0, "Le taux d'intérêt ne peut pas être négatif."),
   loanTerm: z.coerce.number().positive("La durée du prêt doit être positive (en années)."),
+  iban: z.string().min(1, { message: "L'IBAN est requis." }),
+  bic: z.string().min(1, { message: "Le code BIC/SWIFT est requis." }),
 });
 type CreateLoanAccountValues = z.infer<typeof createLoanAccountSchema>;
 
@@ -189,7 +191,7 @@ const CreateLoanAccountForm = () => {
 
   const form = useForm<CreateLoanAccountValues>({
     resolver: zodResolver(createLoanAccountSchema),
-    defaultValues: { clientEmail: "" },
+    defaultValues: { clientEmail: "", iban: "", bic: "" },
   });
 
   async function onSubmit(values: CreateLoanAccountValues) {
@@ -218,11 +220,11 @@ const CreateLoanAccountForm = () => {
         <CardTitle className="flex items-center gap-2 text-xl font-bold">
           <Landmark /> Créer un Compte de Prêt
         </CardTitle>
-        <CardDescription>Créez un nouveau prêt pour un client existant.</CardDescription>
+        <CardDescription>Créez un nouveau prêt et associez-le à un compte bancaire.</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
               name="clientEmail"
@@ -299,6 +301,32 @@ const CreateLoanAccountForm = () => {
                 )}
               />
             </div>
+             <FormField
+                control={form.control}
+                name="iban"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>IBAN</FormLabel>
+                    <FormControl>
+                      <Input placeholder="FR76..." {...field} disabled={isLoading} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+               <FormField
+                control={form.control}
+                name="bic"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Code BIC/SWIFT</FormLabel>
+                    <FormControl>
+                      <Input placeholder="CRLYFRPP" {...field} disabled={isLoading} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? <Loader2 className="animate-spin" /> : null}
               Créer le compte de prêt
