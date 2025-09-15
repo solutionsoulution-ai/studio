@@ -27,7 +27,7 @@ export default function Home() {
                     <h2 className="text-3xl font-bold tracking-tight font-headline">Vérifiez Votre Éligibilité en un Instant</h2>
                 </div>
                 <p className="mt-4 text-lg text-muted-foreground">
-                    Utilisez notre outil d'évaluation par IA pour obtenir une réponse rapide sur votre admissibilité à un prêt. C'est simple, rapide et sans engagement.
+                    Utilisez notre outil d'évaluation pour obtenir une réponse rapide sur votre admissibilité à un prêt. C'est simple, rapide et sans engagement.
                 </p>
                 <div className="mt-8">
                     <Button size="lg" asChild>

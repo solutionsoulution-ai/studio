@@ -74,7 +74,7 @@ const ResultCard = ({ result }: { result: EligibilityCheckResult }) => {
       <CardHeader className="text-center">
         <div className="mx-auto mb-4">{getStatusIcon()}</div>
         <CardTitle className="text-2xl font-bold">{eligibilityStatus.split('.')[0]}</CardTitle>
-        <CardDescription>Basé sur notre évaluation par IA.</CardDescription>
+        <CardDescription>Basé sur notre évaluation.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div>
@@ -135,7 +135,7 @@ export default function EligibilityChecker() {
           <h2 className="text-3xl font-bold tracking-tight font-headline">Vérificateur d'Éligibilité au Prêt</h2>
         </div>
         <p className="text-muted-foreground text-lg">
-          Remplissez le formulaire avec les détails de votre entreprise pour obtenir une évaluation instantanée de votre éligibilité au prêt par IA et des suggestions personnalisées.
+          Remplissez le formulaire avec les détails de votre entreprise pour obtenir une évaluation instantanée de votre éligibilité au prêt et des suggestions personnalisées.
         </p>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -224,7 +224,7 @@ export default function EligibilityChecker() {
       <div className="mt-8 md:mt-0">
         <Card className="bg-card/70 sticky top-24">
           <CardHeader>
-            <CardTitle>Votre Évaluation IA</CardTitle>
+            <CardTitle>Votre Évaluation</CardTitle>
             <CardDescription>
               {isLoading
                 ? "Analyse de vos données..."
@@ -235,7 +235,7 @@ export default function EligibilityChecker() {
             {isLoading && (
               <div className="flex flex-col items-center justify-center space-y-4 p-8 text-muted-foreground">
                 <Loader2 className="h-12 w-12 animate-spin text-primary" />
-                <p className="font-medium">Notre IA analyse les chiffres...</p>
+                <p className="font-medium">Analyse en cours...</p>
               </div>
             )}
             {result && <ResultCard result={result} />}

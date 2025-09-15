@@ -9,7 +9,7 @@ import { HelpCircle } from "lucide-react";
 const defaultFaqs = [
   {
     question: "Quelles sont les exigences minimales pour un prêt ?",
-    answer: "Généralement, nous recherchons des entreprises avec au moins 1 an d'activité, un score de crédit minimum de 600 et des revenus annuels constants. Cependant, notre vérificateur d'éligibilité IA peut fournir une évaluation plus personnalisée.",
+    answer: "Généralement, nous recherchons des entreprises avec au moins 1 an d'activité, un score de crédit minimum de 600 et des revenus annuels constants. Cependant, notre vérificateur d'éligibilité peut fournir une évaluation plus personnalisée.",
   },
   {
     question: "Combien de temps dure le processus de demande ?",

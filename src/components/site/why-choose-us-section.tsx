@@ -1,11 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Zap, Users, Scaling, Award } from "lucide-react";
+import { Zap, Users, Scaling, Award, Globe } from "lucide-react";
 
 const features = [
   {
     icon: Zap,
-    title: "Réponse Rapide via IA",
-    description: "Notre technologie d'IA analyse votre profil pour vous donner une réponse de principe en quelques minutes seulement.",
+    title: "Processus 100% en Ligne",
+    description: "Effectuez votre demande de n'importe où, n'importe quand, grâce à notre plateforme en ligne simple et sécurisée.",
   },
   {
     icon: Users,
