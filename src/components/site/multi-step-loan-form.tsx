@@ -116,7 +116,6 @@ export default function MultiStepLoanForm() {
         const result = await handleLoanApplication(data as FullLoanFormValues);
         if (result.success) {
             setIsSubmitted(true);
-            setCurrentStep(currentStep + 1); 
         } else {
             toast({
                 title: "Erreur lors de la soumission",
@@ -141,6 +140,9 @@ export default function MultiStepLoanForm() {
         if (result) {
            setCurrentStep(currentStep + 1);
         }
+    } else {
+      // If there is no schema, it's a step without fields (like recap), so just move forward.
+      setCurrentStep(currentStep + 1);
     }
   };
 
@@ -174,7 +176,7 @@ export default function MultiStepLoanForm() {
       <CardContent className="p-6 md:p-8">
         <div className="mb-8">
             <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-medium text-primary">{steps[currentStep].id} / {steps.length -1}</span>
+                <span className="text-sm font-medium text-primary">{steps[currentStep].id} / {steps.length}</span>
                 <span className="text-sm text-muted-foreground">{steps[currentStep].name}</span>
             </div>
           <Progress value={progress} className="h-2" />
