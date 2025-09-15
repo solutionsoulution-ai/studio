@@ -1,3 +1,4 @@
+
 "use server";
 
 import "dotenv/config"; // Force le chargement des variables d'environnement
@@ -240,4 +241,55 @@ export async function handleCreateClientAndAccount(formData: CreateClientAndAcco
   // Fallback for local development
   console.log("Création de client/compte (aucun webhook configuré):", clientDetails);
   return { success: true, details: clientDetails };
+}
+
+// Schema for Multi-Step Loan Application
+const loanApplicationSchema = z.object({
+  loanType: z.enum(["immobilier", "consommation", "auto", "entreprise", "rachat"]),
+  loanAmount: z.coerce.number(),
+  loanTerm: z.coerce.number(),
+  firstName: z.string(),
+  lastName: z.string(),
+  email: z.string().email(),
+  phone: z.string(),
+  monthlyIncome: z.coerce.number(),
+  monthlyExpenses: z.coerce.number(),
+  creditScore: z.coerce.number(),
+});
+
+export type LoanApplicationInput = z.infer<typeof loanApplicationSchema>;
+export type LoanApplicationResult = { success: boolean; error?: string; applicationId?: string };
+
+export async function handleLoanApplication(formData: LoanApplicationInput): Promise<LoanApplicationResult> {
+  const parsed = loanApplicationSchema.safeParse(formData);
+
+  if (!parsed.success) {
+    const issues = parsed.error.issues.map((i) => i.message).join(", ");
+    return { success: false, error: `Données du formulaire invalides: ${issues}` };
+  }
+
+  const applicationDetails = {
+    ...parsed.data,
+    applicationId: `APP-${Date.now()}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`,
+    submissionDate: new Date().toISOString(),
+  };
+
+  if (process.env.LOAN_APP_WEBHOOK_URL) {
+    try {
+      await fetch(process.env.LOAN_APP_WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(applicationDetails),
+      });
+    } catch (error) {
+      console.error("Erreur lors de l'appel au webhook de demande de prêt:", error);
+      // Ne pas bloquer l'utilisateur si le webhook échoue
+    }
+  }
+
+  // Pour le développement, on logue les données
+  console.log("Nouvelle demande de prêt reçue (aucun webhook configuré):", applicationDetails);
+  
+  // Simuler un succès
+  return { success: true, applicationId: applicationDetails.applicationId };
 }

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -68,6 +69,9 @@ export default function SiteHeader() {
           ))}
         </nav>
         <div className="flex flex-1 items-center justify-end space-x-2 md:flex-none">
+          <Button variant="secondary" asChild>
+            <Link href="/demande-de-pret">Faire une demande</Link>
+          </Button>
           <Button asChild>
             <Link href="/login">Connexion</Link>
           </Button>
@@ -93,7 +97,10 @@ export default function SiteHeader() {
                   </SheetTrigger>
                 </div>
                 <nav className="flex flex-col space-y-4 p-4">
-                  <p className="text-sm font-semibold text-muted-foreground">Nos Services</p>
+                   <Link href="/demande-de-pret" className="text-lg font-medium transition-colors hover:text-primary" onClick={closeMobileMenu}>
+                      Faire une demande
+                    </Link>
+                  <p className="text-sm font-semibold text-muted-foreground pt-4">Nos Services</p>
                   {serviceLinks.map(({ href, label }) => (
                     <Link
                       key={label}
