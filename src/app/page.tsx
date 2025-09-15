@@ -8,6 +8,7 @@ import SiteFooter from '@/components/site/site-footer';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Sparkles } from 'lucide-react';
+import TestimonialsSection from '@/components/site/testimonials-section';
 
 export default function Home() {
   return (
@@ -40,6 +41,8 @@ export default function Home() {
         <section id="calculateur" className="w-full py-16 md-py-24 bg-muted/30">
           <InterestRateCalculator />
         </section>
+
+        <TestimonialsSection />
 
         <section id="faq" className="container mx-auto py-16 md:py-24">
           <FaqSection />
