@@ -13,11 +13,11 @@ export default function Home() {
       <main className="flex-1">
         <HeroSection />
 
-        <section id="eligibility" className="container mx-auto py-16 md:py-24">
+        <section id="eligibilite" className="container mx-auto py-16 md:py-24">
           <EligibilityChecker />
         </section>
 
-        <section id="calculator" className="w-full py-16 md:py-24 bg-muted/30">
+        <section id="calculateur" className="w-full py-16 md:py-24 bg-muted/30">
           <InterestRateCalculator />
         </section>
 

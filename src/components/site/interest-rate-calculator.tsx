@@ -25,9 +25,9 @@ export default function InterestRateCalculator() {
   }, [loanAmount, interestRate, loanTerm]);
 
   const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat("en-US", {
+    return new Intl.NumberFormat("fr-FR", {
       style: "currency",
-      currency: "USD",
+      currency: "EUR",
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(value);
@@ -38,10 +38,10 @@ export default function InterestRateCalculator() {
         <div className="mx-auto max-w-3xl text-center">
             <div className="flex items-center gap-3 justify-center">
                 <Calculator className="w-8 h-8 text-primary" />
-                <h2 className="text-3xl font-bold tracking-tight font-headline">Loan Repayment Calculator</h2>
+                <h2 className="text-3xl font-bold tracking-tight font-headline">Calculateur de Remboursement de Prêt</h2>
             </div>
             <p className="mt-4 text-lg text-muted-foreground">
-                Use our simple calculator to estimate your monthly loan payments. Adjust the sliders to see how the loan amount, interest rate, and term affect your payments.
+                Utilisez notre calculateur simple pour estimer vos mensualités. Ajustez les curseurs pour voir comment le montant, le taux et la durée du prêt affectent vos paiements.
             </p>
         </div>
 
@@ -49,7 +49,7 @@ export default function InterestRateCalculator() {
             <CardContent className="grid md:grid-cols-2 gap-8 p-6 md:p-8">
                 <div className="space-y-8">
                     <div>
-                        <Label htmlFor="loanAmount" className="text-lg">Loan Amount</Label>
+                        <Label htmlFor="loanAmount" className="text-lg">Montant du Prêt</Label>
                         <p className="text-2xl font-bold text-primary">{formatCurrency(loanAmount)}</p>
                         <Slider
                             id="loanAmount"
@@ -62,7 +62,7 @@ export default function InterestRateCalculator() {
                         />
                     </div>
                     <div>
-                        <Label htmlFor="interestRate" className="text-lg">Interest Rate</Label>
+                        <Label htmlFor="interestRate" className="text-lg">Taux d'Intérêt</Label>
                         <p className="text-2xl font-bold text-primary">{interestRate.toFixed(1)}%</p>
                         <Slider
                             id="interestRate"
@@ -75,8 +75,8 @@ export default function InterestRateCalculator() {
                         />
                     </div>
                     <div>
-                        <Label htmlFor="loanTerm" className="text-lg">Loan Term</Label>
-                        <p className="text-2xl font-bold text-primary">{loanTerm} {loanTerm > 1 ? 'Years' : 'Year'}</p>
+                        <Label htmlFor="loanTerm" className="text-lg">Durée du Prêt</Label>
+                        <p className="text-2xl font-bold text-primary">{loanTerm} {loanTerm > 1 ? 'Ans' : 'An'}</p>
                         <Slider
                             id="loanTerm"
                             min={1}
@@ -90,12 +90,12 @@ export default function InterestRateCalculator() {
                 </div>
 
                 <div className="bg-primary text-primary-foreground rounded-lg p-8 flex flex-col items-center justify-center text-center">
-                    <p className="text-lg font-medium opacity-80">Estimated Monthly Payment</p>
+                    <p className="text-lg font-medium opacity-80">Paiement Mensuel Estimé</p>
                     <p className="text-5xl font-extrabold tracking-tight mt-2">
                         {formatCurrency(monthlyPayment)}
                     </p>
                     <p className="mt-4 opacity-80 text-sm">
-                        This is an estimate and does not constitute a loan offer. Actual payments may vary.
+                        Ceci est une estimation et ne constitue pas une offre de prêt. Les paiements réels могут varier.
                     </p>
                 </div>
             </CardContent>

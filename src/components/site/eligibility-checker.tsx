@@ -26,21 +26,21 @@ import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
   annualRevenue: z.coerce
-    .number({ required_error: "Annual revenue is required." })
-    .positive("Annual revenue must be a positive number."),
+    .number({ required_error: "Le revenu annuel est requis." })
+    .positive("Le revenu annuel doit être un nombre positif."),
   creditScore: z.coerce
-    .number({ required_error: "Credit score is required." })
-    .min(300, "Credit score must be at least 300.")
-    .max(850, "Credit score cannot be more than 850."),
+    .number({ required_error: "Le score de crédit est requis." })
+    .min(300, "Le score de crédit doit être d'au moins 300.")
+    .max(850, "Le score de crédit ne peut pas dépasser 850."),
   yearsInBusiness: z.coerce
-    .number({ required_error: "Years in business is required." })
-    .min(0, "Years in business cannot be negative."),
+    .number({ required_error: "Le nombre d'années d'activité est requis." })
+    .min(0, "Le nombre d'années d'activité ne peut pas être négatif."),
   loanAmountRequested: z.coerce
-    .number({ required_error: "Loan amount is required." })
-    .positive("Loan amount must be a positive number."),
+    .number({ required_error: "Le montant du prêt est requis." })
+    .positive("Le montant du prêt doit être un nombre positif."),
   reasonForLoan: z
-    .string({ required_error: "Reason for loan is required." })
-    .min(10, "Please provide a more detailed reason (at least 10 characters)."),
+    .string({ required_error: "La raison du prêt est requise." })
+    .min(10, "Veuillez fournir une raison plus détaillée (au moins 10 caractères)."),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -50,7 +50,7 @@ const ResultCard = ({ result }: { result: EligibilityCheckResult }) => {
     return (
       <Card className="bg-destructive/10 border-destructive">
         <CardHeader>
-          <CardTitle className="text-destructive">An Error Occurred</CardTitle>
+          <CardTitle className="text-destructive">Une erreur est survenue</CardTitle>
         </CardHeader>
         <CardContent>
           <p>{result.error}</p>
@@ -60,8 +60,8 @@ const ResultCard = ({ result }: { result: EligibilityCheckResult }) => {
   }
 
   const { eligibilityStatus, confidenceScore } = result;
-  const isEligible = eligibilityStatus.toLowerCase().includes("eligible");
-  const isHighlyEligible = eligibilityStatus.toLowerCase().includes("highly");
+  const isEligible = eligibilityStatus.toLowerCase().includes("eligible") || eligibilityStatus.toLowerCase().includes("éligible");
+  const isHighlyEligible = eligibilityStatus.toLowerCase().includes("highly") || eligibilityStatus.toLowerCase().includes("hautement");
 
   const getStatusIcon = () => {
     if (isHighlyEligible) return <BadgeCheck className="h-10 w-10 text-green-500" />;
@@ -74,12 +74,12 @@ const ResultCard = ({ result }: { result: EligibilityCheckResult }) => {
       <CardHeader className="text-center">
         <div className="mx-auto mb-4">{getStatusIcon()}</div>
         <CardTitle className="text-2xl font-bold">{eligibilityStatus.split('.')[0]}</CardTitle>
-        <CardDescription>Based on our AI-powered assessment.</CardDescription>
+        <CardDescription>Basé sur notre évaluation par IA.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div>
           <div className="flex justify-between mb-1 text-sm font-medium">
-            <span>Confidence Score</span>
+            <span>Score de confiance</span>
             <span>{(confidenceScore * 100).toFixed(0)}%</span>
           </div>
           <Progress value={confidenceScore * 100} className={cn(
@@ -90,7 +90,7 @@ const ResultCard = ({ result }: { result: EligibilityCheckResult }) => {
         </div>
         {!isHighlyEligible && (
           <div className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-md">
-            <p className="font-semibold text-foreground mb-2">Suggestions for Improvement:</p>
+            <p className="font-semibold text-foreground mb-2">Suggestions d'amélioration :</p>
             <p>{eligibilityStatus.substring(eligibilityStatus.indexOf('.') + 1).trim()}</p>
           </div>
         )}
@@ -121,7 +121,7 @@ export default function EligibilityChecker() {
       const res = await handleEligibilityCheck(values);
       setResult(res);
     } catch (e) {
-      setResult({ error: "Failed to process the request." });
+      setResult({ error: "Échec du traitement de la demande." });
     } finally {
       setIsLoading(false);
     }
@@ -132,10 +132,10 @@ export default function EligibilityChecker() {
       <div className="space-y-4">
         <div className="flex items-center gap-3">
           <Sparkles className="w-8 h-8 text-primary" />
-          <h2 className="text-3xl font-bold tracking-tight font-headline">Loan Eligibility Checker</h2>
+          <h2 className="text-3xl font-bold tracking-tight font-headline">Vérificateur d'Éligibilité au Prêt</h2>
         </div>
         <p className="text-muted-foreground text-lg">
-          Fill out the form with your business details to get an instant, AI-powered assessment of your loan eligibility and personalized suggestions.
+          Remplissez le formulaire avec les détails de votre entreprise pour obtenir une évaluation instantanée de votre éligibilité au prêt par IA et des suggestions personnalisées.
         </p>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -145,9 +145,9 @@ export default function EligibilityChecker() {
                 name="annualRevenue"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Annual Revenue ($)</FormLabel>
+                    <FormLabel>Revenu Annuel (€)</FormLabel>
                     <FormControl>
-                      <Input type="number" placeholder="e.g., 250000" {...field} />
+                      <Input type="number" placeholder="ex: 250000" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -158,7 +158,7 @@ export default function EligibilityChecker() {
                 name="creditScore"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Credit Score</FormLabel>
+                    <FormLabel>Score de Crédit</FormLabel>
                     <FormControl>
                       <Input type="number" placeholder="300-850" {...field} />
                     </FormControl>
@@ -171,9 +171,9 @@ export default function EligibilityChecker() {
                 name="yearsInBusiness"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Years in Business</FormLabel>
+                    <FormLabel>Années d'Activité</FormLabel>
                     <FormControl>
-                      <Input type="number" placeholder="e.g., 3" {...field} />
+                      <Input type="number" placeholder="ex: 3" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -184,9 +184,9 @@ export default function EligibilityChecker() {
                 name="loanAmountRequested"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Loan Amount Requested ($)</FormLabel>
+                    <FormLabel>Montant du Prêt Demandé (€)</FormLabel>
                     <FormControl>
-                      <Input type="number" placeholder="e.g., 50000" {...field} />
+                      <Input type="number" placeholder="ex: 50000" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -198,12 +198,12 @@ export default function EligibilityChecker() {
               name="reasonForLoan"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Reason for Loan</FormLabel>
+                  <FormLabel>Raison du Prêt</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="e.g., To expand operations, purchase new equipment..." {...field} />
+                    <Textarea placeholder="ex: Pour étendre nos opérations, acheter de nouveaux équipements..." {...field} />
                   </FormControl>
                   <FormDescription>
-                    Briefly explain why you are seeking this loan.
+                    Expliquez brièvement pourquoi vous demandez ce prêt.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -215,7 +215,7 @@ export default function EligibilityChecker() {
               ) : (
                 <Sparkles className="mr-2 h-4 w-4" />
               )}
-              Assess Eligibility
+              Évaluer l'éligibilité
             </Button>
           </form>
         </Form>
@@ -224,25 +224,25 @@ export default function EligibilityChecker() {
       <div className="mt-8 md:mt-0">
         <Card className="bg-card/70 sticky top-24">
           <CardHeader>
-            <CardTitle>Your AI Assessment</CardTitle>
+            <CardTitle>Votre Évaluation IA</CardTitle>
             <CardDescription>
               {isLoading
-                ? "Analyzing your data..."
-                : "Your eligibility results will appear here."}
+                ? "Analyse de vos données..."
+                : "Vos résultats d'éligibilité apparaîtront ici."}
             </CardDescription>
           </CardHeader>
           <CardContent>
             {isLoading && (
               <div className="flex flex-col items-center justify-center space-y-4 p-8 text-muted-foreground">
                 <Loader2 className="h-12 w-12 animate-spin text-primary" />
-                <p className="font-medium">Our AI is crunching the numbers...</p>
+                <p className="font-medium">Notre IA analyse les chiffres...</p>
               </div>
             )}
             {result && <ResultCard result={result} />}
             {!isLoading && !result && (
               <div className="flex flex-col items-center justify-center space-y-4 p-8 text-muted-foreground">
                 <Sparkles className="h-12 w-12" />
-                <p className="text-center font-medium">Ready when you are!</p>
+                <p className="text-center font-medium">Prêt quand vous l'êtes !</p>
               </div>
             )}
           </CardContent>

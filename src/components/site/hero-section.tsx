@@ -21,15 +21,15 @@ export default function HeroSection() {
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/50 to-transparent" />
       <div className="relative z-10 flex h-full flex-col items-center justify-center text-center p-4">
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl font-headline">
-          Secure Your Business's Future
+          Sécurisez l'Avenir de Votre Entreprise
         </h1>
         <p className="mt-4 max-w-2xl text-lg sm:text-xl text-neutral-200">
-          VylsCapital provides fast, flexible financing solutions to help your business thrive. Get the capital you need to grow.
+          VylsCapital fournit des solutions de financement rapides et flexibles pour aider votre entreprise à prospérer. Obtenez le capital dont vous avez besoin pour grandir.
         </p>
         <div className="mt-8">
-          <Link href="#eligibility">
+          <Link href="#eligibilite">
             <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 text-lg px-8 py-6">
-              Check Eligibility Now
+              Vérifier mon éligibilité
             </Button>
           </Link>
         </div>

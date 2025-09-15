@@ -21,9 +21,9 @@ import { handleContactForm, type ContactFormInput } from "@/app/actions";
 import { Loader2, Mail, Send } from "lucide-react";
 
 const formSchema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
-  email: z.string().email({ message: "Please enter a valid email address." }),
-  message: z.string().min(10, { message: "Message must be at least 10 characters." }),
+  name: z.string().min(2, { message: "Le nom doit comporter au moins 2 caractères." }),
+  email: z.string().email({ message: "Veuillez entrer une adresse e-mail valide." }),
+  message: z.string().min(10, { message: "Le message doit comporter au moins 10 caractères." }),
 });
 
 export default function ContactForm() {
@@ -46,16 +46,16 @@ export default function ContactForm() {
 
     if (result.success) {
       toast({
-        title: "Message Sent!",
-        description: "Thank you for contacting us. We'll get back to you shortly.",
+        title: "Message envoyé !",
+        description: "Merci de nous avoir contactés. Nous vous répondrons sous peu.",
         variant: "default",
         className: "bg-accent text-accent-foreground border-accent",
       });
       form.reset();
     } else {
        toast({
-        title: "Oh no! Something went wrong.",
-        description: result.error || "There was a problem with your request. Please try again.",
+        title: "Oh non ! Quelque chose s'est mal passé.",
+        description: result.error || "Un problème est survenu avec votre demande. Veuillez réessayer.",
         variant: "destructive",
       });
     }
@@ -66,10 +66,10 @@ export default function ContactForm() {
       <div className="text-center mb-10">
         <div className="flex items-center gap-3 justify-center">
             <Mail className="w-8 h-8 text-primary" />
-            <h2 className="text-3xl font-bold tracking-tight font-headline">Get in Touch</h2>
+            <h2 className="text-3xl font-bold tracking-tight font-headline">Contactez-nous</h2>
         </div>
         <p className="mt-4 text-lg text-muted-foreground">
-          Have a specific question? Fill out the form below and a member of our team will reach out to you.
+          Vous avez une question spécifique ? Remplissez le formulaire ci-dessous et un membre de notre équipe vous contactera.
         </p>
       </div>
 
@@ -83,9 +83,9 @@ export default function ContactForm() {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Full Name</FormLabel>
+                      <FormLabel>Nom Complet</FormLabel>
                       <FormControl>
-                        <Input placeholder="John Doe" {...field} disabled={isLoading} />
+                        <Input placeholder="Jean Dupont" {...field} disabled={isLoading} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -96,9 +96,9 @@ export default function ContactForm() {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email Address</FormLabel>
+                      <FormLabel>Adresse E-mail</FormLabel>
                       <FormControl>
-                        <Input type="email" placeholder="you@example.com" {...field} disabled={isLoading} />
+                        <Input type="email" placeholder="vous@exemple.com" {...field} disabled={isLoading} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -110,9 +110,9 @@ export default function ContactForm() {
                 name="message"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Your Message</FormLabel>
+                    <FormLabel>Votre Message</FormLabel>
                     <FormControl>
-                      <Textarea rows={5} placeholder="How can we help you today?" {...field} disabled={isLoading} />
+                      <Textarea rows={5} placeholder="Comment pouvons-nous vous aider aujourd'hui ?" {...field} disabled={isLoading} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -124,7 +124,7 @@ export default function ContactForm() {
                 ) : (
                   <Send />
                 )}
-                Send Message
+                Envoyer le Message
               </Button>
             </form>
           </Form>

@@ -2,7 +2,7 @@
   "placeholderImages": [
     {
       "id": "hero-background",
-      "description": "A modern office interior view.",
+      "description": "Vue intérieure d'un bureau moderne.",
       "imageUrl": "https://picsum.photos/seed/vylscapital/1920/1080",
       "imageHint": "business office"
     }

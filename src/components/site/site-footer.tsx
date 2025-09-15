@@ -11,7 +11,7 @@ export default function SiteFooter() {
             <span className="font-semibold">VylsCapital</span>
           </div>
           <p className="mt-4 text-sm text-muted-foreground md:mt-0">
-            &copy; {new Date().getFullYear()} VylsCapital. All rights reserved.
+            &copy; {new Date().getFullYear()} VylsCapital. Tous droits réservés.
           </p>
         </div>
       </div>

@@ -10,21 +10,21 @@ import { z } from "zod";
 // Schema for Loan Eligibility
 const loanEligibilityFormSchema = z.object({
   annualRevenue: z.coerce
-    .number({ required_error: "Annual revenue is required." })
-    .positive("Annual revenue must be a positive number."),
+    .number({ required_error: "Le revenu annuel est requis." })
+    .positive("Le revenu annuel doit être un nombre positif."),
   creditScore: z.coerce
-    .number({ required_error: "Credit score is required." })
-    .min(300, "Credit score must be at least 300.")
-    .max(850, "Credit score cannot be more than 850."),
+    .number({ required_error: "Le score de crédit est requis." })
+    .min(300, "Le score de crédit doit être d'au moins 300.")
+    .max(850, "Le score de crédit ne peut pas dépasser 850."),
   yearsInBusiness: z.coerce
-    .number({ required_error: "Years in business is required." })
-    .min(0, "Years in business cannot be negative."),
+    .number({ required_error: "Le nombre d'années d'activité est requis." })
+    .min(0, "Le nombre d'années d'activité ne peut pas être négatif."),
   loanAmountRequested: z.coerce
-    .number({ required_error: "Loan amount is required." })
-    .positive("Loan amount must be a positive number."),
+    .number({ required_error: "Le montant du prêt est requis." })
+    .positive("Le montant du prêt doit être un nombre positif."),
   reasonForLoan: z
-    .string({ required_error: "Reason for loan is required." })
-    .min(10, "Please provide a more detailed reason (at least 10 characters)."),
+    .string({ required_error: "La raison du prêt est requise." })
+    .min(10, "Veuillez fournir une raison plus détaillée (au moins 10 caractères)."),
 });
 
 export type EligibilityCheckResult = LoanEligibilityOutput | { error: string };
@@ -36,7 +36,7 @@ export async function handleEligibilityCheck(
 
   if (!parsed.success) {
     const issues = parsed.error.issues.map((i) => i.message).join(", ");
-    return { error: `Invalid form data: ${issues}` };
+    return { error: `Données du formulaire invalides: ${issues}` };
   }
 
   try {
@@ -55,15 +55,15 @@ export async function handleEligibilityCheck(
           }),
         });
       } catch (webhookError) {
-        console.error("Error sending data to loan webhook:", webhookError);
+        console.error("Erreur lors de l'envoi des données au webhook de prêt:", webhookError);
       }
     }
 
     return result;
   } catch (error) {
-    console.error("Error in assessLoanEligibility flow:", error);
+    console.error("Erreur dans le flux assessLoanEligibility:", error);
     return {
-      error: "An unexpected error occurred while assessing eligibility. Please try again later.",
+      error: "Une erreur inattendue est survenue lors de l'évaluation de l'éligibilité. Veuillez réessayer plus tard.",
     };
   }
 }
@@ -71,9 +71,9 @@ export async function handleEligibilityCheck(
 
 // Schema for Contact Form
 const contactFormSchema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
-  email: z.string().email({ message: "Please enter a valid email address." }),
-  message: z.string().min(10, { message: "Message must be at least 10 characters." }),
+  name: z.string().min(2, { message: "Le nom doit comporter au moins 2 caractères." }),
+  email: z.string().email({ message: "Veuillez entrer une adresse e-mail valide." }),
+  message: z.string().min(10, { message: "Le message doit comporter au moins 10 caractères." }),
 });
 
 export type ContactFormInput = z.infer<typeof contactFormSchema>;
@@ -86,7 +86,7 @@ export async function handleContactForm(
 
   if (!parsed.success) {
     const issues = parsed.error.issues.map((i) => i.message).join(", ");
-    return { success: false, error: `Invalid form data: ${issues}` };
+    return { success: false, error: `Données du formulaire invalides: ${issues}` };
   }
   
   if (process.env.CONTACT_WEBHOOK_URL) {
@@ -99,13 +99,13 @@ export async function handleContactForm(
         body: JSON.stringify(parsed.data),
       });
     } catch (webhookError) {
-      console.error("Error sending data to contact webhook:", webhookError);
+      console.error("Erreur lors de l'envoi des données au webhook de contact:", webhookError);
       // We don't return an error to the client here, just log it. 
       // The main goal is to show the user their message was "sent".
     }
   } else {
     // Log to console if no webhook is configured, so data is not lost.
-    console.log("Contact form submitted (no webhook configured):", parsed.data);
+    console.log("Formulaire de contact soumis (aucun webhook configuré):", parsed.data);
   }
 
   // Assume success if it passes validation and the attempt to send is made.

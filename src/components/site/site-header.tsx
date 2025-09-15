@@ -7,8 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 const navLinks = [
-  { href: "/#eligibility", label: "Eligibility" },
-  { href: "/#calculator", label: "Calculator" },
+  { href: "/#eligibilite", label: "Éligibilité" },
+  { href: "/#calculateur", label: "Calculateur" },
   { href: "/#faq", label: "FAQ" },
   { href: "/#contact", label: "Contact" },
 ];
@@ -37,11 +37,14 @@ export default function SiteHeader() {
           ))}
         </nav>
         <div className="flex flex-1 items-center justify-end space-x-2 md:flex-none">
+          <Button asChild>
+            <Link href="/login">Connexion</Link>
+          </Button>
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="md:hidden">
                 <Menu className="h-5 w-5" />
-                <span className="sr-only">Toggle Menu</span>
+                <span className="sr-only">Ouvrir le menu</span>
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-full max-w-xs pr-0">
@@ -54,7 +57,7 @@ export default function SiteHeader() {
                   <SheetTrigger asChild>
                      <Button variant="ghost" size="icon">
                         <X className="h-5 w-5" />
-                        <span className="sr-only">Close Menu</span>
+                        <span className="sr-only">Fermer le menu</span>
                     </Button>
                   </SheetTrigger>
                 </div>
