@@ -5,6 +5,7 @@ import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { CheckCircle } from "lucide-react";
+import InterestRateCalculator from "@/components/site/interest-rate-calculator";
 
 export default function PretAutoPage() {
   const image = PlaceHolderImages.find((img) => img.id === "pret-auto");
@@ -54,6 +55,19 @@ export default function PretAutoPage() {
             </div>
           </div>
         </section>
+
+        <section className="w-full py-16 md:py-24 bg-muted/30">
+          <InterestRateCalculator 
+            title="Estimez vos mensualités auto"
+            description="Ajustez le montant et la durée pour simuler le remboursement de votre prêt auto."
+            defaultLoanAmount={20000} 
+            defaultTerm={5} 
+            defaultRate={2} 
+            maxAmount={75000}
+            maxTerm={7}
+          />
+        </section>
+
       </main>
       <SiteFooter />
     </div>

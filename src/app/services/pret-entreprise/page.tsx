@@ -74,7 +74,14 @@ export default function PretEntreprisePage() {
         </section>
 
         <section className="w-full py-16 md:py-24 bg-muted/30">
-           <InterestRateCalculator defaultLoanAmount={100000} defaultTerm={7} defaultRate={5.5} maxAmount={1000000} />
+           <InterestRateCalculator 
+              title="Simulez votre financement professionnel"
+              description="Estimez les remboursements pour vos projets d'investissement, de développement ou de trésorerie."
+              defaultLoanAmount={100000} 
+              defaultTerm={7} 
+              defaultRate={2} 
+              maxAmount={1000000} 
+            />
         </section>
 
         <section className="container mx-auto py-16 md:py-24">

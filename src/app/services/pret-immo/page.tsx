@@ -5,6 +5,7 @@ import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { CheckCircle } from "lucide-react";
+import InterestRateCalculator from "@/components/site/interest-rate-calculator";
 
 export default function PretImmobilierPage() {
   const image = PlaceHolderImages.find((img) => img.id === "pret-immo");
@@ -54,6 +55,19 @@ export default function PretImmobilierPage() {
             </div>
           </div>
         </section>
+
+        <section className="w-full py-16 md:py-24 bg-muted/30">
+          <InterestRateCalculator 
+            title="Calculez votre prêt immobilier"
+            description="Simulez les mensualités de votre futur achat immobilier en ajustant le montant et la durée."
+            defaultLoanAmount={200000} 
+            defaultTerm={25} 
+            defaultRate={2} 
+            maxAmount={1500000}
+            maxTerm={30}
+          />
+        </section>
+
       </main>
       <SiteFooter />
     </div>

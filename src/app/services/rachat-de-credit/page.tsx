@@ -5,6 +5,7 @@ import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { CheckCircle } from "lucide-react";
+import InterestRateCalculator from "@/components/site/interest-rate-calculator";
 
 export default function RachatCreditPage() {
   const image = PlaceHolderImages.find((img) => img.id === "rachat-credit");
@@ -54,6 +55,19 @@ export default function RachatCreditPage() {
             </div>
           </div>
         </section>
+
+        <section className="w-full py-16 md:py-24 bg-muted/30">
+          <InterestRateCalculator 
+            title="Simulez votre rachat de crédit"
+            description="Voyez comment le regroupement de vos prêts peut affecter vos paiements mensuels."
+            defaultLoanAmount={40000} 
+            defaultTerm={10} 
+            defaultRate={2} 
+            maxAmount={250000}
+            maxTerm={15}
+          />
+        </section>
+
       </main>
       <SiteFooter />
     </div>

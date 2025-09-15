@@ -5,6 +5,7 @@ import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { CheckCircle } from "lucide-react";
+import InterestRateCalculator from "@/components/site/interest-rate-calculator";
 
 export default function PretPersonnelPage() {
   const image = PlaceHolderImages.find((img) => img.id === "pret-personnel");
@@ -54,6 +55,19 @@ export default function PretPersonnelPage() {
             </div>
           </div>
         </section>
+
+        <section className="w-full py-16 md:py-24 bg-muted/30">
+          <InterestRateCalculator 
+            title="Simulez votre prêt personnel"
+            description="Estimez vos remboursements mensuels pour vos projets personnels."
+            defaultLoanAmount={10000} 
+            defaultTerm={4} 
+            defaultRate={2} 
+            maxAmount={75000}
+            maxTerm={10}
+          />
+        </section>
+
       </main>
       <SiteFooter />
     </div>
