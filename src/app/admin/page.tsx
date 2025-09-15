@@ -25,7 +25,7 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { handleAdminLogin, handleCreateClientAndAccount, type CreateClientAndAccountResult } from "@/app/actions";
-import { Loader2, UserPlus, Shield, Landmark, Users } from "lucide-react";
+import { Loader2, UserPlus, Shield, Landmark, Users, ArrowLeft, UserCog, Pencil } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 
@@ -328,13 +328,24 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: (cli
   );
 };
 
-const ClientList = ({ clients }: { clients: any[] }) => {
+const ClientList = ({ clients, onClientSelect }: { clients: any[], onClientSelect: (client:any) => void }) => {
     if (clients.length === 0) {
-        return null;
+        return (
+             <Card className="w-full shadow-lg mt-8 lg:mt-0">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-xl font-bold">
+                        <Users /> Liste des Clients
+                    </CardTitle>
+                </CardHeader>
+                <CardContent className="text-center text-muted-foreground py-12">
+                    Aucun client créé pendant cette session.
+                </CardContent>
+            </Card>
+        );
     }
 
     return (
-        <Card className="w-full shadow-lg mt-8">
+        <Card className="w-full shadow-lg mt-8 lg:mt-0">
             <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-xl font-bold">
                     <Users /> Liste des Clients Créés
@@ -350,18 +361,16 @@ const ClientList = ({ clients }: { clients: any[] }) => {
                         <TableHead>Email</TableHead>
                         <TableHead>Numéro de Compte</TableHead>
                         <TableHead>Prêt Actif</TableHead>
-                        <TableHead>Date Création</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {clients.map((client) => (
-                        <TableRow key={client.clientId}>
+                        <TableRow key={client.clientId} onClick={() => onClientSelect(client)} className="cursor-pointer hover:bg-muted/50">
                             <TableCell className="font-medium">{client.email}</TableCell>
                             <TableCell>{client.accountNumber}</TableCell>
                             <TableCell>
                                 {client.hasLoan ? <Badge variant="default">Oui</Badge> : <Badge variant="secondary">Non</Badge>}
                             </TableCell>
-                            <TableCell>{new Date(client.creationDate).toLocaleDateString('fr-FR')}</TableCell>
                         </TableRow>
                         ))}
                     </TableBody>
@@ -371,14 +380,76 @@ const ClientList = ({ clients }: { clients: any[] }) => {
     )
 }
 
+const ClientDetailView = ({ client, onBack }: { client: any, onBack: () => void }) => {
+    return (
+        <Card className="w-full shadow-lg">
+            <CardHeader>
+                <div className="flex justify-between items-start">
+                    <div>
+                        <CardTitle className="flex items-center gap-2 text-xl font-bold">
+                            <UserCog /> Détails du Client
+                        </CardTitle>
+                        <CardDescription>{client.email}</CardDescription>
+                    </div>
+                    <Button variant="outline" size="sm" onClick={onBack}>
+                        <ArrowLeft className="mr-2 h-4 w-4" /> Retour
+                    </Button>
+                </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+                <div className="p-4 border rounded-md">
+                    <h3 className="font-semibold mb-2">Informations du Compte</h3>
+                    <p><strong>Numéro de compte :</strong> {client.accountNumber}</p>
+                    <p><strong>IBAN :</strong> {client.iban}</p>
+                    <p><strong>BIC/SWIFT :</strong> {client.bic}</p>
+                    <p><strong>Date de création :</strong> {new Date(client.creationDate).toLocaleDateString('fr-FR')}</p>
+                </div>
+
+                {client.hasLoan && (
+                     <div className="p-4 border rounded-md">
+                        <h3 className="font-semibold mb-2">Informations du Prêt</h3>
+                        <p><strong>Type de prêt :</strong> {client.loanType}</p>
+                        <p><strong>Montant :</strong> {client.loanAmount} €</p>
+                        <p><strong>Taux :</strong> {client.interestRate} %</p>
+                        <p><strong>Durée :</strong> {client.loanTerm} ans</p>
+                    </div>
+                )}
+                
+                <div className="p-4 border rounded-md space-y-4">
+                     <h3 className="font-semibold mb-2">Actions de Gestion (Simulation)</h3>
+                     <div className="flex gap-4">
+                        <Button disabled>
+                            <Pencil className="mr-2" /> Créditer / Débiter
+                        </Button>
+                         <Button disabled variant="secondary">
+                            Gérer les virements
+                        </Button>
+                     </div>
+                      <p className="text-sm text-muted-foreground">Ces actions sont désactivées car elles nécessitent une base de données pour fonctionner.</p>
+                </div>
+            </CardContent>
+        </Card>
+    );
+};
+
 
 export default function AdminPage() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [clients, setClients] = useState<any[]>([]);
+  const [selectedClient, setSelectedClient] = useState<any | null>(null);
 
   const handleClientCreation = (client: any) => {
     setClients(prevClients => [...prevClients, client]);
   }
+
+  const handleClientSelection = (client: any) => {
+    setSelectedClient(client);
+  }
+
+  const handleBackToList = () => {
+    setSelectedClient(null);
+  }
+
 
   if (!isAdmin) {
     return (
@@ -394,12 +465,17 @@ export default function AdminPage() {
         <h1 className="text-3xl font-bold mb-2">Panneau Administrateur</h1>
         <p className="text-muted-foreground mb-8">Gérez les comptes clients et leurs produits bancaires.</p>
         <div className="grid lg:grid-cols-2 gap-8 items-start">
-            <CreateClientAndAccountForm onClientCreated={handleClientCreation} />
-            <ClientList clients={clients} />
+            {selectedClient ? (
+                <ClientDetailView client={selectedClient} onBack={handleBackToList} />
+            ) : (
+                <CreateClientAndAccountForm onClientCreated={handleClientCreation} />
+            )}
+            <ClientList clients={clients} onClientSelect={handleClientSelection} />
         </div>
       </div>
     </main>
   );
 }
 
+    
     
