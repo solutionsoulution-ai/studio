@@ -2,15 +2,29 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Landmark, Menu, X } from "lucide-react";
+import { Landmark, Menu, X, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 
-const navLinks = [
+const mainNavLinks = [
   { href: "/#eligibilite", label: "Éligibilité" },
   { href: "/#calculateur", label: "Calculateur" },
   { href: "/#faq", label: "FAQ" },
   { href: "/#contact", label: "Contact" },
+];
+
+const serviceLinks = [
+  { href: "/services/pret-personnel", label: "Prêt Personnel" },
+  { href: "/services/pret-immo", label: "Prêt Immobilier" },
+  { href: "/services/pret-auto", label: "Prêt Auto" },
+  { href: "/services/rachat-de-credit", label: "Rachat de Crédit" },
 ];
 
 export default function SiteHeader() {
@@ -26,7 +40,23 @@ export default function SiteHeader() {
           <span className="font-bold sm:inline-block">VylsCapital</span>
         </Link>
         <nav className="hidden md:flex flex-1 items-center space-x-6 text-sm font-medium">
-          {navLinks.map(({ href, label }) => (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="px-2">
+                Nos Services
+                <ChevronDown className="ml-1 h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              {serviceLinks.map(({ href, label }) => (
+                <DropdownMenuItem key={label} asChild>
+                  <Link href={href}>{label}</Link>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {mainNavLinks.map(({ href, label }) => (
             <Link
               key={label}
               href={href}
@@ -62,11 +92,23 @@ export default function SiteHeader() {
                   </SheetTrigger>
                 </div>
                 <nav className="flex flex-col space-y-4 p-4">
-                  {navLinks.map(({ href, label }) => (
+                  <p className="text-sm font-semibold text-muted-foreground">Nos Services</p>
+                  {serviceLinks.map(({ href, label }) => (
                     <Link
                       key={label}
                       href={href}
-                      className="text-lg font-medium transition-colors hover:text-primary"
+                      className="text-lg font-medium transition-colors hover:text-primary pl-2"
+                      onClick={closeMobileMenu}
+                    >
+                      {label}
+                    </Link>
+                  ))}
+                   <p className="text-sm font-semibold text-muted-foreground pt-4">Menu</p>
+                  {mainNavLinks.map(({ href, label }) => (
+                    <Link
+                      key={label}
+                      href={href}
+                      className="text-lg font-medium transition-colors hover:text-primary pl-2"
                       onClick={closeMobileMenu}
                     >
                       {label}

@@ -5,6 +5,30 @@
       "description": "Vue intérieure d'un bureau moderne.",
       "imageUrl": "https://picsum.photos/seed/vylscapital/1920/1080",
       "imageHint": "business office"
+    },
+    {
+      "id": "pret-personnel",
+      "description": "Personne planifiant son budget pour un projet personnel.",
+      "imageUrl": "https://picsum.photos/seed/personal-loan/1200/800",
+      "imageHint": "personal project"
+    },
+    {
+      "id": "pret-immo",
+      "description": "Maquette d'une maison posée sur des plans d'architecte.",
+      "imageUrl": "https://picsum.photos/seed/immo-loan/1200/800",
+      "imageHint": "house plans"
+    },
+    {
+      "id": "pret-auto",
+      "description": "Gros plan sur le phare d'une voiture neuve et brillante.",
+      "imageUrl": "https://picsum.photos/seed/auto-loan/1200/800",
+      "imageHint": "new car"
+    },
+    {
+      "id": "rachat-credit",
+      "description": "Plusieurs cartes de crédit et factures organisées sur un bureau.",
+      "imageUrl": "https://picsum.photos/seed/credit-buyback/1200/800",
+      "imageHint": "credit cards"
     }
   ]
 }
