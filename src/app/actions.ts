@@ -42,6 +42,26 @@ export async function handleEligibilityCheck(
 
   try {
     const result = await assessLoanEligibility(parsed.data);
+
+    // If a webhook URL is configured, send the data to it.
+    if (process.env.WEBHOOK_URL) {
+      try {
+        await fetch(process.env.WEBHOOK_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            formData: parsed.data,
+            eligibilityResult: result,
+          }),
+        });
+      } catch (webhookError) {
+        console.error("Error sending data to webhook:", webhookError);
+        // We don't return an error to the client, as the primary function (eligibility check) succeeded.
+      }
+    }
+
     return result;
   } catch (error) {
     console.error("Error in assessLoanEligibility flow:", error);
