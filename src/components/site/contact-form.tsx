@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -16,7 +17,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Mail } from "lucide-react";
+import { handleContactForm, type ContactFormInput } from "@/app/actions";
+import { Loader2, Mail, Send } from "lucide-react";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -24,12 +26,11 @@ const formSchema = z.object({
   message: z.string().min(10, { message: "Message must be at least 10 characters." }),
 });
 
-type FormValues = z.infer<typeof formSchema>;
-
 export default function ContactForm() {
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const form = useForm<FormValues>({
+  const form = useForm<ContactFormInput>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
@@ -38,15 +39,26 @@ export default function ContactForm() {
     },
   });
 
-  function onSubmit(values: FormValues) {
-    console.log("Form submitted:", values);
-    toast({
-      title: "Message Sent!",
-      description: "Thank you for contacting us. We'll get back to you shortly.",
-      variant: "default",
-      className: "bg-accent text-accent-foreground border-accent",
-    });
-    form.reset();
+  async function onSubmit(values: ContactFormInput) {
+    setIsLoading(true);
+    const result = await handleContactForm(values);
+    setIsLoading(false);
+
+    if (result.success) {
+      toast({
+        title: "Message Sent!",
+        description: "Thank you for contacting us. We'll get back to you shortly.",
+        variant: "default",
+        className: "bg-accent text-accent-foreground border-accent",
+      });
+      form.reset();
+    } else {
+       toast({
+        title: "Oh no! Something went wrong.",
+        description: result.error || "There was a problem with your request. Please try again.",
+        variant: "destructive",
+      });
+    }
   }
 
   return (
@@ -73,7 +85,7 @@ export default function ContactForm() {
                     <FormItem>
                       <FormLabel>Full Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="John Doe" {...field} />
+                        <Input placeholder="John Doe" {...field} disabled={isLoading} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -86,7 +98,7 @@ export default function ContactForm() {
                     <FormItem>
                       <FormLabel>Email Address</FormLabel>
                       <FormControl>
-                        <Input type="email" placeholder="you@example.com" {...field} />
+                        <Input type="email" placeholder="you@example.com" {...field} disabled={isLoading} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -100,13 +112,18 @@ export default function ContactForm() {
                   <FormItem>
                     <FormLabel>Your Message</FormLabel>
                     <FormControl>
-                      <Textarea rows={5} placeholder="How can we help you today?" {...field} />
+                      <Textarea rows={5} placeholder="How can we help you today?" {...field} disabled={isLoading} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button type="submit" size="lg" className="w-full">
+              <Button type="submit" size="lg" className="w-full" disabled={isLoading}>
+                 {isLoading ? (
+                  <Loader2 className="animate-spin" />
+                ) : (
+                  <Send />
+                )}
                 Send Message
               </Button>
             </form>
