@@ -243,6 +243,10 @@ export async function handleCreateClientAndAccount(formData: CreateClientAndAcco
   return { success: true, details: clientDetails };
 }
 
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "application/pdf"];
+
+
 // Schema for Multi-Step Loan Application
 const loanApplicationSchema = z.object({
   // Step 1
@@ -270,6 +274,32 @@ const loanApplicationSchema = z.object({
   monthlyIncome: z.coerce.number().positive("Le revenu doit être positif."),
   monthlyExpenses: z.coerce.number().nonnegative("Les charges ne peuvent être négatives."),
   creditScore: z.coerce.number().min(300).max(850),
+
+  // Step 4: Files
+  identityDocument: z
+    .any()
+    .refine((file) => !!file, "Le téléversement d'un fichier est requis.")
+    .refine((file) => file?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
+    .refine(
+      (file) => ACCEPTED_FILE_TYPES.includes(file?.type),
+      "Seuls les formats .jpg, .png et .pdf sont acceptés."
+    ),
+  proofOfAddress: z
+    .any()
+    .refine((file) => !!file, "Le téléversement d'un fichier est requis.")
+    .refine((file) => file?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
+    .refine(
+      (file) => ACCEPTED_FILE_TYPES.includes(file?.type),
+      "Seuls les formats .jpg, .png et .pdf sont acceptés."
+    ),
+  proofOfIncome: z
+    .any()
+    .refine((file) => !!file, "Le téléversement d'un fichier est requis.")
+    .refine((file) => file?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
+    .refine(
+      (file) => ACCEPTED_FILE_TYPES.includes(file?.type),
+      "Seuls les formats .jpg, .png et .pdf sont acceptés."
+    ),
 }).refine((data) => {
     try {
         const date = new Date(data.birthYear, data.birthMonth - 1, data.birthDay);
@@ -287,15 +317,37 @@ const loanApplicationSchema = z.object({
 export type LoanApplicationInput = z.infer<typeof loanApplicationSchema>;
 export type LoanApplicationResult = { success: boolean; error?: string; applicationId?: string };
 
-export async function handleLoanApplication(formData: LoanApplicationInput): Promise<LoanApplicationResult> {
-  const parsed = loanApplicationSchema.safeParse(formData);
+export async function handleLoanApplication(formData: FormData): Promise<LoanApplicationResult> {
+    
+  const rawData = Object.fromEntries(formData.entries());
+
+  // Coerce numbers and files
+  const dataToParse = {
+    ...rawData,
+    loanAmount: Number(rawData.loanAmount),
+    loanTerm: Number(rawData.loanTerm),
+    numberOfChildren: Number(rawData.numberOfChildren),
+    birthDay: Number(rawData.birthDay),
+    birthMonth: Number(rawData.birthMonth),
+    birthYear: Number(rawData.birthYear),
+    monthlyIncome: Number(rawData.monthlyIncome),
+    monthlyExpenses: Number(rawData.monthlyExpenses),
+    creditScore: Number(rawData.creditScore),
+    identityDocument: rawData.identityDocument,
+    proofOfAddress: rawData.proofOfAddress,
+    proofOfIncome: rawData.proofOfIncome,
+  };
+
+
+  const parsed = loanApplicationSchema.safeParse(dataToParse);
+
 
   if (!parsed.success) {
-    const issues = parsed.error.issues.map((i) => i.message).join(", ");
+    const issues = parsed.error.issues.map((i) => `${i.path.join('.')} : ${i.message}`).join(", ");
     return { success: false, error: `Données du formulaire invalides: ${issues}` };
   }
 
-  const { birthDay, birthMonth, birthYear, ...restOfData } = parsed.data;
+  const { birthDay, birthMonth, birthYear, identityDocument, proofOfAddress, proofOfIncome, ...restOfData } = parsed.data;
   const dateOfBirth = new Date(birthYear, birthMonth - 1, birthDay).toISOString();
 
   const applicationDetails = {
@@ -303,10 +355,17 @@ export async function handleLoanApplication(formData: LoanApplicationInput): Pro
     dateOfBirth,
     applicationId: `APP-${Date.now()}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`,
     submissionDate: new Date().toISOString(),
+    files: [
+        { name: 'identityDocument', fileName: (identityDocument as File).name, type: (identityDocument as File).type },
+        { name: 'proofOfAddress', fileName: (proofOfAddress as File).name, type: (proofOfAddress as File).type },
+        { name: 'proofOfIncome', fileName: (proofOfIncome as File).name, type: (proofOfIncome as File).type },
+    ]
   };
 
   if (process.env.LOAN_APP_WEBHOOK_URL) {
     try {
+      // NOTE: Sending files to a webhook requires multipart/form-data, which is more complex.
+      // For this example, we'll send the file metadata as JSON.
       await fetch(process.env.LOAN_APP_WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

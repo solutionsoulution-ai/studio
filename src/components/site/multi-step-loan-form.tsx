@@ -22,7 +22,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { handleLoanApplication } from "@/app/actions";
-import { Loader2, ArrowRight, ArrowLeft, Send, CheckCircle, FileText, User, Banknote } from "lucide-react";
+import { Loader2, ArrowRight, ArrowLeft, Send, CheckCircle, FileText, User, Banknote, UploadCloud } from "lucide-react";
 
 // Schémas de validation pour chaque étape
 const step1Schema = z.object({
@@ -54,9 +54,41 @@ const step3Schema = z.object({
   creditScore: z.coerce.number().min(300).max(850, "Le score de crédit doit être entre 300 et 850."),
 });
 
+// Limite de taille de fichier à 5MB
+const MAX_FILE_SIZE = 5 * 1024 * 1024; 
+// Types de fichiers autorisés
+const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "application/pdf"];
+
+const step4Schema = z.object({
+  identityDocument: z
+    .any()
+    .refine((files) => files?.length == 1, "Le téléversement d'un fichier est requis.")
+    .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
+    .refine(
+      (files) => ACCEPTED_FILE_TYPES.includes(files?.[0]?.type),
+      "Seuls les formats .jpg, .png et .pdf sont acceptés."
+    ),
+  proofOfAddress: z
+    .any()
+    .refine((files) => files?.length == 1, "Le téléversement d'un fichier est requis.")
+    .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
+    .refine(
+      (files) => ACCEPTED_FILE_TYPES.includes(files?.[0]?.type),
+      "Seuls les formats .jpg, .png et .pdf sont acceptés."
+    ),
+  proofOfIncome: z
+    .any()
+    .refine((files) => files?.length == 1, "Le téléversement d'un fichier est requis.")
+    .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
+    .refine(
+      (files) => ACCEPTED_FILE_TYPES.includes(files?.[0]?.type),
+      "Seuls les formats .jpg, .png et .pdf sont acceptés."
+    ),
+});
+
 
 // Schéma complet pour la soumission finale
-const fullLoanSchema = step1Schema.merge(step2Schema).merge(step3Schema).refine((data) => {
+const fullLoanSchema = step1Schema.merge(step2Schema).merge(step3Schema).merge(step4Schema).refine((data) => {
     try {
         const date = new Date(data.birthYear, data.birthMonth - 1, data.birthDay);
         return date.getFullYear() === data.birthYear && date.getMonth() === data.birthMonth - 1 && date.getDate() === data.birthDay;
@@ -74,7 +106,8 @@ const steps = [
   { id: "Étape 1", name: "Informations sur le Prêt", schema: step1Schema, icon: FileText },
   { id: "Étape 2", name: "Informations Personnelles", schema: step2Schema, icon: User },
   { id: "Étape 3", name: "Situation Financière", schema: step3Schema, icon: Banknote },
-  { id: "Étape 4", name: "Confirmation", icon: CheckCircle },
+  { id: "Étape 4", name: "Documents", schema: step4Schema, icon: UploadCloud },
+  { id: "Étape 5", name: "Confirmation", icon: CheckCircle },
 ];
 
 export default function MultiStepLoanForm() {
@@ -85,6 +118,7 @@ export default function MultiStepLoanForm() {
 
   const form = useForm<FullLoanFormValues>({
     resolver: zodResolver(fullLoanSchema),
+    mode: "onChange",
     defaultValues: {
       loanType: "immobilier",
       loanAmount: 100000,
@@ -106,14 +140,30 @@ export default function MultiStepLoanForm() {
       monthlyIncome: 3000,
       monthlyExpenses: 1000,
       creditScore: 700,
+      identityDocument: undefined,
+      proofOfAddress: undefined,
+      proofOfIncome: undefined,
     },
   });
+  
+  const identityDocumentRef = form.register("identityDocument");
+  const proofOfAddressRef = form.register("proofOfAddress");
+  const proofOfIncomeRef = form.register("proofOfIncome");
 
   const processForm = async (data: FieldValues) => {
     setIsLoading(true);
-    // This is the final submission step
+
+    const formData = new FormData();
+    Object.entries(data).forEach(([key, value]) => {
+      if (value instanceof FileList) {
+        formData.append(key, value[0]);
+      } else {
+        formData.append(key, String(value));
+      }
+    });
+
     try {
-        const result = await handleLoanApplication(data as FullLoanFormValues);
+        const result = await handleLoanApplication(formData);
         if (result.success) {
             setIsSubmitted(true);
         } else {
@@ -136,12 +186,12 @@ export default function MultiStepLoanForm() {
   const nextStep = async () => {
     const currentSchema = steps[currentStep].schema;
     if (currentSchema) {
-        const result = await form.trigger(Object.keys(currentSchema.shape) as any);
+        const fields = Object.keys(currentSchema.shape) as (keyof FullLoanFormValues)[];
+        const result = await form.trigger(fields);
         if (result) {
            setCurrentStep(currentStep + 1);
         }
     } else {
-      // If there is no schema, it's a step without fields (like recap), so just move forward.
       setCurrentStep(currentStep + 1);
     }
   };
@@ -169,6 +219,11 @@ export default function MultiStepLoanForm() {
             </CardContent>
         </Card>
     );
+  }
+  
+  const getFileName = (field: "identityDocument" | "proofOfAddress" | "proofOfIncome") => {
+    const files = form.watch(field) as FileList | undefined;
+    return files && files.length > 0 ? files[0].name : "Aucun fichier sélectionné";
   }
 
   return (
@@ -386,6 +441,49 @@ export default function MultiStepLoanForm() {
                   </div>
                 )}
                 {currentStep === 3 && (
+                    <div className="space-y-4">
+                        <FormField
+                            control={form.control}
+                            name="identityDocument"
+                            render={() => (
+                            <FormItem>
+                                <FormLabel>Pièce d'identité (PDF, JPG, PNG)</FormLabel>
+                                <FormControl>
+                                <Input type="file" {...identityDocumentRef} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                            )}
+                        />
+                         <FormField
+                            control={form.control}
+                            name="proofOfAddress"
+                            render={() => (
+                            <FormItem>
+                                <FormLabel>Justificatif de domicile (PDF, JPG, PNG)</FormLabel>
+                                <FormControl>
+                                <Input type="file" {...proofOfAddressRef} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                            )}
+                        />
+                         <FormField
+                            control={form.control}
+                            name="proofOfIncome"
+                            render={() => (
+                            <FormItem>
+                                <FormLabel>Justificatif de revenus (PDF, JPG, PNG)</FormLabel>
+                                <FormControl>
+                                <Input type="file" {...proofOfIncomeRef} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                            )}
+                        />
+                    </div>
+                )}
+                {currentStep === 4 && (
                     <div className="space-y-4 text-sm">
                         <h3 className="text-lg font-bold">Récapitulatif de votre demande</h3>
                         <div className="p-4 bg-muted/50 rounded-lg space-y-2">
@@ -400,6 +498,10 @@ export default function MultiStepLoanForm() {
                             <p><strong>Profession :</strong> {form.getValues("occupation")}</p>
                             <p><strong>Revenu mensuel :</strong> {form.getValues("monthlyIncome")} €</p>
                              <p><strong>Situation familiale :</strong> {form.getValues("maritalStatus")} ({form.getValues("numberOfChildren")} enfant(s))</p>
+                            <hr className="my-2" />
+                            <p><strong>Pièce d'identité :</strong> {getFileName("identityDocument")}</p>
+                            <p><strong>Justificatif de domicile :</strong> {getFileName("proofOfAddress")}</p>
+                            <p><strong>Justificatif de revenus :</strong> {getFileName("proofOfIncome")}</p>
                         </div>
                         <p className="text-xs text-muted-foreground">En cliquant sur "Envoyer ma demande", vous confirmez que les informations fournies sont exactes et complètes.</p>
                     </div>
@@ -411,13 +513,7 @@ export default function MultiStepLoanForm() {
               <Button type="button" variant="outline" onClick={prevStep} disabled={currentStep === 0 || isLoading}>
                 <ArrowLeft className="mr-2" /> Précédent
               </Button>
-               {currentStep === steps.length - 2 ? ( // Penultimate step
-                 <Button type="button" onClick={nextStep} disabled={isLoading}>
-                    {isLoading && <Loader2 className="animate-spin mr-2" />}
-                    Vérifier et soumettre
-                    <ArrowRight className="ml-2" />
-                </Button>
-               ) : currentStep === steps.length - 1 ? ( // Last step (recap)
+               {currentStep === steps.length - 1 ? ( // Last step (recap)
                  <Button type="submit" disabled={isLoading}>
                     {isLoading && <Loader2 className="animate-spin mr-2" />}
                     Envoyer ma demande
