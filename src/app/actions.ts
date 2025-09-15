@@ -45,9 +45,10 @@ export async function handleEligibilityCheck(
   try {
     const result = await assessLoanEligibility(parsed.data);
 
-    if (process.env.WEBHOOK_URL) {
+    // Envoi des données au webhook si l'URL est configurée
+    if (process.env.LOAN_ELIGIBILITY_WEBHOOK_URL) {
       try {
-        await fetch(process.env.WEBHOOK_URL, {
+        await fetch(process.env.LOAN_ELIGIBILITY_WEBHOOK_URL, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -58,7 +59,7 @@ export async function handleEligibilityCheck(
           }),
         });
       } catch (webhookError) {
-        console.error("Erreur lors de l'envoi des données au webhook de prêt:", webhookError);
+        console.error("Erreur lors de l'envoi des données au webhook d'éligibilité:", webhookError);
       }
     }
 
@@ -92,6 +93,7 @@ export async function handleContactForm(
     return { success: false, error: `Données du formulaire invalides: ${issues}` };
   }
   
+  // Envoi des données au webhook si l'URL est configurée
   if (process.env.CONTACT_WEBHOOK_URL) {
     try {
       await fetch(process.env.CONTACT_WEBHOOK_URL, {
@@ -103,15 +105,14 @@ export async function handleContactForm(
       });
     } catch (webhookError) {
       console.error("Erreur lors de l'envoi des données au webhook de contact:", webhookError);
-      // We don't return an error to the client here, just log it. 
-      // The main goal is to show the user their message was "sent".
+      // Nous ne retournons pas d'erreur au client ici, juste un log.
     }
   } else {
-    // Log to console if no webhook is configured, so data is not lost.
+    // Log en console si aucun webhook n'est configuré, pour ne pas perdre les données.
     console.log("Formulaire de contact soumis (aucun webhook configuré):", parsed.data);
   }
 
-  // Assume success if it passes validation and the attempt to send is made.
+  // Succès présumé si la validation passe et la tentative d'envoi est faite.
   return { success: true };
 }
 
@@ -155,8 +156,6 @@ export async function handleLogin(formData: LoginInput): Promise<AuthResult> {
         return { success: false, error: res.error || "Identifiants incorrects." };
       }
       const session = await response.json();
-      // Ici, vous définiriez un cookie ou un token de session.
-      // Pour cet exemple, nous allons simplement retourner un succès.
       return { success: true };
     } catch (error) {
       console.error("Erreur lors de l'appel au webhook de connexion:", error);
@@ -164,28 +163,23 @@ export async function handleLogin(formData: LoginInput): Promise<AuthResult> {
     }
   }
   
-  // Logique de secours pour le développement local sans webhook
   if (formData.email === 'client@test.com' && formData.password === 'password') {
     console.log("Connexion de l'utilisateur de test réussie.");
     return { success: true };
   }
 
   console.log("Tentative de connexion (aucun webhook configuré):", parsed.data);
-  // Simuler un échec pour les autres utilisateurs en l'absence de webhook
   return { success: false, error: "Service d'authentification non configuré. Identifiants de test non valides." };
 }
 
 
 // Schema for Client and Account Creation
 const createClientAndAccountSchema = z.object({
-  // Infos Client
   email: z.string().email({ message: "Veuillez entrer une adresse e-mail valide." }),
   password: z.string().min(8, { message: "Le mot de passe doit comporter au moins 8 caractères." }),
-  // Infos Compte Bancaire
   accountNumber: z.string().min(1, { message: "Le numéro de compte est requis." }),
   iban: z.string().min(1, { message: "L'IBAN est requis." }),
   bic: z.string().min(1, { message: "Le code BIC/SWIFT est requis." }),
-  // Infos Prêt (Optionnel)
   loanType: z.enum(["none", "immobilier", "consommation", "auto"]),
   loanAmount: z.coerce.number().optional(),
   interestRate: z.coerce.number().optional(),
@@ -238,7 +232,6 @@ export async function handleCreateClientAndAccount(formData: CreateClientAndAcco
     }
   }
 
-  // Fallback for local development
   console.log("Création de client/compte (aucun webhook configuré):", clientDetails);
   return { success: true, details: clientDetails };
 }
@@ -249,12 +242,9 @@ const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "application/pdf"];
 
 // Schema for Multi-Step Loan Application
 const loanApplicationSchema = z.object({
-  // Step 1
   loanType: z.enum(["immobilier", "consommation", "auto", "entreprise", "rachat"]),
   loanAmount: z.coerce.number().positive("Le montant doit être positif."),
   loanTerm: z.coerce.number().int().min(12, "La durée doit être d'au moins 12 mois."),
-  
-  // Step 2
   firstName: z.string().min(2, "Le prénom est requis."),
   lastName: z.string().min(2, "Le nom est requis."),
   email: z.string().email("L'adresse e-mail est invalide."),
@@ -268,14 +258,10 @@ const loanApplicationSchema = z.object({
   birthDay: z.coerce.number().int().min(1).max(31),
   birthMonth: z.coerce.number().int().min(1).max(12),
   birthYear: z.coerce.number().int().min(1900).max(new Date().getFullYear() - 18),
-  
-  // Step 3
   occupation: z.string().min(2, "La profession est requise."),
   monthlyIncome: z.coerce.number().positive("Le revenu doit être positif."),
   monthlyExpenses: z.coerce.number().nonnegative("Les charges ne peuvent être négatives."),
   creditScore: z.coerce.number().min(300).max(850),
-
-  // Step 4: Files
   identityDocument: z
     .any()
     .refine((file) => !!file, "Le téléversement d'un fichier est requis.")
@@ -303,14 +289,13 @@ const loanApplicationSchema = z.object({
 }).refine((data) => {
     try {
         const date = new Date(data.birthYear, data.birthMonth - 1, data.birthDay);
-        // Check if the date is valid and also if the components match (e.g., handles Feb 30th)
         return date.getFullYear() === data.birthYear && date.getMonth() === data.birthMonth - 1 && date.getDate() === data.birthDay;
     } catch (e) {
         return false;
     }
 }, {
     message: "La date de naissance est invalide.",
-    path: ["birthDay"], // Attach error to the first date field
+    path: ["birthDay"],
 });
 
 
@@ -321,7 +306,6 @@ export async function handleLoanApplication(formData: FormData): Promise<LoanApp
     
   const rawData = Object.fromEntries(formData.entries());
 
-  // Coerce numbers and files
   const dataToParse = {
     ...rawData,
     loanAmount: Number(rawData.loanAmount),
@@ -338,9 +322,7 @@ export async function handleLoanApplication(formData: FormData): Promise<LoanApp
     proofOfIncome: rawData.proofOfIncome,
   };
 
-
   const parsed = loanApplicationSchema.safeParse(dataToParse);
-
 
   if (!parsed.success) {
     const issues = parsed.error.issues.map((i) => `${i.path.join('.')} : ${i.message}`).join(", ");
@@ -364,8 +346,8 @@ export async function handleLoanApplication(formData: FormData): Promise<LoanApp
 
   if (process.env.LOAN_APP_WEBHOOK_URL) {
     try {
-      // NOTE: Sending files to a webhook requires multipart/form-data, which is more complex.
-      // For this example, we'll send the file metadata as JSON.
+      // NOTE: L'envoi de fichiers à un webhook nécessite multipart/form-data.
+      // Pour cet exemple, nous envoyons les métadonnées des fichiers en JSON.
       await fetch(process.env.LOAN_APP_WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -373,14 +355,11 @@ export async function handleLoanApplication(formData: FormData): Promise<LoanApp
       });
     } catch (error) {
       console.error("Erreur lors de l'appel au webhook de demande de prêt:", error);
-      // Ne pas bloquer l'utilisateur si le webhook échoue
     }
   }
 
-  // Pour le développement, on logue les données
   console.log("Nouvelle demande de prêt reçue (aucun webhook configuré):", applicationDetails);
   
-  // Simuler un succès
   return { success: true, applicationId: applicationDetails.applicationId };
 }
 
@@ -403,8 +382,6 @@ export type TransferResult = { success: boolean; error?: string; transactionId?:
 export async function handleTransfer(
   formData: TransferFormInput
 ): Promise<TransferResult> {
-  // En situation réelle : vérifier l'authentification et le solde du client ici
-  
   const parsed = transferFormSchema.safeParse(formData);
 
   if (!parsed.success) {
@@ -412,7 +389,6 @@ export async function handleTransfer(
     return { success: false, error: `Données de virement invalides: ${issues}` };
   }
 
-  // Simuler le traitement du virement
   const transactionDetails = {
     ...parsed.data,
     transactionId: `VIR-${Date.now()}-${Math.random().toString(36).substring(2, 9).toUpperCase()}`,
@@ -420,7 +396,6 @@ export async function handleTransfer(
     date: new Date().toISOString(),
   };
 
-  // Simuler un appel à un service bancaire ou webhook
   if (process.env.TRANSFER_WEBHOOK_URL) {
     try {
       await fetch(process.env.TRANSFER_WEBHOOK_URL, {
@@ -430,15 +405,11 @@ export async function handleTransfer(
       });
     } catch (error) {
       console.error("Erreur lors de l'appel au webhook de virement:", error);
-      // En production, vous pourriez vouloir gérer ce cas différemment
-      // (par ex. mettre le virement en attente de traitement)
       return { success: false, error: "Le service de virement est momentanément indisponible." };
     }
   }
 
-  // Pour le développement local, on logue le virement
   console.log("Virement initié (aucun webhook configuré):", transactionDetails);
 
-  // Simuler un succès
   return { success: true, transactionId: transactionDetails.transactionId };
 }
