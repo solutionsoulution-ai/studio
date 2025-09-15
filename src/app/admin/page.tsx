@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -23,8 +24,10 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { handleAdminLogin, handleCreateClientAndAccount } from "@/app/actions";
-import { Loader2, UserPlus, Shield, Landmark } from "lucide-react";
+import { handleAdminLogin, handleCreateClientAndAccount, type CreateClientAndAccountResult } from "@/app/actions";
+import { Loader2, UserPlus, Shield, Landmark, Users } from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
 
 // Schéma pour le formulaire de connexion admin
 const adminLoginSchema = z.object({
@@ -116,7 +119,7 @@ const AdminLoginForm = ({ onLoginSuccess }: { onLoginSuccess: () => void }) => {
 };
 
 
-const CreateClientAndAccountForm = () => {
+const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: (client: any) => void }) => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -139,11 +142,12 @@ const CreateClientAndAccountForm = () => {
     const result = await handleCreateClientAndAccount(values);
     setIsLoading(false);
 
-    if (result.success) {
+    if (result.success && result.details) {
       toast({
         title: "Client et Compte Créés !",
         description: `Le compte pour ${values.email} a été créé avec succès.`,
       });
+      onClientCreated(result.details);
       form.reset();
     } else {
       toast({
@@ -155,7 +159,7 @@ const CreateClientAndAccountForm = () => {
   }
 
   return (
-    <Card className="w-full max-w-2xl shadow-lg">
+    <Card className="w-full shadow-lg">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-xl font-bold">
           <UserPlus /> Créer un Compte Client
@@ -277,7 +281,7 @@ const CreateClientAndAccountForm = () => {
                                 <FormItem>
                                 <FormLabel>Montant (€)</FormLabel>
                                 <FormControl>
-                                    <Input type="number" placeholder="50000" {...field} disabled={isLoading} />
+                                    <Input type="number" placeholder="50000" {...field} value={field.value ?? ''} disabled={isLoading} />
                                 </FormControl>
                                 <FormMessage />
                                 </FormItem>
@@ -290,7 +294,7 @@ const CreateClientAndAccountForm = () => {
                             <FormItem>
                                 <FormLabel>Taux (%)</FormLabel>
                                 <FormControl>
-                                <Input type="number" step="0.1" placeholder="2.5" {...field} disabled={isLoading} />
+                                <Input type="number" step="0.1" placeholder="2.5" {...field} value={field.value ?? ''} disabled={isLoading} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -303,7 +307,7 @@ const CreateClientAndAccountForm = () => {
                             <FormItem>
                                 <FormLabel>Durée (années)</FormLabel>
                                 <FormControl>
-                                <Input type="number" placeholder="20" {...field} disabled={isLoading} />
+                                <Input type="number" placeholder="20" {...field} value={field.value ?? ''} disabled={isLoading} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -324,9 +328,57 @@ const CreateClientAndAccountForm = () => {
   );
 };
 
+const ClientList = ({ clients }: { clients: any[] }) => {
+    if (clients.length === 0) {
+        return null;
+    }
+
+    return (
+        <Card className="w-full shadow-lg mt-8">
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-xl font-bold">
+                    <Users /> Liste des Clients Créés
+                </CardTitle>
+                <CardDescription>
+                    Voici la liste des clients que vous avez créés durant cette session.
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                 <Table>
+                    <TableHeader>
+                        <TableRow>
+                        <TableHead>Email</TableHead>
+                        <TableHead>Numéro de Compte</TableHead>
+                        <TableHead>Prêt Actif</TableHead>
+                        <TableHead>Date Création</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {clients.map((client) => (
+                        <TableRow key={client.clientId}>
+                            <TableCell className="font-medium">{client.email}</TableCell>
+                            <TableCell>{client.accountNumber}</TableCell>
+                            <TableCell>
+                                {client.hasLoan ? <Badge variant="default">Oui</Badge> : <Badge variant="secondary">Non</Badge>}
+                            </TableCell>
+                            <TableCell>{new Date(client.creationDate).toLocaleDateString('fr-FR')}</TableCell>
+                        </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </CardContent>
+        </Card>
+    )
+}
+
 
 export default function AdminPage() {
   const [isAdmin, setIsAdmin] = useState(false);
+  const [clients, setClients] = useState<any[]>([]);
+
+  const handleClientCreation = (client: any) => {
+    setClients(prevClients => [...prevClients, client]);
+  }
 
   if (!isAdmin) {
     return (
@@ -337,12 +389,17 @@ export default function AdminPage() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-start p-6 sm:p-24">
-      <div className="w-full max-w-2xl">
+    <main className="flex min-h-screen flex-col items-center justify-start p-6 sm:p-12 md:p-24">
+      <div className="w-full max-w-4xl">
         <h1 className="text-3xl font-bold mb-2">Panneau Administrateur</h1>
         <p className="text-muted-foreground mb-8">Gérez les comptes clients et leurs produits bancaires.</p>
-        <CreateClientAndAccountForm />
+        <div className="grid lg:grid-cols-2 gap-8 items-start">
+            <CreateClientAndAccountForm onClientCreated={handleClientCreation} />
+            <ClientList clients={clients} />
+        </div>
       </div>
     </main>
   );
 }
+
+    
