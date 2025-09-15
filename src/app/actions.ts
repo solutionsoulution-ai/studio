@@ -196,7 +196,13 @@ export async function handleLogin(formData: LoginInput): Promise<AuthResult> {
     }
   }
   
+  // Logique de secours pour le développement local sans webhook
+  if (formData.email === 'client@test.com' && formData.password === 'password') {
+    console.log("Connexion de l'utilisateur de test réussie.");
+    return { success: true };
+  }
+
   console.log("Tentative de connexion (aucun webhook configuré):", parsed.data);
-  // Simuler un échec en l'absence de webhook pour le développement local
-  return { success: false, error: "Service d'authentification non configuré." };
+  // Simuler un échec pour les autres utilisateurs en l'absence de webhook
+  return { success: false, error: "Service d'authentification non configuré. Identifiants de test non valides." };
 }
