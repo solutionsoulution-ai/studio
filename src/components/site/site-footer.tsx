@@ -1,16 +1,83 @@
 import Link from "next/link";
-import { Landmark } from "lucide-react";
+import { Landmark, Linkedin, Twitter, Facebook } from "lucide-react";
+
+const navLinks = [
+  { href: "/#eligibilite", label: "Éligibilité" },
+  { href: "/#calculateur", label: "Calculateur" },
+  { href: "/#faq", label: "FAQ" },
+  { href: "/#contact", label: "Contact" },
+];
+
+const legalLinks = [
+    { href: "#", label: "Politique de confidentialité" },
+    { href: "#", label: "Conditions d'utilisation" },
+];
+
+const socialLinks = [
+    { href: "#", icon: Twitter, label: "Twitter / X" },
+    { href: "#", icon: Linkedin, label: "LinkedIn" },
+    { href: "#", icon: Facebook, label: "Facebook" },
+];
 
 export default function SiteFooter() {
   return (
-    <footer className="border-t">
-      <div className="container mx-auto py-6">
-        <div className="flex flex-col items-center justify-between md:flex-row">
-          <div className="flex items-center space-x-2">
-            <Landmark className="h-5 w-5 text-primary" />
-            <span className="font-semibold">VylsCapital</span>
+    <footer className="bg-muted/30 border-t">
+      <div className="container mx-auto py-12 px-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          {/* Section Marque */}
+          <div className="md:col-span-1">
+            <Link href="/" className="flex items-center space-x-2 mb-4">
+              <Landmark className="h-7 w-7 text-primary" />
+              <span className="text-xl font-bold">VylsCapital</span>
+            </Link>
+            <p className="text-sm text-muted-foreground">
+              Solutions de financement rapides et flexibles pour aider votre entreprise à prospérer.
+            </p>
           </div>
-          <p className="mt-4 text-sm text-muted-foreground md:mt-0">
+
+          {/* Section Navigation */}
+          <div>
+            <h3 className="font-semibold mb-4">Navigation</h3>
+            <ul className="space-y-2">
+              {navLinks.map(({ href, label }) => (
+                <li key={label}>
+                  <Link href={href} className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Section Légal */}
+          <div>
+            <h3 className="font-semibold mb-4">Légal</h3>
+            <ul className="space-y-2">
+              {legalLinks.map(({ href, label }) => (
+                <li key={label}>
+                  <Link href={href} className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Section Social */}
+          <div>
+            <h3 className="font-semibold mb-4">Suivez-nous</h3>
+            <div className="flex space-x-4">
+              {socialLinks.map(({ href, icon: Icon, label }) => (
+                <Link key={label} href={href} aria-label={label} className="text-muted-foreground hover:text-primary transition-colors">
+                  <Icon className="h-5 w-5" />
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-12 border-t pt-6 text-center">
+          <p className="text-sm text-muted-foreground">
             &copy; {new Date().getFullYear()} VylsCapital. Tous droits réservés.
           </p>
         </div>
