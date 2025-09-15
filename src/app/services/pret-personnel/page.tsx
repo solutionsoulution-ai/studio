@@ -6,6 +6,23 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { CheckCircle } from "lucide-react";
 import InterestRateCalculator from "@/components/site/interest-rate-calculator";
+import FaqSection from "@/components/site/faq-section";
+
+const personalFaqs = [
+  {
+    question: "Dois-je justifier l'utilisation des fonds pour un prêt personnel ?",
+    answer: "Non, l'un des principaux avantages du prêt personnel est que vous n'avez pas besoin de justifier vos dépenses. Vous pouvez utiliser les fonds librement pour tout type de projet.",
+  },
+  {
+    question: "Quel est le montant maximum que je peux emprunter ?",
+    answer: "Le montant maximum pour un prêt personnel est généralement de 75 000 €. Le montant qui vous sera accordé dépendra de votre capacité de remboursement et de votre situation financière.",
+  },
+  {
+    question: "Le taux du prêt personnel est-il fixe ou variable ?",
+    answer: "Nous proposons principalement des prêts personnels à taux fixe. Cela signifie que votre taux d'intérêt et vos mensualités restent les mêmes pendant toute la durée du prêt, pour une meilleure maîtrise de votre budget.",
+  },
+];
+
 
 export default function PretPersonnelPage() {
   const image = PlaceHolderImages.find((img) => img.id === "pret-personnel");
@@ -66,6 +83,10 @@ export default function PretPersonnelPage() {
             maxAmount={75000}
             maxTerm={10}
           />
+        </section>
+
+        <section className="container mx-auto py-16 md:py-24">
+          <FaqSection faqs={personalFaqs} />
         </section>
 
       </main>

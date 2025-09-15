@@ -6,6 +6,22 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { CheckCircle } from "lucide-react";
 import InterestRateCalculator from "@/components/site/interest-rate-calculator";
+import FaqSection from "@/components/site/faq-section";
+
+const creditFaqs = [
+  {
+    question: "Quels types de crédits peuvent être rachetés ?",
+    answer: "Nous pouvons regrouper la plupart de vos crédits à la consommation : prêts personnels, crédits renouvelables, prêts auto, etc. Les prêts immobiliers peuvent aussi être inclus dans l'opération sous certaines conditions.",
+  },
+  {
+    question: "Le rachat de crédit entraîne-t-il des frais ?",
+    answer: "L'opération peut inclure des frais de dossier. De plus, le remboursement anticipé de vos anciens crédits peut engendrer des pénalités. Cependant, l'objectif est que le gain sur vos mensualités compense largement ces frais.",
+  },
+  {
+    question: "Est-ce que le rachat de crédit va vraiment améliorer mon taux d'endettement ?",
+    answer: "Oui, c'est l'un des principaux objectifs. En allongeant la durée de remboursement et en négociant un taux unique, nous réduisons le montant total de vos mensualités, ce qui diminue mécaniquement votre taux d'endettement.",
+  },
+];
 
 export default function RachatCreditPage() {
   const image = PlaceHolderImages.find((img) => img.id === "rachat-credit");
@@ -66,6 +82,10 @@ export default function RachatCreditPage() {
             maxAmount={250000}
             maxTerm={15}
           />
+        </section>
+
+        <section className="container mx-auto py-16 md:py-24">
+            <FaqSection faqs={creditFaqs} />
         </section>
 
       </main>

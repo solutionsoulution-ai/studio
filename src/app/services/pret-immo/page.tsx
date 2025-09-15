@@ -6,6 +6,22 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { CheckCircle } from "lucide-react";
 import InterestRateCalculator from "@/components/site/interest-rate-calculator";
+import FaqSection from "@/components/site/faq-section";
+
+const immoFaqs = [
+  {
+    question: "Quel est l'apport personnel recommandé pour un prêt immobilier ?",
+    answer: "Un apport d'au moins 10% du prix d'achat est généralement conseillé pour couvrir les frais de notaire et de garantie. Un apport plus important peut vous aider à obtenir de meilleures conditions de prêt.",
+  },
+  {
+    question: "Puis-je emprunter sans apport ?",
+    answer: "C'est de plus en plus rare, mais possible sous certaines conditions, notamment si vous avez un profil financier très solide (stabilité professionnelle, épargne existante, etc.). Chaque dossier est étudié au cas par cas.",
+  },
+  {
+    question: "Quelle est la durée maximale pour un prêt immobilier ?",
+    answer: "La durée de remboursement peut aller jusqu'à 25 ans, voire 30 ans dans de très rares cas. Une durée plus courte signifie des mensualités plus élevées mais un coût total du crédit plus faible.",
+  },
+];
 
 export default function PretImmobilierPage() {
   const image = PlaceHolderImages.find((img) => img.id === "pret-immo");
@@ -66,6 +82,10 @@ export default function PretImmobilierPage() {
             maxAmount={1500000}
             maxTerm={30}
           />
+        </section>
+
+        <section className="container mx-auto py-16 md:py-24">
+          <FaqSection faqs={immoFaqs} />
         </section>
 
       </main>

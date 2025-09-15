@@ -6,6 +6,22 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { CheckCircle } from "lucide-react";
 import InterestRateCalculator from "@/components/site/interest-rate-calculator";
+import FaqSection from "@/components/site/faq-section";
+
+const autoFaqs = [
+  {
+    question: "Le prêt auto peut-il financer un véhicule d'occasion ?",
+    answer: "Oui, nos solutions de financement couvrent aussi bien les véhicules neufs que les véhicules d'occasion achetés auprès d'un professionnel ou d'un particulier.",
+  },
+  {
+    question: "Est-ce que l'assurance du véhicule est incluse ?",
+    answer: "L'assurance du véhicule n'est pas directement incluse dans le prêt auto. Cependant, nous pouvons vous proposer des solutions d'assurance partenaires à des tarifs préférentiels.",
+  },
+  {
+    question: "Puis-je faire un remboursement anticipé de mon prêt auto ?",
+    answer: "Oui, vous pouvez rembourser tout ou partie de votre prêt auto par anticipation, conformément à la législation en vigueur. Des indemnités peuvent s'appliquer dans certains cas.",
+  },
+];
 
 export default function PretAutoPage() {
   const image = PlaceHolderImages.find((img) => img.id === "pret-auto");
@@ -66,6 +82,10 @@ export default function PretAutoPage() {
             maxAmount={75000}
             maxTerm={7}
           />
+        </section>
+
+        <section className="container mx-auto py-16 md:py-24">
+            <FaqSection faqs={autoFaqs} />
         </section>
 
       </main>
