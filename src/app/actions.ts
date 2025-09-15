@@ -220,12 +220,17 @@ export async function handleCreateClientAndAccount(formData: CreateClientAndAcco
 
   if (process.env.CREATE_CLIENT_ACCOUNT_WEBHOOK_URL) {
     try {
-      await fetch(process.env.CREATE_CLIENT_ACCOUNT_WEBHOOK_URL, {
+      const response = await fetch(process.env.CREATE_CLIENT_ACCOUNT_WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(clientDetails),
       });
-      return { success: true, details: clientDetails };
+
+      if (!response.ok) {
+        throw new Error(`Le webhook a retourné une erreur: ${response.statusText}`);
+      }
+      const result = await response.json();
+      return { success: true, details: result.client };
     } catch (error) {
       console.error("Erreur lors de l'appel au webhook de création de client/compte:", error);
       return { success: false, error: "Impossible de contacter le service de création." };
@@ -235,6 +240,36 @@ export async function handleCreateClientAndAccount(formData: CreateClientAndAcco
   console.log("Création de client/compte (aucun webhook configuré):", clientDetails);
   return { success: true, details: clientDetails };
 }
+
+export type GetClientsResult = { success: boolean; data?: any[]; error?: string; };
+
+export async function getClients(): Promise<GetClientsResult> {
+    if (process.env.CREATE_CLIENT_ACCOUNT_WEBHOOK_URL) {
+        try {
+            const response = await fetch(process.env.CREATE_CLIENT_ACCOUNT_WEBHOOK_URL, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                 cache: 'no-store' // Important pour toujours avoir les données à jour
+            });
+            if (!response.ok) {
+                 throw new Error(`Le webhook a retourné une erreur: ${response.statusText}`);
+            }
+            const data = await response.json();
+            // Le script Google Apps peut renvoyer {error: ...} en cas de problème
+            if(data.error) {
+                throw new Error(data.error);
+            }
+            return { success: true, data };
+        } catch(error) {
+            console.error("Erreur lors de la récupération des clients depuis le webhook:", error);
+            return { success: false, error: "Impossible de récupérer la liste des clients." };
+        }
+    }
+    
+    console.log("Récupération des clients (aucun webhook configuré). Retour d'une liste vide.");
+    return { success: true, data: [] };
+}
+
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "application/pdf"];

@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -24,10 +24,12 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { handleAdminLogin, handleCreateClientAndAccount, type CreateClientAndAccountResult } from "@/app/actions";
-import { Loader2, UserPlus, Shield, Landmark, Users, ArrowLeft, UserCog, Pencil } from "lucide-react";
+import { handleAdminLogin, handleCreateClientAndAccount, getClients, type CreateClientAndAccountResult } from "@/app/actions";
+import { Loader2, UserPlus, Shield, Landmark, Users, ArrowLeft, UserCog, Pencil, AlertCircle } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+
 
 // Schéma pour le formulaire de connexion admin
 const adminLoginSchema = z.object({
@@ -328,7 +330,40 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: (cli
   );
 };
 
-const ClientList = ({ clients, onClientSelect }: { clients: any[], onClientSelect: (client:any) => void }) => {
+const ClientList = ({ clients, onClientSelect, isLoading, error }: { clients: any[], onClientSelect: (client:any) => void, isLoading: boolean, error?: string | null }) => {
+    
+    if (isLoading) {
+         return (
+             <Card className="w-full shadow-lg mt-8 lg:mt-0">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-xl font-bold">
+                        <Users /> Liste des Clients
+                    </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                    <Skeleton className="h-10 w-full" />
+                    <Skeleton className="h-10 w-full" />
+                    <Skeleton className="h-10 w-full" />
+                </CardContent>
+            </Card>
+        );
+    }
+    
+    if (error) {
+         return (
+             <Card className="w-full shadow-lg mt-8 lg:mt-0">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-xl font-bold">
+                       <AlertCircle className="text-destructive" /> Erreur
+                    </CardTitle>
+                </CardHeader>
+                <CardContent className="text-center text-destructive py-12">
+                    {error}
+                </CardContent>
+            </Card>
+        );
+    }
+    
     if (clients.length === 0) {
         return (
              <Card className="w-full shadow-lg mt-8 lg:mt-0">
@@ -338,7 +373,7 @@ const ClientList = ({ clients, onClientSelect }: { clients: any[], onClientSelec
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="text-center text-muted-foreground py-12">
-                    Aucun client créé pendant cette session.
+                    Aucun client trouvé.
                 </CardContent>
             </Card>
         );
@@ -348,10 +383,10 @@ const ClientList = ({ clients, onClientSelect }: { clients: any[], onClientSelec
         <Card className="w-full shadow-lg mt-8 lg:mt-0">
             <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-xl font-bold">
-                    <Users /> Liste des Clients Créés
+                    <Users /> Liste des Clients
                 </CardTitle>
                 <CardDescription>
-                    Voici la liste des clients que vous avez créés durant cette session.
+                    Voici la liste des clients récupérée. Cliquez sur un client pour voir les détails.
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -437,9 +472,36 @@ export default function AdminPage() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [clients, setClients] = useState<any[]>([]);
   const [selectedClient, setSelectedClient] = useState<any | null>(null);
+  const [isLoadingClients, setIsLoadingClients] = useState(true);
+  const [errorClients, setErrorClients] = useState<string | null>(null);
+  const { toast } = useToast();
 
-  const handleClientCreation = (client: any) => {
-    setClients(prevClients => [...prevClients, client]);
+  useEffect(() => {
+      if (isAdmin) {
+          const fetchClients = async () => {
+              setIsLoadingClients(true);
+              setErrorClients(null);
+              const result = await getClients();
+              if (result.success && result.data) {
+                  setClients(result.data);
+              } else {
+                  setErrorClients(result.error || "Une erreur est survenue.");
+                  toast({
+                      title: "Erreur de chargement",
+                      description: result.error || "Impossible de charger la liste des clients.",
+                      variant: "destructive"
+                  });
+              }
+              setIsLoadingClients(false);
+          };
+          fetchClients();
+      }
+  }, [isAdmin, toast]);
+
+  const handleClientCreation = (newClient: any) => {
+    setClients(prevClients => [newClient, ...prevClients]);
+    // Optionnel: rafraîchir la liste complète depuis la source de données
+    // getClients().then(result => result.success && setClients(result.data));
   }
 
   const handleClientSelection = (client: any) => {
@@ -470,12 +532,14 @@ export default function AdminPage() {
             ) : (
                 <CreateClientAndAccountForm onClientCreated={handleClientCreation} />
             )}
-            <ClientList clients={clients} onClientSelect={handleClientSelection} />
+            <ClientList 
+                clients={clients} 
+                onClientSelect={handleClientSelection} 
+                isLoading={isLoadingClients}
+                error={errorClients}
+            />
         </div>
       </div>
     </main>
   );
 }
-
-    
-    
