@@ -1,12 +1,23 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import type { LucideIcon } from "lucide-react";
+import type { LucideProps } from "lucide-react";
 import { FilePen, DollarSign, HandCoins, Search, Bot } from 'lucide-react';
+import * as React from "react";
 
+// Crée un mappage des noms d'icônes vers les composants d'icônes.
+const iconMap = {
+  FilePen,
+  DollarSign,
+  HandCoins,
+  Search,
+  Bot,
+};
+
+type IconName = keyof typeof iconMap;
 
 export type HowItWorksStep = {
-  icon: LucideIcon;
+  icon: IconName;
   title: string;
   description: string;
 };
@@ -14,6 +25,12 @@ export type HowItWorksStep = {
 type HowItWorksSectionProps = {
   steps: HowItWorksStep[];
   title?: string;
+};
+
+const IconComponent = ({ name, ...props }: { name: IconName } & LucideProps) => {
+  const LucideIcon = iconMap[name];
+  if (!LucideIcon) return null; // ou une icône par défaut
+  return <LucideIcon {...props} />;
 };
 
 export default function HowItWorksSection({
@@ -38,7 +55,7 @@ export default function HowItWorksSection({
                 {steps.map((step, index) => (
                 <div key={index} className="flex flex-col items-center text-center">
                     <div className="relative z-10 flex items-center justify-center w-20 h-20 rounded-full bg-primary text-primary-foreground mb-4 ring-8 ring-background">
-                        <step.icon className="w-10 h-10" />
+                        <IconComponent name={step.icon} className="w-10 h-10" />
                     </div>
                     <h3 className="text-xl font-bold mb-2">{step.title}</h3>
                     <p className="text-muted-foreground">{step.description}</p>

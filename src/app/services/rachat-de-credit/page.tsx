@@ -27,17 +27,17 @@ const creditFaqs = [
 
 const howItWorksSteps: HowItWorksStep[] = [
     {
-      icon: FilePen,
+      icon: "FilePen",
       title: "1. Simulation Gratuite",
       description: "Listez vos crédits en cours et simulez votre nouvelle mensualité unique en quelques minutes.",
     },
     {
-      icon: Search,
+      icon: "Search",
       title: "2. Étude de votre Dossier",
       description: "Un expert analyse votre situation financière pour construire la meilleure offre de regroupement.",
     },
     {
-      icon: HandCoins,
+      icon: "HandCoins",
       title: "3. Simplifiez vos Finances",
       description: "Nous remboursons vos anciens créanciers. Vous n'avez plus qu'une seule mensualité, plus facile à gérer.",
     },

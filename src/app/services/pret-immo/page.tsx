@@ -26,17 +26,17 @@ const immoFaqs = [
 
 const howItWorksSteps: HowItWorksStep[] = [
     {
-      icon: FilePen,
+      icon: "FilePen",
       title: "1. Simulation en Ligne",
       description: "Utilisez notre calculateur pour estimer votre capacité d'emprunt et vos mensualités en quelques clics.",
     },
     {
-      icon: Search,
+      icon: "Search",
       title: "2. Étude Personnalisée",
       description: "Un conseiller dédié étudie votre projet et négocie pour vous les meilleures conditions auprès de nos partenaires.",
     },
     {
-      icon: HandCoins,
+      icon: "HandCoins",
       title: "3. Signature & Acquisition",
       description: "Après acceptation de l'offre, signez chez le notaire et recevez les clés de votre nouvelle propriété.",
     },

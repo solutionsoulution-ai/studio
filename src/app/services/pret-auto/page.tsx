@@ -27,17 +27,17 @@ const autoFaqs = [
 
 const howItWorksSteps: HowItWorksStep[] = [
     {
-      icon: FilePen,
+      icon: "FilePen",
       title: "1. Demande Rapide",
       description: "Faites votre demande en quelques minutes et recevez une réponse de principe immédiate.",
     },
     {
-      icon: Bot,
+      icon: "Bot",
       title: "2. Approbation Intelligente",
       description: "Notre IA analyse votre profil pour vous fournir une offre ferme rapidement, souvent en quelques heures.",
     },
     {
-      icon: HandCoins,
+      icon: "HandCoins",
       title: "3. Prenez la Route",
       description: "Après signature électronique, les fonds sont virés au vendeur et vous pouvez récupérer votre voiture.",
     },

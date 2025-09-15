@@ -27,17 +27,17 @@ const businessFaqs = [
 
 const howItWorksSteps: HowItWorksStep[] = [
     {
-      icon: FilePen,
+      icon: "FilePen",
       title: "1. Demande en Ligne",
       description: "Remplissez notre formulaire sécurisé avec les informations de votre entreprise et vos besoins de financement.",
     },
     {
-      icon: Search,
+      icon: "Search",
       title: "2. Analyse du Dossier",
       description: "Nos experts analysent votre dossier et la viabilité de votre projet pour vous proposer la meilleure solution.",
     },
     {
-      icon: HandCoins,
+      icon: "HandCoins",
       title: "3. Déblocage des Fonds",
       description: "Après approbation, les fonds sont rapidement transférés sur votre compte professionnel pour lancer vos projets.",
     },
