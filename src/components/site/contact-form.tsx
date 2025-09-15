@@ -18,7 +18,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { handleContactForm, type ContactFormInput } from "@/app/actions";
-import { Loader2, Mail, Send } from "lucide-react";
+import { Loader2, Send } from "lucide-react";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Le nom doit comporter au moins 2 caractères." }),
@@ -62,17 +62,6 @@ export default function ContactForm() {
   }
 
   return (
-    <div className="container mx-auto max-w-3xl">
-      <div className="text-center mb-10">
-        <div className="flex items-center gap-3 justify-center">
-            <Mail className="w-8 h-8 text-primary" />
-            <h2 className="text-3xl font-bold tracking-tight font-headline">Contactez-nous</h2>
-        </div>
-        <p className="mt-4 text-lg text-muted-foreground">
-          Vous avez une question spécifique ? Remplissez le formulaire ci-dessous et un membre de notre équipe vous contactera.
-        </p>
-      </div>
-
       <Card className="shadow-lg">
         <CardContent className="p-6 md:p-8">
           <Form {...form}>
@@ -130,6 +119,5 @@ export default function ContactForm() {
           </Form>
         </CardContent>
       </Card>
-    </div>
   );
 }
