@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Sparkles } from 'lucide-react';
 import TestimonialsSection from '@/components/site/testimonials-section';
+import PartnersSection from '@/components/site/partners-section';
 
 export default function Home() {
   return (
@@ -20,6 +21,8 @@ export default function Home() {
         <ServicesSection />
 
         <WhyChooseUsSection />
+
+        <PartnersSection />
 
         <section id="eligibilite" className="container mx-auto py-16 md:py-24 text-center">
             <div className="mx-auto max-w-3xl">
