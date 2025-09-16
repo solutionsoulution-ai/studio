@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -456,7 +457,7 @@ const ClientDetailView = ({ client, onBack, onClientDeleted, onBalanceUpdate }: 
 
     const balanceForm = useForm<UpdateBalanceValues>({
         resolver: zodResolver(updateBalanceSchema),
-        defaultValues: { amount: undefined, operation: "credit" }
+        defaultValues: { amount: '' as any, operation: "credit" }
     });
 
     const handleDelete = async () => {
@@ -714,3 +715,5 @@ export default function AdminPage() {
     </main>
   );
 }
+
+    
