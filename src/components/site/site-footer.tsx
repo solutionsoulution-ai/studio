@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Landmark, Linkedin, Twitter, Facebook } from "lucide-react";
+import { Landmark, Linkedin, Twitter, Facebook, Mail, Phone, MapPin } from "lucide-react";
 
 const mainNavLinks = [
   { href: "/a-propos", label: "À Propos" },
@@ -35,14 +35,28 @@ export default function SiteFooter() {
       <div className="container mx-auto py-12 px-6">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
           {/* Section Marque */}
-          <div className="col-span-2 md:col-span-1">
+          <div className="col-span-2 md:col-span-2">
             <Link href="/" className="flex items-center space-x-2 mb-4">
               <Landmark className="h-7 w-7 text-primary" />
               <span className="text-xl font-bold">VylsCapital</span>
             </Link>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground max-w-sm">
               Solutions de financement rapides et flexibles pour aider votre entreprise à prospérer.
             </p>
+             <div className="mt-6 space-y-2 text-sm text-muted-foreground">
+                <a href="mailto:contact@vylscapital.com" className="flex items-center gap-2 hover:text-primary">
+                    <Mail className="w-4 h-4" />
+                    contact@vylscapital.com
+                </a>
+                <a href="tel:+33756986769" className="flex items-center gap-2 hover:text-primary">
+                    <Phone className="w-4 h-4" />
+                    +33 7 56 98 67 69
+                </a>
+                <p className="flex items-center gap-2">
+                    <MapPin className="w-4 h-4" />
+                    Lyon, France
+                </p>
+             </div>
           </div>
 
           {/* Section Services */}
@@ -50,20 +64,6 @@ export default function SiteFooter() {
             <h3 className="font-semibold mb-4">Nos Services</h3>
             <ul className="space-y-2">
               {serviceLinks.map(({ href, label }) => (
-                <li key={label}>
-                  <Link href={href} className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Section Navigation */}
-          <div>
-            <h3 className="font-semibold mb-4">Navigation</h3>
-            <ul className="space-y-2">
-              {mainNavLinks.map(({ href, label }) => (
                 <li key={label}>
                   <Link href={href} className="text-sm text-muted-foreground hover:text-primary transition-colors">
                     {label}

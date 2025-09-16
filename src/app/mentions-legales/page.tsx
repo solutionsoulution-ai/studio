@@ -13,10 +13,10 @@ export default function MentionsLegalesPage() {
           <h2>1. Édition du site</h2>
           <p>
             <strong>Site :</strong> VylsCapital <br />
-            <strong>Éditeur :</strong> [Nom de votre société] <br />
+            <strong>Éditeur :</strong> VylsCapital <br />
             <strong>Forme juridique :</strong> [Forme juridique] <br />
             <strong>Capital social :</strong> [Montant] euros <br />
-            <strong>Siège social :</strong> [Adresse de votre siège social] <br />
+            <strong>Siège social :</strong> Lyon, France <br />
             <strong>RCS :</strong> [Numéro RCS] <br />
             <strong>Numéro de TVA intracommunautaire :</strong> [Votre numéro de TVA]
           </p>
@@ -37,8 +37,9 @@ export default function MentionsLegalesPage() {
 
           <h2>4. Nous contacter</h2>
           <ul>
-            <li><strong>Par email :</strong> [Votre adresse e-mail de contact]</li>
-            <li><strong>Par courrier :</strong> [Votre adresse postale]</li>
+            <li><strong>Par email :</strong> contact@vylscapital.com</li>
+            <li><strong>Par téléphone :</strong> +33 7 56 98 67 69</li>
+            <li><strong>Par courrier :</strong> Lyon, France</li>
           </ul>
 
           <h2>5. CNIL</h2>
