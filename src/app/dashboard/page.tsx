@@ -7,11 +7,12 @@ import SiteFooter from "@/components/site/site-footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { LogOut, ArrowUpRight, ArrowDownLeft, Landmark, Send, FileText, User } from "lucide-react";
+import { LogOut, ArrowUpRight, ArrowDownLeft, Landmark, Send, FileText, User, Info, Copy } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import TransferForm from "@/components/dashboard/transfer-form";
 import type { TransferFormInput } from "@/app/actions";
+import { useToast } from "@/hooks/use-toast";
 
 
 // Données initiales pour l'exemple
@@ -23,6 +24,8 @@ const initialAccountData = {
   },
   balance: 12345.67,
   iban: "FR76 3000 4000 0512 3456 7890 123",
+  accountNumber: "00012345678",
+  bic: "CRLYFRPP",
   transactions: [],
 };
 
@@ -31,6 +34,30 @@ const formatCurrency = (value: number) => {
       style: "currency",
       currency: "EUR",
     }).format(value);
+};
+
+const InfoRow = ({ label, value }: { label: string; value: string }) => {
+    const { toast } = useToast();
+
+    const copyToClipboard = () => {
+        navigator.clipboard.writeText(value);
+        toast({
+            title: "Copié !",
+            description: `${label} a été copié dans le presse-papiers.`,
+        });
+    };
+
+    return (
+        <div className="flex justify-between items-center py-2 border-b last:border-b-0">
+            <div>
+                <p className="text-sm text-muted-foreground">{label}</p>
+                <p className="font-mono text-sm sm:text-base">{value}</p>
+            </div>
+            <Button variant="ghost" size="icon" onClick={copyToClipboard} aria-label={`Copier ${label}`}>
+                <Copy className="w-4 h-4" />
+            </Button>
+        </div>
+    );
 };
 
 
@@ -60,7 +87,7 @@ export default function DashboardPage() {
       <main className="flex-1 container mx-auto py-16">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
             <div>
-                <h1 className="text-3xl font-bold font-headline">Bienvenue, {accountData.client.firstName} {accountData.client.lastName} !</h1>
+                <h1 className="text-3xl font-bold font-headline">Bienvenue, cher client {accountData.client.firstName} !</h1>
                 <p className="text-muted-foreground flex items-center gap-2 mt-1">
                     C'est un plaisir de vous revoir sur votre espace client.
                 </p>
@@ -80,19 +107,40 @@ export default function DashboardPage() {
                 <TabsTrigger value="loans">Mes Prêts</TabsTrigger>
             </TabsList>
             <TabsContent value="overview">
-                <Card className="mt-4">
-                    <CardHeader className="flex flex-row justify-between items-start">
-                        <div>
-                            <CardTitle>Résumé du Compte Courant</CardTitle>
-                            <CardDescription className="font-mono">{accountData.iban}</CardDescription>
-                        </div>
-                         <div className="text-right">
-                            <p className="text-sm text-muted-foreground">Solde Actuel</p>
-                            <p className="text-3xl font-bold text-primary">{formatCurrency(accountData.balance)}</p>
-                         </div>
+                <div className="grid lg:grid-cols-5 gap-6 mt-4">
+                    <div className="lg:col-span-3">
+                        <Card className="h-full">
+                            <CardHeader>
+                                <CardTitle className="flex items-center gap-2">
+                                   <Info className="w-5 h-5 text-primary" /> Informations du Compte
+                                </CardTitle>
+                                <CardDescription>Vos coordonnées bancaires pour recevoir des virements.</CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-2">
+                                <InfoRow label="IBAN" value={accountData.iban} />
+                                <InfoRow label="Numéro de compte" value={accountData.accountNumber} />
+                                <InfoRow label="BIC / SWIFT" value={accountData.bic} />
+                            </CardContent>
+                        </Card>
+                    </div>
+                     <div className="lg:col-span-2">
+                        <Card className="h-full bg-primary/5">
+                            <CardHeader>
+                                <CardTitle>Compte Courant</CardTitle>
+                                <CardDescription>Solde disponible</CardDescription>
+                            </CardHeader>
+                            <CardContent className="text-center">
+                                <p className="text-4xl font-bold text-primary">{formatCurrency(accountData.balance)}</p>
+                            </CardContent>
+                        </Card>
+                    </div>
+                </div>
+
+                <Card className="mt-6">
+                    <CardHeader>
+                        <CardTitle>Dernières Transactions</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <h3 className="text-lg font-semibold mb-2">Dernières Transactions</h3>
                         <div className="border rounded-md">
                             <Table>
                                 <TableHeader>
