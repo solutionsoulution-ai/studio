@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -32,7 +33,11 @@ const transferFormSchema = z.object({
 
 type TransferState = "idle" | "loading" | "processing" | "success" | "error";
 
-export default function TransferForm() {
+type TransferFormProps = {
+  onTransferSuccess: (data: TransferFormInput) => void;
+};
+
+export default function TransferForm({ onTransferSuccess }: TransferFormProps) {
   const { toast } = useToast();
   const [transferState, setTransferState] = useState<TransferState>("idle");
   const [progress, setProgress] = useState(0);
@@ -54,12 +59,12 @@ export default function TransferForm() {
     if (result.success) {
       setTransferState("processing");
       
-      // Simulation de la progression du virement
       const interval = setInterval(() => {
         setProgress((prev) => {
           if (prev >= 100) {
             clearInterval(interval);
             setTransferState("success");
+            onTransferSuccess(values); // Notifier le composant parent
             return 100;
           }
           return prev + 10;
@@ -96,7 +101,7 @@ export default function TransferForm() {
                  <>
                     <CheckCircle className="text-green-500 w-12 h-12 mx-auto mb-4" />
                     <h3 className="text-xl font-semibold">Virement Effectué !</h3>
-                    <p className="text-muted-foreground mb-6">Le virement a été initié avec succès.</p>
+                    <p className="text-muted-foreground mb-6">Le virement a été initié avec succès et apparaît dans votre historique.</p>
                     <Button onClick={resetForm}>
                         <RefreshCw className="mr-2" />
                         Effectuer un autre virement
@@ -148,7 +153,7 @@ export default function TransferForm() {
                 <FormItem>
                     <FormLabel>Montant</FormLabel>
                     <FormControl>
-                    <Input type="number" step="0.01" placeholder="100.00" {...field} disabled={isLoading} />
+                    <Input type="number" step="0.01" placeholder="100.00" {...field} />
                     </FormControl>
                     <FormMessage />
                 </FormItem>

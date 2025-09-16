@@ -1,5 +1,7 @@
+
 "use client";
 
+import { useState } from "react";
 import SiteHeader from "@/components/site/site-header";
 import SiteFooter from "@/components/site/site-footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,9 +11,11 @@ import { LogOut, ArrowUpRight, ArrowDownLeft, Landmark, Send, FileText } from "l
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import TransferForm from "@/components/dashboard/transfer-form";
+import type { TransferFormInput } from "@/app/actions";
 
-// Données factices pour l'exemple
-const accountData = {
+
+// Données initiales pour l'exemple
+const initialAccountData = {
   balance: 12345.67,
   iban: "FR76 3000 4000 0512 3456 7890 123",
   transactions: [
@@ -32,6 +36,24 @@ const formatCurrency = (value: number) => {
 
 
 export default function DashboardPage() {
+    const [accountData, setAccountData] = useState(initialAccountData);
+
+    const handleTransferSuccess = (transferData: TransferFormInput) => {
+        const newTransaction = {
+            id: new Date().toISOString(),
+            type: `Virement à ${transferData.recipientName}`,
+            date: new Date().toISOString().split('T')[0], // Format YYYY-MM-DD
+            amount: -transferData.amount,
+        };
+
+        setAccountData(prevData => ({
+            ...prevData,
+            balance: prevData.balance - transferData.amount,
+            transactions: [newTransaction, ...prevData.transactions]
+        }));
+    };
+
+
   return (
     <div className="flex flex-col min-h-dvh bg-background">
       <SiteHeader />
@@ -102,7 +124,7 @@ export default function DashboardPage() {
                         <CardDescription>Transférez de l'argent facilement et en toute sécurité.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <TransferForm />
+                        <TransferForm onTransferSuccess={handleTransferSuccess} />
                     </CardContent>
                 </Card>
             </TabsContent>
