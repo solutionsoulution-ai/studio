@@ -510,7 +510,7 @@ export async function handleDeleteClient(clientId: string): Promise<DeleteClient
 }
 
 // Action to update a client's balance
-const updateBalanceSchema = z.object({
+export const updateBalanceSchema = z.object({
   clientId: z.string(),
   amount: z.coerce.number().positive("Le montant doit être un nombre positif."),
   operation: z.enum(["credit", "debit"]),
