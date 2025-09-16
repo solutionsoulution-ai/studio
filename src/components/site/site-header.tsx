@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Landmark, Menu, X, ChevronDown, Briefcase, User, Home, Car, Recycle } from "lucide-react";
+import { Landmark, Menu, X, ChevronDown, Briefcase, User, Home, Car, Recycle, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 
 const mainNavLinks = [
   { href: "/#services", label: "Nos Services" },
+  { href: "/a-propos", label: "À Propos" },
   { href: "/eligibilite", label: "Éligibilité" },
   { href: "/#calculateur", label: "Calculateur" },
   { href: "/#faq", label: "FAQ" },
@@ -42,7 +43,7 @@ export default function SiteHeader() {
           <Landmark className="h-6 w-6 text-primary" />
           <span className="font-bold sm:inline-block">VylsCapital</span>
         </Link>
-        <nav className="hidden md:flex flex-1 items-center space-x-6 text-sm font-medium">
+        <nav className="hidden lg:flex flex-1 items-center space-x-4 text-sm font-medium">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="px-2">
@@ -62,7 +63,7 @@ export default function SiteHeader() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {mainNavLinks.slice(1).map(({ href, label }) => ( // slice(1) to avoid duplicating "Nos Services"
+          {mainNavLinks.slice(1).map(({ href, label }) => (
             <Link
               key={label}
               href={href}
@@ -72,7 +73,7 @@ export default function SiteHeader() {
             </Link>
           ))}
         </nav>
-        <div className="flex flex-1 items-center justify-end space-x-2 md:flex-none">
+        <div className="flex flex-1 items-center justify-end space-x-2 md:flex-none lg:flex-1 lg:justify-end">
           <Button variant="secondary" asChild>
             <Link href="/demande-de-pret">Faire une demande</Link>
           </Button>
@@ -81,7 +82,7 @@ export default function SiteHeader() {
           </Button>
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden">
+              <Button variant="ghost" size="icon" className="lg:hidden">
                 <Menu className="h-5 w-5" />
                 <span className="sr-only">Ouvrir le menu</span>
               </Button>
@@ -104,20 +105,9 @@ export default function SiteHeader() {
                    <Link href="/demande-de-pret" className="text-lg font-medium transition-colors hover:text-primary" onClick={closeMobileMenu}>
                       Faire une demande
                     </Link>
-                  <p className="text-sm font-semibold text-muted-foreground pt-4">Nos Services</p>
-                  {serviceLinks.map(({ href, label }) => (
-                    <Link
-                      key={label}
-                      href={href}
-                      className="text-lg font-medium transition-colors hover:text-primary pl-2"
-                      onClick={closeMobileMenu}
-                    >
-                      {label}
-                    </Link>
-                  ))}
-                   <p className="text-sm font-semibold text-muted-foreground pt-4">Menu</p>
-                  {mainNavLinks.slice(1).map(({ href, label }) => (
-                    <Link
+                  <p className="text-sm font-semibold text-muted-foreground pt-4">Menu</p>
+                  {mainNavLinks.map(({ href, label }) => (
+                     <Link
                       key={label}
                       href={href}
                       className="text-lg font-medium transition-colors hover:text-primary pl-2"

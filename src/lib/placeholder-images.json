@@ -35,6 +35,12 @@
       "description": "Réunion de travail dans un bureau avec des graphiques en arrière-plan.",
       "imageUrl": "https://picsum.photos/seed/business-loan/1200/800",
       "imageHint": "business meeting"
+    },
+    {
+      "id": "about-us-hero",
+      "description": "Une équipe diversifiée collaborant dans un espace de travail lumineux.",
+      "imageUrl": "https://picsum.photos/seed/about-hero/1600/600",
+      "imageHint": "diverse team"
     }
   ]
 }

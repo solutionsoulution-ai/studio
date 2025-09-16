@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Landmark, Linkedin, Twitter, Facebook } from "lucide-react";
 
 const mainNavLinks = [
+  { href: "/a-propos", label: "À Propos" },
   { href: "/eligibilite", label: "Éligibilité" },
   { href: "/#calculateur", label: "Calculateur" },
   { href: "/#faq", label: "FAQ" },
