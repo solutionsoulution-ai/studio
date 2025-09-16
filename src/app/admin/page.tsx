@@ -36,7 +36,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { handleAdminLogin, handleCreateClientAndAccount, getClients, handleDeleteClient, handleUpdateBalance, updateBalanceSchema, type UpdateBalanceInput } from "@/app/actions";
+import { handleAdminLogin, handleCreateClientAndAccount, getClients, handleDeleteClient, handleUpdateBalance, type UpdateBalanceInput } from "@/app/actions";
 import { Loader2, UserPlus, Shield, Landmark, Users, ArrowLeft, UserCog, AlertCircle, Trash2, Banknote, ArrowRightLeft } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -444,8 +444,12 @@ const ClientList = ({ clients, onClientSelect, isLoading, error }: { clients: an
 }
 
 // Schéma de validation pour le formulaire de mise à jour du solde
-// Utilise le schéma importé de `actions`
-const clientUpdateBalanceSchema = updateBalanceSchema.omit({ clientId: true });
+const clientUpdateBalanceSchema = z.object({
+  amount: z.coerce.number().positive("Le montant doit être un nombre positif."),
+  operation: z.enum(["credit", "debit"]),
+  reason: z.string().min(3, "Un motif est requis pour l'opération."),
+});
+
 type UpdateBalanceValues = z.infer<typeof clientUpdateBalanceSchema>;
 
 
@@ -456,7 +460,7 @@ const ClientDetailView = ({ client, onBack, onClientDeleted, onBalanceUpdate }: 
 
     const balanceForm = useForm<UpdateBalanceValues>({
         resolver: zodResolver(clientUpdateBalanceSchema),
-        defaultValues: { amount: "" as any, operation: "credit", reason: "" }
+        defaultValues: { amount: '' as any, operation: "credit", reason: "" }
     });
 
     const handleDelete = async () => {
