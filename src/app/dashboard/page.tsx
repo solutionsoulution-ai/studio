@@ -18,13 +18,7 @@ import type { TransferFormInput } from "@/app/actions";
 const initialAccountData = {
   balance: 12345.67,
   iban: "FR76 3000 4000 0512 3456 7890 123",
-  transactions: [
-    { id: "1", type: "Prêt Immobilier", date: "2024-07-01", amount: -850.50 },
-    { id: "2", type: "Salaire", date: "2024-06-30", amount: 3200.00 },
-    { id: "3", type: "Virement à John Doe", date: "2024-06-28", amount: -50.00 },
-    { id: "4", type: "Carrefour", date: "2024-06-27", amount: -123.45 },
-    { id: "5", type: "Virement de Jane Smith", date: "2024-06-25", amount: 100.00 },
-  ],
+  transactions: [],
 };
 
 const formatCurrency = (value: number) => {
@@ -99,16 +93,24 @@ export default function DashboardPage() {
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {accountData.transactions.map((tx) => (
-                                        <TableRow key={tx.id}>
-                                            <TableCell className="font-medium flex items-center gap-2">
-                                                 {tx.amount > 0 ? <ArrowDownLeft className="w-4 h-4 text-green-500"/> : <ArrowUpRight className="w-4 h-4 text-red-500" />}
-                                                {tx.type}
+                                    {accountData.transactions.length > 0 ? (
+                                        accountData.transactions.map((tx) => (
+                                            <TableRow key={tx.id}>
+                                                <TableCell className="font-medium flex items-center gap-2">
+                                                    {tx.amount > 0 ? <ArrowDownLeft className="w-4 h-4 text-green-500"/> : <ArrowUpRight className="w-4 h-4 text-red-500" />}
+                                                    {tx.type}
+                                                </TableCell>
+                                                <TableCell className={`text-right font-semibold ${tx.amount > 0 ? 'text-green-600' : 'text-red-600'}`}>{formatCurrency(tx.amount)}</TableCell>
+                                                <TableCell className="hidden sm:table-cell text-right text-muted-foreground">{new Date(tx.date).toLocaleDateString('fr-FR')}</TableCell>
+                                            </TableRow>
+                                        ))
+                                    ) : (
+                                        <TableRow>
+                                            <TableCell colSpan={3} className="text-center h-24 text-muted-foreground">
+                                                Aucune transaction pour le moment.
                                             </TableCell>
-                                            <TableCell className={`text-right font-semibold ${tx.amount > 0 ? 'text-green-600' : 'text-red-600'}`}>{formatCurrency(tx.amount)}</TableCell>
-                                            <TableCell className="hidden sm:table-cell text-right text-muted-foreground">{tx.date}</TableCell>
                                         </TableRow>
-                                    ))}
+                                    )}
                                 </TableBody>
                             </Table>
                         </div>
