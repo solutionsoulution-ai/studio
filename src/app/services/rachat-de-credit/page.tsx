@@ -121,7 +121,6 @@ export default function RachatCreditPage() {
             description="Voyez comment le regroupement de vos prêts peut affecter vos paiements mensuels."
             defaultLoanAmount={40000} 
             defaultTerm={120} 
-            defaultRate={2} 
             maxAmount={250000}
             maxTerm={180}
           />

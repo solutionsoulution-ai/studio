@@ -120,7 +120,6 @@ export default function PretImmobilierPage() {
             description="Simulez les mensualités de votre futur achat immobilier en ajustant le montant et la durée."
             defaultLoanAmount={200000} 
             defaultTerm={300} 
-            defaultRate={2} 
             maxAmount={1500000}
             maxTerm={360}
           />

@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Zap, Users, Scaling, Award, Globe } from "lucide-react";
+import { Zap, Users, Scaling, Award, Globe, Percent } from "lucide-react";
 
 const features = [
   {
@@ -13,9 +13,9 @@ const features = [
     description: "Nos conseillers financiers vous accompagnent à chaque étape pour trouver la solution la mieux adaptée à votre projet.",
   },
   {
-    icon: Scaling,
-    title: "Solutions Flexibles",
-    description: "Nous proposons des conditions de prêt et des modalités de remboursement flexibles pour s'adapter à votre situation.",
+    icon: Percent,
+    title: "Taux Fixe Avantageux de 2%",
+    description: "Profitez d'un taux d'intérêt fixe et transparent de 2% pour tous nos produits de financement, sans surprise.",
   },
 ];
 

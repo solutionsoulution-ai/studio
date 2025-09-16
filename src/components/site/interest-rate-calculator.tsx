@@ -4,43 +4,42 @@ import { useState, useMemo } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-import { Calculator } from "lucide-react";
+import { Calculator, Percent } from "lucide-react";
 
 type InterestRateCalculatorProps = {
     title?: string;
     description?: string;
     defaultLoanAmount?: number;
-    defaultRate?: number;
     defaultTerm?: number; // Now in months
     maxAmount?: number;
     maxTerm?: number; // Now in months
 }
 
+const FIXED_INTEREST_RATE = 2;
+
 export default function InterestRateCalculator({
     title = "Calculateur de Remboursement de Prêt",
-    description = "Utilisez notre calculateur simple pour estimer vos mensualités. Ajustez les curseurs pour voir comment le montant, le taux et la durée du prêt affectent vos paiements.",
+    description = "Utilisez notre calculateur simple pour estimer vos mensualités. Ajustez les curseurs pour voir comment le montant et la durée du prêt affectent vos paiements.",
     defaultLoanAmount = 50000,
-    defaultRate = 7.5,
     defaultTerm = 60, // 5 years in months
     maxAmount = 500000,
     maxTerm = 360 // 30 years in months
 }: InterestRateCalculatorProps) {
   const [loanAmount, setLoanAmount] = useState(defaultLoanAmount);
-  const [interestRate, setInterestRate] = useState(defaultRate);
   const [loanTerm, setLoanTerm] = useState(defaultTerm); // State is in months
 
   const monthlyPayment = useMemo(() => {
-    if (loanAmount <= 0 || interestRate <= 0 || loanTerm <= 0) {
+    if (loanAmount <= 0 || FIXED_INTEREST_RATE <= 0 || loanTerm <= 0) {
       return 0;
     }
-    const monthlyRate = interestRate / 100 / 12;
+    const monthlyRate = FIXED_INTEREST_RATE / 100 / 12;
     const numberOfPayments = loanTerm; // loanTerm is already in months
     const payment =
       loanAmount *
       (monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) /
       (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
     return payment;
-  }, [loanAmount, interestRate, loanTerm]);
+  }, [loanAmount, loanTerm]);
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("fr-FR", {
@@ -80,19 +79,6 @@ export default function InterestRateCalculator({
                         />
                     </div>
                     <div>
-                        <Label htmlFor="interestRate" className="text-lg">Taux d'Intérêt</Label>
-                        <p className="text-2xl font-bold text-primary">{interestRate.toFixed(1)}%</p>
-                        <Slider
-                            id="interestRate"
-                            min={1}
-                            max={25}
-                            step={0.1}
-                            value={[interestRate]}
-                            onValueChange={(value) => setInterestRate(value[0])}
-                            className="mt-2"
-                        />
-                    </div>
-                    <div>
                         <Label htmlFor="loanTerm" className="text-lg">Durée du Prêt (Mois)</Label>
                         <p className="text-2xl font-bold text-primary">{loanTerm} Mois</p>
                         <Slider
@@ -104,6 +90,15 @@ export default function InterestRateCalculator({
                             onValueChange={(value) => setLoanTerm(value[0])}
                             className="mt-2"
                         />
+                    </div>
+                    <div className="p-4 rounded-md bg-secondary/50">
+                        <div className="flex items-center gap-3">
+                            <Percent className="w-6 h-6 text-primary" />
+                             <div>
+                                <Label className="text-lg">Taux d'Intérêt Fixe</Label>
+                                <p className="text-2xl font-bold text-primary">{FIXED_INTEREST_RATE}%</p>
+                             </div>
+                        </div>
                     </div>
                 </div>
 

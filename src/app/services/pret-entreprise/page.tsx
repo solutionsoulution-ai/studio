@@ -122,7 +122,6 @@ export default function PretEntreprisePage() {
               description="Estimez les remboursements pour vos projets d'investissement, de développement ou de trésorerie."
               defaultLoanAmount={100000} 
               defaultTerm={84} 
-              defaultRate={2} 
               maxAmount={1000000} 
             />
         </section>
