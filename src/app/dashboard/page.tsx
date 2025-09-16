@@ -26,13 +26,7 @@ const initialAccountData = {
   iban: "FR76 3000 4000 0512 3456 7890 123",
   accountNumber: "00012345678",
   bic: "CRLYFRPP",
-  transactions: [
-    { id: "tx1", type: "Salaire - Avril 2024", date: "2024-04-30", amount: 2500.00 },
-    { id: "tx2", type: "Loyer - Mai 2024", date: "2024-05-05", amount: -850.00 },
-    { id: "tx3", type: "Achat Supermarché", date: "2024-05-10", amount: -125.45 },
-    { id: "tx4", type: "Virement de Sophie", date: "2024-05-12", amount: 150.00 },
-    { id: "tx5", type: "Facture Internet", date: "2024-05-15", amount: -49.99 },
-  ],
+  transactions: [],
 };
 
 const formatCurrency = (value: number) => {
@@ -247,3 +241,5 @@ export default function DashboardPage() {
     </div>
   );
 }
+
+    
