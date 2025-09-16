@@ -446,6 +446,7 @@ const ClientList = ({ clients, onClientSelect, isLoading, error }: { clients: an
 const updateBalanceSchema = z.object({
   amount: z.coerce.number().positive("Le montant doit être positif."),
   operation: z.enum(["credit", "debit"]),
+  reason: z.string().min(3, "Un motif est requis pour l'opération."),
 });
 
 type UpdateBalanceValues = z.infer<typeof updateBalanceSchema>;
@@ -457,7 +458,7 @@ const ClientDetailView = ({ client, onBack, onClientDeleted, onBalanceUpdate }: 
 
     const balanceForm = useForm<UpdateBalanceValues>({
         resolver: zodResolver(updateBalanceSchema),
-        defaultValues: { amount: '' as any, operation: "credit" }
+        defaultValues: { amount: '' as any, operation: "credit", reason: "" }
     });
 
     const handleDelete = async () => {
@@ -491,7 +492,7 @@ const ClientDetailView = ({ client, onBack, onClientDeleted, onBalanceUpdate }: 
                 description: `Le nouveau solde est de ${result.newBalance.toFixed(2)} €.`
             });
             onBalanceUpdate(client.clientId, result.newBalance);
-            balanceForm.reset();
+            balanceForm.reset({amount: '' as any, operation: 'credit', reason: ''});
         } else {
             toast({
                 title: "Erreur de mise à jour",
@@ -548,6 +549,19 @@ const ClientDetailView = ({ client, onBack, onClientDeleted, onBalanceUpdate }: 
                                         <FormLabel>Montant de l'opération</FormLabel>
                                         <FormControl>
                                             <Input type="number" placeholder="100.00" {...field} disabled={isUpdatingBalance}/>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={balanceForm.control}
+                                name="reason"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Motif de l'opération</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Ex: Ajustement, Bonus..." {...field} disabled={isUpdatingBalance}/>
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -715,5 +729,3 @@ export default function AdminPage() {
     </main>
   );
 }
-
-    
