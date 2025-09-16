@@ -168,7 +168,11 @@ export async function handleLogin(formData: LoginInput): Promise<AuthResult> {
         const res = await response.json().catch(() => ({error: `Erreur ${response.status}`}));
         return { success: false, error: res.error || "Identifiants incorrects." };
       }
-      return { success: true, email: email };
+      const data = await response.json();
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      return { success: true, email: data.email };
     } catch (error: any) {
       console.error("Erreur lors de l'appel au webhook de connexion:", error);
       return { success: false, error: `Impossible de contacter le service de connexion. ${error.message}` };
