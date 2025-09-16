@@ -5,7 +5,7 @@ import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Check, Target, Handshake, Lightbulb, Users, Phone, Rocket, Milestone, Telescope, BrainCircuit, UsersRound } from 'lucide-react';
+import { Check, Target, Handshake, Lightbulb, Users, Phone, Rocket, Milestone, Telescope, BrainCircuit, UsersRound, Euro } from 'lucide-react';
 import { Button } from "../ui/button";
 import Link from "next/link";
 import {
@@ -53,12 +53,18 @@ const timelineEvents = [
     },
     {
         year: "2023",
-        title: "Création de VylsCapital",
+        title: "Fondation de VylsCapital",
         description: "Création officielle de l'entreprise et obtention des agréments pour opérer sur le marché européen.",
         icon: Rocket
     },
     {
-        year: "Futur",
+        year: "2024",
+        title: "Lancement & 100M€ Prêtés",
+        description: "Lancement public de la plateforme et atteinte du jalon de 100 millions d'euros de prêts financés la première année.",
+        icon: Euro
+    },
+    {
+        year: "2025 et au-delà",
         title: "Expansion Continue",
         description: "Nous prévoyons d'étendre nos services, d'ajouter de nouvelles fonctionnalités et de servir plus de clients en Europe.",
         icon: Telescope
@@ -99,7 +105,7 @@ export default function AboutUsSection() {
                     <div>
                         <h2 className="text-3xl font-bold font-headline mb-4">Notre Histoire</h2>
                         <p className="text-muted-foreground text-base leading-relaxed">
-                            Fondée en 2024, VylsCapital est née d'une ambition simple : révolutionner l'accès au financement pour les particuliers et les entreprises en Europe. Frustrés par la lenteur et la complexité des systèmes bancaires traditionnels, nous avons décidé de créer une plateforme qui allie le meilleur de la technologie et une expertise humaine pour offrir des solutions de prêt rapides, transparentes et adaptées aux besoins réels de nos clients.
+                            Fondée en 2023, VylsCapital est née d'une ambition simple : révolutionner l'accès au financement pour les particuliers et les entreprises en Europe. Frustrés par la lenteur et la complexité des systèmes bancaires traditionnels, nous avons décidé de créer une plateforme qui allie le meilleur de la technologie et une expertise humaine pour offrir des solutions de prêt rapides, transparentes et adaptées aux besoins réels de nos clients.
                         </p>
                     </div>
                      <div>
