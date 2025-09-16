@@ -182,6 +182,7 @@ export async function handleLogin(formData: LoginInput): Promise<AuthResult> {
     }
   }
 
+  // Fallback pour le test local si aucun webhook n'est configuré
   if (email === 'client@test.com' && password === 'password') {
     console.log("Connexion de l'utilisateur de test réussie.");
     return { success: true, email: email };
@@ -630,6 +631,8 @@ export async function handleUpdateBalance(formData: UpdateBalanceInput): Promise
     }
 }
     
+    
+
     
 
     
