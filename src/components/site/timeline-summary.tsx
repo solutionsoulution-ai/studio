@@ -6,27 +6,27 @@ import Link from 'next/link';
 const summaryEvents = [
     {
         year: "2012",
-        title: "L'Idée",
-        icon: Milestone
-    },
-    {
-        year: "2020",
-        title: "L'Équipe",
-        icon: UsersRound
-    },
-    {
-        year: "2023",
         title: "Fondation",
         icon: Rocket
     },
     {
-        year: "2024",
-        title: "Lancement",
+        year: "2015",
+        title: "100M€ Prêtés",
         icon: Euro
     },
     {
-        year: "2025+",
+        year: "2018",
         title: "Expansion",
+        icon: UsersRound
+    },
+    {
+        year: "2021",
+        title: "Innovation IA",
+        icon: Milestone
+    },
+    {
+        year: "2024+",
+        title: "Avenir",
         icon: Telescope
     }
 ];
@@ -67,3 +67,5 @@ export default function TimelineSummary() {
         </section>
     );
 }
+
+    

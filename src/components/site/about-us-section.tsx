@@ -35,38 +35,38 @@ const values = [
 const timelineEvents = [
     {
         year: "2012",
-        title: "La Naissance de l'Idée",
-        description: "Frustrés par la complexité bancaire, les fondateurs conçoivent une plateforme de prêt plus simple et plus humaine.",
-        icon: Milestone
+        title: "Fondation et Lancement",
+        description: "VylsCapital est créé avec la mission de rendre le prêt plus simple, rapide et accessible pour tous en Europe.",
+        icon: Rocket
     },
      {
         year: "2015",
-        title: "Recherche & Développement",
-        description: "Années de recherche pour développer une technologie de scoring innovante et éthique, basée sur l'IA.",
-        icon: BrainCircuit
-    },
-    {
-        year: "2020",
-        title: "Constitution de l'Équipe",
-        description: "L'équipe fondatrice est réunie, alliant experts de la finance, de la tech et du service client.",
-        icon: UsersRound
-    },
-    {
-        year: "2023",
-        title: "Fondation de VylsCapital",
-        description: "Création officielle de l'entreprise et obtention des agréments pour opérer sur le marché européen.",
-        icon: Rocket
-    },
-    {
-        year: "2024",
-        title: "Lancement & 100M€ Prêtés",
-        description: "Lancement public de la plateforme et atteinte du jalon de 100 millions d'euros de prêts financés la première année.",
+        title: "100 Millions d'euros prêtés",
+        description: "Nous atteignons notre premier jalon majeur, démontrant la confiance de nos clients et la solidité de notre modèle.",
         icon: Euro
     },
     {
+        year: "2018",
+        title: "Expansion Européenne",
+        description: "Nos services s'étendent à 5 nouveaux pays, affirmant notre ambition de devenir un leader européen.",
+        icon: UsersRound
+    },
+    {
+        year: "2021",
+        title: "Lancement de l'IA",
+        description: "Déploiement de notre technologie d'IA pour une analyse de risque plus juste et des réponses encore plus rapides.",
+        icon: BrainCircuit
+    },
+    {
+        year: "2024",
+        title: "Nouveaux Produits",
+        description: "Introduction du rachat de crédit et du prêt immobilier pour répondre à une demande croissante de nos clients.",
+        icon: Milestone
+    },
+    {
         year: "2025 et au-delà",
-        title: "Expansion Continue",
-        description: "Nous prévoyons d'étendre nos services, d'ajouter de nouvelles fonctionnalités et de servir plus de clients en Europe.",
+        title: "Vers l'Avenir",
+        description: "Continuer à innover pour offrir les meilleures solutions de financement, avec de nouveaux services à venir.",
         icon: Telescope
     }
 ]
@@ -105,7 +105,7 @@ export default function AboutUsSection() {
                     <div>
                         <h2 className="text-3xl font-bold font-headline mb-4">Notre Histoire</h2>
                         <p className="text-muted-foreground text-base leading-relaxed">
-                            Fondée en 2023, VylsCapital est née d'une ambition simple : révolutionner l'accès au financement pour les particuliers et les entreprises en Europe. Frustrés par la lenteur et la complexité des systèmes bancaires traditionnels, nous avons décidé de créer une plateforme qui allie le meilleur de la technologie et une expertise humaine pour offrir des solutions de prêt rapides, transparentes et adaptées aux besoins réels de nos clients.
+                            Fondée en 2012, VylsCapital est née d'une ambition simple : révolutionner l'accès au financement pour les particuliers et les entreprises en Europe. Frustrés par la lenteur et la complexité des systèmes bancaires traditionnels, nous avons décidé de créer une plateforme qui allie le meilleur de la technologie et une expertise humaine pour offrir des solutions de prêt rapides, transparentes et adaptées aux besoins réels de nos clients.
                         </p>
                     </div>
                      <div>
@@ -236,4 +236,5 @@ export default function AboutUsSection() {
     
 }
 
+    
     
