@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from "react";
@@ -10,8 +11,28 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { testimonials } from "@/lib/testimonials";
-import { MessageSquareQuote } from "lucide-react";
+import { MessageSquareQuote, Star } from "lucide-react";
 import Autoplay from "embla-carousel-autoplay";
+import { cn } from "@/lib/utils";
+
+const StarRating = ({ rating }: { rating: number }) => {
+  return (
+    <div className="flex items-center gap-0.5">
+      {Array.from({ length: 5 }, (_, index) => (
+        <Star
+          key={index}
+          className={cn(
+            "w-5 h-5",
+            index < rating
+              ? "text-yellow-400 fill-yellow-400"
+              : "text-muted-foreground/30"
+          )}
+        />
+      ))}
+    </div>
+  );
+};
+
 
 export default function TestimonialsSection() {
   const plugin = React.useRef(
@@ -46,6 +67,7 @@ export default function TestimonialsSection() {
                         <div className="p-1 h-full">
                             <Card className="h-full flex flex-col">
                                 <CardContent className="flex flex-col items-start gap-4 p-6 flex-grow">
+                                    <StarRating rating={testimonial.rating} />
                                     <p className="text-muted-foreground italic flex-grow">"{testimonial.quote}"</p>
                                     <div className="pt-4 border-t w-full">
                                         <p className="font-semibold">{testimonial.name}</p>
