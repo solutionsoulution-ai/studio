@@ -22,10 +22,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { handleAdminLogin, handleCreateClientAndAccount, getClients, type CreateClientAndAccountResult } from "@/app/actions";
-import { Loader2, UserPlus, Shield, Landmark, Users, ArrowLeft, UserCog, Pencil, AlertCircle } from "lucide-react";
+import { handleAdminLogin, handleCreateClientAndAccount, getClients, handleDeleteClient, type CreateClientAndAccountResult } from "@/app/actions";
+import { Loader2, UserPlus, Shield, Landmark, Users, ArrowLeft, UserCog, AlertCircle, Trash2 } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -415,7 +426,30 @@ const ClientList = ({ clients, onClientSelect, isLoading, error }: { clients: an
     )
 }
 
-const ClientDetailView = ({ client, onBack }: { client: any, onBack: () => void }) => {
+const ClientDetailView = ({ client, onBack, onClientDeleted }: { client: any, onBack: () => void, onClientDeleted: (clientId: string) => void }) => {
+    const { toast } = useToast();
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    const handleDelete = async () => {
+        setIsDeleting(true);
+        const result = await handleDeleteClient(client.clientId);
+        setIsDeleting(false);
+
+        if (result.success) {
+            toast({
+                title: "Client supprimé",
+                description: "Le client a été supprimé avec succès.",
+            });
+            onClientDeleted(client.clientId);
+        } else {
+            toast({
+                title: "Erreur de suppression",
+                description: result.error || "Impossible de supprimer le client.",
+                variant: "destructive",
+            });
+        }
+    };
+    
     return (
         <Card className="w-full shadow-lg">
             <CardHeader>
@@ -450,17 +484,31 @@ const ClientDetailView = ({ client, onBack }: { client: any, onBack: () => void 
                     </div>
                 )}
                 
-                <div className="p-4 border rounded-md space-y-4">
-                     <h3 className="font-semibold mb-2">Actions de Gestion (Simulation)</h3>
-                     <div className="flex gap-4">
-                        <Button disabled>
-                            <Pencil className="mr-2" /> Créditer / Débiter
-                        </Button>
-                         <Button disabled variant="secondary">
-                            Gérer les virements
-                        </Button>
-                     </div>
-                      <p className="text-sm text-muted-foreground">Ces actions sont désactivées car elles nécessitent une base de données pour fonctionner.</p>
+                <div className="p-4 border rounded-md space-y-4 bg-secondary/30">
+                     <h3 className="font-semibold mb-2">Actions de Gestion</h3>
+                     <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                            <Button variant="destructive" disabled={isDeleting}>
+                                <Trash2 className="mr-2" /> Supprimer le Client
+                            </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                            <AlertDialogTitle>Êtes-vous sûr de vouloir supprimer ce client ?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                Cette action est irréversible. Le fichier du client sera déplacé vers la corbeille de votre Google Drive. Vous ne pourrez pas annuler cette opération depuis l'application.
+                            </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                            <AlertDialogCancel>Annuler</AlertDialogCancel>
+                            <AlertDialogAction onClick={handleDelete} disabled={isDeleting}>
+                                {isDeleting && <Loader2 className="animate-spin mr-2" />}
+                                Confirmer la suppression
+                            </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
+                     <p className="text-sm text-muted-foreground">D'autres actions comme la modification ou la gestion des transactions seront bientôt disponibles.</p>
                 </div>
             </CardContent>
         </Card>
@@ -483,7 +531,7 @@ export default function AdminPage() {
               setErrorClients(null);
               const result = await getClients();
               if (result.success && result.data) {
-                  setClients(result.data);
+                  setClients(result.data.sort((a,b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime()));
               } else {
                   setErrorClients(result.error || "Une erreur est survenue.");
                   toast({
@@ -502,6 +550,11 @@ export default function AdminPage() {
     setClients(prevClients => [newClient, ...prevClients]);
     // Optionnel: rafraîchir la liste complète depuis la source de données
     // getClients().then(result => result.success && setClients(result.data));
+  }
+  
+  const handleClientDeletion = (clientId: string) => {
+    setClients(prevClients => prevClients.filter(c => c.clientId !== clientId));
+    setSelectedClient(null);
   }
 
   const handleClientSelection = (client: any) => {
@@ -528,7 +581,7 @@ export default function AdminPage() {
         <p className="text-muted-foreground mb-8">Gérez les comptes clients et leurs produits bancaires.</p>
         <div className="grid lg:grid-cols-2 gap-8 items-start">
             {selectedClient ? (
-                <ClientDetailView client={selectedClient} onBack={handleBackToList} />
+                <ClientDetailView client={selectedClient} onBack={handleBackToList} onClientDeleted={handleClientDeletion} />
             ) : (
                 <CreateClientAndAccountForm onClientCreated={handleClientCreation} />
             )}

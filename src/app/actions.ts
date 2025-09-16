@@ -10,6 +10,9 @@ import {
 } from "@/ai/flows/loan-eligibility-assessment";
 import { z } from "zod";
 
+const WEBHOOK_URL = process.env.WEBHOOK_URL || "";
+
+
 // Schema for Loan Eligibility
 const loanEligibilityFormSchema = z.object({
   annualRevenue: z.coerce
@@ -46,9 +49,9 @@ export async function handleEligibilityCheck(
     const result = await assessLoanEligibility(parsed.data);
 
     // Envoi des données au webhook si l'URL est configurée
-    if (process.env.WEBHOOK_URL) {
+    if (WEBHOOK_URL) {
       try {
-        const response = await fetch(process.env.WEBHOOK_URL, {
+        const response = await fetch(WEBHOOK_URL, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -99,21 +102,18 @@ export async function handleContactForm(
     return { success: false, error: `Données du formulaire invalides: ${issues}` };
   }
   
-  // Envoi des données au webhook si l'URL est configurée
-  if (process.env.WEBHOOK_URL) {
+  if (WEBHOOK_URL) {
     try {
-      const response = await fetch(process.env.WEBHOOK_URL, {
+      const response = await fetch(WEBHOOK_URL, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(parsed.data),
       });
 
       if (!response.ok) {
-        const errorBody = await response.text();
+        const errorBody = await response.json().catch(() => ({ message: response.statusText }));
         console.error("Erreur de réponse du webhook de contact:", errorBody);
-        return { success: false, error: `Le serveur a retourné une erreur: ${response.statusText} (${response.status}).` };
+        return { success: false, error: `Le serveur a retourné une erreur: ${errorBody.message || response.statusText}` };
       }
 
     } catch (webhookError: any) {
@@ -121,11 +121,9 @@ export async function handleContactForm(
       return { success: false, error: `Impossible de contacter le serveur webhook. ${webhookError.message}` };
     }
   } else {
-    // Log en console si aucun webhook n'est configuré, pour ne pas perdre les données.
     console.log("Formulaire de contact soumis (aucun webhook configuré):", parsed.data);
   }
 
-  // Succès
   return { success: true };
 }
 
@@ -157,9 +155,9 @@ export async function handleLogin(formData: LoginInput): Promise<AuthResult> {
     return { success: false, error: `Données du formulaire invalides: ${issues}` };
   }
 
-  if (process.env.WEBHOOK_URL) {
+  if (WEBHOOK_URL) {
     try {
-      const response = await fetch(process.env.WEBHOOK_URL, {
+      const response = await fetch(WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ formType: 'login', ...parsed.data}),
@@ -230,18 +228,17 @@ export async function handleCreateClientAndAccount(formData: CreateClientAndAcco
   }
 
 
-  if (process.env.WEBHOOK_URL) {
+  if (WEBHOOK_URL) {
     try {
-      const response = await fetch(process.env.WEBHOOK_URL, {
+      const response = await fetch(WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(clientDetails),
       });
 
       if (!response.ok) {
-        const errorBody = await response.text();
-        console.error("Erreur de réponse du webhook de création:", errorBody);
-        return { success: false, error: `Le serveur a retourné une erreur: ${response.statusText} (${response.status}).` };
+        const errorBody = await response.json().catch(() => ({ message: response.statusText }));
+        return { success: false, error: `Le serveur a retourné une erreur: ${errorBody.message || response.statusText}` };
       }
       const result = await response.json();
       return { success: true, details: result.client };
@@ -258,9 +255,9 @@ export async function handleCreateClientAndAccount(formData: CreateClientAndAcco
 export type GetClientsResult = { success: boolean; data?: any[]; error?: string; };
 
 export async function getClients(): Promise<GetClientsResult> {
-    if (process.env.WEBHOOK_URL) {
+    if (WEBHOOK_URL) {
         try {
-            const url = new URL(process.env.WEBHOOK_URL);
+            const url = new URL(WEBHOOK_URL);
             url.searchParams.append('action', 'getClients');
             
             const response = await fetch(url.toString(), {
@@ -397,18 +394,18 @@ export async function handleLoanApplication(formData: FormData): Promise<LoanApp
     ]
   };
 
-  if (process.env.WEBHOOK_URL) {
+  if (WEBHOOK_URL) {
     try {
-      const response = await fetch(process.env.WEBHOOK_URL, {
+      const response = await fetch(WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(applicationDetails),
       });
 
       if (!response.ok) {
-          const errorBody = await response.text();
+          const errorBody = await response.json().catch(() => ({ message: response.statusText }));
           console.error("Erreur de réponse du webhook de demande de prêt:", errorBody);
-          return { success: false, error: `Le serveur du webhook a retourné une erreur: ${response.statusText} (${response.status}).` };
+          return { success: false, error: `Le serveur du webhook a retourné une erreur: ${errorBody.message || response.statusText}.` };
       }
     } catch (error: any) {
       console.error("Erreur lors de l'appel au webhook de demande de prêt:", error);
@@ -454,9 +451,9 @@ export async function handleTransfer(
     date: new Date().toISOString(),
   };
 
-  if (process.env.WEBHOOK_URL) {
+  if (WEBHOOK_URL) {
     try {
-      const response = await fetch(process.env.WEBHOOK_URL, {
+      const response = await fetch(WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({formType: 'transfer', ...transactionDetails}),
@@ -478,4 +475,36 @@ export async function handleTransfer(
   return { success: true, transactionId: transactionDetails.transactionId };
 }
 
+
+// Action to delete a client
+export type DeleteClientResult = { success: boolean; error?: string; };
+
+export async function handleDeleteClient(clientId: string): Promise<DeleteClientResult> {
+  if (!WEBHOOK_URL) {
+    return { success: false, error: "Le service de gestion des clients n'est pas configuré." };
+  }
+
+  try {
+    const response = await fetch(WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: 'deleteClient', clientId }),
+    });
+
+    if (!response.ok) {
+      const errorBody = await response.json().catch(() => ({ message: response.statusText }));
+      throw new Error(errorBody.message || "Le serveur a retourné une erreur.");
+    }
+    
+    const result = await response.json();
+    if (result.status !== 'success') {
+        throw new Error(result.message || "Une erreur inconnue est survenue lors de la suppression.");
+    }
+
+    return { success: true };
+  } catch (error: any) {
+    console.error("Erreur lors de la suppression du client:", error);
+    return { success: false, error: error.message };
+  }
+}
     
