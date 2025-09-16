@@ -41,6 +41,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Separator } from "@/components/ui/separator";
 
 // Schéma pour le formulaire de connexion admin
 const adminLoginSchema = z.object({
@@ -713,4 +714,3 @@ export default function AdminPage() {
     </main>
   );
 }
-```
