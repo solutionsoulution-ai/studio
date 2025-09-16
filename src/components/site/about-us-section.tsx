@@ -86,7 +86,7 @@ export default function AboutUsSection() {
             
             {/* Timeline Section */}
             <section className="container mx-auto py-16 md:py-24">
-                 <div className="text-center mb-12">
+                 <div className="text-center mb-16">
                     <h2 className="text-3xl font-bold font-headline">Notre Parcours</h2>
                     <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
                         Les grandes étapes qui ont façonné VylsCapital.
@@ -94,31 +94,24 @@ export default function AboutUsSection() {
                 </div>
                 <div className="relative">
                     {/* The vertical line */}
-                    <div className="absolute left-1/2 -translate-x-1/2 h-full w-0.5 bg-border" aria-hidden="true" />
+                    <div className="absolute left-0 md:left-1/2 -translate-x-1/2 w-0.5 h-full bg-border" aria-hidden="true"></div>
 
-                    <div className="space-y-12">
+                    <div className="space-y-16">
                         {timelineEvents.map((event, index) => (
-                            <div key={event.title} className="relative flex items-center justify-center">
-                                <div className={`w-full md:w-1/2 flex ${index % 2 === 0 ? 'justify-start md:justify-end' : 'justify-start'} `}>
-                                     <div className={`w-full md:w-1/2 ${index % 2 === 0 ? 'md:pr-8' : 'md:pl-8'}`}>
-                                        <Card className="shadow-lg">
-                                            <CardHeader>
-                                                <div className="flex items-center gap-4">
-                                                    <event.icon className="w-8 h-8 text-primary"/>
-                                                    <div>
-                                                         <p className="text-primary font-bold">{event.year}</p>
-                                                        <CardTitle className="text-xl">{event.title}</CardTitle>
-                                                    </div>
-                                                </div>
-                                            </CardHeader>
-                                            <CardContent>
-                                                <p className="text-muted-foreground">{event.description}</p>
-                                            </CardContent>
-                                        </Card>
+                            <div key={event.title} className="relative flex items-start group">
+                                {/* The circle on the line */}
+                                <div className="hidden md:block absolute top-5 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-primary ring-8 ring-background" aria-hidden="true"></div>
+                                
+                                <div className={`w-full md:w-1/2 md:pr-8 ${index % 2 !== 0 ? 'md:ml-auto md:pl-8 md:pr-0' : ''}`}>
+                                     <div className={`pl-8 md:pl-0 ${index % 2 !== 0 ? 'md:text-left' : 'md:text-right'}`}>
+                                        <div className="flex items-center gap-4">
+                                            <div className="block md:hidden absolute top-0 left-0 -translate-x-1/2 w-4 h-4 rounded-full bg-primary ring-4 ring-background" aria-hidden="true"></div>
+                                            <p className={`text-primary font-bold ${index % 2 !== 0 ? 'md:text-left' : 'md:text-right'}`}>{event.year}</p>
+                                        </div>
+                                        <h3 className="text-xl font-bold mt-1">{event.title}</h3>
+                                        <p className="text-muted-foreground mt-2">{event.description}</p>
                                     </div>
                                 </div>
-                                {/* The circle on the line */}
-                                <div className="absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-primary ring-8 ring-background" aria-hidden="true" />
                            </div>
                         ))}
                     </div>
