@@ -1,3 +1,4 @@
+
 import SiteHeader from '@/components/site/site-header';
 import HeroSection from '@/components/site/hero-section';
 import ServicesSection from '@/components/site/services-section';
@@ -21,6 +22,10 @@ export default function Home() {
         
         <ServicesSection />
 
+        <section id="calculateur" className="w-full py-16 md-py-24 bg-muted/30">
+          <InterestRateCalculator />
+        </section>
+
         <WhyChooseUsSection />
 
         <TimelineSummary />
@@ -42,10 +47,6 @@ export default function Home() {
                     </Button>
                 </div>
             </div>
-        </section>
-
-        <section id="calculateur" className="w-full py-16 md-py-24 bg-muted/30">
-          <InterestRateCalculator />
         </section>
 
         <TestimonialsSection />
