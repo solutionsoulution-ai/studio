@@ -167,20 +167,15 @@ export async function handleLogin(formData: LoginInput): Promise<AuthResult> {
 
       if (!response.ok) {
         const errorText = await response.text();
-        // Essayer de parser comme JSON, sinon utiliser le texte brut
-        try {
-            const res = JSON.parse(errorText);
-            return { success: false, error: res.error || "Identifiants incorrects." };
-        } catch {
-            return { success: false, error: errorText || `Erreur ${response.status}` };
-        }
+        return { success: false, error: errorText || `Erreur ${response.status}: Identifiants incorrects.` };
       }
 
       const data = await response.json();
       if (data.error) {
-        throw new Error(data.error);
+        return { success: false, error: data.error };
       }
       return { success: true, email: data.email };
+
     } catch (error: any) {
       console.error("Erreur lors de l'appel au webhook de connexion:", error);
       return { success: false, error: `Impossible de contacter le service de connexion. ${error.message}` };
@@ -635,6 +630,8 @@ export async function handleUpdateBalance(formData: UpdateBalanceInput): Promise
     }
 }
     
+    
+
     
 
     
