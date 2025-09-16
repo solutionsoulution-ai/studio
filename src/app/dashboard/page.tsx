@@ -60,10 +60,9 @@ export default function DashboardPage() {
       <main className="flex-1 container mx-auto py-16">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
             <div>
-                <h1 className="text-3xl font-bold font-headline">Tableau de Bord</h1>
+                <h1 className="text-3xl font-bold font-headline">Bienvenue, {accountData.client.firstName} {accountData.client.lastName} !</h1>
                 <p className="text-muted-foreground flex items-center gap-2 mt-1">
-                    <User className="w-4 h-4" /> 
-                    {accountData.client.firstName} {accountData.client.lastName} - Client N° {accountData.client.clientId}
+                    C'est un plaisir de vous revoir sur votre espace client.
                 </p>
             </div>
             <Button variant="outline" asChild>
