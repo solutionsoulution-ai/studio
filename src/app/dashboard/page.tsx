@@ -7,13 +7,15 @@ import SiteFooter from "@/components/site/site-footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { LogOut, ArrowUpRight, ArrowDownLeft, Landmark, Send, FileText, User, Info, Copy, TrendingUp, TrendingDown, Loader2 } from "lucide-react";
+import { LogOut, ArrowUpRight, ArrowDownLeft, Landmark, Send, FileText, Info, Copy, TrendingUp, TrendingDown, Loader2 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import TransferForm from "@/components/dashboard/transfer-form";
 import type { TransferFormInput } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getAccountData } from "@/app/actions";
+import { useRouter } from "next/navigation";
 
 
 const formatCurrency = (value: number) => {
@@ -51,38 +53,47 @@ const InfoRow = ({ label, value }: { label: string; value: string }) => {
 export default function DashboardPage() {
     const [accountData, setAccountData] = useState<any>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const { toast } = useToast();
+    const router = useRouter();
     
-    // Simulate fetching data for the logged-in user
     useEffect(() => {
-        // In a real app, you'd fetch this from your backend based on the user's session
-        const fetchAccountData = () => {
-             // This is a mock fetch. Replace with your actual API call.
-             setTimeout(() => {
-                setAccountData({
-                    client: {
-                        firstName: "Jean",
-                        lastName: "Dupont",
-                        clientId: "C-1A2B3C4D"
-                    },
-                    balance: 12345.67,
-                    iban: "FR76 3000 4000 0512 3456 7890 123",
-                    accountNumber: "00012345678",
-                    bic: "CRLYFRPP",
-                    transactions: [
-                        { id: '1', type: 'Salaire', date: '2024-07-01', amount: 2500 },
-                        { id: '2', type: 'Loyer', date: '2024-07-05', amount: -850 },
-                        { id: '3', type: 'Carrefour', date: '2024-07-06', amount: -120.50 },
-                        { id: '4', type: 'Remboursement ami', date: '2024-07-10', amount: 50 },
-                    ],
+        const fetchAccountData = async () => {
+            const userEmail = localStorage.getItem("userEmail");
+            if (!userEmail) {
+                toast({
+                    title: "Accès non autorisé",
+                    description: "Veuillez vous connecter pour accéder à votre espace.",
+                    variant: "destructive",
                 });
-                setIsLoading(false);
-             }, 1500)
-        }
+                router.push("/login");
+                return;
+            }
+
+            setIsLoading(true);
+            const result = await getAccountData(userEmail);
+            if (result.success && result.data) {
+                setAccountData(result.data);
+            } else {
+                setError(result.error || "Impossible de charger les données du compte.");
+                toast({
+                    title: "Erreur de chargement",
+                    description: result.error || "Une erreur est survenue lors de la récupération de vos données.",
+                    variant: "destructive",
+                });
+            }
+            setIsLoading(false);
+        };
         
         fetchAccountData();
 
-    }, []);
+    }, [router, toast]);
+    
+    const handleLogout = () => {
+        localStorage.removeItem("userEmail");
+        toast({ title: "Déconnexion réussie." });
+        router.push("/");
+    };
 
     const handleTransferSuccess = (transferData: TransferFormInput) => {
         const newTransaction = {
@@ -100,7 +111,7 @@ export default function DashboardPage() {
     };
     
     const { totalIncome, totalExpenses } = useMemo(() => {
-        if (!accountData) return { totalIncome: 0, totalExpenses: 0 };
+        if (!accountData || !accountData.transactions) return { totalIncome: 0, totalExpenses: 0 };
         const income = accountData.transactions
             .filter((tx: any) => tx.amount > 0)
             .reduce((sum: number, tx: any) => sum + tx.amount, 0);
@@ -143,13 +154,17 @@ export default function DashboardPage() {
     )
   }
   
-  if (!accountData) {
+  if (error || !accountData) {
       return (
           <div className="flex flex-col min-h-dvh bg-background">
                 <SiteHeader />
                 <main className="flex-1 container mx-auto py-16 text-center">
                     <h1 className="text-2xl font-bold">Erreur</h1>
-                    <p className="text-muted-foreground">Impossible de charger les données de votre compte.</p>
+                    <p className="text-muted-foreground">{error || "Impossible de charger les données de votre compte."}</p>
+                     <Button onClick={handleLogout} className="mt-4">
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Retour à l'accueil
+                    </Button>
                 </main>
                 <SiteFooter />
           </div>
@@ -162,16 +177,14 @@ export default function DashboardPage() {
       <main className="flex-1 container mx-auto py-16">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
             <div>
-                <h1 className="text-3xl font-bold font-headline">Bienvenue, cher client {accountData.client.firstName} !</h1>
+                <h1 className="text-3xl font-bold font-headline">Bienvenue, {accountData.client?.firstName || 'cher client'} !</h1>
                 <p className="text-muted-foreground flex items-center gap-2 mt-1">
                     C'est un plaisir de vous revoir sur votre espace client.
                 </p>
             </div>
-            <Button variant="outline" asChild>
-                <Link href="/">
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Déconnexion
-                </Link>
+            <Button variant="outline" onClick={handleLogout}>
+                <LogOut className="mr-2 h-4 w-4" />
+                Déconnexion
             </Button>
         </div>
 
@@ -190,7 +203,7 @@ export default function DashboardPage() {
                         </CardHeader>
                         <CardContent>
                             <p className="text-3xl font-bold text-primary">{formatCurrency(accountData.balance)}</p>
-                            <p className="text-xs text-muted-foreground pt-1">Compte Courant : ...{accountData.accountNumber.slice(-4)}</p>
+                            <p className="text-xs text-muted-foreground pt-1">Compte Courant : ...{accountData.accountNumber?.slice(-4)}</p>
                         </CardContent>
                     </Card>
                      <Card>
@@ -243,7 +256,7 @@ export default function DashboardPage() {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {accountData.transactions.length > 0 ? (
+                                        {accountData.transactions && accountData.transactions.length > 0 ? (
                                             accountData.transactions.map((tx: any) => (
                                                 <TableRow key={tx.id}>
                                                     <TableCell className="font-medium flex items-center gap-2">

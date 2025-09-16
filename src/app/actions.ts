@@ -130,7 +130,7 @@ export async function handleContactForm(
 
 // Schemas and actions for authentication
 
-export type AuthResult = { success: boolean; error?: string };
+export type AuthResult = { success: boolean; error?: string; email?: string };
 
 export async function handleAdminLogin(password: string): Promise<AuthResult> {
   // SOLUTION DE CONTOURNEMENT: Mot de passe en dur pour garantir l'accès
@@ -155,27 +155,29 @@ export async function handleLogin(formData: LoginInput): Promise<AuthResult> {
     return { success: false, error: `Données du formulaire invalides: ${issues}` };
   }
 
+  const { email, password } = parsed.data;
+
   if (WEBHOOK_URL) {
     try {
       const response = await fetch(WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ formType: 'login', ...parsed.data}),
+        body: JSON.stringify({ formType: 'login', email, password }),
       });
       if (!response.ok) {
         const res = await response.json().catch(() => ({error: `Erreur ${response.status}`}));
         return { success: false, error: res.error || "Identifiants incorrects." };
       }
-      return { success: true };
+      return { success: true, email: email };
     } catch (error: any) {
       console.error("Erreur lors de l'appel au webhook de connexion:", error);
       return { success: false, error: `Impossible de contacter le service de connexion. ${error.message}` };
     }
   }
   
-  if (formData.email === 'client@test.com' && formData.password === 'password') {
+  if (email === 'client@test.com' && password === 'password') {
     console.log("Connexion de l'utilisateur de test réussie.");
-    return { success: true };
+    return { success: true, email: email };
   }
 
   console.log("Tentative de connexion (aucun webhook configuré):", parsed.data);
@@ -284,6 +286,69 @@ export async function getClients(): Promise<GetClientsResult> {
     
     console.log("Récupération des clients (aucun webhook configuré). Retour d'une liste vide.");
     return { success: true, data: [] };
+}
+
+// Action pour récupérer les données d'un client pour le dashboard
+export type AccountDataResult = { success: boolean; data?: any; error?: string };
+
+export async function getAccountData(email: string): Promise<AccountDataResult> {
+  if (!email) {
+    return { success: false, error: "L'e-mail du client est manquant." };
+  }
+
+  if (WEBHOOK_URL) {
+    try {
+      const url = new URL(WEBHOOK_URL);
+      url.searchParams.append("action", "getClientData");
+      url.searchParams.append("email", email);
+
+      const response = await fetch(url.toString(), {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        const errorBody = await response.text();
+        throw new Error(`Le webhook a retourné une erreur: ${response.statusText}. Body: ${errorBody}`);
+      }
+      const data = await response.json();
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      return { success: true, data };
+    } catch (error: any) {
+      console.error("Erreur lors de la récupération des données du compte client:", error);
+      return { success: false, error: `Impossible de récupérer les données du compte. ${error.message}` };
+    }
+  }
+
+  // Fallback pour le test local si aucun webhook n'est configuré
+  if (email === "client@test.com") {
+    return {
+      success: true,
+      data: {
+        client: {
+            email: "client@test.com",
+            firstName: "Jean",
+            lastName: "Dupont",
+            clientId: "C-1A2B3C4D"
+        },
+        balance: 12345.67,
+        iban: "FR76 3000 4000 0512 3456 7890 123",
+        accountNumber: "00012345678",
+        bic: "CRLYFRPP",
+        transactions: [
+            { id: '1', type: 'Salaire', date: '2024-07-01', amount: 2500 },
+            { id: '2', type: 'Loyer', date: '2024-07-05', amount: -850 },
+            { id: '3', type: 'Carrefour', date: '2024-07-06', amount: -120.50 },
+            { id: '4', type: 'Remboursement ami', date: '2024-07-10', amount: 50 },
+        ],
+      },
+    };
+  }
+
+  return { success: false, error: "Aucun service de données client configuré et utilisateur de test non trouvé." };
 }
 
 
@@ -546,7 +611,7 @@ export async function handleUpdateBalance(formData: UpdateBalanceInput): Promise
         }
 
         const result = await response.json();
-        if (result.status !== 'success') {
+        if (result.status !== 'success' || result.newBalance === undefined) {
             throw new Error(result.message || "Une erreur inconnue est survenue lors de la mise à jour du solde.");
         }
 
@@ -557,5 +622,4 @@ export async function handleUpdateBalance(formData: UpdateBalanceInput): Promise
         return { success: false, error: error.message };
     }
 }
-
     

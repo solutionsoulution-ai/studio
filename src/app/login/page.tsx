@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -47,7 +48,10 @@ export default function LoginPage() {
     const result = await handleLogin(values);
     setIsLoading(false);
 
-    if (result.success) {
+    if (result.success && result.email) {
+      // Stocker l'identifiant de l'utilisateur dans le localStorage
+      localStorage.setItem("userEmail", result.email);
+
       toast({
         title: "Connexion réussie !",
         description: "Vous allez être redirigé vers votre espace client.",
@@ -118,5 +122,4 @@ export default function LoginPage() {
     </div>
   );
 }
-
     
