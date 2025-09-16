@@ -151,7 +151,7 @@ export type LoginInput = z.infer<typeof loginSchema>;
 export async function handleLogin(formData: LoginInput): Promise<AuthResult> {
   const parsed = loginSchema.safeParse(formData);
   if (!parsed.success) {
-     const issues = parsed.error.issues.map((i) => i.message).join(", ");
+    const issues = parsed.error.issues.map((i) => i.message).join(", ");
     return { success: false, error: `Données du formulaire invalides: ${issues}` };
   }
 
@@ -164,10 +164,18 @@ export async function handleLogin(formData: LoginInput): Promise<AuthResult> {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ formType: 'login', email, password }),
       });
+
       if (!response.ok) {
-        const res = await response.json().catch(() => ({error: `Erreur ${response.status}`}));
-        return { success: false, error: res.error || "Identifiants incorrects." };
+        const errorText = await response.text();
+        // Essayer de parser comme JSON, sinon utiliser le texte brut
+        try {
+            const res = JSON.parse(errorText);
+            return { success: false, error: res.error || "Identifiants incorrects." };
+        } catch {
+            return { success: false, error: errorText || `Erreur ${response.status}` };
+        }
       }
+
       const data = await response.json();
       if (data.error) {
         throw new Error(data.error);
@@ -178,7 +186,7 @@ export async function handleLogin(formData: LoginInput): Promise<AuthResult> {
       return { success: false, error: `Impossible de contacter le service de connexion. ${error.message}` };
     }
   }
-  
+
   if (email === 'client@test.com' && password === 'password') {
     console.log("Connexion de l'utilisateur de test réussie.");
     return { success: true, email: email };
@@ -627,4 +635,6 @@ export async function handleUpdateBalance(formData: UpdateBalanceInput): Promise
     }
 }
     
+    
+
     
