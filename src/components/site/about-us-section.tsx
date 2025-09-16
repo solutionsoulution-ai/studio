@@ -1,10 +1,20 @@
+
+"use client";
+
 import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Check, Target, Handshake, Lightbulb, Users, Phone, Rocket, Milestone, Telescope } from 'lucide-react';
+import { Check, Target, Handshake, Lightbulb, Users, Phone, Rocket, Milestone, Telescope, BrainCircuit, UsersRound } from 'lucide-react';
 import { Button } from "../ui/button";
 import Link from "next/link";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 const teamMembers = [
     { name: "Alice Durand", role: "CEO & Fondatrice", avatar: "https://i.pravatar.cc/150?img=31" },
@@ -21,21 +31,33 @@ const values = [
 
 const timelineEvents = [
     {
-        year: "2023",
+        year: "2012",
         title: "La Naissance de l'Idée",
-        description: "Frustrés par la complexité bancaire, les fondateurs conçoivent une plateforme de prêt plus simple, plus rapide et plus humaine.",
+        description: "Frustrés par la complexité bancaire, les fondateurs conçoivent une plateforme de prêt plus simple et plus humaine.",
         icon: Milestone
     },
+     {
+        year: "2015",
+        title: "Recherche & Développement",
+        description: "Années de recherche pour développer une technologie de scoring innovante et éthique, basée sur l'IA.",
+        icon: BrainCircuit
+    },
     {
-        year: "2024",
-        title: "Lancement de VylsCapital",
-        description: "La plateforme est lancée. Nous accueillons nos premiers clients et validons notre modèle avec succès.",
+        year: "2020",
+        title: "Constitution de l'Équipe",
+        description: "L'équipe fondatrice est réunie, alliant experts de la finance, de la tech et du service client.",
+        icon: UsersRound
+    },
+    {
+        year: "2023",
+        title: "Création de VylsCapital",
+        description: "Création officielle de l'entreprise et obtention des agréments pour opérer sur le marché européen.",
         icon: Rocket
     },
     {
         year: "Futur",
-        title: "Expansion Européenne",
-        description: "Nous prévoyons d'étendre nos services à de nouveaux pays européens et de continuer à innover pour nos clients.",
+        title: "Expansion Continue",
+        description: "Nous prévoyons d'étendre nos services, d'ajouter de nouvelles fonctionnalités et de servir plus de clients en Europe.",
         icon: Telescope
     }
 ]
@@ -85,42 +107,50 @@ export default function AboutUsSection() {
             </section>
             
             {/* Timeline Section */}
-            <section className="container mx-auto py-16 md:py-24">
-                 <div className="text-center mb-16">
-                    <h2 className="text-3xl font-bold font-headline">Notre Parcours</h2>
-                    <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-                        Les grandes étapes qui ont façonné VylsCapital.
-                    </p>
-                </div>
-                <div className="relative">
-                    {/* The vertical line */}
-                    <div className="absolute left-0 md:left-1/2 -translate-x-1/2 w-0.5 h-full bg-border" aria-hidden="true"></div>
-
-                    <div className="space-y-16">
-                        {timelineEvents.map((event, index) => (
-                            <div key={event.title} className="relative flex items-start group">
-                                {/* The circle on the line */}
-                                <div className="hidden md:block absolute top-5 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-primary ring-8 ring-background" aria-hidden="true"></div>
-                                
-                                <div className={`w-full md:w-1/2 md:pr-8 ${index % 2 !== 0 ? 'md:ml-auto md:pl-8 md:pr-0' : ''}`}>
-                                     <div className={`pl-8 md:pl-0 ${index % 2 !== 0 ? 'md:text-left' : 'md:text-right'}`}>
-                                        <div className="flex items-center gap-4">
-                                            <div className="block md:hidden absolute top-0 left-0 -translate-x-1/2 w-4 h-4 rounded-full bg-primary ring-4 ring-background" aria-hidden="true"></div>
-                                            <p className={`text-primary font-bold ${index % 2 !== 0 ? 'md:text-left' : 'md:text-right'}`}>{event.year}</p>
-                                        </div>
-                                        <h3 className="text-xl font-bold mt-1">{event.title}</h3>
-                                        <p className="text-muted-foreground mt-2">{event.description}</p>
-                                    </div>
-                                </div>
-                           </div>
-                        ))}
+            <section className="bg-muted/30 w-full py-16 md:py-24">
+                 <div className="container mx-auto">
+                    <div className="text-center mb-16">
+                        <h2 className="text-3xl font-bold font-headline">Notre Parcours</h2>
+                        <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
+                            Les grandes étapes qui ont façonné VylsCapital.
+                        </p>
                     </div>
-                </div>
+                    <Carousel
+                        opts={{
+                            align: "start",
+                            loop: false,
+                        }}
+                        className="w-full"
+                    >
+                        <CarouselContent>
+                        {timelineEvents.map((event, index) => (
+                            <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                                <div className="p-1 h-full">
+                                    <Card className="h-full text-center">
+                                        <CardHeader>
+                                            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 mb-4">
+                                                <event.icon className="h-8 w-8 text-primary" />
+                                            </div>
+                                            <p className="font-bold text-primary text-lg">{event.year}</p>
+                                            <CardTitle>{event.title}</CardTitle>
+                                        </CardHeader>
+                                        <CardContent>
+                                            <p className="text-muted-foreground">{event.description}</p>
+                                        </CardContent>
+                                    </Card>
+                                </div>
+                            </CarouselItem>
+                        ))}
+                        </CarouselContent>
+                        <CarouselPrevious className="hidden lg:flex" />
+                        <CarouselNext className="hidden lg:flex" />
+                    </Carousel>
+                 </div>
             </section>
 
 
             {/* Values Section */}
-            <section className="bg-muted/30 py-16 md:py-24">
+            <section className="py-16 md:py-24">
                 <div className="container mx-auto">
                     <div className="text-center mb-12">
                         <h2 className="text-3xl font-bold font-headline">Nos Valeurs Fondamentales</h2>
@@ -187,4 +217,5 @@ export default function AboutUsSection() {
 
         </div>
     );
-}
+
+    
