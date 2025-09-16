@@ -48,7 +48,7 @@ export async function handleEligibilityCheck(
     // Envoi des données au webhook si l'URL est configurée
     if (process.env.WEBHOOK_URL) {
       try {
-        await fetch(process.env.WEBHOOK_URL, {
+        const response = await fetch(process.env.WEBHOOK_URL, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -59,6 +59,11 @@ export async function handleEligibilityCheck(
             eligibilityResult: result,
           }),
         });
+        if (!response.ok) {
+            const errorBody = await response.text();
+            console.error("Erreur de réponse du webhook d'éligibilité:", errorBody);
+            // Optionnel: ne pas bloquer l'utilisateur pour une erreur de webhook
+        }
       } catch (webhookError) {
         console.error("Erreur lors de l'envoi des données au webhook d'éligibilité:", webhookError);
       }
@@ -97,23 +102,30 @@ export async function handleContactForm(
   // Envoi des données au webhook si l'URL est configurée
   if (process.env.WEBHOOK_URL) {
     try {
-      await fetch(process.env.WEBHOOK_URL, {
+      const response = await fetch(process.env.WEBHOOK_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(parsed.data),
       });
-    } catch (webhookError) {
+
+      if (!response.ok) {
+        const errorBody = await response.text();
+        console.error("Erreur de réponse du webhook de contact:", errorBody);
+        return { success: false, error: `Le serveur a retourné une erreur: ${response.statusText} (${response.status}).` };
+      }
+
+    } catch (webhookError: any) {
       console.error("Erreur lors de l'envoi des données au webhook de contact:", webhookError);
-      // Nous ne retournons pas d'erreur au client ici, juste un log.
+      return { success: false, error: `Impossible de contacter le serveur webhook. ${webhookError.message}` };
     }
   } else {
     // Log en console si aucun webhook n'est configuré, pour ne pas perdre les données.
     console.log("Formulaire de contact soumis (aucun webhook configuré):", parsed.data);
   }
 
-  // Succès présumé si la validation passe et la tentative d'envoi est faite.
+  // Succès
   return { success: true };
 }
 
@@ -153,14 +165,13 @@ export async function handleLogin(formData: LoginInput): Promise<AuthResult> {
         body: JSON.stringify({ formType: 'login', ...parsed.data}),
       });
       if (!response.ok) {
-        const res = await response.json();
+        const res = await response.json().catch(() => ({error: `Erreur ${response.status}`}));
         return { success: false, error: res.error || "Identifiants incorrects." };
       }
-      const session = await response.json();
       return { success: true };
-    } catch (error) {
+    } catch (error: any) {
       console.error("Erreur lors de l'appel au webhook de connexion:", error);
-      return { success: false, error: "Impossible de contacter le service de connexion." };
+      return { success: false, error: `Impossible de contacter le service de connexion. ${error.message}` };
     }
   }
   
@@ -228,13 +239,15 @@ export async function handleCreateClientAndAccount(formData: CreateClientAndAcco
       });
 
       if (!response.ok) {
-        throw new Error(`Le webhook a retourné une erreur: ${response.statusText}`);
+        const errorBody = await response.text();
+        console.error("Erreur de réponse du webhook de création:", errorBody);
+        return { success: false, error: `Le serveur a retourné une erreur: ${response.statusText} (${response.status}).` };
       }
       const result = await response.json();
       return { success: true, details: result.client };
-    } catch (error) {
+    } catch (error: any) {
       console.error("Erreur lors de l'appel au webhook de création de client/compte:", error);
-      return { success: false, error: "Impossible de contacter le service de création." };
+      return { success: false, error: `Impossible de contacter le service de création. ${error.message}` };
     }
   }
 
@@ -247,28 +260,27 @@ export type GetClientsResult = { success: boolean; data?: any[]; error?: string;
 export async function getClients(): Promise<GetClientsResult> {
     if (process.env.WEBHOOK_URL) {
         try {
-            // On ajoute un paramètre à l'URL pour que le script sache quoi faire
             const url = new URL(process.env.WEBHOOK_URL);
             url.searchParams.append('action', 'getClients');
             
             const response = await fetch(url.toString(), {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
-                 cache: 'no-store' // Important pour toujours avoir les données à jour
+                 cache: 'no-store'
             });
 
             if (!response.ok) {
-                 throw new Error(`Le webhook a retourné une erreur: ${response.statusText}`);
+                 const errorBody = await response.text();
+                 throw new Error(`Le webhook a retourné une erreur: ${response.statusText}. Body: ${errorBody}`);
             }
             const data = await response.json();
-            // Le script Google Apps peut renvoyer {error: ...} en cas de problème
             if(data.error) {
                 throw new Error(data.error);
             }
             return { success: true, data };
-        } catch(error) {
+        } catch(error: any) {
             console.error("Erreur lors de la récupération des clients depuis le webhook:", error);
-            return { success: false, error: "Impossible de récupérer la liste des clients." };
+            return { success: false, error: `Impossible de récupérer la liste des clients. ${error.message}` };
         }
     }
     
@@ -387,19 +399,24 @@ export async function handleLoanApplication(formData: FormData): Promise<LoanApp
 
   if (process.env.WEBHOOK_URL) {
     try {
-      // NOTE: L'envoi de fichiers à un webhook nécessite multipart/form-data.
-      // Pour cet exemple, nous envoyons les métadonnées des fichiers en JSON.
-      await fetch(process.env.WEBHOOK_URL, {
+      const response = await fetch(process.env.WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(applicationDetails),
       });
-    } catch (error) {
-      console.error("Erreur lors de l'appel au webhook de demande de prêt:", error);
-    }
-  }
 
-  console.log("Nouvelle demande de prêt reçue (aucun webhook configuré):", applicationDetails);
+      if (!response.ok) {
+          const errorBody = await response.text();
+          console.error("Erreur de réponse du webhook de demande de prêt:", errorBody);
+          return { success: false, error: `Le serveur du webhook a retourné une erreur: ${response.statusText} (${response.status}).` };
+      }
+    } catch (error: any) {
+      console.error("Erreur lors de l'appel au webhook de demande de prêt:", error);
+      return { success: false, error: `Impossible de contacter le serveur webhook. ${error.message}` };
+    }
+  } else {
+    console.log("Nouvelle demande de prêt reçue (aucun webhook configuré):", applicationDetails);
+  }
   
   return { success: true, applicationId: applicationDetails.applicationId };
 }
@@ -439,18 +456,26 @@ export async function handleTransfer(
 
   if (process.env.WEBHOOK_URL) {
     try {
-      await fetch(process.env.WEBHOOK_URL, {
+      const response = await fetch(process.env.WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({formType: 'transfer', ...transactionDetails}),
       });
-    } catch (error) {
-      console.error("Erreur lors de l'appel au webhook de virement:", error);
-      return { success: false, error: "Le service de virement est momentanément indisponible." };
-    }
-  }
 
-  console.log("Virement initié (aucun webhook configuré):", transactionDetails);
+      if (!response.ok) {
+        const errorBody = await response.text();
+        console.error("Erreur de réponse du webhook de virement:", errorBody);
+        return { success: false, error: `Le service de virement est indisponible: ${response.statusText}.` };
+      }
+    } catch (error: any) {
+      console.error("Erreur lors de l'appel au webhook de virement:", error);
+      return { success: false, error: `Le service de virement est momentanément indisponible. ${error.message}` };
+    }
+  } else {
+      console.log("Virement initié (aucun webhook configuré):", transactionDetails);
+  }
 
   return { success: true, transactionId: transactionDetails.transactionId };
 }
+
+    
