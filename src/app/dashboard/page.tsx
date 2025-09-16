@@ -7,7 +7,7 @@ import SiteFooter from "@/components/site/site-footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { LogOut, ArrowUpRight, ArrowDownLeft, Landmark, Send, FileText } from "lucide-react";
+import { LogOut, ArrowUpRight, ArrowDownLeft, Landmark, Send, FileText, User } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import TransferForm from "@/components/dashboard/transfer-form";
@@ -16,6 +16,11 @@ import type { TransferFormInput } from "@/app/actions";
 
 // Données initiales pour l'exemple
 const initialAccountData = {
+  client: {
+    firstName: "Jean",
+    lastName: "Dupont",
+    clientId: "C-1A2B3C4D"
+  },
   balance: 12345.67,
   iban: "FR76 3000 4000 0512 3456 7890 123",
   transactions: [],
@@ -43,6 +48,7 @@ export default function DashboardPage() {
         setAccountData(prevData => ({
             ...prevData,
             balance: prevData.balance - transferData.amount,
+            // @ts-ignore
             transactions: [newTransaction, ...prevData.transactions]
         }));
     };
@@ -53,7 +59,13 @@ export default function DashboardPage() {
       <SiteHeader />
       <main className="flex-1 container mx-auto py-16">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-            <h1 className="text-3xl font-bold font-headline">Tableau de Bord Client</h1>
+            <div>
+                <h1 className="text-3xl font-bold font-headline">Tableau de Bord</h1>
+                <p className="text-muted-foreground flex items-center gap-2 mt-1">
+                    <User className="w-4 h-4" /> 
+                    {accountData.client.firstName} {accountData.client.lastName} - Client N° {accountData.client.clientId}
+                </p>
+            </div>
             <Button variant="outline" asChild>
                 <Link href="/">
                     <LogOut className="mr-2 h-4 w-4" />
@@ -72,8 +84,8 @@ export default function DashboardPage() {
                 <Card className="mt-4">
                     <CardHeader className="flex flex-row justify-between items-start">
                         <div>
-                            <CardTitle>Résumé du Compte</CardTitle>
-                            <CardDescription>Client de Test - Compte Courant</CardDescription>
+                            <CardTitle>Résumé du Compte Courant</CardTitle>
+                            <CardDescription className="font-mono">{accountData.iban}</CardDescription>
                         </div>
                          <div className="text-right">
                             <p className="text-sm text-muted-foreground">Solde Actuel</p>
@@ -81,7 +93,6 @@ export default function DashboardPage() {
                          </div>
                     </CardHeader>
                     <CardContent>
-                        <p className="text-sm font-mono text-muted-foreground mb-4">{accountData.iban}</p>
                         <h3 className="text-lg font-semibold mb-2">Dernières Transactions</h3>
                         <div className="border rounded-md">
                             <Table>
