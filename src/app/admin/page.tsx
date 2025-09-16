@@ -35,12 +35,12 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { handleAdminLogin, handleCreateClientAndAccount, getClients, handleDeleteClient, type CreateClientAndAccountResult } from "@/app/actions";
-import { Loader2, UserPlus, Shield, Landmark, Users, ArrowLeft, UserCog, AlertCircle, Trash2 } from "lucide-react";
+import { handleAdminLogin, handleCreateClientAndAccount, getClients, handleDeleteClient, handleUpdateBalance } from "@/app/actions";
+import { Loader2, UserPlus, Shield, Landmark, Users, ArrowLeft, UserCog, AlertCircle, Trash2, Banknote, ArrowRightLeft } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 // Schéma pour le formulaire de connexion admin
 const adminLoginSchema = z.object({
@@ -58,6 +58,7 @@ const createClientAndAccountSchema = z.object({
   accountNumber: z.string().min(1, { message: "Le numéro de compte est requis." }),
   iban: z.string().min(1, { message: "L'IBAN est requis." }),
   bic: z.string().min(1, { message: "Le code BIC/SWIFT est requis." }),
+  balance: z.coerce.number().optional().default(0),
   // Infos Prêt (Optionnel)
   loanType: z.enum(["none", "immobilier", "consommation", "auto"]),
   loanAmount: z.coerce.number().optional(),
@@ -144,6 +145,7 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: (cli
       accountNumber: "",
       iban: "", 
       bic: "",
+      balance: 0,
       loanType: "none",
     },
   });
@@ -216,6 +218,19 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: (cli
             
             <div className="space-y-4 p-4 border rounded-md">
                 <h3 className="font-semibold text-lg">Compte Bancaire Associé</h3>
+                <FormField
+                    control={form.control}
+                    name="balance"
+                    render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>Solde initial (€)</FormLabel>
+                        <FormControl>
+                        <Input type="number" {...field} disabled={isLoading} />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                    )}
+                />
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <FormField
                         control={form.control}
@@ -426,9 +441,22 @@ const ClientList = ({ clients, onClientSelect, isLoading, error }: { clients: an
     )
 }
 
-const ClientDetailView = ({ client, onBack, onClientDeleted }: { client: any, onBack: () => void, onClientDeleted: (clientId: string) => void }) => {
+const updateBalanceSchema = z.object({
+  amount: z.coerce.number().positive("Le montant doit être positif."),
+  operation: z.enum(["credit", "debit"]),
+});
+
+type UpdateBalanceValues = z.infer<typeof updateBalanceSchema>;
+
+const ClientDetailView = ({ client, onBack, onClientDeleted, onBalanceUpdate }: { client: any, onBack: () => void, onClientDeleted: (clientId: string) => void, onBalanceUpdate: (clientId: string, newBalance: number) => void }) => {
     const { toast } = useToast();
     const [isDeleting, setIsDeleting] = useState(false);
+    const [isUpdatingBalance, setIsUpdatingBalance] = useState(false);
+
+    const balanceForm = useForm<UpdateBalanceValues>({
+        resolver: zodResolver(updateBalanceSchema),
+        defaultValues: { amount: undefined, operation: "credit" }
+    });
 
     const handleDelete = async () => {
         setIsDeleting(true);
@@ -446,6 +474,27 @@ const ClientDetailView = ({ client, onBack, onClientDeleted }: { client: any, on
                 title: "Erreur de suppression",
                 description: result.error || "Impossible de supprimer le client.",
                 variant: "destructive",
+            });
+        }
+    };
+
+    const handleBalanceUpdate = async (values: UpdateBalanceValues) => {
+        setIsUpdatingBalance(true);
+        const result = await handleUpdateBalance({ ...values, clientId: client.clientId });
+        setIsUpdatingBalance(false);
+
+        if (result.success && result.newBalance !== undefined) {
+            toast({
+                title: "Solde mis à jour !",
+                description: `Le nouveau solde est de ${result.newBalance.toFixed(2)} €.`
+            });
+            onBalanceUpdate(client.clientId, result.newBalance);
+            balanceForm.reset();
+        } else {
+            toast({
+                title: "Erreur de mise à jour",
+                description: result.error || "Impossible de mettre à jour le solde.",
+                variant: "destructive"
             });
         }
     };
@@ -468,6 +517,7 @@ const ClientDetailView = ({ client, onBack, onClientDeleted }: { client: any, on
             <CardContent className="space-y-6">
                 <div className="p-4 border rounded-md">
                     <h3 className="font-semibold mb-2">Informations du Compte</h3>
+                    <p><strong>Solde :</strong> <span className="font-bold text-primary">{client.balance?.toFixed(2) || '0.00'} €</span></p>
                     <p><strong>Numéro de compte :</strong> {client.accountNumber}</p>
                     <p><strong>IBAN :</strong> {client.iban}</p>
                     <p><strong>BIC/SWIFT :</strong> {client.bic}</p>
@@ -485,7 +535,61 @@ const ClientDetailView = ({ client, onBack, onClientDeleted }: { client: any, on
                 )}
                 
                 <div className="p-4 border rounded-md space-y-4 bg-secondary/30">
-                     <h3 className="font-semibold mb-2">Actions de Gestion</h3>
+                     <h3 className="font-semibold mb-2">Gestion de Compte</h3>
+                     <Form {...balanceForm}>
+                         <form onSubmit={balanceForm.handleSubmit(handleBalanceUpdate)} className="space-y-4">
+                            <FormField
+                                control={balanceForm.control}
+                                name="amount"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Montant de l'opération</FormLabel>
+                                        <FormControl>
+                                            <Input type="number" placeholder="100.00" {...field} disabled={isUpdatingBalance}/>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={balanceForm.control}
+                                name="operation"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Type d'opération</FormLabel>
+                                        <FormControl>
+                                             <RadioGroup
+                                                onValueChange={field.onChange}
+                                                defaultValue={field.value}
+                                                className="flex space-x-4"
+                                                disabled={isUpdatingBalance}
+                                             >
+                                                <FormItem className="flex items-center space-x-2 space-y-0">
+                                                    <FormControl>
+                                                        <RadioGroupItem value="credit" />
+                                                    </FormControl>
+                                                    <FormLabel className="font-normal">Crédit</FormLabel>
+                                                </FormItem>
+                                                <FormItem className="flex items-center space-x-2 space-y-0">
+                                                    <FormControl>
+                                                        <RadioGroupItem value="debit" />
+                                                    </FormControl>
+                                                    <FormLabel className="font-normal">Débit</FormLabel>
+                                                </FormItem>
+                                             </RadioGroup>
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
+                            <Button type="submit" disabled={isUpdatingBalance}>
+                                {isUpdatingBalance && <Loader2 className="animate-spin mr-2" />}
+                                <ArrowRightLeft className="mr-2" />
+                                Exécuter l'opération
+                            </Button>
+                         </form>
+                     </Form>
+                     <Separator />
+                     <h3 className="font-semibold mb-2 pt-2">Zone de Danger</h3>
                      <AlertDialog>
                         <AlertDialogTrigger asChild>
                             <Button variant="destructive" disabled={isDeleting}>
@@ -496,7 +600,7 @@ const ClientDetailView = ({ client, onBack, onClientDeleted }: { client: any, on
                             <AlertDialogHeader>
                             <AlertDialogTitle>Êtes-vous sûr de vouloir supprimer ce client ?</AlertDialogTitle>
                             <AlertDialogDescription>
-                                Cette action est irréversible. Le fichier du client sera déplacé vers la corbeille de votre Google Drive. Vous ne pourrez pas annuler cette opération depuis l'application.
+                                Cette action est irréversible. Toutes les données du client, y compris son compte et ses transactions, seront définitivement effacées.
                             </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
@@ -508,7 +612,6 @@ const ClientDetailView = ({ client, onBack, onClientDeleted }: { client: any, on
                             </AlertDialogFooter>
                         </AlertDialogContent>
                     </AlertDialog>
-                     <p className="text-sm text-muted-foreground">D'autres actions comme la modification ou la gestion des transactions seront bientôt disponibles.</p>
                 </div>
             </CardContent>
         </Card>
@@ -548,8 +651,6 @@ export default function AdminPage() {
 
   const handleClientCreation = (newClient: any) => {
     setClients(prevClients => [newClient, ...prevClients]);
-    // Optionnel: rafraîchir la liste complète depuis la source de données
-    // getClients().then(result => result.success && setClients(result.data));
   }
   
   const handleClientDeletion = (clientId: string) => {
@@ -563,6 +664,17 @@ export default function AdminPage() {
 
   const handleBackToList = () => {
     setSelectedClient(null);
+  }
+  
+  const handleBalanceUpdate = (clientId: string, newBalance: number) => {
+      const updateClient = (client: any) => {
+           if(client.clientId === clientId) {
+               return { ...client, balance: newBalance };
+           }
+           return client;
+      }
+      setClients(prevClients => prevClients.map(updateClient));
+      setSelectedClient(prevClient => prevClient ? updateClient(prevClient) : null);
   }
 
 
@@ -581,7 +693,12 @@ export default function AdminPage() {
         <p className="text-muted-foreground mb-8">Gérez les comptes clients et leurs produits bancaires.</p>
         <div className="grid lg:grid-cols-2 gap-8 items-start">
             {selectedClient ? (
-                <ClientDetailView client={selectedClient} onBack={handleBackToList} onClientDeleted={handleClientDeletion} />
+                <ClientDetailView 
+                    client={selectedClient} 
+                    onBack={handleBackToList} 
+                    onClientDeleted={handleClientDeletion}
+                    onBalanceUpdate={handleBalanceUpdate}
+                />
             ) : (
                 <CreateClientAndAccountForm onClientCreated={handleClientCreation} />
             )}
@@ -596,3 +713,4 @@ export default function AdminPage() {
     </main>
   );
 }
+```

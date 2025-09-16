@@ -1,33 +1,20 @@
 
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import SiteHeader from "@/components/site/site-header";
 import SiteFooter from "@/components/site/site-footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { LogOut, ArrowUpRight, ArrowDownLeft, Landmark, Send, FileText, User, Info, Copy, TrendingUp, TrendingDown } from "lucide-react";
+import { LogOut, ArrowUpRight, ArrowDownLeft, Landmark, Send, FileText, User, Info, Copy, TrendingUp, TrendingDown, Loader2 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import TransferForm from "@/components/dashboard/transfer-form";
 import type { TransferFormInput } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
+import { Skeleton } from "@/components/ui/skeleton";
 
-
-// Données initiales pour l'exemple
-const initialAccountData = {
-  client: {
-    firstName: "Jean",
-    lastName: "Dupont",
-    clientId: "C-1A2B3C4D"
-  },
-  balance: 0,
-  iban: "FR76 3000 4000 0512 3456 7890 123",
-  accountNumber: "00012345678",
-  bic: "CRLYFRPP",
-  transactions: [],
-};
 
 const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("fr-FR", {
@@ -62,7 +49,40 @@ const InfoRow = ({ label, value }: { label: string; value: string }) => {
 
 
 export default function DashboardPage() {
-    const [accountData, setAccountData] = useState(initialAccountData);
+    const [accountData, setAccountData] = useState<any>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const { toast } = useToast();
+    
+    // Simulate fetching data for the logged-in user
+    useEffect(() => {
+        // In a real app, you'd fetch this from your backend based on the user's session
+        const fetchAccountData = () => {
+             // This is a mock fetch. Replace with your actual API call.
+             setTimeout(() => {
+                setAccountData({
+                    client: {
+                        firstName: "Jean",
+                        lastName: "Dupont",
+                        clientId: "C-1A2B3C4D"
+                    },
+                    balance: 12345.67,
+                    iban: "FR76 3000 4000 0512 3456 7890 123",
+                    accountNumber: "00012345678",
+                    bic: "CRLYFRPP",
+                    transactions: [
+                        { id: '1', type: 'Salaire', date: '2024-07-01', amount: 2500 },
+                        { id: '2', type: 'Loyer', date: '2024-07-05', amount: -850 },
+                        { id: '3', type: 'Carrefour', date: '2024-07-06', amount: -120.50 },
+                        { id: '4', type: 'Remboursement ami', date: '2024-07-10', amount: 50 },
+                    ],
+                });
+                setIsLoading(false);
+             }, 1500)
+        }
+        
+        fetchAccountData();
+
+    }, []);
 
     const handleTransferSuccess = (transferData: TransferFormInput) => {
         const newTransaction = {
@@ -72,24 +92,69 @@ export default function DashboardPage() {
             amount: -transferData.amount,
         };
 
-        setAccountData(prevData => ({
+        setAccountData((prevData:any) => ({
             ...prevData,
             balance: prevData.balance - transferData.amount,
-            // @ts-ignore
             transactions: [newTransaction, ...prevData.transactions]
         }));
     };
     
     const { totalIncome, totalExpenses } = useMemo(() => {
+        if (!accountData) return { totalIncome: 0, totalExpenses: 0 };
         const income = accountData.transactions
-            .filter(tx => tx.amount > 0)
-            .reduce((sum, tx) => sum + tx.amount, 0);
+            .filter((tx: any) => tx.amount > 0)
+            .reduce((sum: number, tx: any) => sum + tx.amount, 0);
         const expenses = accountData.transactions
-            .filter(tx => tx.amount < 0)
-            .reduce((sum, tx) => sum + tx.amount, 0);
+            .filter((tx: any) => tx.amount < 0)
+            .reduce((sum: number, tx: any) => sum + tx.amount, 0);
         return { totalIncome: income, totalExpenses: expenses };
-    }, [accountData.transactions]);
+    }, [accountData]);
 
+
+  if (isLoading) {
+    return (
+        <div className="flex flex-col min-h-dvh bg-background">
+            <SiteHeader />
+            <main className="flex-1 container mx-auto py-16">
+                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                     <div>
+                        <Skeleton className="h-10 w-80 mb-2" />
+                        <Skeleton className="h-5 w-96" />
+                    </div>
+                     <Skeleton className="h-10 w-32" />
+                 </div>
+                 <Skeleton className="h-10 w-96 mb-4" />
+                 <div className="grid lg:grid-cols-3 gap-6 mt-4">
+                    <Skeleton className="h-32 w-full" />
+                    <Skeleton className="h-32 w-full" />
+                    <Skeleton className="h-32 w-full" />
+                 </div>
+                  <div className="grid lg:grid-cols-5 gap-6 mt-6">
+                      <div className="lg:col-span-2">
+                        <Skeleton className="h-48 w-full" />
+                      </div>
+                      <div className="lg:col-span-3">
+                        <Skeleton className="h-72 w-full" />
+                      </div>
+                  </div>
+            </main>
+            <SiteFooter />
+        </div>
+    )
+  }
+  
+  if (!accountData) {
+      return (
+          <div className="flex flex-col min-h-dvh bg-background">
+                <SiteHeader />
+                <main className="flex-1 container mx-auto py-16 text-center">
+                    <h1 className="text-2xl font-bold">Erreur</h1>
+                    <p className="text-muted-foreground">Impossible de charger les données de votre compte.</p>
+                </main>
+                <SiteFooter />
+          </div>
+      )
+  }
 
   return (
     <div className="flex flex-col min-h-dvh bg-background">
@@ -179,7 +244,7 @@ export default function DashboardPage() {
                                     </TableHeader>
                                     <TableBody>
                                         {accountData.transactions.length > 0 ? (
-                                            accountData.transactions.map((tx) => (
+                                            accountData.transactions.map((tx: any) => (
                                                 <TableRow key={tx.id}>
                                                     <TableCell className="font-medium flex items-center gap-2">
                                                         {tx.amount > 0 ? <ArrowDownLeft className="w-4 h-4 text-green-500"/> : <ArrowUpRight className="w-4 h-4 text-red-500" />}
@@ -241,5 +306,4 @@ export default function DashboardPage() {
     </div>
   );
 }
-
-    
+```

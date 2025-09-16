@@ -190,6 +190,7 @@ const createClientAndAccountSchema = z.object({
   accountNumber: z.string().min(1, { message: "Le numéro de compte est requis." }),
   iban: z.string().min(1, { message: "L'IBAN est requis." }),
   bic: z.string().min(1, { message: "Le code BIC/SWIFT est requis." }),
+  balance: z.coerce.number().optional().default(0),
   loanType: z.enum(["none", "immobilier", "consommation", "auto"]),
   loanAmount: z.coerce.number().optional(),
   interestRate: z.coerce.number().optional(),
@@ -507,6 +508,50 @@ export async function handleDeleteClient(clientId: string): Promise<DeleteClient
     return { success: false, error: error.message };
   }
 }
-    
 
-    
+// Action to update a client's balance
+const updateBalanceSchema = z.object({
+  clientId: z.string(),
+  amount: z.coerce.number().finite("Le montant doit être un nombre valide."),
+  operation: z.enum(["credit", "debit"]),
+});
+
+export type UpdateBalanceInput = z.infer<typeof updateBalanceSchema>;
+export type UpdateBalanceResult = { success: boolean; error?: string; newBalance?: number };
+
+export async function handleUpdateBalance(formData: UpdateBalanceInput): Promise<UpdateBalanceResult> {
+    const parsed = updateBalanceSchema.safeParse(formData);
+
+    if (!parsed.success) {
+        const issues = parsed.error.issues.map((i) => i.message).join(", ");
+        return { success: false, error: `Données invalides: ${issues}` };
+    }
+
+    if (!WEBHOOK_URL) {
+        return { success: false, error: "Le service de gestion des clients n'est pas configuré." };
+    }
+
+    try {
+        const response = await fetch(WEBHOOK_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: 'updateBalance', ...parsed.data }),
+        });
+
+        if (!response.ok) {
+            const errorBody = await response.json().catch(() => ({ message: response.statusText }));
+            throw new Error(errorBody.message || "Le serveur a retourné une erreur.");
+        }
+
+        const result = await response.json();
+        if (result.status !== 'success') {
+            throw new Error(result.message || "Une erreur inconnue est survenue lors de la mise à jour du solde.");
+        }
+
+        return { success: true, newBalance: result.newBalance };
+
+    } catch (error: any) {
+        console.error("Erreur lors de la mise à jour du solde:", error);
+        return { success: false, error: error.message };
+    }
+}
