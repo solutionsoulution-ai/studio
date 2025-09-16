@@ -1,13 +1,13 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import SiteHeader from "@/components/site/site-header";
 import SiteFooter from "@/components/site/site-footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { LogOut, ArrowUpRight, ArrowDownLeft, Landmark, Send, FileText, User, Info, Copy } from "lucide-react";
+import { LogOut, ArrowUpRight, ArrowDownLeft, Landmark, Send, FileText, User, Info, Copy, TrendingUp, TrendingDown } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import TransferForm from "@/components/dashboard/transfer-form";
@@ -26,7 +26,13 @@ const initialAccountData = {
   iban: "FR76 3000 4000 0512 3456 7890 123",
   accountNumber: "00012345678",
   bic: "CRLYFRPP",
-  transactions: [],
+  transactions: [
+    { id: "tx1", type: "Salaire - Avril 2024", date: "2024-04-30", amount: 2500.00 },
+    { id: "tx2", type: "Loyer - Mai 2024", date: "2024-05-05", amount: -850.00 },
+    { id: "tx3", type: "Achat Supermarché", date: "2024-05-10", amount: -125.45 },
+    { id: "tx4", type: "Virement de Sophie", date: "2024-05-12", amount: 150.00 },
+    { id: "tx5", type: "Facture Internet", date: "2024-05-15", amount: -49.99 },
+  ],
 };
 
 const formatCurrency = (value: number) => {
@@ -79,6 +85,16 @@ export default function DashboardPage() {
             transactions: [newTransaction, ...prevData.transactions]
         }));
     };
+    
+    const { totalIncome, totalExpenses } = useMemo(() => {
+        const income = accountData.transactions
+            .filter(tx => tx.amount > 0)
+            .reduce((sum, tx) => sum + tx.amount, 0);
+        const expenses = accountData.transactions
+            .filter(tx => tx.amount < 0)
+            .reduce((sum, tx) => sum + tx.amount, 0);
+        return { totalIncome: income, totalExpenses: expenses };
+    }, [accountData.transactions]);
 
 
   return (
@@ -107,73 +123,91 @@ export default function DashboardPage() {
                 <TabsTrigger value="loans">Mes Prêts</TabsTrigger>
             </TabsList>
             <TabsContent value="overview">
-                <div className="grid lg:grid-cols-5 gap-6 mt-4">
-                    <div className="lg:col-span-3">
+                <div className="grid lg:grid-cols-3 gap-6 mt-4">
+                    <Card className="lg:col-span-1 h-full bg-primary/5">
+                        <CardHeader className="flex flex-row items-center justify-between pb-2">
+                            <CardTitle className="text-sm font-medium">Solde Actuel</CardTitle>
+                            <Landmark className="w-4 h-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                            <p className="text-3xl font-bold text-primary">{formatCurrency(accountData.balance)}</p>
+                            <p className="text-xs text-muted-foreground pt-1">Compte Courant : ...{accountData.accountNumber.slice(-4)}</p>
+                        </CardContent>
+                    </Card>
+                     <Card>
+                        <CardHeader className="flex flex-row items-center justify-between pb-2">
+                            <CardTitle className="text-sm font-medium">Revenus (ce mois-ci)</CardTitle>
+                            <TrendingUp className="w-4 h-4 text-green-500" />
+                        </CardHeader>
+                        <CardContent>
+                            <p className="text-3xl font-bold text-green-600">{formatCurrency(totalIncome)}</p>
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader className="flex flex-row items-center justify-between pb-2">
+                            <CardTitle className="text-sm font-medium">Dépenses (ce mois-ci)</CardTitle>
+                            <TrendingDown className="w-4 h-4 text-red-500" />
+                        </CardHeader>
+                        <CardContent>
+                            <p className="text-3xl font-bold text-red-600">{formatCurrency(totalExpenses)}</p>
+                        </CardContent>
+                    </Card>
+                </div>
+                
+                 <div className="grid lg:grid-cols-5 gap-6 mt-6">
+                    <div className="lg:col-span-2">
                         <Card className="h-full">
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2">
                                    <Info className="w-5 h-5 text-primary" /> Informations du Compte
                                 </CardTitle>
-                                <CardDescription>Vos coordonnées bancaires pour recevoir des virements.</CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-2">
                                 <InfoRow label="IBAN" value={accountData.iban} />
-                                <InfoRow label="Numéro de compte" value={accountData.accountNumber} />
                                 <InfoRow label="BIC / SWIFT" value={accountData.bic} />
                             </CardContent>
                         </Card>
                     </div>
-                     <div className="lg:col-span-2">
-                        <Card className="h-full bg-primary/5">
-                            <CardHeader>
-                                <CardTitle>Compte Courant</CardTitle>
-                                <CardDescription>Solde disponible</CardDescription>
-                            </CardHeader>
-                            <CardContent className="text-center">
-                                <p className="text-4xl font-bold text-primary">{formatCurrency(accountData.balance)}</p>
-                            </CardContent>
-                        </Card>
-                    </div>
-                </div>
 
-                <Card className="mt-6">
-                    <CardHeader>
-                        <CardTitle>Dernières Transactions</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="border rounded-md">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Description</TableHead>
-                                        <TableHead className="text-right">Montant</TableHead>
-                                        <TableHead className="hidden sm:table-cell text-right">Date</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {accountData.transactions.length > 0 ? (
-                                        accountData.transactions.map((tx) => (
-                                            <TableRow key={tx.id}>
-                                                <TableCell className="font-medium flex items-center gap-2">
-                                                    {tx.amount > 0 ? <ArrowDownLeft className="w-4 h-4 text-green-500"/> : <ArrowUpRight className="w-4 h-4 text-red-500" />}
-                                                    {tx.type}
-                                                </TableCell>
-                                                <TableCell className={`text-right font-semibold ${tx.amount > 0 ? 'text-green-600' : 'text-red-600'}`}>{formatCurrency(tx.amount)}</TableCell>
-                                                <TableCell className="hidden sm:table-cell text-right text-muted-foreground">{new Date(tx.date).toLocaleDateString('fr-FR')}</TableCell>
-                                            </TableRow>
-                                        ))
-                                    ) : (
+                    <Card className="mt-0 lg:col-span-3">
+                        <CardHeader>
+                            <CardTitle>Dernières Transactions</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="border rounded-md">
+                                <Table>
+                                    <TableHeader>
                                         <TableRow>
-                                            <TableCell colSpan={3} className="text-center h-24 text-muted-foreground">
-                                                Aucune transaction pour le moment.
-                                            </TableCell>
+                                            <TableHead>Description</TableHead>
+                                            <TableHead className="text-right">Montant</TableHead>
+                                            <TableHead className="hidden sm:table-cell text-right">Date</TableHead>
                                         </TableRow>
-                                    )}
-                                </TableBody>
-                            </Table>
-                        </div>
-                    </CardContent>
-                </Card>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {accountData.transactions.length > 0 ? (
+                                            accountData.transactions.map((tx) => (
+                                                <TableRow key={tx.id}>
+                                                    <TableCell className="font-medium flex items-center gap-2">
+                                                        {tx.amount > 0 ? <ArrowDownLeft className="w-4 h-4 text-green-500"/> : <ArrowUpRight className="w-4 h-4 text-red-500" />}
+                                                        {tx.type}
+                                                    </TableCell>
+                                                    <TableCell className={`text-right font-semibold ${tx.amount > 0 ? 'text-green-600' : 'text-red-600'}`}>{formatCurrency(tx.amount)}</TableCell>
+                                                    <TableCell className="hidden sm:table-cell text-right text-muted-foreground">{new Date(tx.date).toLocaleDateString('fr-FR')}</TableCell>
+                                                </TableRow>
+                                            ))
+                                        ) : (
+                                            <TableRow>
+                                                <TableCell colSpan={3} className="text-center h-24 text-muted-foreground">
+                                                    Aucune transaction pour le moment.
+                                                </TableCell>
+                                            </TableRow>
+                                        )}
+                                    </TableBody>
+                                </Table>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
             </TabsContent>
             <TabsContent value="transfer">
                  <Card className="mt-4">
