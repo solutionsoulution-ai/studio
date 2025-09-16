@@ -458,7 +458,7 @@ const ClientDetailView = ({ client, onBack, onClientDeleted, onBalanceUpdate }: 
 
     const balanceForm = useForm<UpdateBalanceValues>({
         resolver: zodResolver(updateBalanceSchema),
-        defaultValues: { amount: '' as any, operation: "credit", reason: "" }
+        defaultValues: { amount: "" as any, operation: "credit", reason: "" }
     });
 
     const handleDelete = async () => {
