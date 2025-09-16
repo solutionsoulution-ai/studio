@@ -2,7 +2,7 @@ import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Check, Target, Handshake, Lightbulb, Users, Phone } from 'lucide-react';
+import { Check, Target, Handshake, Lightbulb, Users, Phone, Rocket, Milestone, Telescope } from 'lucide-react';
 import { Button } from "../ui/button";
 import Link from "next/link";
 
@@ -17,6 +17,27 @@ const values = [
     { icon: Handshake, title: "Transparence", description: "Nous croyons en une communication claire et honnête à chaque étape." },
     { icon: Lightbulb, title: "Innovation", description: "Nous utilisons la technologie pour simplifier et améliorer les services financiers." },
     { icon: Target, title: "Orientation Client", description: "Votre succès est notre priorité. Nous nous engageons à trouver la meilleure solution pour vous." },
+]
+
+const timelineEvents = [
+    {
+        year: "2023",
+        title: "La Naissance de l'Idée",
+        description: "Frustrés par la complexité bancaire, les fondateurs conçoivent une plateforme de prêt plus simple, plus rapide et plus humaine.",
+        icon: Milestone
+    },
+    {
+        year: "2024",
+        title: "Lancement de VylsCapital",
+        description: "La plateforme est lancée. Nous accueillons nos premiers clients et validons notre modèle avec succès.",
+        icon: Rocket
+    },
+    {
+        year: "Futur",
+        title: "Expansion Européenne",
+        description: "Nous prévoyons d'étendre nos services à de nouveaux pays européens et de continuer à innover pour nos clients.",
+        icon: Telescope
+    }
 ]
 
 export default function AboutUsSection() {
@@ -62,6 +83,48 @@ export default function AboutUsSection() {
                     </div>
                 </div>
             </section>
+            
+            {/* Timeline Section */}
+            <section className="container mx-auto py-16 md:py-24">
+                 <div className="text-center mb-12">
+                    <h2 className="text-3xl font-bold font-headline">Notre Parcours</h2>
+                    <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
+                        Les grandes étapes qui ont façonné VylsCapital.
+                    </p>
+                </div>
+                <div className="relative">
+                    {/* The vertical line */}
+                    <div className="absolute left-1/2 -translate-x-1/2 h-full w-0.5 bg-border" aria-hidden="true" />
+
+                    <div className="space-y-12">
+                        {timelineEvents.map((event, index) => (
+                            <div key={event.title} className="relative flex items-center justify-center">
+                                <div className={`w-full md:w-1/2 flex ${index % 2 === 0 ? 'justify-start md:justify-end' : 'justify-start'} `}>
+                                     <div className={`w-full md:w-1/2 ${index % 2 === 0 ? 'md:pr-8' : 'md:pl-8'}`}>
+                                        <Card className="shadow-lg">
+                                            <CardHeader>
+                                                <div className="flex items-center gap-4">
+                                                    <event.icon className="w-8 h-8 text-primary"/>
+                                                    <div>
+                                                         <p className="text-primary font-bold">{event.year}</p>
+                                                        <CardTitle className="text-xl">{event.title}</CardTitle>
+                                                    </div>
+                                                </div>
+                                            </CardHeader>
+                                            <CardContent>
+                                                <p className="text-muted-foreground">{event.description}</p>
+                                            </CardContent>
+                                        </Card>
+                                    </div>
+                                </div>
+                                {/* The circle on the line */}
+                                <div className="absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-primary ring-8 ring-background" aria-hidden="true" />
+                           </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
 
             {/* Values Section */}
             <section className="bg-muted/30 py-16 md:py-24">
