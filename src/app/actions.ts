@@ -46,14 +46,15 @@ export async function handleEligibilityCheck(
     const result = await assessLoanEligibility(parsed.data);
 
     // Envoi des données au webhook si l'URL est configurée
-    if (process.env.LOAN_ELIGIBILITY_WEBHOOK_URL) {
+    if (process.env.WEBHOOK_URL) {
       try {
-        await fetch(process.env.LOAN_ELIGIBILITY_WEBHOOK_URL, {
+        await fetch(process.env.WEBHOOK_URL, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
+            formType: 'eligibility',
             formData: parsed.data,
             eligibilityResult: result,
           }),
@@ -94,9 +95,9 @@ export async function handleContactForm(
   }
   
   // Envoi des données au webhook si l'URL est configurée
-  if (process.env.CONTACT_WEBHOOK_URL) {
+  if (process.env.WEBHOOK_URL) {
     try {
-      await fetch(process.env.CONTACT_WEBHOOK_URL, {
+      await fetch(process.env.WEBHOOK_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -144,12 +145,12 @@ export async function handleLogin(formData: LoginInput): Promise<AuthResult> {
     return { success: false, error: `Données du formulaire invalides: ${issues}` };
   }
 
-  if (process.env.LOGIN_WEBHOOK_URL) {
+  if (process.env.WEBHOOK_URL) {
     try {
-      const response = await fetch(process.env.LOGIN_WEBHOOK_URL, {
+      const response = await fetch(process.env.WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(parsed.data),
+        body: JSON.stringify({ formType: 'login', ...parsed.data}),
       });
       if (!response.ok) {
         const res = await response.json();
@@ -218,9 +219,9 @@ export async function handleCreateClientAndAccount(formData: CreateClientAndAcco
   }
 
 
-  if (process.env.CREATE_CLIENT_ACCOUNT_WEBHOOK_URL) {
+  if (process.env.WEBHOOK_URL) {
     try {
-      const response = await fetch(process.env.CREATE_CLIENT_ACCOUNT_WEBHOOK_URL, {
+      const response = await fetch(process.env.WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(clientDetails),
@@ -244,13 +245,18 @@ export async function handleCreateClientAndAccount(formData: CreateClientAndAcco
 export type GetClientsResult = { success: boolean; data?: any[]; error?: string; };
 
 export async function getClients(): Promise<GetClientsResult> {
-    if (process.env.CREATE_CLIENT_ACCOUNT_WEBHOOK_URL) {
+    if (process.env.WEBHOOK_URL) {
         try {
-            const response = await fetch(process.env.CREATE_CLIENT_ACCOUNT_WEBHOOK_URL, {
+            // On ajoute un paramètre à l'URL pour que le script sache quoi faire
+            const url = new URL(process.env.WEBHOOK_URL);
+            url.searchParams.append('action', 'getClients');
+            
+            const response = await fetch(url.toString(), {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
                  cache: 'no-store' // Important pour toujours avoir les données à jour
             });
+
             if (!response.ok) {
                  throw new Error(`Le webhook a retourné une erreur: ${response.statusText}`);
             }
@@ -379,11 +385,11 @@ export async function handleLoanApplication(formData: FormData): Promise<LoanApp
     ]
   };
 
-  if (process.env.LOAN_APP_WEBHOOK_URL) {
+  if (process.env.WEBHOOK_URL) {
     try {
       // NOTE: L'envoi de fichiers à un webhook nécessite multipart/form-data.
       // Pour cet exemple, nous envoyons les métadonnées des fichiers en JSON.
-      await fetch(process.env.LOAN_APP_WEBHOOK_URL, {
+      await fetch(process.env.WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(applicationDetails),
@@ -431,12 +437,12 @@ export async function handleTransfer(
     date: new Date().toISOString(),
   };
 
-  if (process.env.TRANSFER_WEBHOOK_URL) {
+  if (process.env.WEBHOOK_URL) {
     try {
-      await fetch(process.env.TRANSFER_WEBHOOK_URL, {
+      await fetch(process.env.WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(transactionDetails),
+        body: JSON.stringify({formType: 'transfer', ...transactionDetails}),
       });
     } catch (error) {
       console.error("Erreur lors de l'appel au webhook de virement:", error);
