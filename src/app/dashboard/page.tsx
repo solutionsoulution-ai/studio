@@ -22,7 +22,7 @@ const initialAccountData = {
     lastName: "Dupont",
     clientId: "C-1A2B3C4D"
   },
-  balance: 12345.67,
+  balance: 0,
   iban: "FR76 3000 4000 0512 3456 7890 123",
   accountNumber: "00012345678",
   bic: "CRLYFRPP",
@@ -241,5 +241,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-
-    
