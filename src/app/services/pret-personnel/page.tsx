@@ -4,10 +4,11 @@ import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { CheckCircle, FilePen, Search, HandCoins } from "lucide-react";
+import { CheckCircle, FilePen, Search, HandCoins, Plane, Wrench, GraduationCap } from "lucide-react";
 import InterestRateCalculator from "@/components/site/interest-rate-calculator";
 import FaqSection from "@/components/site/faq-section";
 import HowItWorksSection, { HowItWorksStep } from "@/components/site/how-it-works-section";
+import WhySubscribeSection, { type Feature } from "@/components/site/why-subscribe-section";
 
 
 const personalFaqs = [
@@ -40,6 +41,24 @@ const howItWorksSteps: HowItWorksStep[] = [
       icon: "HandCoins",
       title: "3. Recevez les fonds",
       description: "Après accord définitif, les fonds sont versés sur votre compte bancaire sous 48h pour réaliser vos projets.",
+    },
+];
+
+const whySubscribeFeatures: Feature[] = [
+    {
+        icon: Plane,
+        title: "Financer un voyage",
+        description: "Concrétisez vos envies d'évasion, du tour du monde au week-end prolongé, sans piocher dans votre épargne.",
+    },
+    {
+        icon: Wrench,
+        title: "Réaliser des travaux",
+        description: "Rénovez votre cuisine, aménagez vos combles ou refaites votre décoration grâce à une solution de financement simple.",
+    },
+    {
+        icon: GraduationCap,
+        title: "Prévoir un grand événement",
+        description: "Financez un mariage, des études, ou faites face à une dépense imprévue avec une trésorerie disponible rapidement.",
     },
 ];
 
@@ -92,6 +111,8 @@ export default function PretPersonnelPage() {
             </div>
           </div>
         </section>
+
+        <WhySubscribeSection title="Pourquoi souscrire un Prêt Personnel ?" features={whySubscribeFeatures} />
 
         <HowItWorksSection steps={howItWorksSteps} />
 

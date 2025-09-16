@@ -4,10 +4,11 @@ import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { CheckCircle, FilePen, Search, HandCoins } from "lucide-react";
+import { CheckCircle, FilePen, Search, HandCoins, Car, Percent, FileCheck2 } from "lucide-react";
 import InterestRateCalculator from "@/components/site/interest-rate-calculator";
 import FaqSection from "@/components/site/faq-section";
 import HowItWorksSection, { HowItWorksStep } from "@/components/site/how-it-works-section";
+import WhySubscribeSection, { type Feature } from "@/components/site/why-subscribe-section";
 
 
 const autoFaqs = [
@@ -42,6 +43,24 @@ const howItWorksSteps: HowItWorksStep[] = [
       description: "Après signature électronique, les fonds sont virés au vendeur et vous pouvez récupérer votre voiture.",
     },
 ];
+
+const whySubscribeFeatures: Feature[] = [
+    {
+        icon: Car,
+        title: "Pour tout type de véhicule",
+        description: "Financez une voiture neuve, d'occasion, une moto ou même un camping-car. Notre prêt s'adapte à votre projet de mobilité.",
+    },
+    {
+        icon: Percent,
+        title: "Taux compétitifs",
+        description: "Bénéficiez de conditions de taux avantageuses négociées auprès de nos partenaires pour maîtriser le coût total de votre achat.",
+    },
+    {
+        icon: FileCheck2,
+        title: "Simplicité administrative",
+        description: "Nous vous accompagnons pour un montage de dossier rapide et efficace, afin que vous puissiez prendre le volant au plus vite.",
+    },
+]
 
 export default function PretAutoPage() {
   const image = PlaceHolderImages.find((img) => img.id === "pret-auto");
@@ -91,6 +110,8 @@ export default function PretAutoPage() {
             </div>
           </div>
         </section>
+
+        <WhySubscribeSection title="Pourquoi souscrire un Prêt Auto ?" features={whySubscribeFeatures} />
 
         <HowItWorksSection steps={howItWorksSteps} />
 

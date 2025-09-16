@@ -4,10 +4,11 @@ import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { CheckCircle, Landmark, FilePen, Search, HandCoins } from "lucide-react";
+import { CheckCircle, Landmark, FilePen, Search, HandCoins, Building2, TrendingUp, Briefcase } from "lucide-react";
 import FaqSection from "@/components/site/faq-section";
 import InterestRateCalculator from "@/components/site/interest-rate-calculator";
 import HowItWorksSection, { HowItWorksStep } from "@/components/site/how-it-works-section";
+import WhySubscribeSection, { type Feature } from "@/components/site/why-subscribe-section";
 
 
 const businessFaqs = [
@@ -40,6 +41,24 @@ const howItWorksSteps: HowItWorksStep[] = [
       icon: "HandCoins",
       title: "3. Déblocage des Fonds",
       description: "Après approbation, les fonds sont rapidement transférés sur votre compte professionnel pour lancer vos projets.",
+    },
+];
+
+const whySubscribeFeatures: Feature[] = [
+    {
+        icon: Building2,
+        title: "Investir dans vos locaux",
+        description: "Financez l'achat ou la rénovation de vos bureaux, ateliers ou locaux commerciaux pour offrir un meilleur environnement à vos équipes.",
+    },
+    {
+        icon: TrendingUp,
+        title: "Soutenir votre croissance",
+        description: "Obtenez les fonds nécessaires pour développer de nouveaux marchés, lancer de nouveaux produits ou renforcer vos équipes.",
+    },
+    {
+        icon: Briefcase,
+        title: "Optimiser votre trésorerie",
+        description: "Gérez les décalages de paiement et assurez la fluidité de votre cycle d'exploitation avec une ligne de crédit adaptée.",
     },
 ];
 
@@ -92,6 +111,8 @@ export default function PretEntreprisePage() {
             </div>
           </div>
         </section>
+
+        <WhySubscribeSection title="Pourquoi souscrire un Prêt Entreprise ?" features={whySubscribeFeatures} />
 
         <HowItWorksSection steps={howItWorksSteps} />
 

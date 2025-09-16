@@ -4,10 +4,11 @@ import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { CheckCircle, FilePen, Search, HandCoins } from "lucide-react";
+import { CheckCircle, FilePen, Search, HandCoins, Home, Brush, Building } from "lucide-react";
 import InterestRateCalculator from "@/components/site/interest-rate-calculator";
 import FaqSection from "@/components/site/faq-section";
 import HowItWorksSection, { HowItWorksStep } from "@/components/site/how-it-works-section";
+import WhySubscribeSection, { type Feature } from "@/components/site/why-subscribe-section";
 
 const immoFaqs = [
   {
@@ -39,6 +40,24 @@ const howItWorksSteps: HowItWorksStep[] = [
       icon: "HandCoins",
       title: "3. Signature & Acquisition",
       description: "Après acceptation de l'offre, signez chez le notaire et recevez les clés de votre nouvelle propriété.",
+    },
+];
+
+const whySubscribeFeatures: Feature[] = [
+    {
+        icon: Home,
+        title: "Acheter votre résidence",
+        description: "Devenez propriétaire de votre résidence principale ou secondaire et construisez votre patrimoine sur le long terme.",
+    },
+    {
+        icon: Building,
+        title: "Investissement locatif",
+        description: "Financez l'acquisition d'un bien destiné à la location pour générer des revenus complémentaires et préparer votre avenir.",
+    },
+    {
+        icon: Brush,
+        title: "Financer des travaux",
+        description: "Obtenez un prêt pour réaliser des travaux de rénovation, d'agrandissement ou d'amélioration énergétique dans votre bien.",
     },
 ];
 
@@ -90,6 +109,8 @@ export default function PretImmobilierPage() {
             </div>
           </div>
         </section>
+
+        <WhySubscribeSection title="Pourquoi souscrire un Prêt Immobilier ?" features={whySubscribeFeatures} />
 
         <HowItWorksSection steps={howItWorksSteps} />
 

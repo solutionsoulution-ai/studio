@@ -4,10 +4,11 @@ import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { CheckCircle, FilePen, Search, HandCoins } from "lucide-react";
+import { CheckCircle, FilePen, Search, HandCoins, Wallet, TrendingDown, Lightbulb } from "lucide-react";
 import InterestRateCalculator from "@/components/site/interest-rate-calculator";
 import FaqSection from "@/components/site/faq-section";
 import HowItWorksSection, { HowItWorksStep } from "@/components/site/how-it-works-section";
+import WhySubscribeSection, { type Feature } from "@/components/site/why-subscribe-section";
 
 
 const creditFaqs = [
@@ -40,6 +41,24 @@ const howItWorksSteps: HowItWorksStep[] = [
       icon: "HandCoins",
       title: "3. Simplifiez vos Finances",
       description: "Nous remboursons vos anciens créanciers. Vous n'avez plus qu'une seule mensualité, plus facile à gérer.",
+    },
+];
+
+const whySubscribeFeatures: Feature[] = [
+    {
+        icon: TrendingDown,
+        title: "Réduire vos mensualités",
+        description: "Allégez votre charge de remboursement mensuelle en regroupant vos prêts et en allongeant la durée, et gagnez en pouvoir d'achat.",
+    },
+    {
+        icon: Wallet,
+        title: "Simplifier votre budget",
+        description: "Ne gérez plus qu'un seul prélèvement et un seul interlocuteur. La gestion de vos finances personnelles devient plus claire et plus simple.",
+    },
+    {
+        icon: Lightbulb,
+        title: "Financer un nouveau projet",
+        description: "Profitez du regroupement pour inclure le financement d'un nouveau projet (voiture, travaux...) sans alourdir votre endettement.",
     },
 ];
 
@@ -91,6 +110,8 @@ export default function RachatCreditPage() {
             </div>
           </div>
         </section>
+
+        <WhySubscribeSection title="Pourquoi faire un Rachat de Crédit ?" features={whySubscribeFeatures} />
 
         <HowItWorksSection steps={howItWorksSteps} />
 
