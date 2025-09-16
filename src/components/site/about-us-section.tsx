@@ -15,6 +15,9 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
+import * as React from "react";
+
 
 const teamMembers = [
     { name: "Alice Durand", role: "CEO & Fondatrice", avatar: "https://i.pravatar.cc/150?img=31" },
@@ -64,6 +67,9 @@ const timelineEvents = [
 
 export default function AboutUsSection() {
     const heroImage = PlaceHolderImages.find((img) => img.id === "about-us-hero");
+    const plugin = React.useRef(
+      Autoplay({ delay: 4000, stopOnInteraction: true })
+    );
 
     return (
         <div>
@@ -116,11 +122,14 @@ export default function AboutUsSection() {
                         </p>
                     </div>
                     <Carousel
+                        plugins={[plugin.current]}
                         opts={{
                             align: "start",
-                            loop: false,
+                            loop: true,
                         }}
                         className="w-full"
+                        onMouseEnter={plugin.current.stop}
+                        onMouseLeave={plugin.current.reset}
                     >
                         <CarouselContent>
                         {timelineEvents.map((event, index) => (
@@ -217,5 +226,8 @@ export default function AboutUsSection() {
 
         </div>
     );
+
+    
+}
 
     
