@@ -87,7 +87,8 @@ export default function DashboardPage() {
         
         fetchAccountData();
 
-    }, [router, toast]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     
     const handleLogout = () => {
         localStorage.removeItem("userEmail");
