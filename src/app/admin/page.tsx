@@ -649,29 +649,33 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
 
 
 export default function AdminPage() {
+  const [isClient, setIsClient] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [clients, setClients] = useState<any[]>([]);
   const [selectedClient, setSelectedClient] = useState<any | null>(null);
   const [isLoadingClients, setIsLoadingClients] = useState(true);
 
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const fetchClients = useCallback(() => {
+      if (!isClient) return;
       setIsLoadingClients(true);
       const localClients = getLocalClients();
       const sortedClients = localClients.sort((a:any, b:any) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
       setClients(sortedClients);
       setIsLoadingClients(false);
-  }, []);
+  }, [isClient]);
 
   useEffect(() => {
-    if (isAdmin) {
+    if (isAdmin && isClient) {
       fetchClients();
     }
-  }, [isAdmin, fetchClients]);
+  }, [isAdmin, fetchClients, isClient]);
 
   const handleClientAction = () => {
-    // Re-fetch clients to reflect changes
     fetchClients();
-    // If a client was selected, find the updated version of it.
     if (selectedClient) {
         const updatedClients = getLocalClients();
         const updatedSelectedClient = updatedClients.find(c => c.clientId === selectedClient.clientId);
@@ -688,7 +692,7 @@ export default function AdminPage() {
     fetchClients(); 
   }
 
-  if (typeof window === 'undefined') {
+  if (!isClient) {
     return (
        <main className="flex min-h-screen flex-col items-center justify-center p-6 sm:p-24">
             <Loader2 className="animate-spin" />
@@ -730,5 +734,3 @@ export default function AdminPage() {
     </main>
   );
 }
-
-    
