@@ -164,48 +164,18 @@ export async function handleLogin(formData: LoginInput): Promise<AuthResult> {
   }
   
   // **LOGIQUE DE CONTOURNEMENT : Vérification locale via la liste des clients**
-  if (WEBHOOK_URL) {
-      console.log("Tentative de connexion via la vérification de la liste locale...");
-      const clientsResult = await getClients();
-      if (clientsResult.success && clientsResult.data) {
-          const foundClient = clientsResult.data.find(
-              (client: any) => client.email === email && client.password === password
-          );
-          if (foundClient) {
-              console.log(`Connexion réussie pour ${email} via la vérification locale.`);
-              return { success: true, email: foundClient.email };
-          }
+  console.log("Tentative de connexion via la vérification de la liste locale...");
+  const clientsResult = await getClients();
+  if (clientsResult.success && clientsResult.data) {
+      const foundClient = clientsResult.data.find(
+          (client: any) => client.email === email && client.password === password
+      );
+      if (foundClient) {
+          console.log(`Connexion réussie pour ${email} via la vérification locale.`);
+          return { success: true, email: foundClient.email };
       }
   }
 
-
-  // Si ce ne sont pas les identifiants de test, on tente la connexion via le webhook
-  if (WEBHOOK_URL) {
-    console.log("Tentative de connexion via le webhook...");
-    try {
-      const response = await fetch(WEBHOOK_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ formType: 'login', email, password }),
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error("Réponse d'erreur du webhook de connexion:", errorText);
-        return { success: false, error: errorText || `Erreur ${response.status}: Identifiants incorrects.` };
-      }
-
-      const data = await response.json();
-      if (data.error) {
-        return { success: false, error: data.error };
-      }
-      return { success: true, email: data.email };
-
-    } catch (error: any) {
-      console.error("Erreur lors de l'appel au webhook de connexion:", error);
-      return { success: false, error: `Service d'authentification indisponible. ${error.message}` };
-    }
-  }
 
   // Message d'erreur final si aucune autre condition n'est remplie
   return { success: false, error: "Identifiants incorrects." };
@@ -348,34 +318,32 @@ export async function getAccountData(email: string): Promise<AccountDataResult> 
     };
   }
   
-  if (WEBHOOK_URL) {
-    try {
-      const url = new URL(WEBHOOK_URL);
-      url.searchParams.append("action", "getClientData");
-      url.searchParams.append("email", email);
-
-      const response = await fetch(url.toString(), {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        cache: "no-store",
-      });
-
-      if (!response.ok) {
-        const errorBody = await response.text();
-        throw new Error(`Le webhook a retourné une erreur: ${response.statusText}. Body: ${errorBody}`);
+  // Logique principale : récupérer les données depuis la liste des clients
+  const clientsResult = await getClients();
+  if (clientsResult.success && clientsResult.data) {
+      const clientData = clientsResult.data.find((client: any) => client.email === email);
+      if (clientData) {
+          // Simuler une réponse de données de compte
+          return {
+              success: true,
+              data: {
+                  client: {
+                      email: clientData.email,
+                      firstName: clientData.firstName || 'Client', // Utiliser des valeurs par défaut
+                      lastName: clientData.lastName || '',
+                      clientId: clientData.clientId,
+                  },
+                  balance: clientData.balance || 0,
+                  iban: clientData.iban,
+                  accountNumber: clientData.accountNumber,
+                  bic: clientData.bic,
+                  transactions: clientData.transactions || [], // Assumer que les transactions peuvent être là
+              },
+          };
       }
-      const data = await response.json();
-      if (data.error) {
-        throw new Error(data.error);
-      }
-      return { success: true, data };
-    } catch (error: any) {
-      console.error("Erreur lors de la récupération des données du compte client:", error);
-      return { success: false, error: `Service de données client indisponible. ${error.message}` };
-    }
   }
 
-  return { success: false, error: "Utilisateur non trouvé et service de données indisponible." };
+  return { success: false, error: "Utilisateur non trouvé ou service de données indisponible." };
 }
 
 
