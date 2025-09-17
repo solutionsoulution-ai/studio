@@ -298,5 +298,3 @@ const transferFormSchema = z.object({
 });
 
 export type TransferFormInput = z.infer<typeof transferFormSchema>;
-    
-```
