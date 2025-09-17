@@ -1,11 +1,11 @@
 
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { LogOut, ArrowUpRight, ArrowDownLeft, Landmark, Send, FileText, Info, Copy, TrendingUp, TrendingDown, Loader2 } from "lucide-react";
+import { LogOut, ArrowUpRight, ArrowDownLeft, Landmark, Send, FileText, Info, Copy, TrendingUp, TrendingDown } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import TransferForm from "@/components/dashboard/transfer-form";
@@ -55,43 +55,51 @@ export default function DashboardClientPage() {
     const { toast } = useToast();
     const router = useRouter();
     
-    useEffect(() => {
-        const fetchAccountData = async () => {
-            const userEmail = localStorage.getItem("userEmail");
-            if (!userEmail) {
-                toast({
-                    title: "Accès non autorisé",
-                    description: "Veuillez vous connecter pour accéder à votre espace.",
-                    variant: "destructive",
-                });
-                router.push("/login");
-                return;
+    const fetchAndSyncAccountData = useCallback(async () => {
+        const userEmail = localStorage.getItem("userEmail");
+        if (!userEmail) {
+            toast({
+                title: "Accès non autorisé",
+                description: "Veuillez vous connecter pour accéder à votre espace.",
+                variant: "destructive",
+            });
+            router.push("/login");
+            return;
+        }
+
+        setIsLoading(true);
+        const result = await getAccountData(userEmail);
+
+        if (result.success && result.data) {
+            let data = result.data;
+            // Synchronisation avec le localStorage
+            const localBalanceStr = localStorage.getItem(`balance_${userEmail}`);
+            if (localBalanceStr) {
+                const localBalance = parseFloat(localBalanceStr);
+                if (!isNaN(localBalance)) {
+                    data.balance = localBalance;
+                }
             }
-
-            setIsLoading(true);
-            const result = await getAccountData(userEmail);
-
-            if (result.success && result.data) {
-                setAccountData(result.data);
-            } else {
-                setError(result.error || "Impossible de charger les données du compte.");
-                toast({
-                    title: "Erreur de chargement",
-                    description: result.error || "Une erreur est survenue lors de la récupération de vos données.",
-                    variant: "destructive",
-                });
-            }
-            setIsLoading(false);
-        };
-        
-        fetchAccountData();
-
+            setAccountData(data);
+        } else {
+            setError(result.error || "Impossible de charger les données du compte.");
+            toast({
+                title: "Erreur de chargement",
+                description: result.error || "Une erreur est survenue lors de la récupération de vos données.",
+                variant: "destructive",
+            });
+        }
+        setIsLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     
+    useEffect(() => {
+        fetchAndSyncAccountData();
+    }, [fetchAndSyncAccountData]);
+    
     const handleLogout = () => {
+        // Ne pas effacer le localStorage pour garder les modifications de solde
         localStorage.removeItem("userEmail");
-        // We keep updatedBalances so admin changes persist across sessions
         toast({ title: "Déconnexion réussie." });
         router.push("/");
     };
@@ -104,11 +112,18 @@ export default function DashboardClientPage() {
             amount: -transferData.amount,
         };
 
-        setAccountData((prevData:any) => ({
-            ...prevData,
-            balance: prevData.balance - transferData.amount,
-            transactions: [newTransaction, ...prevData.transactions]
-        }));
+        setAccountData((prevData:any) => {
+            if (!prevData) return null;
+            const newBalance = prevData.balance - transferData.amount;
+            // Mettre à jour le localStorage avec le nouveau solde
+            localStorage.setItem(`balance_${prevData.client.email}`, String(newBalance));
+
+            return {
+                ...prevData,
+                balance: newBalance,
+                transactions: [newTransaction, ...prevData.transactions]
+            }
+        });
     };
     
     const { totalIncome, totalExpenses } = useMemo(() => {
@@ -308,5 +323,3 @@ export default function DashboardClientPage() {
     </div>
   );
 }
-
-

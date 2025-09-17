@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -36,8 +36,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { handleAdminLogin, handleCreateClientAndAccount, getClients, handleDeleteClient, handleUpdateBalance, type UpdateBalanceInput } from "@/app/actions";
-import { Loader2, UserPlus, Shield, Landmark, Users, ArrowLeft, UserCog, AlertCircle, Trash2, Banknote, ArrowRightLeft } from "lucide-react";
+import { handleAdminLogin, handleCreateClientAndAccount, getClients, handleDeleteClient, handleUpdateBalance } from "@/app/actions";
+import { Loader2, UserPlus, Shield, Landmark, Users, ArrowLeft, UserCog, AlertCircle, Trash2, ArrowRightLeft } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -394,7 +394,7 @@ const ClientList = ({ clients, onClientSelect, isLoading, error }: { clients: an
     
     if (clients.length === 0) {
         return (
-             <Card className="w-full shadow-lg mt-8 lg-mt-0">
+             <Card className="w-full shadow-lg mt-8 lg:mt-0">
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-xl font-bold">
                         <Users /> Liste des Clients
@@ -422,7 +422,7 @@ const ClientList = ({ clients, onClientSelect, isLoading, error }: { clients: an
                     <TableHeader>
                         <TableRow>
                         <TableHead>Email</TableHead>
-                        <TableHead>Numéro de Compte</TableHead>
+                        <TableHead>Solde</TableHead>
                         <TableHead>Prêt Actif</TableHead>
                         </TableRow>
                     </TableHeader>
@@ -430,7 +430,7 @@ const ClientList = ({ clients, onClientSelect, isLoading, error }: { clients: an
                         {clients.map((client) => (
                         <TableRow key={client.clientId} onClick={() => onClientSelect(client)} className="cursor-pointer hover:bg-muted/50">
                             <TableCell className="font-medium">{client.email}</TableCell>
-                            <TableCell>{client.accountNumber}</TableCell>
+                            <TableCell>{client.balance?.toFixed(2) || '0.00'} €</TableCell>
                             <TableCell>
                                 {client.hasLoan ? <Badge variant="default">Oui</Badge> : <Badge variant="secondary">Non</Badge>}
                             </TableCell>
@@ -483,24 +483,51 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
         }
     };
 
+    // LOGIQUE DE CONTOURNEMENT: Mise à jour du solde dans le localStorage
     const handleBalanceUpdate = async (values: UpdateBalanceValues) => {
         setIsUpdatingBalance(true);
-        const result = await handleUpdateBalance({ ...values, clientId: client.clientId });
-        setIsUpdatingBalance(false);
 
-        if (result.success) {
+        try {
+            // 1. Appeler l'action serveur (qui est maintenant un placeholder)
+            await handleUpdateBalance({ ...values, clientId: client.clientId });
+
+            // 2. Récupérer la liste actuelle des clients depuis le localStorage
+            const storedClients = JSON.parse(localStorage.getItem('clients') || '[]');
+            
+            // 3. Trouver le client et mettre à jour son solde
+            let newBalance = client.balance || 0;
+            const updatedClients = storedClients.map((c: any) => {
+                if (c.clientId === client.clientId) {
+                    const amount = values.operation === 'credit' ? values.amount : -values.amount;
+                    newBalance = (c.balance || 0) + amount;
+                    return { ...c, balance: newBalance };
+                }
+                return c;
+            });
+
+            // 4. Sauvegarder la nouvelle liste dans le localStorage
+            localStorage.setItem('clients', JSON.stringify(updatedClients));
+            
+            // 5. Mettre à jour le localStorage spécifique au solde du client pour le dashboard
+            localStorage.setItem(`balance_${client.email}`, String(newBalance));
+
             toast({
                 title: "Opération réussie !",
-                description: "La demande de mise à jour a été envoyée. Le solde sera mis à jour après rafraîchissement.",
+                description: `Le solde a été mis à jour localement. Le nouveau solde est de ${newBalance.toFixed(2)} €.`,
             });
+            
+            // 6. Notifier le parent pour rafraîchir l'interface
             onClientAction();
             balanceForm.reset({ amount: undefined, operation: 'credit', reason: ''});
-        } else {
-            toast({
+
+        } catch (error) {
+             toast({
                 title: "Erreur de mise à jour",
-                description: result.error || "Impossible de mettre à jour le solde.",
+                description: "Une erreur inattendue est survenue lors de la mise à jour locale.",
                 variant: "destructive"
             });
+        } finally {
+            setIsUpdatingBalance(false);
         }
     };
     
@@ -645,36 +672,76 @@ export default function AdminPage() {
   const [errorClients, setErrorClients] = useState<string | null>(null);
   const { toast } = useToast();
 
-  const fetchClients = async () => {
+  const fetchClients = useCallback(async () => {
       setIsLoadingClients(true);
       setErrorClients(null);
       
       const result = await getClients();
       
       if (result.success && result.data) {
-          setClients(result.data.sort((a,b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime()));
+          const sortedClients = result.data.sort((a:any,b:any) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
+          
+          // Sauvegarde dans le localStorage pour une utilisation immédiate
+          localStorage.setItem('clients', JSON.stringify(sortedClients));
+          setClients(sortedClients);
       } else {
-          setErrorClients(result.error || "Une erreur est survenue.");
-          toast({
-              title: "Erreur de chargement",
-              description: result.error || "Impossible de charger la liste des clients.",
-              variant: "destructive"
-          });
+          // En cas d'échec du webhook, essayer de charger depuis le localStorage
+          const localData = localStorage.getItem('clients');
+          if (localData) {
+              setClients(JSON.parse(localData));
+              toast({
+                  title: "Mode hors ligne",
+                  description: "Impossible de contacter le serveur, les données affichées peuvent ne pas être à jour.",
+                  variant: "destructive"
+              });
+          } else {
+              setErrorClients(result.error || "Une erreur est survenue.");
+              toast({
+                  title: "Erreur de chargement",
+                  description: result.error || "Impossible de charger la liste des clients.",
+                  variant: "destructive"
+              });
+          }
       }
       setIsLoadingClients(false);
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const refreshClientsFromLocalStorage = useCallback(() => {
+    const localData = localStorage.getItem('clients');
+    if (localData) {
+        const parsedData = JSON.parse(localData);
+        setClients(parsedData);
+
+        // Si un client est sélectionné, mettre à jour ses données
+        if (selectedClient) {
+            const updatedSelectedClient = parsedData.find((c: any) => c.clientId === selectedClient.clientId);
+            if (updatedSelectedClient) {
+                setSelectedClient(updatedSelectedClient);
+            } else {
+                // Le client a été supprimé
+                setSelectedClient(null);
+            }
+        }
+    } else {
+        // Si les données locales sont vides, on rafraîchit depuis le serveur
+        fetchClients();
+    }
+  }, [selectedClient, fetchClients]);
+
 
   useEffect(() => {
       if (isAdmin) {
           fetchClients();
       }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAdmin]);
+  }, [isAdmin, fetchClients]);
 
 
   const handleClientAction = () => {
-    fetchClients();
-    setSelectedClient(null);
+    // Cette fonction rafraîchit la liste des clients depuis le localStorage
+    // pour refléter les changements (création, mise à jour de solde) immédiatement.
+    refreshClientsFromLocalStorage();
+    setSelectedClient(null); // Deselect client to go back to the list
   }
   
   const handleClientSelection = (client: any) => {
@@ -683,7 +750,7 @@ export default function AdminPage() {
 
   const handleBackToList = () => {
     setSelectedClient(null);
-    fetchClients(); // Re-fetch to see any updates
+    refreshClientsFromLocalStorage(); // Re-fetch to see any updates
   }
 
 
@@ -708,7 +775,7 @@ export default function AdminPage() {
                     onClientAction={handleClientAction}
                 />
             ) : (
-                <CreateClientAndAccountForm onClientCreated={handleClientAction} />
+                <CreateClientAndAccountForm onClientCreated={fetchClients} />
             )}
             <ClientList 
                 clients={clients} 
@@ -721,6 +788,4 @@ export default function AdminPage() {
     </main>
   );
 }
-
-
 
