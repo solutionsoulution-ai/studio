@@ -47,6 +47,7 @@ import { Switch } from "@/components/ui/switch";
 const CLIENT_DATA_KEY = 'clientData';
 
 const getLocalClients = (): any[] => {
+  if (typeof window === 'undefined') return [];
   try {
     const data = localStorage.getItem(CLIENT_DATA_KEY);
     return data ? JSON.parse(data) : [];
@@ -57,6 +58,7 @@ const getLocalClients = (): any[] => {
 };
 
 const setLocalClients = (clients: any[]) => {
+  if (typeof window === 'undefined') return;
   localStorage.setItem(CLIENT_DATA_KEY, JSON.stringify(clients));
 };
 
@@ -657,27 +659,24 @@ export default function AdminPage() {
       const localClients = getLocalClients();
       const sortedClients = localClients.sort((a:any, b:any) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
       setClients(sortedClients);
-      
-      if (selectedClient) {
-          const updatedSelectedClient = sortedClients.find(c => c.clientId === selectedClient.clientId);
-          setSelectedClient(updatedSelectedClient || null);
-      }
       setIsLoadingClients(false);
-  }, [selectedClient]);
+  }, []);
 
   useEffect(() => {
-    // Ensure localStorage is only accessed on the client side
-    if (typeof window !== 'undefined') {
-        if (isAdmin) {
-          fetchClients();
-        } else {
-            setIsLoadingClients(false);
-        }
+    if (isAdmin) {
+      fetchClients();
     }
   }, [isAdmin, fetchClients]);
 
   const handleClientAction = () => {
+    // Re-fetch clients to reflect changes
     fetchClients();
+    // If a client was selected, find the updated version of it.
+    if (selectedClient) {
+        const updatedClients = getLocalClients();
+        const updatedSelectedClient = updatedClients.find(c => c.clientId === selectedClient.clientId);
+        setSelectedClient(updatedSelectedClient || null);
+    }
   }
   
   const handleClientSelection = (client: any) => {
@@ -687,6 +686,14 @@ export default function AdminPage() {
   const handleBackToList = () => {
     setSelectedClient(null);
     fetchClients(); 
+  }
+
+  if (typeof window === 'undefined') {
+    return (
+       <main className="flex min-h-screen flex-col items-center justify-center p-6 sm:p-24">
+            <Loader2 className="animate-spin" />
+      </main>
+    );
   }
 
 
@@ -723,3 +730,5 @@ export default function AdminPage() {
     </main>
   );
 }
+
+    
