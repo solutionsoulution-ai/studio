@@ -57,6 +57,10 @@ export default function DashboardClientPage() {
     const router = useRouter();
     
     const fetchAccountData = useCallback(() => {
+        setIsLoading(true);
+        setError(null);
+        if (typeof window === 'undefined') return;
+
         const userEmail = localStorage.getItem("userEmail");
         if (!userEmail) {
             toast({
@@ -68,38 +72,21 @@ export default function DashboardClientPage() {
             return;
         }
 
-        setIsLoading(true);
         try {
             const clientDataString = localStorage.getItem('clientData');
             const allClients = clientDataString ? JSON.parse(clientDataString) : [];
             const clientData = allClients.find((client: any) => client.email === userEmail);
 
             if (clientData) {
-                // We format the data to match the expected structure
-                setAccountData({
-                  client: {
-                      email: clientData.email,
-                      firstName: clientData.firstName || 'Client',
-                      lastName: clientData.lastName || '',
-                      clientId: clientData.clientId,
-                  },
-                  balance: clientData.balance || 0,
-                  iban: clientData.iban,
-                  accountNumber: clientData.accountNumber,
-                  bic: clientData.bic,
-                  transactions: clientData.transactions || [],
-                  isTransferBlocked: clientData.isTransferBlocked,
-                  transferBlockReason: clientData.transferBlockReason,
-                  transferProcessingTime: clientData.transferProcessingTime
-                });
+                setAccountData(clientData);
             } else {
-                throw new Error("Utilisateur non trouvé dans les données locales.");
+                 throw new Error("Impossible de trouver vos données de compte. Veuillez vous reconnecter.");
             }
         } catch (e: any) {
-            setError(e.message || "Une erreur est survenue.");
+            setError(e.message || "Une erreur est survenue lors de la récupération des données.");
             toast({
                 title: "Erreur de chargement",
-                description: e.message || "Une erreur est survenue lors de la récupération de vos données.",
+                description: e.message || "Impossible de récupérer les données du compte.",
                 variant: "destructive",
             });
         }
@@ -116,7 +103,9 @@ export default function DashboardClientPage() {
         router.push("/");
     };
 
-    const handleTransferSuccess = async (transferData: TransferFormInput) => {
+    const handleTransferSuccess = (transferData: TransferFormInput) => {
+        if(typeof window === 'undefined') return;
+        
         const clientDataString = localStorage.getItem('clientData');
         let allClients = clientDataString ? JSON.parse(clientDataString) : [];
         const userEmail = localStorage.getItem("userEmail");
@@ -124,10 +113,8 @@ export default function DashboardClientPage() {
         const clientIndex = allClients.findIndex((c: any) => c.email === userEmail);
 
         if (clientIndex !== -1) {
-            // Update balance
             allClients[clientIndex].balance -= transferData.amount;
 
-            // Add transaction
             if (!allClients[clientIndex].transactions) {
                 allClients[clientIndex].transactions = [];
             }
@@ -140,10 +127,9 @@ export default function DashboardClientPage() {
             allClients[clientIndex].transactions.unshift(newTransaction);
             
             localStorage.setItem('clientData', JSON.stringify(allClients));
+            
+            fetchAccountData();
         }
-
-        // Re-fetch data to update UI
-        fetchAccountData();
     };
     
     const { totalIncome, totalExpenses } = useMemo(() => {
@@ -203,7 +189,7 @@ export default function DashboardClientPage() {
     <div className="container mx-auto py-16">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
             <div>
-                <h1 className="text-3xl font-bold font-headline">Bienvenue, {accountData.client?.firstName || 'Client'} !</h1>
+                <h1 className="text-3xl font-bold font-headline">Bienvenue, {accountData.firstName || 'Client'} !</h1>
                 <p className="text-muted-foreground flex items-center gap-2 mt-1">
                     C'est un plaisir de vous revoir sur votre espace client.
                 </p>
@@ -356,3 +342,5 @@ export default function DashboardClientPage() {
     </div>
   );
 }
+
+    
