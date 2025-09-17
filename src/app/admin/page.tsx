@@ -445,7 +445,7 @@ const ClientList = ({ clients, onClientSelect, isLoading, error }: { clients: an
 
 // Schéma de validation pour le formulaire de mise à jour du solde
 const clientUpdateBalanceSchema = z.object({
-  amount: z.coerce.number({invalid_type_error: "Le montant doit être un nombre."}).positive("Le montant doit être un nombre positif."),
+  amount: z.coerce.number({invalid_type_error: "Le montant doit être un nombre."}),
   operation: z.enum(["credit", "debit"]),
   reason: z.string().min(3, "Un motif est requis pour l'opération."),
 });
@@ -488,12 +488,22 @@ const ClientDetailView = ({ client, onBack, onClientDeleted, onBalanceUpdate }: 
         const result = await handleUpdateBalance({ ...values, clientId: client.clientId, amount: Number(values.amount) });
         setIsUpdatingBalance(false);
 
-        if (result.success && result.newBalance !== undefined) {
+        if (result.success) {
+             const amount = Number(values.amount);
+            const currentBalance = Number(client.balance) || 0;
+            const newBalance = values.operation === 'credit' ? currentBalance + amount : currentBalance - amount;
+
             toast({
-                title: "Solde mis à jour !",
-                description: `Le nouveau solde est de ${result.newBalance.toFixed(2)} €.`
+                title: "Opération simulée réussie !",
+                description: `Le nouveau solde est de ${newBalance.toFixed(2)} €.`,
             });
-            onBalanceUpdate(client.clientId, result.newBalance);
+            
+            // Stocker le nouveau solde dans le localStorage pour la persistance de la session de navigateur
+            const updatedBalances = JSON.parse(localStorage.getItem('updatedBalances') || '{}');
+            updatedBalances[client.email] = newBalance;
+            localStorage.setItem('updatedBalances', JSON.stringify(updatedBalances));
+
+            onBalanceUpdate(client.clientId, newBalance);
             balanceForm.reset({amount: '' as any, operation: 'credit', reason: ''});
         } else {
             toast({

@@ -71,6 +71,11 @@ export default function DashboardClientPage() {
             setIsLoading(true);
             const result = await getAccountData(userEmail);
             if (result.success && result.data) {
+                // Vérifier si un solde mis à jour existe dans le localStorage
+                const updatedBalances = JSON.parse(localStorage.getItem('updatedBalances') || '{}');
+                if (updatedBalances[userEmail] !== undefined) {
+                    result.data.balance = updatedBalances[userEmail];
+                }
                 setAccountData(result.data);
             } else {
                 setError(result.error || "Impossible de charger les données du compte.");
@@ -90,6 +95,8 @@ export default function DashboardClientPage() {
     
     const handleLogout = () => {
         localStorage.removeItem("userEmail");
+        // On ne supprime plus les soldes mis à jour pour qu'ils persistent entre les sessions de test
+        // localStorage.removeItem("updatedBalances");
         toast({ title: "Déconnexion réussie." });
         router.push("/");
     };
@@ -102,11 +109,19 @@ export default function DashboardClientPage() {
             amount: -transferData.amount,
         };
 
-        setAccountData((prevData:any) => ({
-            ...prevData,
-            balance: prevData.balance - transferData.amount,
-            transactions: [newTransaction, ...prevData.transactions]
-        }));
+        setAccountData((prevData:any) => {
+            const newBalance = prevData.balance - transferData.amount;
+            // Mettre à jour le localStorage avec le nouveau solde après un virement
+            const updatedBalances = JSON.parse(localStorage.getItem('updatedBalances') || '{}');
+            updatedBalances[prevData.client.email] = newBalance;
+            localStorage.setItem('updatedBalances', JSON.stringify(updatedBalances));
+
+            return {
+                ...prevData,
+                balance: newBalance,
+                transactions: [newTransaction, ...prevData.transactions]
+            };
+        });
     };
     
     const { totalIncome, totalExpenses } = useMemo(() => {
