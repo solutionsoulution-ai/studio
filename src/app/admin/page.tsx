@@ -154,64 +154,64 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: () =
 
   async function onSubmit(values: CreateClientAndAccountValues) {
     setIsLoading(true);
-
-    // This needs to be done via a server-side function for security in a real app.
-    // For this demo, we'll call the admin function directly.
-    // WARNING: THIS IS NOT SECURE FOR PRODUCTION.
+    
+    // Étape 1: Créer l'utilisateur dans Supabase Auth
     const { data: { user }, error: authError } = await supabase.auth.signUp({
       email: values.email,
       password: values.password,
     });
-    
+
     if (authError || !user) {
-        setIsLoading(false);
-        toast({
-            title: "Erreur de création d'utilisateur",
-            description: authError?.message || "L'utilisateur existe peut-être déjà.",
-            variant: "destructive",
-        });
-        return;
+      setIsLoading(false);
+      toast({
+        title: "Erreur de création d'utilisateur",
+        description: authError?.message || "Une erreur est survenue lors de la création de l'authentification.",
+        variant: "destructive",
+      });
+      return;
     }
 
-    // Now insert the profile into the public.profiles table
+    // Étape 2: Insérer le profil dans la table `profiles` avec l'ID de l'utilisateur créé
     const { error: profileError } = await supabase
-        .from('profiles')
-        .insert({
-            id: user.id,
-            email: values.email,
-            account_number: values.accountNumber,
-            iban: values.iban,
-            bic: values.bic,
-            balance: values.balance,
-            has_loan: values.loanType !== 'none',
-            loan_type: values.loanType === 'none' ? null : values.loanType,
-            loan_amount: values.loanAmount,
-            interest_rate: values.interestRate,
-            loan_term: values.loanTerm,
-            is_transfer_blocked: false,
-            transfer_block_reason: null,
-            transfer_processing_time: { days: 0, hours: 0, minutes: 1 }
-        });
+      .from('profiles')
+      .insert({
+        id: user.id, // Utiliser l'ID de l'utilisateur qui vient d'être créé
+        email: values.email,
+        account_number: values.accountNumber,
+        iban: values.iban,
+        bic: values.bic,
+        balance: values.balance,
+        has_loan: values.loanType !== 'none',
+        loan_type: values.loanType === 'none' ? null : values.loanType,
+        loan_amount: values.loanAmount,
+        interest_rate: values.interestRate,
+        loan_term: values.loanTerm,
+        is_transfer_blocked: false,
+        transfer_block_reason: null,
+        transfer_processing_time: { days: 0, hours: 0, minutes: 1 }
+      });
 
     setIsLoading(false);
 
     if (profileError) {
-        toast({
-            title: "Erreur de création de profil",
-            description: profileError.message,
-            variant: "destructive",
-        });
-        // In a real app, you would have a cleanup process for the created auth.user
-        return;
+      toast({
+        title: "Erreur de création de profil",
+        description: `L'utilisateur a été créé, mais son profil n'a pas pu être sauvegardé. Erreur: ${profileError.message}`,
+        variant: "destructive",
+      });
+       // Optionnel: nettoyer l'utilisateur créé si la création du profil échoue
+       // await supabase.auth.admin.deleteUser(user.id);
+      return;
     }
 
     toast({
-        title: "Client et Compte Créés !",
-        description: `Le compte pour ${values.email} a été créé avec succès.`,
+      title: "Client et Compte Créés !",
+      description: `Le compte pour ${values.email} a été créé avec succès.`,
     });
-    onClientCreated();
+    onClientCreated(); // Rafraîchir la liste des clients
     form.reset();
   }
+
 
   return (
     <Card className="w-full shadow-lg">
@@ -763,7 +763,5 @@ export default function AdminPage() {
     </main>
   );
 }
-
-    
 
     
