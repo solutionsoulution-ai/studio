@@ -293,6 +293,31 @@ export async function getAccountData(email: string): Promise<AccountDataResult> 
     return { success: false, error: "L'e-mail du client est manquant." };
   }
   
+    // Fallback pour le test local si l'email correspond
+  if (email === "client@test.com") {
+    return {
+      success: true,
+      data: {
+        client: {
+            email: "client@test.com",
+            firstName: "Jean",
+            lastName: "Dupont",
+            clientId: "C-1A2B3C4D"
+        },
+        balance: 12345.67,
+        iban: "FR76 3000 4000 0512 3456 7890 123",
+        accountNumber: "00012345678",
+        bic: "CRLYFRPP",
+        transactions: [
+            { id: '1', type: 'Salaire', date: '2024-07-01', amount: 2500 },
+            { id: '2', type: 'Loyer', date: '2024-07-05', amount: -850 },
+            { id: '3', type: 'Carrefour', date: '2024-07-06', amount: -120.50 },
+            { id: '4', type: 'Remboursement ami', date: '2024-07-10', amount: 50 },
+        ],
+      },
+    };
+  }
+
   // Logique principale : récupérer les données depuis la liste des clients
   const clientsResult = await getClients();
   if (clientsResult.success && clientsResult.data) {
@@ -317,32 +342,6 @@ export async function getAccountData(email: string): Promise<AccountDataResult> 
           };
       }
   }
-
-  // Fallback pour le test local si l'email correspond
-  if (email === "client@test.com") {
-    return {
-      success: true,
-      data: {
-        client: {
-            email: "client@test.com",
-            firstName: "Jean",
-            lastName: "Dupont",
-            clientId: "C-1A2B3C4D"
-        },
-        balance: 12345.67,
-        iban: "FR76 3000 4000 0512 3456 7890 123",
-        accountNumber: "00012345678",
-        bic: "CRLYFRPP",
-        transactions: [
-            { id: '1', type: 'Salaire', date: '2024-07-01', amount: 2500 },
-            { id: '2', type: 'Loyer', date: '2024-07-05', amount: -850 },
-            { id: '3', type: 'Carrefour', date: '2024-07-06', amount: -120.50 },
-            { id: '4', type: 'Remboursement ami', date: '2024-07-10', amount: 50 },
-        ],
-      },
-    };
-  }
-  
 
   return { success: false, error: "Utilisateur non trouvé ou service de données indisponible." };
 }
@@ -590,34 +589,31 @@ export async function handleUpdateBalance(formData: UpdateBalanceInput): Promise
         return { success: false, error: `Données invalides: ${issues}` };
     }
 
-    // ALTERNATIVE: Simulate balance update locally without calling webhook
-    console.log("Simulation de la mise à jour du solde (alternative locale).");
+    if (!WEBHOOK_URL) {
+        return { success: false, error: "Le service de mise à jour n'est pas configuré." };
+    }
+
     try {
-        const clientsResult = await getClients();
-        if (!clientsResult.success || !clientsResult.data) {
-            throw new Error("Impossible de récupérer les données clients pour la simulation.");
+        const response = await fetch(WEBHOOK_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: 'updateBalance', ...parsed.data }),
+        });
+
+        if (!response.ok) {
+            const errorBody = await response.text();
+            throw new Error(`Le serveur a retourné une erreur: ${response.statusText} - ${errorBody}`);
         }
 
-        const clientToUpdate = clientsResult.data.find(c => c.clientId === parsed.data.clientId);
-        if (!clientToUpdate) {
-            throw new Error("Client non trouvé pour la simulation.");
-        }
-
-        const currentBalance = Number(clientToUpdate.balance) || 0;
-        const operationAmount = parsed.data.amount;
-
-        const newBalance = parsed.data.operation === 'credit'
-            ? currentBalance + operationAmount
-            : currentBalance - operationAmount;
+        const result = await response.json();
         
-        console.log(`Simulation: Client ${parsed.data.clientId}, Solde actuel: ${currentBalance}, Opération: ${parsed.data.operation} ${operationAmount}, Nouveau solde: ${newBalance}`);
+        if (result.status !== 'success' || result.newBalance === undefined) {
+             throw new Error(result.message || "La réponse du serveur était invalide.");
+        }
 
-        // Note: This does not persist the change to the Google Sheet.
-        // It only returns the calculated new balance for the UI.
-        return { success: true, newBalance: newBalance };
-
+        return { success: true, newBalance: result.newBalance };
     } catch (error: any) {
-        console.error("Erreur lors de la simulation de mise à jour du solde:", error);
+        console.error("Erreur lors de la mise à jour du solde:", error);
         return { success: false, error: error.message };
     }
 }
