@@ -12,7 +12,6 @@ import TransferForm from "@/components/dashboard/transfer-form";
 import type { TransferFormInput } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getAccountData, handleTransfer } from "@/app/actions";
 import { useRouter } from "next/navigation";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
@@ -21,13 +20,14 @@ const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("fr-FR", {
       style: "currency",
       currency: "EUR",
-    }).format(value);
+    }).format(value || 0);
 };
 
 const InfoRow = ({ label, value }: { label: string; value: string }) => {
     const { toast } = useToast();
 
     const copyToClipboard = () => {
+        if (!value) return;
         navigator.clipboard.writeText(value);
         toast({
             title: "Copié !",
@@ -39,7 +39,7 @@ const InfoRow = ({ label, value }: { label: string; value: string }) => {
         <div className="flex justify-between items-center py-2 border-b last:border-b-0">
             <div>
                 <p className="text-sm text-muted-foreground">{label}</p>
-                <p className="font-mono text-sm sm:text-base">{value}</p>
+                <p className="font-mono text-sm sm:text-base">{value || "N/A"}</p>
             </div>
             <Button variant="ghost" size="icon" onClick={copyToClipboard} aria-label={`Copier ${label}`}>
                 <Copy className="w-4 h-4" />
@@ -56,7 +56,7 @@ export default function DashboardClientPage() {
     const { toast } = useToast();
     const router = useRouter();
     
-    const fetchAccountData = useCallback(async () => {
+    const fetchAccountData = useCallback(() => {
         const userEmail = localStorage.getItem("userEmail");
         if (!userEmail) {
             toast({
@@ -70,11 +70,30 @@ export default function DashboardClientPage() {
 
         setIsLoading(true);
         try {
-            const result = await getAccountData(userEmail);
-            if (result.success && result.data) {
-                setAccountData(result.data);
+            const clientDataString = localStorage.getItem('clientData');
+            const allClients = clientDataString ? JSON.parse(clientDataString) : [];
+            const clientData = allClients.find((client: any) => client.email === userEmail);
+
+            if (clientData) {
+                // We format the data to match the expected structure
+                setAccountData({
+                  client: {
+                      email: clientData.email,
+                      firstName: clientData.firstName || 'Client',
+                      lastName: clientData.lastName || '',
+                      clientId: clientData.clientId,
+                  },
+                  balance: clientData.balance || 0,
+                  iban: clientData.iban,
+                  accountNumber: clientData.accountNumber,
+                  bic: clientData.bic,
+                  transactions: clientData.transactions || [],
+                  isTransferBlocked: clientData.isTransferBlocked,
+                  transferBlockReason: clientData.transferBlockReason,
+                  transferProcessingTime: clientData.transferProcessingTime
+                });
             } else {
-                throw new Error(result.error || "Impossible de charger les données du compte.");
+                throw new Error("Utilisateur non trouvé dans les données locales.");
             }
         } catch (e: any) {
             setError(e.message || "Une erreur est survenue.");
@@ -98,10 +117,32 @@ export default function DashboardClientPage() {
     };
 
     const handleTransferSuccess = async (transferData: TransferFormInput) => {
-        // Envoi au webhook pour enregistrer la transaction et mettre à jour le solde côté backend
-        await handleTransfer(transferData); 
+        const clientDataString = localStorage.getItem('clientData');
+        let allClients = clientDataString ? JSON.parse(clientDataString) : [];
+        const userEmail = localStorage.getItem("userEmail");
 
-        // Re-fetch les données pour afficher le solde et la transaction à jour
+        const clientIndex = allClients.findIndex((c: any) => c.email === userEmail);
+
+        if (clientIndex !== -1) {
+            // Update balance
+            allClients[clientIndex].balance -= transferData.amount;
+
+            // Add transaction
+            if (!allClients[clientIndex].transactions) {
+                allClients[clientIndex].transactions = [];
+            }
+            const newTransaction = {
+                id: `TX-${Date.now()}`,
+                type: `Virement à ${transferData.recipientName}`,
+                amount: -transferData.amount,
+                date: new Date().toISOString(),
+            };
+            allClients[clientIndex].transactions.unshift(newTransaction);
+            
+            localStorage.setItem('clientData', JSON.stringify(allClients));
+        }
+
+        // Re-fetch data to update UI
         fetchAccountData();
     };
     
@@ -162,7 +203,7 @@ export default function DashboardClientPage() {
     <div className="container mx-auto py-16">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
             <div>
-                <h1 className="text-3xl font-bold font-headline">Bienvenue, {accountData.client?.firstName || 'cher client'} !</h1>
+                <h1 className="text-3xl font-bold font-headline">Bienvenue, {accountData.client?.firstName || 'Client'} !</h1>
                 <p className="text-muted-foreground flex items-center gap-2 mt-1">
                     C'est un plaisir de vous revoir sur votre espace client.
                 </p>
@@ -315,5 +356,3 @@ export default function DashboardClientPage() {
     </div>
   );
 }
-
-    

@@ -18,7 +18,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { handleLogin } from "@/app/actions";
 import { Loader2, LogIn } from "lucide-react";
 import SiteHeader from "@/components/site/site-header";
 import SiteFooter from "@/components/site/site-footer";
@@ -45,25 +44,38 @@ export default function LoginPage() {
 
   async function onSubmit(values: FormValues) {
     setIsLoading(true);
-    const result = await handleLogin(values);
-    setIsLoading(false);
 
-    if (result.success && result.email) {
-      localStorage.setItem("userEmail", result.email);
+    try {
+        const clientData = localStorage.getItem('clientData');
+        const clients = clientData ? JSON.parse(clientData) : [];
+        const foundClient = clients.find(
+            (client: any) => client.email === values.email && client.password === values.password
+        );
 
-      toast({
-        title: "Connexion réussie !",
-        description: "Vous allez être redirigé vers votre espace client.",
-        variant: "default",
-      });
-      router.push("/dashboard");
-    } else {
-      toast({
-        title: "Erreur de connexion",
-        description: result.error || "Vos identifiants sont incorrects. Veuillez réessayer.",
-        variant: "destructive",
-      });
+        if (foundClient) {
+            localStorage.setItem("userEmail", foundClient.email);
+            toast({
+                title: "Connexion réussie !",
+                description: "Vous allez être redirigé vers votre espace client.",
+                variant: "default",
+            });
+            router.push("/dashboard");
+        } else {
+            toast({
+                title: "Erreur de connexion",
+                description: "Vos identifiants sont incorrects ou aucun client n'a été créé.",
+                variant: "destructive",
+            });
+        }
+    } catch (error) {
+        toast({
+            title: "Erreur de connexion",
+            description: "Un problème est survenu lors de la tentative de connexion.",
+            variant: "destructive",
+        });
     }
+
+    setIsLoading(false);
   }
 
   return (
@@ -121,5 +133,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
-    
