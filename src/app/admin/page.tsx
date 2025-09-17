@@ -178,7 +178,7 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: () =
     // A secure way is to use a server-side function, but for this demo,
     // we will sign in as the new user, create the profile, and then sign out.
     
-    // 1. Sign in as the new user
+    // 1. Sign in as the new user (signUp already does this, but we ensure it for the next step)
     const { error: signInError } = await supabase.auth.signInWithPassword({
         email: values.email,
         password: values.password,
@@ -788,7 +788,5 @@ export default function AdminPage() {
     </main>
   );
 }
-
-    
 
     
