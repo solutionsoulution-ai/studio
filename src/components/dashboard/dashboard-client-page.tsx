@@ -69,55 +69,23 @@ export default function DashboardClientPage() {
         }
 
         setIsLoading(true);
-        // Utilisation du localStorage comme source prioritaire
         try {
-            const localClients = localStorage.getItem('clients');
-            let clientData = null;
-
-            if (localClients) {
-                const clients = JSON.parse(localClients);
-                clientData = clients.find((c: any) => c.email === userEmail);
-            }
-            
-            if (clientData) {
-                // Simuler une réponse de données de compte
-                 setAccountData({
-                    client: {
-                        email: clientData.email,
-                        firstName: clientData.firstName || 'Client',
-                        lastName: clientData.lastName || '',
-                        clientId: clientData.clientId,
-                    },
-                    balance: clientData.balance || 0,
-                    iban: clientData.iban,
-                    accountNumber: clientData.accountNumber,
-                    bic: clientData.bic,
-                    transactions: clientData.transactions || [],
-                    isTransferBlocked: clientData.isTransferBlocked,
-                    transferBlockReason: clientData.transferBlockReason,
-                    transferProcessingTime: clientData.transferProcessingTime,
-                });
-
+            const result = await getAccountData(userEmail);
+            if (result.success && result.data) {
+                setAccountData(result.data);
             } else {
-                 // Fallback si le client n'est pas dans le localStorage
-                const result = await getAccountData(userEmail);
-                 if (result.success && result.data) {
-                    setAccountData(result.data);
-                } else {
-                    throw new Error(result.error || "Impossible de charger les données du compte.");
-                }
+                throw new Error(result.error || "Impossible de charger les données du compte.");
             }
         } catch (e: any) {
             setError(e.message || "Une erreur est survenue.");
-             toast({
+            toast({
                 title: "Erreur de chargement",
                 description: e.message || "Une erreur est survenue lors de la récupération de vos données.",
                 variant: "destructive",
             });
         }
         setIsLoading(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [router, toast]);
     
     useEffect(() => {
         fetchAccountData();
@@ -130,33 +98,11 @@ export default function DashboardClientPage() {
     };
 
     const handleTransferSuccess = async (transferData: TransferFormInput) => {
-        await handleTransfer(transferData); // Notifier le webhook (action serveur)
+        // Envoi au webhook pour enregistrer la transaction et mettre à jour le solde côté backend
+        await handleTransfer(transferData); 
 
-        const newTransaction = {
-            id: new Date().toISOString(),
-            type: `Virement à ${transferData.recipientName}`,
-            date: new Date().toISOString().split('T')[0],
-            amount: -transferData.amount,
-        };
-
-        setAccountData((prevData:any) => {
-            if (!prevData) return null;
-            const newBalance = prevData.balance - transferData.amount;
-            const updatedData = {
-                ...prevData,
-                balance: newBalance,
-                transactions: [newTransaction, ...prevData.transactions]
-            };
-            
-            // Mettre à jour le localStorage
-            const localClients = JSON.parse(localStorage.getItem('clients') || '[]');
-            const updatedClients = localClients.map((c:any) => c.clientId === prevData.client.clientId ? updatedData : c);
-            localStorage.setItem('clients', JSON.stringify(updatedClients));
-
-            return updatedData;
-        });
-
-        fetchAccountData(); // Re-fetch pour la cohérence
+        // Re-fetch les données pour afficher le solde et la transaction à jour
+        fetchAccountData();
     };
     
     const { totalIncome, totalExpenses } = useMemo(() => {
@@ -369,3 +315,5 @@ export default function DashboardClientPage() {
     </div>
   );
 }
+
+    

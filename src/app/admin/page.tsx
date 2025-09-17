@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
@@ -36,7 +35,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { handleAdminLogin, handleCreateClientAndAccount, getClients, handleDeleteClient, handleUpdateBalance } from "@/app/actions";
+import { handleAdminLogin, handleCreateClientAndAccount, getClients, handleDeleteClient, handleUpdateBalance, handleUpdateClient } from "@/app/actions";
 import { Loader2, UserPlus, Shield, Landmark, Users, ArrowLeft, UserCog, AlertCircle, Trash2, ArrowRightLeft, Settings, Ban } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -51,8 +50,7 @@ const adminLoginSchema = z.object({
 });
 type AdminLoginValues = z.infer<typeof adminLoginSchema>;
 
-
-// Schéma pour la création de client et de compte (prêt optionnel)
+// Schéma pour la création de client et de compte
 const createClientAndAccountSchema = z.object({
   // Infos Client
   email: z.string().email({ message: "Veuillez entrer une adresse e-mail valide." }),
@@ -67,6 +65,14 @@ const createClientAndAccountSchema = z.object({
   loanAmount: z.coerce.number().optional(),
   interestRate: z.coerce.number().optional(),
   loanTerm: z.coerce.number().optional(),
+  // Configuration
+  isTransferBlocked: z.boolean().default(false),
+  transferBlockReason: z.string().optional(),
+  transferProcessingTime: z.object({
+      days: z.coerce.number().min(0).default(0),
+      hours: z.coerce.number().min(0).max(23).default(0),
+      minutes: z.coerce.number().min(0).max(59).default(1),
+  })
 }).refine(data => {
     if (data.loanType !== 'none') {
         return data.loanAmount !== undefined && data.interestRate !== undefined && data.loanTerm !== undefined;
@@ -74,9 +80,8 @@ const createClientAndAccountSchema = z.object({
     return true;
 }, {
     message: "Les détails du prêt sont requis lorsque le type de prêt n'est pas 'Aucun'.",
-    path: ["loanAmount"], // On peut attacher l'erreur à un champ spécifique
+    path: ["loanAmount"], 
 });
-
 type CreateClientAndAccountValues = z.infer<typeof createClientAndAccountSchema>;
 
 
@@ -150,6 +155,9 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: () =
       bic: "",
       balance: 0,
       loanType: "none",
+      isTransferBlocked: false,
+      transferBlockReason: "",
+      transferProcessingTime: { days: 0, hours: 0, minutes: 1 }
     },
   });
 
@@ -160,12 +168,7 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: () =
     const result = await handleCreateClientAndAccount(values);
     setIsLoading(false);
 
-    if (result.success && result.details) {
-      // Sauvegarde dans localStorage
-      const clients = JSON.parse(localStorage.getItem('clients') || '[]');
-      clients.push(result.details);
-      localStorage.setItem('clients', JSON.stringify(clients));
-
+    if (result.success) {
       toast({
         title: "Client et Compte Créés !",
         description: `Le compte pour ${values.email} a été créé avec succès.`,
@@ -187,7 +190,7 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: () =
         <CardTitle className="flex items-center gap-2 text-xl font-bold">
           <UserPlus /> Créer un Compte Client
         </CardTitle>
-        <CardDescription>Créez un nouvel accès client et associez un compte bancaire (avec ou sans prêt).</CardDescription>
+        <CardDescription>Créez un nouvel accès client et associez un compte bancaire.</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -420,7 +423,7 @@ const ClientList = ({ clients, onClientSelect, isLoading, error }: { clients: an
                     <Users /> Liste des Clients
                 </CardTitle>
                 <CardDescription>
-                    Voici la liste des clients récupérée. Cliquez sur un client pour voir les détails.
+                    Cliquez sur un client pour voir les détails et le gérer.
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -473,7 +476,7 @@ const clientConfigSchema = z.object({
 type ClientConfigValues = z.infer<typeof clientConfigSchema>;
 
 
-const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onBack: () => void, onClientAction: (updatedClient: any) => void }) => {
+const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onBack: () => void, onClientAction: () => void }) => {
     const { toast } = useToast();
     const [isDeleting, setIsDeleting] = useState(false);
     const [isUpdatingBalance, setIsUpdatingBalance] = useState(false);
@@ -500,14 +503,11 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
         const result = await handleDeleteClient(client.clientId);
         
         if (result.success) {
-            const clients = JSON.parse(localStorage.getItem('clients') || '[]');
-            const updatedClients = clients.filter((c:any) => c.clientId !== client.clientId);
-            localStorage.setItem('clients', JSON.stringify(updatedClients));
             toast({
                 title: "Client supprimé",
                 description: "Le client a été supprimé avec succès.",
             });
-            onClientAction(null); // Signal de revenir à la liste
+            onClientAction();
         } else {
             toast({
                 title: "Erreur de suppression",
@@ -524,28 +524,12 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
         const result = await handleUpdateBalance({ clientId: client.clientId, ...values });
         
         if (result.success) {
-            const clients = JSON.parse(localStorage.getItem('clients') || '[]');
-            let updatedClient = null;
-            const updatedClients = clients.map((c: any) => {
-                if (c.clientId === client.clientId) {
-                    const currentBalance = c.balance || 0;
-                    const newBalance = values.operation === 'credit' ? currentBalance + values.amount : currentBalance - values.amount;
-                    updatedClient = { ...c, balance: newBalance };
-                    return updatedClient;
-                }
-                return c;
-            });
-
-            localStorage.setItem('clients', JSON.stringify(updatedClients));
             toast({
                 title: "Opération réussie !",
                 description: `Le solde du client a été mis à jour.`,
             });
-            
-            if(updatedClient) {
-                onClientAction(updatedClient);
-            }
             balanceForm.reset();
+            onClientAction();
         } else {
              toast({
                 title: "Erreur de mise à jour",
@@ -557,27 +541,24 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
         setIsUpdatingBalance(false);
     };
 
-    const handleConfigUpdate = (values: ClientConfigValues) => {
+    const handleConfigUpdate = async (values: ClientConfigValues) => {
         setIsUpdatingConfig(true);
-        const clients = JSON.parse(localStorage.getItem('clients') || '[]');
-        let updatedClient = null;
-        const updatedClients = clients.map((c: any) => {
-            if (c.clientId === client.clientId) {
-                updatedClient = { ...c, ...values };
-                return updatedClient;
-            }
-            return c;
-        });
+        const result = await handleUpdateClient({ clientId: client.clientId, ...values });
 
-        localStorage.setItem('clients', JSON.stringify(updatedClients));
-        toast({
-            title: "Configuration enregistrée",
-            description: "Les paramètres du client ont été mis à jour.",
-        });
-        
-        if(updatedClient) {
-            onClientAction(updatedClient);
+        if (result.success) {
+             toast({
+                title: "Configuration enregistrée",
+                description: "Les paramètres du client ont été mis à jour.",
+            });
+            onClientAction();
+        } else {
+             toast({
+                title: "Erreur de mise à jour",
+                description: result.error || "La mise à jour a échoué.",
+                variant: "destructive",
+            });
         }
+       
         setIsUpdatingConfig(false);
     };
     
@@ -799,36 +780,27 @@ export default function AdminPage() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [clients, setClients] = useState<any[]>([]);
   const [selectedClient, setSelectedClient] = useState<any | null>(null);
-  const [isLoadingClients, setIsLoadingClients] = useState(true);
+  const [isLoadingClients, setIsLoadingClients] = useState(false);
   const [errorClients, setErrorClients] = useState<string | null>(null);
-  const { toast } = useToast();
 
   const fetchClients = useCallback(async () => {
       setIsLoadingClients(true);
       setErrorClients(null);
       
-      try {
-        const localClients = localStorage.getItem('clients');
-        if (localClients) {
-            const parsedClients = JSON.parse(localClients);
-            const sortedClients = parsedClients.sort((a:any,b:any) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
-            setClients(sortedClients);
-        } else {
-            // Si le localStorage est vide, on tente de fetch depuis le serveur
-            const result = await getClients();
-            if (result.success && result.data) {
-                const sortedClients = result.data.sort((a:any,b:any) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
-                setClients(sortedClients);
-                localStorage.setItem('clients', JSON.stringify(sortedClients));
-            } else {
-                setErrorClients(result.error || "Une erreur est survenue.");
-            }
-        }
-      } catch (e) {
-         setErrorClients("Impossible de lire les données des clients.");
+      const result = await getClients();
+      if (result.success && result.data) {
+          const sortedClients = result.data.sort((a:any, b:any) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
+          setClients(sortedClients);
+          // Si un client était sélectionné, on met à jour ses données
+          if (selectedClient) {
+              const updatedSelectedClient = sortedClients.find(c => c.clientId === selectedClient.clientId);
+              setSelectedClient(updatedSelectedClient || null);
+          }
+      } else {
+          setErrorClients(result.error || "Une erreur est survenue lors du chargement des clients.");
       }
       setIsLoadingClients(false);
-  }, []);
+  }, [selectedClient]);
 
   useEffect(() => {
       if (isAdmin) {
@@ -837,24 +809,18 @@ export default function AdminPage() {
   }, [isAdmin, fetchClients]);
 
 
-  const handleClientAction = (updatedClientData: any) => {
+  const handleClientAction = () => {
+    // Re-fetch all clients to get the latest state from the backend
     fetchClients();
-    if (updatedClientData) {
-        setSelectedClient(updatedClientData); // Mettre à jour la vue de détail avec les nouvelles données
-    } else {
-        setSelectedClient(null); // Revenir à la liste
-    }
   }
   
   const handleClientSelection = (client: any) => {
-    const clientsFromStorage = JSON.parse(localStorage.getItem('clients') || '[]');
-    const freshClientData = clientsFromStorage.find((c:any) => c.clientId === client.clientId) || client;
-    setSelectedClient(freshClientData);
+    setSelectedClient(client);
   }
 
   const handleBackToList = () => {
     setSelectedClient(null);
-    fetchClients(); // Re-fetch to see any updates
+    fetchClients(); 
   }
 
 
@@ -892,3 +858,5 @@ export default function AdminPage() {
     </main>
   );
 }
+
+    

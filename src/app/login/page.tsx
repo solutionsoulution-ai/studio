@@ -18,7 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { handleLogin, getClients } from "@/app/actions";
+import { handleLogin } from "@/app/actions";
 import { Loader2, LogIn } from "lucide-react";
 import SiteHeader from "@/components/site/site-header";
 import SiteFooter from "@/components/site/site-footer";
@@ -49,19 +49,7 @@ export default function LoginPage() {
     setIsLoading(false);
 
     if (result.success && result.email) {
-      // Stocker l'identifiant de l'utilisateur dans le localStorage
       localStorage.setItem("userEmail", result.email);
-
-      // Synchroniser les données clients dans le localStorage
-      try {
-        const clientsResult = await getClients();
-        if (clientsResult.success && clientsResult.data) {
-          localStorage.setItem('clients', JSON.stringify(clientsResult.data));
-        }
-      } catch (e) {
-        console.error("Impossible de synchroniser les clients dans le localStorage:", e);
-      }
-
 
       toast({
         title: "Connexion réussie !",
@@ -133,3 +121,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
+    

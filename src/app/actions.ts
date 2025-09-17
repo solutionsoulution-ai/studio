@@ -156,29 +156,20 @@ export async function handleLogin(formData: LoginInput): Promise<AuthResult> {
   }
 
   const { email, password } = parsed.data;
-
-  // **NOUVELLE LOGIQUE : Vérification du compte de test en priorité**
-  if (email === 'client@test.com' && password === 'password') {
-    console.log("Connexion de l'utilisateur de test réussie (prioritaire).");
-    return { success: true, email: email };
-  }
   
-  // **LOGIQUE PRINCIPALE : Vérification via la liste des clients**
-  console.log("Tentative de connexion via la vérification de la liste locale...");
+  console.log("Tentative de connexion via la vérification de la liste des clients...");
   const clientsResult = await getClients();
   if (clientsResult.success && clientsResult.data) {
       const foundClient = clientsResult.data.find(
           (client: any) => client.email === email && client.password === password
       );
       if (foundClient) {
-          console.log(`Connexion réussie pour ${email} via la vérification locale.`);
+          console.log(`Connexion réussie pour ${email} via la vérification de la liste.`);
           return { success: true, email: foundClient.email };
       }
   }
 
-
-  // Message d'erreur final si aucune autre condition n'est remplie
-  return { success: false, error: "Identifiants incorrects." };
+  return { success: false, error: "Identifiants incorrects ou service indisponible." };
 }
 
 
@@ -197,6 +188,14 @@ const createClientAndAccountSchema = z.object({
   loanAmount: z.coerce.number().optional(),
   interestRate: z.coerce.number().optional(),
   loanTerm: z.coerce.number().optional(),
+  // Configuration
+  isTransferBlocked: z.boolean().default(false),
+  transferBlockReason: z.string().optional(),
+  transferProcessingTime: z.object({
+    days: z.coerce.number().min(0).default(0),
+    hours: z.coerce.number().min(0).max(23).default(0),
+    minutes: z.coerce.number().min(0).max(59).default(1),
+  }),
 }).refine(data => {
     if (data.loanType !== 'none') {
         return data.loanAmount !== undefined && data.interestRate !== undefined && data.loanTerm !== undefined;
@@ -209,7 +208,7 @@ const createClientAndAccountSchema = z.object({
 
 
 export type CreateClientAndAccountInput = z.infer<typeof createClientAndAccountSchema>;
-export type CreateClientAndAccountResult = { success: boolean; error?: string; details?: any };
+export type CreateClientAndAccountResult = { success: boolean; error?: string; };
 
 export async function handleCreateClientAndAccount(formData: CreateClientAndAccountInput): Promise<CreateClientAndAccountResult> {
   const parsed = createClientAndAccountSchema.safeParse(formData);
@@ -219,16 +218,15 @@ export async function handleCreateClientAndAccount(formData: CreateClientAndAcco
     return { success: false, error: `Données du formulaire invalides: ${issues}` };
   }
 
+  if (!WEBHOOK_URL) {
+    return { success: false, error: "L'URL du webhook n'est pas configurée."};
+  }
+
   const clientDetails = { 
     ...parsed.data, 
     clientId: `CLIENT-${Math.random().toString(36).substring(2, 9).toUpperCase()}`,
     creationDate: new Date().toISOString(),
     hasLoan: parsed.data.loanType !== 'none',
-    // Initialisation des nouveaux champs
-    isTransferBlocked: false,
-    transferBlockReason: "",
-    transferProcessingTime: { days: 0, hours: 0, minutes: 1 },
-    transactions: [],
   };
 
   if (clientDetails.hasLoan) {
@@ -237,61 +235,54 @@ export async function handleCreateClientAndAccount(formData: CreateClientAndAcco
   }
 
 
-  if (WEBHOOK_URL) {
-    try {
-      const response = await fetch(WEBHOOK_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({formType: 'createClient', ...clientDetails}),
-      });
+  try {
+    const response = await fetch(WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({formType: 'createClient', ...clientDetails}),
+    });
 
-      if (!response.ok) {
-        const errorBody = await response.json().catch(() => ({ message: response.statusText }));
-        return { success: false, error: `Le serveur a retourné une erreur: ${errorBody.message || response.statusText}` };
-      }
-      // On ne retourne pas la réponse du webhook, on retourne les détails locaux pour le localStorage
-    } catch (error: any) {
-      console.error("Erreur lors de l'appel au webhook de création de client/compte:", error);
-      return { success: false, error: `Impossible de contacter le service de création. ${error.message}` };
+    if (!response.ok) {
+      const errorBody = await response.json().catch(() => ({ message: response.statusText }));
+      return { success: false, error: `Le serveur a retourné une erreur: ${errorBody.message || response.statusText}` };
     }
-  }
+    return { success: true };
 
-  // Toujours retourner les détails pour la mise à jour locale
-  return { success: true, details: clientDetails };
+  } catch (error: any) {
+    console.error("Erreur lors de l'appel au webhook de création de client/compte:", error);
+    return { success: false, error: `Impossible de contacter le service de création. ${error.message}` };
+  }
 }
 
 export type GetClientsResult = { success: boolean; data?: any[]; error?: string; };
 
 export async function getClients(): Promise<GetClientsResult> {
-    if (WEBHOOK_URL) {
-        try {
-            const url = new URL(WEBHOOK_URL);
-            url.searchParams.append('action', 'getClients');
-            
-            const response = await fetch(url.toString(), {
-                method: "GET",
-                headers: { "Content-Type": "application/json" },
-                 cache: 'no-store'
-            });
-
-            if (!response.ok) {
-                 const errorBody = await response.text();
-                 throw new Error(`Le webhook a retourné une erreur: ${response.statusText}. Body: ${errorBody}`);
-            }
-            const data = await response.json();
-            if(data.error) {
-                throw new Error(data.error);
-            }
-            return { success: true, data };
-        } catch(error: any) {
-            console.error("Erreur lors de la récupération des clients depuis le webhook:", error);
-            // En cas d'erreur, on ne retourne pas d'erreur bloquante pour permettre au localStorage de prendre le relai
-            return { success: false, error: `Impossible de récupérer la liste des clients. ${error.message}`, data: [] };
-        }
+    if (!WEBHOOK_URL) {
+        return { success: false, error: "L'URL du webhook n'est pas configurée.", data: [] };
     }
-    
-    console.log("Récupération des clients (aucun webhook configuré). Retour d'une liste vide.");
-    return { success: true, data: [] };
+    try {
+        const url = new URL(WEBHOOK_URL);
+        url.searchParams.append('action', 'getClients');
+        
+        const response = await fetch(url.toString(), {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+            cache: 'no-store' // Toujours récupérer les données fraîches
+        });
+
+        if (!response.ok) {
+            const errorBody = await response.text();
+            throw new Error(`Le webhook a retourné une erreur: ${response.statusText}. Body: ${errorBody}`);
+        }
+        const data = await response.json();
+        if(data.error) {
+            throw new Error(data.error);
+        }
+        return { success: true, data };
+    } catch(error: any) {
+        console.error("Erreur lors de la récupération des clients depuis le webhook:", error);
+        return { success: false, error: `Impossible de récupérer la liste des clients. ${error.message}`, data: [] };
+    }
 }
 
 // Action pour récupérer les données d'un client pour le dashboard
@@ -302,43 +293,16 @@ export async function getAccountData(email: string): Promise<AccountDataResult> 
     return { success: false, error: "L'e-mail du client est manquant." };
   }
   
-    // Fallback pour le test local si l'email correspond
-  if (email === "client@test.com") {
-    return {
-      success: true,
-      data: {
-        client: {
-            email: "client@test.com",
-            firstName: "Jean",
-            lastName: "Dupont",
-            clientId: "C-1A2B3C4D"
-        },
-        balance: 12345.67,
-        iban: "FR76 3000 4000 0512 3456 7890 123",
-        accountNumber: "00012345678",
-        bic: "CRLYFRPP",
-        transactions: [
-            { id: '1', type: 'Salaire', date: '2024-07-01', amount: 2500 },
-            { id: '2', type: 'Loyer', date: '2024-07-05', amount: -850 },
-            { id: '3', type: 'Carrefour', date: '2024-07-06', amount: -120.50 },
-            { id: '4', type: 'Remboursement ami', date: '2024-07-10', amount: 50 },
-        ],
-      },
-    };
-  }
-
-  // Logique principale : récupérer les données depuis la liste des clients
   const clientsResult = await getClients();
   if (clientsResult.success && clientsResult.data) {
       const clientData = clientsResult.data.find((client: any) => client.email === email);
       if (clientData) {
-          // Simuler une réponse de données de compte
           return {
               success: true,
               data: {
                   client: {
                       email: clientData.email,
-                      firstName: clientData.firstName || 'Client', // Utiliser des valeurs par défaut
+                      firstName: clientData.firstName || 'Client',
                       lastName: clientData.lastName || '',
                       clientId: clientData.clientId,
                   },
@@ -346,7 +310,7 @@ export async function getAccountData(email: string): Promise<AccountDataResult> 
                   iban: clientData.iban,
                   accountNumber: clientData.accountNumber,
                   bic: clientData.bic,
-                  transactions: clientData.transactions || [], // Assumer que les transactions peuvent être là
+                  transactions: clientData.transactions || [],
                   isTransferBlocked: clientData.isTransferBlocked,
                   transferBlockReason: clientData.transferBlockReason,
                   transferProcessingTime: clientData.transferProcessingTime
@@ -355,7 +319,7 @@ export async function getAccountData(email: string): Promise<AccountDataResult> 
       }
   }
 
-  return { success: false, error: "Utilisateur non trouvé ou service de données indisponible." };
+  return { success: false, error: clientsResult.error || "Utilisateur non trouvé." };
 }
 
 
@@ -554,8 +518,7 @@ export type DeleteClientResult = { success: boolean; error?: string; };
 
 export async function handleDeleteClient(clientId: string): Promise<DeleteClientResult> {
   if (!WEBHOOK_URL) {
-    // Si pas de webhook, on simule la réussite pour le localStorage
-    return { success: true };
+    return { success: false, error: "L'URL du webhook n'est pas configurée." };
   }
 
   try {
@@ -582,6 +545,59 @@ export async function handleDeleteClient(clientId: string): Promise<DeleteClient
   }
 }
 
+// Action to update a client
+const updateClientSchema = z.object({
+  clientId: z.string(),
+  // Configuration
+  isTransferBlocked: z.boolean().default(false),
+  transferBlockReason: z.string().optional(),
+  transferProcessingTime: z.object({
+      days: z.coerce.number().min(0).default(0),
+      hours: z.coerce.number().min(0).max(23).default(0),
+      minutes: z.coerce.number().min(0).max(59).default(1),
+  })
+});
+
+export type UpdateClientInput = z.infer<typeof updateClientSchema>;
+export type UpdateClientResult = { success: boolean; error?: string };
+
+export async function handleUpdateClient(formData: UpdateClientInput): Promise<UpdateClientResult> {
+  const parsed = updateClientSchema.safeParse(formData);
+
+  if (!parsed.success) {
+    const issues = parsed.error.issues.map((i) => i.message).join(", ");
+    return { success: false, error: `Données invalides: ${issues}` };
+  }
+  
+  if (!WEBHOOK_URL) {
+    return { success: false, error: "L'URL du webhook n'est pas configurée." };
+  }
+  
+  try {
+    const response = await fetch(WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: 'updateClient', ...parsed.data }),
+    });
+    
+    if (!response.ok) {
+        const errorBody = await response.json().catch(() => ({ message: response.statusText }));
+        throw new Error(errorBody.message || "Le serveur a retourné une erreur.");
+    }
+
+    const result = await response.json();
+    if (result.status !== 'success') {
+        throw new Error(result.message || "Une erreur inconnue est survenue lors de la mise à jour.");
+    }
+    
+    return { success: true };
+
+  } catch (error: any) {
+     console.error("Erreur lors de la mise à jour du client:", error);
+     return { success: false, error: error.message };
+  }
+}
+
 // Action to update a client's balance
 const updateBalanceSchema = z.object({
   clientId: z.string(),
@@ -589,7 +605,6 @@ const updateBalanceSchema = z.object({
   operation: z.enum(["credit", "debit"]),
   reason: z.string().min(3, "Un motif est requis pour l'opération."),
 });
-
 
 export type UpdateBalanceInput = z.infer<typeof updateBalanceSchema>;
 export type UpdateBalanceResult = { success: boolean; error?: string; };
@@ -601,8 +616,34 @@ export async function handleUpdateBalance(formData: UpdateBalanceInput): Promise
       const issues = parsed.error.issues.map((i) => i.message).join(", ");
       return { success: false, error: `Données invalides: ${issues}` };
     }
+    
+    if (!WEBHOOK_URL) {
+      return { success: false, error: "L'URL du webhook n'est pas configurée." };
+    }
 
-    // Pour la stratégie localStorage, on retourne simplement un succès
-    // La logique de mise à jour est dans le composant client (admin page)
-    return { success: true };
+    try {
+      const response = await fetch(WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: 'updateBalance', ...parsed.data }),
+      });
+      
+      if (!response.ok) {
+        const errorBody = await response.json().catch(() => ({ message: response.statusText }));
+        throw new Error(errorBody.message || "Le serveur a retourné une erreur.");
+      }
+
+      const result = await response.json();
+      if (result.status !== 'success') {
+          throw new Error(result.message || "Une erreur inconnue est survenue lors de la mise à jour.");
+      }
+      
+      return { success: true };
+
+    } catch (error: any) {
+        console.error("Erreur lors de la mise à jour du solde:", error);
+        return { success: false, error: error.message };
+    }
 }
+
+    
