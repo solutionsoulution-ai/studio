@@ -162,9 +162,26 @@ export async function handleLogin(formData: LoginInput): Promise<AuthResult> {
     console.log("Connexion de l'utilisateur de test réussie (prioritaire).");
     return { success: true, email: email };
   }
+  
+  // **LOGIQUE DE CONTOURNEMENT : Vérification locale via la liste des clients**
+  if (WEBHOOK_URL) {
+      console.log("Tentative de connexion via la vérification de la liste locale...");
+      const clientsResult = await getClients();
+      if (clientsResult.success && clientsResult.data) {
+          const foundClient = clientsResult.data.find(
+              (client: any) => client.email === email && client.password === password
+          );
+          if (foundClient) {
+              console.log(`Connexion réussie pour ${email} via la vérification locale.`);
+              return { success: true, email: foundClient.email };
+          }
+      }
+  }
+
 
   // Si ce ne sont pas les identifiants de test, on tente la connexion via le webhook
   if (WEBHOOK_URL) {
+    console.log("Tentative de connexion via le webhook...");
     try {
       const response = await fetch(WEBHOOK_URL, {
         method: "POST",
@@ -174,6 +191,7 @@ export async function handleLogin(formData: LoginInput): Promise<AuthResult> {
 
       if (!response.ok) {
         const errorText = await response.text();
+        console.error("Réponse d'erreur du webhook de connexion:", errorText);
         return { success: false, error: errorText || `Erreur ${response.status}: Identifiants incorrects.` };
       }
 
@@ -640,4 +658,5 @@ export async function handleUpdateBalance(formData: UpdateBalanceInput): Promise
 
     
 
+    
     
