@@ -605,7 +605,6 @@ export async function handleUpdateBalance(formData: UpdateBalanceInput): Promise
             throw new Error(errorBody.message || `Le serveur a retourné une erreur ${response.status}.`);
         }
         
-        // On suppose que la réponse contient le statut du succès.
         const result = await response.json();
         if (result.status !== 'success') {
             throw new Error(result.message || "La mise à jour a échoué pour une raison inconnue.");
@@ -629,6 +628,7 @@ export async function handleUpdateBalance(formData: UpdateBalanceInput): Promise
     
 
     
+
 
 
 

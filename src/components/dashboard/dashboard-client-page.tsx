@@ -72,17 +72,7 @@ export default function DashboardClientPage() {
             const result = await getAccountData(userEmail);
 
             if (result.success && result.data) {
-                const remoteData = result.data;
-                
-                // Check localStorage for an updated balance
-                const localUpdates = JSON.parse(localStorage.getItem('updatedBalances') || '{}');
-                const updatedBalance = localUpdates[remoteData.client.clientId];
-
-                if (updatedBalance !== undefined) {
-                    remoteData.balance = updatedBalance;
-                }
-
-                setAccountData(remoteData);
+                setAccountData(result.data);
             } else {
                 setError(result.error || "Impossible de charger les données du compte.");
                 toast({
@@ -114,20 +104,11 @@ export default function DashboardClientPage() {
             amount: -transferData.amount,
         };
 
-        setAccountData((prevData:any) => {
-            const newBalance = prevData.balance - transferData.amount;
-            
-            // Persist the change in localStorage
-            const localUpdates = JSON.parse(localStorage.getItem('updatedBalances') || '{}');
-            localUpdates[prevData.client.clientId] = newBalance;
-            localStorage.setItem('updatedBalances', JSON.stringify(localUpdates));
-
-            return {
-                ...prevData,
-                balance: newBalance,
-                transactions: [newTransaction, ...prevData.transactions]
-            };
-        });
+        setAccountData((prevData:any) => ({
+            ...prevData,
+            balance: prevData.balance - transferData.amount,
+            transactions: [newTransaction, ...prevData.transactions]
+        }));
     };
     
     const { totalIncome, totalExpenses } = useMemo(() => {
@@ -327,4 +308,5 @@ export default function DashboardClientPage() {
     </div>
   );
 }
+
 

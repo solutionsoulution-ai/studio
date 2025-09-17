@@ -445,7 +445,7 @@ const ClientList = ({ clients, onClientSelect, isLoading, error }: { clients: an
 
 // Schéma de validation pour le formulaire de mise à jour du solde
 const clientUpdateBalanceSchema = z.object({
-  amount: z.coerce.number({invalid_type_error: "Le montant doit être un nombre."}),
+  amount: z.coerce.number({invalid_type_error: "Le montant doit être un nombre."}).positive("Le montant doit être positif."),
   operation: z.enum(["credit", "debit"]),
   reason: z.string().min(3, "Un motif est requis pour l'opération."),
 });
@@ -460,7 +460,7 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
 
     const balanceForm = useForm<UpdateBalanceValues>({
         resolver: zodResolver(clientUpdateBalanceSchema),
-        defaultValues: { amount: '' as any, operation: "credit", reason: "" }
+        defaultValues: { amount: undefined, operation: "credit", reason: "" }
     });
 
     const handleDelete = async () => {
@@ -485,16 +485,16 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
 
     const handleBalanceUpdate = async (values: UpdateBalanceValues) => {
         setIsUpdatingBalance(true);
-        const result = await handleUpdateBalance({ ...values, clientId: client.clientId, amount: Number(values.amount) });
+        const result = await handleUpdateBalance({ ...values, clientId: client.clientId });
         setIsUpdatingBalance(false);
 
         if (result.success) {
             toast({
                 title: "Opération réussie !",
-                description: "Le solde du client sera mis à jour après rafraîchissement.",
+                description: "La demande de mise à jour a été envoyée. Le solde sera mis à jour après rafraîchissement.",
             });
             onClientAction();
-            balanceForm.reset({amount: '' as any, operation: 'credit', reason: ''});
+            balanceForm.reset({ amount: undefined, operation: 'credit', reason: ''});
         } else {
             toast({
                 title: "Erreur de mise à jour",
@@ -550,7 +550,7 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
                                     <FormItem>
                                         <FormLabel>Montant de l'opération</FormLabel>
                                         <FormControl>
-                                            <Input type="number" placeholder="100.00" {...field} disabled={isUpdatingBalance}/>
+                                            <Input type="number" placeholder="100.00" {...field} disabled={isUpdatingBalance} value={field.value ?? ''} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -721,5 +721,6 @@ export default function AdminPage() {
     </main>
   );
 }
+
 
 
