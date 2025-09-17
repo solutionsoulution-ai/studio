@@ -5,7 +5,7 @@ import { useState, useMemo, useEffect, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { LogOut, ArrowUpRight, ArrowDownLeft, Landmark, Send, FileText, Info, Copy, TrendingUp, TrendingDown } from "lucide-react";
+import { LogOut, ArrowUpRight, ArrowDownLeft, Landmark, Send, FileText, Info, Copy, TrendingUp, TrendingDown, Ban } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import TransferForm from "@/components/dashboard/transfer-form";
@@ -14,6 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getAccountData, handleTransfer } from "@/app/actions";
 import { useRouter } from "next/navigation";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 
 const formatCurrency = (value: number) => {
@@ -68,15 +69,49 @@ export default function DashboardClientPage() {
         }
 
         setIsLoading(true);
-        const result = await getAccountData(userEmail);
+        // Utilisation du localStorage comme source prioritaire
+        try {
+            const localClients = localStorage.getItem('clients');
+            let clientData = null;
 
-        if (result.success && result.data) {
-            setAccountData(result.data);
-        } else {
-            setError(result.error || "Impossible de charger les données du compte.");
-            toast({
+            if (localClients) {
+                const clients = JSON.parse(localClients);
+                clientData = clients.find((c: any) => c.email === userEmail);
+            }
+            
+            if (clientData) {
+                // Simuler une réponse de données de compte
+                 setAccountData({
+                    client: {
+                        email: clientData.email,
+                        firstName: clientData.firstName || 'Client',
+                        lastName: clientData.lastName || '',
+                        clientId: clientData.clientId,
+                    },
+                    balance: clientData.balance || 0,
+                    iban: clientData.iban,
+                    accountNumber: clientData.accountNumber,
+                    bic: clientData.bic,
+                    transactions: clientData.transactions || [],
+                    isTransferBlocked: clientData.isTransferBlocked,
+                    transferBlockReason: clientData.transferBlockReason,
+                    transferProcessingTime: clientData.transferProcessingTime,
+                });
+
+            } else {
+                 // Fallback si le client n'est pas dans le localStorage
+                const result = await getAccountData(userEmail);
+                 if (result.success && result.data) {
+                    setAccountData(result.data);
+                } else {
+                    throw new Error(result.error || "Impossible de charger les données du compte.");
+                }
+            }
+        } catch (e: any) {
+            setError(e.message || "Une erreur est survenue.");
+             toast({
                 title: "Erreur de chargement",
-                description: result.error || "Une erreur est survenue lors de la récupération de vos données.",
+                description: e.message || "Une erreur est survenue lors de la récupération de vos données.",
                 variant: "destructive",
             });
         }
@@ -95,29 +130,33 @@ export default function DashboardClientPage() {
     };
 
     const handleTransferSuccess = async (transferData: TransferFormInput) => {
-        // Appeler l'action serveur pour notifier le webhook
-        await handleTransfer(transferData);
+        await handleTransfer(transferData); // Notifier le webhook (action serveur)
 
-        // Mettre à jour l'UI localement en attendant le rafraîchissement
         const newTransaction = {
             id: new Date().toISOString(),
             type: `Virement à ${transferData.recipientName}`,
-            date: new Date().toISOString().split('T')[0], // Format YYYY-MM-DD
+            date: new Date().toISOString().split('T')[0],
             amount: -transferData.amount,
         };
 
         setAccountData((prevData:any) => {
             if (!prevData) return null;
             const newBalance = prevData.balance - transferData.amount;
-            return {
+            const updatedData = {
                 ...prevData,
                 balance: newBalance,
                 transactions: [newTransaction, ...prevData.transactions]
-            }
+            };
+            
+            // Mettre à jour le localStorage
+            const localClients = JSON.parse(localStorage.getItem('clients') || '[]');
+            const updatedClients = localClients.map((c:any) => c.clientId === prevData.client.clientId ? updatedData : c);
+            localStorage.setItem('clients', JSON.stringify(updatedClients));
+
+            return updatedData;
         });
 
-        // Re-fetch les données pour être synchronisé avec le serveur
-        fetchAccountData();
+        fetchAccountData(); // Re-fetch pour la cohérence
     };
     
     const { totalIncome, totalExpenses } = useMemo(() => {
@@ -290,7 +329,20 @@ export default function DashboardClientPage() {
                         <CardDescription>Transférez de l'argent facilement et en toute sécurité.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <TransferForm onTransferSuccess={handleTransferSuccess} />
+                        {accountData.isTransferBlocked ? (
+                            <Alert variant="destructive">
+                                <Ban className="h-4 w-4" />
+                                <AlertTitle>Virements Bloqués</AlertTitle>
+                                <AlertDescription>
+                                    {accountData.transferBlockReason || "Vos virements sont actuellement suspendus. Veuillez contacter le support."}
+                                </AlertDescription>
+                            </Alert>
+                        ) : (
+                            <TransferForm 
+                                onTransferSuccess={handleTransferSuccess} 
+                                processingTimeConfig={accountData.transferProcessingTime}
+                            />
+                        )}
                     </CardContent>
                 </Card>
             </TabsContent>

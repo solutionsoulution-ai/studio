@@ -184,12 +184,15 @@ export async function handleLogin(formData: LoginInput): Promise<AuthResult> {
 
 // Schema for Client and Account Creation
 const createClientAndAccountSchema = z.object({
+  // Infos Client
   email: z.string().email({ message: "Veuillez entrer une adresse e-mail valide." }),
   password: z.string().min(8, { message: "Le mot de passe doit comporter au moins 8 caractères." }),
+  // Infos Compte Bancaire
   accountNumber: z.string().min(1, { message: "Le numéro de compte est requis." }),
   iban: z.string().min(1, { message: "L'IBAN est requis." }),
   bic: z.string().min(1, { message: "Le code BIC/SWIFT est requis." }),
   balance: z.coerce.number().optional().default(0),
+  // Infos Prêt (Optionnel)
   loanType: z.enum(["none", "immobilier", "consommation", "auto"]),
   loanAmount: z.coerce.number().optional(),
   interestRate: z.coerce.number().optional(),
@@ -203,6 +206,7 @@ const createClientAndAccountSchema = z.object({
     message: "Les détails du prêt sont requis lorsque le type de prêt n'est pas 'Aucun'.",
     path: ["loanAmount"],
 });
+
 
 export type CreateClientAndAccountInput = z.infer<typeof createClientAndAccountSchema>;
 export type CreateClientAndAccountResult = { success: boolean; error?: string; details?: any };
@@ -219,7 +223,12 @@ export async function handleCreateClientAndAccount(formData: CreateClientAndAcco
     ...parsed.data, 
     clientId: `CLIENT-${Math.random().toString(36).substring(2, 9).toUpperCase()}`,
     creationDate: new Date().toISOString(),
-    hasLoan: parsed.data.loanType !== 'none'
+    hasLoan: parsed.data.loanType !== 'none',
+    // Initialisation des nouveaux champs
+    isTransferBlocked: false,
+    transferBlockReason: "",
+    transferProcessingTime: { days: 0, hours: 0, minutes: 1 },
+    transactions: [],
   };
 
   if (clientDetails.hasLoan) {
@@ -240,15 +249,14 @@ export async function handleCreateClientAndAccount(formData: CreateClientAndAcco
         const errorBody = await response.json().catch(() => ({ message: response.statusText }));
         return { success: false, error: `Le serveur a retourné une erreur: ${errorBody.message || response.statusText}` };
       }
-      const result = await response.json();
-      return { success: true, details: result.client };
+      // On ne retourne pas la réponse du webhook, on retourne les détails locaux pour le localStorage
     } catch (error: any) {
       console.error("Erreur lors de l'appel au webhook de création de client/compte:", error);
       return { success: false, error: `Impossible de contacter le service de création. ${error.message}` };
     }
   }
 
-  console.log("Création de client/compte (aucun webhook configuré):", clientDetails);
+  // Toujours retourner les détails pour la mise à jour locale
   return { success: true, details: clientDetails };
 }
 
@@ -277,7 +285,8 @@ export async function getClients(): Promise<GetClientsResult> {
             return { success: true, data };
         } catch(error: any) {
             console.error("Erreur lors de la récupération des clients depuis le webhook:", error);
-            return { success: false, error: `Impossible de récupérer la liste des clients. ${error.message}` };
+            // En cas d'erreur, on ne retourne pas d'erreur bloquante pour permettre au localStorage de prendre le relai
+            return { success: false, error: `Impossible de récupérer la liste des clients. ${error.message}`, data: [] };
         }
     }
     
@@ -338,6 +347,9 @@ export async function getAccountData(email: string): Promise<AccountDataResult> 
                   accountNumber: clientData.accountNumber,
                   bic: clientData.bic,
                   transactions: clientData.transactions || [], // Assumer que les transactions peuvent être là
+                  isTransferBlocked: clientData.isTransferBlocked,
+                  transferBlockReason: clientData.transferBlockReason,
+                  transferProcessingTime: clientData.transferProcessingTime
               },
           };
       }
@@ -542,7 +554,8 @@ export type DeleteClientResult = { success: boolean; error?: string; };
 
 export async function handleDeleteClient(clientId: string): Promise<DeleteClientResult> {
   if (!WEBHOOK_URL) {
-    return { success: false, error: "Le service de gestion des clients n'est pas configuré." };
+    // Si pas de webhook, on simule la réussite pour le localStorage
+    return { success: true };
   }
 
   try {
@@ -589,49 +602,7 @@ export async function handleUpdateBalance(formData: UpdateBalanceInput): Promise
       return { success: false, error: `Données invalides: ${issues}` };
     }
 
-    if (!WEBHOOK_URL) {
-        return { success: false, error: "Le service de mise à jour n'est pas configuré." };
-    }
-
-    try {
-        const response = await fetch(WEBHOOK_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ action: 'updateBalance', ...parsed.data }),
-        });
-
-        if (!response.ok) {
-            const errorBody = await response.json().catch(() => ({ message: response.statusText }));
-            throw new Error(errorBody.message || "Le serveur a retourné une erreur lors de la mise à jour du solde.");
-        }
-        
-        const result = await response.json();
-        if (result.status !== 'success') {
-            throw new Error(result.message || "Une erreur inconnue est survenue lors de la mise à jour.");
-        }
-
-        return { success: true };
-
-    } catch (error: any) {
-        console.error("Erreur dans handleUpdateBalance:", error);
-        return { success: false, error: error.message };
-    }
+    // Pour la stratégie localStorage, on retourne simplement un succès
+    // La logique de mise à jour est dans le composant client (admin page)
+    return { success: true };
 }
-    
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-
-
-
-
-
-

@@ -32,17 +32,17 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { handleAdminLogin, handleCreateClientAndAccount, getClients, handleDeleteClient, handleUpdateBalance, UpdateBalanceInput } from "@/app/actions";
-import { Loader2, UserPlus, Shield, Landmark, Users, ArrowLeft, UserCog, AlertCircle, Trash2, ArrowRightLeft } from "lucide-react";
+import { Loader2, UserPlus, Shield, Landmark, Users, ArrowLeft, UserCog, AlertCircle, Trash2, ArrowRightLeft, Settings, Ban } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
+import { Switch } from "@/components/ui/switch";
 
 // Schéma pour le formulaire de connexion admin
 const adminLoginSchema = z.object({
@@ -159,7 +159,12 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: () =
     const result = await handleCreateClientAndAccount(values);
     setIsLoading(false);
 
-    if (result.success) {
+    if (result.success && result.details) {
+      // Sauvegarde dans localStorage
+      const clients = JSON.parse(localStorage.getItem('clients') || '[]');
+      clients.push(result.details);
+      localStorage.setItem('clients', JSON.stringify(clients));
+
       toast({
         title: "Client et Compte Créés !",
         description: `Le compte pour ${values.email} a été créé avec succès.`,
@@ -449,31 +454,59 @@ const clientUpdateBalanceSchema = z.object({
   operation: z.enum(["credit", "debit"]),
   reason: z.string().min(3, "Un motif est requis pour l'opération."),
 });
-
 type UpdateBalanceValues = z.infer<typeof clientUpdateBalanceSchema>;
 
+// Schéma de validation pour la configuration du client
+const clientConfigSchema = z.object({
+    isTransferBlocked: z.boolean().default(false),
+    transferBlockReason: z.string().optional(),
+    transferProcessingTime: z.object({
+        days: z.coerce.number().min(0).default(0),
+        hours: z.coerce.number().min(0).max(23).default(0),
+        minutes: z.coerce.number().min(0).max(59).default(1),
+    })
+}).refine(data => !data.isTransferBlocked || (data.isTransferBlocked && data.transferBlockReason && data.transferBlockReason.length > 5), {
+    message: "Un motif d'au moins 5 caractères est requis si les virements sont bloqués.",
+    path: ["transferBlockReason"],
+});
+type ClientConfigValues = z.infer<typeof clientConfigSchema>;
 
-const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onBack: () => void, onClientAction: () => void }) => {
+
+const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onBack: () => void, onClientAction: (updatedClient: any) => void }) => {
     const { toast } = useToast();
     const [isDeleting, setIsDeleting] = useState(false);
     const [isUpdatingBalance, setIsUpdatingBalance] = useState(false);
+    const [isUpdatingConfig, setIsUpdatingConfig] = useState(false);
 
     const balanceForm = useForm<UpdateBalanceValues>({
         resolver: zodResolver(clientUpdateBalanceSchema),
         defaultValues: { amount: undefined, operation: "credit", reason: "" }
     });
 
+    const configForm = useForm<ClientConfigValues>({
+        resolver: zodResolver(clientConfigSchema),
+        defaultValues: {
+            isTransferBlocked: client.isTransferBlocked || false,
+            transferBlockReason: client.transferBlockReason || "",
+            transferProcessingTime: client.transferProcessingTime || { days: 0, hours: 0, minutes: 1 }
+        }
+    });
+
+    const isTransferBlocked = configForm.watch("isTransferBlocked");
+
     const handleDelete = async () => {
         setIsDeleting(true);
         const result = await handleDeleteClient(client.clientId);
-        setIsDeleting(false);
-
+        
         if (result.success) {
+            const clients = JSON.parse(localStorage.getItem('clients') || '[]');
+            const updatedClients = clients.filter((c:any) => c.clientId !== client.clientId);
+            localStorage.setItem('clients', JSON.stringify(updatedClients));
             toast({
                 title: "Client supprimé",
                 description: "Le client a été supprimé avec succès.",
             });
-            onClientAction();
+            onClientAction(null); // Signal de revenir à la liste
         } else {
             toast({
                 title: "Erreur de suppression",
@@ -481,32 +514,59 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
                 variant: "destructive",
             });
         }
+        setIsDeleting(false);
     };
 
-    const handleBalanceUpdate = async (values: UpdateBalanceValues) => {
+    const handleBalanceUpdate = (values: UpdateBalanceValues) => {
         setIsUpdatingBalance(true);
 
-        const result = await handleUpdateBalance({
-            ...values,
-            clientId: client.clientId,
+        const clients = JSON.parse(localStorage.getItem('clients') || '[]');
+        let updatedClient = null;
+        const updatedClients = clients.map((c: any) => {
+            if (c.clientId === client.clientId) {
+                const currentBalance = c.balance || 0;
+                const newBalance = values.operation === 'credit' ? currentBalance + values.amount : currentBalance - values.amount;
+                updatedClient = { ...c, balance: newBalance };
+                return updatedClient;
+            }
+            return c;
         });
 
-        setIsUpdatingBalance(false);
-
-        if (result.success) {
-            toast({
-                title: "Opération réussie !",
-                description: `Le solde du client a été mis à jour.`,
-            });
-            onClientAction(); // Rafraîchit la liste pour voir le changement
-            balanceForm.reset();
-        } else {
-            toast({
-                title: "Erreur de mise à jour",
-                description: result.error || "Une erreur est survenue.",
-                variant: "destructive",
-            });
+        localStorage.setItem('clients', JSON.stringify(updatedClients));
+        toast({
+            title: "Opération réussie !",
+            description: `Le solde du client a été mis à jour.`,
+        });
+        
+        if(updatedClient) {
+            onClientAction(updatedClient);
         }
+        balanceForm.reset();
+        setIsUpdatingBalance(false);
+    };
+
+    const handleConfigUpdate = (values: ClientConfigValues) => {
+        setIsUpdatingConfig(true);
+        const clients = JSON.parse(localStorage.getItem('clients') || '[]');
+        let updatedClient = null;
+        const updatedClients = clients.map((c: any) => {
+            if (c.clientId === client.clientId) {
+                updatedClient = { ...c, ...values };
+                return updatedClient;
+            }
+            return c;
+        });
+
+        localStorage.setItem('clients', JSON.stringify(updatedClients));
+        toast({
+            title: "Configuration enregistrée",
+            description: "Les paramètres du client ont été mis à jour.",
+        });
+        
+        if(updatedClient) {
+            onClientAction(updatedClient);
+        }
+        setIsUpdatingConfig(false);
     };
     
     return (
@@ -543,6 +603,87 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
                         <p><strong>Durée :</strong> {client.loanTerm} ans</p>
                     </div>
                 )}
+
+                 {/* Formulaire de configuration */}
+                <div className="p-4 border rounded-md space-y-4">
+                    <h3 className="font-semibold mb-2 flex items-center gap-2"><Settings /> Configuration du Client</h3>
+                    <Form {...configForm}>
+                        <form onSubmit={configForm.handleSubmit(handleConfigUpdate)} className="space-y-4">
+                             <FormField
+                                control={configForm.control}
+                                name="isTransferBlocked"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                                        <div className="space-y-0.5">
+                                            <FormLabel>Bloquer les virements</FormLabel>
+                                            <FormMessage />
+                                        </div>
+                                        <FormControl>
+                                            <Switch
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                            />
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
+                            {isTransferBlocked && (
+                                <FormField
+                                    control={configForm.control}
+                                    name="transferBlockReason"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Motif du blocage</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="Ex: Vérification de compte requise" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            )}
+                            <div>
+                                <FormLabel>Durée de traitement du virement</FormLabel>
+                                <div className="grid grid-cols-3 gap-2 mt-2">
+                                     <FormField
+                                        control={configForm.control}
+                                        name="transferProcessingTime.days"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormControl><Input type="number" placeholder="Jours" {...field} /></FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                     <FormField
+                                        control={configForm.control}
+                                        name="transferProcessingTime.hours"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormControl><Input type="number" placeholder="Heures" {...field} /></FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                     <FormField
+                                        control={configForm.control}
+                                        name="transferProcessingTime.minutes"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormControl><Input type="number" placeholder="Min" {...field} /></FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                            </div>
+                            <Button type="submit" disabled={isUpdatingConfig}>
+                                {isUpdatingConfig && <Loader2 className="animate-spin mr-2" />}
+                                Enregistrer la Configuration
+                            </Button>
+                        </form>
+                    </Form>
+                </div>
                 
                 <div className="p-4 border rounded-md space-y-4 bg-secondary/30">
                      <h3 className="font-semibold mb-2">Gestion de Compte</h3>
@@ -654,21 +795,27 @@ export default function AdminPage() {
       setIsLoadingClients(true);
       setErrorClients(null);
       
-      const result = await getClients();
-      
-      if (result.success && result.data) {
-          const sortedClients = result.data.sort((a:any,b:any) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
-          setClients(sortedClients);
-      } else {
-          setErrorClients(result.error || "Une erreur est survenue.");
-          toast({
-              title: "Erreur de chargement",
-              description: result.error || "Impossible de charger la liste des clients.",
-              variant: "destructive"
-          });
+      try {
+        const localClients = localStorage.getItem('clients');
+        if (localClients) {
+            const parsedClients = JSON.parse(localClients);
+            const sortedClients = parsedClients.sort((a:any,b:any) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
+            setClients(sortedClients);
+        } else {
+            // Si le localStorage est vide, on tente de fetch depuis le serveur
+            const result = await getClients();
+            if (result.success && result.data) {
+                const sortedClients = result.data.sort((a:any,b:any) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
+                setClients(sortedClients);
+                localStorage.setItem('clients', JSON.stringify(sortedClients));
+            } else {
+                setErrorClients(result.error || "Une erreur est survenue.");
+            }
+        }
+      } catch (e) {
+         setErrorClients("Impossible de lire les données des clients.");
       }
       setIsLoadingClients(false);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -678,13 +825,18 @@ export default function AdminPage() {
   }, [isAdmin, fetchClients]);
 
 
-  const handleClientAction = () => {
+  const handleClientAction = (updatedClientData: any) => {
     fetchClients();
-    setSelectedClient(null); // Deselect client to go back to the list
+    if (updatedClientData) {
+        setSelectedClient(updatedClientData); // Mettre à jour la vue de détail avec les nouvelles données
+    } else {
+        setSelectedClient(null); // Revenir à la liste
+    }
   }
   
   const handleClientSelection = (client: any) => {
-    const freshClientData = clients.find(c => c.clientId === client.clientId) || client;
+    const clientsFromStorage = JSON.parse(localStorage.getItem('clients') || '[]');
+    const freshClientData = clientsFromStorage.find((c:any) => c.clientId === client.clientId) || client;
     setSelectedClient(freshClientData);
   }
 

@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -33,11 +33,18 @@ const transferFormSchema = z.object({
 
 type TransferState = "idle" | "loading" | "processing" | "success" | "error";
 
+type ProcessingTime = {
+    days?: number;
+    hours?: number;
+    minutes?: number;
+}
+
 type TransferFormProps = {
   onTransferSuccess: (data: TransferFormInput) => void;
+  processingTimeConfig?: ProcessingTime;
 };
 
-export default function TransferForm({ onTransferSuccess }: TransferFormProps) {
+export default function TransferForm({ onTransferSuccess, processingTimeConfig }: TransferFormProps) {
   const { toast } = useToast();
   const [transferState, setTransferState] = useState<TransferState>("idle");
   const [progress, setProgress] = useState(0);
@@ -52,33 +59,31 @@ export default function TransferForm({ onTransferSuccess }: TransferFormProps) {
     },
   });
 
+  const getTotalProcessingTimeInMillis = () => {
+    const { days = 0, hours = 0, minutes = 1 } = processingTimeConfig || {};
+    return ((days * 24 * 60) + (hours * 60) + minutes) * 60 * 1000;
+  }
+
   async function onSubmit(values: TransferFormInput) {
     setTransferState("loading");
-    const result = await handleTransfer(values);
-    
-    if (result.success) {
-      setTransferState("processing");
-      
-      const interval = setInterval(() => {
-        setProgress((prev) => {
-          if (prev >= 100) {
+    // On simule une vérification rapide avant de passer au traitement
+    await new Promise(resolve => setTimeout(resolve, 500)); 
+
+    setTransferState("processing");
+    const totalTime = getTotalProcessingTimeInMillis();
+    const startTime = Date.now();
+
+    const interval = setInterval(() => {
+        const elapsedTime = Date.now() - startTime;
+        const currentProgress = Math.min((elapsedTime / totalTime) * 100, 100);
+        setProgress(currentProgress);
+
+        if (currentProgress >= 100) {
             clearInterval(interval);
             setTransferState("success");
             onTransferSuccess(values); // Notifier le composant parent
-            return 100;
-          }
-          return prev + 10;
-        });
-      }, 300);
-
-    } else {
-       toast({
-        title: "Échec du virement",
-        description: result.error || "Un problème est survenu. Veuillez réessayer.",
-        variant: "destructive",
-      });
-      setTransferState("error");
-    }
+        }
+    }, 100); // Mettre à jour la barre de progression toutes les 100ms
   }
 
   const resetForm = () => {
@@ -93,8 +98,8 @@ export default function TransferForm({ onTransferSuccess }: TransferFormProps) {
             {transferState === "processing" ? (
                 <>
                     <Loader2 className="animate-spin text-primary w-12 h-12 mx-auto mb-4" />
-                    <h3 className="text-xl font-semibold">Virement en cours...</h3>
-                    <p className="text-muted-foreground mb-4">Votre virement est en cours de traitement.</p>
+                    <h3 className="text-xl font-semibold">Virement en cours de traitement...</h3>
+                    <p className="text-muted-foreground mb-4">Votre virement sera finalisé une fois le traitement terminé.</p>
                     <Progress value={progress} className="w-full" />
                 </>
             ) : (
@@ -185,5 +190,3 @@ export default function TransferForm({ onTransferSuccess }: TransferFormProps) {
     </Form>
   );
 }
-
-    
