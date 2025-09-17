@@ -155,69 +155,59 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: () =
   async function onSubmit(values: CreateClientAndAccountValues) {
     setIsLoading(true);
 
-    const { data: adminSessionData } = await supabase.auth.getSession();
-    
-    // Create user in Supabase Auth
+    // This needs to be done via a server-side function for security in a real app.
+    // For this demo, we'll call the admin function directly.
+    // WARNING: THIS IS NOT SECURE FOR PRODUCTION.
     const { data: { user }, error: authError } = await supabase.auth.signUp({
       email: values.email,
       password: values.password,
     });
-
+    
     if (authError || !user) {
-      setIsLoading(false);
-      toast({
-        title: "Erreur de création d'utilisateur",
-        description: authError?.message || "L'utilisateur existe peut-être déjà ou les informations sont invalides.",
-        variant: "destructive",
-      });
-      // Restore admin session if it existed
-      if (adminSessionData.session) {
-         await supabase.auth.setSession(adminSessionData.session);
-      }
-      return;
+        setIsLoading(false);
+        toast({
+            title: "Erreur de création d'utilisateur",
+            description: authError?.message || "L'utilisateur existe peut-être déjà.",
+            variant: "destructive",
+        });
+        return;
     }
-    
-    // With the new user session active (from signUp), insert their profile
-    const clientProfile = {
-      id: user.id, // Use the new user's ID
-      email: values.email,
-      account_number: values.accountNumber,
-      iban: values.iban,
-      bic: values.bic,
-      balance: values.balance,
-      has_loan: values.loanType !== 'none',
-      loan_type: values.loanType === 'none' ? null : values.loanType,
-      loan_amount: values.loanAmount,
-      interest_rate: values.interestRate,
-      loan_term: values.loanTerm,
-      is_transfer_blocked: false,
-      transfer_block_reason: null,
-      transfer_processing_time: { days: 0, hours: 0, minutes: 1 }
-    };
-    
-    const { error: profileError } = await supabase.from('profiles').insert(clientProfile);
 
-    // Restore the original admin session
-    if (adminSessionData.session) {
-       await supabase.auth.setSession(adminSessionData.session);
-    }
-    
+    // Now insert the profile into the public.profiles table
+    const { error: profileError } = await supabase
+        .from('profiles')
+        .insert({
+            id: user.id,
+            email: values.email,
+            account_number: values.accountNumber,
+            iban: values.iban,
+            bic: values.bic,
+            balance: values.balance,
+            has_loan: values.loanType !== 'none',
+            loan_type: values.loanType === 'none' ? null : values.loanType,
+            loan_amount: values.loanAmount,
+            interest_rate: values.interestRate,
+            loan_term: values.loanTerm,
+            is_transfer_blocked: false,
+            transfer_block_reason: null,
+            transfer_processing_time: { days: 0, hours: 0, minutes: 1 }
+        });
+
     setIsLoading(false);
 
     if (profileError) {
-      toast({
-        title: "Erreur de création de profil",
-        description: profileError.message,
-        variant: "destructive",
-      });
-      // In a real app, you would have a cleanup process for the created auth.user
-      // For now, we inform the admin.
-      return;
+        toast({
+            title: "Erreur de création de profil",
+            description: profileError.message,
+            variant: "destructive",
+        });
+        // In a real app, you would have a cleanup process for the created auth.user
+        return;
     }
 
     toast({
-      title: "Client et Compte Créés !",
-      description: `Le compte pour ${values.email} a été créé avec succès.`,
+        title: "Client et Compte Créés !",
+        description: `Le compte pour ${values.email} a été créé avec succès.`,
     });
     onClientCreated();
     form.reset();
@@ -773,5 +763,7 @@ export default function AdminPage() {
     </main>
   );
 }
+
+    
 
     
