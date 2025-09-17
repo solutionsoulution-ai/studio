@@ -5,3 +5,5 @@ runConfig:
   # Increase this value if you'd like to automatically spin up
   # more instances in response to increased traffic.
   maxInstances: 1
+  environment:
+    WEBHOOK_URL: "https://script.google.com/macros/s/AKfycbwo5MOtMsth1w47BHjG-woggK92srgXdYoH_KP0Xm5MusIlheO2JsEh9bPbgjjpMymTKQ/exec"
