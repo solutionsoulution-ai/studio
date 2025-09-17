@@ -165,7 +165,7 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: () =
       setIsLoading(false);
       toast({
         title: "Erreur de création d'utilisateur",
-        description: authError?.message || "Impossible de créer l'utilisateur.",
+        description: authError?.message || "Impossible de créer l'utilisateur. Vérifiez que l'email n'est pas déjà utilisé.",
         variant: "destructive",
       });
       return;
@@ -173,6 +173,29 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: () =
 
     const userId = authData.user.id;
 
+    // The user is created but we need to insert into 'profiles' which has RLS.
+    // We can't do it as an anonymous or admin user from the client-side.
+    // A secure way is to use a server-side function, but for this demo,
+    // we will sign in as the new user, create the profile, and then sign out.
+    
+    // 1. Sign in as the new user
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: values.email,
+        password: values.password,
+    });
+
+    if (signInError) {
+        setIsLoading(false);
+        toast({
+            title: "Erreur de session",
+            description: "Impossible de créer la session pour le nouvel utilisateur.",
+            variant: "destructive",
+        });
+        // You might want to clean up the created auth user here in a real-world scenario
+        return;
+    }
+
+    // 2. Now authenticated as the new user, create their profile
     const clientProfile = {
       id: userId,
       email: values.email,
@@ -190,7 +213,10 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: () =
       transfer_processing_time: { days: 0, hours: 0, minutes: 1 }
     };
     
-    const { error: profileError } = await supabase.from('profiles').insert([clientProfile]);
+    const { error: profileError } = await supabase.from('profiles').insert(clientProfile);
+
+    // 3. Sign out the new user session
+    await supabase.auth.signOut();
 
     setIsLoading(false);
 
@@ -200,8 +226,7 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: () =
         description: profileError.message,
         variant: "destructive",
       });
-      // Optionally delete the auth user if profile creation fails
-      // await supabase.auth.admin.deleteUser(userId);
+      // In a real app, you would have a cleanup process for the created auth.user
       return;
     }
 
@@ -763,5 +788,7 @@ export default function AdminPage() {
     </main>
   );
 }
+
+    
 
     
