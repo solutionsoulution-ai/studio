@@ -579,7 +579,7 @@ const updateBalanceSchema = z.object({
 
 
 export type UpdateBalanceInput = z.infer<typeof updateBalanceSchema>;
-export type UpdateBalanceResult = { success: boolean; error?: string; newBalance?: number };
+export type UpdateBalanceResult = { success: boolean; error?: string; };
 
 export async function handleUpdateBalance(formData: UpdateBalanceInput): Promise<UpdateBalanceResult> {
     const parsed = updateBalanceSchema.safeParse(formData);
@@ -589,10 +589,34 @@ export async function handleUpdateBalance(formData: UpdateBalanceInput): Promise
         return { success: false, error: `Données invalides: ${issues}` };
     }
 
-    // Workaround: Since the webhook is unreliable, we'll just return success.
-    // The actual balance update will happen on the client-side in the admin panel
-    // and be stored in localStorage.
-    return { success: true };
+    if (!WEBHOOK_URL) {
+        return { success: false, error: "Le service de mise à jour n'est pas configuré." };
+    }
+
+    try {
+        const response = await fetch(WEBHOOK_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: 'updateBalance', ...parsed.data }),
+        });
+
+        if (!response.ok) {
+            const errorBody = await response.json().catch(() => ({ message: response.statusText }));
+            throw new Error(errorBody.message || `Le serveur a retourné une erreur ${response.status}.`);
+        }
+        
+        // On suppose que la réponse contient le statut du succès.
+        const result = await response.json();
+        if (result.status !== 'success') {
+            throw new Error(result.message || "La mise à jour a échoué pour une raison inconnue.");
+        }
+
+        return { success: true };
+
+    } catch (error: any) {
+        console.error("Erreur lors de la mise à jour du solde:", error);
+        return { success: false, error: error.message };
+    }
 }
     
     
@@ -605,6 +629,7 @@ export async function handleUpdateBalance(formData: UpdateBalanceInput): Promise
     
 
     
+
 
 
 

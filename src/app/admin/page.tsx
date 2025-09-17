@@ -135,7 +135,7 @@ const AdminLoginForm = ({ onLoginSuccess }: { onLoginSuccess: () => void }) => {
 };
 
 
-const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: (client: any) => void }) => {
+const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: () => void }) => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -159,12 +159,12 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: (cli
     const result = await handleCreateClientAndAccount(values);
     setIsLoading(false);
 
-    if (result.success && result.details) {
+    if (result.success) {
       toast({
         title: "Client et Compte Créés !",
         description: `Le compte pour ${values.email} a été créé avec succès.`,
       });
-      onClientCreated(result.details);
+      onClientCreated();
       form.reset();
     } else {
       toast({
@@ -453,7 +453,7 @@ const clientUpdateBalanceSchema = z.object({
 type UpdateBalanceValues = z.infer<typeof clientUpdateBalanceSchema>;
 
 
-const ClientDetailView = ({ client, onBack, onClientDeleted, onBalanceUpdate }: { client: any, onBack: () => void, onClientDeleted: (clientId: string) => void, onBalanceUpdate: (clientId: string, newBalance: number) => void }) => {
+const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onBack: () => void, onClientAction: () => void }) => {
     const { toast } = useToast();
     const [isDeleting, setIsDeleting] = useState(false);
     const [isUpdatingBalance, setIsUpdatingBalance] = useState(false);
@@ -473,7 +473,7 @@ const ClientDetailView = ({ client, onBack, onClientDeleted, onBalanceUpdate }: 
                 title: "Client supprimé",
                 description: "Le client a été supprimé avec succès.",
             });
-            onClientDeleted(client.clientId);
+            onClientAction();
         } else {
             toast({
                 title: "Erreur de suppression",
@@ -485,23 +485,15 @@ const ClientDetailView = ({ client, onBack, onClientDeleted, onBalanceUpdate }: 
 
     const handleBalanceUpdate = async (values: UpdateBalanceValues) => {
         setIsUpdatingBalance(true);
-        // We pass the raw values to the server action
         const result = await handleUpdateBalance({ ...values, clientId: client.clientId, amount: Number(values.amount) });
         setIsUpdatingBalance(false);
 
         if (result.success) {
-            const amount = Number(values.amount);
-            const currentBalance = Number(client.balance) || 0;
-            const newBalance = values.operation === 'credit' ? currentBalance + amount : currentBalance - amount;
-            
-            // This is the client-side update for the UI
-            onBalanceUpdate(client.clientId, newBalance);
-
             toast({
                 title: "Opération réussie !",
-                description: `Le nouveau solde est de ${newBalance.toFixed(2)} €. L'affichage sera mis à jour.`,
+                description: "Le solde du client sera mis à jour après rafraîchissement.",
             });
-            
+            onClientAction();
             balanceForm.reset({amount: '' as any, operation: 'credit', reason: ''});
         } else {
             toast({
@@ -660,20 +652,7 @@ export default function AdminPage() {
       const result = await getClients();
       
       if (result.success && result.data) {
-          const remoteClients = result.data;
-          
-          // Get local updates
-          const localUpdates = JSON.parse(localStorage.getItem('updatedBalances') || '{}');
-          
-          // Merge remote data with local updates
-          const mergedClients = remoteClients.map((client: any) => {
-              if (localUpdates[client.clientId]) {
-                  return { ...client, balance: localUpdates[client.clientId] };
-              }
-              return client;
-          });
-
-          setClients(mergedClients.sort((a,b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime()));
+          setClients(result.data.sort((a,b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime()));
       } else {
           setErrorClients(result.error || "Une erreur est survenue.");
           toast({
@@ -692,44 +671,19 @@ export default function AdminPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAdmin]);
 
-  const handleClientCreation = (newClient: any) => {
-    setClients(prevClients => [newClient, ...prevClients]);
+
+  const handleClientAction = () => {
+    fetchClients();
+    setSelectedClient(null);
   }
   
-  const handleClientDeletion = (clientId: string) => {
-    setClients(prevClients => prevClients.filter(c => c.clientId !== clientId));
-    setSelectedClient(null);
-    
-    // Remove from local storage as well
-    const localUpdates = JSON.parse(localStorage.getItem('updatedBalances') || '{}');
-    delete localUpdates[clientId];
-    localStorage.setItem('updatedBalances', JSON.stringify(localUpdates));
-  }
-
   const handleClientSelection = (client: any) => {
     setSelectedClient(client);
   }
 
   const handleBackToList = () => {
     setSelectedClient(null);
-    fetchClients(); // Re-fetch to see all updates
-  }
-  
-  const handleBalanceUpdate = (clientId: string, newBalance: number) => {
-      // Update local state for immediate feedback
-      const updateClientInState = (client: any) => {
-           if(client.clientId === clientId) {
-               return { ...client, balance: newBalance };
-           }
-           return client;
-      }
-      setClients(prevClients => prevClients.map(updateClientInState));
-      setSelectedClient(prevClient => prevClient ? updateClientInState(prevClient) : null);
-      
-      // Persist the change in localStorage
-      const localUpdates = JSON.parse(localStorage.getItem('updatedBalances') || '{}');
-      localUpdates[clientId] = newBalance;
-      localStorage.setItem('updatedBalances', JSON.stringify(localUpdates));
+    fetchClients(); // Re-fetch to see any updates
   }
 
 
@@ -751,11 +705,10 @@ export default function AdminPage() {
                 <ClientDetailView 
                     client={selectedClient} 
                     onBack={handleBackToList} 
-                    onClientDeleted={handleClientDeletion}
-                    onBalanceUpdate={handleBalanceUpdate}
+                    onClientAction={handleClientAction}
                 />
             ) : (
-                <CreateClientAndAccountForm onClientCreated={handleClientCreation} />
+                <CreateClientAndAccountForm onClientCreated={handleClientAction} />
             )}
             <ClientList 
                 clients={clients} 
@@ -768,4 +721,5 @@ export default function AdminPage() {
     </main>
   );
 }
+
 
