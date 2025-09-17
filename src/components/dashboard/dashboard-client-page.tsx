@@ -57,22 +57,25 @@ export default function DashboardClientPage() {
     const router = useRouter();
     
     const fetchAccountData = useCallback(() => {
-        setIsLoading(true);
-        setError(null);
-        if (typeof window === 'undefined') return;
-
-        const userEmail = localStorage.getItem("userEmail");
-        if (!userEmail) {
-            toast({
-                title: "Accès non autorisé",
-                description: "Veuillez vous connecter pour accéder à votre espace.",
-                variant: "destructive",
-            });
-            router.push("/login");
+        if (typeof window === 'undefined') {
             return;
         }
 
+        setIsLoading(true);
+        setError(null);
+        
         try {
+            const userEmail = localStorage.getItem("userEmail");
+            if (!userEmail) {
+                toast({
+                    title: "Accès non autorisé",
+                    description: "Veuillez vous connecter pour accéder à votre espace.",
+                    variant: "destructive",
+                });
+                router.push("/login");
+                return;
+            }
+
             const clientDataString = localStorage.getItem('clientData');
             const allClients = clientDataString ? JSON.parse(clientDataString) : [];
             const clientData = allClients.find((client: any) => client.email === userEmail);
@@ -80,7 +83,7 @@ export default function DashboardClientPage() {
             if (clientData) {
                 setAccountData(clientData);
             } else {
-                 throw new Error("Impossible de trouver vos données de compte. Veuillez vous reconnecter.");
+                 throw new Error("Impossible de trouver les données de votre compte. Veuillez vous reconnecter.");
             }
         } catch (e: any) {
             setError(e.message || "Une erreur est survenue lors de la récupération des données.");
@@ -89,8 +92,9 @@ export default function DashboardClientPage() {
                 description: e.message || "Impossible de récupérer les données du compte.",
                 variant: "destructive",
             });
+        } finally {
+            setIsLoading(false);
         }
-        setIsLoading(false);
     }, [router, toast]);
     
     useEffect(() => {
@@ -175,11 +179,11 @@ export default function DashboardClientPage() {
   if (error || !accountData) {
       return (
           <div className="container mx-auto py-16 text-center">
-                <h1 className="text-2xl font-bold">Erreur</h1>
-                <p className="text-muted-foreground">{error || "Impossible de charger les données de votre compte."}</p>
+                <h1 className="text-2xl font-bold text-destructive">Erreur de chargement</h1>
+                <p className="text-muted-foreground mt-2">{error || "Impossible de charger les données de votre compte."}</p>
                  <Button onClick={handleLogout} className="mt-4">
                     <LogOut className="mr-2 h-4 w-4" />
-                    Retour à l'accueil
+                    Retour à l'accueil et se reconnecter
                 </Button>
           </div>
       )
@@ -343,4 +347,4 @@ export default function DashboardClientPage() {
   );
 }
 
-    
+  

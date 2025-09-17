@@ -659,20 +659,19 @@ export default function AdminPage() {
     setIsClient(true);
   }, []);
 
-  const fetchClients = useCallback(() => {
-      if (!isClient) return;
+  const fetchClients = () => {
       setIsLoadingClients(true);
       const localClients = getLocalClients();
       const sortedClients = localClients.sort((a:any, b:any) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
       setClients(sortedClients);
       setIsLoadingClients(false);
-  }, [isClient]);
+  };
 
   useEffect(() => {
     if (isAdmin && isClient) {
       fetchClients();
     }
-  }, [isAdmin, fetchClients, isClient]);
+  }, [isAdmin, isClient]);
 
   const handleClientAction = () => {
     fetchClients();
@@ -699,7 +698,6 @@ export default function AdminPage() {
       </main>
     );
   }
-
 
   if (!isAdmin) {
     return (
@@ -734,3 +732,7 @@ export default function AdminPage() {
     </main>
   );
 }
+
+  
+
+    
