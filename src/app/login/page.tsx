@@ -57,13 +57,12 @@ export default function LoginPage() {
     
     setIsLoading(true);
 
-    const { data: profile, error: profileError } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('client_id', values.clientId)
-      .single();
+    const { data: authResult, error: authError } = await supabase.rpc('verify_password', {
+        p_client_id: values.clientId,
+        p_password: values.password
+    });
 
-    if (profileError || !profile) {
+    if (authError || !authResult) {
       setIsLoading(false);
       toast({
         title: "Erreur de connexion",
@@ -73,18 +72,18 @@ export default function LoginPage() {
       return;
     }
     
-    const { data: authResult, error: authError } = await supabase.rpc('verify_password', {
-        p_client_id: values.clientId,
-        p_password: values.password
-    });
-
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('client_id', values.clientId)
+      .single();
 
     setIsLoading(false);
 
-    if (authError || !authResult) {
-      toast({
+    if (profileError || !profile) {
+       toast({
         title: "Erreur de connexion",
-        description: "Identifiant client ou mot de passe incorrect.",
+        description: "Impossible de récupérer les informations du profil après la connexion.",
         variant: "destructive",
       });
     } else {
