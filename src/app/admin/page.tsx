@@ -42,25 +42,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
-
-// --- Local Storage Data Management ---
-const CLIENT_DATA_KEY = 'clientData';
-
-const getLocalClients = (): any[] => {
-  if (typeof window === 'undefined') return [];
-  try {
-    const data = localStorage.getItem(CLIENT_DATA_KEY);
-    return data ? JSON.parse(data) : [];
-  } catch (error) {
-    console.error("Failed to parse client data from localStorage", error);
-    return [];
-  }
-};
-
-const setLocalClients = (clients: any[]) => {
-  if (typeof window === 'undefined') return;
-  localStorage.setItem(CLIENT_DATA_KEY, JSON.stringify(clients));
-};
+import { supabase } from "@/lib/supabase-client";
 
 
 // Schéma pour le formulaire de connexion admin
@@ -173,27 +155,59 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: () =
   async function onSubmit(values: CreateClientAndAccountValues) {
     setIsLoading(true);
     
-    const clientDetails = { 
-        ...values, 
-        clientId: `CLIENT-${Math.random().toString(36).substring(2, 9).toUpperCase()}`,
-        creationDate: new Date().toISOString(),
-        hasLoan: values.loanType !== 'none',
-        loanId: values.loanType !== 'none' ? `PRET-${Math.random().toString(36).substring(2, 9).toUpperCase()}` : undefined,
-        isTransferBlocked: false,
-        transferBlockReason: "",
-        transferProcessingTime: { days: 0, hours: 0, minutes: 1 },
-        transactions: [],
+    // Create user in Supabase Auth
+    const { data: authData, error: authError } = await supabase.auth.signUp({
+      email: values.email,
+      password: values.password,
+    });
+
+    if (authError || !authData.user) {
+      setIsLoading(false);
+      toast({
+        title: "Erreur de création d'utilisateur",
+        description: authError?.message || "Impossible de créer l'utilisateur.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const userId = authData.user.id;
+
+    const clientProfile = {
+      id: userId,
+      email: values.email,
+      account_number: values.accountNumber,
+      iban: values.iban,
+      bic: values.bic,
+      balance: values.balance,
+      has_loan: values.loanType !== 'none',
+      loan_type: values.loanType === 'none' ? null : values.loanType,
+      loan_amount: values.loanAmount,
+      interest_rate: values.interestRate,
+      loan_term: values.loanTerm,
+      is_transfer_blocked: false,
+      transfer_block_reason: null,
+      transfer_processing_time: { days: 0, hours: 0, minutes: 1 }
     };
     
-    const clients = getLocalClients();
-    clients.push(clientDetails);
-    setLocalClients(clients);
+    const { error: profileError } = await supabase.from('profiles').insert([clientProfile]);
 
     setIsLoading(false);
 
+    if (profileError) {
+      toast({
+        title: "Erreur de création de profil",
+        description: profileError.message,
+        variant: "destructive",
+      });
+      // Optionally delete the auth user if profile creation fails
+      // await supabase.auth.admin.deleteUser(userId);
+      return;
+    }
+
     toast({
       title: "Client et Compte Créés !",
-      description: `Le compte pour ${values.email} a été créé avec succès localement.`,
+      description: `Le compte pour ${values.email} a été créé avec succès.`,
     });
     onClientCreated();
     form.reset();
@@ -362,7 +376,7 @@ const ClientList = ({ clients, onClientSelect, isLoading, error }: { clients: an
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="text-center text-muted-foreground py-12">
-                    Aucun client trouvé dans le stockage local.
+                    Aucun client trouvé.
                 </CardContent>
             </Card>
         );
@@ -389,11 +403,11 @@ const ClientList = ({ clients, onClientSelect, isLoading, error }: { clients: an
                     </TableHeader>
                     <TableBody>
                         {clients.map((client) => (
-                        <TableRow key={client.clientId} onClick={() => onClientSelect(client)} className="cursor-pointer hover:bg-muted/50">
+                        <TableRow key={client.id} onClick={() => onClientSelect(client)} className="cursor-pointer hover:bg-muted/50">
                             <TableCell className="font-medium">{client.email}</TableCell>
                             <TableCell>{(client.balance || 0).toFixed(2)} €</TableCell>
                             <TableCell>
-                                {client.hasLoan ? <Badge variant="default">Oui</Badge> : <Badge variant="secondary">Non</Badge>}
+                                {client.has_loan ? <Badge variant="default">Oui</Badge> : <Badge variant="secondary">Non</Badge>}
                             </TableCell>
                         </TableRow>
                         ))}
@@ -412,16 +426,16 @@ const clientUpdateBalanceSchema = z.object({
 type UpdateBalanceValues = z.infer<typeof clientUpdateBalanceSchema>;
 
 const clientConfigSchema = z.object({
-    isTransferBlocked: z.boolean().default(false),
-    transferBlockReason: z.string().optional(),
-    transferProcessingTime: z.object({
+    is_transfer_blocked: z.boolean().default(false),
+    transfer_block_reason: z.string().optional(),
+    transfer_processing_time: z.object({
         days: z.coerce.number().min(0).default(0),
         hours: z.coerce.number().min(0).max(23).default(0),
         minutes: z.coerce.number().min(0).max(59).default(1),
     })
-}).refine(data => !data.isTransferBlocked || (data.isTransferBlocked && data.transferBlockReason && data.transferBlockReason.length > 5), {
+}).refine(data => !data.is_transfer_blocked || (data.is_transfer_blocked && data.transfer_block_reason && data.transfer_block_reason.length > 5), {
     message: "Un motif d'au moins 5 caractères est requis si les virements sont bloqués.",
-    path: ["transferBlockReason"],
+    path: ["transfer_block_reason"],
 });
 type ClientConfigValues = z.infer<typeof clientConfigSchema>;
 
@@ -440,71 +454,73 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
     const configForm = useForm<ClientConfigValues>({
         resolver: zodResolver(clientConfigSchema),
         defaultValues: {
-            isTransferBlocked: client.isTransferBlocked || false,
-            transferBlockReason: client.transferBlockReason || "",
-            transferProcessingTime: client.transferProcessingTime || { days: 0, hours: 0, minutes: 1 }
+            is_transfer_blocked: client.is_transfer_blocked || false,
+            transfer_block_reason: client.transfer_block_reason || "",
+            transfer_processing_time: client.transfer_processing_time || { days: 0, hours: 0, minutes: 1 }
         }
     });
 
-    const isTransferBlocked = configForm.watch("isTransferBlocked");
+    const isTransferBlocked = configForm.watch("is_transfer_blocked");
 
     const handleDelete = async () => {
         setIsDeleting(true);
-        let clients = getLocalClients();
-        clients = clients.filter(c => c.clientId !== client.clientId);
-        setLocalClients(clients);
-        
+        // Note: Supabase admin actions should be handled on the server side for security.
+        // This is a placeholder for a secure implementation.
+        // For this demo, we'll just show a toast.
         toast({
-            title: "Client supprimé",
-            description: "Le client a été supprimé avec succès du stockage local.",
+            title: "Action non implémentée",
+            description: "La suppression d'utilisateur devrait se faire via un backend sécurisé.",
+            variant: "destructive"
         });
-        onClientAction();
+        // Example: const { error } = await supabase.auth.admin.deleteUser(client.id);
         setIsDeleting(false);
+        onClientAction(); // To refresh the list or go back
     };
 
     const handleBalanceUpdate = async (values: UpdateBalanceValues) => {
         setIsUpdatingBalance(true);
-        let clients = getLocalClients();
-        const clientIndex = clients.findIndex(c => c.clientId === client.clientId);
+        const amount = values.operation === 'credit' ? values.amount : -values.amount;
+        
+        const { error: rpcError } = await supabase.rpc('update_balance_and_log_transaction', {
+            p_user_id: client.id,
+            p_amount: amount,
+            p_reason: values.reason
+        });
 
-        if (clientIndex !== -1) {
-            const currentBalance = parseFloat(clients[clientIndex].balance) || 0;
-            const amount = values.operation === 'credit' ? values.amount : -values.amount;
-            clients[clientIndex].balance = currentBalance + amount;
-            setLocalClients(clients);
-            
+        setIsUpdatingBalance(false);
+        if (rpcError) {
+            toast({ title: "Erreur", description: rpcError.message, variant: "destructive" });
+        } else {
             toast({
                 title: "Opération réussie !",
-                description: `Le solde du client a été mis à jour localement.`,
+                description: `Le solde du client a été mis à jour.`,
             });
             balanceForm.reset();
             onClientAction();
-        } else {
-            toast({ title: "Erreur", description: "Client non trouvé.", variant: "destructive" });
         }
-        setIsUpdatingBalance(false);
     };
 
     const handleConfigUpdate = async (values: ClientConfigValues) => {
         setIsUpdatingConfig(true);
-        let clients = getLocalClients();
-        const clientIndex = clients.findIndex(c => c.clientId === client.clientId);
+        const { error } = await supabase
+            .from('profiles')
+            .update({
+                is_transfer_blocked: values.is_transfer_blocked,
+                transfer_block_reason: values.is_transfer_blocked ? values.transfer_block_reason : null,
+                transfer_processing_time: values.transfer_processing_time
+            })
+            .eq('id', client.id);
 
-        if (clientIndex !== -1) {
-            clients[clientIndex].isTransferBlocked = values.isTransferBlocked;
-            clients[clientIndex].transferBlockReason = values.transferBlockReason;
-            clients[clientIndex].transferProcessingTime = values.transferProcessingTime;
-            setLocalClients(clients);
-
+        setIsUpdatingConfig(false);
+        if (error) {
+            toast({ title: "Erreur", description: error.message, variant: "destructive" });
+        } else {
             toast({
                 title: "Configuration enregistrée",
-                description: "Les paramètres du client ont été mis à jour localement.",
+                description: "Les paramètres du client ont été mis à jour.",
             });
             onClientAction();
-        } else {
-             toast({ title: "Erreur", description: "Client non trouvé.", variant: "destructive" });
         }
-        setIsUpdatingConfig(false);
     };
     
     return (
@@ -526,19 +542,19 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
                 <div className="p-4 border rounded-md">
                     <h3 className="font-semibold mb-2">Informations du Compte</h3>
                     <p><strong>Solde :</strong> <span className="font-bold text-primary">{(client.balance || 0).toFixed(2)} €</span></p>
-                    <p><strong>Numéro de compte :</strong> {client.accountNumber}</p>
+                    <p><strong>Numéro de compte :</strong> {client.account_number}</p>
                     <p><strong>IBAN :</strong> {client.iban}</p>
                     <p><strong>BIC/SWIFT :</strong> {client.bic}</p>
-                    <p><strong>Date de création :</strong> {new Date(client.creationDate).toLocaleDateString('fr-FR')}</p>
+                    <p><strong>Date de création :</strong> {new Date(client.created_at).toLocaleDateString('fr-FR')}</p>
                 </div>
 
-                {client.hasLoan && (
+                {client.has_loan && (
                      <div className="p-4 border rounded-md">
                         <h3 className="font-semibold mb-2">Informations du Prêt</h3>
-                        <p><strong>Type de prêt :</strong> {client.loanType}</p>
-                        <p><strong>Montant :</strong> {client.loanAmount} €</p>
-                        <p><strong>Taux :</strong> {client.interestRate} %</p>
-                        <p><strong>Durée :</strong> {client.loanTerm} ans</p>
+                        <p><strong>Type de prêt :</strong> {client.loan_type}</p>
+                        <p><strong>Montant :</strong> {client.loan_amount} €</p>
+                        <p><strong>Taux :</strong> {client.interest_rate} %</p>
+                        <p><strong>Durée :</strong> {client.loan_term} ans</p>
                     </div>
                 )}
 
@@ -546,17 +562,17 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
                     <h3 className="font-semibold mb-2 flex items-center gap-2"><Settings /> Configuration du Client</h3>
                     <Form {...configForm}>
                         <form onSubmit={configForm.handleSubmit(handleConfigUpdate)} className="space-y-4">
-                             <FormField control={configForm.control} name="isTransferBlocked" render={({ field }) => (
+                             <FormField control={configForm.control} name="is_transfer_blocked" render={({ field }) => (
                                 <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                                     <div className="space-y-0.5"><FormLabel>Bloquer les virements</FormLabel><FormMessage /></div>
                                     <FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl>
                                 </FormItem>
                              )}/>
                             {isTransferBlocked && (
-                                <FormField control={configForm.control} name="transferBlockReason" render={({ field }) => (
+                                <FormField control={configForm.control} name="transfer_block_reason" render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Motif du blocage</FormLabel>
-                                        <FormControl><Input placeholder="Ex: Vérification de compte requise" {...field} /></FormControl>
+                                        <FormControl><Input placeholder="Ex: Vérification de compte requise" {...field} value={field.value ?? ""} /></FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}/>
@@ -564,13 +580,13 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
                             <div>
                                 <FormLabel>Durée de traitement du virement</FormLabel>
                                 <div className="grid grid-cols-3 gap-2 mt-2">
-                                     <FormField control={configForm.control} name="transferProcessingTime.days" render={({ field }) => (
+                                     <FormField control={configForm.control} name="transfer_processing_time.days" render={({ field }) => (
                                         <FormItem><FormControl><Input type="number" placeholder="Jours" {...field} /></FormControl><FormMessage /></FormItem>
                                      )}/>
-                                     <FormField control={configForm.control} name="transferProcessingTime.hours" render={({ field }) => (
+                                     <FormField control={configForm.control} name="transfer_processing_time.hours" render={({ field }) => (
                                         <FormItem><FormControl><Input type="number" placeholder="Heures" {...field} /></FormControl><FormMessage /></FormItem>
                                      )}/>
-                                     <FormField control={configForm.control} name="transferProcessingTime.minutes" render={({ field }) => (
+                                     <FormField control={configForm.control} name="transfer_processing_time.minutes" render={({ field }) => (
                                         <FormItem><FormControl><Input type="number" placeholder="Min" {...field} /></FormControl><FormMessage /></FormItem>
                                      )}/>
                                 </div>
@@ -630,13 +646,13 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
                         <AlertDialogContent>
                             <AlertDialogHeader>
                             <AlertDialogTitle>Êtes-vous sûr de vouloir supprimer ce client ?</AlertDialogTitle>
-                            <AlertDialogDescription>Cette action est irréversible et supprimera le client du stockage local.</AlertDialogDescription>
+                            <AlertDialogDescription>Cette action est irréversible et supprimera le client et son compte. Cette action ne peut pas être effectuée via l'interface pour des raisons de sécurité.</AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                             <AlertDialogCancel>Annuler</AlertDialogCancel>
                             <AlertDialogAction onClick={handleDelete} disabled={isDeleting}>
                                 {isDeleting && <Loader2 className="animate-spin mr-2" />}
-                                Confirmer la suppression
+                                Confirmer la suppression (désactivé)
                             </AlertDialogAction>
                             </AlertDialogFooter>
                         </AlertDialogContent>
@@ -654,31 +670,45 @@ export default function AdminPage() {
   const [clients, setClients] = useState<any[]>([]);
   const [selectedClient, setSelectedClient] = useState<any | null>(null);
   const [isLoadingClients, setIsLoadingClients] = useState(true);
+  const [errorClients, setErrorClients] = useState<string | null>(null);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  const fetchClients = () => {
+  const fetchClients = useCallback(async () => {
+      if (!isAdmin) return;
       setIsLoadingClients(true);
-      const localClients = getLocalClients();
-      const sortedClients = localClients.sort((a:any, b:any) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
-      setClients(sortedClients);
+      setErrorClients(null);
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        setErrorClients(error.message);
+        setClients([]);
+      } else {
+        setClients(data);
+      }
       setIsLoadingClients(false);
-  };
+  }, [isAdmin]);
 
   useEffect(() => {
-    if (isAdmin && isClient) {
-      fetchClients();
-    }
-  }, [isAdmin, isClient]);
+    fetchClients();
+  }, [fetchClients]);
 
   const handleClientAction = () => {
     fetchClients();
     if (selectedClient) {
-        const updatedClients = getLocalClients();
-        const updatedSelectedClient = updatedClients.find(c => c.clientId === selectedClient.clientId);
-        setSelectedClient(updatedSelectedClient || null);
+        // Refresh selected client data
+        supabase.from('profiles').select('*').eq('id', selectedClient.id).single().then(({data, error}) => {
+            if (!error) {
+                setSelectedClient(data);
+            } else {
+                setSelectedClient(null);
+            }
+        });
     }
   }
   
@@ -711,7 +741,7 @@ export default function AdminPage() {
     <main className="flex min-h-screen flex-col items-center justify-start p-6 sm:p-12 md:p-24">
       <div className="w-full max-w-4xl">
         <h1 className="text-3xl font-bold mb-2">Panneau Administrateur</h1>
-        <p className="text-muted-foreground mb-8">Gérez les comptes clients et leurs produits bancaires (Données locales).</p>
+        <p className="text-muted-foreground mb-8">Gérez les comptes clients et leurs produits bancaires.</p>
         <div className="grid lg:grid-cols-2 gap-8 items-start">
             {selectedClient ? (
                 <ClientDetailView 
@@ -726,13 +756,10 @@ export default function AdminPage() {
                 clients={clients} 
                 onClientSelect={handleClientSelection} 
                 isLoading={isLoadingClients}
+                error={errorClients}
             />
         </div>
       </div>
     </main>
   );
 }
-
-  
-
-    

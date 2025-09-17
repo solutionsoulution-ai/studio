@@ -21,6 +21,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2, LogIn } from "lucide-react";
 import SiteHeader from "@/components/site/site-header";
 import SiteFooter from "@/components/site/site-footer";
+import { supabase } from "@/lib/supabase-client";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Veuillez entrer une adresse e-mail valide." }),
@@ -52,37 +53,27 @@ export default function LoginPage() {
     
     setIsLoading(true);
 
-    try {
-        const clientData = localStorage.getItem('clientData');
-        const clients = clientData ? JSON.parse(clientData) : [];
-        const foundClient = clients.find(
-            (client: any) => client.email === values.email && client.password === values.password
-        );
-
-        if (foundClient) {
-            localStorage.setItem("userEmail", foundClient.email);
-            toast({
-                title: "Connexion réussie !",
-                description: "Vous allez être redirigé vers votre espace client.",
-                variant: "default",
-            });
-            router.push("/dashboard");
-        } else {
-            toast({
-                title: "Erreur de connexion",
-                description: "Vos identifiants sont incorrects ou aucun client n'a été créé.",
-                variant: "destructive",
-            });
-        }
-    } catch (error) {
-        toast({
-            title: "Erreur de connexion",
-            description: "Un problème est survenu lors de la tentative de connexion.",
-            variant: "destructive",
-        });
-    }
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: values.email,
+      password: values.password,
+    });
 
     setIsLoading(false);
+
+    if (error) {
+      toast({
+        title: "Erreur de connexion",
+        description: error.message || "Vos identifiants sont incorrects.",
+        variant: "destructive",
+      });
+    } else if (data.user) {
+      toast({
+        title: "Connexion réussie !",
+        description: "Vous allez être redirigé vers votre espace client.",
+        variant: "default",
+      });
+      router.push("/dashboard");
+    }
   }
 
   return (

@@ -14,6 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter } from "next/navigation";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { supabase } from "@/lib/supabase-client";
 
 
 const formatCurrency = (value: number) => {
@@ -51,101 +52,91 @@ const InfoRow = ({ label, value }: { label: string; value: string }) => {
 
 export default function DashboardClientPage() {
     const [accountData, setAccountData] = useState<any>(null);
+    const [transactions, setTransactions] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const { toast } = useToast();
     const router = useRouter();
     
-    const fetchAccountData = useCallback(() => {
-        if (typeof window === 'undefined') {
-            return;
-        }
+    const fetchAccountData = useCallback(async () => {
+      setIsLoading(true);
+      setError(null);
+      
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
-        setIsLoading(true);
-        setError(null);
+      if (sessionError || !session) {
+        toast({ title: "Accès non autorisé", description: "Veuillez vous reconnecter.", variant: "destructive" });
+        router.push("/login");
+        return;
+      }
+
+      const user = session.user;
+      
+      try {
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', user.id)
+          .single();
+
+        if (profileError) throw profileError;
+        setAccountData(profile);
         
-        try {
-            const userEmail = localStorage.getItem("userEmail");
-            if (!userEmail) {
-                toast({
-                    title: "Accès non autorisé",
-                    description: "Veuillez vous connecter pour accéder à votre espace.",
-                    variant: "destructive",
-                });
-                router.push("/login");
-                return;
-            }
+        const { data: transactionsData, error: transactionsError } = await supabase
+          .from('transactions')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false });
 
-            const clientDataString = localStorage.getItem('clientData');
-            const allClients = clientDataString ? JSON.parse(clientDataString) : [];
-            const clientData = allClients.find((client: any) => client.email === userEmail);
+        if (transactionsError) throw transactionsError;
+        setTransactions(transactionsData);
 
-            if (clientData) {
-                setAccountData(clientData);
-            } else {
-                 throw new Error("Impossible de trouver les données de votre compte. Veuillez vous reconnecter.");
-            }
-        } catch (e: any) {
-            setError(e.message || "Une erreur est survenue lors de la récupération des données.");
-            toast({
-                title: "Erreur de chargement",
-                description: e.message || "Impossible de récupérer les données du compte.",
-                variant: "destructive",
-            });
-        } finally {
-            setIsLoading(false);
-        }
+      } catch (e: any) {
+        setError(e.message || "Une erreur est survenue lors de la récupération des données.");
+        toast({ title: "Erreur de chargement", description: e.message, variant: "destructive" });
+      } finally {
+        setIsLoading(false);
+      }
     }, [router, toast]);
     
     useEffect(() => {
         fetchAccountData();
     }, [fetchAccountData]);
     
-    const handleLogout = () => {
-        localStorage.removeItem("userEmail");
+    const handleLogout = async () => {
+        await supabase.auth.signOut();
         toast({ title: "Déconnexion réussie." });
         router.push("/");
     };
 
-    const handleTransferSuccess = (transferData: TransferFormInput) => {
-        if(typeof window === 'undefined') return;
-        
-        const clientDataString = localStorage.getItem('clientData');
-        let allClients = clientDataString ? JSON.parse(clientDataString) : [];
-        const userEmail = localStorage.getItem("userEmail");
+    const handleTransferSuccess = async (transferData: TransferFormInput) => {
+        if (!accountData) return;
 
-        const clientIndex = allClients.findIndex((c: any) => c.email === userEmail);
+        const { error: rpcError } = await supabase.rpc('process_transfer', {
+            p_sender_id: accountData.id,
+            p_recipient_iban: transferData.recipientIban,
+            p_recipient_name: transferData.recipientName,
+            p_amount: transferData.amount,
+            p_reason: transferData.reason,
+        });
 
-        if (clientIndex !== -1) {
-            allClients[clientIndex].balance -= transferData.amount;
-
-            if (!allClients[clientIndex].transactions) {
-                allClients[clientIndex].transactions = [];
-            }
-            const newTransaction = {
-                id: `TX-${Date.now()}`,
-                type: `Virement à ${transferData.recipientName}`,
-                amount: -transferData.amount,
-                date: new Date().toISOString(),
-            };
-            allClients[clientIndex].transactions.unshift(newTransaction);
-            
-            localStorage.setItem('clientData', JSON.stringify(allClients));
-            
-            fetchAccountData();
+        if (rpcError) {
+             toast({ title: "Erreur de virement", description: rpcError.message, variant: "destructive"});
+        } else {
+             fetchAccountData(); // Refresh data after transfer
         }
     };
     
     const { totalIncome, totalExpenses } = useMemo(() => {
-        if (!accountData || !accountData.transactions) return { totalIncome: 0, totalExpenses: 0 };
-        const income = accountData.transactions
+        if (!transactions) return { totalIncome: 0, totalExpenses: 0 };
+        const income = transactions
             .filter((tx: any) => tx.amount > 0)
             .reduce((sum: number, tx: any) => sum + tx.amount, 0);
-        const expenses = accountData.transactions
+        const expenses = transactions
             .filter((tx: any) => tx.amount < 0)
             .reduce((sum: number, tx: any) => sum + tx.amount, 0);
         return { totalIncome: income, totalExpenses: expenses };
-    }, [accountData]);
+    }, [transactions]);
 
 
   if (isLoading) {
@@ -193,7 +184,7 @@ export default function DashboardClientPage() {
     <div className="container mx-auto py-16">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
             <div>
-                <h1 className="text-3xl font-bold font-headline">Bienvenue, {accountData.firstName || 'Client'} !</h1>
+                <h1 className="text-3xl font-bold font-headline">Bienvenue, {accountData.email || 'Client'} !</h1>
                 <p className="text-muted-foreground flex items-center gap-2 mt-1">
                     C'est un plaisir de vous revoir sur votre espace client.
                 </p>
@@ -219,7 +210,7 @@ export default function DashboardClientPage() {
                         </CardHeader>
                         <CardContent>
                             <p className="text-3xl font-bold text-primary">{formatCurrency(accountData.balance)}</p>
-                            <p className="text-xs text-muted-foreground pt-1">Compte Courant : ...{accountData.accountNumber?.slice(-4)}</p>
+                            <p className="text-xs text-muted-foreground pt-1">Compte Courant : ...{accountData.account_number?.slice(-4)}</p>
                         </CardContent>
                     </Card>
                      <Card>
@@ -272,15 +263,15 @@ export default function DashboardClientPage() {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {accountData.transactions && accountData.transactions.length > 0 ? (
-                                            accountData.transactions.map((tx: any) => (
+                                        {transactions && transactions.length > 0 ? (
+                                            transactions.map((tx: any) => (
                                                 <TableRow key={tx.id}>
                                                     <TableCell className="font-medium flex items-center gap-2">
                                                         {tx.amount > 0 ? <ArrowDownLeft className="w-4 h-4 text-green-500"/> : <ArrowUpRight className="w-4 h-4 text-red-500" />}
-                                                        {tx.type}
+                                                        {tx.reason}
                                                     </TableCell>
                                                     <TableCell className={`text-right font-semibold ${tx.amount > 0 ? 'text-green-600' : 'text-red-600'}`}>{formatCurrency(tx.amount)}</TableCell>
-                                                    <TableCell className="hidden sm:table-cell text-right text-muted-foreground">{new Date(tx.date).toLocaleDateString('fr-FR')}</TableCell>
+                                                    <TableCell className="hidden sm:table-cell text-right text-muted-foreground">{new Date(tx.created_at).toLocaleDateString('fr-FR')}</TableCell>
                                                 </TableRow>
                                             ))
                                         ) : (
@@ -306,18 +297,18 @@ export default function DashboardClientPage() {
                         <CardDescription>Transférez de l'argent facilement et en toute sécurité.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        {accountData.isTransferBlocked ? (
+                        {accountData.is_transfer_blocked ? (
                             <Alert variant="destructive">
                                 <Ban className="h-4 w-4" />
                                 <AlertTitle>Virements Bloqués</AlertTitle>
                                 <AlertDescription>
-                                    {accountData.transferBlockReason || "Vos virements sont actuellement suspendus. Veuillez contacter le support."}
+                                    {accountData.transfer_block_reason || "Vos virements sont actuellement suspendus. Veuillez contacter le support."}
                                 </AlertDescription>
                             </Alert>
                         ) : (
                             <TransferForm 
                                 onTransferSuccess={handleTransferSuccess} 
-                                processingTimeConfig={accountData.transferProcessingTime}
+                                processingTimeConfig={accountData.transfer_processing_time}
                             />
                         )}
                     </CardContent>
@@ -346,5 +337,3 @@ export default function DashboardClientPage() {
     </div>
   );
 }
-
-  
