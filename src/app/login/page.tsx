@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -33,6 +33,11 @@ export default function LoginPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -43,6 +48,8 @@ export default function LoginPage() {
   });
 
   async function onSubmit(values: FormValues) {
+    if (!isClient) return;
+    
     setIsLoading(true);
 
     try {
@@ -88,44 +95,50 @@ export default function LoginPage() {
             <CardDescription>Connectez-vous pour accéder à votre tableau de bord.</CardDescription>
           </CardHeader>
           <CardContent>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Adresse E-mail</FormLabel>
-                      <FormControl>
-                        <Input type="email" placeholder="vous@exemple.com" {...field} disabled={isLoading} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Mot de passe</FormLabel>
-                      <FormControl>
-                        <Input type="password" placeholder="••••••••" {...field} disabled={isLoading} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button type="submit" size="lg" className="w-full" disabled={isLoading}>
-                  {isLoading ? (
-                    <Loader2 className="animate-spin" />
-                  ) : (
-                    <LogIn />
-                  )}
-                  Se connecter
-                </Button>
-              </form>
-            </Form>
+            {!isClient ? (
+              <div className="flex justify-center items-center h-48">
+                <Loader2 className="animate-spin" />
+              </div>
+            ) : (
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Adresse E-mail</FormLabel>
+                        <FormControl>
+                          <Input type="email" placeholder="vous@exemple.com" {...field} disabled={isLoading} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Mot de passe</FormLabel>
+                        <FormControl>
+                          <Input type="password" placeholder="••••••••" {...field} disabled={isLoading} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <Button type="submit" size="lg" className="w-full" disabled={isLoading}>
+                    {isLoading ? (
+                      <Loader2 className="animate-spin" />
+                    ) : (
+                      <LogIn />
+                    )}
+                    Se connecter
+                  </Button>
+                </form>
+              </Form>
+            )}
           </CardContent>
         </Card>
       </main>
