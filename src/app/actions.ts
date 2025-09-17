@@ -157,6 +157,13 @@ export async function handleLogin(formData: LoginInput): Promise<AuthResult> {
 
   const { email, password } = parsed.data;
 
+  // **NOUVELLE LOGIQUE : Vérification du compte de test en priorité**
+  if (email === 'client@test.com' && password === 'password') {
+    console.log("Connexion de l'utilisateur de test réussie (prioritaire).");
+    return { success: true, email: email };
+  }
+
+  // Si ce ne sont pas les identifiants de test, on tente la connexion via le webhook
   if (WEBHOOK_URL) {
     try {
       const response = await fetch(WEBHOOK_URL, {
@@ -178,18 +185,12 @@ export async function handleLogin(formData: LoginInput): Promise<AuthResult> {
 
     } catch (error: any) {
       console.error("Erreur lors de l'appel au webhook de connexion:", error);
-      // Ne pas retourner d'erreur ici pour permettre le fallback
+      return { success: false, error: `Service d'authentification indisponible. ${error.message}` };
     }
   }
 
-  // Fallback pour le test local si aucun webhook n'est configuré ou si le webhook échoue
-  if (email === 'client@test.com' && password === 'password') {
-    console.log("Connexion de l'utilisateur de test réussie (fallback).");
-    return { success: true, email: email };
-  }
-
-  console.log("Tentative de connexion (échec du webhook ou aucun webhook configuré):", parsed.data);
-  return { success: false, error: "Service d'authentification indisponible ou identifiants incorrects." };
+  // Message d'erreur final si aucune autre condition n'est remplie
+  return { success: false, error: "Identifiants incorrects." };
 }
 
 
@@ -304,34 +305,7 @@ export async function getAccountData(email: string): Promise<AccountDataResult> 
     return { success: false, error: "L'e-mail du client est manquant." };
   }
 
-  if (WEBHOOK_URL) {
-    try {
-      const url = new URL(WEBHOOK_URL);
-      url.searchParams.append("action", "getClientData");
-      url.searchParams.append("email", email);
-
-      const response = await fetch(url.toString(), {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        cache: "no-store",
-      });
-
-      if (!response.ok) {
-        const errorBody = await response.text();
-        throw new Error(`Le webhook a retourné une erreur: ${response.statusText}. Body: ${errorBody}`);
-      }
-      const data = await response.json();
-      if (data.error) {
-        throw new Error(data.error);
-      }
-      return { success: true, data };
-    } catch (error: any) {
-      console.error("Erreur lors de la récupération des données du compte client:", error);
-      // Fallback si le webhook échoue
-    }
-  }
-
-  // Fallback pour le test local si aucun webhook n'est configuré ou si le webhook échoue
+  // Fallback pour le test local si l'email correspond
   if (email === "client@test.com") {
     return {
       success: true,
@@ -355,8 +329,35 @@ export async function getAccountData(email: string): Promise<AccountDataResult> 
       },
     };
   }
+  
+  if (WEBHOOK_URL) {
+    try {
+      const url = new URL(WEBHOOK_URL);
+      url.searchParams.append("action", "getClientData");
+      url.searchParams.append("email", email);
 
-  return { success: false, error: "Service de données client indisponible et utilisateur de test non trouvé." };
+      const response = await fetch(url.toString(), {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        const errorBody = await response.text();
+        throw new Error(`Le webhook a retourné une erreur: ${response.statusText}. Body: ${errorBody}`);
+      }
+      const data = await response.json();
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      return { success: true, data };
+    } catch (error: any) {
+      console.error("Erreur lors de la récupération des données du compte client:", error);
+      return { success: false, error: `Service de données client indisponible. ${error.message}` };
+    }
+  }
+
+  return { success: false, error: "Utilisateur non trouvé et service de données indisponible." };
 }
 
 
@@ -631,6 +632,8 @@ export async function handleUpdateBalance(formData: UpdateBalanceInput): Promise
     }
 }
     
+    
+
     
 
     
