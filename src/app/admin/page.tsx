@@ -485,6 +485,7 @@ const ClientDetailView = ({ client, onBack, onClientDeleted, onBalanceUpdate }: 
 
     const handleBalanceUpdate = async (values: UpdateBalanceValues) => {
         setIsUpdatingBalance(true);
+        // We pass the raw values to the server action
         const result = await handleUpdateBalance({ ...values, clientId: client.clientId, amount: Number(values.amount) });
         setIsUpdatingBalance(false);
 
@@ -492,13 +493,15 @@ const ClientDetailView = ({ client, onBack, onClientDeleted, onBalanceUpdate }: 
             const amount = Number(values.amount);
             const currentBalance = Number(client.balance) || 0;
             const newBalance = values.operation === 'credit' ? currentBalance + amount : currentBalance - amount;
+            
+            // This is the client-side update for the UI
+            onBalanceUpdate(client.clientId, newBalance);
 
             toast({
                 title: "Opération réussie !",
-                description: `Le nouveau solde simulé est de ${newBalance.toFixed(2)} €.`,
+                description: `Le nouveau solde est de ${newBalance.toFixed(2)} €. L'affichage sera mis à jour.`,
             });
             
-            onBalanceUpdate(client.clientId, newBalance);
             balanceForm.reset({amount: '' as any, operation: 'credit', reason: ''});
         } else {
             toast({
@@ -650,27 +653,44 @@ export default function AdminPage() {
   const [errorClients, setErrorClients] = useState<string | null>(null);
   const { toast } = useToast();
 
+  const fetchClients = async () => {
+      setIsLoadingClients(true);
+      setErrorClients(null);
+      
+      const result = await getClients();
+      
+      if (result.success && result.data) {
+          const remoteClients = result.data;
+          
+          // Get local updates
+          const localUpdates = JSON.parse(localStorage.getItem('updatedBalances') || '{}');
+          
+          // Merge remote data with local updates
+          const mergedClients = remoteClients.map((client: any) => {
+              if (localUpdates[client.clientId]) {
+                  return { ...client, balance: localUpdates[client.clientId] };
+              }
+              return client;
+          });
+
+          setClients(mergedClients.sort((a,b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime()));
+      } else {
+          setErrorClients(result.error || "Une erreur est survenue.");
+          toast({
+              title: "Erreur de chargement",
+              description: result.error || "Impossible de charger la liste des clients.",
+              variant: "destructive"
+          });
+      }
+      setIsLoadingClients(false);
+  };
+
   useEffect(() => {
       if (isAdmin) {
-          const fetchClients = async () => {
-              setIsLoadingClients(true);
-              setErrorClients(null);
-              const result = await getClients();
-              if (result.success && result.data) {
-                  setClients(result.data.sort((a,b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime()));
-              } else {
-                  setErrorClients(result.error || "Une erreur est survenue.");
-                  toast({
-                      title: "Erreur de chargement",
-                      description: result.error || "Impossible de charger la liste des clients.",
-                      variant: "destructive"
-                  });
-              }
-              setIsLoadingClients(false);
-          };
           fetchClients();
       }
-  }, [isAdmin, toast]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAdmin]);
 
   const handleClientCreation = (newClient: any) => {
     setClients(prevClients => [newClient, ...prevClients]);
@@ -679,6 +699,11 @@ export default function AdminPage() {
   const handleClientDeletion = (clientId: string) => {
     setClients(prevClients => prevClients.filter(c => c.clientId !== clientId));
     setSelectedClient(null);
+    
+    // Remove from local storage as well
+    const localUpdates = JSON.parse(localStorage.getItem('updatedBalances') || '{}');
+    delete localUpdates[clientId];
+    localStorage.setItem('updatedBalances', JSON.stringify(localUpdates));
   }
 
   const handleClientSelection = (client: any) => {
@@ -687,17 +712,24 @@ export default function AdminPage() {
 
   const handleBackToList = () => {
     setSelectedClient(null);
+    fetchClients(); // Re-fetch to see all updates
   }
   
   const handleBalanceUpdate = (clientId: string, newBalance: number) => {
-      const updateClient = (client: any) => {
+      // Update local state for immediate feedback
+      const updateClientInState = (client: any) => {
            if(client.clientId === clientId) {
                return { ...client, balance: newBalance };
            }
            return client;
       }
-      setClients(prevClients => prevClients.map(updateClient));
-      setSelectedClient(prevClient => prevClient ? updateClient(prevClient) : null);
+      setClients(prevClients => prevClients.map(updateClientInState));
+      setSelectedClient(prevClient => prevClient ? updateClientInState(prevClient) : null);
+      
+      // Persist the change in localStorage
+      const localUpdates = JSON.parse(localStorage.getItem('updatedBalances') || '{}');
+      localUpdates[clientId] = newBalance;
+      localStorage.setItem('updatedBalances', JSON.stringify(localUpdates));
   }
 
 
@@ -736,3 +768,4 @@ export default function AdminPage() {
     </main>
   );
 }
+

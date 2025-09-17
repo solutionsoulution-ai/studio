@@ -70,8 +70,19 @@ export default function DashboardClientPage() {
 
             setIsLoading(true);
             const result = await getAccountData(userEmail);
+
             if (result.success && result.data) {
-                setAccountData(result.data);
+                const remoteData = result.data;
+                
+                // Check localStorage for an updated balance
+                const localUpdates = JSON.parse(localStorage.getItem('updatedBalances') || '{}');
+                const updatedBalance = localUpdates[remoteData.client.clientId];
+
+                if (updatedBalance !== undefined) {
+                    remoteData.balance = updatedBalance;
+                }
+
+                setAccountData(remoteData);
             } else {
                 setError(result.error || "Impossible de charger les données du compte.");
                 toast({
@@ -90,7 +101,7 @@ export default function DashboardClientPage() {
     
     const handleLogout = () => {
         localStorage.removeItem("userEmail");
-        localStorage.removeItem("updatedBalances");
+        // We keep updatedBalances so admin changes persist across sessions
         toast({ title: "Déconnexion réussie." });
         router.push("/");
     };
@@ -106,6 +117,11 @@ export default function DashboardClientPage() {
         setAccountData((prevData:any) => {
             const newBalance = prevData.balance - transferData.amount;
             
+            // Persist the change in localStorage
+            const localUpdates = JSON.parse(localStorage.getItem('updatedBalances') || '{}');
+            localUpdates[prevData.client.clientId] = newBalance;
+            localStorage.setItem('updatedBalances', JSON.stringify(localUpdates));
+
             return {
                 ...prevData,
                 balance: newBalance,
@@ -311,3 +327,4 @@ export default function DashboardClientPage() {
     </div>
   );
 }
+
