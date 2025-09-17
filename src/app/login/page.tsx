@@ -57,13 +57,13 @@ export default function LoginPage() {
     
     setIsLoading(true);
 
-    const { data: profile, error } = await supabase
+    const { data: profile, error: profileError } = await supabase
       .from('profiles')
-      .select('*, password') // Important: select the hashed password
+      .select('*')
       .eq('client_id', values.clientId)
       .single();
 
-    if (error || !profile) {
+    if (profileError || !profile) {
       setIsLoading(false);
       toast({
         title: "Erreur de connexion",
@@ -73,9 +73,6 @@ export default function LoginPage() {
       return;
     }
     
-    // We need to verify the password. This is tricky without a dedicated backend function.
-    // A simple RPC function in Supabase is the best way to handle this securely.
-    // Let's create one.
     const { data: authResult, error: authError } = await supabase.rpc('verify_password', {
         p_client_id: values.clientId,
         p_password: values.password
@@ -92,7 +89,8 @@ export default function LoginPage() {
       });
     } else {
       // Store session in localStorage
-      localStorage.setItem('vyls_session', JSON.stringify(profile));
+      const { password, ...sessionData } = profile;
+      localStorage.setItem('vyls_session', JSON.stringify(sessionData));
 
       toast({
         title: "Connexion réussie !",
