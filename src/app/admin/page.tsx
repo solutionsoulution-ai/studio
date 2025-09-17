@@ -394,7 +394,7 @@ const ClientList = ({ clients, onClientSelect, isLoading, error }: { clients: an
     
     if (clients.length === 0) {
         return (
-             <Card className="w-full shadow-lg mt-8 lg:mt-0">
+             <Card className="w-full shadow-lg mt-8 lg-mt-0">
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-xl font-bold">
                         <Users /> Liste des Clients
@@ -489,20 +489,15 @@ const ClientDetailView = ({ client, onBack, onClientDeleted, onBalanceUpdate }: 
         setIsUpdatingBalance(false);
 
         if (result.success) {
-             const amount = Number(values.amount);
+            const amount = Number(values.amount);
             const currentBalance = Number(client.balance) || 0;
             const newBalance = values.operation === 'credit' ? currentBalance + amount : currentBalance - amount;
 
             toast({
-                title: "Opération simulée réussie !",
-                description: `Le nouveau solde est de ${newBalance.toFixed(2)} €.`,
+                title: "Opération réussie !",
+                description: `Le nouveau solde simulé est de ${newBalance.toFixed(2)} €.`,
             });
             
-            // Stocker le nouveau solde dans le localStorage pour la persistance de la session de navigateur
-            const updatedBalances = JSON.parse(localStorage.getItem('updatedBalances') || '{}');
-            updatedBalances[client.email] = newBalance;
-            localStorage.setItem('updatedBalances', JSON.stringify(updatedBalances));
-
             onBalanceUpdate(client.clientId, newBalance);
             balanceForm.reset({amount: '' as any, operation: 'credit', reason: ''});
         } else {
