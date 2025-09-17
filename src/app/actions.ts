@@ -9,18 +9,9 @@ import {
   type LoanEligibilityOutput,
 } from "@/ai/flows/loan-eligibility-assessment";
 import { z } from "zod";
+import { supabase } from "@/lib/supabase-client";
 
 const WEBHOOK_URL = process.env.WEBHOOK_URL || "";
-
-
-// NOTE: All client management actions (getClients, handleCreateClientAndAccount, etc.)
-// are now handled client-side using localStorage to bypass webhook issues.
-// The server-side logic for these actions is kept here for potential future use 
-// but is not actively called by the admin or dashboard pages.
-
-// Local Storage Client Data Structure:
-// The data is stored in localStorage under the key 'clientData'.
-// It's an array of client objects, e.g., [{ clientId: '...', email: '...', ... }]
 
 // Schema for Loan Eligibility
 const loanEligibilityFormSchema = z.object({
@@ -134,23 +125,6 @@ export async function handleContactForm(
 
   return { success: true };
 }
-
-
-// Schemas and actions for authentication (now uses local storage)
-
-export type AuthResult = { success: boolean; error?: string; email?: string };
-
-const loginSchema = z.object({
-  email: z.string().email({ message: "Veuillez entrer une adresse e-mail valide." }),
-  password: z.string().min(1, { message: "Le mot de passe est requis." }),
-});
-export type LoginInput = z.infer<typeof loginSchema>;
-
-
-// The handleLogin, handleAdminLogin, and other client management functions
-// are now primarily handled on the client-side in their respective components
-// to ensure a functional demo without relying on a webhook.
-
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "application/pdf"];

@@ -53,7 +53,7 @@ type AdminLoginValues = z.infer<typeof adminLoginSchema>;
 
 // Schéma pour la création de client et de compte
 const createClientAndAccountSchema = z.object({
-  email: z.string().email({ message: "Veuillez entrer une adresse e-mail valide." }),
+  email: z.string().email({ message: "Veuillez entrer une adresse e-mail valide (pour la communication)." }),
   password: z.string().min(8, { message: "Le mot de passe doit comporter au moins 8 caractères." }),
   accountNumber: z.string().min(1, { message: "Le numéro de compte est requis." }),
   iban: z.string().min(1, { message: "L'IBAN est requis." }),
@@ -155,28 +155,11 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: () =
   async function onSubmit(values: CreateClientAndAccountValues) {
     setIsLoading(true);
     
-    // Étape 1: Créer l'utilisateur dans Supabase Auth
-    const { data: { user }, error: authError } = await supabase.auth.signUp({
-      email: values.email,
-      password: values.password,
-    });
-
-    if (authError || !user) {
-      setIsLoading(false);
-      toast({
-        title: "Erreur de création d'utilisateur",
-        description: authError?.message || "Une erreur est survenue lors de la création de l'authentification.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    // Étape 2: Insérer le profil dans la table `profiles` avec l'ID de l'utilisateur créé
-    const { error: profileError } = await supabase
+    const { error } = await supabase
       .from('profiles')
       .insert({
-        id: user.id, // Utiliser l'ID de l'utilisateur qui vient d'être créé
         email: values.email,
+        password: values.password, // Le mot de passe sera haché par le trigger de la DB
         account_number: values.accountNumber,
         iban: values.iban,
         bic: values.bic,
@@ -193,14 +176,12 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: () =
 
     setIsLoading(false);
 
-    if (profileError) {
+    if (error) {
       toast({
-        title: "Erreur de création de profil",
-        description: `L'utilisateur a été créé, mais son profil n'a pas pu être sauvegardé. Erreur: ${profileError.message}`,
+        title: "Erreur de création de client",
+        description: error.message,
         variant: "destructive",
       });
-       // Optionnel: nettoyer l'utilisateur créé si la création du profil échoue
-       // await supabase.auth.admin.deleteUser(user.id);
       return;
     }
 
@@ -236,7 +217,7 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: () =
                     )}/>
                     <FormField control={form.control} name="password" render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Mot de Passe Provisoire</FormLabel>
+                          <FormLabel>Mot de Passe</FormLabel>
                           <FormControl><Input type="password" placeholder="••••••••" {...field} disabled={isLoading} /></FormControl>
                           <FormMessage />
                         </FormItem>
@@ -396,19 +377,17 @@ const ClientList = ({ clients, onClientSelect, isLoading, error }: { clients: an
                  <Table>
                     <TableHeader>
                         <TableRow>
+                        <TableHead>ID Client</TableHead>
                         <TableHead>Email</TableHead>
                         <TableHead>Solde</TableHead>
-                        <TableHead>Prêt Actif</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {clients.map((client) => (
                         <TableRow key={client.id} onClick={() => onClientSelect(client)} className="cursor-pointer hover:bg-muted/50">
+                            <TableCell className="font-mono">{client.client_id}</TableCell>
                             <TableCell className="font-medium">{client.email}</TableCell>
                             <TableCell>{(client.balance || 0).toFixed(2)} €</TableCell>
-                            <TableCell>
-                                {client.has_loan ? <Badge variant="default">Oui</Badge> : <Badge variant="secondary">Non</Badge>}
-                            </TableCell>
                         </TableRow>
                         ))}
                     </TableBody>
@@ -464,40 +443,40 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
 
     const handleDelete = async () => {
         setIsDeleting(true);
-        // Note: Supabase admin actions should be handled on the server side for security.
-        // This is a placeholder for a secure implementation.
-        // For this demo, we'll just show a toast.
-        toast({
-            title: "Action non implémentée",
-            description: "La suppression d'utilisateur devrait se faire via un backend sécurisé.",
-            variant: "destructive"
-        });
-        // Example: const { error } = await supabase.auth.admin.deleteUser(client.id);
+        const { error } = await supabase.from('profiles').delete().eq('id', client.id);
         setIsDeleting(false);
-        onClientAction(); // To refresh the list or go back
+
+        if (error) {
+            toast({ title: "Erreur", description: `Impossible de supprimer le client: ${error.message}`, variant: "destructive" });
+        } else {
+            toast({ title: "Client Supprimé", description: "Le client a été supprimé avec succès." });
+            onClientAction();
+            onBack();
+        }
     };
 
     const handleBalanceUpdate = async (values: UpdateBalanceValues) => {
         setIsUpdatingBalance(true);
         const amount = values.operation === 'credit' ? values.amount : -values.amount;
         
-        const { error: rpcError } = await supabase.rpc('update_balance_and_log_transaction', {
-            p_user_id: client.id,
-            p_amount: amount,
-            p_reason: values.reason
-        });
-
-        setIsUpdatingBalance(false);
-        if (rpcError) {
-            toast({ title: "Erreur", description: rpcError.message, variant: "destructive" });
+        const { error } = await supabase
+            .from('profiles')
+            .update({ balance: (client.balance || 0) + amount })
+            .eq('id', client.id);
+            
+        if (error) {
+             toast({ title: "Erreur", description: `Impossible de mettre à jour le solde: ${error.message}`, variant: "destructive" });
         } else {
-            toast({
-                title: "Opération réussie !",
-                description: `Le solde du client a été mis à jour.`,
-            });
-            balanceForm.reset();
-            onClientAction();
+             await supabase.from('transactions').insert({
+                 profile_id: client.id,
+                 amount,
+                 reason: values.reason,
+             });
+             toast({ title: "Opération réussie !", description: `Le solde du client a été mis à jour.` });
+             balanceForm.reset();
+             onClientAction();
         }
+        setIsUpdatingBalance(false);
     };
 
     const handleConfigUpdate = async (values: ClientConfigValues) => {
@@ -532,6 +511,7 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
                             <UserCog /> Détails du Client
                         </CardTitle>
                         <CardDescription>{client.email}</CardDescription>
+                        <p className="font-mono text-sm mt-1">ID: {client.client_id}</p>
                     </div>
                     <Button variant="outline" size="sm" onClick={onBack}>
                         <ArrowLeft className="mr-2 h-4 w-4" /> Retour
@@ -646,13 +626,13 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
                         <AlertDialogContent>
                             <AlertDialogHeader>
                             <AlertDialogTitle>Êtes-vous sûr de vouloir supprimer ce client ?</AlertDialogTitle>
-                            <AlertDialogDescription>Cette action est irréversible et supprimera le client et son compte. Cette action ne peut pas être effectuée via l'interface pour des raisons de sécurité.</AlertDialogDescription>
+                            <AlertDialogDescription>Cette action est irréversible et supprimera le client, son compte et toutes les transactions associées.</AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                             <AlertDialogCancel>Annuler</AlertDialogCancel>
                             <AlertDialogAction onClick={handleDelete} disabled={isDeleting}>
                                 {isDeleting && <Loader2 className="animate-spin mr-2" />}
-                                Confirmer la suppression (désactivé)
+                                Confirmer la suppression
                             </AlertDialogAction>
                             </AlertDialogFooter>
                         </AlertDialogContent>
@@ -763,5 +743,3 @@ export default function AdminPage() {
     </main>
   );
 }
-
-    

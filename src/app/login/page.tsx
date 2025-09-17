@@ -24,7 +24,7 @@ import SiteFooter from "@/components/site/site-footer";
 import { supabase } from "@/lib/supabase-client";
 
 const formSchema = z.object({
-  email: z.string().email({ message: "Veuillez entrer une adresse e-mail valide." }),
+  clientId: z.string().min(1, { message: "L'identifiant client est requis." }),
   password: z.string().min(1, { message: "Le mot de passe est requis." }),
 });
 
@@ -38,12 +38,16 @@ export default function LoginPage() {
 
   useEffect(() => {
     setIsClient(true);
+    // Clear any session on page load
+    if (typeof window !== 'undefined') {
+        localStorage.removeItem('vyls_session');
+    }
   }, []);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
+      clientId: "",
       password: "",
     },
   });
@@ -53,20 +57,43 @@ export default function LoginPage() {
     
     setIsLoading(true);
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: values.email,
-      password: values.password,
+    const { data: profile, error } = await supabase
+      .from('profiles')
+      .select('*, password') // Important: select the hashed password
+      .eq('client_id', values.clientId)
+      .single();
+
+    if (error || !profile) {
+      setIsLoading(false);
+      toast({
+        title: "Erreur de connexion",
+        description: "Identifiant client ou mot de passe incorrect.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    // We need to verify the password. This is tricky without a dedicated backend function.
+    // A simple RPC function in Supabase is the best way to handle this securely.
+    // Let's create one.
+    const { data: authResult, error: authError } = await supabase.rpc('verify_password', {
+        p_client_id: values.clientId,
+        p_password: values.password
     });
+
 
     setIsLoading(false);
 
-    if (error) {
+    if (authError || !authResult) {
       toast({
         title: "Erreur de connexion",
-        description: error.message || "Vos identifiants sont incorrects.",
+        description: "Identifiant client ou mot de passe incorrect.",
         variant: "destructive",
       });
-    } else if (data.user) {
+    } else {
+      // Store session in localStorage
+      localStorage.setItem('vyls_session', JSON.stringify(profile));
+
       toast({
         title: "Connexion réussie !",
         description: "Vous allez être redirigé vers votre espace client.",
@@ -95,12 +122,12 @@ export default function LoginPage() {
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                   <FormField
                     control={form.control}
-                    name="email"
+                    name="clientId"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Adresse E-mail</FormLabel>
+                        <FormLabel>Identifiant Client</FormLabel>
                         <FormControl>
-                          <Input type="email" placeholder="vous@exemple.com" {...field} disabled={isLoading} />
+                          <Input placeholder="VC-xxxxxx" {...field} disabled={isLoading} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

@@ -58,25 +58,15 @@ export default function DashboardClientPage() {
     const { toast } = useToast();
     const router = useRouter();
     
-    const fetchAccountData = useCallback(async () => {
+    const fetchAccountData = useCallback(async (profileId: string) => {
       setIsLoading(true);
       setError(null);
-      
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-
-      if (sessionError || !session) {
-        toast({ title: "Accès non autorisé", description: "Veuillez vous reconnecter.", variant: "destructive" });
-        router.push("/login");
-        return;
-      }
-
-      const user = session.user;
       
       try {
         const { data: profile, error: profileError } = await supabase
           .from('profiles')
           .select('*')
-          .eq('id', user.id)
+          .eq('id', profileId)
           .single();
 
         if (profileError) throw profileError;
@@ -85,7 +75,7 @@ export default function DashboardClientPage() {
         const { data: transactionsData, error: transactionsError } = await supabase
           .from('transactions')
           .select('*')
-          .eq('user_id', user.id)
+          .eq('profile_id', profileId)
           .order('created_at', { ascending: false });
 
         if (transactionsError) throw transactionsError;
@@ -94,39 +84,67 @@ export default function DashboardClientPage() {
       } catch (e: any) {
         setError(e.message || "Une erreur est survenue lors de la récupération des données.");
         toast({ title: "Erreur de chargement", description: e.message, variant: "destructive" });
+        // If error, log out
+        handleLogout();
       } finally {
         setIsLoading(false);
       }
     }, [router, toast]);
     
     useEffect(() => {
-        fetchAccountData();
-    }, [fetchAccountData]);
+        const sessionString = localStorage.getItem('vyls_session');
+        if (!sessionString) {
+            toast({ title: "Accès non autorisé", description: "Veuillez vous reconnecter.", variant: "destructive" });
+            router.push("/login");
+            return;
+        }
+        const session = JSON.parse(sessionString);
+        if (session.id) {
+            fetchAccountData(session.id);
+        }
+    }, [fetchAccountData, router, toast]);
     
-    const handleLogout = async () => {
-        await supabase.auth.signOut();
+    const handleLogout = () => {
+        localStorage.removeItem('vyls_session');
         toast({ title: "Déconnexion réussie." });
         router.push("/");
     };
 
     const handleTransferSubmit = async (transferData: TransferFormInput): Promise<{success: boolean}> => {
         if (!accountData) return {success: false};
-
-        const { error: rpcError } = await supabase.rpc('process_transfer', {
-            p_sender_id: accountData.id,
-            p_recipient_iban: transferData.recipientIban,
-            p_recipient_name: transferData.recipientName,
-            p_amount: transferData.amount,
-            p_reason: transferData.reason,
-        });
-
-        if (rpcError) {
-             toast({ title: "Erreur de virement", description: rpcError.message, variant: "destructive"});
-             return {success: false};
-        } else {
-             fetchAccountData(); // Refresh data after transfer
-             return {success: true};
+        
+        if (accountData.balance < transferData.amount) {
+            toast({ title: "Erreur de virement", description: "Solde insuffisant.", variant: "destructive"});
+            return {success: false};
         }
+
+        const { error } = await supabase
+            .from('profiles')
+            .update({ balance: accountData.balance - transferData.amount })
+            .eq('id', accountData.id);
+
+        if (error) {
+             toast({ title: "Erreur de virement", description: error.message, variant: "destructive"});
+             return {success: false};
+        }
+        
+        const { error: txError } = await supabase.from('transactions').insert({
+            profile_id: accountData.id,
+            amount: -transferData.amount,
+            reason: transferData.reason,
+            recipient_iban: transferData.recipientIban,
+            recipient_name: transferData.recipientName
+        });
+        
+        if (txError) {
+            // Try to revert balance
+            await supabase.from('profiles').update({ balance: accountData.balance }).eq('id', accountData.id);
+            toast({ title: "Erreur de virement", description: `La transaction n'a pas pu être enregistrée: ${txError.message}`, variant: "destructive"});
+            return {success: false};
+        }
+
+        fetchAccountData(accountData.id);
+        return {success: true};
     };
     
     const { totalIncome, totalExpenses } = useMemo(() => {
@@ -188,7 +206,7 @@ export default function DashboardClientPage() {
             <div>
                 <h1 className="text-3xl font-bold font-headline">Bienvenue, {accountData.email || 'Client'} !</h1>
                 <p className="text-muted-foreground flex items-center gap-2 mt-1">
-                    C'est un plaisir de vous revoir sur votre espace client.
+                    Votre identifiant client : <span className="font-mono text-foreground">{accountData.client_id}</span>
                 </p>
             </div>
             <Button variant="outline" onClick={handleLogout}>
@@ -217,7 +235,7 @@ export default function DashboardClientPage() {
                     </Card>
                      <Card>
                         <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm font-medium">Revenus (ce mois-ci)</CardTitle>
+                            <CardTitle className="text-sm font-medium">Revenus (historique)</CardTitle>
                             <TrendingUp className="w-4 h-4 text-green-500" />
                         </CardHeader>
                         <CardContent>
@@ -226,7 +244,7 @@ export default function DashboardClientPage() {
                     </Card>
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm font-medium">Dépenses (ce mois-ci)</CardTitle>
+                            <CardTitle className="text-sm font-medium">Dépenses (historique)</CardTitle>
                             <TrendingDown className="w-4 h-4 text-red-500" />
                         </CardHeader>
                         <CardContent>
@@ -339,5 +357,3 @@ export default function DashboardClientPage() {
     </div>
   );
 }
-
-    
