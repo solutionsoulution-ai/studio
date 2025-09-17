@@ -292,6 +292,31 @@ export async function getAccountData(email: string): Promise<AccountDataResult> 
   if (!email) {
     return { success: false, error: "L'e-mail du client est manquant." };
   }
+  
+  // Logique principale : récupérer les données depuis la liste des clients
+  const clientsResult = await getClients();
+  if (clientsResult.success && clientsResult.data) {
+      const clientData = clientsResult.data.find((client: any) => client.email === email);
+      if (clientData) {
+          // Simuler une réponse de données de compte
+          return {
+              success: true,
+              data: {
+                  client: {
+                      email: clientData.email,
+                      firstName: clientData.firstName || 'Client', // Utiliser des valeurs par défaut
+                      lastName: clientData.lastName || '',
+                      clientId: clientData.clientId,
+                  },
+                  balance: clientData.balance || 0,
+                  iban: clientData.iban,
+                  accountNumber: clientData.accountNumber,
+                  bic: clientData.bic,
+                  transactions: clientData.transactions || [], // Assumer que les transactions peuvent être là
+              },
+          };
+      }
+  }
 
   // Fallback pour le test local si l'email correspond
   if (email === "client@test.com") {
@@ -318,30 +343,6 @@ export async function getAccountData(email: string): Promise<AccountDataResult> 
     };
   }
   
-  // Logique principale : récupérer les données depuis la liste des clients
-  const clientsResult = await getClients();
-  if (clientsResult.success && clientsResult.data) {
-      const clientData = clientsResult.data.find((client: any) => client.email === email);
-      if (clientData) {
-          // Simuler une réponse de données de compte
-          return {
-              success: true,
-              data: {
-                  client: {
-                      email: clientData.email,
-                      firstName: clientData.firstName || 'Client', // Utiliser des valeurs par défaut
-                      lastName: clientData.lastName || '',
-                      clientId: clientData.clientId,
-                  },
-                  balance: clientData.balance || 0,
-                  iban: clientData.iban,
-                  accountNumber: clientData.accountNumber,
-                  bic: clientData.bic,
-                  transactions: clientData.transactions || [], // Assumer que les transactions peuvent être là
-              },
-          };
-      }
-  }
 
   return { success: false, error: "Utilisateur non trouvé ou service de données indisponible." };
 }
@@ -572,7 +573,7 @@ export async function handleDeleteClient(clientId: string): Promise<DeleteClient
 // Action to update a client's balance
 const updateBalanceSchema = z.object({
   clientId: z.string(),
-  amount: z.coerce.number().positive("Le montant doit être un nombre positif."),
+  amount: z.coerce.number({invalid_type_error: "Le montant doit être un nombre."}).positive("Le montant doit être un nombre positif."),
   operation: z.enum(["credit", "debit"]),
   reason: z.string().min(3, "Un motif est requis pour l'opération."),
 });
@@ -601,7 +602,7 @@ export async function handleUpdateBalance(formData: UpdateBalanceInput): Promise
         });
 
         if (!response.ok) {
-            const errorBody = await response.text(); // Lire en tant que texte pour un meilleur débogage
+            const errorBody = await response.text();
             console.error("Erreur de réponse du webhook de mise à jour du solde:", errorBody);
             try {
                 const jsonError = JSON.parse(errorBody);

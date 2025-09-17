@@ -445,7 +445,7 @@ const ClientList = ({ clients, onClientSelect, isLoading, error }: { clients: an
 
 // Schéma de validation pour le formulaire de mise à jour du solde
 const clientUpdateBalanceSchema = z.object({
-  amount: z.coerce.number().positive("Le montant doit être un nombre positif."),
+  amount: z.coerce.number({invalid_type_error: "Le montant doit être un nombre."}).positive("Le montant doit être un nombre positif."),
   operation: z.enum(["credit", "debit"]),
   reason: z.string().min(3, "Un motif est requis pour l'opération."),
 });
@@ -485,7 +485,7 @@ const ClientDetailView = ({ client, onBack, onClientDeleted, onBalanceUpdate }: 
 
     const handleBalanceUpdate = async (values: UpdateBalanceValues) => {
         setIsUpdatingBalance(true);
-        const result = await handleUpdateBalance({ ...values, clientId: client.clientId });
+        const result = await handleUpdateBalance({ ...values, clientId: client.clientId, amount: Number(values.amount) });
         setIsUpdatingBalance(false);
 
         if (result.success && result.newBalance !== undefined) {
