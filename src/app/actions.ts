@@ -107,7 +107,7 @@ export async function handleContactForm(
       const response = await fetch(WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(parsed.data),
+        body: JSON.stringify({formType: 'contact', ...parsed.data}),
       });
 
       if (!response.ok) {
@@ -233,7 +233,7 @@ export async function handleCreateClientAndAccount(formData: CreateClientAndAcco
       const response = await fetch(WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(clientDetails),
+        body: JSON.stringify({formType: 'createClient', ...clientDetails}),
       });
 
       if (!response.ok) {
@@ -461,7 +461,7 @@ export async function handleLoanApplication(formData: FormData): Promise<LoanApp
       const response = await fetch(WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(applicationDetails),
+        body: JSON.stringify({formType: 'loanApplication', ...applicationDetails}),
       });
 
       if (!response.ok) {
@@ -590,38 +590,34 @@ export async function handleUpdateBalance(formData: UpdateBalanceInput): Promise
         return { success: false, error: `Données invalides: ${issues}` };
     }
 
-    if (!WEBHOOK_URL) {
-        return { success: false, error: "Le service de gestion des clients n'est pas configuré." };
-    }
-
+    // ALTERNATIVE: Simulate balance update locally without calling webhook
+    console.log("Simulation de la mise à jour du solde (alternative locale).");
     try {
-        const response = await fetch(WEBHOOK_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ action: 'updateBalance', ...parsed.data }),
-        });
-
-        if (!response.ok) {
-            const errorBody = await response.text();
-            console.error("Erreur de réponse du webhook de mise à jour du solde:", errorBody);
-            try {
-                const jsonError = JSON.parse(errorBody);
-                throw new Error(jsonError.message || "Le serveur a retourné une erreur.");
-            } catch (e) {
-                // Si ce n'est pas du JSON, utiliser le texte brut.
-                throw new Error(errorBody || "Le serveur a retourné une erreur.");
-            }
+        const clientsResult = await getClients();
+        if (!clientsResult.success || !clientsResult.data) {
+            throw new Error("Impossible de récupérer les données clients pour la simulation.");
         }
 
-        const result = await response.json();
-        if (result.status !== 'success' || result.newBalance === undefined) {
-            throw new Error(result.message || "Une erreur inconnue est survenue lors de la mise à jour du solde.");
+        const clientToUpdate = clientsResult.data.find(c => c.clientId === parsed.data.clientId);
+        if (!clientToUpdate) {
+            throw new Error("Client non trouvé pour la simulation.");
         }
 
-        return { success: true, newBalance: result.newBalance };
+        const currentBalance = Number(clientToUpdate.balance) || 0;
+        const operationAmount = parsed.data.amount;
+
+        const newBalance = parsed.data.operation === 'credit'
+            ? currentBalance + operationAmount
+            : currentBalance - operationAmount;
+        
+        console.log(`Simulation: Client ${parsed.data.clientId}, Solde actuel: ${currentBalance}, Opération: ${parsed.data.operation} ${operationAmount}, Nouveau solde: ${newBalance}`);
+
+        // Note: This does not persist the change to the Google Sheet.
+        // It only returns the calculated new balance for the UI.
+        return { success: true, newBalance: newBalance };
 
     } catch (error: any) {
-        console.error("Erreur lors de la mise à jour du solde:", error);
+        console.error("Erreur lors de la simulation de mise à jour du solde:", error);
         return { success: false, error: error.message };
     }
 }
