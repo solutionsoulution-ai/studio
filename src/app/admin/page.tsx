@@ -154,50 +154,32 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: () =
 
   async function onSubmit(values: CreateClientAndAccountValues) {
     setIsLoading(true);
+
+    const { data: adminSessionData } = await supabase.auth.getSession();
     
     // Create user in Supabase Auth
-    const { data: authData, error: authError } = await supabase.auth.signUp({
+    const { data: { user }, error: authError } = await supabase.auth.signUp({
       email: values.email,
       password: values.password,
     });
 
-    if (authError || !authData.user) {
+    if (authError || !user) {
       setIsLoading(false);
       toast({
         title: "Erreur de création d'utilisateur",
-        description: authError?.message || "Impossible de créer l'utilisateur. Vérifiez que l'email n'est pas déjà utilisé.",
+        description: authError?.message || "L'utilisateur existe peut-être déjà ou les informations sont invalides.",
         variant: "destructive",
       });
+      // Restore admin session if it existed
+      if (adminSessionData.session) {
+         await supabase.auth.setSession(adminSessionData.session);
+      }
       return;
     }
-
-    const userId = authData.user.id;
-
-    // The user is created but we need to insert into 'profiles' which has RLS.
-    // We can't do it as an anonymous or admin user from the client-side.
-    // A secure way is to use a server-side function, but for this demo,
-    // we will sign in as the new user, create the profile, and then sign out.
     
-    // 1. Sign in as the new user (signUp already does this, but we ensure it for the next step)
-    const { error: signInError } = await supabase.auth.signInWithPassword({
-        email: values.email,
-        password: values.password,
-    });
-
-    if (signInError) {
-        setIsLoading(false);
-        toast({
-            title: "Erreur de session",
-            description: "Impossible de créer la session pour le nouvel utilisateur.",
-            variant: "destructive",
-        });
-        // You might want to clean up the created auth user here in a real-world scenario
-        return;
-    }
-
-    // 2. Now authenticated as the new user, create their profile
+    // With the new user session active (from signUp), insert their profile
     const clientProfile = {
-      id: userId,
+      id: user.id, // Use the new user's ID
       email: values.email,
       account_number: values.accountNumber,
       iban: values.iban,
@@ -215,9 +197,11 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: () =
     
     const { error: profileError } = await supabase.from('profiles').insert(clientProfile);
 
-    // 3. Sign out the new user session
-    await supabase.auth.signOut();
-
+    // Restore the original admin session
+    if (adminSessionData.session) {
+       await supabase.auth.setSession(adminSessionData.session);
+    }
+    
     setIsLoading(false);
 
     if (profileError) {
@@ -227,6 +211,7 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: () =
         variant: "destructive",
       });
       // In a real app, you would have a cleanup process for the created auth.user
+      // For now, we inform the admin.
       return;
     }
 
