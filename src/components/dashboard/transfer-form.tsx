@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -15,9 +15,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
-import { handleTransfer, type TransferFormInput } from "@/app/actions";
-import { Loader2, Send, CheckCircle, RefreshCw } from "lucide-react";
+import { type TransferFormInput } from "@/app/actions";
+import { Loader2, Send, CheckCircle, RefreshCw, AlertTriangle } from "lucide-react";
 import { Progress } from "../ui/progress";
 
 const ibanRegex = /^[A-Z]{2}[0-9]{2}[A-Z0-9]{4}[0-9]{7}([A-Z0-9]?){0,16}$/;
@@ -40,12 +39,11 @@ type ProcessingTime = {
 }
 
 type TransferFormProps = {
-  onTransferSuccess: (data: TransferFormInput) => void;
+  onTransferSubmit: (data: TransferFormInput) => Promise<{success: boolean}>;
   processingTimeConfig?: ProcessingTime;
 };
 
-export default function TransferForm({ onTransferSuccess, processingTimeConfig }: TransferFormProps) {
-  const { toast } = useToast();
+export default function TransferForm({ onTransferSubmit, processingTimeConfig }: TransferFormProps) {
   const [transferState, setTransferState] = useState<TransferState>("idle");
   const [progress, setProgress] = useState(0);
 
@@ -66,8 +64,14 @@ export default function TransferForm({ onTransferSuccess, processingTimeConfig }
 
   async function onSubmit(values: TransferFormInput) {
     setTransferState("loading");
-    // On simule une vérification rapide avant de passer au traitement
     await new Promise(resolve => setTimeout(resolve, 500)); 
+
+    const result = await onTransferSubmit(values);
+
+    if (!result.success) {
+        setTransferState("error");
+        return;
+    }
 
     setTransferState("processing");
     const totalTime = getTotalProcessingTimeInMillis();
@@ -81,9 +85,8 @@ export default function TransferForm({ onTransferSuccess, processingTimeConfig }
         if (currentProgress >= 100) {
             clearInterval(interval);
             setTransferState("success");
-            onTransferSuccess(values); // Notifier le composant parent
         }
-    }, 100); // Mettre à jour la barre de progression toutes les 100ms
+    }, 100);
   }
 
   const resetForm = () => {
@@ -92,17 +95,18 @@ export default function TransferForm({ onTransferSuccess, processingTimeConfig }
     setTransferState("idle");
   }
 
-  if (transferState === "processing" || transferState === "success") {
+  if (transferState === "processing" || transferState === "success" || transferState === "error") {
     return (
         <div className="text-center p-8 border rounded-lg">
-            {transferState === "processing" ? (
+            {transferState === "processing" && (
                 <>
                     <Loader2 className="animate-spin text-primary w-12 h-12 mx-auto mb-4" />
                     <h3 className="text-xl font-semibold">Virement en cours de traitement...</h3>
                     <p className="text-muted-foreground mb-4">Votre virement sera finalisé une fois le traitement terminé.</p>
                     <Progress value={progress} className="w-full" />
                 </>
-            ) : (
+            )}
+            {transferState === "success" && (
                  <>
                     <CheckCircle className="text-green-500 w-12 h-12 mx-auto mb-4" />
                     <h3 className="text-xl font-semibold">Virement Effectué !</h3>
@@ -110,6 +114,17 @@ export default function TransferForm({ onTransferSuccess, processingTimeConfig }
                     <Button onClick={resetForm}>
                         <RefreshCw className="mr-2" />
                         Effectuer un autre virement
+                    </Button>
+                </>
+            )}
+             {transferState === "error" && (
+                 <>
+                    <AlertTriangle className="text-destructive w-12 h-12 mx-auto mb-4" />
+                    <h3 className="text-xl font-semibold">Le Virement a Échoué</h3>
+                    <p className="text-muted-foreground mb-6">Impossible de traiter votre demande. Veuillez vérifier les informations ou le solde de votre compte.</p>
+                    <Button onClick={resetForm} variant="outline">
+                        <RefreshCw className="mr-2" />
+                        Réessayer
                     </Button>
                 </>
             )}
@@ -190,3 +205,5 @@ export default function TransferForm({ onTransferSuccess, processingTimeConfig }
     </Form>
   );
 }
+
+    

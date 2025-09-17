@@ -109,8 +109,8 @@ export default function DashboardClientPage() {
         router.push("/");
     };
 
-    const handleTransferSuccess = async (transferData: TransferFormInput) => {
-        if (!accountData) return;
+    const handleTransferSubmit = async (transferData: TransferFormInput): Promise<{success: boolean}> => {
+        if (!accountData) return {success: false};
 
         const { error: rpcError } = await supabase.rpc('process_transfer', {
             p_sender_id: accountData.id,
@@ -122,8 +122,10 @@ export default function DashboardClientPage() {
 
         if (rpcError) {
              toast({ title: "Erreur de virement", description: rpcError.message, variant: "destructive"});
+             return {success: false};
         } else {
              fetchAccountData(); // Refresh data after transfer
+             return {success: true};
         }
     };
     
@@ -307,7 +309,7 @@ export default function DashboardClientPage() {
                             </Alert>
                         ) : (
                             <TransferForm 
-                                onTransferSuccess={handleTransferSuccess} 
+                                onTransferSubmit={handleTransferSubmit} 
                                 processingTimeConfig={accountData.transfer_processing_time}
                             />
                         )}
@@ -337,3 +339,5 @@ export default function DashboardClientPage() {
     </div>
   );
 }
+
+    
