@@ -32,10 +32,11 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { handleAdminLogin, handleCreateClientAndAccount, getClients, handleDeleteClient, handleUpdateBalance, UpdateBalanceInput } from "@/app/actions";
+import { handleAdminLogin, handleCreateClientAndAccount, getClients, handleDeleteClient, handleUpdateBalance } from "@/app/actions";
 import { Loader2, UserPlus, Shield, Landmark, Users, ArrowLeft, UserCog, AlertCircle, Trash2, ArrowRightLeft, Settings, Ban } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -517,31 +518,42 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
         setIsDeleting(false);
     };
 
-    const handleBalanceUpdate = (values: UpdateBalanceValues) => {
+    const handleBalanceUpdate = async (values: UpdateBalanceValues) => {
         setIsUpdatingBalance(true);
 
-        const clients = JSON.parse(localStorage.getItem('clients') || '[]');
-        let updatedClient = null;
-        const updatedClients = clients.map((c: any) => {
-            if (c.clientId === client.clientId) {
-                const currentBalance = c.balance || 0;
-                const newBalance = values.operation === 'credit' ? currentBalance + values.amount : currentBalance - values.amount;
-                updatedClient = { ...c, balance: newBalance };
-                return updatedClient;
-            }
-            return c;
-        });
-
-        localStorage.setItem('clients', JSON.stringify(updatedClients));
-        toast({
-            title: "Opération réussie !",
-            description: `Le solde du client a été mis à jour.`,
-        });
+        const result = await handleUpdateBalance({ clientId: client.clientId, ...values });
         
-        if(updatedClient) {
-            onClientAction(updatedClient);
+        if (result.success) {
+            const clients = JSON.parse(localStorage.getItem('clients') || '[]');
+            let updatedClient = null;
+            const updatedClients = clients.map((c: any) => {
+                if (c.clientId === client.clientId) {
+                    const currentBalance = c.balance || 0;
+                    const newBalance = values.operation === 'credit' ? currentBalance + values.amount : currentBalance - values.amount;
+                    updatedClient = { ...c, balance: newBalance };
+                    return updatedClient;
+                }
+                return c;
+            });
+
+            localStorage.setItem('clients', JSON.stringify(updatedClients));
+            toast({
+                title: "Opération réussie !",
+                description: `Le solde du client a été mis à jour.`,
+            });
+            
+            if(updatedClient) {
+                onClientAction(updatedClient);
+            }
+            balanceForm.reset();
+        } else {
+             toast({
+                title: "Erreur de mise à jour",
+                description: result.error || "L'opération a échoué.",
+                variant: "destructive",
+            });
         }
-        balanceForm.reset();
+
         setIsUpdatingBalance(false);
     };
 
@@ -880,4 +892,3 @@ export default function AdminPage() {
     </main>
   );
 }
-
