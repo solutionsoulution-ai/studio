@@ -601,8 +601,15 @@ export async function handleUpdateBalance(formData: UpdateBalanceInput): Promise
         });
 
         if (!response.ok) {
-            const errorBody = await response.json().catch(() => ({ message: response.statusText }));
-            throw new Error(errorBody.message || "Le serveur a retourné une erreur.");
+            const errorBody = await response.text(); // Lire en tant que texte pour un meilleur débogage
+            console.error("Erreur de réponse du webhook de mise à jour du solde:", errorBody);
+            try {
+                const jsonError = JSON.parse(errorBody);
+                throw new Error(jsonError.message || "Le serveur a retourné une erreur.");
+            } catch (e) {
+                // Si ce n'est pas du JSON, utiliser le texte brut.
+                throw new Error(errorBody || "Le serveur a retourné une erreur.");
+            }
         }
 
         const result = await response.json();
