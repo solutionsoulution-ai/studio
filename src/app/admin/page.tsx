@@ -36,7 +36,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { handleAdminLogin, handleCreateClientAndAccount, getClients, handleDeleteClient, handleUpdateBalance } from "@/app/actions";
+import { handleAdminLogin, handleCreateClientAndAccount, getClients, handleDeleteClient, handleUpdateBalance, UpdateBalanceInput } from "@/app/actions";
 import { Loader2, UserPlus, Shield, Landmark, Users, ArrowLeft, UserCog, AlertCircle, Trash2, ArrowRightLeft } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -483,51 +483,29 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
         }
     };
 
-    // LOGIQUE DE CONTOURNEMENT: Mise à jour du solde dans le localStorage
     const handleBalanceUpdate = async (values: UpdateBalanceValues) => {
         setIsUpdatingBalance(true);
 
-        try {
-            // 1. Appeler l'action serveur (qui est maintenant un placeholder)
-            await handleUpdateBalance({ ...values, clientId: client.clientId });
+        const result = await handleUpdateBalance({
+            ...values,
+            clientId: client.clientId,
+        });
 
-            // 2. Récupérer la liste actuelle des clients depuis le localStorage
-            const storedClients = JSON.parse(localStorage.getItem('clients') || '[]');
-            
-            // 3. Trouver le client et mettre à jour son solde
-            let newBalance = client.balance || 0;
-            const updatedClients = storedClients.map((c: any) => {
-                if (c.clientId === client.clientId) {
-                    const amount = values.operation === 'credit' ? values.amount : -values.amount;
-                    newBalance = (c.balance || 0) + amount;
-                    return { ...c, balance: newBalance };
-                }
-                return c;
-            });
+        setIsUpdatingBalance(false);
 
-            // 4. Sauvegarder la nouvelle liste dans le localStorage
-            localStorage.setItem('clients', JSON.stringify(updatedClients));
-            
-            // 5. Mettre à jour le localStorage spécifique au solde du client pour le dashboard
-            localStorage.setItem(`balance_${client.email}`, String(newBalance));
-
+        if (result.success) {
             toast({
                 title: "Opération réussie !",
-                description: `Le solde a été mis à jour localement. Le nouveau solde est de ${newBalance.toFixed(2)} €.`,
+                description: `Le solde du client a été mis à jour.`,
             });
-            
-            // 6. Notifier le parent pour rafraîchir l'interface
-            onClientAction();
-            balanceForm.reset({ amount: undefined, operation: 'credit', reason: ''});
-
-        } catch (error) {
-             toast({
+            onClientAction(); // Rafraîchit la liste pour voir le changement
+            balanceForm.reset();
+        } else {
+            toast({
                 title: "Erreur de mise à jour",
-                description: "Une erreur inattendue est survenue lors de la mise à jour locale.",
-                variant: "destructive"
+                description: result.error || "Une erreur est survenue.",
+                variant: "destructive",
             });
-        } finally {
-            setIsUpdatingBalance(false);
         }
     };
     
@@ -680,55 +658,18 @@ export default function AdminPage() {
       
       if (result.success && result.data) {
           const sortedClients = result.data.sort((a:any,b:any) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
-          
-          // Sauvegarde dans le localStorage pour une utilisation immédiate
-          localStorage.setItem('clients', JSON.stringify(sortedClients));
           setClients(sortedClients);
       } else {
-          // En cas d'échec du webhook, essayer de charger depuis le localStorage
-          const localData = localStorage.getItem('clients');
-          if (localData) {
-              setClients(JSON.parse(localData));
-              toast({
-                  title: "Mode hors ligne",
-                  description: "Impossible de contacter le serveur, les données affichées peuvent ne pas être à jour.",
-                  variant: "destructive"
-              });
-          } else {
-              setErrorClients(result.error || "Une erreur est survenue.");
-              toast({
-                  title: "Erreur de chargement",
-                  description: result.error || "Impossible de charger la liste des clients.",
-                  variant: "destructive"
-              });
-          }
+          setErrorClients(result.error || "Une erreur est survenue.");
+          toast({
+              title: "Erreur de chargement",
+              description: result.error || "Impossible de charger la liste des clients.",
+              variant: "destructive"
+          });
       }
       setIsLoadingClients(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const refreshClientsFromLocalStorage = useCallback(() => {
-    const localData = localStorage.getItem('clients');
-    if (localData) {
-        const parsedData = JSON.parse(localData);
-        setClients(parsedData);
-
-        // Si un client est sélectionné, mettre à jour ses données
-        if (selectedClient) {
-            const updatedSelectedClient = parsedData.find((c: any) => c.clientId === selectedClient.clientId);
-            if (updatedSelectedClient) {
-                setSelectedClient(updatedSelectedClient);
-            } else {
-                // Le client a été supprimé
-                setSelectedClient(null);
-            }
-        }
-    } else {
-        // Si les données locales sont vides, on rafraîchit depuis le serveur
-        fetchClients();
-    }
-  }, [selectedClient, fetchClients]);
-
 
   useEffect(() => {
       if (isAdmin) {
@@ -738,19 +679,18 @@ export default function AdminPage() {
 
 
   const handleClientAction = () => {
-    // Cette fonction rafraîchit la liste des clients depuis le localStorage
-    // pour refléter les changements (création, mise à jour de solde) immédiatement.
-    refreshClientsFromLocalStorage();
+    fetchClients();
     setSelectedClient(null); // Deselect client to go back to the list
   }
   
   const handleClientSelection = (client: any) => {
-    setSelectedClient(client);
+    const freshClientData = clients.find(c => c.clientId === client.clientId) || client;
+    setSelectedClient(freshClientData);
   }
 
   const handleBackToList = () => {
     setSelectedClient(null);
-    refreshClientsFromLocalStorage(); // Re-fetch to see any updates
+    fetchClients(); // Re-fetch to see any updates
   }
 
 

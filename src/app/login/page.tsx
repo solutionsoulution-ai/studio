@@ -18,7 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { handleLogin, getClients } from "@/app/actions";
+import { handleLogin } from "@/app/actions";
 import { Loader2, LogIn } from "lucide-react";
 import SiteHeader from "@/components/site/site-header";
 import SiteFooter from "@/components/site/site-footer";
@@ -51,22 +51,6 @@ export default function LoginPage() {
     if (result.success && result.email) {
       // Stocker l'identifiant de l'utilisateur dans le localStorage
       localStorage.setItem("userEmail", result.email);
-
-      // Pré-charger les données clients dans le localStorage pour la session
-      try {
-        const clientsResult = await getClients();
-        if (clientsResult.success && clientsResult.data) {
-          localStorage.setItem('clients', JSON.stringify(clientsResult.data));
-          // Sauvegarde du solde initial spécifique
-          const currentUser = clientsResult.data.find((c:any) => c.email === result.email);
-          if (currentUser) {
-            localStorage.setItem(`balance_${result.email}`, String(currentUser.balance || 0));
-          }
-        }
-      } catch (e) {
-        console.error("Impossible de pré-charger les données clients dans localStorage", e);
-      }
-
 
       toast({
         title: "Connexion réussie !",

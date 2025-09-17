@@ -12,7 +12,7 @@ import TransferForm from "@/components/dashboard/transfer-form";
 import type { TransferFormInput } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getAccountData } from "@/app/actions";
+import { getAccountData, handleTransfer } from "@/app/actions";
 import { useRouter } from "next/navigation";
 
 
@@ -55,7 +55,7 @@ export default function DashboardClientPage() {
     const { toast } = useToast();
     const router = useRouter();
     
-    const fetchAndSyncAccountData = useCallback(async () => {
+    const fetchAccountData = useCallback(async () => {
         const userEmail = localStorage.getItem("userEmail");
         if (!userEmail) {
             toast({
@@ -71,16 +71,7 @@ export default function DashboardClientPage() {
         const result = await getAccountData(userEmail);
 
         if (result.success && result.data) {
-            let data = result.data;
-            // Synchronisation avec le localStorage
-            const localBalanceStr = localStorage.getItem(`balance_${userEmail}`);
-            if (localBalanceStr) {
-                const localBalance = parseFloat(localBalanceStr);
-                if (!isNaN(localBalance)) {
-                    data.balance = localBalance;
-                }
-            }
-            setAccountData(data);
+            setAccountData(result.data);
         } else {
             setError(result.error || "Impossible de charger les données du compte.");
             toast({
@@ -94,17 +85,20 @@ export default function DashboardClientPage() {
     }, []);
     
     useEffect(() => {
-        fetchAndSyncAccountData();
-    }, [fetchAndSyncAccountData]);
+        fetchAccountData();
+    }, [fetchAccountData]);
     
     const handleLogout = () => {
-        // Ne pas effacer le localStorage pour garder les modifications de solde
         localStorage.removeItem("userEmail");
         toast({ title: "Déconnexion réussie." });
         router.push("/");
     };
 
-    const handleTransferSuccess = (transferData: TransferFormInput) => {
+    const handleTransferSuccess = async (transferData: TransferFormInput) => {
+        // Appeler l'action serveur pour notifier le webhook
+        await handleTransfer(transferData);
+
+        // Mettre à jour l'UI localement en attendant le rafraîchissement
         const newTransaction = {
             id: new Date().toISOString(),
             type: `Virement à ${transferData.recipientName}`,
@@ -115,15 +109,15 @@ export default function DashboardClientPage() {
         setAccountData((prevData:any) => {
             if (!prevData) return null;
             const newBalance = prevData.balance - transferData.amount;
-            // Mettre à jour le localStorage avec le nouveau solde
-            localStorage.setItem(`balance_${prevData.client.email}`, String(newBalance));
-
             return {
                 ...prevData,
                 balance: newBalance,
                 transactions: [newTransaction, ...prevData.transactions]
             }
         });
+
+        // Re-fetch les données pour être synchronisé avec le serveur
+        fetchAccountData();
     };
     
     const { totalIncome, totalExpenses } = useMemo(() => {

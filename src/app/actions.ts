@@ -163,7 +163,7 @@ export async function handleLogin(formData: LoginInput): Promise<AuthResult> {
     return { success: true, email: email };
   }
   
-  // **LOGIQUE DE CONTOURNEMENT : Vérification locale via la liste des clients**
+  // **LOGIQUE PRINCIPALE : Vérification via la liste des clients**
   console.log("Tentative de connexion via la vérification de la liste locale...");
   const clientsResult = await getClients();
   if (clientsResult.success && clientsResult.data) {
@@ -582,10 +582,40 @@ export type UpdateBalanceInput = z.infer<typeof updateBalanceSchema>;
 export type UpdateBalanceResult = { success: boolean; error?: string; };
 
 export async function handleUpdateBalance(formData: UpdateBalanceInput): Promise<UpdateBalanceResult> {
-    // Cette fonction est maintenant un placeholder. La logique est déplacée côté client
-    // dans admin/page.tsx pour utiliser le localStorage comme contournement.
-    console.log("handleUpdateBalance a été appelé (logique de contournement côté client).", formData);
-    return { success: true };
+    const parsed = updateBalanceSchema.safeParse(formData);
+
+    if (!parsed.success) {
+      const issues = parsed.error.issues.map((i) => i.message).join(", ");
+      return { success: false, error: `Données invalides: ${issues}` };
+    }
+
+    if (!WEBHOOK_URL) {
+        return { success: false, error: "Le service de mise à jour n'est pas configuré." };
+    }
+
+    try {
+        const response = await fetch(WEBHOOK_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: 'updateBalance', ...parsed.data }),
+        });
+
+        if (!response.ok) {
+            const errorBody = await response.json().catch(() => ({ message: response.statusText }));
+            throw new Error(errorBody.message || "Le serveur a retourné une erreur lors de la mise à jour du solde.");
+        }
+        
+        const result = await response.json();
+        if (result.status !== 'success') {
+            throw new Error(result.message || "Une erreur inconnue est survenue lors de la mise à jour.");
+        }
+
+        return { success: true };
+
+    } catch (error: any) {
+        console.error("Erreur dans handleUpdateBalance:", error);
+        return { success: false, error: error.message };
+    }
 }
     
     
@@ -598,6 +628,7 @@ export async function handleUpdateBalance(formData: UpdateBalanceInput): Promise
     
 
     
+
 
 
 
