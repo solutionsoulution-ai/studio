@@ -38,6 +38,23 @@ export default function Home() {
           <FaqSection />
         </section>
 
+        <section id="eligibilite-cta" className="bg-primary text-primary-foreground">
+          <div className="container mx-auto text-center py-16">
+            <h2 className="text-3xl font-bold">Vérifiez Votre Éligibilité en un Instant</h2>
+            <p className="mt-2 text-lg max-w-xl mx-auto opacity-90">
+              Utilisez notre outil d'évaluation pour obtenir une réponse rapide sur votre admissibilité à un prêt. C'est simple, rapide et sans engagement.
+            </p>
+            <div className="mt-8">
+              <Button size="lg" variant="secondary" asChild>
+                <Link href="/demande-de-pret">
+                  <Sparkles className="mr-2" />
+                  Faire une demande
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </section>
+
       </main>
       <SiteFooter />
     </div>
