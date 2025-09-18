@@ -3,8 +3,6 @@
 
 import "dotenv/config";
 import { z } from "zod";
-import { createClient } from '@supabase/supabase-js'
-
 import {
   assessLoanEligibility,
   type LoanEligibilityInput,
@@ -13,57 +11,6 @@ import {
 
 
 const WEBHOOK_URL = process.env.WEBHOOK_URL || "";
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
-
-if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
-  throw new Error('Supabase URL and service key are required.');
-}
-
-// Client sécurisé côté serveur
-const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
-
-
-// ========= LOGIN CLIENT =========
-const loginSchema = z.object({
-  email: z.string().email(),
-  password: z.string(),
-});
-
-type LoginInput = z.infer<typeof loginSchema>;
-
-export async function handleClientLogin(credentials: LoginInput): Promise<{ success: boolean; profile?: any; error?: string }> {
-    const parsed = loginSchema.safeParse(credentials);
-    if (!parsed.success) {
-        return { success: false, error: 'Données invalides.' };
-    }
-
-    const { email, password } = parsed.data;
-
-    const { data: authData, error: authError } = await supabaseAdmin.auth.signInWithPassword({
-        email,
-        password,
-    });
-
-    if (authError || !authData.user) {
-        console.error("Login - Auth Error:", authError);
-        return { success: false, error: 'Email ou mot de passe incorrect.' };
-    }
-
-    const { data: profile, error: profileError } = await supabaseAdmin
-        .from('profiles')
-        .select('*')
-        .eq('id', authData.user.id)
-        .single();
-    
-    if (profileError || !profile) {
-        console.error("Login - Profile not found:", profileError);
-        return { success: false, error: 'Profil client non trouvé.' };
-    }
-
-    return { success: true, profile };
-}
-
 
 // Schema for Loan Eligibility
 const loanEligibilityFormSchema = z.object({
@@ -309,20 +256,3 @@ export async function handleLoanApplication(formData: FormData): Promise<LoanApp
   
   return { success: true, applicationId: applicationDetails.applicationId };
 }
-
-
-// Schema for bank transfers
-const ibanRegex = /^[A-Z]{2}[0-9]{2}[A-Z0-9]{4}[0-9]{7}([A-Z0-9]?){0,16}$/;
-const transferFormSchema = z.object({
-  recipientIban: z.string().regex(ibanRegex, "Format de l'IBAN invalide."),
-  recipientName: z.string().min(2, "Le nom du bénéficiaire est requis."),
-  amount: z.coerce
-    .number()
-    .positive("Le montant doit être supérieur à 0.")
-    .multipleOf(0.01, "Le montant ne peut avoir plus de 2 décimales."),
-  reason: z.string().min(3, "Une référence est requise.").max(140, "La référence ne peut dépasser 140 caractères."),
-});
-
-export type TransferFormInput = z.infer<typeof transferFormSchema>;
-
-    

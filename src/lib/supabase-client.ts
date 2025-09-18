@@ -12,13 +12,3 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 // Client pour le navigateur (côté client)
 export const supabase = createClient(supabaseUrl!, supabaseAnonKey!)
-
-
-// Client pour les actions serveur (côté serveur)
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY;
-
-if (!supabaseServiceKey) {
-    console.log('Supabase service key not found. Admin actions will be disabled.');
-}
-
-export const supabaseAdmin = supabaseServiceKey ? createClient(supabaseUrl!, supabaseServiceKey) : null;

@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Landmark, Menu, X, ChevronDown, Briefcase, User, Home, Car, Recycle, Info } from "lucide-react";
+import { Landmark, Menu, X, ChevronDown, Briefcase, User, Home, Car, Recycle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
@@ -12,7 +12,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
 
 const mainNavLinks = [
   { href: "/#services", label: "Nos Services" },
@@ -74,11 +73,8 @@ export default function SiteHeader() {
           ))}
         </nav>
         <div className="flex flex-1 items-center justify-end space-x-2 md:flex-none lg:flex-1 lg:justify-end">
-          <Button variant="secondary" asChild>
-            <Link href="/demande-de-pret">Faire une demande</Link>
-          </Button>
           <Button asChild>
-            <Link href="/login">Connexion</Link>
+            <Link href="/demande-de-pret">Faire une demande</Link>
           </Button>
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
