@@ -1,6 +1,6 @@
 
 import SiteHeader from '@/components/site/site-header';
-import HeroSection from '@/components/site/hero-section';
+import HomeCarousel from '@/components/site/home-carousel';
 import ServicesSection from '@/components/site/services-section';
 import WhyChooseUsSection from '@/components/site/why-choose-us-section';
 import InterestRateCalculator from '@/components/site/interest-rate-calculator';
@@ -18,7 +18,7 @@ export default function Home() {
     <div className="flex flex-col min-h-dvh bg-background">
       <SiteHeader />
       <main className="flex-1">
-        <HeroSection />
+        <HomeCarousel />
         
         <ServicesSection />
 
