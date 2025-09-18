@@ -13,9 +13,20 @@ import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter } from "next/navigation";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { getClientByIdAction, createTransferAction, type ClientProfile, type Transaction } from "@/app/actions/clients";
+import { getClientByIdAction, createTransferAction } from "@/app/actions/clients";
+import type { ClientProfile } from "@/app/actions/clients";
 import type { TransferFormInput } from "@/app/actions";
 
+interface Transaction {
+    id: string;
+    profile_id: string;
+    amount: number;
+    reason: string;
+    recipient_iban: string | null;
+    recipient_name: string | null;
+    created_at: string;
+    status: 'PENDING' | 'COMPLETED' | 'FAILED';
+}
 
 const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("fr-FR", {
@@ -51,7 +62,7 @@ const InfoRow = ({ label, value }: { label: string; value: string }) => {
 
 
 export default function DashboardClientPage() {
-    const [accountData, setAccountData] = useState<ClientProfile | null>(null);
+    const [accountData, setAccountData] = useState<Omit<ClientProfile, 'password'> | null>(null);
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);

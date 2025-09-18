@@ -162,7 +162,7 @@ export default function TransferForm({ onTransferSubmit, processingTimeConfig }:
                 <FormItem>
                     <FormLabel>Montant</FormLabel>
                     <FormControl>
-                    <Input type="number" step="0.01" placeholder="100.00" {...field} disabled={isLoading}/>
+                    <Input type="number" step="0.01" placeholder="100.00" {...field} onChange={event => field.onChange(+event.target.value)} disabled={isLoading}/>
                     </FormControl>
                     <FormMessage />
                 </FormItem>

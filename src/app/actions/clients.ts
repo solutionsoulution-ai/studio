@@ -4,11 +4,12 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { z } from 'zod';
+import type { TransferFormInput } from '@/app/actions';
 
 const dataFilePath = path.join(process.cwd(), 'src', 'data', 'clients.json');
 
-// Types
-export interface Transaction {
+// Types (non-exportés)
+interface Transaction {
     id: string;
     profile_id: string;
     amount: number;
@@ -23,7 +24,7 @@ export interface ClientProfile {
     id: string;
     client_id: string;
     email: string;
-    password?: string; // Ne jamais renvoyer le mot de passe au client
+    password?: string;
     balance: number;
     account_number: string;
     iban: string;
@@ -69,15 +70,6 @@ const loginSchema = z.object({
   password: z.string(),
 });
 
-export const transferFormSchema = z.object({
-  recipientIban: z.string().min(1, "L'IBAN est requis."),
-  recipientName: z.string().min(2, "Le nom du bénéficiaire est requis."),
-  amount: z.coerce.number().positive("Le montant doit être positif."),
-  reason: z.string().min(2, "Le motif est requis."),
-});
-export type TransferFormInput = z.infer<typeof transferFormSchema>;
-
-
 // Server Actions
 
 /**
@@ -112,7 +104,7 @@ export async function verifyClientLoginAction(credentials: z.infer<typeof loginS
  * @param clientId - The ID of the client to fetch.
  * @returns { success: boolean; client?: ClientProfile; error?: string }
  */
-export async function getClientByIdAction(clientId: string): Promise<{ success: boolean; client?: ClientProfile; error?: string }> {
+export async function getClientByIdAction(clientId: string): Promise<{ success: boolean; client?: Omit<ClientProfile, 'password'>; error?: string }> {
     if (!clientId) {
         return { success: false, error: "ID client non fourni." };
     }
@@ -226,7 +218,7 @@ export async function verifyAdminLoginAction(password: string): Promise<{ succes
  * Fetches all client profiles for the admin dashboard.
  * @returns { success: boolean; clients?: ClientProfile[]; error?: string }
  */
-export async function getClientsAction(): Promise<{ success: boolean; clients?: ClientProfile[]; error?: string }> {
+export async function getClientsAction(): Promise<{ success: boolean; clients?: Omit<ClientProfile, 'password'>[]; error?: string }> {
     try {
         const clients = await readData();
         // Remove password before sending to client

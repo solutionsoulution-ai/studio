@@ -78,7 +78,7 @@ const AdminLoginForm = ({ onLoginSuccess }: { onLoginSuccess: () => void }) => {
   );
 };
 
-const ClientList = ({ clients, onClientSelect, isLoading, error }: { clients: ClientProfile[], onClientSelect: (client:ClientProfile) => void, isLoading: boolean, error?: string | null }) => {
+const ClientList = ({ clients, onClientSelect, isLoading, error }: { clients: Omit<ClientProfile, 'password'>[], onClientSelect: (client:Omit<ClientProfile, 'password'>) => void, isLoading: boolean, error?: string | null }) => {
 
     if (isLoading) {
          return (
@@ -161,7 +161,7 @@ const ClientList = ({ clients, onClientSelect, isLoading, error }: { clients: Cl
     )
 }
 
-const ClientDetailView = ({ client, onBack, onClientAction }: { client: ClientProfile, onBack: () => void, onClientAction: () => void }) => {
+const ClientDetailView = ({ client, onBack, onClientAction }: { client: Omit<ClientProfile, 'password'>, onBack: () => void, onClientAction: () => void }) => {
     const { toast } = useToast();
     const [isDeleting, setIsDeleting] = useState(false);
     
@@ -248,8 +248,8 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: ClientPr
 export default function AdminPage() {
   const [isClient, setIsClient] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [clients, setClients] = useState<ClientProfile[]>([]);
-  const [selectedClient, setSelectedClient] = useState<ClientProfile | null>(null);
+  const [clients, setClients] = useState<Omit<ClientProfile, 'password'>[]>([]);
+  const [selectedClient, setSelectedClient] = useState<Omit<ClientProfile, 'password'> | null>(null);
   const [isLoadingClients, setIsLoadingClients] = useState(true);
   const [errorClients, setErrorClients] = useState<string | null>(null);
 
@@ -282,7 +282,7 @@ export default function AdminPage() {
     }
   }, [isAdmin, fetchClients]);
 
-  const handleClientSelection = (client: ClientProfile) => {
+  const handleClientSelection = (client: Omit<ClientProfile, 'password'>) => {
     setSelectedClient(client);
   }
 
