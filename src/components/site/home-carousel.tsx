@@ -75,7 +75,7 @@ export default function HomeCarousel() {
                     </p>
                     <div className="mt-8">
                       <Button size="lg" asChild>
-                        <Link href="/demande-de-pret">Faire une demande</Link>
+                        <Link href="/demande-de-pret">Commencer ma demande</Link>
                       </Button>
                     </div>
                   </div>

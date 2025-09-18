@@ -93,7 +93,7 @@ export default function PretAutoPage() {
                 </li>
               </ul>
               <Button size="lg" asChild>
-                <Link href="/#eligibilite">Calculer mon prêt auto</Link>
+                <Link href="/demande-de-pret">Commencer ma demande</Link>
               </Button>
             </div>
             <div className="order-1 md:order-2">

@@ -92,7 +92,7 @@ export default function PretImmobilierPage() {
                 </li>
               </ul>
               <Button size="lg" asChild>
-                <Link href="/#eligibilite">Démarrer mon projet</Link>
+                <Link href="/demande-de-pret">Commencer ma demande</Link>
               </Button>
             </div>
             <div className="order-1 md:order-2">

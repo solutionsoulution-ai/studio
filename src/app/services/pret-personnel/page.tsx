@@ -94,7 +94,7 @@ export default function PretPersonnelPage() {
                 </li>
               </ul>
               <Button size="lg" asChild>
-                <Link href="/demande-de-pret">Faire une demande</Link>
+                <Link href="/demande-de-pret">Commencer ma demande</Link>
               </Button>
             </div>
             <div className="order-1 md:order-2">
