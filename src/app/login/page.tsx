@@ -54,10 +54,11 @@ export default function LoginPage() {
 
   async function onSubmit(values: FormValues) {
     if (!isClient) return;
-    
+
     setIsLoading(true);
 
     try {
+      // 1. Appeler la fonction RPC pour vérifier le mot de passe
       const { data: isValid, error: rpcError } = await supabase.rpc('verify_password', {
           p_client_id: values.clientId,
           p_password: values.password
@@ -66,12 +67,12 @@ export default function LoginPage() {
       if (rpcError) {
         throw new Error(`Erreur RPC: ${rpcError.message}`);
       }
-      
+
       if (!isValid) {
         throw new Error("Identifiant client ou mot de passe incorrect.");
       }
-      
-      // If password is valid, fetch the full profile
+
+      // 2. Si le mot de passe est valide, récupérer le profil complet
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
         .select('*')
@@ -81,8 +82,8 @@ export default function LoginPage() {
       if (profileError || !profile) {
         throw new Error("Impossible de récupérer le profil après la vérification.");
       }
-      
-      // Store session in localStorage
+
+      // 3. Stocker les données de session (sans le mot de passe) dans localStorage
       const { password, ...sessionData } = profile;
       localStorage.setItem('vyls_session', JSON.stringify(sessionData));
 
@@ -166,3 +167,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
+    

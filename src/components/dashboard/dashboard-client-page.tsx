@@ -57,11 +57,11 @@ export default function DashboardClientPage() {
     const [error, setError] = useState<string | null>(null);
     const { toast } = useToast();
     const router = useRouter();
-    
+
     const fetchAccountData = useCallback(async (profileId: string) => {
       setIsLoading(true);
       setError(null);
-      
+
       try {
         const { data: profile, error: profileError } = await supabase
           .from('profiles')
@@ -71,7 +71,7 @@ export default function DashboardClientPage() {
 
         if (profileError) throw profileError;
         setAccountData(profile);
-        
+
         const { data: transactionsData, error: transactionsError } = await supabase
           .from('transactions')
           .select('*')
@@ -90,7 +90,7 @@ export default function DashboardClientPage() {
         setIsLoading(false);
       }
     }, [router, toast]);
-    
+
     useEffect(() => {
         const sessionString = localStorage.getItem('vyls_session');
         if (!sessionString) {
@@ -101,9 +101,11 @@ export default function DashboardClientPage() {
         const session = JSON.parse(sessionString);
         if (session.id) {
             fetchAccountData(session.id);
+        } else {
+            router.push("/login");
         }
     }, [fetchAccountData, router, toast]);
-    
+
     const handleLogout = () => {
         localStorage.removeItem('vyls_session');
         toast({ title: "Déconnexion réussie." });
@@ -112,22 +114,24 @@ export default function DashboardClientPage() {
 
     const handleTransferSubmit = async (transferData: TransferFormInput): Promise<{success: boolean}> => {
         if (!accountData) return {success: false};
-        
+
         if (accountData.balance < transferData.amount) {
             toast({ title: "Erreur de virement", description: "Solde insuffisant.", variant: "destructive"});
             return {success: false};
         }
 
-        const { error } = await supabase
+        const newBalance = accountData.balance - transferData.amount;
+
+        const { error: profileUpdateError } = await supabase
             .from('profiles')
-            .update({ balance: accountData.balance - transferData.amount })
+            .update({ balance: newBalance })
             .eq('id', accountData.id);
 
-        if (error) {
-             toast({ title: "Erreur de virement", description: error.message, variant: "destructive"});
+        if (profileUpdateError) {
+             toast({ title: "Erreur de virement", description: profileUpdateError.message, variant: "destructive"});
              return {success: false};
         }
-        
+
         const { error: txError } = await supabase.from('transactions').insert({
             profile_id: accountData.id,
             amount: -transferData.amount,
@@ -135,7 +139,7 @@ export default function DashboardClientPage() {
             recipient_iban: transferData.recipientIban,
             recipient_name: transferData.recipientName
         });
-        
+
         if (txError) {
             // Try to revert balance
             await supabase.from('profiles').update({ balance: accountData.balance }).eq('id', accountData.id);
@@ -143,10 +147,10 @@ export default function DashboardClientPage() {
             return {success: false};
         }
 
-        fetchAccountData(accountData.id);
+        fetchAccountData(accountData.id); // Re-fetch data to update the view
         return {success: true};
     };
-    
+
     const { totalIncome, totalExpenses } = useMemo(() => {
         if (!transactions) return { totalIncome: 0, totalExpenses: 0 };
         const income = transactions
@@ -186,7 +190,7 @@ export default function DashboardClientPage() {
         </div>
     )
   }
-  
+
   if (error || !accountData) {
       return (
           <div className="container mx-auto py-16 text-center">
@@ -252,7 +256,7 @@ export default function DashboardClientPage() {
                         </CardContent>
                     </Card>
                 </div>
-                
+
                  <div className="grid lg:grid-cols-5 gap-6 mt-6">
                     <div className="lg:col-span-2">
                         <Card className="h-full">
@@ -326,8 +330,8 @@ export default function DashboardClientPage() {
                                 </AlertDescription>
                             </Alert>
                         ) : (
-                            <TransferForm 
-                                onTransferSubmit={handleTransferSubmit} 
+                            <TransferForm
+                                onTransferSubmit={handleTransferSubmit}
                                 processingTimeConfig={accountData.transfer_processing_time}
                             />
                         )}
@@ -357,3 +361,5 @@ export default function DashboardClientPage() {
     </div>
   );
 }
+
+    

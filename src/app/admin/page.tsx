@@ -70,7 +70,7 @@ const createClientAndAccountSchema = z.object({
     return true;
 }, {
     message: "Les détails du prêt sont requis lorsque le type de prêt n'est pas 'Aucun'.",
-    path: ["loanAmount"], 
+    path: ["loanAmount"],
 });
 type CreateClientAndAccountValues = z.infer<typeof createClientAndAccountSchema>;
 
@@ -139,11 +139,11 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: () =
 
   const form = useForm<CreateClientAndAccountValues>({
     resolver: zodResolver(createClientAndAccountSchema),
-    defaultValues: { 
-      email: "", 
-      password: "", 
+    defaultValues: {
+      email: "",
+      password: "",
       accountNumber: "",
-      iban: "", 
+      iban: "",
       bic: "",
       balance: 0,
       loanType: "none",
@@ -154,7 +154,7 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: () =
 
   async function onSubmit(values: CreateClientAndAccountValues) {
     setIsLoading(true);
-    
+
     const { error } = await supabase
       .from('profiles')
       .insert({
@@ -224,7 +224,7 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: () =
                      )}/>
                  </div>
             </div>
-            
+
             <div className="space-y-4 p-4 border rounded-md">
                 <h3 className="font-semibold text-lg">Compte Bancaire Associé</h3>
                 <FormField control={form.control} name="balance" render={({ field }) => (
@@ -315,7 +315,7 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: () =
 };
 
 const ClientList = ({ clients, onClientSelect, isLoading, error }: { clients: any[], onClientSelect: (client:any) => void, isLoading: boolean, error?: string | null }) => {
-    
+
     if (isLoading) {
          return (
              <Card className="w-full shadow-lg mt-8 lg:mt-0">
@@ -332,7 +332,7 @@ const ClientList = ({ clients, onClientSelect, isLoading, error }: { clients: an
             </Card>
         );
     }
-    
+
     if (error) {
          return (
              <Card className="w-full shadow-lg mt-8 lg:mt-0">
@@ -347,7 +347,7 @@ const ClientList = ({ clients, onClientSelect, isLoading, error }: { clients: an
             </Card>
         );
     }
-    
+
     if (clients.length === 0) {
         return (
              <Card className="w-full shadow-lg mt-8 lg:mt-0">
@@ -443,6 +443,9 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
 
     const handleDelete = async () => {
         setIsDeleting(true);
+        // Supprimer les transactions associées d'abord
+        await supabase.from('transactions').delete().eq('profile_id', client.id);
+        // Puis supprimer le profil
         const { error } = await supabase.from('profiles').delete().eq('id', client.id);
         setIsDeleting(false);
 
@@ -458,12 +461,12 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
     const handleBalanceUpdate = async (values: UpdateBalanceValues) => {
         setIsUpdatingBalance(true);
         const amount = values.operation === 'credit' ? values.amount : -values.amount;
-        
+
         const { error } = await supabase
             .from('profiles')
             .update({ balance: (client.balance || 0) + amount })
             .eq('id', client.id);
-            
+
         if (error) {
              toast({ title: "Erreur", description: `Impossible de mettre à jour le solde: ${error.message}`, variant: "destructive" });
         } else {
@@ -501,7 +504,7 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
             onClientAction();
         }
     };
-    
+
     return (
         <Card className="w-full shadow-lg">
             <CardHeader>
@@ -578,7 +581,7 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
                         </form>
                     </Form>
                 </div>
-                
+
                 <div className="p-4 border rounded-md space-y-4 bg-secondary/30">
                      <h3 className="font-semibold mb-2">Gestion de Compte</h3>
                      <Form {...balanceForm}>
@@ -691,14 +694,14 @@ export default function AdminPage() {
         });
     }
   }
-  
+
   const handleClientSelection = (client: any) => {
     setSelectedClient(client);
   }
 
   const handleBackToList = () => {
     setSelectedClient(null);
-    fetchClients(); 
+    fetchClients();
   }
 
   if (!isClient) {
@@ -724,17 +727,17 @@ export default function AdminPage() {
         <p className="text-muted-foreground mb-8">Gérez les comptes clients et leurs produits bancaires.</p>
         <div className="grid lg:grid-cols-2 gap-8 items-start">
             {selectedClient ? (
-                <ClientDetailView 
-                    client={selectedClient} 
-                    onBack={handleBackToList} 
+                <ClientDetailView
+                    client={selectedClient}
+                    onBack={handleBackToList}
                     onClientAction={handleClientAction}
                 />
             ) : (
                 <CreateClientAndAccountForm onClientCreated={fetchClients} />
             )}
-            <ClientList 
-                clients={clients} 
-                onClientSelect={handleClientSelection} 
+            <ClientList
+                clients={clients}
+                onClientSelect={handleClientSelection}
                 isLoading={isLoadingClients}
                 error={errorClients}
             />
@@ -743,3 +746,5 @@ export default function AdminPage() {
     </main>
   );
 }
+
+    
