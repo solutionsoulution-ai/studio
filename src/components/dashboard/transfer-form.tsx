@@ -4,7 +4,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,20 +14,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { type TransferFormInput } from "@/app/actions";
+import { transferFormSchema, type TransferFormInput } from "@/app/actions";
 import { Loader2, Send, CheckCircle, RefreshCw, AlertTriangle } from "lucide-react";
 import { Progress } from "../ui/progress";
 
-const ibanRegex = /^[A-Z]{2}[0-9]{2}[A-Z0-9]{4}[0-9]{7}([A-Z0-9]?){0,16}$/;
-const transferFormSchema = z.object({
-  recipientIban: z.string().regex(ibanRegex, "Format de l'IBAN invalide."),
-  recipientName: z.string().min(2, "Le nom du bénéficiaire est requis."),
-  amount: z.coerce
-    .number()
-    .positive("Le montant doit être supérieur à 0.")
-    .multipleOf(0.01, "Le montant ne peut avoir plus de 2 décimales."),
-  reason: z.string().min(3, "Une référence est requise.").max(140, "La référence ne peut dépasser 140 caractères."),
-});
 
 type TransferState = "idle" | "loading" | "processing" | "success" | "error";
 
@@ -109,7 +98,7 @@ export default function TransferForm({ onTransferSubmit, processingTimeConfig }:
             {transferState === "success" && (
                  <>
                     <CheckCircle className="text-green-500 w-12 h-12 mx-auto mb-4" />
-                    <h3 className="text-xl font-semibold">Virement Effectué !</h3>
+                    <h3 className="text-xl font-semibold">Virement Initié !</h3>
                     <p className="text-muted-foreground mb-6">Le virement a été initié avec succès et apparaît dans votre historique.</p>
                     <Button onClick={resetForm}>
                         <RefreshCw className="mr-2" />
@@ -173,7 +162,7 @@ export default function TransferForm({ onTransferSubmit, processingTimeConfig }:
                 <FormItem>
                     <FormLabel>Montant</FormLabel>
                     <FormControl>
-                    <Input type="number" step="0.01" placeholder="100.00" {...field} />
+                    <Input type="number" step="0.01" placeholder="100.00" {...field} disabled={isLoading}/>
                     </FormControl>
                     <FormMessage />
                 </FormItem>
@@ -205,5 +194,3 @@ export default function TransferForm({ onTransferSubmit, processingTimeConfig }:
     </Form>
   );
 }
-
-    

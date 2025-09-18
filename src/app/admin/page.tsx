@@ -22,15 +22,9 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2, Shield, Users, ArrowLeft, UserCog, AlertCircle, Trash2 } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
-import { createClient } from "@supabase/supabase-js";
+import { getClientsAction, deleteClientAction, verifyAdminLoginAction } from "@/app/actions/clients";
+import type { ClientProfile } from "@/app/actions/clients";
 
-// Supabase Admin Client - Côté Serveur (via une action)
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY!;
-
-// Supabase Client - Côté Navigateur
-const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Schéma pour le formulaire de connexion admin
 const adminLoginSchema = z.object({
@@ -49,16 +43,15 @@ const AdminLoginForm = ({ onLoginSuccess }: { onLoginSuccess: () => void }) => {
 
   async function onSubmit(values: AdminLoginValues) {
     setIsLoading(true);
-    // Hardcoded password for demo access
-    const ADMIN_PASSWORD = "XtZ_7@pQn!fS8#mV";
-    const success = values.password === ADMIN_PASSWORD;
+    const result = await verifyAdminLoginAction(values.password);
     setIsLoading(false);
 
-    if (success) {
+    if (result.success) {
       toast({ title: "Accès autorisé" });
+      sessionStorage.setItem('vyls_admin_session', 'true');
       onLoginSuccess();
     } else {
-      toast({ title: "Accès refusé", description: "Mot de passe incorrect.", variant: "destructive" });
+      toast({ title: "Accès refusé", description: result.error, variant: "destructive" });
     }
   }
 
@@ -85,7 +78,7 @@ const AdminLoginForm = ({ onLoginSuccess }: { onLoginSuccess: () => void }) => {
   );
 };
 
-const ClientList = ({ clients, onClientSelect, isLoading, error }: { clients: any[], onClientSelect: (client:any) => void, isLoading: boolean, error?: string | null }) => {
+const ClientList = ({ clients, onClientSelect, isLoading, error }: { clients: ClientProfile[], onClientSelect: (client:ClientProfile) => void, isLoading: boolean, error?: string | null }) => {
 
     if (isLoading) {
          return (
@@ -128,7 +121,7 @@ const ClientList = ({ clients, onClientSelect, isLoading, error }: { clients: an
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="text-center text-muted-foreground py-12">
-                    Aucun client trouvé. Vous pouvez en ajouter directement dans votre base de données Supabase.
+                    Aucun client trouvé.
                 </CardContent>
             </Card>
         );
@@ -168,31 +161,26 @@ const ClientList = ({ clients, onClientSelect, isLoading, error }: { clients: an
     )
 }
 
-const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onBack: () => void, onClientAction: () => void }) => {
+const ClientDetailView = ({ client, onBack, onClientAction }: { client: ClientProfile, onBack: () => void, onClientAction: () => void }) => {
     const { toast } = useToast();
     const [isDeleting, setIsDeleting] = useState(false);
     
-    // This is a placeholder for the server action
-    const deleteUserById = async (userId: string) => {
-        // In a real app, this would be a server action calling supabase.auth.admin.deleteUser(userId)
-        console.log("Simulating deletion of user:", userId);
-        const { error } = await supabase.from('profiles').delete().eq('id', userId);
-        return { error };
-    }
-
     const handleDelete = async () => {
+        if (!client) return;
         setIsDeleting(true);
-        const { error } = await deleteUserById(client.id);
+        const result = await deleteClientAction(client.id);
         setIsDeleting(false);
 
-        if (error) {
-            toast({ title: "Erreur", description: `Impossible de supprimer le client: ${error.message}`, variant: "destructive" });
-        } else {
+        if (result.success) {
             toast({ title: "Client Supprimé", description: "Le client a été supprimé avec succès." });
             onClientAction();
             onBack();
+        } else {
+             toast({ title: "Erreur", description: result.error, variant: "destructive" });
         }
     };
+
+    if (!client) return null;
 
     return (
         <Card className="w-full shadow-lg col-span-1 lg:col-span-2">
@@ -260,13 +248,16 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
 export default function AdminPage() {
   const [isClient, setIsClient] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [clients, setClients] = useState<any[]>([]);
-  const [selectedClient, setSelectedClient] = useState<any | null>(null);
+  const [clients, setClients] = useState<ClientProfile[]>([]);
+  const [selectedClient, setSelectedClient] = useState<ClientProfile | null>(null);
   const [isLoadingClients, setIsLoadingClients] = useState(true);
   const [errorClients, setErrorClients] = useState<string | null>(null);
 
   useEffect(() => {
     setIsClient(true);
+    if (sessionStorage.getItem('vyls_admin_session') === 'true') {
+        setIsAdmin(true);
+    }
   }, []);
 
   const fetchClients = useCallback(async () => {
@@ -274,16 +265,13 @@ export default function AdminPage() {
       setIsLoadingClients(true);
       setErrorClients(null);
       
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .order('created_at', { ascending: false });
+      const result = await getClientsAction();
 
-      if (error) {
-        setErrorClients(`Erreur: ${error.message}. Assurez-vous que l'accès anonyme en lecture est activé sur votre table 'profiles' dans les policies Supabase pour cette page de démonstration.`);
-        setClients([]);
+      if (result.success && result.clients) {
+        setClients(result.clients);
       } else {
-        setClients(data);
+        setErrorClients(result.error || "Une erreur est survenue.");
+        setClients([]);
       }
       setIsLoadingClients(false);
   }, [isAdmin]);
@@ -294,7 +282,7 @@ export default function AdminPage() {
     }
   }, [isAdmin, fetchClients]);
 
-  const handleClientSelection = (client: any) => {
+  const handleClientSelection = (client: ClientProfile) => {
     setSelectedClient(client);
   }
 

@@ -21,7 +21,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2, LogIn } from "lucide-react";
 import SiteHeader from "@/components/site/site-header";
 import SiteFooter from "@/components/site/site-footer";
-import { handleClientLogin } from "@/app/actions";
+import { verifyClientLoginAction } from "@/app/actions/clients";
 
 const formSchema = z.object({
   email: z.string().email({ message: "L'adresse e-mail est requise." }),
@@ -38,8 +38,9 @@ export default function LoginPage() {
 
   useEffect(() => {
     setIsClient(true);
+    // Clear any previous session on page load
     if (typeof window !== 'undefined') {
-        localStorage.removeItem('vyls_session');
+        sessionStorage.removeItem('vyls_session_id');
     }
   }, []);
 
@@ -57,10 +58,10 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const result = await handleClientLogin(values);
+      const result = await verifyClientLoginAction(values);
 
-      if (result.success && result.profile) {
-        localStorage.setItem('vyls_session', JSON.stringify(result.profile));
+      if (result.success && result.clientId) {
+        sessionStorage.setItem('vyls_session_id', result.clientId);
         toast({
           title: "Connexion réussie !",
           description: "Vous allez être redirigé vers votre espace client.",
@@ -144,5 +145,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
-    

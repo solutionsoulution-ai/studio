@@ -9,12 +9,12 @@ import { LogOut, ArrowUpRight, ArrowDownLeft, Landmark, Send, FileText, Info, Co
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import TransferForm from "@/components/dashboard/transfer-form";
-import type { TransferFormInput } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter } from "next/navigation";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { supabase } from "@/lib/supabase-client";
+import { getClientByIdAction, createTransferAction, type ClientProfile, type Transaction } from "@/app/actions/clients";
+import type { TransferFormInput } from "@/app/actions";
 
 
 const formatCurrency = (value: number) => {
@@ -51,114 +51,77 @@ const InfoRow = ({ label, value }: { label: string; value: string }) => {
 
 
 export default function DashboardClientPage() {
-    const [accountData, setAccountData] = useState<any>(null);
-    const [transactions, setTransactions] = useState<any[]>([]);
+    const [accountData, setAccountData] = useState<ClientProfile | null>(null);
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const { toast } = useToast();
     const router = useRouter();
 
-    const fetchAccountData = useCallback(async (profileId: string) => {
+    const handleLogout = useCallback(() => {
+        sessionStorage.removeItem('vyls_session_id');
+        toast({ title: "Déconnexion réussie." });
+        router.push("/");
+    }, [router, toast]);
+
+
+    const fetchAccountData = useCallback(async (clientId: string) => {
       setIsLoading(true);
       setError(null);
 
       try {
-        const { data: profile, error: profileError } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', profileId)
-          .single();
-
-        if (profileError) throw profileError;
-        setAccountData(profile);
-
-        const { data: transactionsData, error: transactionsError } = await supabase
-          .from('transactions')
-          .select('*')
-          .eq('profile_id', profileId)
-          .order('created_at', { ascending: false });
-
-        if (transactionsError) throw transactionsError;
-        setTransactions(transactionsData);
+        const result = await getClientByIdAction(clientId);
+        if (!result.success || !result.client) {
+            throw new Error(result.error || "Client non trouvé.");
+        }
+        
+        setAccountData(result.client);
+        setTransactions(result.client.transactions || []);
 
       } catch (e: any) {
         setError(e.message || "Une erreur est survenue lors de la récupération des données.");
         toast({ title: "Erreur de chargement", description: e.message, variant: "destructive" });
-        // If error, log out
         handleLogout();
       } finally {
         setIsLoading(false);
       }
-    }, [router, toast]);
+    }, [toast, handleLogout]);
 
     useEffect(() => {
-        const sessionString = localStorage.getItem('vyls_session');
-        if (!sessionString) {
+        const clientId = sessionStorage.getItem('vyls_session_id');
+        if (!clientId) {
             toast({ title: "Accès non autorisé", description: "Veuillez vous reconnecter.", variant: "destructive" });
             router.push("/login");
             return;
         }
-        const session = JSON.parse(sessionString);
-        if (session.id) {
-            fetchAccountData(session.id);
-        } else {
-            router.push("/login");
-        }
+        fetchAccountData(clientId);
     }, [fetchAccountData, router, toast]);
-
-    const handleLogout = () => {
-        localStorage.removeItem('vyls_session');
-        toast({ title: "Déconnexion réussie." });
-        router.push("/");
-    };
 
     const handleTransferSubmit = async (transferData: TransferFormInput): Promise<{success: boolean}> => {
         if (!accountData) return {success: false};
 
-        if (accountData.balance < transferData.amount) {
-            toast({ title: "Erreur de virement", description: "Solde insuffisant.", variant: "destructive"});
-            return {success: false};
-        }
-
-        const newBalance = accountData.balance - transferData.amount;
-
-        const { error: profileUpdateError } = await supabase
-            .from('profiles')
-            .update({ balance: newBalance })
-            .eq('id', accountData.id);
-
-        if (profileUpdateError) {
-             toast({ title: "Erreur de virement", description: profileUpdateError.message, variant: "destructive"});
-             return {success: false};
-        }
-
-        const { error: txError } = await supabase.from('transactions').insert({
-            profile_id: accountData.id,
-            amount: -transferData.amount,
-            reason: transferData.reason,
-            recipient_iban: transferData.recipientIban,
-            recipient_name: transferData.recipientName
+        const result = await createTransferAction({
+            clientId: accountData.id,
+            ...transferData
         });
 
-        if (txError) {
-            // Try to revert balance
-            await supabase.from('profiles').update({ balance: accountData.balance }).eq('id', accountData.id);
-            toast({ title: "Erreur de virement", description: `La transaction n'a pas pu être enregistrée: ${txError.message}`, variant: "destructive"});
-            return {success: false};
+        if (result.success) {
+             // Re-fetch data to update the view
+            fetchAccountData(accountData.id);
+        } else {
+             toast({ title: "Erreur de virement", description: result.error, variant: "destructive"});
         }
-
-        fetchAccountData(accountData.id); // Re-fetch data to update the view
-        return {success: true};
+        return {success: result.success};
     };
 
     const { totalIncome, totalExpenses } = useMemo(() => {
         if (!transactions) return { totalIncome: 0, totalExpenses: 0 };
         const income = transactions
-            .filter((tx: any) => tx.amount > 0)
-            .reduce((sum: number, tx: any) => sum + tx.amount, 0);
+            .filter((tx) => tx.amount > 0)
+            .reduce((sum, tx) => sum + tx.amount, 0);
         const expenses = transactions
-            .filter((tx: any) => tx.amount < 0)
-            .reduce((sum: number, tx: any) => sum + tx.amount, 0);
+            .filter((tx) => tx.amount < 0)
+            .reduce((sum, tx) => sum + tx.amount, 0);
         return { totalIncome: income, totalExpenses: expenses };
     }, [transactions]);
 
@@ -203,6 +166,8 @@ export default function DashboardClientPage() {
           </div>
       )
   }
+
+  const sortedTransactions = [...transactions].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
   return (
     <div className="container mx-auto py-16">
@@ -288,7 +253,7 @@ export default function DashboardClientPage() {
                                     </TableHeader>
                                     <TableBody>
                                         {transactions && transactions.length > 0 ? (
-                                            transactions.map((tx: any) => (
+                                            sortedTransactions.map((tx) => (
                                                 <TableRow key={tx.id}>
                                                     <TableCell className="font-medium flex items-center gap-2">
                                                         {tx.amount > 0 ? <ArrowDownLeft className="w-4 h-4 text-green-500"/> : <ArrowUpRight className="w-4 h-4 text-red-500" />}
@@ -361,5 +326,3 @@ export default function DashboardClientPage() {
     </div>
   );
 }
-
-    
