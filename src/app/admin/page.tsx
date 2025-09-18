@@ -42,7 +42,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
-import { supabase } from "@/lib/supabase-client";
+import { supabase, supabaseAdmin } from "@/lib/supabase-client";
 
 
 // Schéma pour le formulaire de connexion admin
@@ -152,46 +152,60 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: () =
 
   const loanType = form.watch("loanType");
 
-  async function onSubmit(values: CreateClientAndAccountValues) {
-    setIsLoading(true);
+    async function onSubmit(values: CreateClientAndAccountValues) {
+        setIsLoading(true);
 
-    const { error } = await supabase
-      .from('profiles')
-      .insert({
-        email: values.email,
-        password: values.password, // Le mot de passe sera haché par le trigger de la DB
-        account_number: values.accountNumber,
-        iban: values.iban,
-        bic: values.bic,
-        balance: values.balance,
-        has_loan: values.loanType !== 'none',
-        loan_type: values.loanType === 'none' ? null : values.loanType,
-        loan_amount: values.loanAmount,
-        interest_rate: values.interestRate,
-        loan_term: values.loanTerm,
-        is_transfer_blocked: false,
-        transfer_block_reason: null,
-        transfer_processing_time: { days: 0, hours: 0, minutes: 1 }
-      });
+        if (!supabaseAdmin) {
+            toast({
+                title: "Erreur de configuration",
+                description: "La connexion sécurisée à la base de données n'est pas disponible.",
+                variant: "destructive",
+            });
+            setIsLoading(false);
+            return;
+        }
 
-    setIsLoading(false);
+        try {
+            const { error } = await supabaseAdmin
+            .from('profiles')
+            .insert({
+                email: values.email,
+                password: values.password, // Le mot de passe sera haché par le trigger de la DB
+                account_number: values.accountNumber,
+                iban: values.iban,
+                bic: values.bic,
+                balance: values.balance,
+                has_loan: values.loanType !== 'none',
+                loan_type: values.loanType === 'none' ? null : values.loanType,
+                loan_amount: values.loanAmount,
+                interest_rate: values.interestRate,
+                loan_term: values.loanTerm,
+                is_transfer_blocked: false,
+                transfer_block_reason: null,
+                transfer_processing_time: { days: 0, hours: 0, minutes: 1 }
+            });
 
-    if (error) {
-      toast({
-        title: "Erreur de création de client",
-        description: error.message,
-        variant: "destructive",
-      });
-      return;
+            if (error) {
+                throw error;
+            }
+
+            toast({
+                title: "Client et Compte Créés !",
+                description: `Le compte pour ${values.email} a été créé avec succès.`,
+            });
+            onClientCreated(); // Rafraîchir la liste des clients
+            form.reset();
+
+        } catch (error: any) {
+             toast({
+                title: "Erreur de création de client",
+                description: error.message || "Une erreur inattendue est survenue.",
+                variant: "destructive",
+            });
+        } finally {
+            setIsLoading(false);
+        }
     }
-
-    toast({
-      title: "Client et Compte Créés !",
-      description: `Le compte pour ${values.email} a été créé avec succès.`,
-    });
-    onClientCreated(); // Rafraîchir la liste des clients
-    form.reset();
-  }
 
 
   return (
@@ -442,11 +456,12 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
     const isTransferBlocked = configForm.watch("is_transfer_blocked");
 
     const handleDelete = async () => {
+        if (!supabaseAdmin) return;
         setIsDeleting(true);
         // Supprimer les transactions associées d'abord
-        await supabase.from('transactions').delete().eq('profile_id', client.id);
+        await supabaseAdmin.from('transactions').delete().eq('profile_id', client.id);
         // Puis supprimer le profil
-        const { error } = await supabase.from('profiles').delete().eq('id', client.id);
+        const { error } = await supabaseAdmin.from('profiles').delete().eq('id', client.id);
         setIsDeleting(false);
 
         if (error) {
@@ -459,10 +474,11 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
     };
 
     const handleBalanceUpdate = async (values: UpdateBalanceValues) => {
+        if (!supabaseAdmin) return;
         setIsUpdatingBalance(true);
         const amount = values.operation === 'credit' ? values.amount : -values.amount;
 
-        const { error } = await supabase
+        const { error } = await supabaseAdmin
             .from('profiles')
             .update({ balance: (client.balance || 0) + amount })
             .eq('id', client.id);
@@ -470,7 +486,7 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
         if (error) {
              toast({ title: "Erreur", description: `Impossible de mettre à jour le solde: ${error.message}`, variant: "destructive" });
         } else {
-             await supabase.from('transactions').insert({
+             await supabaseAdmin.from('transactions').insert({
                  profile_id: client.id,
                  amount,
                  reason: values.reason,
@@ -483,8 +499,9 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
     };
 
     const handleConfigUpdate = async (values: ClientConfigValues) => {
+        if (!supabaseAdmin) return;
         setIsUpdatingConfig(true);
-        const { error } = await supabase
+        const { error } = await supabaseAdmin
             .from('profiles')
             .update({
                 is_transfer_blocked: values.is_transfer_blocked,
@@ -663,6 +680,10 @@ export default function AdminPage() {
       if (!isAdmin) return;
       setIsLoadingClients(true);
       setErrorClients(null);
+      
+      // We use the client-side `supabase` here which uses the anon key.
+      // We assume RLS is configured to allow admins to read all profiles,
+      // or for this demo, that RLS is off for the `profiles` table.
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -678,8 +699,10 @@ export default function AdminPage() {
   }, [isAdmin]);
 
   useEffect(() => {
-    fetchClients();
-  }, [fetchClients]);
+    if (isAdmin) {
+      fetchClients();
+    }
+  }, [isAdmin, fetchClients]);
 
   const handleClientAction = () => {
     fetchClients();
@@ -746,5 +769,3 @@ export default function AdminPage() {
     </main>
   );
 }
-
-    

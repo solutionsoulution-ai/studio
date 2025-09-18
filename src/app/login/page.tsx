@@ -21,7 +21,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2, LogIn } from "lucide-react";
 import SiteHeader from "@/components/site/site-header";
 import SiteFooter from "@/components/site/site-footer";
-import { supabase } from "@/lib/supabase-client";
+import { handleClientLogin } from "@/app/actions";
 
 const formSchema = z.object({
   clientId: z.string().min(1, { message: "L'identifiant client est requis." }),
@@ -38,7 +38,6 @@ export default function LoginPage() {
 
   useEffect(() => {
     setIsClient(true);
-    // Clear any session on page load
     if (typeof window !== 'undefined') {
         localStorage.removeItem('vyls_session');
     }
@@ -58,42 +57,19 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      // 1. Appeler la fonction RPC pour vérifier le mot de passe
-      const { data: isValid, error: rpcError } = await supabase.rpc('verify_password', {
-          p_client_id: values.clientId,
-          p_password: values.password
-      });
+      const result = await handleClientLogin(values);
 
-      if (rpcError) {
-        console.error("Erreur RPC:", rpcError);
-        throw new Error(`Un problème technique est survenu. Veuillez réessayer.`);
+      if (result.success && result.profile) {
+        localStorage.setItem('vyls_session', JSON.stringify(result.profile));
+        toast({
+          title: "Connexion réussie !",
+          description: "Vous allez être redirigé vers votre espace client.",
+          variant: "default",
+        });
+        router.push("/dashboard");
+      } else {
+        throw new Error(result.error || "Identifiant client ou mot de passe incorrect.");
       }
-
-      if (!isValid) {
-        throw new Error("Identifiant client ou mot de passe incorrect.");
-      }
-
-      // 2. Si le mot de passe est valide, récupérer le profil complet
-      const { data: profile, error: profileError } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('client_id', values.clientId)
-        .single();
-
-      if (profileError || !profile) {
-        throw new Error("Impossible de récupérer le profil après la vérification.");
-      }
-
-      // 3. Stocker les données de session (sans le mot de passe) dans localStorage
-      const { password, ...sessionData } = profile;
-      localStorage.setItem('vyls_session', JSON.stringify(sessionData));
-
-      toast({
-        title: "Connexion réussie !",
-        description: "Vous allez être redirigé vers votre espace client.",
-        variant: "default",
-      });
-      router.push("/dashboard");
 
     } catch (error: any) {
       console.error("Login error:", error);

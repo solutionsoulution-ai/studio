@@ -2,16 +2,81 @@
 "use server";
 
 import "dotenv/config";
+import { z } from "zod";
+import { createClient } from '@supabase/supabase-js'
 
 import {
   assessLoanEligibility,
   type LoanEligibilityInput,
   type LoanEligibilityOutput,
 } from "@/ai/flows/loan-eligibility-assessment";
-import { z } from "zod";
-import { supabase } from "@/lib/supabase-client";
+
 
 const WEBHOOK_URL = process.env.WEBHOOK_URL || "";
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
+
+if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
+  throw new Error('Supabase URL and service key are required.');
+}
+
+// Client sécurisé côté serveur
+const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
+
+
+// ========= LOGIN CLIENT =========
+const loginSchema = z.object({
+  clientId: z.string(),
+  password: z.string(),
+});
+
+type LoginInput = z.infer<typeof loginSchema>;
+
+export async function handleClientLogin(credentials: LoginInput): Promise<{ success: boolean; profile?: any; error?: string }> {
+    const parsed = loginSchema.safeParse(credentials);
+    if (!parsed.success) {
+        return { success: false, error: 'Données invalides.' };
+    }
+
+    const { clientId, password } = parsed.data;
+
+    try {
+        const { data: profile, error } = await supabaseAdmin
+            .from('profiles')
+            .select('*')
+            .eq('client_id', clientId)
+            .single();
+
+        if (error || !profile) {
+            console.error("Login - User not found:", error);
+            return { success: false, error: 'Identifiant client ou mot de passe incorrect.' };
+        }
+
+        // Appel à une fonction SQL pour vérifier le mot de passe chiffré
+        const { data: isValid, error: rpcError } = await supabaseAdmin.rpc('verify_password_rpc', {
+            p_client_id: clientId,
+            p_password: password
+        });
+        
+        if (rpcError) {
+             console.error("Login - RPC Error:", rpcError);
+             return { success: false, error: 'Une erreur technique est survenue lors de la vérification.' };
+        }
+
+        if (!isValid) {
+            return { success: false, error: 'Identifiant client ou mot de passe incorrect.' };
+        }
+
+        // On ne retourne pas le mot de passe au client
+        const { password: _, ...safeProfile } = profile;
+        return { success: true, profile: safeProfile };
+
+    } catch (e: any) {
+        console.error("Login - Catch exception:", e);
+        return { success: false, error: e.message || 'Une erreur inattendue est survenue.' };
+    }
+}
+
 
 // Schema for Loan Eligibility
 const loanEligibilityFormSchema = z.object({
