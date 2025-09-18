@@ -37,12 +37,20 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, UserPlus, Shield, Landmark, Users, ArrowLeft, UserCog, AlertCircle, Trash2, ArrowRightLeft, Settings } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
-import { supabase, supabaseAdmin } from "@/lib/supabase-client";
+import { createClient } from "@supabase/supabase-js";
+
+// Supabase Admin Client - Côté Serveur (via une action)
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY!;
+const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
+
+// Supabase Client - Côté Navigateur
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 
 // Schéma pour le formulaire de connexion admin
@@ -53,8 +61,9 @@ type AdminLoginValues = z.infer<typeof adminLoginSchema>;
 
 // Schéma pour la création de client et de compte
 const createClientAndAccountSchema = z.object({
-  email: z.string().email({ message: "Veuillez entrer une adresse e-mail valide (pour la communication)." }),
+  email: z.string().email({ message: "Veuillez entrer une adresse e-mail valide." }),
   password: z.string().min(8, { message: "Le mot de passe doit comporter au moins 8 caractères." }),
+  clientId: z.string().min(1, { message: "L'identifiant client est requis."}),
   accountNumber: z.string().min(1, { message: "Le numéro de compte est requis." }),
   iban: z.string().min(1, { message: "L'IBAN est requis." }),
   bic: z.string().min(1, { message: "Le code BIC/SWIFT est requis." }),
@@ -142,6 +151,7 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: () =
     defaultValues: {
       email: "",
       password: "",
+      clientId: `VC-${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
       accountNumber: "",
       iban: "",
       bic: "",
@@ -155,46 +165,56 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: () =
     async function onSubmit(values: CreateClientAndAccountValues) {
         setIsLoading(true);
 
-        if (!supabaseAdmin) {
-            toast({
-                title: "Erreur de configuration",
-                description: "La connexion sécurisée à la base de données n'est pas disponible.",
-                variant: "destructive",
-            });
-            setIsLoading(false);
-            return;
-        }
-
         try {
-            const { error } = await supabaseAdmin
-            .from('profiles')
-            .insert({
+            // 1. Create the user in Supabase Auth
+            const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
                 email: values.email,
-                password: values.password, // Le mot de passe sera haché par le trigger de la DB
-                account_number: values.accountNumber,
-                iban: values.iban,
-                bic: values.bic,
-                balance: values.balance,
-                has_loan: values.loanType !== 'none',
-                loan_type: values.loanType === 'none' ? null : values.loanType,
-                loan_amount: values.loanAmount,
-                interest_rate: values.interestRate,
-                loan_term: values.loanTerm,
-                is_transfer_blocked: false,
-                transfer_block_reason: null,
-                transfer_processing_time: { days: 0, hours: 0, minutes: 1 }
+                password: values.password,
+                email_confirm: true, // Auto-confirms the email
             });
 
-            if (error) {
-                throw error;
+            if (authError) throw authError;
+
+            const userId = authData.user.id;
+
+            // 2. Create the profile in the 'profiles' table
+            const { error: profileError } = await supabaseAdmin
+                .from('profiles')
+                .insert({
+                    id: userId,
+                    client_id: values.clientId,
+                    email: values.email,
+                    account_number: values.accountNumber,
+                    iban: values.iban,
+                    bic: values.bic,
+                    balance: values.balance,
+                    has_loan: values.loanType !== 'none',
+                    loan_type: values.loanType === 'none' ? null : values.loanType,
+                    loan_amount: values.loanAmount,
+                    interest_rate: values.interestRate,
+                    loan_term: values.loanTerm,
+                    is_transfer_blocked: false,
+                    transfer_block_reason: null,
+                    transfer_processing_time: { days: 0, hours: 0, minutes: 1 }
+                });
+            
+            if (profileError) {
+                // If profile creation fails, try to delete the auth user to avoid orphans
+                await supabaseAdmin.auth.admin.deleteUser(userId);
+                throw profileError;
             }
 
             toast({
                 title: "Client et Compte Créés !",
                 description: `Le compte pour ${values.email} a été créé avec succès.`,
             });
-            onClientCreated(); // Rafraîchir la liste des clients
-            form.reset();
+            onClientCreated(); // Refresh the client list
+            form.reset({
+                ...form.getValues(), // keep some values if needed
+                email: "",
+                password: "",
+                clientId: `VC-${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
+            });
 
         } catch (error: any) {
              toast({
@@ -224,7 +244,7 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: () =
                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <FormField control={form.control} name="email" render={({ field }) => (
                         <FormItem>
-                          <FormLabel>E-mail du Client</FormLabel>
+                          <FormLabel>E-mail (pour la connexion)</FormLabel>
                           <FormControl><Input type="email" placeholder="client@exemple.com" {...field} disabled={isLoading} /></FormControl>
                           <FormMessage />
                         </FormItem>
@@ -241,13 +261,22 @@ const CreateClientAndAccountForm = ({ onClientCreated }: { onClientCreated: () =
 
             <div className="space-y-4 p-4 border rounded-md">
                 <h3 className="font-semibold text-lg">Compte Bancaire Associé</h3>
-                <FormField control={form.control} name="balance" render={({ field }) => (
-                    <FormItem>
-                        <FormLabel>Solde initial (€)</FormLabel>
-                        <FormControl><Input type="number" {...field} disabled={isLoading} /></FormControl>
-                        <FormMessage />
-                    </FormItem>
-                )}/>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                     <FormField control={form.control} name="clientId" render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Identifiant Client</FormLabel>
+                            <FormControl><Input placeholder="VC-..." {...field} disabled={isLoading} /></FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}/>
+                    <FormField control={form.control} name="balance" render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Solde initial (€)</FormLabel>
+                            <FormControl><Input type="number" {...field} disabled={isLoading} /></FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}/>
+                </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <FormField control={form.control} name="accountNumber" render={({ field }) => (
                         <FormItem>
@@ -456,12 +485,9 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
     const isTransferBlocked = configForm.watch("is_transfer_blocked");
 
     const handleDelete = async () => {
-        if (!supabaseAdmin) return;
         setIsDeleting(true);
-        // Supprimer les transactions associées d'abord
-        await supabaseAdmin.from('transactions').delete().eq('profile_id', client.id);
-        // Puis supprimer le profil
-        const { error } = await supabaseAdmin.from('profiles').delete().eq('id', client.id);
+        // This will cascade delete thanks to DB constraints
+        const { error } = await supabaseAdmin.auth.admin.deleteUser(client.id);
         setIsDeleting(false);
 
         if (error) {
@@ -474,7 +500,6 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
     };
 
     const handleBalanceUpdate = async (values: UpdateBalanceValues) => {
-        if (!supabaseAdmin) return;
         setIsUpdatingBalance(true);
         const amount = values.operation === 'credit' ? values.amount : -values.amount;
 
@@ -499,7 +524,6 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
     };
 
     const handleConfigUpdate = async (values: ClientConfigValues) => {
-        if (!supabaseAdmin) return;
         setIsUpdatingConfig(true);
         const { error } = await supabaseAdmin
             .from('profiles')
@@ -646,7 +670,7 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: any, onB
                         <AlertDialogContent>
                             <AlertDialogHeader>
                             <AlertDialogTitle>Êtes-vous sûr de vouloir supprimer ce client ?</AlertDialogTitle>
-                            <AlertDialogDescription>Cette action est irréversible et supprimera le client, son compte et toutes les transactions associées.</AlertDialogDescription>
+                            <AlertDialogDescription>Cette action est irréversible et supprimera l'authentification et le profil du client, ainsi que toutes les transactions associées.</AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                             <AlertDialogCancel>Annuler</AlertDialogCancel>
@@ -681,16 +705,13 @@ export default function AdminPage() {
       setIsLoadingClients(true);
       setErrorClients(null);
       
-      // We use the client-side `supabase` here which uses the anon key.
-      // We assume RLS is configured to allow admins to read all profiles,
-      // or for this demo, that RLS is off for the `profiles` table.
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
         .order('created_at', { ascending: false });
 
       if (error) {
-        setErrorClients(error.message);
+        setErrorClients(`Erreur de RLS: ${error.message}. Vérifiez les policies sur la table 'profiles'. L'admin doit pouvoir lire.`);
         setClients([]);
       } else {
         setClients(data);
@@ -769,3 +790,5 @@ export default function AdminPage() {
     </main>
   );
 }
+
+    

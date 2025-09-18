@@ -24,7 +24,7 @@ import SiteFooter from "@/components/site/site-footer";
 import { handleClientLogin } from "@/app/actions";
 
 const formSchema = z.object({
-  clientId: z.string().min(1, { message: "L'identifiant client est requis." }),
+  email: z.string().email({ message: "L'adresse e-mail est requise." }),
   password: z.string().min(1, { message: "Le mot de passe est requis." }),
 });
 
@@ -46,7 +46,7 @@ export default function LoginPage() {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      clientId: "",
+      email: "",
       password: "",
     },
   });
@@ -68,7 +68,7 @@ export default function LoginPage() {
         });
         router.push("/dashboard");
       } else {
-        throw new Error(result.error || "Identifiant client ou mot de passe incorrect.");
+        throw new Error(result.error || "Email ou mot de passe incorrect.");
       }
 
     } catch (error: any) {
@@ -102,12 +102,12 @@ export default function LoginPage() {
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                   <FormField
                     control={form.control}
-                    name="clientId"
+                    name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Identifiant Client</FormLabel>
+                        <FormLabel>Adresse E-mail</FormLabel>
                         <FormControl>
-                          <Input placeholder="VC-xxxxxx" {...field} disabled={isLoading} />
+                          <Input placeholder="vous@exemple.com" {...field} disabled={isLoading} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -144,3 +144,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
+    

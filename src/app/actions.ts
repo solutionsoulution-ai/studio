@@ -26,7 +26,7 @@ const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 
 // ========= LOGIN CLIENT =========
 const loginSchema = z.object({
-  clientId: z.string(),
+  email: z.string().email(),
   password: z.string(),
 });
 
@@ -38,43 +38,30 @@ export async function handleClientLogin(credentials: LoginInput): Promise<{ succ
         return { success: false, error: 'Données invalides.' };
     }
 
-    const { clientId, password } = parsed.data;
+    const { email, password } = parsed.data;
 
-    try {
-        const { data: profile, error } = await supabaseAdmin
-            .from('profiles')
-            .select('*')
-            .eq('client_id', clientId)
-            .single();
+    const { data: authData, error: authError } = await supabaseAdmin.auth.signInWithPassword({
+        email,
+        password,
+    });
 
-        if (error || !profile) {
-            console.error("Login - User not found:", error);
-            return { success: false, error: 'Identifiant client ou mot de passe incorrect.' };
-        }
-
-        // Appel à une fonction SQL pour vérifier le mot de passe chiffré
-        const { data: isValid, error: rpcError } = await supabaseAdmin.rpc('verify_password', {
-            p_client_id: clientId,
-            p_password: password
-        });
-        
-        if (rpcError) {
-             console.error("Login - RPC Error:", rpcError);
-             return { success: false, error: 'Une erreur technique est survenue lors de la vérification.' };
-        }
-
-        if (!isValid) {
-            return { success: false, error: 'Identifiant client ou mot de passe incorrect.' };
-        }
-
-        // On ne retourne pas le mot de passe au client
-        const { password: _, ...safeProfile } = profile;
-        return { success: true, profile: safeProfile };
-
-    } catch (e: any) {
-        console.error("Login - Catch exception:", e);
-        return { success: false, error: e.message || 'Une erreur inattendue est survenue.' };
+    if (authError || !authData.user) {
+        console.error("Login - Auth Error:", authError);
+        return { success: false, error: 'Email ou mot de passe incorrect.' };
     }
+
+    const { data: profile, error: profileError } = await supabaseAdmin
+        .from('profiles')
+        .select('*')
+        .eq('id', authData.user.id)
+        .single();
+    
+    if (profileError || !profile) {
+        console.error("Login - Profile not found:", profileError);
+        return { success: false, error: 'Profil client non trouvé.' };
+    }
+
+    return { success: true, profile };
 }
 
 
@@ -337,3 +324,5 @@ const transferFormSchema = z.object({
 });
 
 export type TransferFormInput = z.infer<typeof transferFormSchema>;
+
+    
