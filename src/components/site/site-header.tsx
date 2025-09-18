@@ -3,9 +3,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import * as Dialog from "@radix-ui/react-dialog";
 import { Landmark, Menu, X, ChevronDown, Briefcase, User, Home, Car, Recycle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -84,7 +85,7 @@ export default function SiteHeader() {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-full max-w-xs pr-0">
-              <SheetTitle className="sr-only">Menu principal mobile</SheetTitle>
+              <Dialog.Title className="sr-only">Menu principal mobile</Dialog.Title>
               <div className="flex h-full flex-col">
                 <div className="flex items-center justify-between border-b p-4">
                   <Link href="/" className="flex items-center space-x-2" onClick={closeMobileMenu}>
