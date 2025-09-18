@@ -74,11 +74,9 @@ export default function HomeCarousel() {
                       {item.description}
                     </p>
                     <div className="mt-8">
-                      <Link href="#eligibilite">
-                        <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 text-lg px-8 py-6">
-                          Vérifier mon éligibilité
-                        </Button>
-                      </Link>
+                      <Button size="lg" asChild>
+                        <Link href="/demande-de-pret">Faire une demande</Link>
+                      </Button>
                     </div>
                   </div>
                   <div className="relative h-64 md:h-96 w-full rounded-lg overflow-hidden">
