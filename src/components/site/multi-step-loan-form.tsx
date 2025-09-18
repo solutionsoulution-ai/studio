@@ -126,10 +126,6 @@ export default function MultiStepLoanForm() {
     },
   });
   
-  const identityDocumentRef = form.register("identityDocument");
-  const proofOfAddressRef = form.register("proofOfAddress");
-  const proofOfIncomeRef = form.register("proofOfIncome");
-  
   const nextStep = async () => {
     const currentSchema = steps[currentStep].schema;
     if (currentSchema) {
@@ -379,7 +375,7 @@ export default function MultiStepLoanForm() {
                         <FormField
                             control={form.control}
                             name="identityDocument"
-                            render={({ field: { onChange, ...rest }}) => (
+                            render={({ field: { onChange, value, ...rest }}) => (
                             <FormItem>
                                 <FormLabel>Pièce d'identité (PDF, JPG, PNG)</FormLabel>
                                 <FormControl>
@@ -392,7 +388,7 @@ export default function MultiStepLoanForm() {
                          <FormField
                             control={form.control}
                             name="proofOfAddress"
-                            render={({ field: { onChange, ...rest }}) => (
+                            render={({ field: { onChange, value, ...rest }}) => (
                             <FormItem>
                                 <FormLabel>Justificatif de domicile (PDF, JPG, PNG)</FormLabel>
                                 <FormControl>
@@ -405,7 +401,7 @@ export default function MultiStepLoanForm() {
                          <FormField
                             control={form.control}
                             name="proofOfIncome"
-                            render={({ field: { onChange, ...rest }}) => (
+                            render={({ field: { onChange, value, ...rest }}) => (
                             <FormItem>
                                 <FormLabel>Justificatif de revenus (PDF, JPG, PNG)</FormLabel>
                                 <FormControl>
@@ -467,3 +463,5 @@ export default function MultiStepLoanForm() {
     </Card>
   );
 }
+
+    
