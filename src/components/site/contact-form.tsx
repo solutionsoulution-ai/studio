@@ -1,6 +1,6 @@
+
 "use client";
 
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -16,9 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
-import { handleContactForm, type ContactFormInput } from "@/app/actions";
-import { Loader2, Send } from "lucide-react";
+import { Send } from "lucide-react";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Le nom doit comporter au moins 2 caractères." }),
@@ -27,10 +25,7 @@ const formSchema = z.object({
 });
 
 export default function ContactForm() {
-  const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
-
-  const form = useForm<ContactFormInput>({
+  const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
@@ -39,33 +34,14 @@ export default function ContactForm() {
     },
   });
 
-  async function onSubmit(values: ContactFormInput) {
-    setIsLoading(true);
-    const result = await handleContactForm(values);
-    setIsLoading(false);
-
-    if (result.success) {
-      toast({
-        title: "Message envoyé !",
-        description: "Merci de nous avoir contactés. Nous vous répondrons sous peu.",
-        variant: "default",
-        className: "bg-accent text-accent-foreground border-accent",
-      });
-      form.reset();
-    } else {
-       toast({
-        title: "Oh non ! Quelque chose s'est mal passé.",
-        description: result.error || "Un problème est survenu avec votre demande. Veuillez réessayer.",
-        variant: "destructive",
-      });
-    }
-  }
-
   return (
       <Card className="shadow-lg">
         <CardContent className="p-6 md:p-8">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <form action="https://formsubmit.co/contact@vylscapital.com" method="POST" className="space-y-6">
+              <input type="hidden" name="_next" value="https://vylscapital-demo.web.app/contact" />
+              <input type="hidden" name="_subject" value="Nouveau Message depuis VylsCapital!" />
+              <input type="hidden" name="_captcha" value="false" />
               <div className="grid sm:grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
@@ -74,7 +50,7 @@ export default function ContactForm() {
                     <FormItem>
                       <FormLabel>Nom Complet</FormLabel>
                       <FormControl>
-                        <Input placeholder="Jean Dupont" {...field} disabled={isLoading} />
+                        <Input placeholder="Jean Dupont" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -87,7 +63,7 @@ export default function ContactForm() {
                     <FormItem>
                       <FormLabel>Adresse E-mail</FormLabel>
                       <FormControl>
-                        <Input type="email" placeholder="vous@exemple.com" {...field} disabled={isLoading} />
+                        <Input type="email" placeholder="vous@exemple.com" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -101,18 +77,14 @@ export default function ContactForm() {
                   <FormItem>
                     <FormLabel>Votre Message</FormLabel>
                     <FormControl>
-                      <Textarea rows={5} placeholder="Comment pouvons-nous vous aider aujourd'hui ?" {...field} disabled={isLoading} />
+                      <Textarea rows={5} placeholder="Comment pouvons-nous vous aider aujourd'hui ?" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button type="submit" size="lg" className="w-full" disabled={isLoading}>
-                 {isLoading ? (
-                  <Loader2 className="animate-spin" />
-                ) : (
-                  <Send />
-                )}
+              <Button type="submit" size="lg" className="w-full">
+                <Send />
                 Envoyer le Message
               </Button>
             </form>

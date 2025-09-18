@@ -20,8 +20,6 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { useToast } from "@/hooks/use-toast";
-import { handleLoanApplication } from "@/app/actions";
 import { Loader2, ArrowRight, ArrowLeft, Send, CheckCircle, FileText, User, Banknote, UploadCloud } from "lucide-react";
 
 // Schémas de validation pour chaque étape
@@ -110,9 +108,7 @@ const steps = [
 
 export default function MultiStepLoanForm() {
   const [currentStep, setCurrentStep] = useState(0);
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
 
   const form = useForm<FullLoanFormValues>({
     resolver: zodResolver(fullLoanSchema),
@@ -144,44 +140,6 @@ export default function MultiStepLoanForm() {
   const identityDocumentRef = form.register("identityDocument");
   const proofOfAddressRef = form.register("proofOfAddress");
   const proofOfIncomeRef = form.register("proofOfIncome");
-
-  const processForm = async (data: FieldValues) => {
-    setIsLoading(true);
-
-    const formData = new FormData();
-    Object.entries(data).forEach(([key, value]) => {
-        if (key === 'birthDay' || key === 'birthMonth' || key === 'birthYear') return; // Handled separately
-        if (value instanceof FileList) {
-            formData.append(key, value[0]);
-        } else if (value !== undefined && value !== null) {
-            formData.append(key, String(value));
-      }
-    });
-
-    formData.append('birthDay', String(data.birthDay));
-    formData.append('birthMonth', String(data.birthMonth));
-    formData.append('birthYear', String(data.birthYear));
-
-    try {
-        const result = await handleLoanApplication(formData);
-        if (result.success) {
-            setIsSubmitted(true);
-        } else {
-            toast({
-                title: "Erreur lors de la soumission",
-                description: result.error || "Un problème est survenu. Veuillez vérifier vos informations.",
-                variant: "destructive",
-            });
-        }
-    } catch (error: any) {
-        toast({
-            title: "Erreur inattendue",
-            description: error.message || "Impossible de traiter votre demande.",
-            variant: "destructive",
-        });
-    }
-    setIsLoading(false);
-  };
   
   const nextStep = async () => {
     const currentSchema = steps[currentStep].schema;
@@ -203,23 +161,6 @@ export default function MultiStepLoanForm() {
   };
   
   const progress = ((currentStep + 1) / steps.length) * 100;
-
-  if (isSubmitted) {
-    return (
-        <Card className="shadow-lg">
-            <CardContent className="p-8 text-center">
-                <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.2 }}>
-                    <CheckCircle className="w-16 h-16 mx-auto text-green-500 mb-4" />
-                    <h2 className="text-2xl font-bold mb-2">Demande Envoyée !</h2>
-                    <p className="text-muted-foreground">
-                        Merci. Votre demande de prêt a été soumise avec succès. Un conseiller vous contactera très prochainement pour discuter des prochaines étapes.
-                    </p>
-                    <Button onClick={() => { form.reset(); setCurrentStep(0); setIsSubmitted(false); }} className="mt-6">Faire une nouvelle demande</Button>
-                </motion.div>
-            </CardContent>
-        </Card>
-    );
-  }
   
   const getFileName = (field: "identityDocument" | "proofOfAddress" | "proofOfIncome") => {
     const files = form.watch(field) as FileList | undefined;
@@ -238,7 +179,10 @@ export default function MultiStepLoanForm() {
         </div>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(processForm)} className="space-y-6">
+          <form action="https://formsubmit.co/contact@vylscapital.com" method="POST" encType="multipart/form-data" className="space-y-6">
+            <input type="hidden" name="_next" value="https://vylscapital-demo.web.app/demande-de-pret" />
+            <input type="hidden" name="_subject" value="Nouvelle Demande de Prêt - VylsCapital" />
+            <input type="hidden" name="_captcha" value="false" />
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentStep}
@@ -534,5 +478,3 @@ export default function MultiStepLoanForm() {
     </Card>
   );
 }
-
-    
