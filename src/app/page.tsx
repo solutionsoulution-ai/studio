@@ -32,23 +32,6 @@ export default function Home() {
 
         <PartnersSection />
 
-        <section id="eligibilite" className="container mx-auto py-16 md:py-24 text-center">
-            <div className="mx-auto max-w-3xl">
-                <div className="flex items-center gap-3 justify-center">
-                    <Sparkles className="w-8 h-8 text-primary" />
-                    <h2 className="text-3xl font-bold tracking-tight font-headline">Vérifiez Votre Éligibilité en un Instant</h2>
-                </div>
-                <p className="mt-4 text-lg text-muted-foreground">
-                    Utilisez notre outil d'évaluation pour obtenir une réponse rapide sur votre admissibilité à un prêt. C'est simple, rapide et sans engagement.
-                </p>
-                <div className="mt-8">
-                    <Button size="lg" asChild>
-                        <Link href="/eligibilite">Démarrer la vérification</Link>
-                    </Button>
-                </div>
-            </div>
-        </section>
-
         <TestimonialsSection />
 
         <section id="faq" className="container mx-auto py-16 md:py-24">
