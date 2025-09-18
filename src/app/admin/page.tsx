@@ -7,6 +7,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+  DialogClose
+} from "@/components/ui/dialog";
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -19,10 +29,10 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Shield, Users, ArrowLeft, UserCog, AlertCircle, Trash2 } from "lucide-react";
+import { Loader2, Shield, Users, ArrowLeft, UserCog, AlertCircle, Trash2, UserPlus } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getClientsAction, deleteClientAction, verifyAdminLoginAction } from "@/app/actions/clients";
+import { getClientsAction, deleteClientAction, verifyAdminLoginAction, createClientAction } from "@/app/actions/clients";
 import type { ClientProfile } from "@/app/actions/clients";
 
 
@@ -78,7 +88,85 @@ const AdminLoginForm = ({ onLoginSuccess }: { onLoginSuccess: () => void }) => {
   );
 };
 
-const ClientList = ({ clients, onClientSelect, isLoading, error }: { clients: Omit<ClientProfile, 'password'>[], onClientSelect: (client:Omit<ClientProfile, 'password'>) => void, isLoading: boolean, error?: string | null }) => {
+const createClientSchema = z.object({
+    email: z.string().email("L'adresse e-mail est invalide."),
+    password: z.string().min(8, "Le mot de passe doit comporter au moins 8 caractères."),
+    initialBalance: z.coerce.number().min(0, "Le solde initial ne peut pas être négatif."),
+});
+type CreateClientValues = z.infer<typeof createClientSchema>;
+
+const CreateClientForm = ({ onClientCreated }: { onClientCreated: () => void }) => {
+    const { toast } = useToast();
+    const [isLoading, setIsLoading] = useState(false);
+    const [open, setOpen] = useState(false);
+
+    const form = useForm<CreateClientValues>({
+        resolver: zodResolver(createClientSchema),
+        defaultValues: { email: "", password: "", initialBalance: 0 },
+    });
+
+    async function onSubmit(values: CreateClientValues) {
+        setIsLoading(true);
+        const result = await createClientAction(values);
+        setIsLoading(false);
+
+        if (result.success) {
+            toast({ title: "Client Créé", description: "Le nouveau client a été ajouté avec succès." });
+            onClientCreated();
+            setOpen(false); // Close dialog on success
+            form.reset();
+        } else {
+            toast({ title: "Erreur de création", description: result.error, variant: "destructive" });
+        }
+    }
+
+    return (
+         <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+                <Button>
+                    <UserPlus className="mr-2" />
+                    Créer un Client
+                </Button>
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Créer un nouveau client</DialogTitle>
+                    <DialogDescription>
+                        Entrez les détails ci-dessous pour créer un nouveau profil client.
+                    </DialogDescription>
+                </DialogHeader>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                    <div>
+                        <label htmlFor="email">Email</label>
+                        <input id="email" type="email" {...form.register("email")} className="w-full p-2 border rounded-md mt-1" disabled={isLoading} />
+                        {form.formState.errors.email && <p className="text-red-500 text-sm mt-1">{form.formState.errors.email.message}</p>}
+                    </div>
+                    <div>
+                        <label htmlFor="password">Mot de passe</label>
+                        <input id="password" type="password" {...form.register("password")} className="w-full p-2 border rounded-md mt-1" disabled={isLoading} />
+                        {form.formState.errors.password && <p className="text-red-500 text-sm mt-1">{form.formState.errors.password.message}</p>}
+                    </div>
+                    <div>
+                        <label htmlFor="initialBalance">Solde initial (€)</label>
+                        <input id="initialBalance" type="number" {...form.register("initialBalance")} className="w-full p-2 border rounded-md mt-1" disabled={isLoading} />
+                        {form.formState.errors.initialBalance && <p className="text-red-500 text-sm mt-1">{form.formState.errors.initialBalance.message}</p>}
+                    </div>
+                    <DialogFooter>
+                         <DialogClose asChild>
+                            <Button type="button" variant="outline" disabled={isLoading}>Annuler</Button>
+                        </DialogClose>
+                        <Button type="submit" disabled={isLoading}>
+                            {isLoading ? <Loader2 className="animate-spin" /> : "Créer le client"}
+                        </Button>
+                    </DialogFooter>
+                </form>
+            </DialogContent>
+        </Dialog>
+    );
+};
+
+
+const ClientList = ({ clients, onClientSelect, isLoading, error, onClientCreated }: { clients: Omit<ClientProfile, 'password'>[], onClientSelect: (client:Omit<ClientProfile, 'password'>) => void, isLoading: boolean, error?: string | null, onClientCreated: () => void }) => {
 
     if (isLoading) {
          return (
@@ -112,50 +200,46 @@ const ClientList = ({ clients, onClientSelect, isLoading, error }: { clients: Om
         );
     }
 
-    if (clients.length === 0) {
-        return (
-             <Card className="w-full shadow-lg mt-8 lg:mt-0">
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-xl font-bold">
-                        <Users /> Liste des Clients
-                    </CardTitle>
-                </CardHeader>
-                <CardContent className="text-center text-muted-foreground py-12">
-                    Aucun client trouvé.
-                </CardContent>
-            </Card>
-        );
-    }
-
     return (
         <Card className="w-full shadow-lg mt-8 lg:mt-0">
             <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-xl font-bold">
-                    <Users /> Liste des Clients
-                </CardTitle>
-                <CardDescription>
-                    Cliquez sur un client pour voir les détails.
-                </CardDescription>
+                <div className="flex justify-between items-center">
+                    <div>
+                        <CardTitle className="flex items-center gap-2 text-xl font-bold">
+                            <Users /> Liste des Clients
+                        </CardTitle>
+                        <CardDescription>
+                            Cliquez sur un client pour voir les détails ou créez un nouveau client.
+                        </CardDescription>
+                    </div>
+                    <CreateClientForm onClientCreated={onClientCreated} />
+                </div>
             </CardHeader>
             <CardContent>
-                 <Table>
-                    <TableHeader>
-                        <TableRow>
-                        <TableHead>ID Client</TableHead>
-                        <TableHead>Email</TableHead>
-                        <TableHead>Solde</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {clients.map((client) => (
-                        <TableRow key={client.id} onClick={() => onClientSelect(client)} className="cursor-pointer hover:bg-muted/50">
-                            <TableCell className="font-mono">{client.client_id}</TableCell>
-                            <TableCell className="font-medium">{client.email}</TableCell>
-                            <TableCell>{(client.balance || 0).toFixed(2)} €</TableCell>
-                        </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                {clients.length === 0 ? (
+                     <div className="text-center text-muted-foreground py-12">
+                        Aucun client trouvé.
+                    </div>
+                ): (
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                            <TableHead>ID Client</TableHead>
+                            <TableHead>Email</TableHead>
+                            <TableHead>Solde</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {clients.map((client) => (
+                            <TableRow key={client.id} onClick={() => onClientSelect(client)} className="cursor-pointer hover:bg-muted/50">
+                                <TableCell className="font-mono">{client.client_id}</TableCell>
+                                <TableCell className="font-medium">{client.email}</TableCell>
+                                <TableCell>{(client.balance || 0).toFixed(2)} €</TableCell>
+                            </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                )}
             </CardContent>
         </Card>
     )
@@ -311,7 +395,7 @@ export default function AdminPage() {
     <main className="flex min-h-screen flex-col items-center justify-start p-6 sm:p-12 md:p-24">
       <div className="w-full max-w-4xl">
         <h1 className="text-3xl font-bold mb-2">Panneau Administrateur</h1>
-        <p className="text-muted-foreground mb-8">Consultez les informations des clients.</p>
+        <p className="text-muted-foreground mb-8">Consultez et gérez les informations des clients.</p>
         
         {selectedClient ? (
             <ClientDetailView
@@ -325,6 +409,7 @@ export default function AdminPage() {
                 onClientSelect={handleClientSelection}
                 isLoading={isLoadingClients}
                 error={errorClients}
+                onClientCreated={fetchClients}
             />
         )}
       </div>

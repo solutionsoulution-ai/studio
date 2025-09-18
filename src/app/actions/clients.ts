@@ -4,7 +4,6 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { z } from 'zod';
-import type { TransferFormInput } from '@/app/actions';
 
 const dataFilePath = path.join(process.cwd(), 'src', 'data', 'clients.json');
 
@@ -63,6 +62,24 @@ async function writeData(data: ClientProfile[]): Promise<void> {
     console.error("Error writing data file:", error);
   }
 }
+
+function generateIBAN(countryCode = 'FR') {
+    const randomDigits = (length: number) => Array.from({ length }, () => Math.floor(Math.random() * 10)).join('');
+    // Ceci est une simplification et ne produit pas d'IBAN valides selon la norme.
+    const countryPart = '76';
+    const bankCode = randomDigits(5);
+    const branchCode = randomDigits(5);
+    const accountNumber = randomDigits(11);
+    const nationalCheckDigits = randomDigits(2);
+    return `${countryCode}${countryPart}${bankCode}${branchCode}${accountNumber}${nationalCheckDigits}`;
+}
+
+function generateBIC() {
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const randomLetters = (length: number) => Array.from({ length }, () => letters.charAt(Math.floor(Math.random() * letters.length))).join('');
+    return `${randomLetters(4)}FR${randomLetters(2)}XXX`;
+}
+
 
 // Validation Schemas
 const loginSchema = z.object({
@@ -157,7 +174,7 @@ export async function getClientByIdAction(clientId: string): Promise<{ success: 
  * @param transferDetails - The details of the transfer.
  * @returns { success: boolean; error?: string }
  */
-export async function createTransferAction(transferDetails: TransferFormInput & { clientId: string }): Promise<{ success: boolean; error?: string }> {
+export async function createTransferAction(transferDetails: z.infer<typeof import('@/app/actions').transferFormSchema> & { clientId: string }): Promise<{ success: boolean; error?: string }> {
     const clients = await readData();
     const clientIndex = clients.findIndex(c => c.id === transferDetails.clientId);
 
@@ -251,5 +268,72 @@ export async function deleteClientAction(clientId: string): Promise<{ success: b
     }
 
     await writeData(updatedClients);
+    return { success: true };
+}
+
+
+const createClientSchema = z.object({
+    email: z.string().email("L'adresse e-mail est invalide."),
+    password: z.string().min(8, "Le mot de passe doit comporter au moins 8 caractères."),
+    initialBalance: z.coerce.number().min(0, "Le solde initial ne peut pas être négatif."),
+});
+
+/**
+ * Creates a new client.
+ * @param clientData - The new client's data.
+ * @returns { success: boolean; error?: string }
+ */
+export async function createClientAction(clientData: z.infer<typeof createClientSchema>): Promise<{ success: boolean; error?: string }> {
+    const parsed = createClientSchema.safeParse(clientData);
+    if (!parsed.success) {
+        const issues = parsed.error.issues.map(i => i.message).join(', ');
+        return { success: false, error: `Données invalides: ${issues}` };
+    }
+
+    const clients = await readData();
+
+    // Check if email already exists
+    if (clients.some(c => c.email === parsed.data.email)) {
+        return { success: false, error: "Un client avec cet e-mail existe déjà." };
+    }
+
+    const newClient: ClientProfile = {
+        id: `cly_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
+        client_id: `VYL-${randomDigits(3)}-${randomDigits(3)}`,
+        email: parsed.data.email,
+        password: parsed.data.password,
+        balance: parsed.data.initialBalance,
+        account_number: generateIBAN(),
+        iban: generateIBAN(),
+        bic: generateBIC(),
+        created_at: new Date().toISOString(),
+        is_transfer_blocked: false,
+        transfer_block_reason: null,
+        transfer_processing_time: { minutes: 1 },
+        has_loan: false,
+        loan_type: null,
+        loan_amount: null,
+        interest_rate: null,
+        loan_term: null,
+        transactions: [],
+    };
+    
+    if(newClient.balance > 0) {
+        const initialTransaction: Transaction = {
+             id: `txn_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
+             profile_id: newClient.id,
+             amount: newClient.balance,
+             reason: "Dépôt initial",
+             recipient_iban: null,
+             recipient_name: null,
+             created_at: new Date().toISOString(),
+             status: 'COMPLETED',
+        };
+        newClient.transactions.push(initialTransaction);
+    }
+
+    clients.push(newClient);
+    await writeData(clients);
+
     return { success: true };
 }
