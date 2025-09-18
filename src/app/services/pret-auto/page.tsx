@@ -1,7 +1,7 @@
+
 import SiteHeader from "@/components/site/site-header";
 import SiteFooter from "@/components/site/site-footer";
 import Image from "next/image";
-import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { CheckCircle, FilePen, Search, HandCoins, Car, Percent, FileCheck2 } from "lucide-react";
@@ -63,7 +63,7 @@ const whySubscribeFeatures: Feature[] = [
 ]
 
 export default function PretAutoPage() {
-  const image = PlaceHolderImages.find((img) => img.id === "pret-auto");
+  const imageUrl = "https://i.postimg.cc/QMyhG9GF/pexels-pixabay-210019.jpg";
 
   return (
     <div className="flex flex-col min-h-dvh bg-background">
@@ -97,16 +97,13 @@ export default function PretAutoPage() {
               </Button>
             </div>
             <div className="order-1 md:order-2">
-              {image && (
-                <Image
-                  src={image.imageUrl}
-                  alt={image.description}
-                  width={600}
-                  height={400}
-                  className="rounded-lg shadow-lg object-cover w-full"
-                  data-ai-hint={image.imageHint}
-                />
-              )}
+              <Image
+                src={imageUrl}
+                alt="Gros plan sur le phare d'une voiture neuve et brillante."
+                width={600}
+                height={400}
+                className="rounded-lg shadow-lg object-cover w-full"
+              />
             </div>
           </div>
         </section>
