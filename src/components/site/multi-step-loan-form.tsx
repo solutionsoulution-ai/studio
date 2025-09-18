@@ -86,18 +86,16 @@ const step4Schema = z.object({
     ),
 });
 
-
-// Schéma complet pour la soumission finale
-const fullLoanSchema = step1Schema.merge(step2Schema).merge(step3Schema).merge(step4Schema).refine((data) => {
-    try {
-        const date = new Date(data.birthYear, data.birthMonth - 1, data.birthDay);
-        return date.getFullYear() === data.birthYear && date.getMonth() === data.birthMonth - 1 && date.getDate() === data.birthDay;
-    } catch (e) {
-        return false;
-    }
+const fullLoanSchema = z.intersection(step1Schema, step2Schema).and(step3Schema).and(step4Schema).refine(data => {
+  try {
+    const date = new Date(data.birthYear, data.birthMonth - 1, data.birthDay);
+    return date.getFullYear() === data.birthYear && date.getMonth() === data.birthMonth - 1 && date.getDate() === data.birthDay;
+  } catch (e) {
+    return false;
+  }
 }, {
-    message: "La date de naissance est invalide.",
-    path: ["birthDay"], // Attach error to the first date field
+  message: "La date de naissance est invalide.",
+  path: ["birthDay"],
 });
 
 type FullLoanFormValues = z.infer<typeof fullLoanSchema>;
@@ -133,9 +131,6 @@ export default function MultiStepLoanForm() {
       country: "France",
       maritalStatus: "celibataire",
       numberOfChildren: 0,
-      birthDay: '',
-      birthMonth: '',
-      birthYear: '',
       occupation: "",
       monthlyIncome: 3000,
       monthlyExpenses: 1000,
@@ -155,12 +150,17 @@ export default function MultiStepLoanForm() {
 
     const formData = new FormData();
     Object.entries(data).forEach(([key, value]) => {
-      if (value instanceof FileList) {
-        formData.append(key, value[0]);
-      } else {
-        formData.append(key, String(value));
+        if (key === 'birthDay' || key === 'birthMonth' || key === 'birthYear') return; // Handled separately
+        if (value instanceof FileList) {
+            formData.append(key, value[0]);
+        } else if (value !== undefined && value !== null) {
+            formData.append(key, String(value));
       }
     });
+
+    formData.append('birthDay', String(data.birthDay));
+    formData.append('birthMonth', String(data.birthMonth));
+    formData.append('birthYear', String(data.birthYear));
 
     try {
         const result = await handleLoanApplication(formData);
@@ -169,14 +169,14 @@ export default function MultiStepLoanForm() {
         } else {
             toast({
                 title: "Erreur lors de la soumission",
-                description: result.error || "Un problème est survenu.",
+                description: result.error || "Un problème est survenu. Veuillez vérifier vos informations.",
                 variant: "destructive",
             });
         }
-    } catch (error) {
-            toast({
+    } catch (error: any) {
+        toast({
             title: "Erreur inattendue",
-            description: "Impossible de traiter votre demande.",
+            description: error.message || "Impossible de traiter votre demande.",
             variant: "destructive",
         });
     }
@@ -328,23 +328,24 @@ export default function MultiStepLoanForm() {
                         <div className="grid grid-cols-3 gap-2">
                            <FormField control={form.control} name="birthDay" render={({ field }) => (
                             <FormItem>
-                                <FormControl><Input type="number" placeholder="Jour" {...field} /></FormControl>
+                                <FormControl><Input type="number" placeholder="Jour" {...field} value={field.value || ''} /></FormControl>
                                 <FormMessage />
                             </FormItem>
                             )} />
                              <FormField control={form.control} name="birthMonth" render={({ field }) => (
                             <FormItem>
-                                <FormControl><Input type="number" placeholder="Mois" {...field} /></FormControl>
+                                <FormControl><Input type="number" placeholder="Mois" {...field} value={field.value || ''} /></FormControl>
                                 <FormMessage />
                             </FormItem>
                             )} />
                              <FormField control={form.control} name="birthYear" render={({ field }) => (
                             <FormItem>
-                                <FormControl><Input type="number" placeholder="Année" {...field} /></FormControl>
+                                <FormControl><Input type="number" placeholder="Année" {...field} value={field.value || ''} /></FormControl>
                                 <FormMessage />
                             </FormItem>
                             )} />
                         </div>
+                         {form.formState.errors.birthDay && <p className="text-sm font-medium text-destructive">{form.formState.errors.birthDay.message}</p>}
                      </div>
                      <FormField control={form.control} name="address" render={({ field }) => (
                         <FormItem>

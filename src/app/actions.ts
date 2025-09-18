@@ -129,8 +129,8 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "application/pdf"];
 
 
-// Schema for Multi-Step Loan Application
-const loanApplicationSchema = z.object({
+// Schéma pour la validation côté serveur
+const loanApplicationSchemaServer = z.object({
   loanType: z.enum(["immobilier", "consommation", "auto", "entreprise", "rachat"]),
   loanAmount: z.coerce.number().positive("Le montant doit être positif."),
   loanTerm: z.coerce.number().int().min(12, "La durée doit être d'au moins 12 mois."),
@@ -153,26 +153,26 @@ const loanApplicationSchema = z.object({
   creditScore: z.coerce.number().min(300).max(850),
   identityDocument: z
     .any()
-    .refine((file) => !!file, "Le téléversement d'un fichier est requis.")
-    .refine((file) => file?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
+    .refine((file: File) => !!file, "Le téléversement d'un fichier est requis.")
+    .refine((file: File) => file.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
     .refine(
-      (file) => ACCEPTED_FILE_TYPES.includes(file?.type),
+      (file: File) => ACCEPTED_FILE_TYPES.includes(file.type),
       "Seuls les formats .jpg, .png et .pdf sont acceptés."
     ),
   proofOfAddress: z
     .any()
-    .refine((file) => !!file, "Le téléversement d'un fichier est requis.")
-    .refine((file) => file?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
+    .refine((file: File) => !!file, "Le téléversement d'un fichier est requis.")
+    .refine((file: File) => file.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
     .refine(
-      (file) => ACCEPTED_FILE_TYPES.includes(file?.type),
+      (file: File) => ACCEPTED_FILE_TYPES.includes(file.type),
       "Seuls les formats .jpg, .png et .pdf sont acceptés."
     ),
   proofOfIncome: z
     .any()
-    .refine((file) => !!file, "Le téléversement d'un fichier est requis.")
-    .refine((file) => file?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
+    .refine((file: File) => !!file, "Le téléversement d'un fichier est requis.")
+    .refine((file: File) => file.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
     .refine(
-      (file) => ACCEPTED_FILE_TYPES.includes(file?.type),
+      (file: File) => ACCEPTED_FILE_TYPES.includes(file.type),
       "Seuls les formats .jpg, .png et .pdf sont acceptés."
     ),
 }).refine((data) => {
@@ -187,34 +187,17 @@ const loanApplicationSchema = z.object({
     path: ["birthDay"],
 });
 
-
-export type LoanApplicationInput = z.infer<typeof loanApplicationSchema>;
 export type LoanApplicationResult = { success: boolean; error?: string; applicationId?: string };
 
 export async function handleLoanApplication(formData: FormData): Promise<LoanApplicationResult> {
     
   const rawData = Object.fromEntries(formData.entries());
 
-  const dataToParse = {
-    ...rawData,
-    loanAmount: Number(rawData.loanAmount),
-    loanTerm: Number(rawData.loanTerm),
-    numberOfChildren: Number(rawData.numberOfChildren),
-    birthDay: Number(rawData.birthDay),
-    birthMonth: Number(rawData.birthMonth),
-    birthYear: Number(rawData.birthYear),
-    monthlyIncome: Number(rawData.monthlyIncome),
-    monthlyExpenses: Number(rawData.monthlyExpenses),
-    creditScore: Number(rawData.creditScore),
-    identityDocument: rawData.identityDocument,
-    proofOfAddress: rawData.proofOfAddress,
-    proofOfIncome: rawData.proofOfIncome,
-  };
-
-  const parsed = loanApplicationSchema.safeParse(dataToParse);
+  const parsed = loanApplicationSchemaServer.safeParse(rawData);
 
   if (!parsed.success) {
-    const issues = parsed.error.issues.map((i) => `${i.path.join('.')} : ${i.message}`).join(", ");
+    const issues = parsed.error.issues.map((i) => `${i.path.join('.')} : ${i.message}`).join("\n");
+    console.error("Validation Error:", issues);
     return { success: false, error: `Données du formulaire invalides: ${issues}` };
   }
 
@@ -256,3 +239,5 @@ export async function handleLoanApplication(formData: FormData): Promise<LoanApp
   
   return { success: true, applicationId: applicationDetails.applicationId };
 }
+
+    
