@@ -57,36 +57,31 @@ export default function LoginPage() {
     
     setIsLoading(true);
 
-    const { data: authResult, error: authError } = await supabase.rpc('verify_password', {
-        p_client_id: values.clientId,
-        p_password: values.password
-    });
-
-    if (authError || !authResult) {
-      setIsLoading(false);
-      toast({
-        title: "Erreur de connexion",
-        description: "Identifiant client ou mot de passe incorrect.",
-        variant: "destructive",
+    try {
+      const { data: isValid, error: rpcError } = await supabase.rpc('verify_password', {
+          p_client_id: values.clientId,
+          p_password: values.password
       });
-      return;
-    }
-    
-    const { data: profile, error: profileError } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('client_id', values.clientId)
-      .single();
 
-    setIsLoading(false);
+      if (rpcError) {
+        throw new Error(`Erreur RPC: ${rpcError.message}`);
+      }
+      
+      if (!isValid) {
+        throw new Error("Identifiant client ou mot de passe incorrect.");
+      }
+      
+      // If password is valid, fetch the full profile
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('client_id', values.clientId)
+        .single();
 
-    if (profileError || !profile) {
-       toast({
-        title: "Erreur de connexion",
-        description: "Impossible de récupérer les informations du profil après la connexion.",
-        variant: "destructive",
-      });
-    } else {
+      if (profileError || !profile) {
+        throw new Error("Impossible de récupérer le profil après la vérification.");
+      }
+      
       // Store session in localStorage
       const { password, ...sessionData } = profile;
       localStorage.setItem('vyls_session', JSON.stringify(sessionData));
@@ -97,6 +92,16 @@ export default function LoginPage() {
         variant: "default",
       });
       router.push("/dashboard");
+
+    } catch (error: any) {
+      console.error("Login error:", error);
+      toast({
+        title: "Erreur de connexion",
+        description: error.message || "Un problème est survenu.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
     }
   }
 
