@@ -53,7 +53,7 @@ export async function handleClientLogin(credentials: LoginInput): Promise<{ succ
         }
 
         // Appel à une fonction SQL pour vérifier le mot de passe chiffré
-        const { data: isValid, error: rpcError } = await supabaseAdmin.rpc('verify_password_rpc', {
+        const { data: isValid, error: rpcError } = await supabaseAdmin.rpc('verify_password', {
             p_client_id: clientId,
             p_password: password
         });
