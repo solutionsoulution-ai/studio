@@ -57,32 +57,21 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024;
 // Types de fichiers autorisés
 const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "application/pdf"];
 
+const fileSchema = z
+    .any()
+    .refine((files) => files?.length == 1, "Le téléversement d'un fichier est requis.")
+    .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
+    .refine(
+      (files) => ACCEPTED_FILE_TYPES.includes(files?.[0]?.type),
+      "Seuls les formats .jpg, .png et .pdf sont acceptés."
+    );
+
 const step4Schema = z.object({
-  identityDocument: z
-    .any()
-    .refine((files) => files?.length == 1, "Le téléversement d'un fichier est requis.")
-    .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
-    .refine(
-      (files) => ACCEPTED_FILE_TYPES.includes(files?.[0]?.type),
-      "Seuls les formats .jpg, .png et .pdf sont acceptés."
-    ),
-  proofOfAddress: z
-    .any()
-    .refine((files) => files?.length == 1, "Le téléversement d'un fichier est requis.")
-    .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
-    .refine(
-      (files) => ACCEPTED_FILE_TYPES.includes(files?.[0]?.type),
-      "Seuls les formats .jpg, .png et .pdf sont acceptés."
-    ),
-  proofOfIncome: z
-    .any()
-    .refine((files) => files?.length == 1, "Le téléversement d'un fichier est requis.")
-    .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
-    .refine(
-      (files) => ACCEPTED_FILE_TYPES.includes(files?.[0]?.type),
-      "Seuls les formats .jpg, .png et .pdf sont acceptés."
-    ),
+  identityDocument: fileSchema,
+  proofOfAddress: fileSchema,
+  proofOfIncome: fileSchema,
 });
+
 
 const fullLoanSchema = z.intersection(step1Schema, step2Schema).and(step3Schema).and(step4Schema).refine(data => {
   try {
@@ -145,7 +134,7 @@ export default function MultiStepLoanForm() {
     const currentSchema = steps[currentStep].schema;
     if (currentSchema) {
         const fields = Object.keys(currentSchema.shape) as (keyof FullLoanFormValues)[];
-        const result = await form.trigger(fields);
+        const result = await form.trigger(fields, { shouldFocus: true });
         if (result) {
            setCurrentStep(currentStep + 1);
         }
@@ -390,11 +379,11 @@ export default function MultiStepLoanForm() {
                         <FormField
                             control={form.control}
                             name="identityDocument"
-                            render={() => (
+                            render={({ field: { onChange, ...rest }}) => (
                             <FormItem>
                                 <FormLabel>Pièce d'identité (PDF, JPG, PNG)</FormLabel>
                                 <FormControl>
-                                <Input type="file" {...identityDocumentRef} />
+                                <Input type="file" onChange={(e) => onChange(e.target.files)} {...rest} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -403,11 +392,11 @@ export default function MultiStepLoanForm() {
                          <FormField
                             control={form.control}
                             name="proofOfAddress"
-                            render={() => (
+                            render={({ field: { onChange, ...rest }}) => (
                             <FormItem>
                                 <FormLabel>Justificatif de domicile (PDF, JPG, PNG)</FormLabel>
                                 <FormControl>
-                                <Input type="file" {...proofOfAddressRef} />
+                                <Input type="file" onChange={(e) => onChange(e.target.files)} {...rest} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -416,11 +405,11 @@ export default function MultiStepLoanForm() {
                          <FormField
                             control={form.control}
                             name="proofOfIncome"
-                            render={() => (
+                            render={({ field: { onChange, ...rest }}) => (
                             <FormItem>
                                 <FormLabel>Justificatif de revenus (PDF, JPG, PNG)</FormLabel>
                                 <FormControl>
-                                <Input type="file" {...proofOfIncomeRef} />
+                                <Input type="file" onChange={(e) => onChange(e.target.files)} {...rest} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
