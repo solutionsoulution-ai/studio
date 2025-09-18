@@ -65,7 +65,8 @@ export default function LoginPage() {
       });
 
       if (rpcError) {
-        throw new Error(`Erreur RPC: ${rpcError.message}`);
+        console.error("Erreur RPC:", rpcError);
+        throw new Error(`Un problème technique est survenu. Veuillez réessayer.`);
       }
 
       if (!isValid) {
@@ -167,5 +168,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
-    
