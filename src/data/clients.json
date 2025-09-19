@@ -106,7 +106,7 @@
     "bic": "UDJCFRZTXXX",
     "created_at": "2025-09-19T00:07:40.803Z",
     "is_transfer_blocked": true,
-    "transfer_block_reason": "VVVV",
+    "transfer_block_reason": "CCC",
     "transfer_processing_time": {
       "days": 0,
       "hours": 0,

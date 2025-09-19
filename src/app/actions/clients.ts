@@ -147,14 +147,19 @@ export async function getClientByIdAction(clientId: string): Promise<{ success: 
             const now = new Date();
 
             if (now >= completionDate) {
-                // If account is blocked, fail the transaction. Otherwise, complete it.
+                // If account is blocked, fail the transaction. Otherwise, complete it and debit the balance.
                 if (client.is_transfer_blocked) {
                     tx.status = 'FAILED';
-                    // Restore balance since the transfer failed
-                    client.balance -= tx.amount; // tx.amount is negative for a debit
                     tx.reason = `[Échec] ${tx.reason} - ${client.transfer_block_reason || 'Compte bloqué'}`
                 } else {
-                    tx.status = 'COMPLETED';
+                    // Check balance before completing
+                    if (client.balance >= Math.abs(tx.amount)) {
+                        client.balance += tx.amount; // tx.amount is negative for a debit
+                        tx.status = 'COMPLETED';
+                    } else {
+                        tx.status = 'FAILED';
+                        tx.reason = `[Échec] ${tx.reason} - Solde insuffisant au moment du traitement`;
+                    }
                 }
                 dataWasModified = true;
             }
@@ -196,11 +201,8 @@ export async function createTransferAction(transferDetails: TransferFormInput & 
     const client = clients[clientIndex];
 
     if (client.balance < parsed.data.amount) {
-        return { success: false, error: "Solde insuffisant." };
+        return { success: false, error: "Solde insuffisant pour initier ce virement." };
     }
-
-    // Update balance
-    client.balance -= parsed.data.amount;
 
     const creationDate = new Date();
     const processingTime = client.transfer_processing_time || { minutes: 1 };
@@ -210,7 +212,7 @@ export async function createTransferAction(transferDetails: TransferFormInput & 
     completionDate.setHours(completionDate.getHours() + (processingTime.hours || 0));
     completionDate.setMinutes(completionDate.getMinutes() + (processingTime.minutes || 0));
     
-    // Create new transaction
+    // Create new transaction without debiting balance immediately
     const newTransaction: Transaction = {
         id: `txn_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
         profile_id: client.id,
