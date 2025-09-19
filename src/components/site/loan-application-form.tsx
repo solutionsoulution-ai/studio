@@ -122,6 +122,7 @@ export default function LoanApplicationForm() {
 
       const formData = new FormData();
 
+      // Append all form data to FormData object
       for (const key in data) {
         const valueKey = key as keyof LoanApplicationFormValues;
         const value = data[valueKey];
@@ -316,3 +317,5 @@ export default function LoanApplicationForm() {
     </Form>
   );
 }
+
+    
