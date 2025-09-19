@@ -66,12 +66,26 @@ export async function submitEligibilityContact(formData: FormData) {
         htmlContent += `<li><strong>${key.replace(/_/g, ' ')} :</strong> ${value}</li>`;
     }
     htmlContent += `</ul>`;
-    
-    await sendEmail({
-      to: process.env.SMTP_USER!,
-      subject: subject,
-      html: htmlContent,
-    });
+
+    const webhookUrl = process.env.WEBHOOK_URL;
+    if (webhookUrl) {
+      await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          type: 'eligibility',
+          data: details
+        }),
+      });
+    } else {
+        await sendEmail({
+          to: process.env.SMTP_USER!,
+          subject: subject,
+          html: htmlContent,
+        });
+    }
 
     return { success: true };
   } catch (error) {
@@ -112,12 +126,26 @@ export async function handleLoanApplication(formData: FormData) {
         }
       }
 
-      await sendEmail({
-        to: process.env.SMTP_USER!,
-        subject,
-        html: htmlContent,
-        attachments: attachments,
-      });
+      const webhookUrl = process.env.WEBHOOK_URL;
+      if (webhookUrl) {
+         await fetch(webhookUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              type: 'loanApplication',
+              data: data
+            }),
+         });
+      } else {
+        await sendEmail({
+            to: process.env.SMTP_USER!,
+            subject,
+            html: htmlContent,
+            attachments: attachments,
+        });
+      }
       
       const applicationId = `APP-${Date.now()}`;
       return { success: true, applicationId };
@@ -152,13 +180,28 @@ export async function handleContactForm(formData: z.infer<typeof contactFormSche
             <p><strong>Message :</strong></p>
             <p>${message}</p>
         `;
+        
+        const webhookUrl = process.env.WEBHOOK_URL;
+        if (webhookUrl) {
+           await fetch(webhookUrl, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                type: 'contact',
+                data: parsed.data
+              }),
+           });
+        } else {
+          await sendEmail({
+              to: process.env.SMTP_USER!,
+              subject,
+              html: htmlContent,
+              replyTo: email,
+          });
+        }
 
-        await sendEmail({
-            to: process.env.SMTP_USER!,
-            subject,
-            html: htmlContent,
-            replyTo: email,
-        });
 
         return { success: true };
 
