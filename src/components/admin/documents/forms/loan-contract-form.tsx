@@ -2,14 +2,13 @@
 "use client";
 
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, type UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import type { LoanContractData } from "../templates/loan-contract-template";
 
 const formSchema = z.object({
     // Borrower
@@ -37,42 +36,15 @@ const formSchema = z.object({
     borrower_signature_location: z.string().min(2),
 });
 
-type FormValues = z.infer<typeof formSchema>;
+export type LoanContractFormValues = z.infer<typeof formSchema>;
 
 interface LoanContractFormProps {
-  onDataChange: (data: LoanContractData) => void;
+  form: UseFormReturn<LoanContractFormValues>;
   lang: 'fr' | 'en';
 }
 
-const defaultValuesFR: FormValues = {
-    borrower_name: "John Doe",
-    borrower_address: "123 Rue de l'Exemple, 75001 Paris, France",
-    borrower_email: "john.doe@example.com",
-    lender_name: "VylsCapital",
-    lender_address: "10 Place de la Bourse, 69002 Lyon, France",
-    loan_amount: 50000,
-    loan_amount_in_words: "Cinquante mille euros",
-    loan_date: new Date().toLocaleDateString('fr-FR'),
-    interest_rate: 2,
-    loan_term_months: 60,
-    repayment_start_date: new Date(new Date().setMonth(new Date().getMonth() + 1)).toLocaleDateString('fr-FR'),
-    monthly_payment: 876.41,
-    signature_date: new Date().toLocaleDateString('fr-FR'),
-    borrower_signature_location: "Paris",
-};
 
-export default function LoanContractForm({ onDataChange, lang }: LoanContractFormProps) {
-    const form = useForm<FormValues>({
-        resolver: zodResolver(formSchema),
-        defaultValues: defaultValuesFR,
-    });
-
-    const watchedData = form.watch();
-
-    useEffect(() => {
-        onDataChange(watchedData);
-    }, [watchedData, onDataChange]);
-
+export default function LoanContractForm({ form, lang }: LoanContractFormProps) {
 
     return (
         <Card>

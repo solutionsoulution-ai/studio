@@ -1,46 +1,73 @@
 
 "use client";
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, type UseFormReturn } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { usePDFGenerator } from "@/hooks/use-pdf-generator";
 import { Loader2, FileDown } from "lucide-react";
-import LoanContractForm from "@/components/admin/documents/forms/loan-contract-form";
-import LoanContractTemplate, { type LoanContractData } from "@/components/admin/documents/templates/loan-contract-template";
+import LoanContractForm, { type LoanContractFormValues } from "@/components/admin/documents/forms/loan-contract-form";
+import LoanContractTemplate from "@/components/admin/documents/templates/loan-contract-template";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 
 
-type DocumentType = "loan-contract";
-type DocumentLanguage = "fr" | "en";
+const configSchema = z.object({
+    docType: z.enum(["loan-contract"]),
+    docLang: z.enum(["fr", "en"]),
+});
+type ConfigFormValues = z.infer<typeof configSchema>;
 
-interface ConfigFormValues {
-    docType: DocumentType;
-    docLang: DocumentLanguage;
-}
+const defaultContractValuesFR: LoanContractFormValues = {
+    borrower_name: "John Doe",
+    borrower_address: "123 Rue de l'Exemple, 75001 Paris, France",
+    borrower_email: "john.doe@example.com",
+    lender_name: "VylsCapital",
+    lender_address: "10 Place de la Bourse, 69002 Lyon, France",
+    loan_amount: 50000,
+    loan_amount_in_words: "Cinquante mille euros",
+    loan_date: new Date().toLocaleDateString('fr-FR'),
+    interest_rate: 2,
+    loan_term_months: 60,
+    repayment_start_date: new Date(new Date().setMonth(new Date().getMonth() + 1)).toLocaleDateString('fr-FR'),
+    monthly_payment: 876.41,
+    signature_date: new Date().toLocaleDateString('fr-FR'),
+    borrower_signature_location: "Paris",
+};
+
 
 export default function DocumentGeneratorPage() {
-    
-    // State for the document data, updated by the form component
-    const [docData, setDocData] = useState<LoanContractData | {}>({});
-
     const { generatePDF, isLoading } = usePDFGenerator();
 
-    const form = useForm<ConfigFormValues>({
+    const configForm = useForm<ConfigFormValues>({
+        resolver: zodResolver(configSchema),
         defaultValues: {
             docType: "loan-contract",
             docLang: "fr",
         }
     });
 
-    const docType = form.watch("docType");
-    const docLang = form.watch("docLang");
+    // We create a separate form instance for each document type
+    const loanContractForm = useForm<LoanContractFormValues>({
+        defaultValues: defaultContractValuesFR,
+    });
+    
+    const docType = configForm.watch("docType");
+    const docLang = configForm.watch("docLang");
+    
+    // Watch the data from the specific form based on docType
+    const docData = docType === 'loan-contract' ? loanContractForm.watch() : {};
+    
+    let activeForm: UseFormReturn<any> | null = null;
+    if (docType === 'loan-contract') {
+        activeForm = loanContractForm;
+    }
 
     const handleGenerateClick = () => {
         generatePDF({
-            elementId: 'pdf-preview', // The ID of the template component
+            elementId: 'pdf-preview',
             fileName: `${docType}-${docLang}-${Date.now()}.pdf`,
         });
     };
@@ -48,8 +75,7 @@ export default function DocumentGeneratorPage() {
     const renderForm = () => {
         switch (docType) {
             case "loan-contract":
-                return <LoanContractForm onDataChange={setDocData} lang={docLang} />;
-            // Add other document forms here
+                return <LoanContractForm form={loanContractForm} lang={docLang} />;
             default:
                 return <p>Veuillez sélectionner un type de document.</p>;
         }
@@ -58,14 +84,11 @@ export default function DocumentGeneratorPage() {
     const renderTemplate = () => {
         switch (docType) {
             case "loan-contract":
-                // The template receives the live data from the form
-                return <LoanContractTemplate data={docData as LoanContractData} lang={docLang} />;
-            // Add other document templates here
+                return <LoanContractTemplate data={docData} lang={docLang} />;
             default:
                 return <div id="pdf-preview" className="p-8 text-center text-muted-foreground">Aperçu du document</div>;
         }
     }
-
 
     return (
         <main className="flex min-h-screen w-full bg-muted/40">
@@ -83,10 +106,10 @@ export default function DocumentGeneratorPage() {
                                     <CardDescription>Choisissez le type et la langue du document.</CardDescription>
                                 </CardHeader>
                                 <CardContent>
-                                    <Form {...form}>
+                                    <Form {...configForm}>
                                         <form className="space-y-4">
                                             <FormField
-                                                control={form.control}
+                                                control={configForm.control}
                                                 name="docType"
                                                 render={({ field }) => (
                                                     <FormItem>
@@ -105,7 +128,7 @@ export default function DocumentGeneratorPage() {
                                                 )}
                                             />
                                             <FormField
-                                                control={form.control}
+                                                control={configForm.control}
                                                 name="docLang"
                                                 render={({ field }) => (
                                                     <FormItem>
@@ -135,7 +158,7 @@ export default function DocumentGeneratorPage() {
                         </div>
 
                          <div className="mt-auto p-4">
-                            <Button onClick={handleGenerateClick} disabled={isLoading} className="w-full">
+                            <Button onClick={handleGenerateClick} disabled={isLoading || !activeForm} className="w-full">
                                 {isLoading ? <Loader2 className="animate-spin" /> : <FileDown />}
                                 {isLoading ? "Génération en cours..." : "Générer le PDF"}
                             </Button>
