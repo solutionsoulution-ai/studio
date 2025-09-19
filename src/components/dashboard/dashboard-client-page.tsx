@@ -306,10 +306,19 @@ export default function DashboardClientPage() {
                                 </AlertDescription>
                             </Alert>
                         ) : (
-                            <TransferForm
-                                onTransferSubmit={handleTransferSubmit}
-                                processingTimeConfig={accountData.transfer_processing_time}
-                            />
+                            <>
+                                <Alert className="mb-6">
+                                  <Info className="h-4 w-4" />
+                                  <AlertTitle>Essayer un virement</AlertTitle>
+                                  <AlertDescription>
+                                    Pour tester, vous pouvez utiliser l'IBAN d'un autre client test, par exemple : <code className="font-mono p-1 bg-muted rounded-sm">DE89370400440532013000</code> (appartient à jane.doe@example.com).
+                                  </AlertDescription>
+                                </Alert>
+                                <TransferForm
+                                    onTransferSubmit={handleTransferSubmit}
+                                    processingTimeConfig={accountData.transfer_processing_time}
+                                />
+                            </>
                         )}
                     </CardContent>
                 </Card>
