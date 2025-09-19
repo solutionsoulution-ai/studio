@@ -22,10 +22,9 @@ export type InvoiceFormValues = z.infer<typeof formSchema>;
 
 interface InvoiceFormProps {
   form: UseFormReturn<InvoiceFormValues>;
-  lang: 'fr' | 'en';
 }
 
-export default function InvoiceForm({ form, lang }: InvoiceFormProps) {
+export default function InvoiceForm({ form }: InvoiceFormProps) {
     return (
         <Card>
             <CardHeader>
@@ -99,3 +98,5 @@ export default function InvoiceForm({ form, lang }: InvoiceFormProps) {
 }
 
 InvoiceForm.schema = formSchema;
+
+    

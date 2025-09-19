@@ -22,40 +22,39 @@ export type BlankDocumentFormValues = z.infer<typeof formSchema>;
 
 interface BlankDocumentFormProps {
   form: UseFormReturn<BlankDocumentFormValues>;
-  lang: 'fr' | 'en';
 }
 
-export default function BlankDocumentForm({ form, lang }: BlankDocumentFormProps) {
+export default function BlankDocumentForm({ form }: BlankDocumentFormProps) {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Invoice (English)</CardTitle>
-                <CardDescription>Fill in the fields to generate the English invoice.</CardDescription>
+                <CardTitle>Facture (EN)</CardTitle>
+                <CardDescription>Remplissez les champs pour générer la facture en anglais.</CardDescription>
             </CardHeader>
             <CardContent>
                 <Form {...form}>
                     <form className="space-y-4">
-                        <h3 className="font-semibold text-lg border-b pb-2">Customer</h3>
+                        <h3 className="font-semibold text-lg border-b pb-2">Client</h3>
                         <FormField control={form.control} name="customer_name" render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Customer Name</FormLabel>
+                                <FormLabel>Nom du Client</FormLabel>
                                 <FormControl><Input {...field} /></FormControl>
                                 <FormMessage />
                             </FormItem>
                         )} />
                         <FormField control={form.control} name="customer_address" render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Customer Address</FormLabel>
+                                <FormLabel>Adresse du Client</FormLabel>
                                 <FormControl><Textarea rows={2} {...field} /></FormControl>
                                 <FormMessage />
                             </FormItem>
                         )} />
                         
-                        <h3 className="font-semibold text-lg border-b pb-2 pt-4">Invoice Details</h3>
+                        <h3 className="font-semibold text-lg border-b pb-2 pt-4">Détails de la Facture</h3>
                         <div className="grid grid-cols-2 gap-4">
                            <FormField control={form.control} name="invoice_number" render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Invoice Number</FormLabel>
+                                    <FormLabel>N° de Facture</FormLabel>
                                     <FormControl><Input {...field} /></FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -77,16 +76,16 @@ export default function BlankDocumentForm({ form, lang }: BlankDocumentFormProps
                         )} />
                          <FormField control={form.control} name="amount" render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Amount (€)</FormLabel>
+                                <FormLabel>Montant (€)</FormLabel>
                                 <FormControl><Input type="number" {...field} /></FormControl>
                                 <FormMessage />
                             </FormItem>
                         )} />
                         
-                        <h3 className="font-semibold text-lg border-b pb-2 pt-4">Payment</h3>
+                        <h3 className="font-semibold text-lg border-b pb-2 pt-4">Paiement</h3>
                         <FormField control={form.control} name="payment_iban" render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Payment IBAN</FormLabel>
+                                <FormLabel>IBAN pour le paiement</FormLabel>
                                 <FormControl><Input {...field} /></FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -99,3 +98,5 @@ export default function BlankDocumentForm({ form, lang }: BlankDocumentFormProps
 }
 
 BlankDocumentForm.schema = formSchema;
+
+    

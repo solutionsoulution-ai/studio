@@ -24,10 +24,9 @@ export type DebtRecognitionFormValues = z.infer<typeof formSchema>;
 
 interface DebtRecognitionFormProps {
   form: UseFormReturn<DebtRecognitionFormValues>;
-  lang: 'fr' | 'en';
 }
 
-export default function DebtRecognitionForm({ form, lang }: DebtRecognitionFormProps) {
+export default function DebtRecognitionForm({ form }: DebtRecognitionFormProps) {
     return (
         <Card>
             <CardHeader>
@@ -111,3 +110,5 @@ export default function DebtRecognitionForm({ form, lang }: DebtRecognitionFormP
 
 // Attach schema to component for easy access in parent
 DebtRecognitionForm.schema = formSchema;
+
+    

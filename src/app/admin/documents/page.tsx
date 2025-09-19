@@ -19,12 +19,6 @@ import EligibilityCertificateForm, { type EligibilityCertificateFormValues } fro
 import InsuranceNoticeForm, { type InsuranceNoticeFormValues } from "@/components/admin/documents/forms/insurance-notice-form";
 import InsuranceCertificateForm, { type InsuranceCertificateFormValues } from "@/components/admin/documents/forms/insurance-certificate-form";
 import SuretyBondForm, { type SuretyBondFormValues } from "@/components/admin/documents/forms/surety-bond-form";
-import BlankDocumentForm, { type BlankDocumentFormValues } from "@/components/admin/documents/forms/blank-document-form";
-import GermanInvoiceForm, { type GermanInvoiceFormValues } from "@/components/admin/documents/forms/german-invoice-form";
-import SpanishInvoiceForm, { type SpanishInvoiceFormValues } from "@/components/admin/documents/forms/spanish-invoice-form";
-import PortugueseInvoiceForm, { type PortugueseInvoiceFormValues } from "@/components/admin/documents/forms/portuguese-invoice-form";
-import ItalianInvoiceForm, { type ItalianInvoiceFormValues } from "@/components/admin/documents/forms/italian-invoice-form";
-
 
 import LoanContractTemplate from "@/components/admin/documents/templates/loan-contract-template";
 import DebtRecognitionTemplate from "@/components/admin/documents/templates/debt-recognition-template";
@@ -33,11 +27,6 @@ import EligibilityCertificateTemplate from "@/components/admin/documents/templat
 import InsuranceNoticeTemplate from "@/components/admin/documents/templates/insurance-notice-template";
 import InsuranceCertificateTemplate from "@/components/admin/documents/templates/insurance-certificate-template";
 import SuretyBondTemplate from "@/components/admin/documents/templates/surety-bond-template";
-import BlankDocumentTemplate from "@/components/admin/documents/templates/blank-document-template";
-import GermanInvoiceTemplate from "@/components/admin/documents/templates/german-invoice-template";
-import SpanishInvoiceTemplate from "@/components/admin/documents/templates/spanish-invoice-template";
-import PortugueseInvoiceTemplate from "@/components/admin/documents/templates/portuguese-invoice-template";
-import ItalianInvoiceTemplate from "@/components/admin/documents/templates/italian-invoice-template";
 
 
 const configSchema = z.object({
@@ -49,12 +38,8 @@ const configSchema = z.object({
         "loan-contract",
         "surety-bond",
         "debt-recognition",
-        "blank-document",
-        "german-invoice",
-        "spanish-invoice",
-        "portuguese-invoice",
-        "italian-invoice",
     ]),
+    docLang: z.enum(["fr", "en", "de", "es", "pt", "it"]),
 });
 type ConfigFormValues = z.infer<typeof configSchema>;
 
@@ -139,67 +124,18 @@ const defaultSuretyBondValues: SuretyBondFormValues = {
     loan_date: todayFR,
     signature_location: "Marseille",
     signature_date: todayFR,
-};
-
-const defaultBlankDocumentValues: BlankDocumentFormValues = {
-    customer_name: "John Doe",
-    customer_address: "123 Example Street, London, W1 1AA",
-    invoice_number: `INV-${today.getFullYear()}-0001`,
-    invoice_date: today.toLocaleDateString('en-GB'),
-    description: "Consulting services for Q3",
-    amount: 250.00,
-    payment_iban: "GB29 NWBK 6016 1331 9268 19",
-}
-
-const defaultGermanInvoiceValues: GermanInvoiceFormValues = {
-    customer_name: "Max Mustermann",
-    customer_address: "Musterstraße 1, 10115 Berlin",
-    invoice_number: `RE-${today.getFullYear()}-0001`,
-    invoice_date: today.toLocaleDateString('de-DE'),
-    description: "Beratungsleistungen für Q3",
-    amount: 300.00,
-    payment_iban: "DE89 3704 0044 0532 0130 00",
-};
-
-const defaultSpanishInvoiceValues: SpanishInvoiceFormValues = {
-    customer_name: "María García",
-    customer_address: "Calle de Alcalá, 20, 28014 Madrid",
-    invoice_number: `FCT-${today.getFullYear()}-0001`,
-    invoice_date: today.toLocaleDateString('es-ES'),
-    description: "Servicios de consultoría para Q3",
-    amount: 320.00,
-    payment_iban: "ES91 2100 0418 4502 0005 1332",
-};
-
-const defaultPortugueseInvoiceValues: PortugueseInvoiceFormValues = {
-    customer_name: "João Silva",
-    customer_address: "Avenida da Liberdade, 100, 1250-145 Lisboa",
-    invoice_number: `FAT-${today.getFullYear()}-0001`,
-    invoice_date: today.toLocaleDateString('pt-PT'),
-    description: "Serviços de consultoria para o T3",
-    amount: 280.00,
-    payment_iban: "PT50 0007 0000 0012 3456 7892 3",
-};
-
-const defaultItalianInvoiceValues: ItalianInvoiceFormValues = {
-    customer_name: "Mario Rossi",
-    customer_address: "Via del Corso, 10, 00186 Roma",
-    invoice_number: `FATT-${today.getFullYear()}-0001`,
-    invoice_date: today.toLocaleDateString('it-IT'),
-    description: "Servizi di consulenza per il Q3",
-    amount: 290.00,
-    payment_iban: "IT60 X054 2811 1010 0000 0123 456",
+    loan_amount_in_words: "Soixante-quinze mille euros"
 };
 
 
 export default function DocumentGeneratorPage() {
     const { generatePDF, isLoading } = usePDFGenerator();
-    const docLang = 'fr'; // Force 'fr' for now
 
     const configForm = useForm<ConfigFormValues>({
         resolver: zodResolver(configSchema),
         defaultValues: {
             docType: "invoice",
+            docLang: "fr",
         }
     });
 
@@ -211,14 +147,10 @@ export default function DocumentGeneratorPage() {
     const insuranceNoticeForm = useForm<InsuranceNoticeFormValues>({ resolver: zodResolver(InsuranceNoticeForm.schema), defaultValues: defaultInsuranceNoticeValues });
     const insuranceCertificateForm = useForm<InsuranceCertificateFormValues>({ resolver: zodResolver(InsuranceCertificateForm.schema), defaultValues: defaultInsuranceCertificateValues });
     const suretyBondForm = useForm<SuretyBondFormValues>({ resolver: zodResolver(SuretyBondForm.schema), defaultValues: defaultSuretyBondValues });
-    const blankDocumentForm = useForm<BlankDocumentFormValues>({ resolver: zodResolver(BlankDocumentForm.schema), defaultValues: defaultBlankDocumentValues });
-    const germanInvoiceForm = useForm<GermanInvoiceFormValues>({ resolver: zodResolver(GermanInvoiceForm.schema), defaultValues: defaultGermanInvoiceValues });
-    const spanishInvoiceForm = useForm<SpanishInvoiceFormValues>({ resolver: zodResolver(SpanishInvoiceForm.schema), defaultValues: defaultSpanishInvoiceValues });
-    const portugueseInvoiceForm = useForm<PortugueseInvoiceFormValues>({ resolver: zodResolver(PortugueseInvoiceForm.schema), defaultValues: defaultPortugueseInvoiceValues });
-    const italianInvoiceForm = useForm<ItalianInvoiceFormValues>({ resolver: zodResolver(ItalianInvoiceForm.schema), defaultValues: defaultItalianInvoiceValues });
 
 
     const docType = configForm.watch("docType");
+    const docLang = configForm.watch("docLang");
     
     // Select active form and data based on docType
     let activeForm: UseFormReturn<any> | null = null;
@@ -253,49 +185,24 @@ export default function DocumentGeneratorPage() {
             activeForm = suretyBondForm;
             docData = suretyBondForm.watch();
             break;
-        case "blank-document":
-            activeForm = blankDocumentForm;
-            docData = blankDocumentForm.watch();
-            break;
-        case "german-invoice":
-            activeForm = germanInvoiceForm;
-            docData = germanInvoiceForm.watch();
-            break;
-        case "spanish-invoice":
-            activeForm = spanishInvoiceForm;
-            docData = spanishInvoiceForm.watch();
-            break;
-        case "portuguese-invoice":
-            activeForm = portugueseInvoiceForm;
-            docData = portugueseInvoiceForm.watch();
-            break;
-        case "italian-invoice":
-            activeForm = italianInvoiceForm;
-            docData = italianInvoiceForm.watch();
-            break;
     }
 
     const handleGenerateClick = () => {
         generatePDF({
             elementId: 'pdf-preview',
-            fileName: `${docType}-${Date.now()}.pdf`,
+            fileName: `${docType}-${docLang}-${Date.now()}.pdf`,
         });
     };
 
     const renderForm = () => {
         switch (docType) {
-            case "invoice": return <InvoiceForm form={invoiceForm} lang={docLang} />;
-            case "eligibility-certificate": return <EligibilityCertificateForm form={eligibilityCertificateForm} lang={docLang} />;
-            case "insurance-notice": return <InsuranceNoticeForm form={insuranceNoticeForm} lang={docLang} />;
-            case "insurance-certificate": return <InsuranceCertificateForm form={insuranceCertificateForm} lang={docLang} />;
-            case "loan-contract": return <LoanContractForm form={loanContractForm} lang={docLang} />;
-            case "surety-bond": return <SuretyBondForm form={suretyBondForm} lang={docLang} />;
-            case "debt-recognition": return <DebtRecognitionForm form={debtRecognitionForm} lang={docLang} />;
-            case "blank-document": return <BlankDocumentForm form={blankDocumentForm} lang="en" />;
-            case "german-invoice": return <GermanInvoiceForm form={germanInvoiceForm} />;
-            case "spanish-invoice": return <SpanishInvoiceForm form={spanishInvoiceForm} />;
-            case "portuguese-invoice": return <PortugueseInvoiceForm form={portugueseInvoiceForm} />;
-            case "italian-invoice": return <ItalianInvoiceForm form={italianInvoiceForm} />;
+            case "invoice": return <InvoiceForm form={invoiceForm} />;
+            case "eligibility-certificate": return <EligibilityCertificateForm form={eligibilityCertificateForm} />;
+            case "insurance-notice": return <InsuranceNoticeForm form={insuranceNoticeForm} />;
+            case "insurance-certificate": return <InsuranceCertificateForm form={insuranceCertificateForm} />;
+            case "loan-contract": return <LoanContractForm form={loanContractForm} />;
+            case "surety-bond": return <SuretyBondForm form={suretyBondForm} />;
+            case "debt-recognition": return <DebtRecognitionForm form={debtRecognitionForm} />;
             default: return <p>Veuillez sélectionner un type de document.</p>;
         }
     }
@@ -309,11 +216,6 @@ export default function DocumentGeneratorPage() {
             case "loan-contract": return <LoanContractTemplate data={docData} lang={docLang} />;
             case "surety-bond": return <SuretyBondTemplate data={docData} lang={docLang} />;
             case "debt-recognition": return <DebtRecognitionTemplate data={docData} lang={docLang} />;
-            case "blank-document": return <BlankDocumentTemplate data={docData} lang="en" />;
-            case "german-invoice": return <GermanInvoiceTemplate data={docData} />;
-            case "spanish-invoice": return <SpanishInvoiceTemplate data={docData} />;
-            case "portuguese-invoice": return <PortugueseInvoiceTemplate data={docData} />;
-            case "italian-invoice": return <ItalianInvoiceTemplate data={docData} />;
             default: return <div id="pdf-preview" className="p-8 text-center text-muted-foreground">Aperçu du document</div>;
         }
     }
@@ -331,7 +233,7 @@ export default function DocumentGeneratorPage() {
                             <Card>
                                 <CardHeader>
                                     <CardTitle>Configuration</CardTitle>
-                                    <CardDescription>Choisissez le type de document à générer.</CardDescription>
+                                    <CardDescription>Choisissez le document et la langue.</CardDescription>
                                 </CardHeader>
                                 <CardContent>
                                     <Form {...configForm}>
@@ -349,18 +251,37 @@ export default function DocumentGeneratorPage() {
                                                                 </SelectTrigger>
                                                             </FormControl>
                                                             <SelectContent>
-                                                                <SelectItem value="invoice">Facture (FR)</SelectItem>
+                                                                <SelectItem value="invoice">Facture</SelectItem>
                                                                 <SelectItem value="eligibility-certificate">Attestation d'Éligibilité</SelectItem>
                                                                 <SelectItem value="insurance-notice">Notice d'Information Assurance</SelectItem>
                                                                 <SelectItem value="insurance-certificate">Attestation d'Assurance</SelectItem>
                                                                 <SelectItem value="loan-contract">Contrat de Prêt</SelectItem>
                                                                 <SelectItem value="surety-bond">Acte de Cautionnement</SelectItem>
                                                                 <SelectItem value="debt-recognition">Reconnaissance de Dette</SelectItem>
-                                                                <SelectItem value="blank-document">Facture (EN)</SelectItem>
-                                                                <SelectItem value="german-invoice">Facture (DE)</SelectItem>
-                                                                <SelectItem value="spanish-invoice">Facture (ES)</SelectItem>
-                                                                <SelectItem value="portuguese-invoice">Facture (PT)</SelectItem>
-                                                                <SelectItem value="italian-invoice">Facture (IT)</SelectItem>
+                                                            </SelectContent>
+                                                        </Select>
+                                                    </FormItem>
+                                                )}
+                                            />
+                                            <FormField
+                                                control={configForm.control}
+                                                name="docLang"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel>Langue du document</FormLabel>
+                                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                            <FormControl>
+                                                                <SelectTrigger>
+                                                                    <SelectValue />
+                                                                </SelectTrigger>
+                                                            </FormControl>
+                                                            <SelectContent>
+                                                                <SelectItem value="fr">Français</SelectItem>
+                                                                <SelectItem value="en">English</SelectItem>
+                                                                <SelectItem value="de">Deutsch</SelectItem>
+                                                                <SelectItem value="es">Español</SelectItem>
+                                                                <SelectItem value="pt">Português</SelectItem>
+                                                                <SelectItem value="it">Italiano</SelectItem>
                                                             </SelectContent>
                                                         </Select>
                                                     </FormItem>
@@ -398,3 +319,5 @@ export default function DocumentGeneratorPage() {
     
 
 }
+
+    

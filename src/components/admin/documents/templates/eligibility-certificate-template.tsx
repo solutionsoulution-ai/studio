@@ -5,6 +5,7 @@ import { eligibilityCertificateClauses } from "@/data/documents/eligibility-cert
 import { useState, useEffect } from 'react';
 import { FileText } from "lucide-react";
 import Image from "next/image";
+import type { Language } from "@/data/documents/languages";
 
 export interface EligibilityCertificateData {
     beneficiary_name?: string;
@@ -18,7 +19,7 @@ export interface EligibilityCertificateData {
 
 interface EligibilityCertificateTemplateProps {
     data: EligibilityCertificateData;
-    lang: 'fr' | 'en';
+    lang: Language;
 }
 
 export default function EligibilityCertificateTemplate({ data, lang }: EligibilityCertificateTemplateProps) {
@@ -57,7 +58,7 @@ export default function EligibilityCertificateTemplate({ data, lang }: Eligibili
             <header className="flex justify-between items-start mb-12 border-b-2 border-primary pb-4">
                  <div>
                     <h1 className="text-3xl font-bold uppercase text-primary">VylsCapital</h1>
-                    <p className="text-gray-600 font-semibold">Département Analyse de Crédit</p>
+                    <p className="text-gray-600 font-semibold">{clauses.department}</p>
                 </div>
                  <div className="text-right text-xs text-gray-500">
                     <p>10 Place de la Bourse, 69002 Lyon, France</p>
@@ -75,9 +76,9 @@ export default function EligibilityCertificateTemplate({ data, lang }: Eligibili
             </p>
 
             <aside className="border-l-4 border-primary bg-primary/5 p-4 mb-10">
-                <h3 className="font-bold text-primary flex items-center gap-2"><FileText size={18} /> Importance de ce document</h3>
+                <h3 className="font-bold text-primary flex items-center gap-2"><FileText size={18} /> {clauses.importance.title}</h3>
                 <p className="text-xs mt-2">
-                    Cette attestation est une validation préliminaire de votre capacité d'emprunt auprès de notre institution. Elle vous permet de prouver votre sérieux et votre éligibilité auprès de tiers (agents immobiliers, vendeurs, etc.) lors de vos démarches, sans pour autant constituer une offre de prêt définitive.
+                    {clauses.importance.description}
                 </p>
             </aside>
 
@@ -108,10 +109,12 @@ export default function EligibilityCertificateTemplate({ data, lang }: Eligibili
                     </div>
                     <div className="border-t border-border pt-2">
                         <p className="font-semibold">{data.analyst_name || "Benoît Leroy"}</p>
-                        <p className="text-xs">Directeur d'Analyse Financière, VylsCapital</p>
+                        <p className="text-xs">{clauses.analyst_title}, VylsCapital</p>
                     </div>
                 </div>
             </footer>
         </div>
     );
 }
+
+    

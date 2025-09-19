@@ -1,6 +1,7 @@
 
 "use client";
 
+import { invoiceClauses } from "@/data/documents/invoice-clauses";
 import { FileText } from "lucide-react";
 import Image from "next/image";
 
@@ -16,11 +17,11 @@ export interface BlankDocumentData {
 
 interface BlankDocumentTemplateProps {
     data: BlankDocumentData;
-    lang: 'fr' | 'en'; // Lang is kept for consistency, but this template will be English.
 }
 
-export default function BlankDocumentTemplate({ data, lang }: BlankDocumentTemplateProps) {
-    
+export default function BlankDocumentTemplate({ data }: BlankDocumentTemplateProps) {
+    const clauses = invoiceClauses.en;
+
     const formatCurrency = (value: number | undefined) => {
         if (value === undefined) return '...';
         return new Intl.NumberFormat('en-US', {
@@ -32,6 +33,16 @@ export default function BlankDocumentTemplate({ data, lang }: BlankDocumentTempl
     const vatAmount = 0.00;
     const totalAmount = data.amount || 0;
 
+    if (!clauses) {
+        return (
+            <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto flex items-center justify-center">
+                <p className="text-center text-lg text-gray-500">
+                    Clauses not available.
+                </p>
+            </div>
+        );
+    }
+
     return (
         <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto relative">
             <header className="flex justify-between items-start mb-16">
@@ -41,9 +52,9 @@ export default function BlankDocumentTemplate({ data, lang }: BlankDocumentTempl
                     <p className="text-gray-600 text-xs mt-2">10 Place de la Bourse, 69002 Lyon, France</p>
                 </div>
                 <div className="text-right">
-                    <h2 className="text-3xl font-bold uppercase text-gray-500">Invoice</h2>
-                    <p className="mt-1">Invoice No: {data.invoice_number || '...'}</p>
-                    <p>Date: {data.invoice_date || '...'}</p>
+                    <h2 className="text-3xl font-bold uppercase text-gray-500">{clauses.title}</h2>
+                    <p className="mt-1">{clauses.invoice_number_label} {data.invoice_number || '...'}</p>
+                    <p>{clauses.date_label} {data.invoice_date || '...'}</p>
                 </div>
             </header>
 
@@ -55,7 +66,7 @@ export default function BlankDocumentTemplate({ data, lang }: BlankDocumentTempl
             </aside>
 
             <section className="mb-12">
-                <h3 className="font-bold border-b-2 border-primary pb-1 mb-2 text-primary">Bill To:</h3>
+                <h3 className="font-bold border-b-2 border-primary pb-1 mb-2 text-primary">{clauses.bill_to_label}</h3>
                 <p className="font-semibold">{data.customer_name || '...'}</p>
                 <p className="whitespace-pre-line">{data.customer_address || '...'}</p>
             </section>
@@ -64,8 +75,8 @@ export default function BlankDocumentTemplate({ data, lang }: BlankDocumentTempl
                 <table className="w-full border-collapse text-base">
                     <thead className="bg-primary/10">
                         <tr>
-                            <th className="border-b-2 border-primary p-2 text-left font-bold text-primary">Description</th>
-                            <th className="border-b-2 border-primary p-2 text-right font-bold text-primary">Amount</th>
+                            <th className="border-b-2 border-primary p-2 text-left font-bold text-primary">{clauses.table_headers.description}</th>
+                            <th className="border-b-2 border-primary p-2 text-right font-bold text-primary">{clauses.table_headers.amount}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -86,15 +97,15 @@ export default function BlankDocumentTemplate({ data, lang }: BlankDocumentTempl
                         <table className="w-full">
                             <tbody>
                                 <tr className="text-base">
-                                    <td className="p-2 font-semibold">Subtotal (VAT Excl.)</td>
+                                    <td className="p-2 font-semibold">{clauses.subtotal_label}</td>
                                     <td className="p-2 text-right">{formatCurrency(data.amount)}</td>
                                 </tr>
                                 <tr className="text-base">
-                                    <td className="p-2 font-semibold">VAT (0%)</td>
+                                    <td className="p-2 font-semibold">{clauses.vat_label}</td>
                                     <td className="p-2 text-right">{formatCurrency(vatAmount)}</td>
                                 </tr>
                                 <tr className="bg-primary text-primary-foreground font-bold text-lg">
-                                    <td className="p-2">Total Due</td>
+                                    <td className="p-2">{clauses.total_label}</td>
                                     <td className="p-2 text-right">{formatCurrency(totalAmount)}</td>
                                 </tr>
                             </tbody>
@@ -106,13 +117,13 @@ export default function BlankDocumentTemplate({ data, lang }: BlankDocumentTempl
             <footer className="absolute bottom-16 left-16 right-16 border-t border-border pt-8">
                 <div className="flex justify-between items-end">
                     <div>
-                        <h3 className="font-bold mb-2 text-primary">Payment Terms</h3>
-                        <p>Payment due within 30 days from the invoice date.</p>
+                        <h3 className="font-bold mb-2 text-primary">{clauses.payment_terms.title}</h3>
+                        <p>{clauses.payment_terms.due_date}</p>
                         <p className="mt-2">
-                            IBAN: <span className="font-mono">{data.payment_iban || '...'}</span>
+                            {clauses.payment_terms.iban_label} <span className="font-mono">{data.payment_iban || '...'}</span>
                         </p>
                         <p className="mt-2">
-                            BIC/SWIFT: <span className="font-mono">VYLCFR2LXXX</span>
+                            {clauses.payment_terms.bic_label} <span className="font-mono">VYLCFR2LXXX</span>
                         </p>
                     </div>
                      <div className="text-center">
@@ -126,9 +137,11 @@ export default function BlankDocumentTemplate({ data, lang }: BlankDocumentTempl
                     </div>
                 </div>
                 <p className="mt-8 text-center text-xs text-gray-500">
-                    Thank you for your business. If you have any questions about this invoice, please contact us at accounting@vylscapital.com.
+                    {clauses.footer.thank_you}
                 </p>
             </footer>
         </div>
     );
 }
+
+    

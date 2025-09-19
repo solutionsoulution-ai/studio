@@ -13,6 +13,7 @@ const formSchema = z.object({
     guarantor_name: z.string().min(2),
     loan_contract_id: z.string().min(5),
     loan_amount: z.coerce.number().positive(),
+    loan_amount_in_words: z.string().min(5),
     loan_term_months: z.coerce.number().positive().int(),
     loan_date: z.string().min(8),
     signature_location: z.string().min(2),
@@ -23,10 +24,9 @@ export type SuretyBondFormValues = z.infer<typeof formSchema>;
 
 interface SuretyBondFormProps {
   form: UseFormReturn<SuretyBondFormValues>;
-  lang: 'fr' | 'en';
 }
 
-export default function SuretyBondForm({ form, lang }: SuretyBondFormProps) {
+export default function SuretyBondForm({ form }: SuretyBondFormProps) {
     return (
         <Card>
             <CardHeader>
@@ -76,6 +76,13 @@ export default function SuretyBondForm({ form, lang }: SuretyBondFormProps) {
                                 </FormItem>
                             )} />
                         </div>
+                        <FormField control={form.control} name="loan_amount_in_words" render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Montant en toutes lettres</FormLabel>
+                                <FormControl><Input {...field} /></FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )} />
                         <FormField control={form.control} name="loan_date" render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Date du Contrat de Prêt</FormLabel>
@@ -109,3 +116,5 @@ export default function SuretyBondForm({ form, lang }: SuretyBondFormProps) {
 }
 
 SuretyBondForm.schema = formSchema;
+
+    

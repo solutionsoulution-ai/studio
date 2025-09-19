@@ -22,10 +22,9 @@ export type EligibilityCertificateFormValues = z.infer<typeof formSchema>;
 
 interface EligibilityCertificateFormProps {
   form: UseFormReturn<EligibilityCertificateFormValues>;
-  lang: 'fr' | 'en';
 }
 
-export default function EligibilityCertificateForm({ form, lang }: EligibilityCertificateFormProps) {
+export default function EligibilityCertificateForm({ form }: EligibilityCertificateFormProps) {
     return (
         <Card>
             <CardHeader>
@@ -99,3 +98,5 @@ export default function EligibilityCertificateForm({ form, lang }: EligibilityCe
 }
 
 EligibilityCertificateForm.schema = formSchema;
+
+    

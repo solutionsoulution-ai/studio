@@ -17,10 +17,9 @@ export type InsuranceNoticeFormValues = z.infer<typeof formSchema>;
 
 interface InsuranceNoticeFormProps {
   form: UseFormReturn<InsuranceNoticeFormValues>;
-  lang: 'fr' | 'en';
 }
 
-export default function InsuranceNoticeForm({ form, lang }: InsuranceNoticeFormProps) {
+export default function InsuranceNoticeForm({ form }: InsuranceNoticeFormProps) {
     return (
         <Card>
             <CardHeader>
@@ -52,3 +51,5 @@ export default function InsuranceNoticeForm({ form, lang }: InsuranceNoticeFormP
 }
 
 InsuranceNoticeForm.schema = formSchema;
+
+    

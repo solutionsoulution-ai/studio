@@ -22,10 +22,9 @@ export type InsuranceCertificateFormValues = z.infer<typeof formSchema>;
 
 interface InsuranceCertificateFormProps {
   form: UseFormReturn<InsuranceCertificateFormValues>;
-  lang: 'fr' | 'en';
 }
 
-export default function InsuranceCertificateForm({ form, lang }: InsuranceCertificateFormProps) {
+export default function InsuranceCertificateForm({ form }: InsuranceCertificateFormProps) {
     return (
         <Card>
             <CardHeader>
@@ -108,3 +107,5 @@ export default function InsuranceCertificateForm({ form, lang }: InsuranceCertif
 }
 
 InsuranceCertificateForm.schema = formSchema;
+
+    

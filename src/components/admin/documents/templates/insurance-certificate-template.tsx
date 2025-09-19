@@ -5,6 +5,7 @@ import { insuranceCertificateClauses } from "@/data/documents/insurance-certific
 import { useState, useEffect } from 'react';
 import { FileText, ShieldCheck } from "lucide-react";
 import Image from "next/image";
+import type { Language } from "@/data/documents/languages";
 
 export interface InsuranceCertificateData {
     insured_name?: string;
@@ -19,7 +20,7 @@ export interface InsuranceCertificateData {
 
 interface InsuranceCertificateTemplateProps {
     data: InsuranceCertificateData;
-    lang: 'fr' | 'en';
+    lang: Language;
 }
 
 export default function InsuranceCertificateTemplate({ data, lang }: InsuranceCertificateTemplateProps) {
@@ -56,7 +57,7 @@ export default function InsuranceCertificateTemplate({ data, lang }: InsuranceCe
             <header className="flex justify-between items-start mb-12 border-b-2 border-primary pb-4">
                  <div>
                     <h1 className="text-3xl font-bold uppercase text-primary">VylsCapital</h1>
-                    <p className="text-gray-600 font-semibold">VylsCapital Assurance</p>
+                    <p className="text-gray-600 font-semibold">{clauses.department}</p>
                 </div>
                  <div className="text-right text-xs text-gray-500">
                     <p>10 Place de la Bourse, 69002 Lyon, France</p>
@@ -71,9 +72,9 @@ export default function InsuranceCertificateTemplate({ data, lang }: InsuranceCe
             </p>
 
             <aside className="border-l-4 border-primary bg-primary/5 p-4 mb-10">
-                <h3 className="font-bold text-primary flex items-center gap-2"><FileText size={18} /> Importance de ce document</h3>
+                <h3 className="font-bold text-primary flex items-center gap-2"><FileText size={18} /> {clauses.importance.title}</h3>
                 <p className="text-xs mt-2">
-                    Cette attestation est le document officiel qui prouve que votre prêt est couvert par une assurance. Elle est exigée par l'organisme prêteur et vous protège, ainsi que vos proches, contre certains aléas de la vie (décès, invalidité) en garantissant le remboursement du capital restant dû.
+                    {clauses.importance.description}
                 </p>
             </aside>
 
@@ -97,7 +98,7 @@ export default function InsuranceCertificateTemplate({ data, lang }: InsuranceCe
                         <div className="font-bold">{formatCurrency(data.insured_capital)}</div>
 
                         <div className="font-semibold">{clauses.premium_label}:</div>
-                        <div className="font-bold">{formatCurrency(data.monthly_premium)} / mois</div>
+                        <div className="font-bold">{formatCurrency(data.monthly_premium)} / {clauses.per_month}</div>
                         
                         <div className="font-semibold">{clauses.effective_date_label}:</div>
                         <div>{data.effective_date || '___/___/_____'}</div>
@@ -130,10 +131,12 @@ export default function InsuranceCertificateTemplate({ data, lang }: InsuranceCe
                     </div>
                     <div className="border-t border-border pt-2">
                         <p className="font-semibold">Isabelle Petit</p>
-                        <p className="text-xs">Directrice des Assurances, VylsCapital</p>
+                        <p className="text-xs">{clauses.director_title}, VylsCapital</p>
                     </div>
                 </div>
             </footer>
         </div>
     );
 }
+
+    

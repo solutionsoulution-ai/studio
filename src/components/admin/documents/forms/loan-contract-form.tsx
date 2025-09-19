@@ -37,11 +37,10 @@ export type LoanContractFormValues = z.infer<typeof formSchema>;
 
 interface LoanContractFormProps {
   form: UseFormReturn<LoanContractFormValues>;
-  lang: 'fr' | 'en';
 }
 
 
-export default function LoanContractForm({ form, lang }: LoanContractFormProps) {
+export default function LoanContractForm({ form }: LoanContractFormProps) {
     return (
         <Card>
             <CardHeader>
@@ -153,3 +152,5 @@ export default function LoanContractForm({ form, lang }: LoanContractFormProps) 
 
 // Attach schema to component for easy access in parent
 LoanContractForm.schema = formSchema;
+
+    

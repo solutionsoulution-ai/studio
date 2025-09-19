@@ -5,6 +5,7 @@ import { suretyBondClauses } from "@/data/documents/surety-bond-clauses";
 import { useState, useEffect } from 'react';
 import { FileText } from "lucide-react";
 import Image from "next/image";
+import type { Language } from "@/data/documents/languages";
 
 export interface SuretyBondData {
     lender_name?: string;
@@ -12,6 +13,7 @@ export interface SuretyBondData {
     guarantor_name?: string;
     loan_contract_id?: string;
     loan_amount?: number;
+    loan_amount_in_words?: string;
     loan_term_months?: number;
     loan_date?: string;
     signature_location?: string;
@@ -20,7 +22,7 @@ export interface SuretyBondData {
 
 interface SuretyBondTemplateProps {
     data: SuretyBondData;
-    lang: 'fr' | 'en';
+    lang: Language;
 }
 
 export default function SuretyBondTemplate({ data, lang }: SuretyBondTemplateProps) {
@@ -53,7 +55,7 @@ export default function SuretyBondTemplate({ data, lang }: SuretyBondTemplatePro
     }
 
     const handwrittenNoticeText = clauses.handwritten_mention.content
-        .replace(/{loan_amount_in_words}/g, '...') // Placeholder, as this field isn't in the form
+        .replace(/{loan_amount_in_words}/g, data.loan_amount_in_words || '_____________________')
         .replace(/{loan_amount}/g, formatCurrency(data.loan_amount))
         .replace(/{lender_name}/g, data.lender_name || 'VylsCapital')
         .replace(/{borrower_name}/g, data.borrower_name || '_____________________');
@@ -64,19 +66,19 @@ export default function SuretyBondTemplate({ data, lang }: SuretyBondTemplatePro
             <header className="flex justify-between items-start mb-12 border-b-2 border-primary pb-4">
                  <div>
                     <h1 className="text-3xl font-bold uppercase text-primary">VylsCapital</h1>
-                    <p className="text-gray-600 font-semibold">Département Juridique & Garanties</p>
+                    <p className="text-gray-600 font-semibold">{clauses.department}</p>
                 </div>
             </header>
             
             <div className="text-center mb-12">
                 <h2 className="text-2xl font-bold uppercase">{clauses.title}</h2>
-                <p className="mt-2 text-gray-600">Référence : {docRef}</p>
+                <p className="mt-2 text-gray-600">{clauses.reference.replace('{ref}', docRef)}</p>
             </div>
 
             <aside className="border-l-4 border-primary bg-primary/5 p-4 mb-10">
-                <h3 className="font-bold text-primary flex items-center gap-2"><FileText size={18} /> Importance de ce document</h3>
+                <h3 className="font-bold text-primary flex items-center gap-2"><FileText size={18} /> {clauses.importance.title}</h3>
                 <p className="text-xs mt-2">
-                    L'acte de cautionnement est un engagement extrêmement important. En le signant, la caution s'engage personnellement à rembourser la dette du débiteur principal si celui-ci ne le fait pas. C'est une garantie forte pour le prêteur, mais un risque financier significatif pour la personne qui se porte caution.
+                    {clauses.importance.description}
                 </p>
             </aside>
 
@@ -126,7 +128,7 @@ export default function SuretyBondTemplate({ data, lang }: SuretyBondTemplatePro
                         <p className="font-semibold mb-2">{clauses.parties.guarantor_label}</p>
                         <div className="h-24 border-b border-border"></div>
                         <p className="mt-2 text-xs">{data.guarantor_name || '_____________________'}</p>
-                         <p className="text-xs">(Précédé de la mention manuscrite et de la signature)</p>
+                         <p className="text-xs">{clauses.guarantor_signature_instruction}</p>
                     </div>
                     <div>
                         <p className="font-semibold mb-2">{clauses.parties.lender_label}</p>
@@ -134,10 +136,12 @@ export default function SuretyBondTemplate({ data, lang }: SuretyBondTemplatePro
                            <Image src="https://i.postimg.cc/jSrRkPWD/signature.png" alt="Signature" layout="fill" objectFit="contain" objectPosition="bottom left"/>
                         </div>
                         <p className="mt-2 text-xs font-semibold">David Rousseau</p>
-                        <p className="text-xs">Directeur Juridique, VylsCapital</p>
+                        <p className="text-xs">{clauses.lender_title}, VylsCapital</p>
                     </div>
                 </div>
             </footer>
         </div>
     );
 }
+
+    

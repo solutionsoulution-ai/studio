@@ -3,6 +3,7 @@
 
 import { insuranceNoticeClauses } from "@/data/documents/insurance-notice-clauses";
 import { FileText } from "lucide-react";
+import type { Language } from "@/data/documents/languages";
 
 export interface InsuranceNoticeData {
     company_name?: string;
@@ -11,7 +12,7 @@ export interface InsuranceNoticeData {
 
 interface InsuranceNoticeTemplateProps {
     data: InsuranceNoticeData;
-    lang: 'fr' | 'en';
+    lang: Language;
 }
 
 export default function InsuranceNoticeTemplate({ data, lang }: InsuranceNoticeTemplateProps) {
@@ -35,9 +36,9 @@ export default function InsuranceNoticeTemplate({ data, lang }: InsuranceNoticeT
             </header>
             
             <aside className="border-l-4 border-primary bg-primary/5 p-4 mb-10">
-                <h3 className="font-bold text-primary flex items-center gap-2"><FileText size={18} /> Importance de ce document</h3>
+                <h3 className="font-bold text-primary flex items-center gap-2"><FileText size={18} /> {clauses.importance.title}</h3>
                 <p className="text-xs mt-2">
-                    La notice d'information est un document pré-contractuel essentiel. Elle vous permet de comprendre en détail l'étendue des garanties proposées par l'assurance emprunteur, mais aussi et surtout ses limites et exclusions. Sa lecture attentive est indispensable pour faire un choix éclairé avant de vous engager.
+                    {clauses.importance.description}
                 </p>
             </aside>
 
@@ -94,3 +95,5 @@ export default function InsuranceNoticeTemplate({ data, lang }: InsuranceNoticeT
         </div>
     );
 }
+
+    

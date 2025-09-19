@@ -5,6 +5,7 @@ import { debtRecognitionClauses } from "@/data/documents/debt-recognition-clause
 import { useState, useEffect } from 'react';
 import { FileText } from "lucide-react";
 import Image from "next/image";
+import type { Language } from "@/data/documents/languages";
 
 export interface DebtRecognitionData {
     borrower_name?: string;
@@ -20,7 +21,7 @@ export interface DebtRecognitionData {
 
 interface DebtRecognitionTemplateProps {
     data: DebtRecognitionData;
-    lang: 'fr' | 'en';
+    lang: Language;
 }
 
 export default function DebtRecognitionTemplate({ data, lang }: DebtRecognitionTemplateProps) {
@@ -57,19 +58,19 @@ export default function DebtRecognitionTemplate({ data, lang }: DebtRecognitionT
             <header className="flex justify-between items-start mb-12 border-b-2 border-primary pb-4">
                  <div>
                     <h1 className="text-3xl font-bold uppercase text-primary">VylsCapital</h1>
-                    <p className="text-gray-600 font-semibold">Département Juridique & Financier</p>
+                    <p className="text-gray-600 font-semibold">{clauses.department}</p>
                 </div>
             </header>
 
             <div className="text-center mb-12">
                 <h2 className="text-2xl font-bold uppercase">{clauses.title}</h2>
-                <p className="mt-2 text-gray-600">Référence du document : {docRef}</p>
+                <p className="mt-2 text-gray-600">{clauses.reference.replace('{ref}', docRef)}</p>
             </div>
 
             <aside className="border-l-4 border-primary bg-primary/5 p-4 mb-10">
-                <h3 className="font-bold text-primary flex items-center gap-2"><FileText size={18} /> Importance de ce document</h3>
+                <h3 className="font-bold text-primary flex items-center gap-2"><FileText size={18} /> {clauses.importance.title}</h3>
                 <p className="text-xs mt-2">
-                    Cet acte est une preuve juridique formelle qui constate l'existence et les modalités d'une dette entre deux parties. Il protège à la fois le créancier en lui donnant un titre pour recouvrer sa créance, et le débiteur en clarifiant le montant et l'échéance du remboursement.
+                    {clauses.importance.description}
                 </p>
             </aside>
 
@@ -111,7 +112,7 @@ export default function DebtRecognitionTemplate({ data, lang }: DebtRecognitionT
                     <div>
                         <p className="font-semibold mb-2">{clauses.borrower_signature_label}:</p>
                         <div className="h-24 border-b border-border"></div>
-                        <p className="mt-2 text-xs">(Lu et approuvé, bon pour reconnaissance de dette de la somme indiquée ci-dessus)</p>
+                        <p className="mt-2 text-xs">{clauses.borrower_signature_instruction}</p>
                         <p className="text-xs mt-2">{data.borrower_name || '_____________________'}</p>
                     </div>
                      <div>
@@ -120,10 +121,12 @@ export default function DebtRecognitionTemplate({ data, lang }: DebtRecognitionT
                              <Image src="https://i.postimg.cc/jSrRkPWD/signature.png" alt="Signature" layout="fill" objectFit="contain" objectPosition="bottom left"/>
                         </div>
                          <p className="mt-2 text-xs font-semibold">David Rousseau</p>
-                        <p className="text-xs">Directeur Juridique, VylsCapital</p>
+                        <p className="text-xs">{clauses.lender_title}, VylsCapital</p>
                     </div>
                 </div>
             </footer>
         </div>
     );
 }
+
+    
