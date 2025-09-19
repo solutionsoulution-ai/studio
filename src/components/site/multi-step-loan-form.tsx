@@ -207,7 +207,7 @@ export default function MultiStepLoanForm() {
                         render={({ field }) => (
                             <FormItem>
                             <FormLabel>Type de Prêt</FormLabel>
-                             <Select onValueChange={field.onChange} defaultValue={field.value}>
+                             <Select onValueChange={field.onChange} defaultValue={field.value} name={field.name}>
                                 <FormControl>
                                 <SelectTrigger>
                                     <SelectValue placeholder="Sélectionnez le type de projet" />
@@ -228,14 +228,14 @@ export default function MultiStepLoanForm() {
                     <FormField control={form.control} name="loanAmount" render={({ field }) => (
                       <FormItem>
                         <FormLabel>Montant souhaité (€)</FormLabel>
-                        <FormControl><Input type="number" {...field} /></FormControl>
+                        <FormControl><Input type="number" {...field} name={field.name} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
                     <FormField control={form.control} name="loanTerm" render={({ field }) => (
                       <FormItem>
                         <FormLabel>Durée de remboursement (mois)</FormLabel>
-                        <FormControl><Input type="number" {...field} /></FormControl>
+                        <FormControl><Input type="number" {...field} name={field.name} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
@@ -247,14 +247,14 @@ export default function MultiStepLoanForm() {
                         <FormField control={form.control} name="firstName" render={({ field }) => (
                         <FormItem>
                             <FormLabel>Prénom</FormLabel>
-                            <FormControl><Input {...field} /></FormControl>
+                            <FormControl><Input {...field} name={field.name} /></FormControl>
                             <FormMessage />
                         </FormItem>
                         )} />
                         <FormField control={form.control} name="lastName" render={({ field }) => (
                         <FormItem>
                             <FormLabel>Nom</FormLabel>
-                            <FormControl><Input {...field} /></FormControl>
+                            <FormControl><Input {...field} name={field.name} /></FormControl>
                             <FormMessage />
                         </FormItem>
                         )} />
@@ -263,14 +263,14 @@ export default function MultiStepLoanForm() {
                         <FormField control={form.control} name="email" render={({ field }) => (
                         <FormItem>
                             <FormLabel>Email</FormLabel>
-                            <FormControl><Input type="email" {...field} /></FormControl>
+                            <FormControl><Input type="email" {...field} name={field.name} /></FormControl>
                             <FormMessage />
                         </FormItem>
                         )} />
                         <FormField control={form.control} name="phone" render={({ field }) => (
                         <FormItem>
                             <FormLabel>Téléphone</FormLabel>
-                            <FormControl><Input type="tel" {...field} /></FormControl>
+                            <FormControl><Input type="tel" {...field} name={field.name} /></FormControl>
                             <FormMessage />
                         </FormItem>
                         )} />
@@ -280,19 +280,19 @@ export default function MultiStepLoanForm() {
                         <div className="grid grid-cols-3 gap-2">
                            <FormField control={form.control} name="birthDay" render={({ field }) => (
                             <FormItem>
-                                <FormControl><Input type="number" placeholder="Jour" {...field} value={field.value || ''} /></FormControl>
+                                <FormControl><Input type="number" placeholder="Jour" {...field} value={field.value || ''} name={field.name} /></FormControl>
                                 <FormMessage />
                             </FormItem>
                             )} />
                              <FormField control={form.control} name="birthMonth" render={({ field }) => (
                             <FormItem>
-                                <FormControl><Input type="number" placeholder="Mois" {...field} value={field.value || ''} /></FormControl>
+                                <FormControl><Input type="number" placeholder="Mois" {...field} value={field.value || ''} name={field.name} /></FormControl>
                                 <FormMessage />
                             </FormItem>
                             )} />
                              <FormField control={form.control} name="birthYear" render={({ field }) => (
                             <FormItem>
-                                <FormControl><Input type="number" placeholder="Année" {...field} value={field.value || ''} /></FormControl>
+                                <FormControl><Input type="number" placeholder="Année" {...field} value={field.value || ''} name={field.name} /></FormControl>
                                 <FormMessage />
                             </FormItem>
                             )} />
@@ -302,7 +302,7 @@ export default function MultiStepLoanForm() {
                      <FormField control={form.control} name="address" render={({ field }) => (
                         <FormItem>
                         <FormLabel>Adresse</FormLabel>
-                        <FormControl><Input {...field} /></FormControl>
+                        <FormControl><Input {...field} name={field.name} /></FormControl>
                         <FormMessage />
                         </FormItem>
                     )} />
@@ -310,21 +310,21 @@ export default function MultiStepLoanForm() {
                          <FormField control={form.control} name="city" render={({ field }) => (
                             <FormItem>
                             <FormLabel>Ville</FormLabel>
-                            <FormControl><Input {...field} /></FormControl>
+                            <FormControl><Input {...field} name={field.name} /></FormControl>
                             <FormMessage />
                             </FormItem>
                         )} />
                         <FormField control={form.control} name="postalCode" render={({ field }) => (
                             <FormItem>
                             <FormLabel>Code Postal</FormLabel>
-                            <FormControl><Input {...field} /></FormControl>
+                            <FormControl><Input {...field} name={field.name} /></FormControl>
                             <FormMessage />
                             </FormItem>
                         )} />
                          <FormField control={form.control} name="country" render={({ field }) => (
                             <FormItem>
                             <FormLabel>Pays</FormLabel>
-                            <FormControl><Input {...field} /></FormControl>
+                            <FormControl><Input {...field} name={field.name} /></FormControl>
                             <FormMessage />
                             </FormItem>
                         )} />
@@ -333,7 +333,7 @@ export default function MultiStepLoanForm() {
                         <FormField control={form.control} name="maritalStatus" render={({ field }) => (
                             <FormItem>
                             <FormLabel>Situation familiale</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <Select onValueChange={field.onChange} defaultValue={field.value} name={field.name}>
                                 <FormControl>
                                 <SelectTrigger>
                                     <SelectValue placeholder="Sélectionnez votre situation" />
@@ -352,7 +352,7 @@ export default function MultiStepLoanForm() {
                         <FormField control={form.control} name="numberOfChildren" render={({ field }) => (
                             <FormItem>
                             <FormLabel>Nombre d'enfants</FormLabel>
-                            <FormControl><Input type="number" {...field} /></FormControl>
+                            <FormControl><Input type="number" {...field} name={field.name} /></FormControl>
                             <FormMessage />
                             </FormItem>
                         )} />
@@ -364,7 +364,7 @@ export default function MultiStepLoanForm() {
                      <FormField control={form.control} name="occupation" render={({ field }) => (
                       <FormItem>
                         <FormLabel>Profession</FormLabel>
-                        <FormControl><Input {...field} /></FormControl>
+                        <FormControl><Input {...field} name={field.name} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
@@ -372,14 +372,14 @@ export default function MultiStepLoanForm() {
                         <FormField control={form.control} name="monthlyIncome" render={({ field }) => (
                         <FormItem>
                             <FormLabel>Revenu Mensuel Net (€)</FormLabel>
-                            <FormControl><Input type="number" {...field} /></FormControl>
+                            <FormControl><Input type="number" {...field} name={field.name} /></FormControl>
                             <FormMessage />
                         </FormItem>
                         )} />
                         <FormField control={form.control} name="monthlyExpenses" render={({ field }) => (
                         <FormItem>
                             <FormLabel>Charges Mensuelles (€)</FormLabel>
-                            <FormControl><Input type="number" {...field} /></FormControl>
+                            <FormControl><Input type="number" {...field} name={field.name} /></FormControl>
                             <FormMessage />
                         </FormItem>
                         )} />
@@ -387,7 +387,7 @@ export default function MultiStepLoanForm() {
                     <FormField control={form.control} name="creditScore" render={({ field }) => (
                       <FormItem>
                         <FormLabel>Score de Crédit (estimation)</FormLabel>
-                        <FormControl><Input type="number" min="300" max="850" {...field} /></FormControl>
+                        <FormControl><Input type="number" min="300" max="850" {...field} name={field.name} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
@@ -402,7 +402,7 @@ export default function MultiStepLoanForm() {
                             <FormItem>
                                 <FormLabel>Pièce d'identité (PDF, JPG, PNG)</FormLabel>
                                 <FormControl>
-                                <Input type="file" onChange={(e) => onChange(e.target.files)} {...rest} />
+                                <Input type="file" onChange={(e) => onChange(e.target.files)} {...rest} name={rest.name} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -415,7 +415,7 @@ export default function MultiStepLoanForm() {
                             <FormItem>
                                 <FormLabel>Justificatif de domicile (PDF, JPG, PNG)</FormLabel>
                                 <FormControl>
-                                <Input type="file" onChange={(e) => onChange(e.target.files)} {...rest} />
+                                <Input type="file" onChange={(e) => onChange(e.target.files)} {...rest} name={rest.name} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -428,7 +428,7 @@ export default function MultiStepLoanForm() {
                             <FormItem>
                                 <FormLabel>Justificatif de revenus (PDF, JPG, PNG)</FormLabel>
                                 <FormControl>
-                                <Input type="file" onChange={(e) => onChange(e.target.files)} {...rest} />
+                                <Input type="file" onChange={(e) => onChange(e.target.files)} {...rest} name={rest.name} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -495,7 +495,3 @@ export default function MultiStepLoanForm() {
     </Card>
   );
 }
-
-    
-
-    
