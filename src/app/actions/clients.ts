@@ -63,8 +63,9 @@ async function writeData(data: ClientProfile[]): Promise<void> {
   }
 }
 
+const randomDigits = (length: number) => Array.from({ length }, () => Math.floor(Math.random() * 10)).join('');
+
 function generateIBAN(countryCode = 'FR') {
-    const randomDigits = (length: number) => Array.from({ length }, () => Math.floor(Math.random() * 10)).join('');
     // Ceci est une simplification et ne produit pas d'IBAN valides selon la norme.
     const countryPart = '76';
     const bankCode = randomDigits(5);
