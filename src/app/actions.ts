@@ -3,6 +3,7 @@
 
 import 'dotenv/config';
 import { z } from 'zod';
+import { supabase } from '@/lib/supabase';
 
 const contactFormSchema = z.object({
   name: z.string().min(2, { message: "Le nom doit comporter au moins 2 caractères." }),
@@ -11,7 +12,7 @@ const contactFormSchema = z.object({
 });
 
 /**
- * Handles the contact form submission by sending data to a Google Script webhook.
+ * Handles the contact form submission by saving data to Supabase.
  * @param formData - The validated form data.
  * @returns An object indicating success or failure.
  */
@@ -22,43 +23,25 @@ export async function handleContactForm(formData: z.infer<typeof contactFormSche
       return { success: false, error: `Données invalides: ${errorMessages}` };
     }
     
-    const webhookUrl = process.env.WEBHOOK_URL;
-    if (!webhookUrl) {
-      console.error("WEBHOOK_URL is not defined in environment variables.");
-      return { success: false, error: "La configuration du serveur est incomplète." };
-    }
-
     try {
-       const payload = {
-         sheet: 'Contacts',
-         data: parsed.data
-       };
+       const { data, error } = await supabase
+         .from('contacts')
+         .insert([
+           { 
+             name: parsed.data.name,
+             email: parsed.data.email,
+             message: parsed.data.message
+           }
+         ]);
 
-       const response = await fetch(webhookUrl, {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
-          },
-          body: JSON.stringify(payload),
-          redirect: 'follow',
-       });
-
-       if (!response.ok) {
-          const errorBody = await response.text();
-          console.error("Webhook error response:", errorBody);
-          throw new Error(`Le serveur du webhook a répondu avec une erreur: ${response.status}`);
+       if (error) {
+         throw error;
        }
 
-        const responseData = await response.json();
-        if (responseData.status !== 'success') {
-          throw new Error(responseData.message || "Le webhook a renvoyé une erreur inattendue.");
-        }
-
-        return { success: true };
+       return { success: true };
 
     } catch (error: any) {
-        console.error("Error sending contact form to webhook:", error);
+        console.error("Error sending contact form to Supabase:", error);
         return { success: false, error: error.message || "Impossible d'envoyer le message." };
     }
 }
@@ -75,7 +58,7 @@ const eligibilityContactSchema = z.object({
 });
 
 /**
- * Handles the eligibility contact form submission.
+ * Handles the eligibility contact form submission to Supabase.
  * @param formData - Raw form data from the client.
  * @returns An object indicating success or failure.
  */
@@ -97,110 +80,91 @@ export async function submitEligibilityContact(formData: FormData) {
     return { success: false, error: `Données d'éligibilité invalides: ${errorMessages}` };
   }
 
-  const webhookUrl = process.env.WEBHOOK_URL;
-  if (!webhookUrl) {
-    console.error("WEBHOOK_URL is not defined in environment variables.");
-    return { success: false, error: "La configuration du serveur est incomplète." };
-  }
-
   try {
-    const payload = {
-        sheet: 'EligibilityContacts',
-        data: parsed.data
-    };
+    const { data, error } = await supabase
+      .from('eligibility_contacts')
+      .insert([
+        { 
+          annual_revenue: parsed.data.annualRevenue,
+          credit_score: parsed.data.creditScore,
+          years_in_business: parsed.data.yearsInBusiness,
+          loan_amount_requested: parsed.data.loanAmountRequested,
+          reason_for_loan: parsed.data.reasonForLoan,
+          eligibility_status: parsed.data.eligibilityStatus,
+          confidence_score: parsed.data.confidenceScore
+        }
+      ]);
 
-    const response = await fetch(webhookUrl, {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
-      },
-      body: JSON.stringify(payload),
-      redirect: 'follow',
-    });
-
-    if (!response.ok) {
-        const errorBody = await response.text();
-        console.error("Webhook error response for eligibility:", errorBody);
-        throw new Error(`Le serveur du webhook a répondu avec le statut ${response.status}.`);
-    }
-
-    const responseData = await response.json();
-    if (responseData.status !== 'success') {
-      throw new Error(responseData.message || "Le webhook a renvoyé une erreur.");
+    if (error) {
+      throw error;
     }
 
     return { success: true };
   } catch (error: any) {
-    console.error("Error submitting eligibility contact to webhook:", error);
+    console.error("Error submitting eligibility contact to Supabase:", error);
     return { success: false, error: error.message || "Impossible d'envoyer la demande de contact." };
   }
 }
 
 /**
- * Handles the full loan application submission, including file uploads.
+ * Handles the full loan application submission, including file uploads to Supabase.
  * @param formData - Raw form data from the client, including files.
  * @returns An object indicating success or failure, with an application ID.
  */
 export async function handleLoanApplication(formData: FormData) {
-  const webhookUrl = process.env.WEBHOOK_URL;
-  if (!webhookUrl) {
-    console.error("WEBHOOK_URL is not defined in environment variables.");
-    return { success: false, error: "La configuration du serveur est incomplète." };
-  }
-
   try {
       const applicationId = `APP-${Date.now()}`;
-      const dataForWebhook: {[key: string]: any} = {
-        applicationId: applicationId,
+      const applicationData: {[key: string]: any} = {
+        application_id: applicationId,
       };
+
+      const fileUploadPromises = [];
 
       // Process form fields and files
       for (const [key, value] of formData.entries()) {
           if (value instanceof File && value.size > 0) {
-              const buffer = Buffer.from(await value.arrayBuffer());
-              // Create a file object structure for the Google Script
-              dataForWebhook[key] = {
-                  fileName: value.name,
-                  mimeType: value.type,
-                  content: buffer.toString('base64'),
-              };
+              const filePath = `${applicationId}/${key}-${value.name}`;
+              
+              // Add file upload promise to the array
+              fileUploadPromises.push(
+                supabase.storage
+                  .from('loan_documents')
+                  .upload(filePath, value)
+              );
+
+              // Store the path in the data to be inserted in the table
+              applicationData[`${key}_url`] = filePath;
+
           } else if (typeof value === 'string') {
-              dataForWebhook[key] = value;
+              // Convert camelCase to snake_case for DB consistency
+              const snakeCaseKey = key.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+              applicationData[snakeCaseKey] = value;
           }
       }
       
-      const payload = {
-        sheet: 'LoanApplications',
-        data: dataForWebhook,
-      };
+      // Execute all file uploads in parallel
+      const uploadResults = await Promise.all(fileUploadPromises);
 
-      const response = await fetch(webhookUrl, {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
-          },
-          // The body size limit might need adjustment in next.config.ts if files are large
-          body: JSON.stringify(payload),
-          redirect: 'follow',
-      });
-      
-      if (!response.ok) {
-        const errorBody = await response.text();
-        console.error("Webhook error response for loan application:", errorBody);
-        throw new Error(`Le serveur du webhook a répondu avec une erreur: ${response.status}`);
+      // Check for any upload errors
+      for (const result of uploadResults) {
+        if (result.error) {
+          throw new Error(`Erreur de téléversement de fichier: ${result.error.message}`);
+        }
       }
 
-      const responseData = await response.json();
-      if (responseData.status !== 'success') {
-        throw new Error(responseData.message || "Le webhook a renvoyé une erreur.");
+      // Once all files are uploaded, insert the record into the database
+      const { data: dbData, error: dbError } = await supabase
+        .from('loan_applications')
+        .insert([applicationData]);
+
+      if (dbError) {
+        throw dbError;
       }
 
       return { success: true, applicationId };
 
   } catch (error: any) {
-      console.error("Error processing loan application via webhook:", error);
+      console.error("Error processing loan application with Supabase:", error);
       return { success: false, error: error.message || "La soumission a échoué. Veuillez réessayer." };
   }
 }
