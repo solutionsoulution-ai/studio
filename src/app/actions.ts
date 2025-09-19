@@ -36,7 +36,10 @@ export async function handleContactForm(formData: z.infer<typeof contactFormSche
 
        const response = await fetch(webhookUrl, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 
+            'Content-Type': 'application/json',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
+          },
           body: JSON.stringify(payload),
           redirect: 'follow',
        });
@@ -108,7 +111,10 @@ export async function submitEligibilityContact(formData: FormData) {
 
     const response = await fetch(webhookUrl, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
+      },
       body: JSON.stringify(payload),
       redirect: 'follow',
     });
@@ -171,7 +177,10 @@ export async function handleLoanApplication(formData: FormData) {
 
       const response = await fetch(webhookUrl, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 
+            'Content-Type': 'application/json',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
+          },
           // The body size limit might need adjustment in next.config.ts if files are large
           body: JSON.stringify(payload),
           redirect: 'follow',
