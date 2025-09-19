@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,11 +20,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { handleEligibilityCheck } from "@/app/actions";
+import { handleEligibilityCheck, submitEligibilityContact } from "@/app/actions";
 import type { EligibilityCheckResult } from "@/app/actions";
 import { Loader2, Sparkles, TrendingUp, TrendingDown, BadgeCheck } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
   annualRevenue: z.coerce
@@ -47,6 +49,10 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 const ResultCard = ({ result, formData }: { result: EligibilityCheckResult, formData: FormValues | null }) => {
+  const router = useRouter();
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   if ("error" in result) {
     return (
       <Card className="bg-destructive/10 border-destructive">
@@ -59,6 +65,31 @@ const ResultCard = ({ result, formData }: { result: EligibilityCheckResult, form
       </Card>
     );
   }
+  
+  const handleContactSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      setIsSubmitting(true);
+      const formElement = event.currentTarget;
+      const contactFormData = new FormData(formElement);
+
+      const res = await submitEligibilityContact(contactFormData);
+      setIsSubmitting(false);
+
+      if (res.success) {
+          toast({
+            title: "Demande de contact envoyée !",
+            description: "Un conseiller va prendre connaissance de votre dossier et vous recontacter.",
+          });
+          router.push('/demande-de-pret/merci');
+      } else {
+           toast({
+            title: "Erreur",
+            description: res.error || "L'envoi de votre demande a échoué.",
+            variant: "destructive"
+          });
+      }
+  }
+
 
   const { eligibilityStatus, confidenceScore } = result;
   const isEligible = eligibilityStatus.toLowerCase().includes("eligible") || eligibilityStatus.toLowerCase().includes("éligible");
@@ -95,13 +126,7 @@ const ResultCard = ({ result, formData }: { result: EligibilityCheckResult, form
             <p>{eligibilityStatus.substring(eligibilityStatus.indexOf('.') + 1).trim()}</p>
           </div>
         )}
-        <form action="https://formsubmit.co/contact@vylscapital.com" method="POST">
-             {/* Formsubmit.co settings */}
-            <input type="hidden" name="_next" value="https://vylscapital-demo.web.app/demande-de-pret/merci" />
-            <input type="hidden" name="_subject" value="Nouvelle Demande d'Éligibilité" />
-            <input type="hidden" name="_captcha" value="false" />
-            <input type="hidden" name="_template" value="table" />
-            
+        <form onSubmit={handleContactSubmit}>
             {/* Form data */}
             <input type="hidden" name="Type de demande" value="Éligibilité" />
             <input type="hidden" name="Revenu Annuel" value={formData?.annualRevenue} />
@@ -114,7 +139,10 @@ const ResultCard = ({ result, formData }: { result: EligibilityCheckResult, form
             <input type="hidden" name="Statut d'éligibilité (IA)" value={result.eligibilityStatus} />
             <input type="hidden" name="Score de confiance (IA)" value={result.confidenceScore} />
 
-            <Button type="submit" className="w-full mt-4">Soumettre ces informations et contacter un conseiller</Button>
+            <Button type="submit" className="w-full mt-4" disabled={isSubmitting}>
+              {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+              Soumettre et contacter un conseiller
+            </Button>
         </form>
       </CardContent>
     </Card>

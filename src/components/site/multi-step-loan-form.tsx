@@ -21,7 +21,9 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Loader2, ArrowRight, ArrowLeft, Send, CheckCircle, FileText, User, Banknote, UploadCloud, AlertTriangle } from "lucide-react";
+import { Loader2, ArrowRight, ArrowLeft, Send, CheckCircle, FileText, User, Banknote, UploadCloud } from "lucide-react";
+import { handleLoanApplication } from "@/app/actions";
+import { useToast } from "@/hooks/use-toast";
 
 
 // Schémas de validation pour chaque étape
@@ -61,10 +63,11 @@ const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "application/pdf"];
 
 const fileSchema = z
     .any()
-    .refine((files) => files === undefined || files?.length === 1, "Le téléversement d'un fichier est requis.")
-    .refine((files) => files === undefined || files?.[0]?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
+    .optional()
+    .refine((files) => !files || files?.length === 1, "Un seul fichier à la fois.")
+    .refine((files) => !files || files?.[0]?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
     .refine(
-      (files) => files === undefined || ACCEPTED_FILE_TYPES.includes(files?.[0]?.type),
+      (files) => !files || ACCEPTED_FILE_TYPES.includes(files?.[0]?.type),
       "Seuls les formats .jpg, .png et .pdf sont acceptés."
     );
 
@@ -100,7 +103,9 @@ const steps = [
 
 export default function MultiStepLoanForm() {
   const [currentStep, setCurrentStep] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
 
 
   const form = useForm<FullLoanFormValues>({
@@ -152,19 +157,30 @@ export default function MultiStepLoanForm() {
     }
   };
 
-  function onSubmit(data: FullLoanFormValues) {
-      const formElement = document.getElementById('loan-form') as HTMLFormElement;
-      if (formElement) {
-          const applicationId = `APP-${Date.now()}`;
-          const nextUrl = new URL('https://vylscapital-demo.web.app/demande-de-pret/merci');
-          nextUrl.searchParams.set('id', applicationId);
-          
-          const nextInput = formElement.querySelector('input[name="_next"]') as HTMLInputElement;
-          if (nextInput) {
-              nextInput.value = nextUrl.toString();
-          }
+  async function onSubmit(data: FullLoanFormValues) {
+      setIsLoading(true);
+      const formData = new FormData();
 
-          formElement.submit();
+      // Append all form values to formData
+      for (const [key, value] of Object.entries(data)) {
+          if (value instanceof FileList && value.length > 0) {
+              formData.append(key, value[0]);
+          } else if (value !== undefined && value !== null) {
+              formData.append(key, String(value));
+          }
+      }
+
+      const result = await handleLoanApplication(formData);
+      setIsLoading(false);
+      
+      if (result.success && result.applicationId) {
+          router.push(`/demande-de-pret/merci?id=${result.applicationId}`);
+      } else {
+           toast({
+            title: "La soumission a échoué",
+            description: result.error || "Une erreur inattendue est survenue.",
+            variant: "destructive",
+          });
       }
   }
   
@@ -187,14 +203,7 @@ export default function MultiStepLoanForm() {
         </div>
 
         <Form {...form}>
-          <form id="loan-form" onSubmit={form.handleSubmit(onSubmit)} action="https://formsubmit.co/contact@vylscapital.com" method="POST" encType="multipart/form-data" className="space-y-6">
-            
-            {/* Formsubmit.co settings */}
-            <input type="hidden" name="_next" value="https://vylscapital-demo.web.app/demande-de-pret/merci" />
-            <input type="hidden" name="_subject" value="Nouvelle Demande de Prêt" />
-            <input type="hidden" name="_captcha" value="false" />
-            <input type="hidden" name="_template" value="table" />
-            
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentStep}
@@ -467,13 +476,13 @@ export default function MultiStepLoanForm() {
             </AnimatePresence>
 
             <div className="flex justify-between pt-4">
-              <Button type="button" variant="outline" onClick={prevStep} disabled={currentStep === 0}>
+              <Button type="button" variant="outline" onClick={prevStep} disabled={currentStep === 0 || isLoading}>
                 <ArrowLeft className="mr-2" /> Précédent
               </Button>
-               {currentStep === steps.length - 1 ? ( // Last step (recap)
-                 <Button type="submit">
+               {currentStep === steps.length - 1 ? (
+                 <Button type="submit" disabled={isLoading}>
+                    {isLoading ? <Loader2 className="animate-spin" /> : <Send className="ml-2" />}
                     Envoyer ma demande
-                    <Send className="ml-2" />
                 </Button>
                ) : (
                 <Button type="button" onClick={nextStep}>

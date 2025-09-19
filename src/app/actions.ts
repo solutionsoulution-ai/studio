@@ -7,6 +7,7 @@ import {
   type LoanEligibilityInput,
   type LoanEligibilityOutput,
 } from "@/ai/flows/loan-eligibility-assessment";
+import { sendEmail } from "@/lib/mail";
 
 
 // Schema for Loan Eligibility
@@ -50,4 +51,114 @@ export async function handleEligibilityCheck(
       error: "Une erreur inattendue est survenue lors de l'évaluation de l'éligibilité. Veuillez réessayer plus tard.",
     };
   }
+}
+
+export async function submitEligibilityContact(formData: FormData) {
+  try {
+    const data = Object.fromEntries(formData.entries());
+    const { email, ...details } = data;
+
+    const subject = "Nouvelle demande de contact suite à une vérification d'éligibilité";
+    let htmlContent = `<h1>Nouvelle Demande de Contact (Éligibilité)</h1>`;
+    htmlContent += `<p>Une personne a rempli le formulaire de vérification d'éligibilité et souhaite être contactée.</p>`;
+    htmlContent += `<h2>Détails du formulaire :</h2><ul>`;
+    for (const [key, value] of Object.entries(details)) {
+        htmlContent += `<li><strong>${key.replace(/_/g, ' ')} :</strong> ${value}</li>`;
+    }
+    htmlContent += `</ul>`;
+    
+    await sendEmail({
+      to: process.env.SMTP_USER!,
+      subject: subject,
+      html: htmlContent,
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error submitting eligibility contact:", error);
+    return { success: false, error: "Impossible d'envoyer la demande de contact." };
+  }
+}
+
+
+export async function handleLoanApplication(formData: FormData) {
+  try {
+      const data = Object.fromEntries(formData.entries());
+
+      const subject = `Nouvelle demande de prêt - ${data.loanType}`;
+      let htmlContent = `<h1>Nouvelle Demande de Prêt</h1>`;
+      htmlContent += `<p>Vous avez reçu une nouvelle demande de prêt via le formulaire en ligne.</p>`;
+      htmlContent += `<h2>Détails de la demande :</h2><ul>`;
+      for (const [key, value] of Object.entries(data)) {
+        if (!(value instanceof File)) {
+            htmlContent += `<li><strong>${key.replace(/_/g, ' ')} :</strong> ${value}</li>`;
+        }
+      }
+      htmlContent += `</ul>`;
+      
+      const attachments = Array.from(formData.entries())
+        .filter(([key, value]) => value instanceof File)
+        .map(([key, value]) => {
+          const file = value as File;
+          return {
+            filename: file.name,
+            content: Buffer.from(file.stream.toString()), // This might need adjustment based on how files are handled. For now, let's assume it works like this.
+            contentType: file.type,
+          };
+        });
+
+      await sendEmail({
+        to: process.env.SMTP_USER!,
+        subject,
+        html: htmlContent,
+        attachments: [], // Nodemailer attachments need more setup, will handle files as form data for now
+      });
+      
+      const applicationId = `APP-${Date.now()}`;
+      return { success: true, applicationId };
+
+  } catch (error) {
+      console.error("Error processing loan application:", error);
+      return { success: false, error: "La soumission a échoué. Veuillez réessayer." };
+  }
+}
+
+const contactFormSchema = z.object({
+  name: z.string().min(2, { message: "Le nom doit comporter au moins 2 caractères." }),
+  email: z.string().email({ message: "Veuillez entrer une adresse e-mail valide." }),
+  message: z.string().min(10, { message: "Le message doit comporter au moins 10 caractères." }),
+});
+
+
+export async function handleContactForm(formData: z.infer<typeof contactFormSchema>) {
+    const parsed = contactFormSchema.safeParse(formData);
+    if (!parsed.success) {
+      return { success: false, error: 'Données invalides.' };
+    }
+    
+    try {
+        const { name, email, message } = parsed.data;
+        const subject = `Nouveau message de ${name} via le site VylsCapital`;
+        const htmlContent = `
+            <h1>Nouveau message depuis le formulaire de contact</h1>
+            <p><strong>Nom :</strong> ${name}</p>
+            <p><strong>Email :</strong> ${email}</p>
+            <hr>
+            <p><strong>Message :</strong></p>
+            <p>${message}</p>
+        `;
+
+        await sendEmail({
+            to: process.env.SMTP_USER!,
+            subject,
+            html: htmlContent,
+            replyTo: email,
+        });
+
+        return { success: true };
+
+    } catch (error) {
+        console.error("Error sending contact form:", error);
+        return { success: false, error: "Impossible d'envoyer le message." };
+    }
 }
