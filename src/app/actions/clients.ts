@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import fs from 'fs/promises';
@@ -246,7 +247,7 @@ export async function verifyAdminLoginAction(password: string): Promise<{ succes
 export async function getClientsAction(): Promise<{ success: boolean; clients?: Omit<ClientProfile, 'password'>[]; error?: string }> {
     try {
         const clients = await readData();
-        // Remove password before sending to client
+        // Remove password from the returned objects
         const clientsWithoutPasswords = clients.map(c => {
             const { password, ...rest } = c;
             return rest;
@@ -341,6 +342,65 @@ export async function createClientAction(clientData: z.infer<typeof createClient
     }
 
     clients.push(newClient);
+    await writeData(clients);
+
+    return { success: true };
+}
+
+
+const adjustBalanceSchema = z.object({
+  clientId: z.string(),
+  amount: z.coerce.number().refine(val => val !== 0, "Le montant ne peut pas être zéro."),
+  reason: z.string().min(3, "Le motif est requis (min 3 caractères)."),
+  type: z.enum(['credit', 'debit']),
+});
+
+/**
+ * Adjusts a client's balance (credit or debit).
+ * @param adjustmentData - The adjustment details.
+ * @returns { success: boolean; error?: string }
+ */
+export async function adjustClientBalanceAction(adjustmentData: z.infer<typeof adjustBalanceSchema>): Promise<{ success: boolean; error?: string }> {
+    const parsed = adjustBalanceSchema.safeParse(adjustmentData);
+    if (!parsed.success) {
+        const issues = parsed.error.issues.map(i => i.message).join(', ');
+        return { success: false, error: `Données invalides: ${issues}` };
+    }
+
+    const { clientId, amount, reason, type } = parsed.data;
+
+    const clients = await readData();
+    const clientIndex = clients.findIndex(c => c.id === clientId);
+
+    if (clientIndex === -1) {
+        return { success: false, error: "Client non trouvé." };
+    }
+
+    const client = clients[clientIndex];
+    const transactionAmount = type === 'credit' ? Math.abs(amount) : -Math.abs(amount);
+
+    // Check for sufficient funds on debit
+    if (type === 'debit' && client.balance < Math.abs(amount)) {
+        return { success: false, error: "Solde insuffisant pour ce débit." };
+    }
+    
+    // Update balance
+    client.balance += transactionAmount;
+    
+    // Create new transaction
+    const newTransaction: Transaction = {
+        id: `txn_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
+        profile_id: client.id,
+        amount: transactionAmount,
+        reason: reason,
+        recipient_iban: null,
+        recipient_name: "Opération Manuelle Admin",
+        created_at: new Date().toISOString(),
+        status: 'COMPLETED',
+    };
+
+    client.transactions.push(newTransaction);
+    clients[clientIndex] = client;
     await writeData(clients);
 
     return { success: true };

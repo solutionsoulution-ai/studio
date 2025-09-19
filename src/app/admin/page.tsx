@@ -29,11 +29,13 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Shield, Users, ArrowLeft, UserCog, AlertCircle, Trash2, UserPlus } from "lucide-react";
+import { Loader2, Shield, Users, ArrowLeft, UserCog, AlertCircle, Trash2, UserPlus, Banknote, Plus, Minus } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getClientsAction, deleteClientAction, verifyAdminLoginAction, createClientAction } from "@/app/actions/clients";
+import { getClientsAction, deleteClientAction, verifyAdminLoginAction, createClientAction, adjustClientBalanceAction } from "@/app/actions/clients";
 import type { ClientProfile } from "@/app/actions/clients";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 
 // Schéma pour le formulaire de connexion admin
@@ -138,17 +140,17 @@ const CreateClientForm = ({ onClientCreated }: { onClientCreated: () => void }) 
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                     <div>
                         <label htmlFor="email">Email</label>
-                        <input id="email" type="email" {...form.register("email")} className="w-full p-2 border rounded-md mt-1" disabled={isLoading} />
+                        <Input id="email" type="email" {...form.register("email")} className="w-full mt-1" disabled={isLoading} />
                         {form.formState.errors.email && <p className="text-red-500 text-sm mt-1">{form.formState.errors.email.message}</p>}
                     </div>
                     <div>
                         <label htmlFor="password">Mot de passe</label>
-                        <input id="password" type="password" {...form.register("password")} className="w-full p-2 border rounded-md mt-1" disabled={isLoading} />
+                        <Input id="password" type="password" {...form.register("password")} className="w-full mt-1" disabled={isLoading} />
                         {form.formState.errors.password && <p className="text-red-500 text-sm mt-1">{form.formState.errors.password.message}</p>}
                     </div>
                     <div>
                         <label htmlFor="initialBalance">Solde initial (€)</label>
-                        <input id="initialBalance" type="number" {...form.register("initialBalance")} className="w-full p-2 border rounded-md mt-1" disabled={isLoading} />
+                        <Input id="initialBalance" type="number" {...form.register("initialBalance")} className="w-full mt-1" disabled={isLoading} />
                         {form.formState.errors.initialBalance && <p className="text-red-500 text-sm mt-1">{form.formState.errors.initialBalance.message}</p>}
                     </div>
                     <DialogFooter>
@@ -245,6 +247,91 @@ const ClientList = ({ clients, onClientSelect, isLoading, error, onClientCreated
     )
 }
 
+const balanceAdjustmentSchema = z.object({
+  amount: z.coerce.number().positive("Le montant doit être positif."),
+  reason: z.string().min(3, "Le motif est requis (min 3 caractères)."),
+  type: z.enum(['credit', 'debit']),
+});
+type BalanceAdjustmentValues = z.infer<typeof balanceAdjustmentSchema>;
+
+const BalanceAdjustmentForm = ({ client, onActionSuccess }: { client: Omit<ClientProfile, 'password'>, onActionSuccess: () => void }) => {
+    const { toast } = useToast();
+    const [isLoading, setIsLoading] = useState(false);
+    const [open, setOpen] = useState(false);
+
+    const form = useForm<BalanceAdjustmentValues>({
+        resolver: zodResolver(balanceAdjustmentSchema),
+        defaultValues: { amount: undefined, reason: "", type: 'credit' },
+    });
+
+    async function onSubmit(values: BalanceAdjustmentValues) {
+        setIsLoading(true);
+        const result = await adjustClientBalanceAction({
+            ...values,
+            clientId: client.id,
+        });
+        setIsLoading(false);
+
+        if (result.success) {
+            toast({ title: "Opération réussie", description: "Le solde du client a été mis à jour." });
+            onActionSuccess();
+            setOpen(false);
+            form.reset();
+        } else {
+            toast({ title: "Erreur", description: result.error, variant: "destructive" });
+        }
+    }
+
+    return (
+        <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+                <Button>
+                    <Banknote className="mr-2" /> Créditer / Débiter
+                </Button>
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Ajuster le Solde</DialogTitle>
+                    <DialogDescription>Créditez ou débitez le compte de {client.email}.</DialogDescription>
+                </DialogHeader>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                    <div>
+                        <label>Type d'opération</label>
+                        <Select onValueChange={(value) => form.setValue('type', value as 'credit' | 'debit')} defaultValue={form.getValues('type')}>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Sélectionner un type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="credit"><div className="flex items-center gap-2"><Plus/>Crédit</div></SelectItem>
+                                <SelectItem value="debit"><div className="flex items-center gap-2"><Minus/>Débit</div></SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div>
+                        <label htmlFor="amount">Montant (€)</label>
+                        <Input id="amount" type="number" step="0.01" {...form.register("amount")} className="w-full mt-1" disabled={isLoading} />
+                        {form.formState.errors.amount && <p className="text-red-500 text-sm mt-1">{form.formState.errors.amount.message}</p>}
+                    </div>
+                    <div>
+                        <label htmlFor="reason">Motif</label>
+                        <Input id="reason" {...form.register("reason")} className="w-full mt-1" disabled={isLoading} />
+                        {form.formState.errors.reason && <p className="text-red-500 text-sm mt-1">{form.formState.errors.reason.message}</p>}
+                    </div>
+                    <DialogFooter>
+                         <DialogClose asChild>
+                            <Button type="button" variant="outline" disabled={isLoading}>Annuler</Button>
+                        </DialogClose>
+                        <Button type="submit" disabled={isLoading}>
+                            {isLoading ? <Loader2 className="animate-spin" /> : "Valider l'opération"}
+                        </Button>
+                    </DialogFooter>
+                </form>
+            </DialogContent>
+        </Dialog>
+    );
+};
+
+
 const ClientDetailView = ({ client, onBack, onClientAction }: { client: Omit<ClientProfile, 'password'>, onBack: () => void, onClientAction: () => void }) => {
     const { toast } = useToast();
     const [isDeleting, setIsDeleting] = useState(false);
@@ -257,12 +344,16 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: Omit<Cli
 
         if (result.success) {
             toast({ title: "Client Supprimé", description: "Le client a été supprimé avec succès." });
-            onClientAction();
-            onBack();
+            onClientAction(); // This will trigger a re-fetch in the parent
+            onBack(); // Go back to the list view
         } else {
              toast({ title: "Erreur", description: result.error, variant: "destructive" });
         }
     };
+    
+    const handleBalanceUpdate = () => {
+        onClientAction();
+    }
 
     if (!client) return null;
 
@@ -290,6 +381,10 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: Omit<Cli
                     <p><strong>IBAN :</strong> {client.iban}</p>
                     <p><strong>BIC/SWIFT :</strong> {client.bic}</p>
                     <p><strong>Date de création :</strong> {new Date(client.created_at).toLocaleDateString('fr-FR')}</p>
+                </div>
+                 <div className="p-4 border rounded-md space-y-4">
+                     <h3 className="font-semibold mb-2 pt-2">Gestion du Compte</h3>
+                     <BalanceAdjustmentForm client={client} onActionSuccess={handleBalanceUpdate} />
                 </div>
 
                 {client.has_loan && (
@@ -353,12 +448,18 @@ export default function AdminPage() {
 
       if (result.success && result.clients) {
         setClients(result.clients);
+         // If a client is selected, update its data
+        if(selectedClient) {
+            const updatedSelectedClient = result.clients.find(c => c.id === selectedClient.id) || null;
+            setSelectedClient(updatedSelectedClient);
+        }
       } else {
         setErrorClients(result.error || "Une erreur est survenue.");
         setClients([]);
+        setSelectedClient(null);
       }
       setIsLoadingClients(false);
-  }, [isAdmin]);
+  }, [isAdmin, selectedClient]);
 
   useEffect(() => {
     if (isAdmin) {
@@ -372,7 +473,6 @@ export default function AdminPage() {
 
   const handleBackToList = () => {
     setSelectedClient(null);
-    fetchClients();
   }
 
   if (!isClient) {
