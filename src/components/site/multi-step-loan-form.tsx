@@ -73,12 +73,11 @@ const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "application/pdf"];
 
 const fileSchema = z
   .any()
-  .optional()
-  .refine((files) => !files || files?.length === 0 || files?.[0]?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
+  .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
   .refine(
-    (files) => !files || files?.length === 0 || ACCEPTED_FILE_TYPES.includes(files?.[0]?.type),
+    (files) => ACCEPTED_FILE_TYPES.includes(files?.[0]?.type),
     "Seuls les formats .jpg, .png et .pdf sont acceptés."
-  );
+  ).optional();
 
 const step4Schema = z.object({
   identityDocument: fileSchema,
@@ -104,6 +103,8 @@ const steps: { id: string, name: string, icon: React.ElementType, schema: StepSc
   { id: "Étape 5", name: "Confirmation", schema: null, icon: CheckCircle },
 ];
 
+const allSchemas = [step1Schema, step2Schema, step3Schema, step4Schema];
+
 export default function MultiStepLoanForm() {
   const [currentStep, setCurrentStep] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -112,6 +113,7 @@ export default function MultiStepLoanForm() {
 
 
   const form = useForm<FullLoanFormValues>({
+    resolver: zodResolver(allSchemas[currentStep]),
     mode: "onChange",
     defaultValues: {
       loanType: undefined,
@@ -144,9 +146,7 @@ export default function MultiStepLoanForm() {
     const currentSchema = steps[currentStep].schema;
 
     if (currentSchema) {
-      const fields = Object.keys(currentSchema.shape) as (keyof FullLoanFormValues)[];
-      const result = await form.trigger(fields, { shouldFocus: true });
-      
+      const result = await form.trigger();
       if (!result) {
         return; // Ne pas avancer si la validation échoue
       }
