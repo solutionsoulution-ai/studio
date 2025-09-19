@@ -52,17 +52,24 @@ export default function SuretyBondTemplate({ data, lang }: SuretyBondTemplatePro
 
     const handwrittenNoticeText = clauses.handwritten_mention.content
         .replace('{loan_amount}', formatCurrency(data.loan_amount))
-        .replace('{loan_term_months}', String(data.loan_term_months || '...'));
+        .replace('{loan_term_months}', String(data.loan_term_months || '...'))
+        .replace(/\[Nom du débiteur\]/g, data.borrower_name || '_____________________');
 
     return (
         <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto">
-            <header className="text-center mb-12">
-                <h1 className="text-2xl font-bold uppercase">{clauses.title}</h1>
-                <p className="mt-2 text-gray-600">Référence : {docRef}</p>
+            <header className="mb-12 border-b-2 border-gray-600 pb-4">
+                <h1 className="text-3xl font-bold uppercase text-gray-800">VylsCapital</h1>
+                <p className="text-gray-600 font-semibold">Département Juridique & Garanties</p>
             </header>
+            
+            <div className="text-center mb-12">
+                <h2 className="text-2xl font-bold uppercase">{clauses.title}</h2>
+                <p className="mt-2 text-gray-600">Référence : {docRef}</p>
+            </div>
+
 
             <section className="mb-8">
-                <h2 className="font-bold text-lg mb-4">{clauses.parties.title}</h2>
+                <h3 className="font-bold text-lg mb-4">{clauses.parties.title}</h3>
                 <ul className="space-y-2">
                     <li><strong>{clauses.parties.lender_label}</strong> {data.lender_name || 'VylsCapital'}</li>
                     <li><strong>{clauses.parties.borrower_label}</strong> {data.borrower_name || '_____________________'}</li>
@@ -74,7 +81,7 @@ export default function SuretyBondTemplate({ data, lang }: SuretyBondTemplatePro
 
             <main className="space-y-6">
                 <article>
-                    <h2 className="font-bold text-base mb-2">{clauses.commitment.title}</h2>
+                    <h3 className="font-bold text-base mb-2">{clauses.commitment.title}</h3>
                     <p>
                         {clauses.commitment.content
                             .replace('{guarantor_name}', data.guarantor_name || '_____________________')
@@ -85,7 +92,7 @@ export default function SuretyBondTemplate({ data, lang }: SuretyBondTemplatePro
                 </article>
 
                 <article>
-                    <h2 className="font-bold text-base mb-2">{clauses.loan_details.title}</h2>
+                    <h3 className="font-bold text-base mb-2">{clauses.loan_details.title}</h3>
                      <p>
                         {clauses.loan_details.content
                             .replace('{loan_contract_id}', data.loan_contract_id || '_____________________')
@@ -97,15 +104,15 @@ export default function SuretyBondTemplate({ data, lang }: SuretyBondTemplatePro
                 </article>
 
                  <article>
-                    <h2 className="font-bold text-base mb-2">{clauses.scope.title}</h2>
+                    <h3 className="font-bold text-base mb-2">{clauses.scope.title}</h3>
                     <p>{clauses.scope.content}</p>
                 </article>
                 
                  <article>
-                    <h2 className="font-bold text-base mb-2">{clauses.handwritten_mention.title}</h2>
+                    <h3 className="font-bold text-base mb-2">{clauses.handwritten_mention.title}</h3>
                     <p className="italic text-xs">{clauses.handwritten_mention.instruction}</p>
-                    <div className="mt-2 p-4 border border-dashed border-gray-400 h-48 bg-gray-50 text-gray-500">
-                        {handwrittenNoticeText}
+                    <div className="mt-2 p-4 border border-dashed border-gray-400 min-h-48 bg-gray-50 text-gray-500 flex items-center justify-center">
+                        <p className="text-center">{handwrittenNoticeText}</p>
                     </div>
                 </article>
             </main>

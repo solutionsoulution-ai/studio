@@ -52,10 +52,15 @@ export default function DebtRecognitionTemplate({ data, lang }: DebtRecognitionT
 
     return (
         <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto">
-            <header className="text-center mb-12">
-                <h1 className="text-2xl font-bold uppercase">{clauses.title}</h1>
-                <p className="mt-2 text-gray-600">Référence du document : {docRef}</p>
+            <header className="mb-12 border-b-2 border-gray-600 pb-4">
+                <h1 className="text-3xl font-bold uppercase text-gray-800">VylsCapital</h1>
+                <p className="text-gray-600 font-semibold">Département Juridique</p>
             </header>
+
+            <div className="text-center mb-12">
+                <h2 className="text-2xl font-bold uppercase">{clauses.title}</h2>
+                <p className="mt-2 text-gray-600">Référence du document : {docRef}</p>
+            </div>
 
             <main className="space-y-6">
                 <p>

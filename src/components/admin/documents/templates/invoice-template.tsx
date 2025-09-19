@@ -47,7 +47,8 @@ export default function InvoiceTemplate({ data, lang }: InvoiceTemplateProps) {
             <header className="flex justify-between items-start mb-16">
                 <div>
                     <h1 className="text-3xl font-bold uppercase text-gray-800">VylsCapital</h1>
-                    <p className="text-gray-600">10 Place de la Bourse, 69002 Lyon, France</p>
+                    <p className="text-gray-600 font-semibold">Département Comptabilité</p>
+                    <p className="text-gray-600 text-xs mt-2">10 Place de la Bourse, 69002 Lyon, France</p>
                 </div>
                 <div className="text-right">
                     <h2 className="text-3xl font-bold uppercase text-gray-500">{clauses.title}</h2>
@@ -100,7 +101,7 @@ export default function InvoiceTemplate({ data, lang }: InvoiceTemplateProps) {
                 </div>
             </main>
 
-            <footer className="mt-24 border-t pt-8">
+            <footer className="absolute bottom-16 left-16 right-16 border-t pt-8">
                 <h3 className="font-bold mb-2">{clauses.payment_terms.title}</h3>
                 <p>{clauses.payment_terms.due_date}</p>
                 <p className="mt-2">

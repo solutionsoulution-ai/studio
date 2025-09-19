@@ -59,21 +59,26 @@ export default function LoanContractTemplate({ data, lang }: LoanContractTemplat
     return (
         // A4-like container with Tailwind for styling
         <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto">
-            <header className="text-center mb-12">
-                <h1 className="text-2xl font-bold uppercase">{clauses.title}</h1>
-                <p className="mt-2 text-gray-600">Référence du contrat : {contractRef}</p>
+            <header className="mb-12 border-b-2 border-gray-600 pb-4">
+                <h1 className="text-3xl font-bold uppercase text-gray-800">VylsCapital</h1>
+                <p className="text-gray-600 font-semibold">Département Juridique & Financier</p>
             </header>
 
+            <div className="text-center mb-12">
+                <h2 className="text-2xl font-bold uppercase">{clauses.title}</h2>
+                <p className="mt-2 text-gray-600">Référence du contrat : {contractRef}</p>
+            </div>
+
             <section className="mb-8">
-                <h2 className="font-bold text-lg mb-4">{clauses.parties.title}</h2>
+                <h3 className="font-bold text-lg mb-4">{clauses.parties.title}</h3>
                 <div className="grid grid-cols-2 gap-8">
                     <div>
-                        <h3 className="font-semibold">{clauses.parties.lender}</h3>
+                        <h4 className="font-semibold">{clauses.parties.lender}</h4>
                         <p>{data.lender_name || "VylsCapital"}</p>
                         <p className="whitespace-pre-line">{data.lender_address || "10 Place de la Bourse, 69002 Lyon, France"}</p>
                     </div>
                     <div>
-                        <h3 className="font-semibold">{clauses.parties.borrower}</h3>
+                        <h4 className="font-semibold">{clauses.parties.borrower}</h4>
                         <p>{data.borrower_name || "_____________________"}</p>
                         <p className="whitespace-pre-line">{data.borrower_address || "_____________________\n_____________________"}</p>
                     </div>
@@ -85,7 +90,7 @@ export default function LoanContractTemplate({ data, lang }: LoanContractTemplat
             <main className="space-y-6">
                 {/* Article 1: Objet du Prêt */}
                 <article>
-                    <h2 className="font-bold text-base mb-2">{clauses.object.title}</h2>
+                    <h3 className="font-bold text-base mb-2">{clauses.object.title}</h3>
                     <p>
                         {clauses.object.content
                             .replace('{lender_name}', data.lender_name || 'VylsCapital')
@@ -99,7 +104,7 @@ export default function LoanContractTemplate({ data, lang }: LoanContractTemplat
 
                 {/* Article 2: Taux d'intérêt */}
                 <article>
-                    <h2 className="font-bold text-base mb-2">{clauses.interest.title}</h2>
+                    <h3 className="font-bold text-base mb-2">{clauses.interest.title}</h3>
                     <p>
                         {clauses.interest.content.replace('{interest_rate}', String(data.interest_rate ?? '...'))}
                     </p>
@@ -107,7 +112,7 @@ export default function LoanContractTemplate({ data, lang }: LoanContractTemplat
                 
                 {/* Article 3: Durée et Modalités de Remboursement */}
                 <article>
-                    <h2 className="font-bold text-base mb-2">{clauses.repayment.title}</h2>
+                    <h3 className="font-bold text-base mb-2">{clauses.repayment.title}</h3>
                     <p>
                          {clauses.repayment.content
                             .replace('{loan_term_months}', String(data.loan_term_months ?? '...'))
@@ -120,7 +125,7 @@ export default function LoanContractTemplate({ data, lang }: LoanContractTemplat
                 {/* Other Clauses */}
                 {Object.entries(clauses.other_clauses).map(([key, clause]) => (
                      <article key={key}>
-                        <h2 className="font-bold text-base mb-2">{clause.title}</h2>
+                        <h3 className="font-bold text-base mb-2">{clause.title}</h3>
                         <p>{clause.content}</p>
                     </article>
                 ))}

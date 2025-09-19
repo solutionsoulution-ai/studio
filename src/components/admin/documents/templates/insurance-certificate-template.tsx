@@ -49,9 +49,9 @@ export default function InsuranceCertificateTemplate({ data, lang }: InsuranceCe
 
     return (
         <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto">
-            <header className="mb-12 border-b-2 border-black pb-4">
+            <header className="mb-12 border-b-2 border-gray-600 pb-4">
                 <h1 className="text-3xl font-bold uppercase text-gray-800">VylsCapital Assurance</h1>
-                <p className="text-gray-600">10 Place de la Bourse, 69002 Lyon, France</p>
+                <p className="text-gray-600 text-xs mt-2">10 Place de la Bourse, 69002 Lyon, France</p>
             </header>
 
             <h2 className="text-center text-2xl font-bold uppercase mb-12">{clauses.title}</h2>
@@ -102,7 +102,7 @@ export default function InsuranceCertificateTemplate({ data, lang }: InsuranceCe
                 </p>
             </main>
 
-            <footer className="mt-24">
+            <footer className="absolute bottom-16 right-16">
                 <div className="flex justify-end">
                     <div className="text-center">
                          <div className="h-24 w-48 mb-2">
