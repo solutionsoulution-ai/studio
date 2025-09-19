@@ -1,5 +1,8 @@
 
+"use client";
+
 import { loanContractClauses } from "@/data/documents/loan-contract-clauses";
+import { useState, useEffect } from 'react';
 
 export interface LoanContractData {
     borrower_name?: string;
@@ -23,6 +26,16 @@ interface LoanContractTemplateProps {
 }
 
 export default function LoanContractTemplate({ data, lang }: LoanContractTemplateProps) {
+    const [contractRef, setContractRef] = useState('');
+
+    useEffect(() => {
+        // Generate the random part of the contract reference only on the client-side
+        const randomPart = Math.floor(1000 + Math.random() * 9000);
+        const year = new Date().getFullYear();
+        setContractRef(`VYLS-${year}-${randomPart}`);
+    }, []);
+
+
     const clauses = loanContractClauses[lang];
 
     const formatCurrency = (value: number | undefined) => {
@@ -38,7 +51,7 @@ export default function LoanContractTemplate({ data, lang }: LoanContractTemplat
         <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto">
             <header className="text-center mb-12">
                 <h1 className="text-2xl font-bold uppercase">{clauses.title}</h1>
-                <p className="mt-2 text-gray-600">Référence du contrat : VYLS-{new Date().getFullYear()}-{Math.floor(1000 + Math.random() * 9000)}</p>
+                <p className="mt-2 text-gray-600">Référence du contrat : {contractRef}</p>
             </header>
 
             <section className="mb-8">
