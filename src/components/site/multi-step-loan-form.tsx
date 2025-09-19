@@ -92,17 +92,22 @@ type Step3Values = z.infer<typeof step3Schema>;
 type Step4Values = z.infer<typeof step4Schema>;
 
 
-const fullFormSchema = step1Schema.merge(step2Schema).merge(step3Schema).merge(step4Schema);
+const fullFormSchema = z.object({
+    ...step1Schema.shape,
+    ...step2Schema.shape,
+    ...step3Schema.shape,
+    ...step4Schema.shape,
+});
 type FullLoanFormValues = z.infer<typeof fullFormSchema>;
 
 
 type StepSchema = typeof step1Schema | typeof step2Schema | typeof step3Schema | typeof step4Schema;
 
-const steps: { id: string, name: string, icon: React.ElementType, schema: StepSchema | null, fields: (keyof Step1Values | keyof Step2Values | keyof Step3Values | keyof Step4Values)[] }[] = [
-  { id: "Étape 1", name: "Informations sur le Prêt", schema: step1Schema, icon: FileText, fields: ["loanType", "loanAmount", "loanTerm"] },
-  { id: "Étape 2", name: "Informations Personnelles", schema: step2Schema, icon: User, fields: ["firstName", "lastName", "email", "phone", "address", "city", "postalCode", "country", "maritalStatus", "numberOfChildren", "birthDay", "birthMonth", "birthYear"] },
-  { id: "Étape 3", name: "Situation Financière", schema: step3Schema, icon: Banknote, fields: ["occupation", "monthlyIncome", "monthlyExpenses", "creditScore"] },
-  { id: "Étape 4", name: "Documents", schema: step4Schema, icon: UploadCloud, fields: ["identityDocument", "proofOfAddress", "proofOfIncome"] },
+const steps: { id: string, name: string, icon: React.ElementType, schema: StepSchema | null, fields: (keyof FullLoanFormValues)[] }[] = [
+  { id: "Étape 1", name: "Informations sur le Prêt", schema: step1Schema, icon: FileText, fields: Object.keys(step1Schema.shape) as (keyof Step1Values)[] },
+  { id: "Étape 2", name: "Informations Personnelles", schema: step2Schema, icon: User, fields: Object.keys(step2Schema.shape) as (keyof Step2Values)[] },
+  { id: "Étape 3", name: "Situation Financière", schema: step3Schema, icon: Banknote, fields: Object.keys(step3Schema.shape) as (keyof Step3Values)[] },
+  { id: "Étape 4", name: "Documents", schema: step4Schema, icon: UploadCloud, fields: Object.keys(step4Schema.shape) as (keyof Step4Values)[] },
   { id: "Étape 5", name: "Confirmation", schema: null, icon: CheckCircle, fields: [] },
 ];
 
@@ -146,18 +151,17 @@ export default function MultiStepLoanForm() {
   
   const nextStep = async () => {
     const currentStepFields = steps[currentStep].fields;
-
-    if (currentStepFields.length > 0) {
-      const result = await form.trigger(currentStepFields as (keyof FullLoanFormValues)[], { shouldFocus: true });
-      if (!result) {
-        return; // Ne pas avancer si la validation échoue
-      }
-    }
-
+    
     if (currentStep < steps.length - 1) {
-      setCurrentStep(currentStep + 1);
+        if (currentStepFields.length > 0) {
+            const result = await form.trigger(currentStepFields);
+            if (!result) {
+                return;
+            }
+        }
+        setCurrentStep(currentStep + 1);
     }
-  };
+};
 
 
   const prevStep = () => {
