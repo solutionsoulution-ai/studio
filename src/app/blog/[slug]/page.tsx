@@ -127,10 +127,6 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                             <CardTitle>À propos de l'auteur</CardTitle>
                         </CardHeader>
                         <CardContent className="text-center">
-                            <Avatar className="w-20 h-20 mx-auto mb-4">
-                                <AvatarImage src={`https://i.pravatar.cc/150?u=${post.author.replace(/\s/g, '')}`} alt={post.author} />
-                                <AvatarFallback>{post.author.charAt(0)}</AvatarFallback>
-                            </Avatar>
                             <h4 className="font-semibold">{post.author.split(',')[0]}</h4>
                             <p className="text-sm text-muted-foreground">{post.author.split(',')[1]}</p>
                         </CardContent>
