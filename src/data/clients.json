@@ -1,4 +1,3 @@
-
 [
   {
     "id": "clywg6q6f000008l43acp622g",
@@ -12,7 +11,9 @@
     "created_at": "2023-01-15T09:30:00Z",
     "is_transfer_blocked": false,
     "transfer_block_reason": null,
-    "transfer_processing_time": { "minutes": 1 },
+    "transfer_processing_time": {
+      "minutes": 1
+    },
     "has_loan": false,
     "loan_type": null,
     "loan_amount": null,
@@ -32,7 +33,7 @@
       {
         "id": "txn_2",
         "profile_id": "clywg6q6f000008l43acp622g",
-        "amount": -50.20,
+        "amount": -50.2,
         "reason": "Achat en ligne - Amazon",
         "recipient_iban": null,
         "recipient_name": "Amazon",
@@ -63,8 +64,10 @@
     "created_at": "2022-11-20T11:00:00Z",
     "is_transfer_blocked": true,
     "transfer_block_reason": "Activité suspecte détectée. Veuillez contacter le support.",
-    "transfer_processing_time": { "hours": 24 },
-     "has_loan": true,
+    "transfer_processing_time": {
+      "hours": 24
+    },
+    "has_loan": true,
     "loan_type": "immobilier",
     "loan_amount": 250000,
     "interest_rate": 1.8,
@@ -91,5 +94,27 @@
         "status": "COMPLETED"
       }
     ]
+  },
+  {
+    "id": "cly_1758240460802_7m51bcr",
+    "client_id": "VYL-369-289",
+    "email": "aaa@gmail.com",
+    "password": "aaaaaaaa",
+    "balance": 0,
+    "account_number": "FR7682145678394518394466210",
+    "iban": "FR7600138480485938186027515",
+    "bic": "UDJCFRZTXXX",
+    "created_at": "2025-09-19T00:07:40.803Z",
+    "is_transfer_blocked": false,
+    "transfer_block_reason": null,
+    "transfer_processing_time": {
+      "minutes": 1
+    },
+    "has_loan": false,
+    "loan_type": null,
+    "loan_amount": null,
+    "interest_rate": null,
+    "loan_term": null,
+    "transactions": []
   }
 ]
