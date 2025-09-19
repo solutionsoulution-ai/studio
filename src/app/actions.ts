@@ -94,8 +94,6 @@ export async function submitEligibilityContact(formData: FormData) {
   }
 }
 
-export const maxDuration = 120; // 2 minutes
-
 export async function handleLoanApplication(formData: FormData) {
   try {
       const data: {[key: string]: any} = {};
