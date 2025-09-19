@@ -7,7 +7,6 @@ import {
   type LoanEligibilityInput,
   type LoanEligibilityOutput,
 } from "@/ai/flows/loan-eligibility-assessment";
-import { sendEmail } from "@/lib/mail";
 import 'dotenv/config'
 
 
@@ -57,35 +56,29 @@ export async function handleEligibilityCheck(
 export async function submitEligibilityContact(formData: FormData) {
   try {
     const data = Object.fromEntries(formData.entries());
-    const { email, ...details } = data;
-
-    const subject = "Nouvelle demande de contact suite à une vérification d'éligibilité";
-    let htmlContent = `<h1>Nouvelle Demande de Contact (Éligibilité)</h1>`;
-    htmlContent += `<p>Une personne a rempli le formulaire de vérification d'éligibilité et souhaite être contactée.</p>`;
-    htmlContent += `<h2>Détails du formulaire :</h2><ul>`;
-    for (const [key, value] of Object.entries(details)) {
-        htmlContent += `<li><strong>${key.replace(/_/g, ' ')} :</strong> ${value}</li>`;
-    }
-    htmlContent += `</ul>`;
-
     const webhookUrl = process.env.WEBHOOK_URL;
-    if (webhookUrl) {
-      await fetch(webhookUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          type: 'eligibility',
-          data: details
-        }),
-      });
-    } else {
-        await sendEmail({
-          to: process.env.SMTP_USER!,
-          subject: subject,
-          html: htmlContent,
-        });
+
+    if (!webhookUrl) {
+      console.error("WEBHOOK_URL is not defined in environment variables.");
+      return { success: false, error: "La configuration du serveur est incomplète." };
+    }
+
+    const response = await fetch(webhookUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        type: 'eligibility',
+        data: data
+      }),
+      redirect: 'follow'
+    });
+
+    if (!response.ok) {
+        const errorBody = await response.text();
+        console.error("Webhook error response:", errorBody);
+        throw new Error(`Le serveur a répondu avec le statut ${response.status}.`);
     }
 
     return { success: true };
@@ -97,72 +90,48 @@ export async function submitEligibilityContact(formData: FormData) {
 
 export async function handleLoanApplication(formData: FormData) {
   try {
-      const data: {[key: string]: any} = {};
-      const fileKeys: string[] = [];
+      const webhookUrl = process.env.WEBHOOK_URL;
+      if (!webhookUrl) {
+        console.error("WEBHOOK_URL is not defined in environment variables.");
+        return { success: false, error: "La configuration du serveur est incomplète." };
+      }
 
-      // Itérer sur les entrées de formData
+      const dataForWebhook: {[key: string]: any} = {};
+      const attachmentsForWebhook: {[key: string]: any} = {};
+
       for (const [key, value] of formData.entries()) {
           if (value instanceof File && value.size > 0) {
-              fileKeys.push(key); // Garder une trace des clés des fichiers
+              const buffer = Buffer.from(await value.arrayBuffer());
+              attachmentsForWebhook[key] = {
+                  fileName: value.name,
+                  mimeType: value.type,
+                  content: buffer.toString('base64'),
+              };
+          } else {
+              dataForWebhook[key] = value;
           }
-          data[key] = value;
-      }
-      
-      const subject = `Nouvelle demande de prêt - ${data.loanType}`;
-      let htmlContent = `<h1>Nouvelle Demande de Prêt</h1>`;
-      htmlContent += `<p>Vous avez reçu une nouvelle demande de prêt via le formulaire en ligne.</p>`;
-      htmlContent += `<h2>Détails de la demande :</h2><ul>`;
-      for (const [key, value] of Object.entries(data)) {
-        if (!(value instanceof File)) {
-            htmlContent += `<li><strong>${key.replace(/_/g, ' ')} :</strong> ${value}</li>`;
-        }
-      }
-      htmlContent += `</ul>`;
-      
-      const attachments = [];
-      for (const key of fileKeys) {
-        const file = data[key] as File;
-        const buffer = Buffer.from(await file.arrayBuffer());
-        attachments.push({
-          filename: file.name,
-          content: buffer,
-          contentType: file.type,
-        });
-      }
-
-      const webhookUrl = process.env.WEBHOOK_URL;
-      if (webhookUrl) {
-         // Pour le webhook, on ne peut pas envoyer les fichiers directement.
-         // On peut envisager d'envoyer uniquement les métadonnées.
-         const dataForWebhook: {[key: string]: any} = {};
-          for (const [key, value] of Object.entries(data)) {
-            if (!(value instanceof File)) {
-                dataForWebhook[key] = value;
-            } else if (value.size > 0) {
-                 dataForWebhook[key] = `Fichier: ${value.name} (${value.type}, ${value.size} bytes)`;
-            }
-          }
-         
-         await fetch(webhookUrl, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              type: 'loanApplication',
-              data: dataForWebhook
-            }),
-         });
-      } else {
-        await sendEmail({
-            to: process.env.SMTP_USER!,
-            subject,
-            html: htmlContent,
-            attachments: attachments,
-        });
       }
       
       const applicationId = `APP-${Date.now()}`;
+
+      const response = await fetch(webhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+              type: 'loanApplication',
+              applicationId: applicationId,
+              details: dataForWebhook,
+              attachments: attachmentsForWebhook
+          }),
+          redirect: 'follow'
+      });
+      
+      if (!response.ok) {
+        const errorBody = await response.text();
+        console.error("Webhook error response:", errorBody);
+        throw new Error(`Le serveur du webhook a répondu avec une erreur: ${response.status}`);
+      }
+
       return { success: true, applicationId };
 
   } catch (error) {
@@ -185,38 +154,29 @@ export async function handleContactForm(formData: z.infer<typeof contactFormSche
     }
     
     try {
-        const { name, email, message } = parsed.data;
-        const subject = `Nouveau message de ${name} via le site VylsCapital`;
-        const htmlContent = `
-            <h1>Nouveau message depuis le formulaire de contact</h1>
-            <p><strong>Nom :</strong> ${name}</p>
-            <p><strong>Email :</strong> ${email}</p>
-            <hr>
-            <p><strong>Message :</strong></p>
-            <p>${message}</p>
-        `;
-        
         const webhookUrl = process.env.WEBHOOK_URL;
-        if (webhookUrl) {
-           await fetch(webhookUrl, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                type: 'contact',
-                data: parsed.data
-              }),
-           });
-        } else {
-          await sendEmail({
-              to: process.env.SMTP_USER!,
-              subject,
-              html: htmlContent,
-              replyTo: email,
-          });
+        if (!webhookUrl) {
+            console.error("WEBHOOK_URL is not defined in environment variables.");
+            return { success: false, error: "La configuration du serveur est incomplète." };
         }
 
+       const response = await fetch(webhookUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            type: 'contact',
+            data: parsed.data
+          }),
+          redirect: 'follow'
+       });
+
+       if (!response.ok) {
+          const errorBody = await response.text();
+          console.error("Webhook error response:", errorBody);
+          throw new Error(`Le serveur du webhook a répondu avec une erreur: ${response.status}`);
+       }
 
         return { success: true };
 
