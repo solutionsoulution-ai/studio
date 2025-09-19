@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Shield, Users, ArrowLeft, UserCog, AlertCircle, Trash2, UserPlus, Banknote, Plus, Minus, Ban, Clock, Timer } from "lucide-react";
+import { Loader2, Shield, Users, ArrowLeft, UserCog, AlertCircle, Trash2, UserPlus, Banknote, Plus, Minus, Ban, Clock, Timer, FileText } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getClientsAction, deleteClientAction, verifyAdminLoginAction, createClientAction, adjustClientBalanceAction, updateClientBlockSettingsAction, updateClientTransferSettingsAction } from "@/app/actions/clients";
@@ -38,6 +38,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import Link from "next/link";
 
 
 // Schéma pour le formulaire de connexion admin
@@ -250,7 +251,7 @@ const ClientList = ({ clients, onClientSelect, isLoading, error, onClientCreated
 }
 
 const balanceAdjustmentSchema = z.object({
-  amount: z.coerce.number().positive("Le montant doit être positif."),
+  amount: z.coerce.number().positive("Le montant doit être positif.").or(z.literal("")),
   reason: z.string().min(3, "Le motif est requis (min 3 caractères)."),
   type: z.enum(['credit', 'debit']),
 });
@@ -263,13 +264,14 @@ const BalanceAdjustmentForm = ({ client, onActionSuccess }: { client: Omit<Clien
 
     const form = useForm<BalanceAdjustmentValues>({
         resolver: zodResolver(balanceAdjustmentSchema),
-        defaultValues: { amount: "" as unknown as number, reason: "", type: 'credit' },
+        defaultValues: { amount: "", reason: "", type: 'credit' },
     });
 
     async function onSubmit(values: BalanceAdjustmentValues) {
         setIsLoading(true);
         const result = await adjustClientBalanceAction({
             ...values,
+            amount: Number(values.amount),
             clientId: client.id,
         });
         setIsLoading(false);
@@ -642,8 +644,18 @@ export default function AdminPage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-start p-6 sm:p-12 md:p-24">
       <div className="w-full max-w-4xl">
-        <h1 className="text-3xl font-bold mb-2">Panneau Administrateur</h1>
-        <p className="text-muted-foreground mb-8">Consultez et gérez les informations des clients.</p>
+        <div className="flex justify-between items-center mb-8">
+            <div>
+                 <h1 className="text-3xl font-bold mb-2">Panneau Administrateur</h1>
+                <p className="text-muted-foreground">Consultez et gérez les informations des clients.</p>
+            </div>
+            <Button asChild variant="outline">
+                <Link href="/admin/documents">
+                    <FileText className="mr-2" />
+                    Générateur de Documents
+                </Link>
+            </Button>
+        </div>
         
         {selectedClient ? (
             <ClientDetailView
