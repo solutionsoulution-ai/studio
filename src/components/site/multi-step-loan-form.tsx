@@ -67,8 +67,8 @@ const fileSchema = z
     .refine(
       (files) => ACCEPTED_FILE_TYPES.includes(files?.[0]?.type),
       "Seuls les formats .jpg, .png et .pdf sont acceptés."
-    )
-    .optional(); // Makes file fields optional at the individual step validation level
+    );
+
 
 const step4Schema = z.object({
   identityDocument: fileSchema,
@@ -123,6 +123,9 @@ export default function MultiStepLoanForm() {
       country: "France",
       maritalStatus: "celibataire",
       numberOfChildren: 0,
+      birthDay: undefined,
+      birthMonth: undefined,
+      birthYear: undefined,
       occupation: "",
       monthlyIncome: 3000,
       monthlyExpenses: 1000,
@@ -152,26 +155,29 @@ export default function MultiStepLoanForm() {
     }
   };
 
-  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
-      event.preventDefault(); // Prevent default form submission
-      
+  async function onSubmit() {
       setIsLoading(true);
       setError(null);
       
-      const formData = new FormData(event.currentTarget);
-      
-      // Manually add file data if it exists
-      const identityDocument = form.getValues('identityDocument');
-      if (identityDocument && identityDocument.length > 0) {
-        formData.set('identityDocument', identityDocument[0]);
+      const formData = new FormData();
+      const allData = form.getValues();
+
+      // Append all text/number/select fields
+      Object.entries(allData).forEach(([key, value]) => {
+          if (value !== undefined && value !== null && !(value instanceof FileList)) {
+              formData.append(key, String(value));
+          }
+      });
+
+      // Manually append file data
+      if (allData.identityDocument && allData.identityDocument.length > 0) {
+        formData.append('identityDocument', allData.identityDocument[0]);
       }
-      const proofOfAddress = form.getValues('proofOfAddress');
-      if (proofOfAddress && proofOfAddress.length > 0) {
-        formData.set('proofOfAddress', proofOfAddress[0]);
+      if (allData.proofOfAddress && allData.proofOfAddress.length > 0) {
+        formData.append('proofOfAddress', allData.proofOfAddress[0]);
       }
-       const proofOfIncome = form.getValues('proofOfIncome');
-      if (proofOfIncome && proofOfIncome.length > 0) {
-        formData.set('proofOfIncome', proofOfIncome[0]);
+      if (allData.proofOfIncome && allData.proofOfIncome.length > 0) {
+        formData.append('proofOfIncome', allData.proofOfIncome[0]);
       }
       
       const result = await handleLoanApplication(formData);
@@ -205,7 +211,7 @@ export default function MultiStepLoanForm() {
         </div>
 
         <Form {...form}>
-          <form onSubmit={onSubmit} className="space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentStep}
@@ -295,19 +301,19 @@ export default function MultiStepLoanForm() {
                         <div className="grid grid-cols-3 gap-2">
                            <FormField control={form.control} name="birthDay" render={({ field }) => (
                             <FormItem>
-                                <FormControl><Input type="number" placeholder="Jour" {...field} value={field.value || ''} name={field.name} /></FormControl>
+                                <FormControl><Input type="number" placeholder="Jour" {...field} onChange={event => field.onChange(+event.target.value)} value={field.value || ''} name={field.name} /></FormControl>
                                 <FormMessage />
                             </FormItem>
                             )} />
                              <FormField control={form.control} name="birthMonth" render={({ field }) => (
                             <FormItem>
-                                <FormControl><Input type="number" placeholder="Mois" {...field} value={field.value || ''} name={field.name} /></FormControl>
+                                <FormControl><Input type="number" placeholder="Mois" {...field} onChange={event => field.onChange(+event.target.value)} value={field.value || ''} name={field.name} /></FormControl>
                                 <FormMessage />
                             </FormItem>
                             )} />
                              <FormField control={form.control} name="birthYear" render={({ field }) => (
                             <FormItem>
-                                <FormControl><Input type="number" placeholder="Année" {...field} value={field.value || ''} name={field.name} /></FormControl>
+                                <FormControl><Input type="number" placeholder="Année" {...field} onChange={event => field.onChange(+event.target.value)} value={field.value || ''} name={field.name} /></FormControl>
                                 <FormMessage />
                             </FormItem>
                             )} />
