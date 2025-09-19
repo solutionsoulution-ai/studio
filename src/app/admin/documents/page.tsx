@@ -2,6 +2,7 @@
 "use client";
 
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
@@ -9,18 +10,33 @@ import { usePDFGenerator } from "@/hooks/use-pdf-generator";
 import { Loader2, FileDown } from "lucide-react";
 import LoanContractForm from "@/components/admin/documents/forms/loan-contract-form";
 import LoanContractTemplate, { type LoanContractData } from "@/components/admin/documents/templates/loan-contract-template";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+
 
 type DocumentType = "loan-contract";
 type DocumentLanguage = "fr" | "en";
 
-export default function DocumentGeneratorPage() {
-    const [docType, setDocType] = useState<DocumentType>("loan-contract");
-    const [docLang, setDocLang] = useState<DocumentLanguage>("fr");
+interface ConfigFormValues {
+    docType: DocumentType;
+    docLang: DocumentLanguage;
+}
 
+export default function DocumentGeneratorPage() {
+    
     // State for the document data, updated by the form component
     const [docData, setDocData] = useState<LoanContractData | {}>({});
 
     const { generatePDF, isLoading } = usePDFGenerator();
+
+    const form = useForm<ConfigFormValues>({
+        defaultValues: {
+            docType: "loan-contract",
+            docLang: "fr",
+        }
+    });
+
+    const docType = form.watch("docType");
+    const docLang = form.watch("docLang");
 
     const handleGenerateClick = () => {
         generatePDF({
@@ -66,30 +82,50 @@ export default function DocumentGeneratorPage() {
                                     <CardTitle>Configuration</CardTitle>
                                     <CardDescription>Choisissez le type et la langue du document.</CardDescription>
                                 </CardHeader>
-                                <CardContent className="space-y-4">
-                                     <div>
-                                        <label className="text-sm font-medium">Type de document</label>
-                                        <Select value={docType} onValueChange={(v) => setDocType(v as DocumentType)}>
-                                            <SelectTrigger>
-                                                <SelectValue />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="loan-contract">Contrat de Prêt</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                     </div>
-                                     <div>
-                                        <label className="text-sm font-medium">Langue</label>
-                                        <Select value={docLang} onValueChange={(v) => setDocLang(v as DocumentLanguage)}>
-                                            <SelectTrigger>
-                                                <SelectValue />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="fr">Français</SelectItem>
-                                                <SelectItem value="en">English (bientôt)</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                     </div>
+                                <CardContent>
+                                    <Form {...form}>
+                                        <form className="space-y-4">
+                                            <FormField
+                                                control={form.control}
+                                                name="docType"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel>Type de document</FormLabel>
+                                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                            <FormControl>
+                                                                <SelectTrigger>
+                                                                    <SelectValue />
+                                                                </SelectTrigger>
+                                                            </FormControl>
+                                                            <SelectContent>
+                                                                <SelectItem value="loan-contract">Contrat de Prêt</SelectItem>
+                                                            </SelectContent>
+                                                        </Select>
+                                                    </FormItem>
+                                                )}
+                                            />
+                                            <FormField
+                                                control={form.control}
+                                                name="docLang"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel>Langue</FormLabel>
+                                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                            <FormControl>
+                                                                <SelectTrigger>
+                                                                    <SelectValue />
+                                                                </SelectTrigger>
+                                                            </FormControl>
+                                                            <SelectContent>
+                                                                <SelectItem value="fr">Français</SelectItem>
+                                                                <SelectItem value="en">English (bientôt)</SelectItem>
+                                                            </SelectContent>
+                                                        </Select>
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        </form>
+                                    </Form>
                                 </CardContent>
                             </Card>
                             
