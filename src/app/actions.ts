@@ -69,7 +69,7 @@ export async function submitEligibilityContact(formData: FormData) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        type: 'eligibility',
+        type: 'eligibilityContact',
         data: data
       }),
     });
@@ -102,6 +102,8 @@ export async function handleLoanApplication(formData: FormData) {
 
       const dataForWebhook: {[key: string]: any} = {};
       const applicationId = `APP-${Date.now()}`;
+      dataForWebhook['applicationId'] = applicationId;
+
 
       for (const [key, value] of formData.entries()) {
           if (value instanceof File && value.size > 0) {
@@ -121,10 +123,7 @@ export async function handleLoanApplication(formData: FormData) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
               type: 'loanApplication',
-              data: {
-                applicationId: applicationId,
-                ...dataForWebhook,
-              }
+              data: dataForWebhook,
           }),
       });
       
@@ -173,7 +172,7 @@ export async function handleContactForm(formData: z.infer<typeof contactFormSche
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            type: 'contact',
+            type: 'contactForm',
             data: parsed.data
           }),
        });
