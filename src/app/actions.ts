@@ -38,6 +38,7 @@ export async function handleContactForm(formData: z.infer<typeof contactFormSche
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
+          redirect: 'follow',
        });
 
        if (!response.ok) {
@@ -109,6 +110,7 @@ export async function submitEligibilityContact(formData: FormData) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
+      redirect: 'follow',
     });
 
     if (!response.ok) {
@@ -172,6 +174,7 @@ export async function handleLoanApplication(formData: FormData) {
           headers: { 'Content-Type': 'application/json' },
           // The body size limit might need adjustment in next.config.ts if files are large
           body: JSON.stringify(payload),
+          redirect: 'follow',
       });
       
       if (!response.ok) {
