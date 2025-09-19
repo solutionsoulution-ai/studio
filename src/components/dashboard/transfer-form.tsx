@@ -36,6 +36,8 @@ export default function TransferForm({ onTransferSubmit }: TransferFormProps) {
     defaultValues: {
       recipientIban: "",
       recipientName: "",
+      recipientBankName: "",
+      recipientBic: "",
       amount: "" as unknown as number,
       reason: "",
     },
@@ -121,17 +123,45 @@ export default function TransferForm({ onTransferSubmit }: TransferFormProps) {
           />
            <FormField
             control={form.control}
-            name="recipientIban"
+            name="recipientBankName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>IBAN du bénéficiaire</FormLabel>
+                <FormLabel>Nom de la banque du bénéficiaire</FormLabel>
                 <FormControl>
-                  <Input placeholder="FR76..." {...field} disabled={isLoading} />
+                  <Input placeholder="Ex: BNP Paribas" {...field} disabled={isLoading} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+        </div>
+        <div className="grid sm:grid-cols-2 gap-4">
+            <FormField
+                control={form.control}
+                name="recipientIban"
+                render={({ field }) => (
+                <FormItem>
+                    <FormLabel>IBAN du bénéficiaire</FormLabel>
+                    <FormControl>
+                    <Input placeholder="FR76..." {...field} disabled={isLoading} />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+                )}
+            />
+            <FormField
+                control={form.control}
+                name="recipientBic"
+                render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Code SWIFT / BIC</FormLabel>
+                    <FormControl>
+                    <Input placeholder="Ex: SOGEFRPP" {...field} disabled={isLoading} />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+                )}
+            />
         </div>
         <div className="grid sm:grid-cols-2 gap-4">
             <FormField
@@ -173,5 +203,3 @@ export default function TransferForm({ onTransferSubmit }: TransferFormProps) {
     </Form>
   );
 }
-
-    

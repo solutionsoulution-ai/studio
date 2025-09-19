@@ -18,6 +18,8 @@ interface Transaction {
     reason: string;
     recipient_iban: string | null;
     recipient_name: string | null;
+    recipient_bic?: string | null;
+    recipient_bank_name?: string | null;
     created_at: string;
     status: 'PENDING' | 'COMPLETED' | 'FAILED';
     estimatedCompletionDate?: string;
@@ -220,6 +222,8 @@ export async function createTransferAction(transferDetails: TransferFormInput & 
         reason: parsed.data.reason,
         recipient_iban: parsed.data.recipientIban,
         recipient_name: parsed.data.recipientName,
+        recipient_bank_name: parsed.data.recipientBankName,
+        recipient_bic: parsed.data.recipientBic,
         created_at: creationDate.toISOString(),
         status: 'PENDING',
         estimatedCompletionDate: completionDate.toISOString(),
