@@ -22,6 +22,8 @@ import SuretyBondForm, { type SuretyBondFormValues } from "@/components/admin/do
 import BlankDocumentForm, { type BlankDocumentFormValues } from "@/components/admin/documents/forms/blank-document-form";
 import GermanInvoiceForm, { type GermanInvoiceFormValues } from "@/components/admin/documents/forms/german-invoice-form";
 import SpanishInvoiceForm, { type SpanishInvoiceFormValues } from "@/components/admin/documents/forms/spanish-invoice-form";
+import PortugueseInvoiceForm, { type PortugueseInvoiceFormValues } from "@/components/admin/documents/forms/portuguese-invoice-form";
+import ItalianInvoiceForm, { type ItalianInvoiceFormValues } from "@/components/admin/documents/forms/italian-invoice-form";
 
 
 import LoanContractTemplate from "@/components/admin/documents/templates/loan-contract-template";
@@ -34,6 +36,8 @@ import SuretyBondTemplate from "@/components/admin/documents/templates/surety-bo
 import BlankDocumentTemplate from "@/components/admin/documents/templates/blank-document-template";
 import GermanInvoiceTemplate from "@/components/admin/documents/templates/german-invoice-template";
 import SpanishInvoiceTemplate from "@/components/admin/documents/templates/spanish-invoice-template";
+import PortugueseInvoiceTemplate from "@/components/admin/documents/templates/portuguese-invoice-template";
+import ItalianInvoiceTemplate from "@/components/admin/documents/templates/italian-invoice-template";
 
 
 const configSchema = z.object({
@@ -48,6 +52,8 @@ const configSchema = z.object({
         "blank-document",
         "german-invoice",
         "spanish-invoice",
+        "portuguese-invoice",
+        "italian-invoice",
     ]),
 });
 type ConfigFormValues = z.infer<typeof configSchema>;
@@ -165,6 +171,26 @@ const defaultSpanishInvoiceValues: SpanishInvoiceFormValues = {
     payment_iban: "ES91 2100 0418 4502 0005 1332",
 };
 
+const defaultPortugueseInvoiceValues: PortugueseInvoiceFormValues = {
+    customer_name: "João Silva",
+    customer_address: "Avenida da Liberdade, 100, 1250-145 Lisboa",
+    invoice_number: `FAT-${today.getFullYear()}-0001`,
+    invoice_date: today.toLocaleDateString('pt-PT'),
+    description: "Serviços de consultoria para o T3",
+    amount: 280.00,
+    payment_iban: "PT50 0007 0000 0012 3456 7892 3",
+};
+
+const defaultItalianInvoiceValues: ItalianInvoiceFormValues = {
+    customer_name: "Mario Rossi",
+    customer_address: "Via del Corso, 10, 00186 Roma",
+    invoice_number: `FATT-${today.getFullYear()}-0001`,
+    invoice_date: today.toLocaleDateString('it-IT'),
+    description: "Servizi di consulenza per il Q3",
+    amount: 290.00,
+    payment_iban: "IT60 X054 2811 1010 0000 0123 456",
+};
+
 
 export default function DocumentGeneratorPage() {
     const { generatePDF, isLoading } = usePDFGenerator();
@@ -188,6 +214,8 @@ export default function DocumentGeneratorPage() {
     const blankDocumentForm = useForm<BlankDocumentFormValues>({ resolver: zodResolver(BlankDocumentForm.schema), defaultValues: defaultBlankDocumentValues });
     const germanInvoiceForm = useForm<GermanInvoiceFormValues>({ resolver: zodResolver(GermanInvoiceForm.schema), defaultValues: defaultGermanInvoiceValues });
     const spanishInvoiceForm = useForm<SpanishInvoiceFormValues>({ resolver: zodResolver(SpanishInvoiceForm.schema), defaultValues: defaultSpanishInvoiceValues });
+    const portugueseInvoiceForm = useForm<PortugueseInvoiceFormValues>({ resolver: zodResolver(PortugueseInvoiceForm.schema), defaultValues: defaultPortugueseInvoiceValues });
+    const italianInvoiceForm = useForm<ItalianInvoiceFormValues>({ resolver: zodResolver(ItalianInvoiceForm.schema), defaultValues: defaultItalianInvoiceValues });
 
 
     const docType = configForm.watch("docType");
@@ -237,6 +265,14 @@ export default function DocumentGeneratorPage() {
             activeForm = spanishInvoiceForm;
             docData = spanishInvoiceForm.watch();
             break;
+        case "portuguese-invoice":
+            activeForm = portugueseInvoiceForm;
+            docData = portugueseInvoiceForm.watch();
+            break;
+        case "italian-invoice":
+            activeForm = italianInvoiceForm;
+            docData = italianInvoiceForm.watch();
+            break;
     }
 
     const handleGenerateClick = () => {
@@ -258,6 +294,8 @@ export default function DocumentGeneratorPage() {
             case "blank-document": return <BlankDocumentForm form={blankDocumentForm} lang="en" />;
             case "german-invoice": return <GermanInvoiceForm form={germanInvoiceForm} />;
             case "spanish-invoice": return <SpanishInvoiceForm form={spanishInvoiceForm} />;
+            case "portuguese-invoice": return <PortugueseInvoiceForm form={portugueseInvoiceForm} />;
+            case "italian-invoice": return <ItalianInvoiceForm form={italianInvoiceForm} />;
             default: return <p>Veuillez sélectionner un type de document.</p>;
         }
     }
@@ -274,6 +312,8 @@ export default function DocumentGeneratorPage() {
             case "blank-document": return <BlankDocumentTemplate data={docData} lang="en" />;
             case "german-invoice": return <GermanInvoiceTemplate data={docData} />;
             case "spanish-invoice": return <SpanishInvoiceTemplate data={docData} />;
+            case "portuguese-invoice": return <PortugueseInvoiceTemplate data={docData} />;
+            case "italian-invoice": return <ItalianInvoiceTemplate data={docData} />;
             default: return <div id="pdf-preview" className="p-8 text-center text-muted-foreground">Aperçu du document</div>;
         }
     }
@@ -319,6 +359,8 @@ export default function DocumentGeneratorPage() {
                                                                 <SelectItem value="blank-document">Facture (EN)</SelectItem>
                                                                 <SelectItem value="german-invoice">Facture (DE)</SelectItem>
                                                                 <SelectItem value="spanish-invoice">Facture (ES)</SelectItem>
+                                                                <SelectItem value="portuguese-invoice">Facture (PT)</SelectItem>
+                                                                <SelectItem value="italian-invoice">Facture (IT)</SelectItem>
                                                             </SelectContent>
                                                         </Select>
                                                     </FormItem>
