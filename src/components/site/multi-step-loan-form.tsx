@@ -157,7 +157,9 @@ export default function MultiStepLoanForm() {
            setCurrentStep(currentStep + 1);
         }
     } else {
-      setCurrentStep(currentStep + 1);
+      if (currentStep < steps.length - 1) {
+        setCurrentStep(currentStep + 1);
+      }
     }
   };
 
@@ -173,18 +175,17 @@ export default function MultiStepLoanForm() {
       const formData = new FormData();
       const allData = form.getValues();
 
-      Object.keys(allData).forEach(key => {
+      for (const key in allData) {
         const valueKey = key as keyof FullLoanFormValues;
         const value = allData[valueKey];
 
         if (value instanceof FileList && value.length > 0) {
             formData.append(valueKey, value[0]);
-        } else if (value !== undefined && value !== null) {
+        } else if (value !== undefined && value !== null && value !== '') {
             formData.append(valueKey, String(value));
         }
-      });
+      }
       
-
       const result = await handleLoanApplication(formData);
       setIsLoading(false);
       
@@ -512,5 +513,3 @@ export default function MultiStepLoanForm() {
     </Card>
   );
 }
-
-    
