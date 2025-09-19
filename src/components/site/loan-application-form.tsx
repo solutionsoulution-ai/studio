@@ -31,11 +31,12 @@ const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "application/pdf"];
 
 const fileSchema = z
   .any()
-  .refine((files) => !files?.[0] || files?.[0]?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
+  .refine((files) => files?.[0], "Ce document est requis.")
+  .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
   .refine(
-    (files) => !files?.[0] || ACCEPTED_FILE_TYPES.includes(files?.[0]?.type),
+    (files) => ACCEPTED_FILE_TYPES.includes(files?.[0]?.type),
     "Seuls les formats .jpg, .png et .pdf sont acceptés."
-  ).optional();
+  );
 
 
 const loanApplicationSchema = z.object({
@@ -130,7 +131,7 @@ export default function LoanApplicationForm() {
         if (value instanceof FileList && value.length > 0) {
             formData.append(valueKey, value[0]);
         } else if (value !== undefined && value !== null && !(value instanceof FileList)) {
-            formData.append(valueKey, String(value));
+            formData.append(String(key), String(value));
         }
       }
       
@@ -268,7 +269,7 @@ export default function LoanApplicationForm() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2"><UploadCloud />Documents</CardTitle>
-            <CardDescription>Téléchargez les documents requis (optionnel, max 5Mo par fichier).</CardDescription>
+            <CardDescription>Téléchargez les documents requis (max 5Mo par fichier).</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <FormField
