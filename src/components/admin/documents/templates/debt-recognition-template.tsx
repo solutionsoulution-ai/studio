@@ -57,7 +57,7 @@ export default function DebtRecognitionTemplate({ data, lang }: DebtRecognitionT
             <header className="flex justify-between items-start mb-12 border-b-2 border-primary pb-4">
                  <div>
                     <h1 className="text-3xl font-bold uppercase text-primary">VylsCapital</h1>
-                    <p className="text-gray-600 font-semibold">Département Juridique</p>
+                    <p className="text-gray-600 font-semibold">Département Juridique & Financier</p>
                 </div>
             </header>
 

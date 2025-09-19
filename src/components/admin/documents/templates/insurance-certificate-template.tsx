@@ -107,7 +107,7 @@ export default function InsuranceCertificateTemplate({ data, lang }: InsuranceCe
                     </div>
                 </div>
 
-                <h3 className="font-bold text-base mt-6 flex items-center gap-2"><ShieldCheck /> {clauses.coverage_summary}</h3>
+                <h3 className="font-bold text-base mt-6 flex items-center gap-2 text-primary"><ShieldCheck /> {clauses.coverage_summary}</h3>
                 <ul className="list-disc list-inside ml-4 space-y-1">
                     <li><strong>{clauses.guarantees.death.title} :</strong> {clauses.guarantees.death.description}</li>
                     <li><strong>{clauses.guarantees.disability.title} :</strong> {clauses.guarantees.disability.description}</li>

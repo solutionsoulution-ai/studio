@@ -106,7 +106,7 @@ export default function InvoiceTemplate({ data, lang }: InvoiceTemplateProps) {
                                     <td className="p-2 font-semibold">{clauses.vat_label}</td>
                                     <td className="p-2 text-right">{formatCurrency(vatAmount)}</td>
                                 </tr>
-                                <tr className="bg-primary/90 text-white font-bold text-lg">
+                                <tr className="bg-primary text-primary-foreground font-bold text-lg">
                                     <td className="p-2">{clauses.total_label}</td>
                                     <td className="p-2 text-right">{formatCurrency(totalAmount)}</td>
                                 </tr>
