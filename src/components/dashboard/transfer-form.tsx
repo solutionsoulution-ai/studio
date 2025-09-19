@@ -41,19 +41,21 @@ export default function TransferForm({ onTransferSubmit, processingTimeConfig }:
     defaultValues: {
       recipientIban: "",
       recipientName: "",
-      amount: "" as unknown as number, // Correct initialization
+      amount: "" as unknown as number,
       reason: "",
     },
   });
 
   const getTotalProcessingTimeInMillis = () => {
-    const { days = 0, hours = 0, minutes = 1 } = processingTimeConfig || {};
-    return ((days * 24 * 60) + (hours * 60) + minutes) * 60 * 1000;
+    const { days = 0, hours = 0, minutes = 0 } = processingTimeConfig || {};
+    const totalMinutes = (days * 24 * 60) + (hours * 60) + minutes;
+    // Si le total est 0, on met une minute par défaut pour que l'animation puisse se jouer
+    return (totalMinutes > 0 ? totalMinutes : 1) * 60 * 1000;
   }
 
   async function onSubmit(values: TransferFormInput) {
     setTransferState("loading");
-    await new Promise(resolve => setTimeout(resolve, 500)); 
+    await new Promise(resolve => setTimeout(resolve, 500));
 
     const result = await onTransferSubmit(values);
 
@@ -62,7 +64,11 @@ export default function TransferForm({ onTransferSubmit, processingTimeConfig }:
         return;
     }
 
+    // Forcer la mise à jour de l'état pour que la barre de progression s'affiche
+    setTransferState("idle"); 
+    await new Promise(resolve => setTimeout(resolve, 0)); // Permet à React de traiter la mise à jour de l'état
     setTransferState("processing");
+    
     const totalTime = getTotalProcessingTimeInMillis();
     const startTime = Date.now();
 
@@ -98,8 +104,8 @@ export default function TransferForm({ onTransferSubmit, processingTimeConfig }:
             {transferState === "success" && (
                  <>
                     <CheckCircle className="text-green-500 w-12 h-12 mx-auto mb-4" />
-                    <h3 className="text-xl font-semibold">Virement Initié !</h3>
-                    <p className="text-muted-foreground mb-6">Le virement a été initié avec succès et apparaît dans votre historique.</p>
+                    <h3 className="text-xl font-semibold">Traitement Terminé !</h3>
+                    <p className="text-muted-foreground mb-6">Le statut final du virement est maintenant visible dans votre historique.</p>
                     <Button onClick={resetForm}>
                         <RefreshCw className="mr-2" />
                         Effectuer un autre virement
