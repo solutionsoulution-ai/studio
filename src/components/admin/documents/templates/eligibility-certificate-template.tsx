@@ -3,7 +3,7 @@
 
 import { eligibilityCertificateClauses } from "@/data/documents/eligibility-certificate-clauses";
 import { useState, useEffect } from 'react';
-import { Landmark } from "lucide-react";
+import { FileText } from "lucide-react";
 
 export interface EligibilityCertificateData {
     beneficiary_name?: string;
@@ -53,12 +53,9 @@ export default function EligibilityCertificateTemplate({ data, lang }: Eligibili
 
     return (
         <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto">
-            <header className="flex justify-between items-start mb-12 border-b-2 border-gray-700 pb-4">
+            <header className="flex justify-between items-start mb-12 border-b-2 border-primary pb-4">
                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                        <Landmark className="w-8 h-8 text-gray-800" />
-                        <h1 className="text-3xl font-bold uppercase text-gray-800">VylsCapital</h1>
-                    </div>
+                    <h1 className="text-3xl font-bold uppercase text-primary">VylsCapital</h1>
                     <p className="text-gray-600 font-semibold">Département Analyse de Crédit</p>
                 </div>
                  <div className="text-right text-xs text-gray-500">
@@ -71,12 +68,19 @@ export default function EligibilityCertificateTemplate({ data, lang }: Eligibili
                  <p>{clauses.location_and_date.replace('{date}', data.signature_date || '___/___/_____')}</p>
             </div>
 
-            <main className="space-y-6">
-                <h2 className="text-center text-2xl font-bold uppercase mb-8">{clauses.title}</h2>
-                <p className="text-sm">
-                    {clauses.reference.replace('{ref}', docRef)}
-                </p>
+             <h2 className="text-center text-2xl font-bold uppercase mb-8">{clauses.title}</h2>
+             <p className="text-center text-sm text-gray-500 mb-12">
+                {clauses.reference.replace('{ref}', docRef)}
+            </p>
 
+            <aside className="border-l-4 border-primary bg-primary/5 p-4 mb-10">
+                <h3 className="font-bold text-primary flex items-center gap-2"><FileText size={18} /> Importance de ce document</h3>
+                <p className="text-xs mt-2">
+                    Cette attestation est une validation préliminaire de votre capacité d'emprunt auprès de notre institution. Elle vous permet de prouver votre sérieux et votre éligibilité auprès de tiers (agents immobiliers, vendeurs, etc.) lors de vos démarches, sans pour autant constituer une offre de prêt définitive.
+                </p>
+            </aside>
+
+            <main className="space-y-6">
                 <p>
                     {clauses.introduction
                         .replace('{beneficiary_name}', data.beneficiary_name || '_____________________')

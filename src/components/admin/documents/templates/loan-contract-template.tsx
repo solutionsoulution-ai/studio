@@ -3,7 +3,7 @@
 
 import { loanContractClauses } from "@/data/documents/loan-contract-clauses";
 import { useState, useEffect } from 'react';
-import { Landmark } from "lucide-react";
+import { FileText } from "lucide-react";
 
 export interface LoanContractData {
     borrower_name?: string;
@@ -58,12 +58,9 @@ export default function LoanContractTemplate({ data, lang }: LoanContractTemplat
 
     return (
         <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto">
-            <header className="flex justify-between items-start mb-12 border-b-2 border-gray-700 pb-4">
+            <header className="flex justify-between items-start mb-12 border-b-2 border-primary pb-4">
                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                        <Landmark className="w-8 h-8 text-gray-800" />
-                        <h1 className="text-3xl font-bold uppercase text-gray-800">VylsCapital</h1>
-                    </div>
+                    <h1 className="text-3xl font-bold uppercase text-primary">VylsCapital</h1>
                     <p className="text-gray-600 font-semibold">Département Juridique & Financier</p>
                 </div>
                  <div className="text-right text-xs text-gray-500">
@@ -77,8 +74,15 @@ export default function LoanContractTemplate({ data, lang }: LoanContractTemplat
                 <p className="mt-2 text-gray-600">Référence du contrat : {contractRef}</p>
             </div>
 
+            <aside className="border-l-4 border-primary bg-primary/5 p-4 mb-10">
+                <h3 className="font-bold text-primary flex items-center gap-2"><FileText size={18} /> Importance de ce document</h3>
+                <p className="text-xs mt-2">
+                    Le contrat de prêt est le document juridique fondamental qui formalise les engagements entre le prêteur et l'emprunteur. Il détaille les conditions, les modalités de remboursement, les droits et les devoirs de chaque partie. Sa signature est un acte engageant qui sécurise la transaction et sert de référence légale en cas de litige.
+                </p>
+            </aside>
+
             <section className="mb-8">
-                <h3 className="font-bold text-lg mb-4 border-b pb-2">{clauses.parties.title}</h3>
+                <h3 className="font-bold text-lg mb-4 border-b-2 border-primary pb-2 text-primary">{clauses.parties.title}</h3>
                 <div className="grid grid-cols-2 gap-8">
                     <div>
                         <h4 className="font-semibold text-gray-700">{clauses.parties.lender}</h4>
@@ -98,7 +102,7 @@ export default function LoanContractTemplate({ data, lang }: LoanContractTemplat
             <main className="space-y-6">
                 {Object.entries(clauses.articles).map(([key, article]) => (
                      <article key={key}>
-                        <h3 className="font-bold text-base mb-2">{article.title}</h3>
+                        <h3 className="font-bold text-base mb-2 text-primary">{article.title}</h3>
                         <p dangerouslySetInnerHTML={{ __html: 
                             article.content
                                 .replace(/{lender_name}/g, data.lender_name || 'VylsCapital')

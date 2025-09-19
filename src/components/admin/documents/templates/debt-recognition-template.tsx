@@ -3,7 +3,7 @@
 
 import { debtRecognitionClauses } from "@/data/documents/debt-recognition-clauses";
 import { useState, useEffect } from 'react';
-import { Landmark } from "lucide-react";
+import { FileText } from "lucide-react";
 
 export interface DebtRecognitionData {
     borrower_name?: string;
@@ -53,12 +53,9 @@ export default function DebtRecognitionTemplate({ data, lang }: DebtRecognitionT
 
     return (
         <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto">
-            <header className="flex justify-between items-start mb-12 border-b-2 border-gray-700 pb-4">
+            <header className="flex justify-between items-start mb-12 border-b-2 border-primary pb-4">
                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                        <Landmark className="w-8 h-8 text-gray-800" />
-                        <h1 className="text-3xl font-bold uppercase text-gray-800">VylsCapital</h1>
-                    </div>
+                    <h1 className="text-3xl font-bold uppercase text-primary">VylsCapital</h1>
                     <p className="text-gray-600 font-semibold">Département Juridique</p>
                 </div>
             </header>
@@ -67,6 +64,13 @@ export default function DebtRecognitionTemplate({ data, lang }: DebtRecognitionT
                 <h2 className="text-2xl font-bold uppercase">{clauses.title}</h2>
                 <p className="mt-2 text-gray-600">Référence du document : {docRef}</p>
             </div>
+
+            <aside className="border-l-4 border-primary bg-primary/5 p-4 mb-10">
+                <h3 className="font-bold text-primary flex items-center gap-2"><FileText size={18} /> Importance de ce document</h3>
+                <p className="text-xs mt-2">
+                    Cet acte est une preuve juridique formelle qui constate l'existence et les modalités d'une dette entre deux parties. Il protège à la fois le créancier en lui donnant un titre pour recouvrer sa créance, et le débiteur en clarifiant le montant et l'échéance du remboursement.
+                </p>
+            </aside>
 
             <main className="space-y-6">
                 <p className="text-lg">

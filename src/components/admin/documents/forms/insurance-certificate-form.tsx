@@ -13,6 +13,8 @@ const formSchema = z.object({
     loan_id: z.string().min(5),
     insured_capital: z.coerce.number().positive(),
     monthly_premium: z.coerce.number().positive(),
+    effective_date: z.string().min(8),
+    end_date: z.string().min(8),
     signature_date: z.string().min(8),
 });
 
@@ -69,6 +71,22 @@ export default function InsuranceCertificateForm({ form, lang }: InsuranceCertif
                                 <FormItem>
                                     <FormLabel>Prime Mensuelle (€)</FormLabel>
                                     <FormControl><Input type="number" {...field} /></FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )} />
+                        </div>
+                         <div className="grid grid-cols-2 gap-4">
+                            <FormField control={form.control} name="effective_date" render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Date d'effet</FormLabel>
+                                    <FormControl><Input {...field} /></FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )} />
+                            <FormField control={form.control} name="end_date" render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Date de fin</FormLabel>
+                                    <FormControl><Input {...field} /></FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )} />

@@ -45,8 +45,8 @@ type ConfigFormValues = z.infer<typeof configSchema>;
 
 const today = new Date();
 const todayFR = today.toLocaleDateString('fr-FR');
-const nextMonthFR = new Date(today.setMonth(today.getMonth() + 1)).toLocaleDateString('fr-FR');
-const next30DaysFR = new Date(today.setDate(today.getDate() + 30)).toLocaleDateString('fr-FR');
+const nextMonthFR = new Date(new Date().setMonth(today.getMonth() + 1)).toLocaleDateString('fr-FR');
+const next30DaysFR = new Date(new Date().setDate(today.getDate() + 30)).toLocaleDateString('fr-FR');
 
 
 // Default Values
@@ -109,6 +109,8 @@ const defaultInsuranceCertificateValues: InsuranceCertificateFormValues = {
     loan_id: "PRT-2024-98765",
     insured_capital: 50000,
     monthly_premium: 18.50,
+    effective_date: todayFR,
+    end_date: new Date(new Date().setFullYear(today.getFullYear() + 5)).toLocaleDateString('fr-FR'),
     signature_date: todayFR,
 };
 

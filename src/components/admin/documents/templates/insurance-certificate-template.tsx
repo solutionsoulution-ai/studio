@@ -3,7 +3,7 @@
 
 import { insuranceCertificateClauses } from "@/data/documents/insurance-certificate-clauses";
 import { useState, useEffect } from 'react';
-import { Landmark } from "lucide-react";
+import { FileText, ShieldCheck } from "lucide-react";
 
 export interface InsuranceCertificateData {
     insured_name?: string;
@@ -12,6 +12,8 @@ export interface InsuranceCertificateData {
     insured_capital?: number;
     monthly_premium?: number;
     signature_date?: string;
+    effective_date?: string;
+    end_date?: string;
 }
 
 interface InsuranceCertificateTemplateProps {
@@ -50,12 +52,9 @@ export default function InsuranceCertificateTemplate({ data, lang }: InsuranceCe
 
     return (
         <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto">
-            <header className="flex justify-between items-start mb-12 border-b-2 border-gray-700 pb-4">
+            <header className="flex justify-between items-start mb-12 border-b-2 border-primary pb-4">
                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                        <Landmark className="w-8 h-8 text-gray-800" />
-                        <h1 className="text-3xl font-bold uppercase text-gray-800">VylsCapital</h1>
-                    </div>
+                    <h1 className="text-3xl font-bold uppercase text-primary">VylsCapital</h1>
                     <p className="text-gray-600 font-semibold">VylsCapital Assurance</p>
                 </div>
                  <div className="text-right text-xs text-gray-500">
@@ -70,35 +69,44 @@ export default function InsuranceCertificateTemplate({ data, lang }: InsuranceCe
                 {clauses.reference.replace('{ref}', docRef)}
             </p>
 
+            <aside className="border-l-4 border-primary bg-primary/5 p-4 mb-10">
+                <h3 className="font-bold text-primary flex items-center gap-2"><FileText size={18} /> Importance de ce document</h3>
+                <p className="text-xs mt-2">
+                    Cette attestation est le document officiel qui prouve que votre prêt est couvert par une assurance. Elle est exigée par l'organisme prêteur et vous protège, ainsi que vos proches, contre certains aléas de la vie (décès, invalidité) en garantissant le remboursement du capital restant dû.
+                </p>
+            </aside>
+
             <main className="space-y-8">
                 <p>
                     {clauses.introduction}
                 </p>
 
                 <div className="border-t border-b py-4 my-6 space-y-3 bg-gray-50 p-4 rounded-md">
-                    <div className="flex justify-between">
-                        <span className="font-semibold">{clauses.insured_label}:</span>
-                        <span className="font-medium">{data.insured_name || '_____________________'}</span>
-                    </div>
-                     <div className="flex justify-between">
-                        <span className="font-semibold">{clauses.beneficiary_label}:</span>
-                        <span>{data.lender_name || '_____________________'}</span>
-                    </div>
-                    <div className="flex justify-between">
-                        <span className="font-semibold">{clauses.loan_id_label}:</span>
-                        <span className="font-mono">{data.loan_id || '_____________________'}</span>
-                    </div>
-                     <div className="flex justify-between">
-                        <span className="font-semibold">{clauses.capital_label}:</span>
-                        <span className="font-bold">{formatCurrency(data.insured_capital)}</span>
-                    </div>
-                     <div className="flex justify-between">
-                        <span className="font-semibold">{clauses.premium_label}:</span>
-                        <span className="font-bold">{formatCurrency(data.monthly_premium)} / mois</span>
+                    <div className="grid grid-cols-2 gap-x-8 gap-y-3">
+                        <div className="font-semibold">{clauses.insured_label}:</div>
+                        <div className="font-medium">{data.insured_name || '_____________________'}</div>
+
+                        <div className="font-semibold">{clauses.beneficiary_label}:</div>
+                        <div>{data.lender_name || '_____________________'}</div>
+
+                        <div className="font-semibold">{clauses.loan_id_label}:</div>
+                        <div className="font-mono">{data.loan_id || '_____________________'}</div>
+
+                        <div className="font-semibold">{clauses.capital_label}:</div>
+                        <div className="font-bold">{formatCurrency(data.insured_capital)}</div>
+
+                        <div className="font-semibold">{clauses.premium_label}:</div>
+                        <div className="font-bold">{formatCurrency(data.monthly_premium)} / mois</div>
+                        
+                        <div className="font-semibold">{clauses.effective_date_label}:</div>
+                        <div>{data.effective_date || '___/___/_____'}</div>
+
+                        <div className="font-semibold">{clauses.end_date_label}:</div>
+                        <div>{data.end_date || '___/___/_____'}</div>
                     </div>
                 </div>
 
-                <h3 className="font-bold text-base mt-6">{clauses.coverage_summary}</h3>
+                <h3 className="font-bold text-base mt-6 flex items-center gap-2"><ShieldCheck /> {clauses.coverage_summary}</h3>
                 <ul className="list-disc list-inside ml-4 space-y-1">
                     <li><strong>{clauses.guarantees.death.title} :</strong> {clauses.guarantees.death.description}</li>
                     <li><strong>{clauses.guarantees.disability.title} :</strong> {clauses.guarantees.disability.description}</li>

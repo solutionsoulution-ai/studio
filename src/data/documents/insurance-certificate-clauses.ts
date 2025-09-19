@@ -9,7 +9,9 @@ export const insuranceCertificateClauses = {
         loan_id_label: "N° du contrat de prêt concerné",
         capital_label: "Capital initialement assuré",
         premium_label: "Prime mensuelle d'assurance",
-        coverage_summary: "Cette assurance couvre les garanties suivantes, conformément aux conditions générales et particulières de la notice d'information :",
+        effective_date_label: "Date d'effet de l'assurance",
+        end_date_label: "Date de fin de l'assurance",
+        coverage_summary: "Résumé des Garanties Couvertes",
         guarantees: {
             death: {
                 title: "Décès",

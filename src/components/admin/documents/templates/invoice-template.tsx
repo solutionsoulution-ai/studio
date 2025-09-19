@@ -2,7 +2,7 @@
 "use client";
 
 import { invoiceClauses } from "@/data/documents/invoice-clauses";
-import { Landmark } from "lucide-react";
+import { FileText } from "lucide-react";
 
 export interface InvoiceData {
     customer_name?: string;
@@ -47,10 +47,7 @@ export default function InvoiceTemplate({ data, lang }: InvoiceTemplateProps) {
         <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto">
             <header className="flex justify-between items-start mb-16">
                 <div>
-                     <div className="flex items-center gap-2 mb-2">
-                        <Landmark className="w-8 h-8 text-gray-800" />
-                        <h1 className="text-3xl font-bold uppercase text-gray-800">VylsCapital</h1>
-                    </div>
+                    <h1 className="text-3xl font-bold uppercase text-primary">VylsCapital</h1>
                     <p className="text-gray-600 font-semibold">Département Comptabilité</p>
                     <p className="text-gray-600 text-xs mt-2">10 Place de la Bourse, 69002 Lyon, France</p>
                 </div>
@@ -61,29 +58,37 @@ export default function InvoiceTemplate({ data, lang }: InvoiceTemplateProps) {
                 </div>
             </header>
 
+            <aside className="border-l-4 border-primary bg-primary/5 p-4 mb-10">
+                <h3 className="font-bold text-primary flex items-center gap-2"><FileText size={18} /> Importance de ce document</h3>
+                <p className="text-xs mt-2">
+                    Une facture est un document comptable essentiel qui atteste d'une transaction commerciale. Elle sert de preuve de la prestation de service ou de la vente, et elle est indispensable pour la gestion de la comptabilité, la déclaration de la TVA et comme justificatif en cas de contrôle fiscal.
+                </p>
+            </aside>
+
+
             <section className="mb-12">
-                <h3 className="font-bold border-b pb-1 mb-2 text-gray-600">{clauses.bill_to_label}</h3>
+                <h3 className="font-bold border-b-2 border-primary pb-1 mb-2 text-primary">{clauses.bill_to_label}</h3>
                 <p className="font-semibold">{data.customer_name || '...'}</p>
                 <p className="whitespace-pre-line">{data.customer_address || '...'}</p>
             </section>
             
             <main>
                 <table className="w-full border-collapse text-base">
-                    <thead className="bg-gray-100">
+                    <thead className="bg-primary/10">
                         <tr>
-                            <th className="border p-2 text-left font-bold text-gray-700">{clauses.table_headers.description}</th>
-                            <th className="border p-2 text-right font-bold text-gray-700">{clauses.table_headers.amount}</th>
+                            <th className="border-b-2 border-primary p-2 text-left font-bold text-primary">{clauses.table_headers.description}</th>
+                            <th className="border-b-2 border-primary p-2 text-right font-bold text-primary">{clauses.table_headers.amount}</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td className="border p-2">{data.description || '...'}</td>
-                            <td className="border p-2 text-right">{formatCurrency(data.amount)}</td>
+                            <td className="border-b p-2">{data.description || '...'}</td>
+                            <td className="border-b p-2 text-right">{formatCurrency(data.amount)}</td>
                         </tr>
                         {/* Add more rows here if needed */}
                         <tr className="h-24">
-                           <td className="border p-2"></td>
-                           <td className="border p-2"></td>
+                           <td className="border-b p-2"></td>
+                           <td className="border-b p-2"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -100,9 +105,9 @@ export default function InvoiceTemplate({ data, lang }: InvoiceTemplateProps) {
                                     <td className="p-2 font-semibold">{clauses.vat_label}</td>
                                     <td className="p-2 text-right">{formatCurrency(vatAmount)}</td>
                                 </tr>
-                                <tr className="bg-gray-200 font-bold text-lg">
-                                    <td className="border p-2">{clauses.total_label}</td>
-                                    <td className="border p-2 text-right">{formatCurrency(totalAmount)}</td>
+                                <tr className="bg-primary/90 text-white font-bold text-lg">
+                                    <td className="p-2">{clauses.total_label}</td>
+                                    <td className="p-2 text-right">{formatCurrency(totalAmount)}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -111,7 +116,7 @@ export default function InvoiceTemplate({ data, lang }: InvoiceTemplateProps) {
             </main>
 
             <footer className="absolute bottom-16 left-16 right-16 border-t pt-8">
-                <h3 className="font-bold mb-2 text-gray-700">{clauses.payment_terms.title}</h3>
+                <h3 className="font-bold mb-2 text-primary">{clauses.payment_terms.title}</h3>
                 <p>{clauses.payment_terms.due_date}</p>
                 <p className="mt-2">
                     {clauses.payment_terms.iban_label} <span className="font-mono">{data.payment_iban || '...'}</span>

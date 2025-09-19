@@ -3,7 +3,7 @@
 
 import { suretyBondClauses } from "@/data/documents/surety-bond-clauses";
 import { useState, useEffect } from 'react';
-import { Landmark } from "lucide-react";
+import { FileText } from "lucide-react";
 
 export interface SuretyBondData {
     lender_name?: string;
@@ -60,12 +60,9 @@ export default function SuretyBondTemplate({ data, lang }: SuretyBondTemplatePro
 
     return (
         <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto">
-            <header className="flex justify-between items-start mb-12 border-b-2 border-gray-700 pb-4">
+            <header className="flex justify-between items-start mb-12 border-b-2 border-primary pb-4">
                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                        <Landmark className="w-8 h-8 text-gray-800" />
-                        <h1 className="text-3xl font-bold uppercase text-gray-800">VylsCapital</h1>
-                    </div>
+                    <h1 className="text-3xl font-bold uppercase text-primary">VylsCapital</h1>
                     <p className="text-gray-600 font-semibold">Département Juridique & Garanties</p>
                 </div>
             </header>
@@ -75,8 +72,15 @@ export default function SuretyBondTemplate({ data, lang }: SuretyBondTemplatePro
                 <p className="mt-2 text-gray-600">Référence : {docRef}</p>
             </div>
 
+            <aside className="border-l-4 border-primary bg-primary/5 p-4 mb-10">
+                <h3 className="font-bold text-primary flex items-center gap-2"><FileText size={18} /> Importance de ce document</h3>
+                <p className="text-xs mt-2">
+                    L'acte de cautionnement est un engagement extrêmement important. En le signant, la caution s'engage personnellement à rembourser la dette du débiteur principal si celui-ci ne le fait pas. C'est une garantie forte pour le prêteur, mais un risque financier significatif pour la personne qui se porte caution.
+                </p>
+            </aside>
+
             <section className="mb-8">
-                <h3 className="font-bold text-lg mb-4 border-b pb-2">{clauses.parties.title}</h3>
+                <h3 className="font-bold text-lg mb-4 border-b-2 border-primary pb-2 text-primary">{clauses.parties.title}</h3>
                 <ul className="space-y-3 text-base">
                     <li><strong>{clauses.parties.lender_label}</strong> {data.lender_name || 'VylsCapital'}</li>
                     <li><strong>{clauses.parties.borrower_label}</strong> {data.borrower_name || '_____________________'}</li>
@@ -89,7 +93,7 @@ export default function SuretyBondTemplate({ data, lang }: SuretyBondTemplatePro
             <main className="space-y-6">
                  {Object.entries(clauses.articles).map(([key, article]) => (
                      <article key={key}>
-                        <h3 className="font-bold text-base mb-2">{article.title}</h3>
+                        <h3 className="font-bold text-base mb-2 text-primary">{article.title}</h3>
                         <p dangerouslySetInnerHTML={{ __html: 
                             article.content
                                 .replace(/{guarantor_name}/g, data.guarantor_name || '_____________________')
@@ -106,7 +110,7 @@ export default function SuretyBondTemplate({ data, lang }: SuretyBondTemplatePro
                 ))}
                 
                  <article>
-                    <h3 className="font-bold text-base mb-2">{clauses.handwritten_mention.title}</h3>
+                    <h3 className="font-bold text-base mb-2 text-primary">{clauses.handwritten_mention.title}</h3>
                     <p className="italic text-xs">{clauses.handwritten_mention.instruction}</p>
                     <div className="mt-2 p-4 border border-dashed border-gray-400 min-h-48 bg-gray-50 text-gray-500 flex items-center justify-center">
                         <p className="text-center">{handwrittenNoticeText}</p>
