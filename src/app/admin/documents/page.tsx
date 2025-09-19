@@ -31,13 +31,13 @@ import SuretyBondTemplate from "@/components/admin/documents/templates/surety-bo
 
 const configSchema = z.object({
     docType: z.enum([
-        "loan-contract", 
-        "debt-recognition",
         "invoice",
         "eligibility-certificate",
         "insurance-notice",
         "insurance-certificate",
-        "surety-bond"
+        "loan-contract", 
+        "surety-bond",
+        "debt-recognition"
     ]),
     docLang: z.enum(["fr", "en"]),
 });
@@ -133,7 +133,7 @@ export default function DocumentGeneratorPage() {
     const configForm = useForm<ConfigFormValues>({
         resolver: zodResolver(configSchema),
         defaultValues: {
-            docType: "loan-contract",
+            docType: "invoice",
             docLang: "fr",
         }
     });
@@ -249,13 +249,13 @@ export default function DocumentGeneratorPage() {
                                                                 </SelectTrigger>
                                                             </FormControl>
                                                             <SelectContent>
-                                                                <SelectItem value="loan-contract">Contrat de Prêt</SelectItem>
-                                                                <SelectItem value="debt-recognition">Reconnaissance de Dette</SelectItem>
                                                                 <SelectItem value="invoice">Facture</SelectItem>
                                                                 <SelectItem value="eligibility-certificate">Attestation d'Éligibilité</SelectItem>
                                                                 <SelectItem value="insurance-notice">Notice d'Information Assurance</SelectItem>
                                                                 <SelectItem value="insurance-certificate">Attestation d'Assurance</SelectItem>
+                                                                <SelectItem value="loan-contract">Contrat de Prêt</SelectItem>
                                                                 <SelectItem value="surety-bond">Acte de Cautionnement</SelectItem>
+                                                                <SelectItem value="debt-recognition">Reconnaissance de Dette</SelectItem>
                                                             </SelectContent>
                                                         </Select>
                                                     </FormItem>
@@ -310,3 +310,5 @@ export default function DocumentGeneratorPage() {
         </main>
     );
 }
+
+    
