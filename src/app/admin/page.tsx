@@ -263,7 +263,7 @@ const BalanceAdjustmentForm = ({ client, onActionSuccess }: { client: Omit<Clien
 
     const form = useForm<BalanceAdjustmentValues>({
         resolver: zodResolver(balanceAdjustmentSchema),
-        defaultValues: { amount: undefined, reason: "", type: 'credit' },
+        defaultValues: { amount: "" as unknown as number, reason: "", type: 'credit' },
     });
 
     async function onSubmit(values: BalanceAdjustmentValues) {

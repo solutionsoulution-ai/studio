@@ -41,7 +41,7 @@ export default function TransferForm({ onTransferSubmit, processingTimeConfig }:
     defaultValues: {
       recipientIban: "",
       recipientName: "",
-      amount: undefined,
+      amount: "" as unknown as number, // Correct initialization
       reason: "",
     },
   });
