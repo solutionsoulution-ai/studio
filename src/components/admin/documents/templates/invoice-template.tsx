@@ -3,6 +3,7 @@
 
 import { invoiceClauses } from "@/data/documents/invoice-clauses";
 import { FileText } from "lucide-react";
+import Image from "next/image";
 
 export interface InvoiceData {
     customer_name?: string;
@@ -44,7 +45,7 @@ export default function InvoiceTemplate({ data, lang }: InvoiceTemplateProps) {
     }
 
     return (
-        <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto">
+        <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto relative">
             <header className="flex justify-between items-start mb-16">
                 <div>
                     <h1 className="text-3xl font-bold uppercase text-primary">VylsCapital</h1>
@@ -116,14 +117,27 @@ export default function InvoiceTemplate({ data, lang }: InvoiceTemplateProps) {
             </main>
 
             <footer className="absolute bottom-16 left-16 right-16 border-t pt-8">
-                <h3 className="font-bold mb-2 text-primary">{clauses.payment_terms.title}</h3>
-                <p>{clauses.payment_terms.due_date}</p>
-                <p className="mt-2">
-                    {clauses.payment_terms.iban_label} <span className="font-mono">{data.payment_iban || '...'}</span>
-                </p>
-                 <p className="mt-2">
-                    {clauses.payment_terms.bic_label} <span className="font-mono">VYLCFR2LXXX</span>
-                </p>
+                <div className="flex justify-between items-end">
+                    <div>
+                        <h3 className="font-bold mb-2 text-primary">{clauses.payment_terms.title}</h3>
+                        <p>{clauses.payment_terms.due_date}</p>
+                        <p className="mt-2">
+                            {clauses.payment_terms.iban_label} <span className="font-mono">{data.payment_iban || '...'}</span>
+                        </p>
+                        <p className="mt-2">
+                            {clauses.payment_terms.bic_label} <span className="font-mono">VYLCFR2LXXX</span>
+                        </p>
+                    </div>
+                     <div className="text-center">
+                        <div className="h-20 w-40 mb-1 relative">
+                             <Image src="https://i.postimg.cc/D0y9RLyN/signature-2.png" alt="Signature" layout="fill" objectFit="contain" objectPosition="bottom center"/>
+                        </div>
+                        <div className="border-t border-gray-400 pt-1">
+                            <p className="font-semibold text-sm">Julien Moreau</p>
+                            <p className="text-xs">Directeur Financier, VylsCapital</p>
+                        </div>
+                    </div>
+                </div>
                 <p className="mt-8 text-center text-xs text-gray-500">
                     {clauses.footer.thank_you}
                 </p>

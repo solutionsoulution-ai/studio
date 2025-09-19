@@ -4,6 +4,7 @@
 import { insuranceCertificateClauses } from "@/data/documents/insurance-certificate-clauses";
 import { useState, useEffect } from 'react';
 import { FileText, ShieldCheck } from "lucide-react";
+import Image from "next/image";
 
 export interface InsuranceCertificateData {
     insured_name?: string;
@@ -51,7 +52,7 @@ export default function InsuranceCertificateTemplate({ data, lang }: InsuranceCe
     }
 
     return (
-        <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto">
+        <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto relative">
             <header className="flex justify-between items-start mb-12 border-b-2 border-primary pb-4">
                  <div>
                     <h1 className="text-3xl font-bold uppercase text-primary">VylsCapital</h1>
@@ -123,15 +124,13 @@ export default function InsuranceCertificateTemplate({ data, lang }: InsuranceCe
             </main>
 
             <footer className="absolute bottom-16 right-16">
-                <div className="flex justify-end">
-                    <div className="text-center">
-                         <div className="h-24 w-48 mb-2">
-                           {/* Placeholder for signature/stamp image */}
-                        </div>
-                        <div className="border-t border-gray-400 pt-2">
-                             <p className="font-semibold">Le Responsable des Assurances</p>
-                            <p className="text-xs">VylsCapital Assurance</p>
-                        </div>
+                <div className="text-center">
+                    <div className="h-24 w-48 mb-2 relative">
+                        <Image src="https://i.postimg.cc/bvp368vC/signature-3.png" alt="Signature" layout="fill" objectFit="contain" objectPosition="bottom center"/>
+                    </div>
+                    <div className="border-t border-gray-400 pt-2">
+                        <p className="font-semibold">Isabelle Petit</p>
+                        <p className="text-xs">Directrice des Assurances, VylsCapital</p>
                     </div>
                 </div>
             </footer>

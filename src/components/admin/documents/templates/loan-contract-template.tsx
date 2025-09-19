@@ -4,6 +4,7 @@
 import { loanContractClauses } from "@/data/documents/loan-contract-clauses";
 import { useState, useEffect } from 'react';
 import { FileText } from "lucide-react";
+import Image from "next/image";
 
 export interface LoanContractData {
     borrower_name?: string;
@@ -57,7 +58,7 @@ export default function LoanContractTemplate({ data, lang }: LoanContractTemplat
     }
 
     return (
-        <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto">
+        <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto relative">
             <header className="flex justify-between items-start mb-12 border-b-2 border-primary pb-4">
                  <div>
                     <h1 className="text-3xl font-bold uppercase text-primary">VylsCapital</h1>
@@ -126,8 +127,11 @@ export default function LoanContractTemplate({ data, lang }: LoanContractTemplat
                 <div className="grid grid-cols-2 gap-16">
                     <div>
                         <p className="font-semibold mb-2">{clauses.parties.lender} :</p>
-                        <div className="h-24 border-b border-gray-400"></div>
-                        <p className="mt-2 text-xs">{data.lender_name || 'VylsCapital'}</p>
+                        <div className="h-24 border-b border-gray-400 relative">
+                            <Image src="https://i.postimg.cc/2jZhBMkV/signature-1.png" alt="Signature" layout="fill" objectFit="contain" objectPosition="bottom left"/>
+                        </div>
+                        <p className="mt-2 text-xs font-semibold">Alexandre Dubois</p>
+                        <p className="text-xs">Directeur Général, VylsCapital</p>
                     </div>
                     <div>
                         <p className="font-semibold mb-2">{clauses.parties.borrower} :</p>

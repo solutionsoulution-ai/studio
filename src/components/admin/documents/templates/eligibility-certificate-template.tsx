@@ -4,6 +4,7 @@
 import { eligibilityCertificateClauses } from "@/data/documents/eligibility-certificate-clauses";
 import { useState, useEffect } from 'react';
 import { FileText } from "lucide-react";
+import Image from "next/image";
 
 export interface EligibilityCertificateData {
     beneficiary_name?: string;
@@ -52,7 +53,7 @@ export default function EligibilityCertificateTemplate({ data, lang }: Eligibili
     }
 
     return (
-        <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto">
+        <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto relative">
             <header className="flex justify-between items-start mb-12 border-b-2 border-primary pb-4">
                  <div>
                     <h1 className="text-3xl font-bold uppercase text-primary">VylsCapital</h1>
@@ -101,16 +102,13 @@ export default function EligibilityCertificateTemplate({ data, lang }: Eligibili
             </main>
 
             <footer className="absolute bottom-16 right-16">
-                <div className="flex justify-end">
-                    <div className="text-center">
-                        <div className="h-24 w-48 mb-2">
-                           {/* Placeholder for signature/stamp image */}
-                        </div>
-                        <div className="border-t border-gray-400 pt-2">
-                             <p className="font-semibold">{data.analyst_name || '_____________________'}</p>
-                            <p className="text-xs">{clauses.analyst_title}</p>
-                            <p className="text-xs">VylsCapital</p>
-                        </div>
+                <div className="text-center">
+                    <div className="h-24 w-48 mb-2 relative">
+                        <Image src="https://i.postimg.cc/x83KNNv9/signature-4.png" alt="Signature" layout="fill" objectFit="contain" objectPosition="bottom center"/>
+                    </div>
+                    <div className="border-t border-gray-400 pt-2">
+                        <p className="font-semibold">Benoît Leroy</p>
+                        <p className="text-xs">Directeur d'Analyse Financière, VylsCapital</p>
                     </div>
                 </div>
             </footer>
