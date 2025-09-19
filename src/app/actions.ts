@@ -94,11 +94,21 @@ export async function submitEligibilityContact(formData: FormData) {
   }
 }
 
+export const maxDuration = 120; // 2 minutes
 
 export async function handleLoanApplication(formData: FormData) {
   try {
-      const data = Object.fromEntries(formData.entries());
+      const data: {[key: string]: any} = {};
+      const fileKeys: string[] = [];
 
+      // Itérer sur les entrées de formData
+      for (const [key, value] of formData.entries()) {
+          if (value instanceof File && value.size > 0) {
+              fileKeys.push(key); // Garder une trace des clés des fichiers
+          }
+          data[key] = value;
+      }
+      
       const subject = `Nouvelle demande de prêt - ${data.loanType}`;
       let htmlContent = `<h1>Nouvelle Demande de Prêt</h1>`;
       htmlContent += `<p>Vous avez reçu une nouvelle demande de prêt via le formulaire en ligne.</p>`;
@@ -111,23 +121,29 @@ export async function handleLoanApplication(formData: FormData) {
       htmlContent += `</ul>`;
       
       const attachments = [];
-      for (const [key, value] of formData.entries()) {
-        if (value instanceof File) {
-          const file = value as File;
-          // Check if file is empty
-          if (file.size > 0) {
-            const buffer = Buffer.from(await file.arrayBuffer());
-            attachments.push({
-              filename: file.name,
-              content: buffer,
-              contentType: file.type,
-            });
-          }
-        }
+      for (const key of fileKeys) {
+        const file = data[key] as File;
+        const buffer = Buffer.from(await file.arrayBuffer());
+        attachments.push({
+          filename: file.name,
+          content: buffer,
+          contentType: file.type,
+        });
       }
 
       const webhookUrl = process.env.WEBHOOK_URL;
       if (webhookUrl) {
+         // Pour le webhook, on ne peut pas envoyer les fichiers directement.
+         // On peut envisager d'envoyer uniquement les métadonnées.
+         const dataForWebhook: {[key: string]: any} = {};
+          for (const [key, value] of Object.entries(data)) {
+            if (!(value instanceof File)) {
+                dataForWebhook[key] = value;
+            } else if (value.size > 0) {
+                 dataForWebhook[key] = `Fichier: ${value.name} (${value.type}, ${value.size} bytes)`;
+            }
+          }
+         
          await fetch(webhookUrl, {
             method: 'POST',
             headers: {
@@ -135,7 +151,7 @@ export async function handleLoanApplication(formData: FormData) {
             },
             body: JSON.stringify({
               type: 'loanApplication',
-              data: data
+              data: dataForWebhook
             }),
          });
       } else {

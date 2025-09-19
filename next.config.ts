@@ -10,6 +10,11 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '4.5mb', // Augmente la limite de taille pour les soumissions de formulaire
+    },
+  },
   images: {
     remotePatterns: [
       {
