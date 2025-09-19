@@ -46,6 +46,16 @@ export default function LoanContractTemplate({ data, lang }: LoanContractTemplat
         }).format(value);
     };
 
+    if (!clauses) {
+        return (
+            <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto flex items-center justify-center">
+                <p className="text-center text-lg text-gray-500">
+                    La traduction pour la langue sélectionnée n'est pas encore disponible.
+                </p>
+            </div>
+        );
+    }
+
     return (
         // A4-like container with Tailwind for styling
         <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto">
