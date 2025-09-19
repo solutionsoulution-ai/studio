@@ -120,6 +120,9 @@ export async function handleLoanApplication(formData: FormData) {
 
       const fileUploadPromises = [];
 
+      // Helper to convert camelCase to snake_case
+      const toSnakeCase = (str: string) => str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+
       // Process form fields and files
       for (const [key, value] of formData.entries()) {
           if (value instanceof File && value.size > 0) {
@@ -134,11 +137,12 @@ export async function handleLoanApplication(formData: FormData) {
               );
 
               // Store the path in the data to be inserted in the table
-              applicationData[`${key}_url`] = filePath;
+              const snakeCaseKey = toSnakeCase(`${key}_url`);
+              applicationData[snakeCaseKey] = filePath;
 
           } else if (typeof value === 'string') {
               // Convert camelCase to snake_case for DB consistency
-              const snakeCaseKey = key.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+              const snakeCaseKey = toSnakeCase(key);
               applicationData[snakeCaseKey] = value;
           }
       }
