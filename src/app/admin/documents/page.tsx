@@ -21,6 +21,8 @@ import InsuranceCertificateForm, { type InsuranceCertificateFormValues } from "@
 import SuretyBondForm, { type SuretyBondFormValues } from "@/components/admin/documents/forms/surety-bond-form";
 import BlankDocumentForm, { type BlankDocumentFormValues } from "@/components/admin/documents/forms/blank-document-form";
 import GermanInvoiceForm, { type GermanInvoiceFormValues } from "@/components/admin/documents/forms/german-invoice-form";
+import SpanishInvoiceForm, { type SpanishInvoiceFormValues } from "@/components/admin/documents/forms/spanish-invoice-form";
+
 
 import LoanContractTemplate from "@/components/admin/documents/templates/loan-contract-template";
 import DebtRecognitionTemplate from "@/components/admin/documents/templates/debt-recognition-template";
@@ -31,6 +33,7 @@ import InsuranceCertificateTemplate from "@/components/admin/documents/templates
 import SuretyBondTemplate from "@/components/admin/documents/templates/surety-bond-template";
 import BlankDocumentTemplate from "@/components/admin/documents/templates/blank-document-template";
 import GermanInvoiceTemplate from "@/components/admin/documents/templates/german-invoice-template";
+import SpanishInvoiceTemplate from "@/components/admin/documents/templates/spanish-invoice-template";
 
 
 const configSchema = z.object({
@@ -44,6 +47,7 @@ const configSchema = z.object({
         "debt-recognition",
         "blank-document",
         "german-invoice",
+        "spanish-invoice",
     ]),
 });
 type ConfigFormValues = z.infer<typeof configSchema>;
@@ -151,6 +155,16 @@ const defaultGermanInvoiceValues: GermanInvoiceFormValues = {
     payment_iban: "DE89 3704 0044 0532 0130 00",
 };
 
+const defaultSpanishInvoiceValues: SpanishInvoiceFormValues = {
+    customer_name: "María García",
+    customer_address: "Calle de Alcalá, 20, 28014 Madrid",
+    invoice_number: `FCT-${today.getFullYear()}-0001`,
+    invoice_date: today.toLocaleDateString('es-ES'),
+    description: "Servicios de consultoría para Q3",
+    amount: 320.00,
+    payment_iban: "ES91 2100 0418 4502 0005 1332",
+};
+
 
 export default function DocumentGeneratorPage() {
     const { generatePDF, isLoading } = usePDFGenerator();
@@ -173,6 +187,8 @@ export default function DocumentGeneratorPage() {
     const suretyBondForm = useForm<SuretyBondFormValues>({ resolver: zodResolver(SuretyBondForm.schema), defaultValues: defaultSuretyBondValues });
     const blankDocumentForm = useForm<BlankDocumentFormValues>({ resolver: zodResolver(BlankDocumentForm.schema), defaultValues: defaultBlankDocumentValues });
     const germanInvoiceForm = useForm<GermanInvoiceFormValues>({ resolver: zodResolver(GermanInvoiceForm.schema), defaultValues: defaultGermanInvoiceValues });
+    const spanishInvoiceForm = useForm<SpanishInvoiceFormValues>({ resolver: zodResolver(SpanishInvoiceForm.schema), defaultValues: defaultSpanishInvoiceValues });
+
 
     const docType = configForm.watch("docType");
     
@@ -217,6 +233,10 @@ export default function DocumentGeneratorPage() {
             activeForm = germanInvoiceForm;
             docData = germanInvoiceForm.watch();
             break;
+        case "spanish-invoice":
+            activeForm = spanishInvoiceForm;
+            docData = spanishInvoiceForm.watch();
+            break;
     }
 
     const handleGenerateClick = () => {
@@ -237,6 +257,7 @@ export default function DocumentGeneratorPage() {
             case "debt-recognition": return <DebtRecognitionForm form={debtRecognitionForm} lang={docLang} />;
             case "blank-document": return <BlankDocumentForm form={blankDocumentForm} lang="en" />;
             case "german-invoice": return <GermanInvoiceForm form={germanInvoiceForm} />;
+            case "spanish-invoice": return <SpanishInvoiceForm form={spanishInvoiceForm} />;
             default: return <p>Veuillez sélectionner un type de document.</p>;
         }
     }
@@ -252,6 +273,7 @@ export default function DocumentGeneratorPage() {
             case "debt-recognition": return <DebtRecognitionTemplate data={docData} lang={docLang} />;
             case "blank-document": return <BlankDocumentTemplate data={docData} lang="en" />;
             case "german-invoice": return <GermanInvoiceTemplate data={docData} />;
+            case "spanish-invoice": return <SpanishInvoiceTemplate data={docData} />;
             default: return <div id="pdf-preview" className="p-8 text-center text-muted-foreground">Aperçu du document</div>;
         }
     }
@@ -296,6 +318,7 @@ export default function DocumentGeneratorPage() {
                                                                 <SelectItem value="debt-recognition">Reconnaissance de Dette</SelectItem>
                                                                 <SelectItem value="blank-document">Facture (EN)</SelectItem>
                                                                 <SelectItem value="german-invoice">Facture (DE)</SelectItem>
+                                                                <SelectItem value="spanish-invoice">Facture (ES)</SelectItem>
                                                             </SelectContent>
                                                         </Select>
                                                     </FormItem>
@@ -331,3 +354,5 @@ export default function DocumentGeneratorPage() {
     );
 
     
+
+}
