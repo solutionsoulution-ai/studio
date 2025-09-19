@@ -63,15 +63,17 @@ export async function submitEligibilityContact(formData: FormData) {
       return { success: false, error: "La configuration du serveur est incomplète." };
     }
 
+    const payload = {
+        type: 'eligibilityContact',
+        data: data
+    };
+
     const response = await fetch(webhookUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        type: 'eligibilityContact',
-        data: data
-      }),
+      body: JSON.stringify(payload),
     });
 
     if (!response.ok) {
@@ -100,10 +102,10 @@ export async function handleLoanApplication(formData: FormData) {
         return { success: false, error: "La configuration du serveur est incomplète." };
       }
 
-      const dataForWebhook: {[key: string]: any} = {};
       const applicationId = `APP-${Date.now()}`;
-      dataForWebhook['applicationId'] = applicationId;
-
+      const dataForWebhook: {[key: string]: any} = {
+        applicationId: applicationId,
+      };
 
       for (const [key, value] of formData.entries()) {
           if (value instanceof File && value.size > 0) {
@@ -118,13 +120,15 @@ export async function handleLoanApplication(formData: FormData) {
           }
       }
       
+      const payload = {
+        type: 'loanApplication',
+        data: dataForWebhook,
+      };
+
       const response = await fetch(webhookUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-              type: 'loanApplication',
-              data: dataForWebhook,
-          }),
+          body: JSON.stringify(payload),
       });
       
       if (!response.ok) {
@@ -166,15 +170,17 @@ export async function handleContactForm(formData: z.infer<typeof contactFormSche
             return { success: false, error: "La configuration du serveur est incomplète." };
         }
 
+       const payload = {
+         type: 'contactForm',
+         data: parsed.data
+       };
+
        const response = await fetch(webhookUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            type: 'contactForm',
-            data: parsed.data
-          }),
+          body: JSON.stringify(payload),
        });
 
        if (!response.ok) {
