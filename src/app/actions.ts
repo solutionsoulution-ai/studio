@@ -72,13 +72,17 @@ export async function submitEligibilityContact(formData: FormData) {
         type: 'eligibility',
         data: data
       }),
-      redirect: 'follow'
     });
 
     if (!response.ok) {
         const errorBody = await response.text();
         console.error("Webhook error response:", errorBody);
         throw new Error(`Le serveur a répondu avec le statut ${response.status}.`);
+    }
+
+    const responseData = await response.json();
+    if (responseData.status !== 'success') {
+      throw new Error(responseData.message || "Le webhook a renvoyé une erreur.");
     }
 
     return { success: true };
@@ -97,12 +101,12 @@ export async function handleLoanApplication(formData: FormData) {
       }
 
       const dataForWebhook: {[key: string]: any} = {};
-      const attachmentsForWebhook: {[key: string]: any} = {};
+      const applicationId = `APP-${Date.now()}`;
 
       for (const [key, value] of formData.entries()) {
           if (value instanceof File && value.size > 0) {
               const buffer = Buffer.from(await value.arrayBuffer());
-              attachmentsForWebhook[key] = {
+              dataForWebhook[key] = {
                   fileName: value.name,
                   mimeType: value.type,
                   content: buffer.toString('base64'),
@@ -112,24 +116,27 @@ export async function handleLoanApplication(formData: FormData) {
           }
       }
       
-      const applicationId = `APP-${Date.now()}`;
-
       const response = await fetch(webhookUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
               type: 'loanApplication',
-              applicationId: applicationId,
-              details: dataForWebhook,
-              attachments: attachmentsForWebhook
+              data: {
+                applicationId: applicationId,
+                ...dataForWebhook,
+              }
           }),
-          redirect: 'follow'
       });
       
       if (!response.ok) {
         const errorBody = await response.text();
         console.error("Webhook error response:", errorBody);
         throw new Error(`Le serveur du webhook a répondu avec une erreur: ${response.status}`);
+      }
+
+      const responseData = await response.json();
+      if (responseData.status !== 'success') {
+        throw new Error(responseData.message || "Le webhook a renvoyé une erreur.");
       }
 
       return { success: true, applicationId };
@@ -169,7 +176,6 @@ export async function handleContactForm(formData: z.infer<typeof contactFormSche
             type: 'contact',
             data: parsed.data
           }),
-          redirect: 'follow'
        });
 
        if (!response.ok) {
@@ -177,6 +183,11 @@ export async function handleContactForm(formData: z.infer<typeof contactFormSche
           console.error("Webhook error response:", errorBody);
           throw new Error(`Le serveur du webhook a répondu avec une erreur: ${response.status}`);
        }
+
+        const responseData = await response.json();
+        if (responseData.status !== 'success') {
+          throw new Error(responseData.message || "Le webhook a renvoyé une erreur.");
+        }
 
         return { success: true };
 
