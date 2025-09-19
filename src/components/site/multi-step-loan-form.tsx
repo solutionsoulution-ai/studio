@@ -73,7 +73,7 @@ const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "application/pdf"];
 
 const fileSchema = z
     .any()
-    .refine((files) => files?.length === 1, "Ce fichier est requis.")
+    .refine((files) => files?.length > 0, "Ce fichier est requis.")
     .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
     .refine(
       (files) => ACCEPTED_FILE_TYPES.includes(files?.[0]?.type),
@@ -88,9 +88,12 @@ const step4Schema = z.object({
 });
 
 
-const fullLoanSchema = z.intersection(step1Schema, step2Schema).and(step3Schema).and(step4Schema);
+type Step1Values = z.infer<typeof step1Schema>;
+type Step2Values = z.infer<typeof step2Schema>;
+type Step3Values = z.infer<typeof step3Schema>;
+type Step4Values = z.infer<typeof step4Schema>;
 
-type FullLoanFormValues = z.infer<typeof fullLoanSchema>;
+type FullLoanFormValues = Step1Values & Step2Values & Step3Values & Step4Values;
 
 type StepSchema = typeof step1Schema | typeof step2Schema | typeof step3Schema | typeof step4Schema;
 
@@ -110,13 +113,11 @@ export default function MultiStepLoanForm() {
 
 
   const form = useForm<FullLoanFormValues>({
-    // We pass the full schema here, but validation is triggered step-by-step
-    resolver: zodResolver(fullLoanSchema),
     mode: "onChange",
     defaultValues: {
-      loanType: "immobilier",
-      loanAmount: 100000,
-      loanTerm: 240,
+      loanType: undefined,
+      loanAmount: undefined,
+      loanTerm: undefined,
       firstName: "",
       lastName: "",
       email: "",
@@ -125,15 +126,15 @@ export default function MultiStepLoanForm() {
       city: "",
       postalCode: "",
       country: "France",
-      maritalStatus: "celibataire",
-      numberOfChildren: 0,
+      maritalStatus: undefined,
+      numberOfChildren: undefined,
       birthDay: undefined,
       birthMonth: undefined,
       birthYear: undefined,
       occupation: "",
-      monthlyIncome: 3000,
-      monthlyExpenses: 1000,
-      creditScore: 700,
+      monthlyIncome: undefined,
+      monthlyExpenses: undefined,
+      creditScore: undefined,
       identityDocument: undefined,
       proofOfAddress: undefined,
       proofOfIncome: undefined,
@@ -159,35 +160,14 @@ export default function MultiStepLoanForm() {
     }
   };
 
-  async function onSubmit(data: FullLoanFormValues) {
-      // Final validation before submitting
-      const isFormValid = await form.trigger();
-      if (!isFormValid) {
-          toast({
-              title: "Formulaire Incomplet",
-              description: "Veuillez vérifier les erreurs dans les étapes précédentes.",
-              variant: "destructive",
-          });
-          // Find first invalid step and go to it
-          for(let i = 0; i < steps.length; i++) {
-              const stepSchema = steps[i].schema;
-              if(stepSchema) {
-                  const fields = Object.keys(stepSchema.shape) as (keyof FullLoanFormValues)[];
-                  const result = await form.trigger(fields);
-                  if(!result) {
-                      setCurrentStep(i);
-                      return;
-                  }
-              }
-          }
-          return;
-      }
-      
+  async function onSubmit() {
       setIsLoading(true);
       const formData = new FormData();
+      const allData = form.getValues();
 
       // Append all form values to formData
-      for (const [key, value] of Object.entries(data)) {
+      for (const key in allData) {
+          const value = allData[key as keyof FullLoanFormValues];
           if (value instanceof FileList && value.length > 0) {
               formData.append(key, value[0]);
           } else if (value !== undefined && value !== null) {
@@ -506,7 +486,7 @@ export default function MultiStepLoanForm() {
               </Button>
                {currentStep === steps.length - 1 ? (
                  <Button type="submit" disabled={isLoading}>
-                    {isLoading ? <Loader2 className="animate-spin" /> : <Send className="ml-2" />}
+                    {isLoading ? <Loader2 className="animate-spin" /> : <Send className="mr-2" />}
                     Envoyer ma demande
                 </Button>
                ) : (
@@ -522,5 +502,3 @@ export default function MultiStepLoanForm() {
     </Card>
   );
 }
-
-    
