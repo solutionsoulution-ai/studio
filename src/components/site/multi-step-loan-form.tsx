@@ -72,15 +72,13 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "application/pdf"];
 
 const fileSchema = z
-    .any()
-    .refine((files) => files === undefined || files?.length > 0, "Ce fichier est requis.")
-    .refine((files) => files === undefined || files?.[0]?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
-    .refine(
-      (files) => files === undefined || ACCEPTED_FILE_TYPES.includes(files?.[0]?.type),
-      "Seuls les formats .jpg, .png et .pdf sont acceptés."
-    )
-    .optional();
-
+  .any()
+  .optional()
+  .refine((files) => !files || files?.length === 0 || files?.[0]?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
+  .refine(
+    (files) => !files || files?.length === 0 || ACCEPTED_FILE_TYPES.includes(files?.[0]?.type),
+    "Seuls les formats .jpg, .png et .pdf sont acceptés."
+  );
 
 const step4Schema = z.object({
   identityDocument: fileSchema,
@@ -98,12 +96,12 @@ type FullLoanFormValues = Step1Values & Step2Values & Step3Values & Step4Values;
 
 type StepSchema = typeof step1Schema | typeof step2Schema | typeof step3Schema | typeof step4Schema;
 
-const steps: { id: string, name: string, icon: React.ElementType, schema?: StepSchema }[] = [
+const steps: { id: string, name: string, icon: React.ElementType, schema: StepSchema | null }[] = [
   { id: "Étape 1", name: "Informations sur le Prêt", schema: step1Schema, icon: FileText },
   { id: "Étape 2", name: "Informations Personnelles", schema: step2Schema, icon: User },
   { id: "Étape 3", name: "Situation Financière", schema: step3Schema, icon: Banknote },
   { id: "Étape 4", name: "Documents", schema: step4Schema, icon: UploadCloud },
-  { id: "Étape 5", name: "Confirmation", icon: CheckCircle },
+  { id: "Étape 5", name: "Confirmation", schema: null, icon: CheckCircle },
 ];
 
 export default function MultiStepLoanForm() {
@@ -115,13 +113,6 @@ export default function MultiStepLoanForm() {
 
   const form = useForm<FullLoanFormValues>({
     mode: "onChange",
-    resolver: async (data, context, options) => {
-        const currentSchema = steps[currentStep].schema;
-        if (currentSchema) {
-            return zodResolver(currentSchema)(data, context, options);
-        }
-        return { values: data, errors: {} };
-    },
     defaultValues: {
       loanType: undefined,
       loanAmount: undefined,
@@ -150,24 +141,22 @@ export default function MultiStepLoanForm() {
   });
   
   const nextStep = async () => {
-    // If we are on the last step, don't do anything.
-    if (currentStep === steps.length - 1) {
-      return;
-    }
-    
     const currentSchema = steps[currentStep].schema;
-    
+
     if (currentSchema) {
-        const fields = Object.keys(currentSchema.shape) as (keyof FullLoanFormValues)[];
-        const result = await form.trigger(fields, { shouldFocus: true });
-        if (result) {
-           setCurrentStep(currentStep + 1);
-        }
-    } else {
-        // If there is no schema for the current step, just go to the next one.
-        setCurrentStep(currentStep + 1);
+      const fields = Object.keys(currentSchema.shape) as (keyof FullLoanFormValues)[];
+      const result = await form.trigger(fields, { shouldFocus: true });
+      
+      if (!result) {
+        return; // Ne pas avancer si la validation échoue
+      }
+    }
+
+    if (currentStep < steps.length - 1) {
+      setCurrentStep(currentStep + 1);
     }
   };
+
 
   const prevStep = () => {
     if (currentStep > 0) {
@@ -181,13 +170,15 @@ export default function MultiStepLoanForm() {
       const formData = new FormData();
       const allData = form.getValues();
 
+      // Parcourir toutes les données du formulaire et les ajouter à FormData
       for (const key in allData) {
         const valueKey = key as keyof FullLoanFormValues;
         const value = allData[valueKey];
 
         if (value instanceof FileList && value.length > 0) {
             formData.append(valueKey, value[0]);
-        } else if (value !== undefined && value !== null && value !== '') {
+        } else if (value !== undefined && value !== null && !(value instanceof FileList)) {
+             // S'assurer de ne pas ajouter les FileList vides ou autres objets non-stringifiables
             formData.append(valueKey, String(value));
         }
       }
@@ -519,5 +510,3 @@ export default function MultiStepLoanForm() {
     </Card>
   );
 }
-
-    
