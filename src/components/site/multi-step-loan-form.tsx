@@ -67,7 +67,8 @@ const fileSchema = z
     .refine(
       (files) => ACCEPTED_FILE_TYPES.includes(files?.[0]?.type),
       "Seuls les formats .jpg, .png et .pdf sont acceptés."
-    );
+    )
+    .optional(); // Makes file fields optional at the individual step validation level
 
 const step4Schema = z.object({
   identityDocument: fileSchema,
@@ -158,6 +159,20 @@ export default function MultiStepLoanForm() {
       setError(null);
       
       const formData = new FormData(event.currentTarget);
+      
+      // Manually add file data if it exists
+      const identityDocument = form.getValues('identityDocument');
+      if (identityDocument && identityDocument.length > 0) {
+        formData.set('identityDocument', identityDocument[0]);
+      }
+      const proofOfAddress = form.getValues('proofOfAddress');
+      if (proofOfAddress && proofOfAddress.length > 0) {
+        formData.set('proofOfAddress', proofOfAddress[0]);
+      }
+       const proofOfIncome = form.getValues('proofOfIncome');
+      if (proofOfIncome && proofOfIncome.length > 0) {
+        formData.set('proofOfIncome', proofOfIncome[0]);
+      }
       
       const result = await handleLoanApplication(formData);
 
@@ -402,7 +417,7 @@ export default function MultiStepLoanForm() {
                             <FormItem>
                                 <FormLabel>Pièce d'identité (PDF, JPG, PNG)</FormLabel>
                                 <FormControl>
-                                <Input type="file" onChange={(e) => onChange(e.target.files)} {...rest} name={rest.name} />
+                                <Input type="file" onChange={(e) => onChange(e.target.files)} {...rest} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -415,7 +430,7 @@ export default function MultiStepLoanForm() {
                             <FormItem>
                                 <FormLabel>Justificatif de domicile (PDF, JPG, PNG)</FormLabel>
                                 <FormControl>
-                                <Input type="file" onChange={(e) => onChange(e.target.files)} {...rest} name={rest.name} />
+                                <Input type="file" onChange={(e) => onChange(e.target.files)} {...rest} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -428,7 +443,7 @@ export default function MultiStepLoanForm() {
                             <FormItem>
                                 <FormLabel>Justificatif de revenus (PDF, JPG, PNG)</FormLabel>
                                 <FormControl>
-                                <Input type="file" onChange={(e) => onChange(e.target.files)} {...rest} name={rest.name} />
+                                <Input type="file" onChange={(e) => onChange(e.target.files)} {...rest} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>

@@ -2,6 +2,7 @@
 
 
 
+
 "use server";
 
 import "dotenv/config";
@@ -156,7 +157,7 @@ const loanApplicationSchemaServer = z.object({
   creditScore: z.coerce.number().min(300).max(850),
   identityDocument: z
     .any()
-    .refine((file: File) => !!file, "Le téléversement d'un fichier est requis.")
+    .refine((file: File) => file && file.size > 0, "Le téléversement d'un fichier est requis.")
     .refine((file: File) => file.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
     .refine(
       (file: File) => ACCEPTED_FILE_TYPES.includes(file.type),
@@ -164,7 +165,7 @@ const loanApplicationSchemaServer = z.object({
     ),
   proofOfAddress: z
     .any()
-    .refine((file: File) => !!file, "Le téléversement d'un fichier est requis.")
+    .refine((file: File) => file && file.size > 0, "Le téléversement d'un fichier est requis.")
     .refine((file: File) => file.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
     .refine(
       (file: File) => ACCEPTED_FILE_TYPES.includes(file.type),
@@ -172,7 +173,7 @@ const loanApplicationSchemaServer = z.object({
     ),
   proofOfIncome: z
     .any()
-    .refine((file: File) => !!file, "Le téléversement d'un fichier est requis.")
+    .refine((file: File) => file && file.size > 0, "Le téléversement d'un fichier est requis.")
     .refine((file: File) => file.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
     .refine(
       (file: File) => ACCEPTED_FILE_TYPES.includes(file.type),
@@ -201,7 +202,7 @@ export async function handleLoanApplication(formData: FormData): Promise<LoanApp
   if (!parsed.success) {
     const issues = parsed.error.issues.map((i) => `${i.path.join('.')} : ${i.message}`).join("\n");
     console.error("Validation Error:", issues);
-    return { success: false, error: `Données du formulaire invalides: ${issues}` };
+    return { success: false, error: `Données du formulaire invalides. Veuillez vérifier tous les champs, y compris les fichiers. ${issues}` };
   }
 
   const { birthDay, birthMonth, birthYear, identityDocument, proofOfAddress, proofOfIncome, ...restOfData } = parsed.data;
