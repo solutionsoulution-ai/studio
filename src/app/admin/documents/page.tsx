@@ -20,6 +20,7 @@ import InsuranceNoticeForm, { type InsuranceNoticeFormValues } from "@/component
 import InsuranceCertificateForm, { type InsuranceCertificateFormValues } from "@/components/admin/documents/forms/insurance-certificate-form";
 import SuretyBondForm, { type SuretyBondFormValues } from "@/components/admin/documents/forms/surety-bond-form";
 import BlankDocumentForm, { type BlankDocumentFormValues } from "@/components/admin/documents/forms/blank-document-form";
+import GermanInvoiceForm, { type GermanInvoiceFormValues } from "@/components/admin/documents/forms/german-invoice-form";
 
 import LoanContractTemplate from "@/components/admin/documents/templates/loan-contract-template";
 import DebtRecognitionTemplate from "@/components/admin/documents/templates/debt-recognition-template";
@@ -29,6 +30,7 @@ import InsuranceNoticeTemplate from "@/components/admin/documents/templates/insu
 import InsuranceCertificateTemplate from "@/components/admin/documents/templates/insurance-certificate-template";
 import SuretyBondTemplate from "@/components/admin/documents/templates/surety-bond-template";
 import BlankDocumentTemplate from "@/components/admin/documents/templates/blank-document-template";
+import GermanInvoiceTemplate from "@/components/admin/documents/templates/german-invoice-template";
 
 
 const configSchema = z.object({
@@ -41,6 +43,7 @@ const configSchema = z.object({
         "surety-bond",
         "debt-recognition",
         "blank-document",
+        "german-invoice",
     ]),
 });
 type ConfigFormValues = z.infer<typeof configSchema>;
@@ -138,6 +141,16 @@ const defaultBlankDocumentValues: BlankDocumentFormValues = {
     payment_iban: "GB29 NWBK 6016 1331 9268 19",
 }
 
+const defaultGermanInvoiceValues: GermanInvoiceFormValues = {
+    customer_name: "Max Mustermann",
+    customer_address: "Musterstraße 1, 10115 Berlin",
+    invoice_number: `RE-${today.getFullYear()}-0001`,
+    invoice_date: today.toLocaleDateString('de-DE'),
+    description: "Beratungsleistungen für Q3",
+    amount: 300.00,
+    payment_iban: "DE89 3704 0044 0532 0130 00",
+};
+
 
 export default function DocumentGeneratorPage() {
     const { generatePDF, isLoading } = usePDFGenerator();
@@ -159,6 +172,7 @@ export default function DocumentGeneratorPage() {
     const insuranceCertificateForm = useForm<InsuranceCertificateFormValues>({ resolver: zodResolver(InsuranceCertificateForm.schema), defaultValues: defaultInsuranceCertificateValues });
     const suretyBondForm = useForm<SuretyBondFormValues>({ resolver: zodResolver(SuretyBondForm.schema), defaultValues: defaultSuretyBondValues });
     const blankDocumentForm = useForm<BlankDocumentFormValues>({ resolver: zodResolver(BlankDocumentForm.schema), defaultValues: defaultBlankDocumentValues });
+    const germanInvoiceForm = useForm<GermanInvoiceFormValues>({ resolver: zodResolver(GermanInvoiceForm.schema), defaultValues: defaultGermanInvoiceValues });
 
     const docType = configForm.watch("docType");
     
@@ -199,6 +213,10 @@ export default function DocumentGeneratorPage() {
             activeForm = blankDocumentForm;
             docData = blankDocumentForm.watch();
             break;
+        case "german-invoice":
+            activeForm = germanInvoiceForm;
+            docData = germanInvoiceForm.watch();
+            break;
     }
 
     const handleGenerateClick = () => {
@@ -218,6 +236,7 @@ export default function DocumentGeneratorPage() {
             case "surety-bond": return <SuretyBondForm form={suretyBondForm} lang={docLang} />;
             case "debt-recognition": return <DebtRecognitionForm form={debtRecognitionForm} lang={docLang} />;
             case "blank-document": return <BlankDocumentForm form={blankDocumentForm} lang="en" />;
+            case "german-invoice": return <GermanInvoiceForm form={germanInvoiceForm} />;
             default: return <p>Veuillez sélectionner un type de document.</p>;
         }
     }
@@ -232,6 +251,7 @@ export default function DocumentGeneratorPage() {
             case "surety-bond": return <SuretyBondTemplate data={docData} lang={docLang} />;
             case "debt-recognition": return <DebtRecognitionTemplate data={docData} lang={docLang} />;
             case "blank-document": return <BlankDocumentTemplate data={docData} lang="en" />;
+            case "german-invoice": return <GermanInvoiceTemplate data={docData} />;
             default: return <div id="pdf-preview" className="p-8 text-center text-muted-foreground">Aperçu du document</div>;
         }
     }
@@ -267,7 +287,7 @@ export default function DocumentGeneratorPage() {
                                                                 </SelectTrigger>
                                                             </FormControl>
                                                             <SelectContent>
-                                                                <SelectItem value="invoice">Facture</SelectItem>
+                                                                <SelectItem value="invoice">Facture (FR)</SelectItem>
                                                                 <SelectItem value="eligibility-certificate">Attestation d'Éligibilité</SelectItem>
                                                                 <SelectItem value="insurance-notice">Notice d'Information Assurance</SelectItem>
                                                                 <SelectItem value="insurance-certificate">Attestation d'Assurance</SelectItem>
@@ -275,6 +295,7 @@ export default function DocumentGeneratorPage() {
                                                                 <SelectItem value="surety-bond">Acte de Cautionnement</SelectItem>
                                                                 <SelectItem value="debt-recognition">Reconnaissance de Dette</SelectItem>
                                                                 <SelectItem value="blank-document">Facture (EN)</SelectItem>
+                                                                <SelectItem value="german-invoice">Facture (DE)</SelectItem>
                                                             </SelectContent>
                                                         </Select>
                                                     </FormItem>
