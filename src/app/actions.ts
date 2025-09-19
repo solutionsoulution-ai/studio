@@ -1,9 +1,4 @@
 
-
-
-
-
-
 "use server";
 
 import "dotenv/config";
@@ -14,8 +9,6 @@ import {
   type LoanEligibilityOutput,
 } from "@/ai/flows/loan-eligibility-assessment";
 
-
-const WEBHOOK_URL = process.env.WEBHOOK_URL || "";
 
 // Schema for Loan Eligibility
 const loanEligibilityFormSchema = z.object({
@@ -51,30 +44,6 @@ export async function handleEligibilityCheck(
 
   try {
     const result = await assessLoanEligibility(parsed.data);
-
-    // Envoi des données au webhook si l'URL est configurée
-    if (WEBHOOK_URL) {
-      try {
-        const response = await fetch(WEBHOOK_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            formType: 'eligibility',
-            formData: parsed.data,
-            eligibilityResult: result,
-          }),
-        });
-        if (!response.ok) {
-            const errorBody = await response.text();
-            console.error("Erreur de réponse du webhook d'éligibilité:", errorBody);
-        }
-      } catch (webhookError) {
-        console.error("Erreur lors de l'envoi des données au webhook d'éligibilité:", webhookError);
-      }
-    }
-
     return result;
   } catch (error) {
     console.error("Erreur dans le flux assessLoanEligibility:", error);
@@ -82,52 +51,6 @@ export async function handleEligibilityCheck(
       error: "Une erreur inattendue est survenue lors de l'évaluation de l'éligibilité. Veuillez réessayer plus tard.",
     };
   }
-}
-
-
-// Schema for Contact Form
-const contactFormSchema = z.object({
-  name: z.string().min(2, { message: "Le nom doit comporter au moins 2 caractères." }),
-  email: z.string().email({ message: "Veuillez entrer une adresse e-mail valide." }),
-  message: z.string().min(10, { message: "Le message doit comporter au moins 10 caractères." }),
-});
-
-export type ContactFormInput = z.infer<typeof contactFormSchema>;
-export type ContactFormResult = { success: boolean; error?: string };
-
-export async function handleContactForm(
-  formData: ContactFormInput
-): Promise<ContactFormResult> {
-  const parsed = contactFormSchema.safeParse(formData);
-
-  if (!parsed.success) {
-    const issues = parsed.error.issues.map((i) => i.message).join(", ");
-    return { success: false, error: `Données du formulaire invalides: ${issues}` };
-  }
-  
-  if (WEBHOOK_URL) {
-    try {
-      const response = await fetch(WEBHOOK_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({formType: 'contact', ...parsed.data}),
-      });
-
-      if (!response.ok) {
-        const errorBody = await response.json().catch(() => ({ message: response.statusText }));
-        console.error("Erreur de réponse du webhook de contact:", errorBody);
-        return { success: false, error: `Le serveur a retourné une erreur: ${errorBody.message || response.statusText}` };
-      }
-
-    } catch (webhookError: any) {
-      console.error("Erreur lors de l'envoi des données au webhook de contact:", webhookError);
-      return { success: false, error: `Impossible de contacter le serveur webhook. ${webhookError.message}` };
-    }
-  } else {
-    console.log("Formulaire de contact soumis (aucun webhook configuré):", parsed.data);
-  }
-
-  return { success: true };
 }
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -218,45 +141,11 @@ export async function handleLoanApplication(formData: FormData): Promise<LoanApp
       return { success: false, error: `Erreurs avec les fichiers téléversés:\n${errorString}` };
   }
 
+  const applicationId = `APP-${Date.now()}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
 
-  const { birthDay, birthMonth, birthYear, ...restOfData } = parsedText.data;
-  const dateOfBirth = new Date(birthYear, birthMonth - 1, birthDay).toISOString();
-
-  const applicationDetails = {
-    ...restOfData,
-    dateOfBirth,
-    applicationId: `APP-${Date.now()}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`,
-    submissionDate: new Date().toISOString(),
-    files: [
-        { name: 'identityDocument', fileName: (identityDocument as File).name, type: (identityDocument as File).type },
-        { name: 'proofOfAddress', fileName: (proofOfAddress as File).name, type: (proofOfAddress as File).type },
-        { name: 'proofOfIncome', fileName: (proofOfIncome as File).name, type: (proofOfIncome as File).type },
-    ]
-  };
-
-  if (WEBHOOK_URL) {
-    try {
-      const response = await fetch(WEBHOOK_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({formType: 'loanApplication', ...applicationDetails}),
-      });
-
-      if (!response.ok) {
-          const errorBody = await response.json().catch(() => ({ message: response.statusText }));
-          console.error("Erreur de réponse du webhook de demande de prêt:", errorBody);
-          return { success: false, error: `Le serveur du webhook a retourné une erreur: ${errorBody.message || response.statusText}.` };
-      }
-    } catch (error: any) {
-      console.error("Erreur lors de l'appel au webhook de demande de prêt:", error);
-      return { success: false, error: `Impossible de contacter le serveur webhook. ${error.message}` };
-    }
-  } else {
-    console.log("Nouvelle demande de prêt reçue (aucun webhook configuré):", applicationDetails);
-  }
+  // NOTE: Logic to send to formsubmit.co is handled client-side in the form component.
+  // This server action is now only for validation.
   
-  return { success: true, applicationId: applicationDetails.applicationId };
+  return { success: true, applicationId };
 }
     
-
-

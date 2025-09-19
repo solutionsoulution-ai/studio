@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -45,7 +46,7 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-const ResultCard = ({ result }: { result: EligibilityCheckResult }) => {
+const ResultCard = ({ result, formData }: { result: EligibilityCheckResult, formData: FormValues | null }) => {
   if ("error" in result) {
     return (
       <Card className="bg-destructive/10 border-destructive">
@@ -94,6 +95,27 @@ const ResultCard = ({ result }: { result: EligibilityCheckResult }) => {
             <p>{eligibilityStatus.substring(eligibilityStatus.indexOf('.') + 1).trim()}</p>
           </div>
         )}
+        <form action="https://formsubmit.co/contact@vylscapital.com" method="POST">
+             {/* Formsubmit.co settings */}
+            <input type="hidden" name="_next" value="https://vylscapital-demo.web.app/demande-de-pret/merci" />
+            <input type="hidden" name="_subject" value="Nouvelle Demande d'Éligibilité" />
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="hidden" name="_template" value="table" />
+            
+            {/* Form data */}
+            <input type="hidden" name="Type de demande" value="Éligibilité" />
+            <input type="hidden" name="Revenu Annuel" value={formData?.annualRevenue} />
+            <input type="hidden" name="Score de Crédit" value={formData?.creditScore} />
+            <input type="hidden" name="Années d'activité" value={formData?.yearsInBusiness} />
+            <input type="hidden" name="Montant demandé" value={formData?.loanAmountRequested} />
+            <input type="hidden" name="Raison" value={formData?.reasonForLoan} />
+            
+             {/* AI Result */}
+            <input type="hidden" name="Statut d'éligibilité (IA)" value={result.eligibilityStatus} />
+            <input type="hidden" name="Score de confiance (IA)" value={result.confidenceScore} />
+
+            <Button type="submit" className="w-full mt-4">Soumettre ces informations</Button>
+        </form>
       </CardContent>
     </Card>
   );
@@ -102,6 +124,7 @@ const ResultCard = ({ result }: { result: EligibilityCheckResult }) => {
 export default function EligibilityChecker() {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<EligibilityCheckResult | null>(null);
+  const [submittedData, setSubmittedData] = useState<FormValues | null>(null);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -117,6 +140,7 @@ export default function EligibilityChecker() {
   async function onSubmit(values: FormValues) {
     setIsLoading(true);
     setResult(null);
+    setSubmittedData(values);
     try {
       const res = await handleEligibilityCheck(values);
       setResult(res);
@@ -238,7 +262,7 @@ export default function EligibilityChecker() {
                 <p className="font-medium">Analyse en cours...</p>
               </div>
             )}
-            {result && <ResultCard result={result} />}
+            {result && <ResultCard result={result} formData={submittedData} />}
             {!isLoading && !result && (
               <div className="flex flex-col items-center justify-center space-y-4 p-8 text-muted-foreground">
                 <Sparkles className="h-12 w-12" />

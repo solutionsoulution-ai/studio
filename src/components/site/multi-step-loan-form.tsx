@@ -62,10 +62,10 @@ const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "application/pdf"];
 
 const fileSchema = z
     .any()
-    .refine((files) => files?.length == 1, "Le téléversement d'un fichier est requis.")
-    .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
+    .refine((files) => files === undefined || files.length === 1, "Le téléversement d'un fichier est requis.")
+    .refine((files) => files === undefined || files?.[0]?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
     .refine(
-      (files) => ACCEPTED_FILE_TYPES.includes(files?.[0]?.type),
+      (files) => files === undefined || ACCEPTED_FILE_TYPES.includes(files?.[0]?.type),
       "Seuls les formats .jpg, .png et .pdf sont acceptés."
     );
 
@@ -155,39 +155,10 @@ export default function MultiStepLoanForm() {
     }
   };
 
-  async function onSubmit() {
-      setIsLoading(true);
-      setError(null);
-      
-      const formData = new FormData();
-      const allData = form.getValues();
-
-      // Append all text/number/select fields
-      Object.entries(allData).forEach(([key, value]) => {
-          if (value !== undefined && value !== null && !(value instanceof FileList)) {
-              formData.append(key, String(value));
-          }
-      });
-
-      // Manually append file data
-      if (allData.identityDocument && allData.identityDocument.length > 0) {
-        formData.append('identityDocument', allData.identityDocument[0]);
-      }
-      if (allData.proofOfAddress && allData.proofOfAddress.length > 0) {
-        formData.append('proofOfAddress', allData.proofOfAddress[0]);
-      }
-      if (allData.proofOfIncome && allData.proofOfIncome.length > 0) {
-        formData.append('proofOfIncome', allData.proofOfIncome[0]);
-      }
-      
-      const result = await handleLoanApplication(formData);
-
-      setIsLoading(false);
-      
-      if (result.success && result.applicationId) {
-          router.push(`/demande-de-pret/merci?id=${result.applicationId}`);
-      } else {
-          setError(result.error || "Une erreur inattendue est survenue.");
+  async function onSubmit(data: FullLoanFormValues) {
+      const formElement = document.getElementById('loan-form') as HTMLFormElement;
+      if (formElement) {
+          formElement.submit();
       }
   }
 
@@ -211,7 +182,14 @@ export default function MultiStepLoanForm() {
         </div>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form id="loan-form" action="https://formsubmit.co/contact@vylscapital.com" method="POST" encType="multipart/form-data" className="space-y-6">
+            
+            {/* Formsubmit.co settings */}
+            <input type="hidden" name="_next" value="https://vylscapital-demo.web.app/demande-de-pret/merci" />
+            <input type="hidden" name="_subject" value="Nouvelle Demande de Prêt" />
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="hidden" name="_template" value="table" />
+            
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentStep}
@@ -419,11 +397,11 @@ export default function MultiStepLoanForm() {
                         <FormField
                             control={form.control}
                             name="identityDocument"
-                            render={({ field: { onChange, value, ...rest }}) => (
+                            render={({ field: { onChange, value, name, ...rest }}) => (
                             <FormItem>
                                 <FormLabel>Pièce d'identité (PDF, JPG, PNG)</FormLabel>
                                 <FormControl>
-                                <Input type="file" onChange={(e) => onChange(e.target.files)} {...rest} />
+                                <Input type="file" onChange={(e) => onChange(e.target.files)} name={name} {...rest} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -432,11 +410,11 @@ export default function MultiStepLoanForm() {
                          <FormField
                             control={form.control}
                             name="proofOfAddress"
-                            render={({ field: { onChange, value, ...rest }}) => (
+                            render={({ field: { onChange, value, name, ...rest }}) => (
                             <FormItem>
                                 <FormLabel>Justificatif de domicile (PDF, JPG, PNG)</FormLabel>
                                 <FormControl>
-                                <Input type="file" onChange={(e) => onChange(e.target.files)} {...rest} />
+                                <Input type="file" onChange={(e) => onChange(e.target.files)} name={name} {...rest} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -445,11 +423,11 @@ export default function MultiStepLoanForm() {
                          <FormField
                             control={form.control}
                             name="proofOfIncome"
-                            render={({ field: { onChange, value, ...rest }}) => (
+                            render={({ field: { onChange, value, name, ...rest }}) => (
                             <FormItem>
                                 <FormLabel>Justificatif de revenus (PDF, JPG, PNG)</FormLabel>
                                 <FormControl>
-                                <Input type="file" onChange={(e) => onChange(e.target.files)} {...rest} />
+                                <Input type="file" onChange={(e) => onChange(e.target.files)} name={name} {...rest} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -497,7 +475,7 @@ export default function MultiStepLoanForm() {
                 <ArrowLeft className="mr-2" /> Précédent
               </Button>
                {currentStep === steps.length - 1 ? ( // Last step (recap)
-                 <Button type="submit" disabled={isLoading}>
+                 <Button type="button" onClick={form.handleSubmit(onSubmit)} disabled={isLoading}>
                     {isLoading && <Loader2 className="animate-spin mr-2" />}
                     Envoyer ma demande
                     <Send className="ml-2" />

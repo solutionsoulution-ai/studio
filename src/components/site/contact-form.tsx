@@ -39,9 +39,12 @@ export default function ContactForm() {
         <CardContent className="p-6 md:p-8">
           <Form {...form}>
             <form action="https://formsubmit.co/contact@vylscapital.com" method="POST" className="space-y-6">
-              <input type="hidden" name="_next" value="https://vylscapital-demo.web.app/contact" />
-              <input type="hidden" name="_subject" value="Nouveau Message depuis VylsCapital!" />
+              {/* Formsubmit.co settings */}
+              <input type="hidden" name="_next" value="https://vylscapital-demo.web.app/demande-de-pret/merci" />
+              <input type="hidden" name="_subject" value="Nouveau Message depuis VylsCapital (Contact)" />
               <input type="hidden" name="_captcha" value="false" />
+              <input type="hidden" name="_template" value="table" />
+              
               <div className="grid sm:grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
