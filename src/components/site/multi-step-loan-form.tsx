@@ -22,7 +22,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Loader2, ArrowRight, ArrowLeft, Send, CheckCircle, FileText, User, Banknote, UploadCloud, AlertTriangle } from "lucide-react";
-import { handleLoanApplication, type LoanApplicationResult } from "@/app/actions";
 
 
 // Schémas de validation pour chaque étape
@@ -62,7 +61,7 @@ const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "application/pdf"];
 
 const fileSchema = z
     .any()
-    .refine((files) => files === undefined || files.length === 1, "Le téléversement d'un fichier est requis.")
+    .refine((files) => files === undefined || files?.length === 1, "Le téléversement d'un fichier est requis.")
     .refine((files) => files === undefined || files?.[0]?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
     .refine(
       (files) => files === undefined || ACCEPTED_FILE_TYPES.includes(files?.[0]?.type),
@@ -71,9 +70,9 @@ const fileSchema = z
 
 
 const step4Schema = z.object({
-  identityDocument: fileSchema,
-  proofOfAddress: fileSchema,
-  proofOfIncome: fileSchema,
+  identityDocument: fileSchema.refine((files) => files?.length === 1, "Pièce d'identité requise."),
+  proofOfAddress: fileSchema.refine((files) => files?.length === 1, "Justificatif de domicile requis."),
+  proofOfIncome: fileSchema.refine((files) => files?.length === 1, "Justificatif de revenus requis."),
 });
 
 
@@ -101,8 +100,6 @@ const steps = [
 
 export default function MultiStepLoanForm() {
   const [currentStep, setCurrentStep] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
 
@@ -155,13 +152,21 @@ export default function MultiStepLoanForm() {
     }
   };
 
-  async function onSubmit(data: FullLoanFormValues) {
+  function onSubmit(data: FullLoanFormValues) {
       const formElement = document.getElementById('loan-form') as HTMLFormElement;
       if (formElement) {
+          const applicationId = `APP-${Date.now()}`;
+          const nextUrl = new URL('https://vylscapital-demo.web.app/demande-de-pret/merci');
+          nextUrl.searchParams.set('id', applicationId);
+          
+          const nextInput = formElement.querySelector('input[name="_next"]') as HTMLInputElement;
+          if (nextInput) {
+              nextInput.value = nextUrl.toString();
+          }
+
           formElement.submit();
       }
   }
-
   
   const progress = ((currentStep + 1) / steps.length) * 100;
   
@@ -182,7 +187,7 @@ export default function MultiStepLoanForm() {
         </div>
 
         <Form {...form}>
-          <form id="loan-form" action="https://formsubmit.co/contact@vylscapital.com" method="POST" encType="multipart/form-data" className="space-y-6">
+          <form id="loan-form" onSubmit={form.handleSubmit(onSubmit)} action="https://formsubmit.co/contact@vylscapital.com" method="POST" encType="multipart/form-data" className="space-y-6">
             
             {/* Formsubmit.co settings */}
             <input type="hidden" name="_next" value="https://vylscapital-demo.web.app/demande-de-pret/merci" />
@@ -397,11 +402,11 @@ export default function MultiStepLoanForm() {
                         <FormField
                             control={form.control}
                             name="identityDocument"
-                            render={({ field: { onChange, value, name, ...rest }}) => (
+                            render={({ field: { onChange, value, onBlur, ref }}) => (
                             <FormItem>
                                 <FormLabel>Pièce d'identité (PDF, JPG, PNG)</FormLabel>
                                 <FormControl>
-                                <Input type="file" onChange={(e) => onChange(e.target.files)} name={name} {...rest} />
+                                <Input type="file" onChange={(e) => onChange(e.target.files)} onBlur={onBlur} name="identityDocument" ref={ref} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -410,11 +415,11 @@ export default function MultiStepLoanForm() {
                          <FormField
                             control={form.control}
                             name="proofOfAddress"
-                            render={({ field: { onChange, value, name, ...rest }}) => (
+                            render={({ field: { onChange, value, onBlur, ref }}) => (
                             <FormItem>
                                 <FormLabel>Justificatif de domicile (PDF, JPG, PNG)</FormLabel>
                                 <FormControl>
-                                <Input type="file" onChange={(e) => onChange(e.target.files)} name={name} {...rest} />
+                                <Input type="file" onChange={(e) => onChange(e.target.files)} onBlur={onBlur} name="proofOfAddress" ref={ref} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -423,11 +428,11 @@ export default function MultiStepLoanForm() {
                          <FormField
                             control={form.control}
                             name="proofOfIncome"
-                            render={({ field: { onChange, value, name, ...rest }}) => (
+                             render={({ field: { onChange, value, onBlur, ref }}) => (
                             <FormItem>
                                 <FormLabel>Justificatif de revenus (PDF, JPG, PNG)</FormLabel>
                                 <FormControl>
-                                <Input type="file" onChange={(e) => onChange(e.target.files)} name={name} {...rest} />
+                                <Input type="file" onChange={(e) => onChange(e.target.files)} onBlur={onBlur} name="proofOfIncome" ref={ref} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -438,15 +443,6 @@ export default function MultiStepLoanForm() {
                 {currentStep === 4 && (
                     <div className="space-y-4 text-sm">
                         <h3 className="text-lg font-bold">Récapitulatif de votre demande</h3>
-                        {error && (
-                            <div className="p-4 bg-destructive/10 rounded-md text-destructive flex items-center gap-3">
-                                <AlertTriangle />
-                                <div>
-                                    <p className="font-bold">La soumission a échoué</p>
-                                    <p className="text-xs">{error}</p>
-                                </div>
-                            </div>
-                        )}
                         <div className="p-4 bg-muted/50 rounded-lg space-y-2">
                             <p><strong>Type de prêt :</strong> {form.getValues("loanType")}</p>
                             <p><strong>Montant :</strong> {form.getValues("loanAmount")} € sur {form.getValues("loanTerm")} mois</p>
@@ -471,18 +467,16 @@ export default function MultiStepLoanForm() {
             </AnimatePresence>
 
             <div className="flex justify-between pt-4">
-              <Button type="button" variant="outline" onClick={prevStep} disabled={currentStep === 0 || isLoading}>
+              <Button type="button" variant="outline" onClick={prevStep} disabled={currentStep === 0}>
                 <ArrowLeft className="mr-2" /> Précédent
               </Button>
                {currentStep === steps.length - 1 ? ( // Last step (recap)
-                 <Button type="button" onClick={form.handleSubmit(onSubmit)} disabled={isLoading}>
-                    {isLoading && <Loader2 className="animate-spin mr-2" />}
+                 <Button type="submit">
                     Envoyer ma demande
                     <Send className="ml-2" />
                 </Button>
                ) : (
-                <Button type="button" onClick={nextStep} disabled={isLoading}>
-                    {isLoading && <Loader2 className="animate-spin mr-2" />}
+                <Button type="button" onClick={nextStep}>
                     Suivant
                     <ArrowRight className="ml-2" />
                 </Button>

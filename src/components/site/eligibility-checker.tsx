@@ -114,7 +114,7 @@ const ResultCard = ({ result, formData }: { result: EligibilityCheckResult, form
             <input type="hidden" name="Statut d'éligibilité (IA)" value={result.eligibilityStatus} />
             <input type="hidden" name="Score de confiance (IA)" value={result.confidenceScore} />
 
-            <Button type="submit" className="w-full mt-4">Soumettre ces informations</Button>
+            <Button type="submit" className="w-full mt-4">Soumettre ces informations et contacter un conseiller</Button>
         </form>
       </CardContent>
     </Card>
