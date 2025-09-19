@@ -208,7 +208,7 @@ const ClientList = ({ clients, onClientSelect, isLoading, error, onClientCreated
     return (
         <Card className="w-full shadow-lg mt-8 lg:mt-0">
             <CardHeader>
-                <div className="flex justify-between items-center">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
                         <CardTitle className="flex items-center gap-2 text-xl font-bold">
                             <Users /> Liste des Clients
@@ -226,24 +226,26 @@ const ClientList = ({ clients, onClientSelect, isLoading, error, onClientCreated
                         Aucun client trouvé.
                     </div>
                 ): (
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                            <TableHead>ID Client</TableHead>
-                            <TableHead>Email</TableHead>
-                            <TableHead>Solde</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {clients.map((client) => (
-                            <TableRow key={client.id} onClick={() => onClientSelect(client)} className="cursor-pointer hover:bg-muted/50">
-                                <TableCell className="font-mono">{client.client_id}</TableCell>
-                                <TableCell className="font-medium">{client.email}</TableCell>
-                                <TableCell>{(client.balance || 0).toFixed(2)} €</TableCell>
-                            </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                    <div className="border rounded-md">
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                <TableHead>ID Client</TableHead>
+                                <TableHead>Email</TableHead>
+                                <TableHead className="text-right">Solde</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {clients.map((client) => (
+                                <TableRow key={client.id} onClick={() => onClientSelect(client)} className="cursor-pointer hover:bg-muted/50">
+                                    <TableCell className="font-mono text-xs sm:text-sm">{client.client_id}</TableCell>
+                                    <TableCell className="font-medium">{client.email}</TableCell>
+                                    <TableCell className="text-right">{(client.balance || 0).toFixed(2)} €</TableCell>
+                                </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </div>
                 )}
             </CardContent>
         </Card>
@@ -503,7 +505,7 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: Omit<Cli
                         <CardTitle className="flex items-center gap-2 text-xl font-bold">
                             <UserCog /> Détails du Client
                         </CardTitle>
-                        <CardDescription>{client.email}</CardDescription>
+                        <CardDescription className="break-all">{client.email}</CardDescription>
                         <p className="font-mono text-sm mt-1">ID: {client.client_id}</p>
                     </div>
                     <Button variant="outline" size="sm" onClick={onBack}>
@@ -642,9 +644,9 @@ export default function AdminPage() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-start p-6 sm:p-12 md:p-24">
-      <div className="w-full max-w-4xl">
-        <div className="flex justify-between items-center mb-8">
+    <main className="flex min-h-screen flex-col items-center justify-start p-6 sm:p-12">
+      <div className="w-full max-w-6xl">
+        <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-8 gap-4">
             <div>
                  <h1 className="text-3xl font-bold mb-2">Panneau Administrateur</h1>
                 <p className="text-muted-foreground">Consultez et gérez les informations des clients.</p>

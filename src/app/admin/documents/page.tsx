@@ -228,8 +228,8 @@ export default function DocumentGeneratorPage() {
                 </header>
                 <div className="flex-1 grid md:grid-cols-[350px_1fr] lg:grid-cols-[450px_1fr]">
                     {/* Left Panel: Form & Controls */}
-                    <div className="flex flex-col border-r bg-background">
-                        <div className="p-4 space-y-4">
+                    <div className="flex flex-col border-r bg-background overflow-y-auto">
+                        <div className="p-4 space-y-4 flex-1">
                             <Card>
                                 <CardHeader>
                                     <CardTitle>Configuration</CardTitle>
@@ -292,12 +292,12 @@ export default function DocumentGeneratorPage() {
                                 </CardContent>
                             </Card>
                             
-                            <div className="flex-1 overflow-auto">
+                            <div className="flex-1">
                                 {renderForm()}
                             </div>
                         </div>
 
-                         <div className="mt-auto p-4">
+                         <div className="sticky bottom-0 bg-background border-t p-4">
                             <Button onClick={handleGenerateClick} disabled={isLoading || !activeForm} className="w-full">
                                 {isLoading ? <Loader2 className="animate-spin" /> : <FileDown />}
                                 {isLoading ? "Génération en cours..." : "Générer le PDF"}
@@ -319,5 +319,3 @@ export default function DocumentGeneratorPage() {
     
 
 }
-
-    

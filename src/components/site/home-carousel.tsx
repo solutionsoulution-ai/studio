@@ -65,21 +65,21 @@ export default function HomeCarousel() {
           {carouselItems.map((item, index) => (
             <CarouselItem key={index}>
               <div className="container mx-auto">
-                <div className="grid md:grid-cols-2 items-center gap-8 py-12 md:py-24 min-h-[60dvh]">
-                  <div className="flex flex-col items-start text-left">
+                <div className="grid md:grid-cols-2 items-center gap-8 py-12 md:py-24 min-h-[70dvh] md:min-h-[60dvh]">
+                  <div className="flex flex-col items-start text-center md:text-left">
                     <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl font-headline">
                       {item.title}
                     </h1>
-                    <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
+                    <p className="mt-4 max-w-2xl text-lg text-muted-foreground mx-auto md:mx-0">
                       {item.description}
                     </p>
-                    <div className="mt-8">
+                    <div className="mt-8 mx-auto md:mx-0">
                       <Button size="lg" asChild>
                         <Link href="/demande-de-pret">Commencer ma demande</Link>
                       </Button>
                     </div>
                   </div>
-                  <div className="relative h-64 md:h-96 w-full rounded-lg overflow-hidden">
+                  <div className="relative h-64 md:h-96 w-full rounded-lg overflow-hidden order-first md:order-last">
                     <Image
                       src={item.src}
                       alt={item.alt}

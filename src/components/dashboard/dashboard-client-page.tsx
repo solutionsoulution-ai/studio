@@ -56,9 +56,9 @@ const InfoRow = ({ label, value }: { label: string; value: string }) => {
         <div className="flex justify-between items-center py-2 border-b last:border-b-0">
             <div>
                 <p className="text-sm text-muted-foreground">{label}</p>
-                <p className="font-mono text-sm sm:text-base">{value || "N/A"}</p>
+                <p className="font-mono text-sm sm:text-base break-all">{value || "N/A"}</p>
             </div>
-            <Button variant="ghost" size="icon" onClick={copyToClipboard} aria-label={`Copier ${label}`}>
+            <Button variant="ghost" size="icon" onClick={copyToClipboard} aria-label={`Copier ${label}`} className="shrink-0">
                 <Copy className="w-4 h-4" />
             </Button>
         </div>
@@ -87,7 +87,7 @@ const TransactionDetailDialog = ({ transaction, open, onOpenChange }: { transact
                 <DialogHeader>
                     <DialogTitle>Détails de la Transaction</DialogTitle>
                     <DialogDescription>
-                        ID de la transaction : {transaction.id}
+                        ID: <span className="font-mono text-xs">{transaction.id}</span>
                     </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-3 text-sm">
@@ -116,7 +116,7 @@ const TransactionDetailDialog = ({ transaction, open, onOpenChange }: { transact
                     {transaction.recipient_iban && (
                         <div className="flex justify-between items-center">
                             <span className="text-muted-foreground">IBAN Bénéficiaire</span>
-                            <span className="font-mono">{transaction.recipient_iban}</span>
+                            <span className="font-mono text-xs break-all">{transaction.recipient_iban}</span>
                         </div>
                     )}
                     {transaction.status === 'FAILED' && (
@@ -229,15 +229,15 @@ export default function DashboardClientPage() {
 
   if (isLoading && !accountData) { // Only show full-page skeleton on initial load
     return (
-        <div className="container mx-auto py-16">
+        <div className="container mx-auto py-8 md:py-16">
              <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                  <div>
-                    <Skeleton className="h-10 w-80 mb-2" />
-                    <Skeleton className="h-5 w-96" />
+                    <Skeleton className="h-10 w-64 md:w-80 mb-2" />
+                    <Skeleton className="h-5 w-80 md:w-96" />
                 </div>
                  <Skeleton className="h-10 w-32" />
              </div>
-             <Skeleton className="h-10 w-96 mb-4" />
+             <Skeleton className="h-10 w-64 md:w-96 mb-4" />
              <div className="grid lg:grid-cols-3 gap-6 mt-4">
                 <Skeleton className="h-32 w-full" />
                 <Skeleton className="h-32 w-full" />
@@ -273,7 +273,7 @@ export default function DashboardClientPage() {
   const completedTransactions = sortedTransactions.filter(tx => tx.status !== 'PENDING');
 
   return (
-    <div className="container mx-auto py-16">
+    <div className="container mx-auto py-8 md:py-16">
         <TransactionDetailDialog 
             transaction={selectedTransaction} 
             open={!!selectedTransaction}
@@ -281,12 +281,12 @@ export default function DashboardClientPage() {
         />
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
             <div>
-                <h1 className="text-3xl font-bold font-headline">Bienvenue, {accountData.email || 'Client'} !</h1>
-                <p className="text-muted-foreground flex items-center gap-2 mt-1">
+                <h1 className="text-2xl md:text-3xl font-bold font-headline">Bienvenue, {accountData.email || 'Client'} !</h1>
+                <p className="text-muted-foreground flex flex-wrap items-center gap-2 mt-1">
                     Votre identifiant client : <span className="font-mono text-foreground">{accountData.client_id}</span>
                 </p>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 self-end md:self-center">
                 {isLoading && <Loader2 className="animate-spin text-muted-foreground" />}
                 <Button variant="outline" onClick={handleLogout}>
                     <LogOut className="mr-2 h-4 w-4" />
@@ -316,8 +316,8 @@ export default function DashboardClientPage() {
                         </CardContent>
                     </Card>
                 )}
-                <div className="grid lg:grid-cols-3 gap-6 mt-4">
-                    <Card className="lg:col-span-1 h-full bg-primary/5">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+                    <Card className="md:col-span-2 lg:col-span-1 h-full bg-primary/5">
                         <CardHeader className="flex flex-row items-center justify-between pb-2">
                             <CardTitle className="text-sm font-medium">Solde Actuel</CardTitle>
                             <Landmark className="w-4 h-4 text-muted-foreground" />
