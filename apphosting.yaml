@@ -1,7 +1,8 @@
+
 runConfig:
   maxInstances: 1
   cpu: 1
   memoryMiB: 512
   timeoutSeconds: 120
   environment:
-    WEBHOOK_URL: "https://script.google.com/macros/s/AKfycbwo5MOtMsth1w47BHjG-woggK92srgXdYoH_KP0Xm5MusIlheO2JsEh9bPbgjjpMymTKQ/exec"
+    WEBHOOK_URL: "https://script.google.com/macros/s/AKfycbz0WOt-SrFsKvJJg2NeWXWRbU9ppuozU4rX67aQKggiMI5vRVet3weC5QQpLy2hcLtt/exec"

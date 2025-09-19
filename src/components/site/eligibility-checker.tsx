@@ -20,8 +20,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { handleEligibilityCheck, submitEligibilityContact } from "@/app/actions";
-import type { EligibilityCheckResult } from "@/app/actions";
+import { submitEligibilityContact } from "@/app/actions";
 import { Loader2, Sparkles, TrendingUp, TrendingDown, BadgeCheck } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
@@ -48,29 +47,42 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-const ResultCard = ({ result, formData }: { result: EligibilityCheckResult, formData: FormValues | null }) => {
+// Simplified mock result type
+type MockEligibilityResult = {
+  eligibilityStatus: string;
+  confidenceScore: number;
+}
+
+const getMockResult = (data: FormValues): MockEligibilityResult => {
+    let score = 0;
+    if (data.annualRevenue > 100000) score += 30;
+    if (data.creditScore > 700) score += 30;
+    if (data.yearsInBusiness > 3) score += 20;
+    if (data.loanAmountRequested < data.annualRevenue / 2) score += 20;
+
+    if (score > 80) return { eligibilityStatus: "Hautement Éligible. Vous avez d'excellentes chances d'approbation.", confidenceScore: 0.95 };
+    if (score > 50) return { eligibilityStatus: "Éligible. Votre profil est intéressant, des vérifications supplémentaires sont nécessaires.", confidenceScore: 0.75 };
+    if (score > 20) return { eligibilityStatus: "Faible Éligibilité. Votre dossier présente des risques. Améliorez votre revenu ou score de crédit.", confidenceScore: 0.40 };
+    return { eligibilityStatus: "Inéligible. Votre profil ne correspond pas à nos critères actuels.", confidenceScore: 0.90 };
+}
+
+
+const ResultCard = ({ result, formData }: { result: MockEligibilityResult, formData: FormValues | null }) => {
   const router = useRouter();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  if ("error" in result) {
-    return (
-      <Card className="bg-destructive/10 border-destructive">
-        <CardHeader>
-          <CardTitle className="text-destructive">Une erreur est survenue</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p>{result.error}</p>
-        </CardContent>
-      </Card>
-    );
-  }
-  
+  if (!formData) return null;
+
   const handleContactSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       setIsSubmitting(true);
       const formElement = event.currentTarget;
       const contactFormData = new FormData(formElement);
+
+      // Append result data to the form
+      contactFormData.set('Statut d\'éligibilité (IA)', result.eligibilityStatus);
+      contactFormData.set('Score de confiance (IA)', String(result.confidenceScore));
 
       const res = await submitEligibilityContact(contactFormData);
       setIsSubmitting(false);
@@ -89,7 +101,6 @@ const ResultCard = ({ result, formData }: { result: EligibilityCheckResult, form
           });
       }
   }
-
 
   const { eligibilityStatus, confidenceScore } = result;
   const isEligible = eligibilityStatus.toLowerCase().includes("eligible") || eligibilityStatus.toLowerCase().includes("éligible");
@@ -120,25 +131,18 @@ const ResultCard = ({ result, formData }: { result: EligibilityCheckResult, form
             !isEligible && "[&>div]:bg-red-500",
           )} />
         </div>
-        {!isHighlyEligible && (
-          <div className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-md">
-            <p className="font-semibold text-foreground mb-2">Suggestions d'amélioration :</p>
+        <div className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-md">
+            <p className="font-semibold text-foreground mb-2">Analyse :</p>
             <p>{eligibilityStatus.substring(eligibilityStatus.indexOf('.') + 1).trim()}</p>
-          </div>
-        )}
+        </div>
         <form onSubmit={handleContactSubmit}>
-            {/* Form data */}
-            <input type="hidden" name="Type de demande" value="Éligibilité" />
-            <input type="hidden" name="Revenu Annuel" value={formData?.annualRevenue} />
-            <input type="hidden" name="Score de Crédit" value={formData?.creditScore} />
-            <input type="hidden" name="Années d'activité" value={formData?.yearsInBusiness} />
-            <input type="hidden" name="Montant demandé" value={formData?.loanAmountRequested} />
-            <input type="hidden" name="Raison" value={formData?.reasonForLoan} />
+            {/* These hidden inputs carry the original form data for the webhook */}
+            <input type="hidden" name="Revenu Annuel" value={formData.annualRevenue} />
+            <input type="hidden" name="Score de Crédit" value={formData.creditScore} />
+            <input type="hidden" name="Années d'activité" value={formData.yearsInBusiness} />
+            <input type="hidden" name="Montant demandé" value={formData.loanAmountRequested} />
+            <input type="hidden" name="Raison" value={formData.reasonForLoan} />
             
-             {/* AI Result */}
-            <input type="hidden" name="Statut d'éligibilité (IA)" value={result.eligibilityStatus} />
-            <input type="hidden" name="Score de confiance (IA)" value={result.confidenceScore} />
-
             <Button type="submit" className="w-full mt-4" disabled={isSubmitting}>
               {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
               Soumettre et contacter un conseiller
@@ -151,7 +155,7 @@ const ResultCard = ({ result, formData }: { result: EligibilityCheckResult, form
 
 export default function EligibilityChecker() {
   const [isLoading, setIsLoading] = useState(false);
-  const [result, setResult] = useState<EligibilityCheckResult | null>(null);
+  const [result, setResult] = useState<MockEligibilityResult | null>(null);
   const [submittedData, setSubmittedData] = useState<FormValues | null>(null);
 
   const form = useForm<FormValues>({
@@ -169,14 +173,13 @@ export default function EligibilityChecker() {
     setIsLoading(true);
     setResult(null);
     setSubmittedData(values);
-    try {
-      const res = await handleEligibilityCheck(values);
-      setResult(res);
-    } catch (e) {
-      setResult({ error: "Échec du traitement de la demande." });
-    } finally {
+    
+    // Simulate a short delay for a better user experience
+    setTimeout(() => {
+      const mockResult = getMockResult(values);
+      setResult(mockResult);
       setIsLoading(false);
-    }
+    }, 1500);
   }
   
   return (

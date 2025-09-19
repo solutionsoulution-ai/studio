@@ -1,154 +1,8 @@
 
-"use server";
+'use server';
 
-import { z } from "zod";
-import {
-  assessLoanEligibility,
-  type LoanEligibilityInput,
-  type LoanEligibilityOutput,
-} from "@/ai/flows/loan-eligibility-assessment";
-import 'dotenv/config'
-
-
-// Schema for Loan Eligibility
-const loanEligibilityFormSchema = z.object({
-  annualRevenue: z.coerce
-    .number({ required_error: "Le revenu annuel est requis." })
-    .positive("Le revenu annuel doit être un nombre positif."),
-  creditScore: z.coerce
-    .number({ required_error: "Le score de crédit est requis." })
-    .min(300, "Le score de crédit doit être d'au moins 300.")
-    .max(850, "Le score de crédit ne peut pas dépasser 850."),
-  yearsInBusiness: z.coerce
-    .number({ required_error: "Le nombre d'années d'activité est requis." })
-    .min(0, "Le nombre d'années d'activité ne peut pas être négatif."),
-  loanAmountRequested: z.coerce
-    .number({ required_error: "Le montant du prêt est requis." })
-    .positive("Le montant du prêt doit être un nombre positif."),
-  reasonForLoan: z
-    .string({ required_error: "La raison du prêt est requise." })
-    .min(10, "Veuillez fournir une raison plus détaillée (au moins 10 caractères)."),
-});
-
-export type EligibilityCheckResult = LoanEligibilityOutput | { error: string };
-
-export async function handleEligibilityCheck(
-  formData: LoanEligibilityInput
-): Promise<EligibilityCheckResult> {
-  const parsed = loanEligibilityFormSchema.safeParse(formData);
-
-  if (!parsed.success) {
-    const issues = parsed.error.issues.map((i) => i.message).join(", ");
-    return { error: `Données du formulaire invalides: ${issues}` };
-  }
-
-  try {
-    const result = await assessLoanEligibility(parsed.data);
-    return result;
-  } catch (error) {
-    console.error("Erreur dans le flux assessLoanEligibility:", error);
-    return {
-      error: "Une erreur inattendue est survenue lors de l'évaluation de l'éligibilité. Veuillez réessayer plus tard.",
-    };
-  }
-}
-
-export async function submitEligibilityContact(formData: FormData) {
-  try {
-    const data = Object.fromEntries(formData.entries());
-    const webhookUrl = process.env.WEBHOOK_URL;
-
-    if (!webhookUrl) {
-      console.error("WEBHOOK_URL is not defined in environment variables.");
-      return { success: false, error: "La configuration du serveur est incomplète." };
-    }
-
-    const payload = {
-        type: 'eligibilityContact',
-        data: data
-    };
-
-    const response = await fetch(webhookUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    });
-
-    if (!response.ok) {
-        const errorBody = await response.text();
-        console.error("Webhook error response:", errorBody);
-        throw new Error(`Le serveur a répondu avec le statut ${response.status}.`);
-    }
-
-    const responseData = await response.json();
-    if (responseData.status !== 'success') {
-      throw new Error(responseData.message || "Le webhook a renvoyé une erreur.");
-    }
-
-    return { success: true };
-  } catch (error) {
-    console.error("Error submitting eligibility contact:", error);
-    return { success: false, error: "Impossible d'envoyer la demande de contact." };
-  }
-}
-
-export async function handleLoanApplication(formData: FormData) {
-  try {
-      const webhookUrl = process.env.WEBHOOK_URL;
-      if (!webhookUrl) {
-        console.error("WEBHOOK_URL is not defined in environment variables.");
-        return { success: false, error: "La configuration du serveur est incomplète." };
-      }
-
-      const applicationId = `APP-${Date.now()}`;
-      const dataForWebhook: {[key: string]: any} = {
-        applicationId: applicationId,
-      };
-
-      for (const [key, value] of formData.entries()) {
-          if (value instanceof File && value.size > 0) {
-              const buffer = Buffer.from(await value.arrayBuffer());
-              dataForWebhook[key] = {
-                  fileName: value.name,
-                  mimeType: value.type,
-                  content: buffer.toString('base64'),
-              };
-          } else {
-              dataForWebhook[key] = value;
-          }
-      }
-      
-      const payload = {
-        type: 'loanApplication',
-        data: dataForWebhook,
-      };
-
-      const response = await fetch(webhookUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-      });
-      
-      if (!response.ok) {
-        const errorBody = await response.text();
-        console.error("Webhook error response:", errorBody);
-        throw new Error(`Le serveur du webhook a répondu avec une erreur: ${response.status}`);
-      }
-
-      const responseData = await response.json();
-      if (responseData.status !== 'success') {
-        throw new Error(responseData.message || "Le webhook a renvoyé une erreur.");
-      }
-
-      return { success: true, applicationId };
-
-  } catch (error) {
-      console.error("Error processing loan application:", error);
-      return { success: false, error: "La soumission a échoué. Veuillez réessayer." };
-  }
-}
+import 'dotenv/config';
+import { z } from 'zod';
 
 const contactFormSchema = z.object({
   name: z.string().min(2, { message: "Le nom doit comporter au moins 2 caractères." }),
@@ -156,30 +10,33 @@ const contactFormSchema = z.object({
   message: z.string().min(10, { message: "Le message doit comporter au moins 10 caractères." }),
 });
 
-
+/**
+ * Handles the contact form submission by sending data to a Google Script webhook.
+ * @param formData - The validated form data.
+ * @returns An object indicating success or failure.
+ */
 export async function handleContactForm(formData: z.infer<typeof contactFormSchema>) {
     const parsed = contactFormSchema.safeParse(formData);
     if (!parsed.success) {
-      return { success: false, error: 'Données invalides.' };
+      const errorMessages = parsed.error.issues.map(issue => issue.message).join(', ');
+      return { success: false, error: `Données invalides: ${errorMessages}` };
     }
     
-    try {
-        const webhookUrl = process.env.WEBHOOK_URL;
-        if (!webhookUrl) {
-            console.error("WEBHOOK_URL is not defined in environment variables.");
-            return { success: false, error: "La configuration du serveur est incomplète." };
-        }
+    const webhookUrl = process.env.WEBHOOK_URL;
+    if (!webhookUrl) {
+      console.error("WEBHOOK_URL is not defined in environment variables.");
+      return { success: false, error: "La configuration du serveur est incomplète." };
+    }
 
+    try {
        const payload = {
-         type: 'contactForm',
+         sheet: 'Contacts',
          data: parsed.data
        };
 
        const response = await fetch(webhookUrl, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
        });
 
@@ -191,13 +48,147 @@ export async function handleContactForm(formData: z.infer<typeof contactFormSche
 
         const responseData = await response.json();
         if (responseData.status !== 'success') {
-          throw new Error(responseData.message || "Le webhook a renvoyé une erreur.");
+          throw new Error(responseData.message || "Le webhook a renvoyé une erreur inattendue.");
         }
 
         return { success: true };
 
-    } catch (error) {
-        console.error("Error sending contact form:", error);
-        return { success: false, error: "Impossible d'envoyer le message." };
+    } catch (error: any) {
+        console.error("Error sending contact form to webhook:", error);
+        return { success: false, error: error.message || "Impossible d'envoyer le message." };
     }
+}
+
+
+const eligibilityContactSchema = z.object({
+  annualRevenue: z.string(),
+  creditScore: z.string(),
+  yearsInBusiness: z.string(),
+  loanAmountRequested: z.string(),
+  reasonForLoan: z.string(),
+  eligibilityStatus: z.string(),
+  confidenceScore: z.string(),
+});
+
+/**
+ * Handles the eligibility contact form submission.
+ * @param formData - Raw form data from the client.
+ * @returns An object indicating success or failure.
+ */
+export async function submitEligibilityContact(formData: FormData) {
+  const rawData = Object.fromEntries(formData.entries());
+  
+  const parsed = eligibilityContactSchema.safeParse({
+    annualRevenue: rawData['Revenu Annuel'],
+    creditScore: rawData['Score de Crédit'],
+    yearsInBusiness: rawData['Années d\'activité'],
+    loanAmountRequested: rawData['Montant demandé'],
+    reasonForLoan: rawData['Raison'],
+    eligibilityStatus: rawData['Statut d\'éligibilité (IA)'],
+    confidenceScore: rawData['Score de confiance (IA)'],
+  });
+
+  if (!parsed.success) {
+    const errorMessages = parsed.error.issues.map(issue => issue.message).join(', ');
+    return { success: false, error: `Données d'éligibilité invalides: ${errorMessages}` };
+  }
+
+  const webhookUrl = process.env.WEBHOOK_URL;
+  if (!webhookUrl) {
+    console.error("WEBHOOK_URL is not defined in environment variables.");
+    return { success: false, error: "La configuration du serveur est incomplète." };
+  }
+
+  try {
+    const payload = {
+        sheet: 'EligibilityContacts',
+        data: parsed.data
+    };
+
+    const response = await fetch(webhookUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+        const errorBody = await response.text();
+        console.error("Webhook error response for eligibility:", errorBody);
+        throw new Error(`Le serveur du webhook a répondu avec le statut ${response.status}.`);
+    }
+
+    const responseData = await response.json();
+    if (responseData.status !== 'success') {
+      throw new Error(responseData.message || "Le webhook a renvoyé une erreur.");
+    }
+
+    return { success: true };
+  } catch (error: any) {
+    console.error("Error submitting eligibility contact to webhook:", error);
+    return { success: false, error: error.message || "Impossible d'envoyer la demande de contact." };
+  }
+}
+
+/**
+ * Handles the full loan application submission, including file uploads.
+ * @param formData - Raw form data from the client, including files.
+ * @returns An object indicating success or failure, with an application ID.
+ */
+export async function handleLoanApplication(formData: FormData) {
+  const webhookUrl = process.env.WEBHOOK_URL;
+  if (!webhookUrl) {
+    console.error("WEBHOOK_URL is not defined in environment variables.");
+    return { success: false, error: "La configuration du serveur est incomplète." };
+  }
+
+  try {
+      const applicationId = `APP-${Date.now()}`;
+      const dataForWebhook: {[key: string]: any} = {
+        applicationId: applicationId,
+      };
+
+      // Process form fields and files
+      for (const [key, value] of formData.entries()) {
+          if (value instanceof File && value.size > 0) {
+              const buffer = Buffer.from(await value.arrayBuffer());
+              // Create a file object structure for the Google Script
+              dataForWebhook[key] = {
+                  fileName: value.name,
+                  mimeType: value.type,
+                  content: buffer.toString('base64'),
+              };
+          } else if (typeof value === 'string') {
+              dataForWebhook[key] = value;
+          }
+      }
+      
+      const payload = {
+        sheet: 'LoanApplications',
+        data: dataForWebhook,
+      };
+
+      const response = await fetch(webhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          // The body size limit might need adjustment in next.config.ts if files are large
+          body: JSON.stringify(payload),
+      });
+      
+      if (!response.ok) {
+        const errorBody = await response.text();
+        console.error("Webhook error response for loan application:", errorBody);
+        throw new Error(`Le serveur du webhook a répondu avec une erreur: ${response.status}`);
+      }
+
+      const responseData = await response.json();
+      if (responseData.status !== 'success') {
+        throw new Error(responseData.message || "Le webhook a renvoyé une erreur.");
+      }
+
+      return { success: true, applicationId };
+
+  } catch (error: any) {
+      console.error("Error processing loan application via webhook:", error);
+      return { success: false, error: error.message || "La soumission a échoué. Veuillez réessayer." };
+  }
 }

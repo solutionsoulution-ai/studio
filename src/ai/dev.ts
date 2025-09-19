@@ -1,4 +1,7 @@
+
 import { config } from 'dotenv';
 config();
 
-import '@/ai/flows/loan-eligibility-assessment.ts';
+// This file is used for local development with Genkit.
+// It can be used to import and test flows.
+// For example: import '@/ai/flows/your-flow.ts';
