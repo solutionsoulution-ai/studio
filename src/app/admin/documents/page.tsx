@@ -291,7 +291,7 @@ export default function DocumentGeneratorPage() {
                                                             </FormControl>
                                                             <SelectContent>
                                                                 <SelectItem value="fr">Français</SelectItem>
-                                                                <SelectItem value="en">English (bientôt)</SelectItem>
+                                                                <SelectItem value="en">English</SelectItem>
                                                             </SelectContent>
                                                         </Select>
                                                     </FormItem>

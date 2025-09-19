@@ -1,4 +1,6 @@
 
+"use client";
+
 export const invoiceClauses = {
     fr: {
         title: "Facture",
@@ -23,6 +25,25 @@ export const invoiceClauses = {
         }
     },
     en: {
-        // English version can be added here
+        title: "Invoice",
+        invoice_number_label: "Invoice No:",
+        date_label: "Date:",
+        bill_to_label: "Bill To:",
+        table_headers: {
+            description: "Description",
+            amount: "Amount",
+        },
+        subtotal_label: "Subtotal (VAT Excl.)",
+        vat_label: "VAT (0%)",
+        total_label: "Total Due",
+        payment_terms: {
+            title: "Payment Terms",
+            due_date: "Payment due within 30 days from the invoice date.",
+            iban_label: "IBAN:",
+            bic_label: "BIC/SWIFT:",
+        },
+        footer: {
+            thank_you: "Thank you for your business. If you have any questions about this invoice, please contact us at accounting@vylscapital.com.",
+        }
     }
 }
