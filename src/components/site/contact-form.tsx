@@ -54,7 +54,7 @@ export default function ContactForm() {
         title: "Message Envoyé !",
         description: "Merci de nous avoir contactés. Nous reviendrons vers vous bientôt.",
       });
-      router.push("/demande-de-pret/merci");
+      router.push("/contact/merci");
     } else {
       toast({
         title: "Erreur",
