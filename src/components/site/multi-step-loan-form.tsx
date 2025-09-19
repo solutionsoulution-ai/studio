@@ -6,6 +6,7 @@ import { useForm, type FieldValues } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -20,7 +21,9 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Loader2, ArrowRight, ArrowLeft, Send, CheckCircle, FileText, User, Banknote, UploadCloud } from "lucide-react";
+import { Loader2, ArrowRight, ArrowLeft, Send, CheckCircle, FileText, User, Banknote, UploadCloud, AlertTriangle } from "lucide-react";
+import { handleLoanApplication, type LoanApplicationResult } from "@/app/actions";
+
 
 // Schémas de validation pour chaque étape
 const step1Schema = z.object({
@@ -98,6 +101,9 @@ const steps = [
 export default function MultiStepLoanForm() {
   const [currentStep, setCurrentStep] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+
 
   const form = useForm<FullLoanFormValues>({
     resolver: zodResolver(fullLoanSchema),
@@ -144,6 +150,26 @@ export default function MultiStepLoanForm() {
       setCurrentStep(currentStep - 1);
     }
   };
+
+  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+      event.preventDefault(); // Prevent default form submission
+      
+      setIsLoading(true);
+      setError(null);
+      
+      const formData = new FormData(event.currentTarget);
+      
+      const result = await handleLoanApplication(formData);
+
+      setIsLoading(false);
+      
+      if (result.success && result.applicationId) {
+          router.push(`/demande-de-pret/merci?id=${result.applicationId}`);
+      } else {
+          setError(result.error || "Une erreur inattendue est survenue.");
+      }
+  }
+
   
   const progress = ((currentStep + 1) / steps.length) * 100;
   
@@ -164,10 +190,7 @@ export default function MultiStepLoanForm() {
         </div>
 
         <Form {...form}>
-          <form action="https://formsubmit.co/contact@vylscapital.com" method="POST" encType="multipart/form-data" className="space-y-6">
-            <input type="hidden" name="_next" value="https://vylscapital-demo.web.app/demande-de-pret" />
-            <input type="hidden" name="_subject" value="Nouvelle Demande de Prêt - VylsCapital" />
-            <input type="hidden" name="_captcha" value="false" />
+          <form onSubmit={onSubmit} className="space-y-6">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentStep}
@@ -416,6 +439,15 @@ export default function MultiStepLoanForm() {
                 {currentStep === 4 && (
                     <div className="space-y-4 text-sm">
                         <h3 className="text-lg font-bold">Récapitulatif de votre demande</h3>
+                        {error && (
+                            <div className="p-4 bg-destructive/10 rounded-md text-destructive flex items-center gap-3">
+                                <AlertTriangle />
+                                <div>
+                                    <p className="font-bold">La soumission a échoué</p>
+                                    <p className="text-xs">{error}</p>
+                                </div>
+                            </div>
+                        )}
                         <div className="p-4 bg-muted/50 rounded-lg space-y-2">
                             <p><strong>Type de prêt :</strong> {form.getValues("loanType")}</p>
                             <p><strong>Montant :</strong> {form.getValues("loanAmount")} € sur {form.getValues("loanTerm")} mois</p>
@@ -463,5 +495,7 @@ export default function MultiStepLoanForm() {
     </Card>
   );
 }
+
+    
 
     
