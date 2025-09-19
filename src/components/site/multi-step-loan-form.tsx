@@ -29,8 +29,8 @@ import { useToast } from "@/hooks/use-toast";
 // Schémas de validation pour chaque étape
 const step1Schema = z.object({
   loanType: z.enum(["immobilier", "consommation", "auto", "entreprise", "rachat"], { required_error: "Veuillez sélectionner un type de prêt." }),
-  loanAmount: z.coerce.number().positive("Le montant doit être positif."),
-  loanTerm: z.coerce.number().int().min(12, "La durée doit être d'au moins 12 mois.").max(360, "La durée ne peut excéder 360 mois."),
+  loanAmount: z.coerce.number({invalid_type_error: "Le montant est requis."}).positive("Le montant doit être positif."),
+  loanTerm: z.coerce.number({invalid_type_error: "La durée est requise."}).int().min(12, "La durée doit être d'au moins 12 mois.").max(360, "La durée ne peut excéder 360 mois."),
 });
 
 const step2Schema = z.object({
@@ -43,43 +43,11 @@ const step2Schema = z.object({
   postalCode: z.string().min(4, "Le code postal est requis."),
   country: z.string().min(2, "Le pays est requis."),
   maritalStatus: z.enum(["celibataire", "marie", "divorce", "veuf"], { required_error: "Veuillez sélectionner votre situation." }),
-  numberOfChildren: z.coerce.number().int().min(0, "Le nombre d'enfants ne peut être négatif."),
-  birthDay: z.coerce.number().int().min(1, "Le jour doit être valide.").max(31),
-  birthMonth: z.coerce.number().int().min(1, "Le mois doit être valide.").max(12),
-  birthYear: z.coerce.number().int().min(1900, "L'année doit être valide.").max(new Date().getFullYear() - 18, "Vous devez avoir au moins 18 ans."),
-});
-
-const step3Schema = z.object({
-  occupation: z.string().min(2, "La profession est requise."),
-  monthlyIncome: z.coerce.number().positive("Le revenu doit être positif."),
-  monthlyExpenses: z.coerce.number().nonnegative("Les charges ne peuvent être négatives."),
-  creditScore: z.coerce.number().min(300).max(850, "Le score de crédit doit être entre 300 et 850."),
-});
-
-// Limite de taille de fichier à 5MB
-const MAX_FILE_SIZE = 5 * 1024 * 1024; 
-// Types de fichiers autorisés
-const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "application/pdf"];
-
-const fileSchema = z
-    .any()
-    .optional()
-    .refine((files) => !files || files?.length === 1, "Un seul fichier à la fois.")
-    .refine((files) => !files || files?.[0]?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
-    .refine(
-      (files) => !files || ACCEPTED_FILE_TYPES.includes(files?.[0]?.type),
-      "Seuls les formats .jpg, .png et .pdf sont acceptés."
-    );
-
-
-const step4Schema = z.object({
-  identityDocument: fileSchema.refine((files) => files?.length === 1, "Pièce d'identité requise."),
-  proofOfAddress: fileSchema.refine((files) => files?.length === 1, "Justificatif de domicile requis."),
-  proofOfIncome: fileSchema.refine((files) => files?.length === 1, "Justificatif de revenus requis."),
-});
-
-
-const fullLoanSchema = z.intersection(step1Schema, step2Schema).and(step3Schema).and(step4Schema).refine(data => {
+  numberOfChildren: z.coerce.number({invalid_type_error: "Le nombre d'enfants est requis."}).int().min(0, "Le nombre d'enfants ne peut être négatif."),
+  birthDay: z.coerce.number({invalid_type_error: "Le jour est requis."}).int().min(1, "Le jour doit être valide.").max(31),
+  birthMonth: z.coerce.number({invalid_type_error: "Le mois est requis."}).int().min(1, "Le mois doit être valide.").max(12),
+  birthYear: z.coerce.number({invalid_type_error: "L'année est requise."}).int().min(1900, "L'année doit être valide.").max(new Date().getFullYear() - 18, "Vous devez avoir au moins 18 ans."),
+}).refine(data => {
   try {
     const date = new Date(data.birthYear, data.birthMonth - 1, data.birthDay);
     return date.getFullYear() === data.birthYear && date.getMonth() === data.birthMonth - 1 && date.getDate() === data.birthDay;
@@ -91,9 +59,42 @@ const fullLoanSchema = z.intersection(step1Schema, step2Schema).and(step3Schema)
   path: ["birthDay"],
 });
 
+const step3Schema = z.object({
+  occupation: z.string().min(2, "La profession est requise."),
+  monthlyIncome: z.coerce.number({invalid_type_error: "Le revenu est requis."}).positive("Le revenu doit être positif."),
+  monthlyExpenses: z.coerce.number({invalid_type_error: "Les charges sont requises."}).nonnegative("Les charges ne peuvent être négatives."),
+  creditScore: z.coerce.number({invalid_type_error: "Le score de crédit est requis."}).min(300).max(850, "Le score de crédit doit être entre 300 et 850."),
+});
+
+// Limite de taille de fichier à 5MB
+const MAX_FILE_SIZE = 5 * 1024 * 1024; 
+// Types de fichiers autorisés
+const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "application/pdf"];
+
+const fileSchema = z
+    .any()
+    .refine((files) => files?.length === 1, "Ce fichier est requis.")
+    .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
+    .refine(
+      (files) => ACCEPTED_FILE_TYPES.includes(files?.[0]?.type),
+      "Seuls les formats .jpg, .png et .pdf sont acceptés."
+    );
+
+
+const step4Schema = z.object({
+  identityDocument: fileSchema,
+  proofOfAddress: fileSchema,
+  proofOfIncome: fileSchema,
+});
+
+
+const fullLoanSchema = z.intersection(step1Schema, step2Schema).and(step3Schema).and(step4Schema);
+
 type FullLoanFormValues = z.infer<typeof fullLoanSchema>;
 
-const steps = [
+type StepSchema = typeof step1Schema | typeof step2Schema | typeof step3Schema | typeof step4Schema;
+
+const steps: { id: string, name: string, icon: React.ElementType, schema?: StepSchema }[] = [
   { id: "Étape 1", name: "Informations sur le Prêt", schema: step1Schema, icon: FileText },
   { id: "Étape 2", name: "Informations Personnelles", schema: step2Schema, icon: User },
   { id: "Étape 3", name: "Situation Financière", schema: step3Schema, icon: Banknote },
@@ -109,6 +110,7 @@ export default function MultiStepLoanForm() {
 
 
   const form = useForm<FullLoanFormValues>({
+    // We pass the full schema here, but validation is triggered step-by-step
     resolver: zodResolver(fullLoanSchema),
     mode: "onChange",
     defaultValues: {
@@ -158,6 +160,29 @@ export default function MultiStepLoanForm() {
   };
 
   async function onSubmit(data: FullLoanFormValues) {
+      // Final validation before submitting
+      const isFormValid = await form.trigger();
+      if (!isFormValid) {
+          toast({
+              title: "Formulaire Incomplet",
+              description: "Veuillez vérifier les erreurs dans les étapes précédentes.",
+              variant: "destructive",
+          });
+          // Find first invalid step and go to it
+          for(let i = 0; i < steps.length; i++) {
+              const stepSchema = steps[i].schema;
+              if(stepSchema) {
+                  const fields = Object.keys(stepSchema.shape) as (keyof FullLoanFormValues)[];
+                  const result = await form.trigger(fields);
+                  if(!result) {
+                      setCurrentStep(i);
+                      return;
+                  }
+              }
+          }
+          return;
+      }
+      
       setIsLoading(true);
       const formData = new FormData();
 
@@ -241,14 +266,14 @@ export default function MultiStepLoanForm() {
                     <FormField control={form.control} name="loanAmount" render={({ field }) => (
                       <FormItem>
                         <FormLabel>Montant souhaité (€)</FormLabel>
-                        <FormControl><Input type="number" {...field} name={field.name} /></FormControl>
+                        <FormControl><Input type="number" {...field} onChange={event => field.onChange(+event.target.value)} value={field.value || ''} name={field.name} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
                     <FormField control={form.control} name="loanTerm" render={({ field }) => (
                       <FormItem>
                         <FormLabel>Durée de remboursement (mois)</FormLabel>
-                        <FormControl><Input type="number" {...field} name={field.name} /></FormControl>
+                        <FormControl><Input type="number" {...field} onChange={event => field.onChange(+event.target.value)} value={field.value || ''} name={field.name} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
@@ -365,7 +390,7 @@ export default function MultiStepLoanForm() {
                         <FormField control={form.control} name="numberOfChildren" render={({ field }) => (
                             <FormItem>
                             <FormLabel>Nombre d'enfants</FormLabel>
-                            <FormControl><Input type="number" {...field} name={field.name} /></FormControl>
+                            <FormControl><Input type="number" {...field} onChange={event => field.onChange(+event.target.value)} value={field.value ?? ''} name={field.name} /></FormControl>
                             <FormMessage />
                             </FormItem>
                         )} />
@@ -385,14 +410,14 @@ export default function MultiStepLoanForm() {
                         <FormField control={form.control} name="monthlyIncome" render={({ field }) => (
                         <FormItem>
                             <FormLabel>Revenu Mensuel Net (€)</FormLabel>
-                            <FormControl><Input type="number" {...field} name={field.name} /></FormControl>
+                            <FormControl><Input type="number" {...field} onChange={event => field.onChange(+event.target.value)} value={field.value || ''} name={field.name} /></FormControl>
                             <FormMessage />
                         </FormItem>
                         )} />
                         <FormField control={form.control} name="monthlyExpenses" render={({ field }) => (
                         <FormItem>
                             <FormLabel>Charges Mensuelles (€)</FormLabel>
-                            <FormControl><Input type="number" {...field} name={field.name} /></FormControl>
+                            <FormControl><Input type="number" {...field} onChange={event => field.onChange(+event.target.value)} value={field.value || ''} name={field.name} /></FormControl>
                             <FormMessage />
                         </FormItem>
                         )} />
@@ -400,7 +425,7 @@ export default function MultiStepLoanForm() {
                     <FormField control={form.control} name="creditScore" render={({ field }) => (
                       <FormItem>
                         <FormLabel>Score de Crédit (estimation)</FormLabel>
-                        <FormControl><Input type="number" min="300" max="850" {...field} name={field.name} /></FormControl>
+                        <FormControl><Input type="number" min="300" max="850" {...field} onChange={event => field.onChange(+event.target.value)} value={field.value || ''} name={field.name} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
@@ -411,7 +436,7 @@ export default function MultiStepLoanForm() {
                         <FormField
                             control={form.control}
                             name="identityDocument"
-                            render={({ field: { onChange, value, onBlur, ref }}) => (
+                            render={({ field: { onChange, onBlur, ref }}) => (
                             <FormItem>
                                 <FormLabel>Pièce d'identité (PDF, JPG, PNG)</FormLabel>
                                 <FormControl>
@@ -424,7 +449,7 @@ export default function MultiStepLoanForm() {
                          <FormField
                             control={form.control}
                             name="proofOfAddress"
-                            render={({ field: { onChange, value, onBlur, ref }}) => (
+                            render={({ field: { onChange, onBlur, ref }}) => (
                             <FormItem>
                                 <FormLabel>Justificatif de domicile (PDF, JPG, PNG)</FormLabel>
                                 <FormControl>
@@ -437,7 +462,7 @@ export default function MultiStepLoanForm() {
                          <FormField
                             control={form.control}
                             name="proofOfIncome"
-                             render={({ field: { onChange, value, onBlur, ref }}) => (
+                             render={({ field: { onChange, onBlur, ref }}) => (
                             <FormItem>
                                 <FormLabel>Justificatif de revenus (PDF, JPG, PNG)</FormLabel>
                                 <FormControl>
@@ -497,3 +522,5 @@ export default function MultiStepLoanForm() {
     </Card>
   );
 }
+
+    
