@@ -63,7 +63,6 @@ const loanApplicationSchema = z.object({
   occupation: z.string().min(2, "La profession est requise."),
   monthlyIncome: z.coerce.number({invalid_type_error: "Le revenu est requis."}).positive("Le revenu doit être positif."),
   monthlyExpenses: z.coerce.number({invalid_type_error: "Les charges sont requises."}).nonnegative("Les charges ne peuvent être négatives."),
-  creditScore: z.coerce.number({invalid_type_error: "Le score de crédit est requis."}).min(300).max(850, "Le score de crédit doit être entre 300 et 850."),
   
   // Step 4
   identityDocument: fileSchema,
@@ -112,7 +111,6 @@ export default function LoanApplicationForm() {
       occupation: "",
       monthlyIncome: '' as unknown as number,
       monthlyExpenses: '' as unknown as number,
-      creditScore: '' as unknown as number,
       identityDocument: undefined,
       proofOfAddress: undefined,
       proofOfIncome: undefined,
@@ -262,7 +260,6 @@ export default function LoanApplicationForm() {
               <FormField control={form.control} name="monthlyIncome" render={({ field }) => (<FormItem><FormLabel>Revenu Mensuel Net (€)</FormLabel><FormControl><Input type="number" placeholder="3000" {...field} /></FormControl><FormMessage /></FormItem>)} />
               <FormField control={form.control} name="monthlyExpenses" render={({ field }) => (<FormItem><FormLabel>Charges Mensuelles (€)</FormLabel><FormControl><Input type="number" placeholder="1200" {...field} /></FormControl><FormMessage /></FormItem>)} />
             </div>
-            <FormField control={form.control} name="creditScore" render={({ field }) => (<FormItem><FormLabel>Score de Crédit (estimation)</FormLabel><FormControl><Input type="number" min="300" max="850" placeholder="300-850" {...field} /></FormControl><FormMessage /></FormItem>)} />
           </CardContent>
         </Card>
 
