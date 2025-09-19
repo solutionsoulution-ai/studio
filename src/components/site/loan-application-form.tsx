@@ -31,9 +31,9 @@ const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "application/pdf"];
 
 const fileSchema = z
   .any()
-  .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
+  .refine((files) => !files?.[0] || files?.[0]?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
   .refine(
-    (files) => ACCEPTED_FILE_TYPES.includes(files?.[0]?.type),
+    (files) => !files?.[0] || ACCEPTED_FILE_TYPES.includes(files?.[0]?.type),
     "Seuls les formats .jpg, .png et .pdf sont acceptés."
   ).optional();
 
@@ -94,8 +94,8 @@ export default function LoanApplicationForm() {
     mode: "onBlur",
     defaultValues: {
       loanType: undefined,
-      loanAmount: undefined,
-      loanTerm: undefined,
+      loanAmount: '' as unknown as number,
+      loanTerm: '' as unknown as number,
       firstName: "",
       lastName: "",
       email: "",
@@ -105,14 +105,14 @@ export default function LoanApplicationForm() {
       postalCode: "",
       country: "France",
       maritalStatus: undefined,
-      numberOfChildren: undefined,
-      birthDay: undefined,
-      birthMonth: undefined,
-      birthYear: undefined,
+      numberOfChildren: '' as unknown as number,
+      birthDay: '' as unknown as number,
+      birthMonth: '' as unknown as number,
+      birthYear: '' as unknown as number,
       occupation: "",
-      monthlyIncome: undefined,
-      monthlyExpenses: undefined,
-      creditScore: undefined,
+      monthlyIncome: '' as unknown as number,
+      monthlyExpenses: '' as unknown as number,
+      creditScore: '' as unknown as number,
       identityDocument: undefined,
       proofOfAddress: undefined,
       proofOfIncome: undefined,
@@ -221,7 +221,7 @@ export default function LoanApplicationForm() {
                 <FormField control={form.control} name="birthMonth" render={({ field }) => (<FormItem><FormControl><Input type="number" placeholder="Mois" {...field} /></FormControl><FormMessage /></FormItem>)} />
                 <FormField control={form.control} name="birthYear" render={({ field }) => (<FormItem><FormControl><Input type="number" placeholder="Année" {...field} /></FormControl><FormMessage /></FormItem>)} />
               </div>
-               {form.formState.errors.birthDay && <p className="text-sm font-medium text-destructive">{form.formState.errors.birthDay.message}</p>}
+               {form.formState.errors.birthDay && !form.formState.errors.birthDay.ref?.value && <p className="text-sm font-medium text-destructive">{form.formState.errors.birthDay.message}</p>}
             </div>
             <FormField control={form.control} name="address" render={({ field }) => (<FormItem><FormLabel>Adresse</FormLabel><FormControl><Input placeholder="123 rue de Paris" {...field} /></FormControl><FormMessage /></FormItem>)} />
             <div className="grid sm:grid-cols-3 gap-4">
