@@ -328,23 +328,13 @@ export default function DashboardClientPage() {
                         <CardDescription>Transférez de l'argent facilement et en toute sécurité.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        {accountData.is_transfer_blocked ? (
-                            <Alert variant="destructive">
-                                <Ban className="h-4 w-4" />
-                                <AlertTitle>Virements Bloqués</AlertTitle>
-                                <AlertDescription>
-                                    Vos virements sont actuellement suspendus. Une tentative de virement échouera après le délai de traitement.
-                                </AlertDescription>
-                            </Alert>
-                        ) : (
-                             <Alert className="mb-6">
-                                <Info className="h-4 w-4" />
-                                <AlertTitle>Essayer un virement</AlertTitle>
-                                <AlertDescription>
-                                Pour tester, vous pouvez utiliser l'IBAN d'un autre client test, par exemple : <code className="font-mono p-1 bg-muted rounded-sm">DE89370400440532013000</code> (appartient à jane.doe@example.com).
-                                </AlertDescription>
-                            </Alert>
-                        )}
+                        <Alert className="mb-6">
+                            <Info className="h-4 w-4" />
+                            <AlertTitle>Essayer un virement</AlertTitle>
+                            <AlertDescription>
+                            Pour tester, vous pouvez utiliser l'IBAN d'un autre client test, par exemple : <code className="font-mono p-1 bg-muted rounded-sm">DE89370400440532013000</code> (appartient à jane.doe@example.com).
+                            </AlertDescription>
+                        </Alert>
                         <div className="mt-6">
                              <TransferForm
                                 onTransferSubmit={handleTransferSubmit}
