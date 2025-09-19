@@ -8,6 +8,7 @@ import {
   type LoanEligibilityOutput,
 } from "@/ai/flows/loan-eligibility-assessment";
 import { sendEmail } from "@/lib/mail";
+import 'dotenv/config'
 
 
 // Schema for Loan Eligibility
