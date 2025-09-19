@@ -9,32 +9,119 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { usePDFGenerator } from "@/hooks/use-pdf-generator";
 import { Loader2, FileDown } from "lucide-react";
-import LoanContractForm, { type LoanContractFormValues } from "@/components/admin/documents/forms/loan-contract-form";
-import LoanContractTemplate from "@/components/admin/documents/templates/loan-contract-template";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+
+// Import new forms and templates
+import LoanContractForm, { type LoanContractFormValues } from "@/components/admin/documents/forms/loan-contract-form";
+import DebtRecognitionForm, { type DebtRecognitionFormValues } from "@/components/admin/documents/forms/debt-recognition-form";
+import InvoiceForm, { type InvoiceFormValues } from "@/components/admin/documents/forms/invoice-form";
+import EligibilityCertificateForm, { type EligibilityCertificateFormValues } from "@/components/admin/documents/forms/eligibility-certificate-form";
+import InsuranceNoticeForm, { type InsuranceNoticeFormValues } from "@/components/admin/documents/forms/insurance-notice-form";
+import InsuranceCertificateForm, { type InsuranceCertificateFormValues } from "@/components/admin/documents/forms/insurance-certificate-form";
+import SuretyBondForm, { type SuretyBondFormValues } from "@/components/admin/documents/forms/surety-bond-form";
+
+import LoanContractTemplate from "@/components/admin/documents/templates/loan-contract-template";
+import DebtRecognitionTemplate from "@/components/admin/documents/templates/debt-recognition-template";
+import InvoiceTemplate from "@/components/admin/documents/templates/invoice-template";
+import EligibilityCertificateTemplate from "@/components/admin/documents/templates/eligibility-certificate-template";
+import InsuranceNoticeTemplate from "@/components/admin/documents/templates/insurance-notice-template";
+import InsuranceCertificateTemplate from "@/components/admin/documents/templates/insurance-certificate-template";
+import SuretyBondTemplate from "@/components/admin/documents/templates/surety-bond-template";
 
 
 const configSchema = z.object({
-    docType: z.enum(["loan-contract"]),
+    docType: z.enum([
+        "loan-contract", 
+        "debt-recognition",
+        "invoice",
+        "eligibility-certificate",
+        "insurance-notice",
+        "insurance-certificate",
+        "surety-bond"
+    ]),
     docLang: z.enum(["fr", "en"]),
 });
 type ConfigFormValues = z.infer<typeof configSchema>;
 
-const defaultContractValuesFR: LoanContractFormValues = {
+const today = new Date();
+const todayFR = today.toLocaleDateString('fr-FR');
+const nextMonthFR = new Date(today.setMonth(today.getMonth() + 1)).toLocaleDateString('fr-FR');
+const next30DaysFR = new Date(today.setDate(today.getDate() + 30)).toLocaleDateString('fr-FR');
+
+
+// Default Values
+const defaultLoanContractValues: LoanContractFormValues = {
     borrower_name: "John Doe",
     borrower_address: "123 Rue de l'Exemple, 75001 Paris, France",
-    borrower_email: "john.doe@example.com",
     lender_name: "VylsCapital",
     lender_address: "10 Place de la Bourse, 69002 Lyon, France",
     loan_amount: 50000,
     loan_amount_in_words: "Cinquante mille euros",
-    loan_date: new Date().toLocaleDateString('fr-FR'),
+    loan_date: todayFR,
     interest_rate: 2,
     loan_term_months: 60,
-    repayment_start_date: new Date(new Date().setMonth(new Date().getMonth() + 1)).toLocaleDateString('fr-FR'),
+    repayment_start_date: nextMonthFR,
     monthly_payment: 876.41,
-    signature_date: new Date().toLocaleDateString('fr-FR'),
+    signature_date: todayFR,
     borrower_signature_location: "Paris",
+};
+
+const defaultDebtRecognitionValues: DebtRecognitionFormValues = {
+    borrower_name: "Jane Smith",
+    borrower_address: "456 Avenue des Champs-Élysées, 75008 Paris",
+    lender_name: "VylsCapital",
+    loan_amount: 10000,
+    loan_amount_in_words: "Dix mille euros",
+    loan_date: todayFR,
+    repayment_deadline: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toLocaleDateString('fr-FR'),
+    signature_location: "Lyon",
+    signature_date: todayFR,
+};
+
+const defaultInvoiceValues: InvoiceFormValues = {
+    customer_name: "John Doe",
+    customer_address: "123 Rue de l'Exemple, 75001 Paris",
+    invoice_number: `FACT-${today.getFullYear()}-0001`,
+    invoice_date: todayFR,
+    description: "Frais de dossier pour prêt personnel",
+    amount: 150.00,
+    payment_iban: "FR76 3000 4000 0112 3456 7890 123",
+};
+
+const defaultEligibilityCertificateValues: EligibilityCertificateFormValues = {
+    beneficiary_name: "Alice Martin",
+    beneficiary_address: "789 Boulevard Saint-Germain, 75006 Paris",
+    beneficiary_id_number: "CNI 12AB34567",
+    eligibility_amount: 250000,
+    validity_end_date: next30DaysFR,
+    analyst_name: "Julien Mercier",
+    signature_date: todayFR,
+};
+
+const defaultInsuranceNoticeValues: InsuranceNoticeFormValues = {
+    company_name: "VylsCapital Assurance",
+    company_address: "10 Place de la Bourse, 69002 Lyon",
+};
+
+const defaultInsuranceCertificateValues: InsuranceCertificateFormValues = {
+    insured_name: "John Doe",
+    lender_name: "VylsCapital",
+    loan_id: "PRT-2024-98765",
+    insured_capital: 50000,
+    monthly_premium: 18.50,
+    signature_date: todayFR,
+};
+
+const defaultSuretyBondValues: SuretyBondFormValues = {
+    lender_name: "VylsCapital",
+    borrower_name: "SARL Horizon",
+    guarantor_name: "Marc Petit",
+    loan_contract_id: "PRT-2024-12345",
+    loan_amount: 75000,
+    loan_term_months: 84,
+    loan_date: todayFR,
+    signature_location: "Marseille",
+    signature_date: todayFR,
 };
 
 
@@ -49,20 +136,51 @@ export default function DocumentGeneratorPage() {
         }
     });
 
-    // We create a separate form instance for each document type
-    const loanContractForm = useForm<LoanContractFormValues>({
-        defaultValues: defaultContractValuesFR,
-    });
-    
+    // Create a form instance for each document type
+    const loanContractForm = useForm<LoanContractFormValues>({ resolver: zodResolver(LoanContractForm.schema), defaultValues: defaultLoanContractValues });
+    const debtRecognitionForm = useForm<DebtRecognitionFormValues>({ resolver: zodResolver(DebtRecognitionForm.schema), defaultValues: defaultDebtRecognitionValues });
+    const invoiceForm = useForm<InvoiceFormValues>({ resolver: zodResolver(InvoiceForm.schema), defaultValues: defaultInvoiceValues });
+    const eligibilityCertificateForm = useForm<EligibilityCertificateFormValues>({ resolver: zodResolver(EligibilityCertificateForm.schema), defaultValues: defaultEligibilityCertificateValues });
+    const insuranceNoticeForm = useForm<InsuranceNoticeFormValues>({ resolver: zodResolver(InsuranceNoticeForm.schema), defaultValues: defaultInsuranceNoticeValues });
+    const insuranceCertificateForm = useForm<InsuranceCertificateFormValues>({ resolver: zodResolver(InsuranceCertificateForm.schema), defaultValues: defaultInsuranceCertificateValues });
+    const suretyBondForm = useForm<SuretyBondFormValues>({ resolver: zodResolver(SuretyBondForm.schema), defaultValues: defaultSuretyBondValues });
+
     const docType = configForm.watch("docType");
     const docLang = configForm.watch("docLang");
     
-    // Watch the data from the specific form based on docType
-    const docData = docType === 'loan-contract' ? loanContractForm.watch() : {};
-    
+    // Select active form and data based on docType
     let activeForm: UseFormReturn<any> | null = null;
-    if (docType === 'loan-contract') {
-        activeForm = loanContractForm;
+    let docData: any = {};
+
+    switch (docType) {
+        case "loan-contract":
+            activeForm = loanContractForm;
+            docData = loanContractForm.watch();
+            break;
+        case "debt-recognition":
+            activeForm = debtRecognitionForm;
+            docData = debtRecognitionForm.watch();
+            break;
+        case "invoice":
+            activeForm = invoiceForm;
+            docData = invoiceForm.watch();
+            break;
+        case "eligibility-certificate":
+            activeForm = eligibilityCertificateForm;
+            docData = eligibilityCertificateForm.watch();
+            break;
+        case "insurance-notice":
+            activeForm = insuranceNoticeForm;
+            docData = insuranceNoticeForm.watch();
+            break;
+        case "insurance-certificate":
+            activeForm = insuranceCertificateForm;
+            docData = insuranceCertificateForm.watch();
+            break;
+        case "surety-bond":
+            activeForm = suretyBondForm;
+            docData = suretyBondForm.watch();
+            break;
     }
 
     const handleGenerateClick = () => {
@@ -74,19 +192,27 @@ export default function DocumentGeneratorPage() {
 
     const renderForm = () => {
         switch (docType) {
-            case "loan-contract":
-                return <LoanContractForm form={loanContractForm} lang={docLang} />;
-            default:
-                return <p>Veuillez sélectionner un type de document.</p>;
+            case "loan-contract": return <LoanContractForm form={loanContractForm} lang={docLang} />;
+            case "debt-recognition": return <DebtRecognitionForm form={debtRecognitionForm} lang={docLang} />;
+            case "invoice": return <InvoiceForm form={invoiceForm} lang={docLang} />;
+            case "eligibility-certificate": return <EligibilityCertificateForm form={eligibilityCertificateForm} lang={docLang} />;
+            case "insurance-notice": return <InsuranceNoticeForm form={insuranceNoticeForm} lang={docLang} />;
+            case "insurance-certificate": return <InsuranceCertificateForm form={insuranceCertificateForm} lang={docLang} />;
+            case "surety-bond": return <SuretyBondForm form={suretyBondForm} lang={docLang} />;
+            default: return <p>Veuillez sélectionner un type de document.</p>;
         }
     }
 
     const renderTemplate = () => {
         switch (docType) {
-            case "loan-contract":
-                return <LoanContractTemplate data={docData} lang={docLang} />;
-            default:
-                return <div id="pdf-preview" className="p-8 text-center text-muted-foreground">Aperçu du document</div>;
+            case "loan-contract": return <LoanContractTemplate data={docData} lang={docLang} />;
+            case "debt-recognition": return <DebtRecognitionTemplate data={docData} lang={docLang} />;
+            case "invoice": return <InvoiceTemplate data={docData} lang={docLang} />;
+            case "eligibility-certificate": return <EligibilityCertificateTemplate data={docData} lang={docLang} />;
+            case "insurance-notice": return <InsuranceNoticeTemplate data={docData} lang={docLang} />;
+            case "insurance-certificate": return <InsuranceCertificateTemplate data={docData} lang={docLang} />;
+            case "surety-bond": return <SuretyBondTemplate data={docData} lang={docLang} />;
+            default: return <div id="pdf-preview" className="p-8 text-center text-muted-foreground">Aperçu du document</div>;
         }
     }
 
@@ -122,6 +248,12 @@ export default function DocumentGeneratorPage() {
                                                             </FormControl>
                                                             <SelectContent>
                                                                 <SelectItem value="loan-contract">Contrat de Prêt</SelectItem>
+                                                                <SelectItem value="debt-recognition">Reconnaissance de Dette</SelectItem>
+                                                                <SelectItem value="invoice">Facture</SelectItem>
+                                                                <SelectItem value="eligibility-certificate">Attestation d'Éligibilité</SelectItem>
+                                                                <SelectItem value="insurance-notice">Notice d'Information Assurance</SelectItem>
+                                                                <SelectItem value="insurance-certificate">Attestation d'Assurance</SelectItem>
+                                                                <SelectItem value="surety-bond">Acte de Cautionnement</SelectItem>
                                                             </SelectContent>
                                                         </Select>
                                                     </FormItem>
