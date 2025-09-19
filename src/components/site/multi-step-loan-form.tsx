@@ -78,13 +78,14 @@ const fileSchema = z
     .refine(
       (files) => files === undefined || ACCEPTED_FILE_TYPES.includes(files?.[0]?.type),
       "Seuls les formats .jpg, .png et .pdf sont acceptés."
-    );
+    )
+    .optional();
 
 
 const step4Schema = z.object({
-  identityDocument: fileSchema.optional(),
-  proofOfAddress: fileSchema.optional(),
-  proofOfIncome: fileSchema.optional(),
+  identityDocument: fileSchema,
+  proofOfAddress: fileSchema,
+  proofOfIncome: fileSchema,
 });
 
 
@@ -149,7 +150,13 @@ export default function MultiStepLoanForm() {
   });
   
   const nextStep = async () => {
+    // If we are on the last step, don't do anything.
+    if (currentStep === steps.length - 1) {
+      return;
+    }
+    
     const currentSchema = steps[currentStep].schema;
+    
     if (currentSchema) {
         const fields = Object.keys(currentSchema.shape) as (keyof FullLoanFormValues)[];
         const result = await form.trigger(fields, { shouldFocus: true });
@@ -157,9 +164,8 @@ export default function MultiStepLoanForm() {
            setCurrentStep(currentStep + 1);
         }
     } else {
-      if (currentStep < steps.length - 1) {
+        // If there is no schema for the current step, just go to the next one.
         setCurrentStep(currentStep + 1);
-      }
     }
   };
 
@@ -513,3 +519,5 @@ export default function MultiStepLoanForm() {
     </Card>
   );
 }
+
+    
