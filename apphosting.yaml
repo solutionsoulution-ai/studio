@@ -5,4 +5,4 @@ runConfig:
   memoryMiB: 512
   timeoutSeconds: 120
   environment:
-    WEBHOOK_URL: "https://script.google.com/macros/s/AKfycbz0WOt-SrFsKvJJg2NeWXWRbU9ppuozU4rX67aQKggiMI5vRVet3weC5QQpLy2hcLtt/exec"
+    WEBHOOK_URL: "METTRE_LA_NOUVELLE_URL_DU_SCRIPT_GOOGLE_ICI"
