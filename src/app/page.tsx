@@ -12,6 +12,7 @@ import { Sparkles } from 'lucide-react';
 import TestimonialsSection from '@/components/site/testimonials-section';
 import PartnersSection from '@/components/site/partners-section';
 import TimelineSummary from '@/components/site/timeline-summary';
+import BlogSummarySection from '@/components/site/blog-summary-section';
 
 export default function Home() {
   return (
@@ -29,6 +30,8 @@ export default function Home() {
         <WhyChooseUsSection />
 
         <TimelineSummary />
+
+        <BlogSummarySection />
 
         <PartnersSection />
 

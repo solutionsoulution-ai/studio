@@ -17,6 +17,7 @@ import {
 const mainNavLinks = [
   { href: "/#services", label: "Nos Services" },
   { href: "/a-propos", label: "À Propos" },
+  { href: "/blog", label: "Blog" },
   { href: "/#calculateur", label: "Calculateur" },
   { href: "/#faq", label: "FAQ" },
   { href: "/contact", label: "Contact" },

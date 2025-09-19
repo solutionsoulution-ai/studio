@@ -1,8 +1,10 @@
+
 import Link from "next/link";
 import { Landmark, Linkedin, Twitter, Facebook, Mail, Phone, MapPin } from "lucide-react";
 
 const mainNavLinks = [
   { href: "/a-propos", label: "À Propos" },
+  { href: "/blog", label: "Blog" },
   { href: "/eligibilite", label: "Éligibilité" },
   { href: "/#calculateur", label: "Calculateur" },
   { href: "/#faq", label: "FAQ" },
@@ -57,6 +59,20 @@ export default function SiteFooter() {
                     Lyon, France
                 </p>
              </div>
+          </div>
+
+          {/* Section Navigation */}
+          <div>
+            <h3 className="font-semibold mb-4">Navigation</h3>
+            <ul className="space-y-2">
+              {mainNavLinks.map(({ href, label }) => (
+                <li key={label}>
+                  <Link href={href} className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
 
           {/* Section Services */}
