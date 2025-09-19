@@ -37,12 +37,11 @@ const configSchema = z.object({
         "eligibility-certificate",
         "insurance-notice",
         "insurance-certificate",
-        "loan-contract", 
+        "loan-contract",
         "surety-bond",
         "debt-recognition",
         "blank-document",
     ]),
-    docLang: z.enum(["fr", "en", "de", "es", "pt", "it"]),
 });
 type ConfigFormValues = z.infer<typeof configSchema>;
 
@@ -142,12 +141,12 @@ const defaultBlankDocumentValues: BlankDocumentFormValues = {
 
 export default function DocumentGeneratorPage() {
     const { generatePDF, isLoading } = usePDFGenerator();
+    const docLang = 'fr'; // Force 'fr' for now
 
     const configForm = useForm<ConfigFormValues>({
         resolver: zodResolver(configSchema),
         defaultValues: {
             docType: "invoice",
-            docLang: "fr",
         }
     });
 
@@ -162,7 +161,6 @@ export default function DocumentGeneratorPage() {
     const blankDocumentForm = useForm<BlankDocumentFormValues>({ resolver: zodResolver(BlankDocumentForm.schema), defaultValues: defaultBlankDocumentValues });
 
     const docType = configForm.watch("docType");
-    const docLang = configForm.watch("docLang");
     
     // Select active form and data based on docType
     let activeForm: UseFormReturn<any> | null = null;
@@ -206,7 +204,7 @@ export default function DocumentGeneratorPage() {
     const handleGenerateClick = () => {
         generatePDF({
             elementId: 'pdf-preview',
-            fileName: `${docType}-${docLang}-${Date.now()}.pdf`,
+            fileName: `${docType}-${Date.now()}.pdf`,
         });
     };
 
@@ -219,7 +217,7 @@ export default function DocumentGeneratorPage() {
             case "loan-contract": return <LoanContractForm form={loanContractForm} lang={docLang} />;
             case "surety-bond": return <SuretyBondForm form={suretyBondForm} lang={docLang} />;
             case "debt-recognition": return <DebtRecognitionForm form={debtRecognitionForm} lang={docLang} />;
-            case "blank-document": return <BlankDocumentForm form={blankDocumentForm} lang={docLang} />;
+            case "blank-document": return <BlankDocumentForm form={blankDocumentForm} lang="en" />;
             default: return <p>Veuillez sélectionner un type de document.</p>;
         }
     }
@@ -233,7 +231,7 @@ export default function DocumentGeneratorPage() {
             case "loan-contract": return <LoanContractTemplate data={docData} lang={docLang} />;
             case "surety-bond": return <SuretyBondTemplate data={docData} lang={docLang} />;
             case "debt-recognition": return <DebtRecognitionTemplate data={docData} lang={docLang} />;
-            case "blank-document": return <BlankDocumentTemplate data={docData} lang={docLang} />;
+            case "blank-document": return <BlankDocumentTemplate data={docData} lang="en" />;
             default: return <div id="pdf-preview" className="p-8 text-center text-muted-foreground">Aperçu du document</div>;
         }
     }
@@ -251,7 +249,7 @@ export default function DocumentGeneratorPage() {
                             <Card>
                                 <CardHeader>
                                     <CardTitle>Configuration</CardTitle>
-                                    <CardDescription>Choisissez le type et la langue du document.</CardDescription>
+                                    <CardDescription>Choisissez le type de document à générer.</CardDescription>
                                 </CardHeader>
                                 <CardContent>
                                     <Form {...configForm}>
@@ -276,31 +274,7 @@ export default function DocumentGeneratorPage() {
                                                                 <SelectItem value="loan-contract">Contrat de Prêt</SelectItem>
                                                                 <SelectItem value="surety-bond">Acte de Cautionnement</SelectItem>
                                                                 <SelectItem value="debt-recognition">Reconnaissance de Dette</SelectItem>
-                                                                <SelectItem value="blank-document">Document Vierge (Facture EN)</SelectItem>
-                                                            </SelectContent>
-                                                        </Select>
-                                                    </FormItem>
-                                                )}
-                                            />
-                                            <FormField
-                                                control={configForm.control}
-                                                name="docLang"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel>Langue</FormLabel>
-                                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                            <FormControl>
-                                                                <SelectTrigger>
-                                                                    <SelectValue />
-                                                                </SelectTrigger>
-                                                            </FormControl>
-                                                            <SelectContent>
-                                                                <SelectItem value="fr">Français</SelectItem>
-                                                                <SelectItem value="en">English</SelectItem>
-                                                                <SelectItem value="de">Deutsch</SelectItem>
-                                                                <SelectItem value="es">Español</SelectItem>
-                                                                <SelectItem value="pt">Português</SelectItem>
-                                                                <SelectItem value="it">Italiano</SelectItem>
+                                                                <SelectItem value="blank-document">Facture (EN)</SelectItem>
                                                             </SelectContent>
                                                         </Select>
                                                     </FormItem>
@@ -334,4 +308,5 @@ export default function DocumentGeneratorPage() {
             </div>
         </main>
     );
-}
+
+    
