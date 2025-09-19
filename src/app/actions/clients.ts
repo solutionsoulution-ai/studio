@@ -152,8 +152,15 @@ export async function getClientByIdAction(clientId: string): Promise<{ success: 
             completionDate.setMinutes(completionDate.getMinutes() + (processingTime.minutes || 0));
 
             if (now >= completionDate) {
-                // Let's assume it succeeds. A real app would have more logic.
-                tx.status = 'COMPLETED'; 
+                // If account is blocked, fail the transaction. Otherwise, complete it.
+                if (client.is_transfer_blocked) {
+                    tx.status = 'FAILED';
+                    // Restore balance since the transfer failed
+                    client.balance -= tx.amount; // tx.amount is negative for a debit
+                    tx.reason = `[Échec] ${tx.reason} - ${client.transfer_block_reason || 'Compte bloqué'}`
+                } else {
+                    tx.status = 'COMPLETED';
+                }
                 dataWasModified = true;
             }
         }
@@ -192,10 +199,8 @@ export async function createTransferAction(transferDetails: TransferFormInput & 
     }
 
     const client = clients[clientIndex];
-
-    if (client.is_transfer_blocked) {
-        return { success: false, error: client.transfer_block_reason || "Les virements sont bloqués pour ce compte." };
-    }
+    
+    // The initial block check is removed from here.
 
     if (client.balance < parsed.data.amount) {
         return { success: false, error: "Solde insuffisant." };
