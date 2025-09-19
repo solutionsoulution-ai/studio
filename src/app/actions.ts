@@ -3,6 +3,7 @@
 
 
 
+
 "use server";
 
 import "dotenv/config";
@@ -133,8 +134,8 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "application/pdf"];
 
 
-// Schéma pour la validation côté serveur
-const loanApplicationSchemaServer = z.object({
+// Schéma pour la validation des champs texte côté serveur
+const loanApplicationTextSchema = z.object({
   loanType: z.enum(["immobilier", "consommation", "auto", "entreprise", "rachat"]),
   loanAmount: z.coerce.number().positive("Le montant doit être positif."),
   loanTerm: z.coerce.number().int().min(12, "La durée doit être d'au moins 12 mois."),
@@ -155,30 +156,6 @@ const loanApplicationSchemaServer = z.object({
   monthlyIncome: z.coerce.number().positive("Le revenu doit être positif."),
   monthlyExpenses: z.coerce.number().nonnegative("Les charges ne peuvent être négatives."),
   creditScore: z.coerce.number().min(300).max(850),
-  identityDocument: z
-    .any()
-    .refine((file: File) => file && file.size > 0, "Le téléversement d'un fichier est requis.")
-    .refine((file: File) => file.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
-    .refine(
-      (file: File) => ACCEPTED_FILE_TYPES.includes(file.type),
-      "Seuls les formats .jpg, .png et .pdf sont acceptés."
-    ),
-  proofOfAddress: z
-    .any()
-    .refine((file: File) => file && file.size > 0, "Le téléversement d'un fichier est requis.")
-    .refine((file: File) => file.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
-    .refine(
-      (file: File) => ACCEPTED_FILE_TYPES.includes(file.type),
-      "Seuls les formats .jpg, .png et .pdf sont acceptés."
-    ),
-  proofOfIncome: z
-    .any()
-    .refine((file: File) => file && file.size > 0, "Le téléversement d'un fichier est requis.")
-    .refine((file: File) => file.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
-    .refine(
-      (file: File) => ACCEPTED_FILE_TYPES.includes(file.type),
-      "Seuls les formats .jpg, .png et .pdf sont acceptés."
-    ),
 }).refine((data) => {
     try {
         const date = new Date(data.birthYear, data.birthMonth - 1, data.birthDay);
@@ -191,21 +168,58 @@ const loanApplicationSchemaServer = z.object({
     path: ["birthDay"],
 });
 
+
+const fileSchema = z
+    .instanceof(File)
+    .refine((file) => file.size > 0, "Le téléversement d'un fichier est requis.")
+    .refine((file) => file.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
+    .refine(
+      (file) => ACCEPTED_FILE_TYPES.includes(file.type),
+      "Seuls les formats .jpg, .png et .pdf sont acceptés."
+    );
+
+
 export type LoanApplicationResult = { success: boolean; error?: string; applicationId?: string };
 
 export async function handleLoanApplication(formData: FormData): Promise<LoanApplicationResult> {
     
   const rawData = Object.fromEntries(formData.entries());
+  
+  // 1. Valider les champs de texte
+  const parsedText = loanApplicationTextSchema.safeParse(rawData);
 
-  const parsed = loanApplicationSchemaServer.safeParse(rawData);
-
-  if (!parsed.success) {
-    const issues = parsed.error.issues.map((i) => `${i.path.join('.')} : ${i.message}`).join("\n");
-    console.error("Validation Error:", issues);
-    return { success: false, error: `Données du formulaire invalides. Veuillez vérifier tous les champs, y compris les fichiers. ${issues}` };
+  if (!parsedText.success) {
+    const issues = parsedText.error.issues.map((i) => `${i.path.join('.')} : ${i.message}`).join("\n");
+    console.error("Validation Error (Text):", issues);
+    return { success: false, error: `Données du formulaire invalides. Veuillez vérifier les champs de texte. ${issues}` };
+  }
+  
+  // 2. Valider les fichiers
+  const identityDocument = formData.get('identityDocument');
+  const proofOfAddress = formData.get('proofOfAddress');
+  const proofOfIncome = formData.get('proofOfIncome');
+  
+  const fileValidations = {
+      identityDocument: fileSchema.safeParse(identityDocument),
+      proofOfAddress: fileSchema.safeParse(proofOfAddress),
+      proofOfIncome: fileSchema.safeParse(proofOfIncome)
+  };
+  
+  const fileErrors: string[] = [];
+  for (const [key, result] of Object.entries(fileValidations)) {
+      if (!result.success) {
+          fileErrors.push(`${key}: ${result.error.issues.map(i => i.message).join(', ')}`);
+      }
   }
 
-  const { birthDay, birthMonth, birthYear, identityDocument, proofOfAddress, proofOfIncome, ...restOfData } = parsed.data;
+  if (fileErrors.length > 0) {
+      const errorString = fileErrors.join('\n');
+      console.error("Validation Error (Files):", errorString);
+      return { success: false, error: `Erreurs avec les fichiers téléversés:\n${errorString}` };
+  }
+
+
+  const { birthDay, birthMonth, birthYear, ...restOfData } = parsedText.data;
   const dateOfBirth = new Date(birthYear, birthMonth - 1, birthDay).toISOString();
 
   const applicationDetails = {
@@ -244,4 +258,5 @@ export async function handleLoanApplication(formData: FormData): Promise<LoanApp
   return { success: true, applicationId: applicationDetails.applicationId };
 }
     
+
 
