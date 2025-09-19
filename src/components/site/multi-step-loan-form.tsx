@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import { useForm, type FieldValues } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { motion, AnimatePresence } from "framer-motion";
@@ -151,15 +151,15 @@ export default function MultiStepLoanForm() {
   
   const nextStep = async () => {
     const currentStepConfig = steps[currentStep];
-    if (!currentStepConfig) return;
 
-    if (currentStepConfig.schema) {
+    if (currentStepConfig && currentStepConfig.schema) {
       const fields = Object.keys(currentStepConfig.schema.shape) as (keyof FullLoanFormValues)[];
       const result = await form.trigger(fields, { shouldFocus: true });
       if (result) {
          setCurrentStep(currentStep + 1);
       }
     } else {
+        // For steps without schema (like confirmation), just proceed
         setCurrentStep(currentStep + 1);
     }
   };
