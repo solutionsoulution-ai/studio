@@ -5,7 +5,7 @@ import { useState, useMemo, useEffect, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { LogOut, ArrowUpRight, ArrowDownLeft, Landmark, Send, FileText, Info, Copy, TrendingUp, TrendingDown, Ban, Loader2 } from "lucide-react";
+import { LogOut, ArrowUpRight, ArrowDownLeft, Landmark, Send, FileText, Info, Copy, TrendingUp, TrendingDown, Ban, Loader2, X, CheckCircle, AlertTriangle, Phone } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import TransferForm from "@/components/dashboard/transfer-form";
@@ -13,10 +13,13 @@ import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter } from "next/navigation";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
 import { getClientByIdAction, createTransferAction } from "@/app/actions/clients";
 import type { ClientProfile } from "@/app/actions/clients";
 import type { TransferFormInput } from "@/lib/schemas";
 import ClientTransactionProgress from "./client-transaction-progress";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 interface Transaction {
     id: string;
@@ -62,12 +65,90 @@ const InfoRow = ({ label, value }: { label: string; value: string }) => {
     );
 };
 
+const TransactionDetailDialog = ({ transaction, open, onOpenChange }: { transaction: Transaction | null, open: boolean, onOpenChange: (open: boolean) => void }) => {
+    if (!transaction) return null;
+
+    const getStatusBadge = (status: Transaction['status']) => {
+        switch (status) {
+            case 'COMPLETED':
+                return <Badge variant="secondary" className="bg-green-100 text-green-800"><CheckCircle />Terminé</Badge>;
+            case 'PENDING':
+                return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800"><Loader2 className="animate-spin" />En attente</Badge>;
+            case 'FAILED':
+                return <Badge variant="destructive"><AlertTriangle />Échoué</Badge>;
+            default:
+                return <Badge variant="outline">Inconnu</Badge>;
+        }
+    };
+    
+    return (
+        <Dialog open={open} onOpenChange={onOpenChange}>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Détails de la Transaction</DialogTitle>
+                    <DialogDescription>
+                        ID de la transaction : {transaction.id}
+                    </DialogDescription>
+                </DialogHeader>
+                <div className="space-y-3 text-sm">
+                    <div className="flex justify-between items-center">
+                        <span className="text-muted-foreground">Statut</span>
+                        {getStatusBadge(transaction.status)}
+                    </div>
+                    <div className="flex justify-between items-center">
+                        <span className="text-muted-foreground">Montant</span>
+                        <span className={cn("font-bold text-lg", transaction.amount > 0 ? 'text-green-600' : 'text-red-600')}>{formatCurrency(transaction.amount)}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                        <span className="text-muted-foreground">Date</span>
+                        <span>{new Date(transaction.created_at).toLocaleString('fr-FR')}</span>
+                    </div>
+                     <div className="flex justify-between items-start pt-2">
+                        <span className="text-muted-foreground">Motif</span>
+                        <span className="text-right font-medium">{transaction.reason}</span>
+                    </div>
+                    {transaction.recipient_name && (
+                        <div className="flex justify-between items-center">
+                            <span className="text-muted-foreground">Bénéficiaire</span>
+                            <span>{transaction.recipient_name}</span>
+                        </div>
+                    )}
+                    {transaction.recipient_iban && (
+                        <div className="flex justify-between items-center">
+                            <span className="text-muted-foreground">IBAN Bénéficiaire</span>
+                            <span className="font-mono">{transaction.recipient_iban}</span>
+                        </div>
+                    )}
+                    {transaction.status === 'FAILED' && (
+                        <Alert variant="destructive" className="mt-4">
+                            <AlertTriangle className="h-4 w-4" />
+                            <AlertTitle>Problème avec votre virement</AlertTitle>
+                            <AlertDescription>
+                                Cette transaction a échoué. Si vous avez des questions, n'hésitez pas à nous contacter.
+                                <Button asChild variant="link" className="p-0 h-auto ml-1">
+                                    <Link href="/contact">
+                                        <Phone className="mr-1" /> Contacter le support
+                                    </Link>
+                                </Button>
+                            </AlertDescription>
+                        </Alert>
+                    )}
+                </div>
+                 <DialogClose asChild>
+                    <Button type="button" variant="outline" className="mt-4 w-full">Fermer</Button>
+                </DialogClose>
+            </DialogContent>
+        </Dialog>
+    )
+}
+
 
 export default function DashboardClientPage() {
     const [accountData, setAccountData] = useState<Omit<ClientProfile, 'password'> | null>(null);
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
     const { toast } = useToast();
     const router = useRouter();
 
@@ -193,6 +274,11 @@ export default function DashboardClientPage() {
 
   return (
     <div className="container mx-auto py-16">
+        <TransactionDetailDialog 
+            transaction={selectedTransaction} 
+            open={!!selectedTransaction}
+            onOpenChange={(open) => !open && setSelectedTransaction(null)}
+        />
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
             <div>
                 <h1 className="text-3xl font-bold font-headline">Bienvenue, {accountData.email || 'Client'} !</h1>
@@ -293,13 +379,13 @@ export default function DashboardClientPage() {
                                     <TableBody>
                                         {completedTransactions.length > 0 ? (
                                             completedTransactions.map((tx) => (
-                                                <TableRow key={tx.id}>
+                                                <TableRow key={tx.id} onClick={() => setSelectedTransaction(tx)} className="cursor-pointer">
                                                     <TableCell className="font-medium">
                                                         <div className="flex items-center gap-2">
                                                             {tx.amount > 0 ? <ArrowDownLeft className="w-4 h-4 text-green-500"/> : <ArrowUpRight className="w-4 h-4 text-red-500" />}
                                                             <span>{tx.reason}</span>
                                                         </div>
-                                                        {tx.status === 'FAILED' && <span className="text-xs text-destructive block ml-6">Échoué</span>}
+                                                        {tx.status === 'FAILED' && <Badge variant="destructive" className="mt-1">Échoué</Badge>}
                                                     </TableCell>
                                                     <TableCell className={`text-right font-semibold ${tx.amount > 0 ? 'text-green-600' : 'text-red-600'}`}>{formatCurrency(tx.amount)}</TableCell>
                                                     <TableCell className="hidden sm:table-cell text-right text-muted-foreground">{new Date(tx.created_at).toLocaleDateString('fr-FR')}</TableCell>
@@ -328,13 +414,6 @@ export default function DashboardClientPage() {
                         <CardDescription>Transférez de l'argent facilement et en toute sécurité.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <Alert className="mb-6">
-                            <Info className="h-4 w-4" />
-                            <AlertTitle>Essayer un virement</AlertTitle>
-                            <AlertDescription>
-                            Pour tester, vous pouvez utiliser l'IBAN d'un autre client test, par exemple : <code className="font-mono p-1 bg-muted rounded-sm">DE89370400440532013000</code> (appartient à jane.doe@example.com).
-                            </AlertDescription>
-                        </Alert>
                         <div className="mt-6">
                              <TransferForm
                                 onTransferSubmit={handleTransferSubmit}
@@ -366,3 +445,5 @@ export default function DashboardClientPage() {
     </div>
   );
 }
+
+    

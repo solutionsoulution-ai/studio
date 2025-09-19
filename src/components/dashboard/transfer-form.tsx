@@ -17,6 +17,8 @@ import { Input } from "@/components/ui/input";
 import { transferFormSchema, type TransferFormInput } from "@/lib/schemas";
 import { Loader2, Send, CheckCircle, RefreshCw, AlertTriangle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { Info } from "lucide-react";
 
 
 type TransferState = "idle" | "loading" | "success" | "error";
@@ -96,6 +98,13 @@ export default function TransferForm({ onTransferSubmit }: TransferFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <Alert className="mb-6">
+            <Info className="h-4 w-4" />
+            <AlertTitle>Essayer un virement</AlertTitle>
+            <AlertDescription>
+            Pour tester, vous pouvez utiliser l'IBAN d'un autre client test, par exemple : <code className="font-mono p-1 bg-muted rounded-sm">DE89370400440532013000</code> (appartient à jane.doe@example.com).
+            </AlertDescription>
+        </Alert>
         <div className="grid sm:grid-cols-2 gap-4">
           <FormField
             control={form.control}
@@ -164,3 +173,5 @@ export default function TransferForm({ onTransferSubmit }: TransferFormProps) {
     </Form>
   );
 }
+
+    

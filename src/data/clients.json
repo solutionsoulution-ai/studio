@@ -110,7 +110,7 @@
     "transfer_processing_time": {
       "days": 0,
       "hours": 0,
-      "minutes": 1
+      "minutes": 2
     },
     "has_loan": false,
     "loan_type": null,
@@ -188,6 +188,28 @@
         "created_at": "2025-09-19T01:07:25.785Z",
         "status": "COMPLETED",
         "estimatedCompletionDate": "2025-09-19T01:08:25.785Z"
+      },
+      {
+        "id": "txn_1758245504923_hwshpzj",
+        "profile_id": "cly_1758240460802_7m51bcr",
+        "amount": -0.83,
+        "reason": "[Échec] nnn - VCV",
+        "recipient_iban": "DE89370400440532013000",
+        "recipient_name": "vvv",
+        "created_at": "2025-09-19T01:31:44.923Z",
+        "status": "FAILED",
+        "estimatedCompletionDate": "2025-09-19T01:32:44.923Z"
+      },
+      {
+        "id": "txn_1758245754016_zw4xqm8",
+        "profile_id": "cly_1758240460802_7m51bcr",
+        "amount": -78,
+        "reason": "[Échec] ccc - VCV",
+        "recipient_iban": "DE89370400440532013000",
+        "recipient_name": "vvv",
+        "created_at": "2025-09-19T01:35:54.016Z",
+        "status": "FAILED",
+        "estimatedCompletionDate": "2025-09-19T01:37:54.016Z"
       }
     ]
   }
