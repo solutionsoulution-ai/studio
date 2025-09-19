@@ -86,37 +86,39 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         {/* Article Content */}
         <section className="container mx-auto py-16 md:py-24">
             <div className="grid lg:grid-cols-4 gap-12">
-                <article className="lg:col-span-3 prose lg:prose-lg max-w-none prose-h2:font-headline prose-h2:text-3xl prose-headings:text-primary prose-p:text-muted-foreground prose-strong:text-foreground">
-                    <h2>Introduction</h2>
-                    <p>
-                        Dans le paysage financier actuel, il est crucial de prendre des décisions éclairées. Que vous soyez un entrepreneur cherchant à financer sa croissance, un particulier souhaitant acquérir un bien immobilier, ou simplement quelqu'un cherchant à optimiser ses finances, la compréhension des mécanismes de prêt est fondamentale. Cet article explore les stratégies clés pour {post.slug.includes('entreprise') ? 'solidifier votre dossier de prêt entreprise' : post.slug.includes('rachat') ? 'gérer intelligemment vos dettes' : 'réussir votre projet'}.
-                    </p>
+                <article className="lg:col-span-3 prose lg:prose-lg max-w-none prose-headings:text-primary prose-p:text-muted-foreground prose-strong:text-foreground prose-ul:space-y-2 prose-li:text-muted-foreground prose-blockquote:border-primary prose-blockquote:text-muted-foreground prose-blockquote:bg-primary/5 prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded-r-lg">
+                    <div className="space-y-6">
+                         <h2>Introduction</h2>
+                        <p>
+                            Dans le paysage financier actuel, il est crucial de prendre des décisions éclairées. Que vous soyez un entrepreneur cherchant à financer sa croissance, un particulier souhaitant acquérir un bien immobilier, ou simplement quelqu'un cherchant à optimiser ses finances, la compréhension des mécanismes de prêt est fondamentale. Cet article explore les stratégies clés pour {post.slug.includes('entreprise') ? 'solidifier votre dossier de prêt entreprise' : post.slug.includes('rachat') ? 'gérer intelligemment vos dettes' : 'réussir votre projet'}.
+                        </p>
 
-                    <h3>1. Comprendre les Attentes des Prêteurs</h3>
-                    <p>
-                        Avant toute chose, il est essentiel de se mettre à la place du prêteur. Les institutions financières évaluent principalement deux choses : votre capacité à rembourser (solvabilité) et votre fiabilité (historique de crédit). Un dossier bien préparé doit rassurer sur ces deux points.
-                    </p>
-                    
-                    <h3>2. Les Piliers d'un Dossier Solide</h3>
-                    <ul>
-                        <li><strong>La Clarté du Projet :</strong> Expliquez précisément l'objet de votre demande de financement. Un projet bien défini et chiffré est toujours plus convaincant.</li>
-                        <li><strong>La Stabilité Financière :</strong> Des revenus réguliers et une gestion saine de vos comptes sont des atouts majeurs. Évitez les découverts et les incidents de paiement dans les mois précédant votre demande.</li>
-                        <li><strong>L'Apport Personnel :</strong> Bien qu'il ne soit pas toujours obligatoire, un apport démontre votre engagement dans le projet et votre capacité à épargner.</li>
-                    </ul>
+                        <h3>1. Comprendre les Attentes des Prêteurs</h3>
+                        <p>
+                            Avant toute chose, il est essentiel de se mettre à la place du prêteur. Les institutions financières évaluent principalement deux choses : votre capacité à rembourser (solvabilité) et votre fiabilité (historique de crédit). Un dossier bien préparé doit rassurer sur ces deux points.
+                        </p>
+                        
+                        <h3>2. Les Piliers d'un Dossier Solide</h3>
+                        <ul>
+                            <li><strong>La Clarté du Projet :</strong> Expliquez précisément l'objet de votre demande de financement. Un projet bien défini et chiffré est toujours plus convaincant.</li>
+                            <li><strong>La Stabilité Financière :</strong> Des revenus réguliers et une gestion saine de vos comptes sont des atouts majeurs. Évitez les découverts et les incidents de paiement dans les mois précédant votre demande.</li>
+                            <li><strong>L'Apport Personnel :</strong> Bien qu'il ne soit pas toujours obligatoire, un apport démontre votre engagement dans le projet et votre capacité à épargner.</li>
+                        </ul>
 
-                    <blockquote>
-                        "La préparation est la clé du succès. Un dossier de prêt ne fait pas exception. Prenez le temps de rassembler toutes les pièces et de peaufiner votre argumentation."
-                    </blockquote>
+                        <blockquote>
+                            "La préparation est la clé du succès. Un dossier de prêt ne fait pas exception. Prenez le temps de rassembler toutes les pièces et de peaufiner votre argumentation."
+                        </blockquote>
 
-                    <h3>3. Stratégies Avancées</h3>
-                    <p>
-                        Pour aller plus loin, vous pouvez également travailler sur l'optimisation de votre taux d'endettement. Si vous avez plusieurs crédits en cours, un rachat de crédit peut être une option intéressante pour réduire vos mensualités avant de solliciter un nouveau prêt. De même, un plan d'affaires détaillé pour un prêt professionnel, ou une simulation de rentabilité pour un investissement locatif, peut faire toute la différence.
-                    </p>
+                        <h3>3. Stratégies Avancées</h3>
+                        <p>
+                            Pour aller plus loin, vous pouvez également travailler sur l'optimisation de votre taux d'endettement. Si vous avez plusieurs crédits en cours, un rachat de crédit peut être une option intéressante pour réduire vos mensualités avant de solliciter un nouveau prêt. De même, un plan d'affaires détaillé pour un prêt professionnel, ou une simulation de rentabilité pour un investissement locatif, peut faire toute la différence.
+                        </p>
 
-                    <h2>Conclusion</h2>
-                    <p>
-                        Obtenir un financement est un marathon, pas un sprint. En suivant ces conseils et en préparant votre dossier avec soin, vous augmentez significativement vos chances de succès. N'oubliez pas que nos conseillers sont là pour vous accompagner à chaque étape.
-                    </p>
+                        <h2>Conclusion</h2>
+                        <p>
+                            Obtenir un financement est un marathon, pas un sprint. En suivant ces conseils et en préparant votre dossier avec soin, vous augmentez significativement vos chances de succès. N'oubliez pas que nos conseillers sont là pour vous accompagner à chaque étape.
+                        </p>
+                    </div>
                 </article>
 
                 {/* Sidebar */}
