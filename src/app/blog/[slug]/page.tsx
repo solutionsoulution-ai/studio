@@ -86,7 +86,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         {/* Article Content */}
         <section className="container mx-auto py-16 md:py-24">
             <div className="grid lg:grid-cols-4 gap-12">
-                <article className="lg:col-span-3 prose lg:prose-lg max-w-none">
+                <article className="lg:col-span-3 prose lg:prose-lg max-w-none prose-h2:font-headline prose-h2:text-3xl prose-headings:text-primary prose-p:text-muted-foreground prose-strong:text-foreground">
                     <h2>Introduction</h2>
                     <p>
                         Dans le paysage financier actuel, il est crucial de prendre des décisions éclairées. Que vous soyez un entrepreneur cherchant à financer sa croissance, un particulier souhaitant acquérir un bien immobilier, ou simplement quelqu'un cherchant à optimiser ses finances, la compréhension des mécanismes de prêt est fondamentale. Cet article explore les stratégies clés pour {post.slug.includes('entreprise') ? 'solidifier votre dossier de prêt entreprise' : post.slug.includes('rachat') ? 'gérer intelligemment vos dettes' : 'réussir votre projet'}.
@@ -127,7 +127,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                         </CardHeader>
                         <CardContent className="text-center">
                             <h4 className="font-semibold">{post.author.split(',')[0]}</h4>
-                            <p className="text-sm text-muted-foreground">{post.author.split(',')[1]}</p>
+                            <p className="text-sm text-primary">{post.author.split(',')[1]}</p>
                         </CardContent>
                     </Card>
 
