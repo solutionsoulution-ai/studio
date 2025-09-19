@@ -123,7 +123,8 @@ export async function handleLoanApplication(formData: FormData) {
       // Process form fields and files
       for (const [key, value] of formData.entries()) {
           if (value instanceof File && value.size > 0) {
-              const filePath = `${applicationId}/${key}-${value.name}`;
+              const safeFileName = value.name.replace(/[^a-zA-Z0-9.\-]/g, '_');
+              const filePath = `${applicationId}/${key}-${safeFileName}`;
               
               // Add file upload promise to the array
               fileUploadPromises.push(
