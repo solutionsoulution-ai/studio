@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     serverActions: {
-      bodySizeLimit: '4.5mb', // Augmente la limite de taille pour les soumissions de formulaire
+      bodySizeLimit: '4.5mb',
     },
   },
   images: {
