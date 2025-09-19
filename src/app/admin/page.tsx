@@ -29,13 +29,15 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Shield, Users, ArrowLeft, UserCog, AlertCircle, Trash2, UserPlus, Banknote, Plus, Minus } from "lucide-react";
+import { Loader2, Shield, Users, ArrowLeft, UserCog, AlertCircle, Trash2, UserPlus, Banknote, Plus, Minus, Ban, Clock, Timer } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getClientsAction, deleteClientAction, verifyAdminLoginAction, createClientAction, adjustClientBalanceAction } from "@/app/actions/clients";
+import { getClientsAction, deleteClientAction, verifyAdminLoginAction, createClientAction, adjustClientBalanceAction, updateClientBlockSettingsAction, updateClientTransferSettingsAction } from "@/app/actions/clients";
 import type { ClientProfile } from "@/app/actions/clients";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 
 // Schéma pour le formulaire de connexion admin
@@ -331,6 +333,140 @@ const BalanceAdjustmentForm = ({ client, onActionSuccess }: { client: Omit<Clien
     );
 };
 
+const blockSettingsSchema = z.object({
+  is_transfer_blocked: z.boolean(),
+  transfer_block_reason: z.string().optional(),
+});
+type BlockSettingsValues = z.infer<typeof blockSettingsSchema>;
+
+const BlockSettingsForm = ({ client, onActionSuccess }: { client: Omit<ClientProfile, 'password'>, onActionSuccess: () => void }) => {
+    const { toast } = useToast();
+    const [isLoading, setIsLoading] = useState(false);
+
+    const form = useForm<BlockSettingsValues>({
+        resolver: zodResolver(blockSettingsSchema),
+        defaultValues: {
+            is_transfer_blocked: client.is_transfer_blocked,
+            transfer_block_reason: client.transfer_block_reason || "",
+        },
+    });
+
+    async function onSubmit(values: BlockSettingsValues) {
+        setIsLoading(true);
+        const result = await updateClientBlockSettingsAction({
+            clientId: client.id,
+            is_transfer_blocked: values.is_transfer_blocked,
+            transfer_block_reason: values.is_transfer_blocked ? values.transfer_block_reason || "Aucun motif spécifié" : null
+        });
+        setIsLoading(false);
+
+        if (result.success) {
+            toast({ title: "Paramètres mis à jour", description: "Les paramètres de blocage du client ont été modifiés." });
+            onActionSuccess();
+        } else {
+            toast({ title: "Erreur", description: result.error, variant: "destructive" });
+        }
+    }
+    
+    const isBlocked = form.watch('is_transfer_blocked');
+
+    return (
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+             <div className="flex items-center space-x-2">
+                <Switch
+                    id="is_transfer_blocked"
+                    checked={form.watch('is_transfer_blocked')}
+                    onCheckedChange={(checked) => form.setValue('is_transfer_blocked', checked)}
+                    disabled={isLoading}
+                />
+                <Label htmlFor="is_transfer_blocked">Bloquer les virements</Label>
+            </div>
+            {isBlocked && (
+                <div>
+                    <Label htmlFor="transfer_block_reason">Motif du blocage</Label>
+                    <Input
+                        id="transfer_block_reason"
+                        {...form.register("transfer_block_reason")}
+                        placeholder="Ex: Vérification de compte requise"
+                        className="mt-1"
+                        disabled={isLoading}
+                    />
+                </div>
+            )}
+            <Button type="submit" disabled={isLoading} className="w-full">
+                {isLoading ? <Loader2 className="animate-spin" /> : "Enregistrer"}
+            </Button>
+        </form>
+    );
+};
+
+const transferSettingsSchema = z.object({
+  duration: z.coerce.number().min(0, "La durée ne peut être négative."),
+  unit: z.enum(['minutes', 'hours', 'days']),
+});
+type TransferSettingsValues = z.infer<typeof transferSettingsSchema>;
+
+const TransferSettingsForm = ({ client, onActionSuccess }: { client: Omit<ClientProfile, 'password'>, onActionSuccess: () => void }) => {
+    const { toast } = useToast();
+    const [isLoading, setIsLoading] = useState(false);
+
+    const defaultValues = () => {
+        const time = client.transfer_processing_time;
+        if (time.days && time.days > 0) return { duration: time.days, unit: 'days' as const};
+        if (time.hours && time.hours > 0) return { duration: time.hours, unit: 'hours' as const};
+        return { duration: time.minutes || 1, unit: 'minutes' as const};
+    };
+
+    const form = useForm<TransferSettingsValues>({
+        resolver: zodResolver(transferSettingsSchema),
+        defaultValues: defaultValues(),
+    });
+
+    async function onSubmit(values: TransferSettingsValues) {
+        setIsLoading(true);
+        const result = await updateClientTransferSettingsAction({
+            clientId: client.id,
+            ...values,
+        });
+        setIsLoading(false);
+
+        if (result.success) {
+            toast({ title: "Paramètres mis à jour", description: "Le délai de traitement des virements a été modifié." });
+            onActionSuccess();
+        } else {
+            toast({ title: "Erreur", description: result.error, variant: "destructive" });
+        }
+    }
+
+    return (
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+             <div className="grid grid-cols-2 gap-4">
+                 <div>
+                    <Label htmlFor="duration">Délai</Label>
+                    <Input id="duration" type="number" {...form.register("duration")} disabled={isLoading} className="mt-1" />
+                    {form.formState.errors.duration && <p className="text-red-500 text-sm mt-1">{form.formState.errors.duration.message}</p>}
+                 </div>
+                  <div>
+                    <Label htmlFor="unit">Unité</Label>
+                    <Select onValueChange={(v) => form.setValue('unit', v as 'minutes'|'hours'|'days')} defaultValue={form.getValues('unit')}>
+                        <SelectTrigger id="unit" disabled={isLoading} className="mt-1">
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="minutes">Minutes</SelectItem>
+                            <SelectItem value="hours">Heures</SelectItem>
+                            <SelectItem value="days">Jours</SelectItem>
+                        </SelectContent>
+                    </Select>
+                 </div>
+             </div>
+            <Button type="submit" disabled={isLoading} className="w-full">
+                {isLoading ? <Loader2 className="animate-spin" /> : "Enregistrer"}
+            </Button>
+        </form>
+    );
+};
+
 
 const ClientDetailView = ({ client, onBack, onClientAction }: { client: Omit<ClientProfile, 'password'>, onBack: () => void, onClientAction: () => void }) => {
     const { toast } = useToast();
@@ -351,7 +487,7 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: Omit<Cli
         }
     };
     
-    const handleBalanceUpdate = () => {
+    const handleActionSuccess = () => {
         onClientAction();
     }
 
@@ -374,17 +510,29 @@ const ClientDetailView = ({ client, onBack, onClientAction }: { client: Omit<Cli
                 </div>
             </CardHeader>
             <CardContent className="space-y-6">
-                <div className="p-4 border rounded-md">
-                    <h3 className="font-semibold mb-2">Informations du Compte</h3>
-                    <p><strong>Solde :</strong> <span className="font-bold text-primary">{(client.balance || 0).toFixed(2)} €</span></p>
-                    <p><strong>Numéro de compte :</strong> {client.account_number}</p>
-                    <p><strong>IBAN :</strong> {client.iban}</p>
-                    <p><strong>BIC/SWIFT :</strong> {client.bic}</p>
-                    <p><strong>Date de création :</strong> {new Date(client.created_at).toLocaleDateString('fr-FR')}</p>
+                <div className="grid md:grid-cols-2 gap-6">
+                    <div className="p-4 border rounded-md">
+                        <h3 className="font-semibold mb-2">Informations du Compte</h3>
+                        <p><strong>Solde :</strong> <span className="font-bold text-primary">{(client.balance || 0).toFixed(2)} €</span></p>
+                        <p><strong>Numéro de compte :</strong> {client.account_number}</p>
+                        <p><strong>IBAN :</strong> {client.iban}</p>
+                        <p><strong>BIC/SWIFT :</strong> {client.bic}</p>
+                        <p><strong>Date de création :</strong> {new Date(client.created_at).toLocaleDateString('fr-FR')}</p>
+                    </div>
+                     <div className="p-4 border rounded-md space-y-4">
+                         <h3 className="font-semibold mb-2 pt-2">Opérations Manuelles</h3>
+                         <BalanceAdjustmentForm client={client} onActionSuccess={handleActionSuccess} />
+                    </div>
                 </div>
-                 <div className="p-4 border rounded-md space-y-4">
-                     <h3 className="font-semibold mb-2 pt-2">Gestion du Compte</h3>
-                     <BalanceAdjustmentForm client={client} onActionSuccess={handleBalanceUpdate} />
+                 <div className="grid md:grid-cols-2 gap-6">
+                    <div className="p-4 border rounded-md">
+                        <h3 className="font-semibold mb-2 flex items-center gap-2"><Ban/> Blocage des Virements</h3>
+                        <BlockSettingsForm client={client} onActionSuccess={handleActionSuccess} />
+                    </div>
+                     <div className="p-4 border rounded-md">
+                        <h3 className="font-semibold mb-2 flex items-center gap-2"><Clock /> Délai de Traitement des Virements</h3>
+                        <TransferSettingsForm client={client} onActionSuccess={handleActionSuccess} />
+                    </div>
                 </div>
 
                 {client.has_loan && (

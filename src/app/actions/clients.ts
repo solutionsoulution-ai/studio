@@ -405,3 +405,78 @@ export async function adjustClientBalanceAction(adjustmentData: z.infer<typeof a
 
     return { success: true };
 }
+
+
+const blockSettingsSchema = z.object({
+  clientId: z.string(),
+  is_transfer_blocked: z.boolean(),
+  transfer_block_reason: z.string().nullable(),
+});
+
+/**
+ * Updates a client's transfer block settings.
+ * @param settingsData - The new block settings.
+ * @returns { success: boolean; error?: string }
+ */
+export async function updateClientBlockSettingsAction(settingsData: z.infer<typeof blockSettingsSchema>): Promise<{ success: boolean; error?: string }> {
+    const parsed = blockSettingsSchema.safeParse(settingsData);
+    if (!parsed.success) {
+        const issues = parsed.error.issues.map(i => i.message).join(', ');
+        return { success: false, error: `Données invalides: ${issues}` };
+    }
+    
+    const { clientId, is_transfer_blocked, transfer_block_reason } = parsed.data;
+
+    let clients = await readData();
+    const clientIndex = clients.findIndex(c => c.id === clientId);
+
+    if (clientIndex === -1) {
+        return { success: false, error: "Client non trouvé." };
+    }
+    
+    clients[clientIndex].is_transfer_blocked = is_transfer_blocked;
+    clients[clientIndex].transfer_block_reason = is_transfer_blocked ? transfer_block_reason : null;
+
+    await writeData(clients);
+    return { success: true };
+}
+
+
+const transferSettingsSchema = z.object({
+  clientId: z.string(),
+  duration: z.coerce.number().min(0),
+  unit: z.enum(['minutes', 'hours', 'days']),
+});
+
+/**
+ * Updates a client's transfer processing time.
+ * @param settingsData - The new transfer processing time settings.
+ * @returns { success: boolean; error?: string }
+ */
+export async function updateClientTransferSettingsAction(settingsData: z.infer<typeof transferSettingsSchema>): Promise<{ success: boolean; error?: string }> {
+    const parsed = transferSettingsSchema.safeParse(settingsData);
+    if (!parsed.success) {
+        const issues = parsed.error.issues.map(i => i.message).join(', ');
+        return { success: false, error: `Données invalides: ${issues}` };
+    }
+    
+    const { clientId, duration, unit } = parsed.data;
+
+    let clients = await readData();
+    const clientIndex = clients.findIndex(c => c.id === clientId);
+
+    if (clientIndex === -1) {
+        return { success: false, error: "Client non trouvé." };
+    }
+
+    const newProcessingTime = {
+        days: unit === 'days' ? duration : 0,
+        hours: unit === 'hours' ? duration : 0,
+        minutes: unit === 'minutes' ? duration : 0,
+    };
+    
+    clients[clientIndex].transfer_processing_time = newProcessingTime;
+
+    await writeData(clients);
+    return { success: true };
+}

@@ -100,7 +100,7 @@
     "client_id": "VYL-369-289",
     "email": "aaa@gmail.com",
     "password": "aaaaaaaa",
-    "balance": 0,
+    "balance": 566,
     "account_number": "FR7682145678394518394466210",
     "iban": "FR7600138480485938186027515",
     "bic": "UDJCFRZTXXX",
@@ -115,6 +115,17 @@
     "loan_amount": null,
     "interest_rate": null,
     "loan_term": null,
-    "transactions": []
+    "transactions": [
+      {
+        "id": "txn_1758242153214_dhlfwxl",
+        "profile_id": "cly_1758240460802_7m51bcr",
+        "amount": 566,
+        "reason": "VIREMENT ENTRANT YIUI",
+        "recipient_iban": null,
+        "recipient_name": "Opération Manuelle Admin",
+        "created_at": "2025-09-19T00:35:53.214Z",
+        "status": "COMPLETED"
+      }
+    ]
   }
 ]
