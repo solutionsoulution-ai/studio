@@ -9,8 +9,13 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z.object({
-    document_title: z.string().min(2, "Le titre est requis."),
-    content_placeholder: z.string().optional(),
+    customer_name: z.string().min(2, "Customer name is required."),
+    customer_address: z.string().min(5, "Customer address is required."),
+    invoice_number: z.string().min(3, "Invoice number is required."),
+    invoice_date: z.string().min(8, "Invoice date is required."),
+    description: z.string().min(5, "Description is required."),
+    amount: z.coerce.number().positive("Amount must be positive."),
+    payment_iban: z.string().min(15, "A valid IBAN is required."),
 });
 
 export type BlankDocumentFormValues = z.infer<typeof formSchema>;
@@ -24,23 +29,65 @@ export default function BlankDocumentForm({ form, lang }: BlankDocumentFormProps
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Document Vierge</CardTitle>
-                <CardDescription>Remplissez les champs de base pour ce nouveau document.</CardDescription>
+                <CardTitle>Invoice (English)</CardTitle>
+                <CardDescription>Fill in the fields to generate the English invoice.</CardDescription>
             </CardHeader>
             <CardContent>
                 <Form {...form}>
                     <form className="space-y-4">
-                        <FormField control={form.control} name="document_title" render={({ field }) => (
+                        <h3 className="font-semibold text-lg border-b pb-2">Customer</h3>
+                        <FormField control={form.control} name="customer_name" render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Titre du Document</FormLabel>
+                                <FormLabel>Customer Name</FormLabel>
                                 <FormControl><Input {...field} /></FormControl>
                                 <FormMessage />
                             </FormItem>
                         )} />
-                         <FormField control={form.control} name="content_placeholder" render={({ field }) => (
+                        <FormField control={form.control} name="customer_address" render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Contenu (temporaire)</FormLabel>
-                                <FormControl><Textarea rows={5} {...field} placeholder="Ce champ est un espace réservé. Le contenu réel sera défini dans le modèle."/></FormControl>
+                                <FormLabel>Customer Address</FormLabel>
+                                <FormControl><Textarea rows={2} {...field} /></FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )} />
+                        
+                        <h3 className="font-semibold text-lg border-b pb-2 pt-4">Invoice Details</h3>
+                        <div className="grid grid-cols-2 gap-4">
+                           <FormField control={form.control} name="invoice_number" render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Invoice Number</FormLabel>
+                                    <FormControl><Input {...field} /></FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )} />
+                            <FormField control={form.control} name="invoice_date" render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Date</FormLabel>
+                                    <FormControl><Input {...field} /></FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )} />
+                        </div>
+                        <FormField control={form.control} name="description" render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Description</FormLabel>
+                                <FormControl><Input {...field} /></FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )} />
+                         <FormField control={form.control} name="amount" render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Amount (€)</FormLabel>
+                                <FormControl><Input type="number" {...field} /></FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )} />
+                        
+                        <h3 className="font-semibold text-lg border-b pb-2 pt-4">Payment</h3>
+                        <FormField control={form.control} name="payment_iban" render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Payment IBAN</FormLabel>
+                                <FormControl><Input {...field} /></FormControl>
                                 <FormMessage />
                             </FormItem>
                         )} />

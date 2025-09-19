@@ -130,8 +130,13 @@ const defaultSuretyBondValues: SuretyBondFormValues = {
 };
 
 const defaultBlankDocumentValues: BlankDocumentFormValues = {
-    document_title: "Titre du Document",
-    content_placeholder: "",
+    customer_name: "John Doe",
+    customer_address: "123 Example Street, London, W1 1AA",
+    invoice_number: `INV-${today.getFullYear()}-0001`,
+    invoice_date: today.toLocaleDateString('en-GB'),
+    description: "Consulting services for Q3",
+    amount: 250.00,
+    payment_iban: "GB29 NWBK 6016 1331 9268 19",
 }
 
 
@@ -271,7 +276,7 @@ export default function DocumentGeneratorPage() {
                                                                 <SelectItem value="loan-contract">Contrat de Prêt</SelectItem>
                                                                 <SelectItem value="surety-bond">Acte de Cautionnement</SelectItem>
                                                                 <SelectItem value="debt-recognition">Reconnaissance de Dette</SelectItem>
-                                                                <SelectItem value="blank-document">Document Vierge</SelectItem>
+                                                                <SelectItem value="blank-document">Document Vierge (Facture EN)</SelectItem>
                                                             </SelectContent>
                                                         </Select>
                                                     </FormItem>
@@ -326,5 +331,3 @@ export default function DocumentGeneratorPage() {
         </main>
     );
 }
-
-    
