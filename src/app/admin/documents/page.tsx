@@ -42,7 +42,7 @@ const configSchema = z.object({
         "debt-recognition",
         "blank-document",
     ]),
-    docLang: z.enum(["fr", "en"]),
+    docLang: z.enum(["fr", "en", "de", "es", "pt", "it"]),
 });
 type ConfigFormValues = z.infer<typeof configSchema>;
 
@@ -297,6 +297,10 @@ export default function DocumentGeneratorPage() {
                                                             <SelectContent>
                                                                 <SelectItem value="fr">Français</SelectItem>
                                                                 <SelectItem value="en">English</SelectItem>
+                                                                <SelectItem value="de">Deutsch</SelectItem>
+                                                                <SelectItem value="es">Español</SelectItem>
+                                                                <SelectItem value="pt">Português</SelectItem>
+                                                                <SelectItem value="it">Italiano</SelectItem>
                                                             </SelectContent>
                                                         </Select>
                                                     </FormItem>
