@@ -4,6 +4,8 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { z } from 'zod';
+import { type TransferFormInput, transferFormSchema } from '@/lib/schemas';
+
 
 const dataFilePath = path.join(process.cwd(), 'src', 'data', 'clients.json');
 
@@ -175,12 +177,17 @@ export async function getClientByIdAction(clientId: string): Promise<{ success: 
  * @param transferDetails - The details of the transfer.
  * @returns { success: boolean; error?: string }
  */
-export async function createTransferAction(transferDetails: z.infer<typeof import('@/app/actions').transferFormSchema> & { clientId: string }): Promise<{ success: boolean; error?: string }> {
+export async function createTransferAction(transferDetails: TransferFormInput & { clientId: string }): Promise<{ success: boolean; error?: string }> {
     const clients = await readData();
     const clientIndex = clients.findIndex(c => c.id === transferDetails.clientId);
 
     if (clientIndex === -1) {
         return { success: false, error: "Client non trouvé." };
+    }
+    
+    const parsed = transferFormSchema.safeParse(transferDetails);
+    if (!parsed.success) {
+        return { success: false, error: 'Données de virement invalides.' };
     }
 
     const client = clients[clientIndex];
@@ -189,21 +196,21 @@ export async function createTransferAction(transferDetails: z.infer<typeof impor
         return { success: false, error: client.transfer_block_reason || "Les virements sont bloqués pour ce compte." };
     }
 
-    if (client.balance < transferDetails.amount) {
+    if (client.balance < parsed.data.amount) {
         return { success: false, error: "Solde insuffisant." };
     }
 
     // Update balance
-    client.balance -= transferDetails.amount;
+    client.balance -= parsed.data.amount;
     
     // Create new transaction
     const newTransaction: Transaction = {
         id: `txn_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
         profile_id: client.id,
-        amount: -transferDetails.amount,
-        reason: transferDetails.reason,
-        recipient_iban: transferDetails.recipientIban,
-        recipient_name: transferDetails.recipientName,
+        amount: -parsed.data.amount,
+        reason: parsed.data.reason,
+        recipient_iban: parsed.data.recipientIban,
+        recipient_name: parsed.data.recipientName,
         created_at: new Date().toISOString(),
         status: 'PENDING',
     };

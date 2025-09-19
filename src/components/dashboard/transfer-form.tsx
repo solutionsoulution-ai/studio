@@ -14,7 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { transferFormSchema, type TransferFormInput } from "@/app/actions";
+import { transferFormSchema, type TransferFormInput } from "@/lib/schemas";
 import { Loader2, Send, CheckCircle, RefreshCw, AlertTriangle } from "lucide-react";
 import { Progress } from "../ui/progress";
 

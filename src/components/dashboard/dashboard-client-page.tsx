@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { getClientByIdAction, createTransferAction } from "@/app/actions/clients";
 import type { ClientProfile } from "@/app/actions/clients";
-import type { TransferFormInput } from "@/app/actions";
+import type { TransferFormInput } from "@/lib/schemas";
 
 interface Transaction {
     id: string;
