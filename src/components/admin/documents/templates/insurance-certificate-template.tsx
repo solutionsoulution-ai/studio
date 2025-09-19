@@ -82,7 +82,7 @@ export default function InsuranceCertificateTemplate({ data, lang }: InsuranceCe
                     {clauses.introduction}
                 </p>
 
-                <div className="border-t border-b py-4 my-6 space-y-3 bg-gray-50 p-4 rounded-md">
+                <div className="border-t border-b border-border py-4 my-6 space-y-3 bg-gray-50 p-4 rounded-md">
                     <div className="grid grid-cols-2 gap-x-8 gap-y-3">
                         <div className="font-semibold">{clauses.insured_label}:</div>
                         <div className="font-medium">{data.insured_name || '_____________________'}</div>
@@ -128,7 +128,7 @@ export default function InsuranceCertificateTemplate({ data, lang }: InsuranceCe
                     <div className="h-24 w-48 mb-2 relative">
                         <Image src="https://i.postimg.cc/bvp368vC/signature-3.png" alt="Signature" layout="fill" objectFit="contain" objectPosition="bottom center"/>
                     </div>
-                    <div className="border-t border-gray-400 pt-2">
+                    <div className="border-t border-border pt-2">
                         <p className="font-semibold">Isabelle Petit</p>
                         <p className="text-xs">Directrice des Assurances, VylsCapital</p>
                     </div>

@@ -83,13 +83,13 @@ export default function InvoiceTemplate({ data, lang }: InvoiceTemplateProps) {
                     </thead>
                     <tbody>
                         <tr>
-                            <td className="border-b p-2">{data.description || '...'}</td>
-                            <td className="border-b p-2 text-right">{formatCurrency(data.amount)}</td>
+                            <td className="border-b border-border p-2">{data.description || '...'}</td>
+                            <td className="border-b border-border p-2 text-right">{formatCurrency(data.amount)}</td>
                         </tr>
                         {/* Add more rows here if needed */}
                         <tr className="h-24">
-                           <td className="border-b p-2"></td>
-                           <td className="border-b p-2"></td>
+                           <td className="border-b border-border p-2"></td>
+                           <td className="border-b border-border p-2"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -116,7 +116,7 @@ export default function InvoiceTemplate({ data, lang }: InvoiceTemplateProps) {
                 </div>
             </main>
 
-            <footer className="absolute bottom-16 left-16 right-16 border-t pt-8">
+            <footer className="absolute bottom-16 left-16 right-16 border-t border-border pt-8">
                 <div className="flex justify-between items-end">
                     <div>
                         <h3 className="font-bold mb-2 text-primary">{clauses.payment_terms.title}</h3>
@@ -132,7 +132,7 @@ export default function InvoiceTemplate({ data, lang }: InvoiceTemplateProps) {
                         <div className="h-20 w-40 mb-1 relative">
                              <Image src="https://i.postimg.cc/D0y9RLyN/signature-2.png" alt="Signature" layout="fill" objectFit="contain" objectPosition="bottom center"/>
                         </div>
-                        <div className="border-t border-gray-400 pt-1">
+                        <div className="border-t border-border pt-1">
                             <p className="font-semibold text-sm">Julien Moreau</p>
                             <p className="text-xs">Directeur Financier, VylsCapital</p>
                         </div>

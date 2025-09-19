@@ -106,7 +106,7 @@ export default function EligibilityCertificateTemplate({ data, lang }: Eligibili
                     <div className="h-24 w-48 mb-2 relative">
                         <Image src="https://i.postimg.cc/x83KNNv9/signature-4.png" alt="Signature" layout="fill" objectFit="contain" objectPosition="bottom center"/>
                     </div>
-                    <div className="border-t border-gray-400 pt-2">
+                    <div className="border-t border-border pt-2">
                         <p className="font-semibold">{data.analyst_name || "Benoît Leroy"}</p>
                         <p className="text-xs">Directeur d'Analyse Financière, VylsCapital</p>
                     </div>

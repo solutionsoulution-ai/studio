@@ -80,7 +80,7 @@ export default function DebtRecognitionTemplate({ data, lang }: DebtRecognitionT
                         .replace('{borrower_address}', data.borrower_address || '_____________________')
                     }
                 </p>
-                <div className="border-y border-gray-200 py-6 my-6">
+                <div className="border-y border-border py-6 my-6">
                     <p className="text-base">
                         {clauses.acknowledgment
                             .replace('{lender_name}', data.lender_name || 'VylsCapital')
@@ -110,13 +110,13 @@ export default function DebtRecognitionTemplate({ data, lang }: DebtRecognitionT
                 <div className="grid grid-cols-2 gap-16">
                     <div>
                         <p className="font-semibold mb-2">{clauses.borrower_signature_label}:</p>
-                        <div className="h-24 border-b border-gray-400"></div>
+                        <div className="h-24 border-b border-border"></div>
                         <p className="mt-2 text-xs">(Lu et approuvé, bon pour reconnaissance de dette de la somme indiquée ci-dessus)</p>
                         <p className="text-xs mt-2">{data.borrower_name || '_____________________'}</p>
                     </div>
                      <div>
                         <p className="font-semibold mb-2">{clauses.lender_signature_label}:</p>
-                        <div className="h-24 border-b border-gray-400 relative">
+                        <div className="h-24 border-b border-border relative">
                              <Image src="https://i.postimg.cc/jSrRkPWD/signature.png" alt="Signature" layout="fill" objectFit="contain" objectPosition="bottom left"/>
                         </div>
                          <p className="mt-2 text-xs font-semibold">David Rousseau</p>

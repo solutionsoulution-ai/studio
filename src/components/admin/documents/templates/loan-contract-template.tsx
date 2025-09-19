@@ -127,7 +127,7 @@ export default function LoanContractTemplate({ data, lang }: LoanContractTemplat
                 <div className="grid grid-cols-2 gap-16">
                     <div>
                         <p className="font-semibold mb-2">{clauses.parties.lender} :</p>
-                        <div className="h-24 border-b border-gray-400 relative">
+                        <div className="h-24 border-b border-border relative">
                             <Image src="https://i.postimg.cc/2jZhBMkV/signature-1.png" alt="Signature" layout="fill" objectFit="contain" objectPosition="bottom left"/>
                         </div>
                         <p className="mt-2 text-xs font-semibold">Alexandre Dubois</p>
@@ -135,7 +135,7 @@ export default function LoanContractTemplate({ data, lang }: LoanContractTemplat
                     </div>
                     <div>
                         <p className="font-semibold mb-2">{clauses.parties.borrower} :</p>
-                        <div className="h-24 border-b border-gray-400"></div>
+                        <div className="h-24 border-b border-border"></div>
                         <p className="mt-2 text-xs">(Lu et approuvé)</p>
                         <p className="text-xs">{data.borrower_name || '_____________________'}</p>
                     </div>

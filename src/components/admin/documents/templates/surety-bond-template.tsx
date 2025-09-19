@@ -113,7 +113,7 @@ export default function SuretyBondTemplate({ data, lang }: SuretyBondTemplatePro
                  <article>
                     <h3 className="font-bold text-base mb-2 text-primary">{clauses.handwritten_mention.title}</h3>
                     <p className="italic text-xs">{clauses.handwritten_mention.instruction}</p>
-                    <div className="mt-2 p-4 border border-dashed border-gray-400 min-h-48 bg-gray-50 text-gray-500 flex items-center justify-center">
+                    <div className="mt-2 p-4 border border-dashed border-border min-h-48 bg-gray-50 text-gray-500 flex items-center justify-center">
                         <p className="text-center">{handwrittenNoticeText}</p>
                     </div>
                 </article>
@@ -124,13 +124,13 @@ export default function SuretyBondTemplate({ data, lang }: SuretyBondTemplatePro
                 <div className="grid grid-cols-2 gap-16">
                      <div>
                         <p className="font-semibold mb-2">{clauses.parties.guarantor_label}</p>
-                        <div className="h-24 border-b border-gray-400"></div>
+                        <div className="h-24 border-b border-border"></div>
                         <p className="mt-2 text-xs">{data.guarantor_name || '_____________________'}</p>
                          <p className="text-xs">(Précédé de la mention manuscrite et de la signature)</p>
                     </div>
                     <div>
                         <p className="font-semibold mb-2">{clauses.parties.lender_label}</p>
-                        <div className="h-24 border-b border-gray-400 relative">
+                        <div className="h-24 border-b border-border relative">
                            <Image src="https://i.postimg.cc/jSrRkPWD/signature.png" alt="Signature" layout="fill" objectFit="contain" objectPosition="bottom left"/>
                         </div>
                         <p className="mt-2 text-xs font-semibold">David Rousseau</p>
