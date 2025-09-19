@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -45,13 +45,37 @@ export default function TransferForm({ onTransferSubmit, processingTimeConfig }:
       reason: "",
     },
   });
+  
+  // Effect to manage the progress bar interval
+  useEffect(() => {
+    if (transferState !== 'processing') {
+      return;
+    }
 
-  const getTotalProcessingTimeInMillis = () => {
-    const { days = 0, hours = 0, minutes = 0 } = processingTimeConfig || {};
-    const totalMinutes = (days * 24 * 60) + (hours * 60) + minutes;
-    // Si le total est 0, on met une minute par défaut pour que l'animation puisse se jouer
-    return (totalMinutes > 0 ? totalMinutes : 1) * 60 * 1000;
-  }
+    const getTotalProcessingTimeInMillis = () => {
+        const { days = 0, hours = 0, minutes = 0 } = processingTimeConfig || {};
+        const totalMinutes = (days * 24 * 60) + (hours * 60) + minutes;
+        return (totalMinutes > 0 ? totalMinutes : 1) * 60 * 1000;
+    };
+
+    const totalTime = getTotalProcessingTimeInMillis();
+    const startTime = Date.now();
+    setProgress(0);
+
+    const interval = setInterval(() => {
+        const elapsedTime = Date.now() - startTime;
+        const currentProgress = Math.min((elapsedTime / totalTime) * 100, 100);
+        setProgress(currentProgress);
+
+        if (currentProgress >= 100) {
+            clearInterval(interval);
+            setTransferState("success");
+        }
+    }, 100); // Update every 100ms for a smooth effect
+
+    return () => clearInterval(interval); // Cleanup on component unmount or state change
+  }, [transferState, processingTimeConfig]);
+
 
   async function onSubmit(values: TransferFormInput) {
     setTransferState("loading");
@@ -63,25 +87,9 @@ export default function TransferForm({ onTransferSubmit, processingTimeConfig }:
         setTransferState("error");
         return;
     }
-
-    // Forcer la mise à jour de l'état pour que la barre de progression s'affiche
-    setTransferState("idle"); 
-    await new Promise(resolve => setTimeout(resolve, 0)); // Permet à React de traiter la mise à jour de l'état
-    setTransferState("processing");
     
-    const totalTime = getTotalProcessingTimeInMillis();
-    const startTime = Date.now();
-
-    const interval = setInterval(() => {
-        const elapsedTime = Date.now() - startTime;
-        const currentProgress = Math.min((elapsedTime / totalTime) * 100, 100);
-        setProgress(currentProgress);
-
-        if (currentProgress >= 100) {
-            clearInterval(interval);
-            setTransferState("success");
-        }
-    }, 100);
+    // The useEffect will trigger the 'processing' state logic
+    setTransferState("processing");
   }
 
   const resetForm = () => {
