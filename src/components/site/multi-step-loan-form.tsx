@@ -73,18 +73,18 @@ const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "application/pdf"];
 
 const fileSchema = z
     .any()
-    .refine((files) => files?.length > 0, "Ce fichier est requis.")
-    .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
+    .refine((files) => files === undefined || files?.length > 0, "Ce fichier est requis.")
+    .refine((files) => files === undefined || files?.[0]?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
     .refine(
-      (files) => ACCEPTED_FILE_TYPES.includes(files?.[0]?.type),
+      (files) => files === undefined || ACCEPTED_FILE_TYPES.includes(files?.[0]?.type),
       "Seuls les formats .jpg, .png et .pdf sont acceptés."
     );
 
 
 const step4Schema = z.object({
-  identityDocument: fileSchema,
-  proofOfAddress: fileSchema,
-  proofOfIncome: fileSchema,
+  identityDocument: fileSchema.optional(),
+  proofOfAddress: fileSchema.optional(),
+  proofOfIncome: fileSchema.optional(),
 });
 
 
@@ -114,6 +114,13 @@ export default function MultiStepLoanForm() {
 
   const form = useForm<FullLoanFormValues>({
     mode: "onChange",
+    resolver: async (data, context, options) => {
+        const currentSchema = steps[currentStep].schema;
+        if (currentSchema) {
+            return zodResolver(currentSchema)(data, context, options);
+        }
+        return { values: data, errors: {} };
+    },
     defaultValues: {
       loanType: undefined,
       loanAmount: undefined,
@@ -160,20 +167,23 @@ export default function MultiStepLoanForm() {
     }
   };
 
-  async function onSubmit() {
+  async function onSubmit(data: FullLoanFormValues) {
       setIsLoading(true);
+
       const formData = new FormData();
       const allData = form.getValues();
 
-      // Append all form values to formData
-      for (const key in allData) {
-          const value = allData[key as keyof FullLoanFormValues];
-          if (value instanceof FileList && value.length > 0) {
-              formData.append(key, value[0]);
-          } else if (value !== undefined && value !== null) {
-              formData.append(key, String(value));
-          }
-      }
+      Object.keys(allData).forEach(key => {
+        const valueKey = key as keyof FullLoanFormValues;
+        const value = allData[valueKey];
+
+        if (value instanceof FileList && value.length > 0) {
+            formData.append(valueKey, value[0]);
+        } else if (value !== undefined && value !== null) {
+            formData.append(valueKey, String(value));
+        }
+      });
+      
 
       const result = await handleLoanApplication(formData);
       setIsLoading(false);
@@ -416,11 +426,11 @@ export default function MultiStepLoanForm() {
                         <FormField
                             control={form.control}
                             name="identityDocument"
-                            render={({ field: { onChange, onBlur, ref }}) => (
+                            render={({ field: { onChange, onBlur, name, ref }}) => (
                             <FormItem>
                                 <FormLabel>Pièce d'identité (PDF, JPG, PNG)</FormLabel>
                                 <FormControl>
-                                <Input type="file" onChange={(e) => onChange(e.target.files)} onBlur={onBlur} name="identityDocument" ref={ref} />
+                                <Input type="file" onChange={(e) => onChange(e.target.files)} onBlur={onBlur} name={name} ref={ref} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -429,11 +439,11 @@ export default function MultiStepLoanForm() {
                          <FormField
                             control={form.control}
                             name="proofOfAddress"
-                            render={({ field: { onChange, onBlur, ref }}) => (
+                            render={({ field: { onChange, onBlur, name, ref }}) => (
                             <FormItem>
                                 <FormLabel>Justificatif de domicile (PDF, JPG, PNG)</FormLabel>
                                 <FormControl>
-                                <Input type="file" onChange={(e) => onChange(e.target.files)} onBlur={onBlur} name="proofOfAddress" ref={ref} />
+                                <Input type="file" onChange={(e) => onChange(e.target.files)} onBlur={onBlur} name={name} ref={ref} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -442,11 +452,11 @@ export default function MultiStepLoanForm() {
                          <FormField
                             control={form.control}
                             name="proofOfIncome"
-                             render={({ field: { onChange, onBlur, ref }}) => (
+                             render={({ field: { onChange, onBlur, name, ref }}) => (
                             <FormItem>
                                 <FormLabel>Justificatif de revenus (PDF, JPG, PNG)</FormLabel>
                                 <FormControl>
-                                <Input type="file" onChange={(e) => onChange(e.target.files)} onBlur={onBlur} name="proofOfIncome" ref={ref} />
+                                <Input type="file" onChange={(e) => onChange(e.target.files)} onBlur={onBlur} name={name} ref={ref} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -502,3 +512,5 @@ export default function MultiStepLoanForm() {
     </Card>
   );
 }
+
+    
