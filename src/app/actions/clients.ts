@@ -20,6 +20,7 @@ interface Transaction {
     recipient_name: string | null;
     created_at: string;
     status: 'PENDING' | 'COMPLETED' | 'FAILED';
+    estimatedCompletionDate?: string;
 }
 
 export interface ClientProfile {
@@ -142,14 +143,8 @@ export async function getClientByIdAction(clientId: string): Promise<{ success: 
     // Simulate time passing to process PENDING transactions
     client.transactions.forEach(tx => {
         if (tx.status === 'PENDING') {
-            const txDate = new Date(tx.created_at);
+            const completionDate = tx.estimatedCompletionDate ? new Date(tx.estimatedCompletionDate) : new Date();
             const now = new Date();
-            const processingTime = client?.transfer_processing_time || { minutes: 1 };
-            const completionDate = new Date(txDate);
-            
-            completionDate.setDate(completionDate.getDate() + (processingTime.days || 0));
-            completionDate.setHours(completionDate.getHours() + (processingTime.hours || 0));
-            completionDate.setMinutes(completionDate.getMinutes() + (processingTime.minutes || 0));
 
             if (now >= completionDate) {
                 // If account is blocked, fail the transaction. Otherwise, complete it.
@@ -199,8 +194,6 @@ export async function createTransferAction(transferDetails: TransferFormInput & 
     }
 
     const client = clients[clientIndex];
-    
-    // The initial block check is removed from here.
 
     if (client.balance < parsed.data.amount) {
         return { success: false, error: "Solde insuffisant." };
@@ -208,6 +201,14 @@ export async function createTransferAction(transferDetails: TransferFormInput & 
 
     // Update balance
     client.balance -= parsed.data.amount;
+
+    const creationDate = new Date();
+    const processingTime = client.transfer_processing_time || { minutes: 1 };
+    const completionDate = new Date(creationDate);
+    
+    completionDate.setDate(completionDate.getDate() + (processingTime.days || 0));
+    completionDate.setHours(completionDate.getHours() + (processingTime.hours || 0));
+    completionDate.setMinutes(completionDate.getMinutes() + (processingTime.minutes || 0));
     
     // Create new transaction
     const newTransaction: Transaction = {
@@ -217,8 +218,9 @@ export async function createTransferAction(transferDetails: TransferFormInput & 
         reason: parsed.data.reason,
         recipient_iban: parsed.data.recipientIban,
         recipient_name: parsed.data.recipientName,
-        created_at: new Date().toISOString(),
+        created_at: creationDate.toISOString(),
         status: 'PENDING',
+        estimatedCompletionDate: completionDate.toISOString(),
     };
 
     client.transactions.push(newTransaction);

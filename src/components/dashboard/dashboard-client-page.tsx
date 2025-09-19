@@ -5,7 +5,7 @@ import { useState, useMemo, useEffect, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { LogOut, ArrowUpRight, ArrowDownLeft, Landmark, Send, FileText, Info, Copy, TrendingUp, TrendingDown, Ban } from "lucide-react";
+import { LogOut, ArrowUpRight, ArrowDownLeft, Landmark, Send, FileText, Info, Copy, TrendingUp, TrendingDown, Ban, Loader2 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import TransferForm from "@/components/dashboard/transfer-form";
@@ -16,6 +16,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { getClientByIdAction, createTransferAction } from "@/app/actions/clients";
 import type { ClientProfile } from "@/app/actions/clients";
 import type { TransferFormInput } from "@/lib/schemas";
+import ClientTransactionProgress from "./client-transaction-progress";
 
 interface Transaction {
     id: string;
@@ -26,6 +27,7 @@ interface Transaction {
     recipient_name: string | null;
     created_at: string;
     status: 'PENDING' | 'COMPLETED' | 'FAILED';
+    estimatedCompletionDate?: string;
 }
 
 const formatCurrency = (value: number) => {
@@ -105,7 +107,14 @@ export default function DashboardClientPage() {
             router.push("/login");
             return;
         }
+        
+        // Fetch data immediately
         fetchAccountData(clientId);
+
+        // Then set up an interval to poll for updates
+        const intervalId = setInterval(() => fetchAccountData(clientId), 5000); // Poll every 5 seconds
+
+        return () => clearInterval(intervalId); // Cleanup interval on component unmount
     }, [fetchAccountData, router, toast]);
 
     const handleTransferSubmit = async (transferData: TransferFormInput): Promise<{success: boolean}> => {
@@ -117,7 +126,7 @@ export default function DashboardClientPage() {
         });
 
         if (result.success) {
-             // Re-fetch data to update the view
+             // Immediately re-fetch data to update the view
             fetchAccountData(accountData.id);
         } else {
              toast({ title: "Erreur de virement", description: result.error, variant: "destructive"});
@@ -128,16 +137,16 @@ export default function DashboardClientPage() {
     const { totalIncome, totalExpenses } = useMemo(() => {
         if (!transactions) return { totalIncome: 0, totalExpenses: 0 };
         const income = transactions
-            .filter((tx) => tx.amount > 0)
+            .filter((tx) => tx.status === 'COMPLETED' && tx.amount > 0)
             .reduce((sum, tx) => sum + tx.amount, 0);
         const expenses = transactions
-            .filter((tx) => tx.amount < 0)
+            .filter((tx) => (tx.status === 'COMPLETED' || tx.status === 'PENDING') && tx.amount < 0)
             .reduce((sum, tx) => sum + tx.amount, 0);
         return { totalIncome: income, totalExpenses: expenses };
     }, [transactions]);
 
 
-  if (isLoading) {
+  if (isLoading && !accountData) { // Only show full-page skeleton on initial load
     return (
         <div className="container mx-auto py-16">
              <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
@@ -179,6 +188,8 @@ export default function DashboardClientPage() {
   }
 
   const sortedTransactions = [...transactions].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+  const pendingTransactions = sortedTransactions.filter(tx => tx.status === 'PENDING');
+  const completedTransactions = sortedTransactions.filter(tx => tx.status !== 'PENDING');
 
   return (
     <div className="container mx-auto py-16">
@@ -189,10 +200,13 @@ export default function DashboardClientPage() {
                     Votre identifiant client : <span className="font-mono text-foreground">{accountData.client_id}</span>
                 </p>
             </div>
-            <Button variant="outline" onClick={handleLogout}>
-                <LogOut className="mr-2 h-4 w-4" />
-                Déconnexion
-            </Button>
+            <div className="flex items-center gap-2">
+                {isLoading && <Loader2 className="animate-spin text-muted-foreground" />}
+                <Button variant="outline" onClick={handleLogout}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Déconnexion
+                </Button>
+            </div>
         </div>
 
         <Tabs defaultValue="overview" className="w-full">
@@ -202,6 +216,20 @@ export default function DashboardClientPage() {
                 <TabsTrigger value="loans">Mes Prêts</TabsTrigger>
             </TabsList>
             <TabsContent value="overview">
+                {pendingTransactions.length > 0 && (
+                    <Card className="mt-6 bg-amber-500/10 border-amber-500/30">
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2 text-amber-700">
+                                <Loader2 className="animate-spin" /> Virements en Cours de Traitement
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            {pendingTransactions.map(tx => (
+                                <ClientTransactionProgress key={tx.id} transaction={tx} />
+                            ))}
+                        </CardContent>
+                    </Card>
+                )}
                 <div className="grid lg:grid-cols-3 gap-6 mt-4">
                     <Card className="lg:col-span-1 h-full bg-primary/5">
                         <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -250,7 +278,7 @@ export default function DashboardClientPage() {
 
                     <Card className="mt-0 lg:col-span-3">
                         <CardHeader>
-                            <CardTitle>Dernières Transactions</CardTitle>
+                            <CardTitle>Historique des Transactions</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="border rounded-md">
@@ -263,12 +291,15 @@ export default function DashboardClientPage() {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {transactions && transactions.length > 0 ? (
-                                            sortedTransactions.map((tx) => (
+                                        {completedTransactions.length > 0 ? (
+                                            completedTransactions.map((tx) => (
                                                 <TableRow key={tx.id}>
                                                     <TableCell className="font-medium flex items-center gap-2">
                                                         {tx.amount > 0 ? <ArrowDownLeft className="w-4 h-4 text-green-500"/> : <ArrowUpRight className="w-4 h-4 text-red-500" />}
-                                                        {tx.reason}
+                                                        <div>
+                                                            {tx.reason}
+                                                            {tx.status === 'FAILED' && <span className="text-xs text-destructive block"> (Échoué)</span>}
+                                                        </div>
                                                     </TableCell>
                                                     <TableCell className={`text-right font-semibold ${tx.amount > 0 ? 'text-green-600' : 'text-red-600'}`}>{formatCurrency(tx.amount)}</TableCell>
                                                     <TableCell className="hidden sm:table-cell text-right text-muted-foreground">{new Date(tx.created_at).toLocaleDateString('fr-FR')}</TableCell>
@@ -277,7 +308,7 @@ export default function DashboardClientPage() {
                                         ) : (
                                             <TableRow>
                                                 <TableCell colSpan={3} className="text-center h-24 text-muted-foreground">
-                                                    Aucune transaction pour le moment.
+                                                    Aucune transaction finalisée pour le moment.
                                                 </TableCell>
                                             </TableRow>
                                         )}
@@ -316,7 +347,6 @@ export default function DashboardClientPage() {
                                 </Alert>
                                 <TransferForm
                                     onTransferSubmit={handleTransferSubmit}
-                                    processingTimeConfig={accountData.transfer_processing_time}
                                 />
                             </>
                         )}
