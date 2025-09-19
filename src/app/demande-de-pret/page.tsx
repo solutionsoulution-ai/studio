@@ -1,7 +1,7 @@
 
 import SiteHeader from "@/components/site/site-header";
 import SiteFooter from "@/components/site/site-footer";
-import MultiStepLoanForm from "@/components/site/multi-step-loan-form";
+import LoanApplicationForm from "@/components/site/loan-application-form";
 
 export default function DemandeDePretPage() {
   return (
@@ -12,10 +12,10 @@ export default function DemandeDePretPage() {
            <div className="text-center mb-10">
                 <h1 className="text-4xl font-bold tracking-tight font-headline">Demande de Financement</h1>
                 <p className="mt-4 text-lg text-muted-foreground">
-                    Suivez les étapes pour compléter votre demande de prêt. C'est simple, rapide et sécurisé.
+                    Remplissez le formulaire ci-dessous pour soumettre votre demande. C'est simple, rapide et sécurisé.
                 </p>
             </div>
-            <MultiStepLoanForm />
+            <LoanApplicationForm />
         </div>
       </main>
       <SiteFooter />
