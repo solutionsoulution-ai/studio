@@ -2,6 +2,7 @@
 "use client";
 
 import { invoiceClauses } from "@/data/documents/invoice-clauses";
+import { Landmark } from "lucide-react";
 
 export interface InvoiceData {
     customer_name?: string;
@@ -46,7 +47,10 @@ export default function InvoiceTemplate({ data, lang }: InvoiceTemplateProps) {
         <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto">
             <header className="flex justify-between items-start mb-16">
                 <div>
-                    <h1 className="text-3xl font-bold uppercase text-gray-800">VylsCapital</h1>
+                     <div className="flex items-center gap-2 mb-2">
+                        <Landmark className="w-8 h-8 text-gray-800" />
+                        <h1 className="text-3xl font-bold uppercase text-gray-800">VylsCapital</h1>
+                    </div>
                     <p className="text-gray-600 font-semibold">Département Comptabilité</p>
                     <p className="text-gray-600 text-xs mt-2">10 Place de la Bourse, 69002 Lyon, France</p>
                 </div>
@@ -58,23 +62,28 @@ export default function InvoiceTemplate({ data, lang }: InvoiceTemplateProps) {
             </header>
 
             <section className="mb-12">
-                <h3 className="font-bold border-b pb-1 mb-2">{clauses.bill_to_label}</h3>
+                <h3 className="font-bold border-b pb-1 mb-2 text-gray-600">{clauses.bill_to_label}</h3>
                 <p className="font-semibold">{data.customer_name || '...'}</p>
                 <p className="whitespace-pre-line">{data.customer_address || '...'}</p>
             </section>
             
             <main>
-                <table className="w-full border-collapse">
+                <table className="w-full border-collapse text-base">
                     <thead className="bg-gray-100">
                         <tr>
-                            <th className="border p-2 text-left font-bold">{clauses.table_headers.description}</th>
-                            <th className="border p-2 text-right font-bold">{clauses.table_headers.amount}</th>
+                            <th className="border p-2 text-left font-bold text-gray-700">{clauses.table_headers.description}</th>
+                            <th className="border p-2 text-right font-bold text-gray-700">{clauses.table_headers.amount}</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td className="border p-2">{data.description || '...'}</td>
                             <td className="border p-2 text-right">{formatCurrency(data.amount)}</td>
+                        </tr>
+                        {/* Add more rows here if needed */}
+                        <tr className="h-24">
+                           <td className="border p-2"></td>
+                           <td className="border p-2"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -83,15 +92,15 @@ export default function InvoiceTemplate({ data, lang }: InvoiceTemplateProps) {
                     <div className="w-1/2">
                         <table className="w-full">
                             <tbody>
-                                <tr>
+                                <tr className="text-base">
                                     <td className="p-2 font-semibold">{clauses.subtotal_label}</td>
                                     <td className="p-2 text-right">{formatCurrency(data.amount)}</td>
                                 </tr>
-                                <tr>
-                                    <td className="p-2 font-semibold">{clauses.vat_label} (0%)</td>
+                                <tr className="text-base">
+                                    <td className="p-2 font-semibold">{clauses.vat_label}</td>
                                     <td className="p-2 text-right">{formatCurrency(vatAmount)}</td>
                                 </tr>
-                                <tr className="bg-gray-100 font-bold text-base">
+                                <tr className="bg-gray-200 font-bold text-lg">
                                     <td className="border p-2">{clauses.total_label}</td>
                                     <td className="border p-2 text-right">{formatCurrency(totalAmount)}</td>
                                 </tr>
@@ -102,10 +111,13 @@ export default function InvoiceTemplate({ data, lang }: InvoiceTemplateProps) {
             </main>
 
             <footer className="absolute bottom-16 left-16 right-16 border-t pt-8">
-                <h3 className="font-bold mb-2">{clauses.payment_terms.title}</h3>
+                <h3 className="font-bold mb-2 text-gray-700">{clauses.payment_terms.title}</h3>
                 <p>{clauses.payment_terms.due_date}</p>
                 <p className="mt-2">
                     {clauses.payment_terms.iban_label} <span className="font-mono">{data.payment_iban || '...'}</span>
+                </p>
+                 <p className="mt-2">
+                    {clauses.payment_terms.bic_label} <span className="font-mono">VYLCFR2LXXX</span>
                 </p>
                 <p className="mt-8 text-center text-xs text-gray-500">
                     {clauses.footer.thank_you}

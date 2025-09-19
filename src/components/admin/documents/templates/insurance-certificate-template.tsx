@@ -3,6 +3,7 @@
 
 import { insuranceCertificateClauses } from "@/data/documents/insurance-certificate-clauses";
 import { useState, useEffect } from 'react';
+import { Landmark } from "lucide-react";
 
 export interface InsuranceCertificateData {
     insured_name?: string;
@@ -49,9 +50,18 @@ export default function InsuranceCertificateTemplate({ data, lang }: InsuranceCe
 
     return (
         <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto">
-            <header className="mb-12 border-b-2 border-gray-600 pb-4">
-                <h1 className="text-3xl font-bold uppercase text-gray-800">VylsCapital Assurance</h1>
-                <p className="text-gray-600 text-xs mt-2">10 Place de la Bourse, 69002 Lyon, France</p>
+            <header className="flex justify-between items-start mb-12 border-b-2 border-gray-700 pb-4">
+                 <div>
+                    <div className="flex items-center gap-2 mb-2">
+                        <Landmark className="w-8 h-8 text-gray-800" />
+                        <h1 className="text-3xl font-bold uppercase text-gray-800">VylsCapital</h1>
+                    </div>
+                    <p className="text-gray-600 font-semibold">VylsCapital Assurance</p>
+                </div>
+                 <div className="text-right text-xs text-gray-500">
+                    <p>10 Place de la Bourse, 69002 Lyon, France</p>
+                    <p>assurance@vylscapital.com</p>
+                </div>
             </header>
 
             <h2 className="text-center text-2xl font-bold uppercase mb-12">{clauses.title}</h2>
@@ -65,10 +75,10 @@ export default function InsuranceCertificateTemplate({ data, lang }: InsuranceCe
                     {clauses.introduction}
                 </p>
 
-                <div className="border-t border-b py-4 space-y-3">
+                <div className="border-t border-b py-4 my-6 space-y-3 bg-gray-50 p-4 rounded-md">
                     <div className="flex justify-between">
                         <span className="font-semibold">{clauses.insured_label}:</span>
-                        <span>{data.insured_name || '_____________________'}</span>
+                        <span className="font-medium">{data.insured_name || '_____________________'}</span>
                     </div>
                      <div className="flex justify-between">
                         <span className="font-semibold">{clauses.beneficiary_label}:</span>
@@ -88,14 +98,16 @@ export default function InsuranceCertificateTemplate({ data, lang }: InsuranceCe
                     </div>
                 </div>
 
-                <p>{clauses.coverage_summary}</p>
-                <ul className="list-disc list-inside ml-4">
-                    <li>{clauses.guarantees.death}</li>
-                    <li>{clauses.guarantees.disability}</li>
-                    <li>{clauses.guarantees.incapacity}</li>
+                <h3 className="font-bold text-base mt-6">{clauses.coverage_summary}</h3>
+                <ul className="list-disc list-inside ml-4 space-y-1">
+                    <li><strong>{clauses.guarantees.death.title} :</strong> {clauses.guarantees.death.description}</li>
+                    <li><strong>{clauses.guarantees.disability.title} :</strong> {clauses.guarantees.disability.description}</li>
+                    <li><strong>{clauses.guarantees.incapacity.title} :</strong> {clauses.guarantees.incapacity.description}</li>
                 </ul>
+                <p className="text-xs text-gray-600">{clauses.notice_reference}</p>
 
-                 <p>
+
+                 <p className="mt-8">
                     {clauses.conclusion
                         .replace('{signature_date}', data.signature_date || '___/___/_____')
                     }
@@ -106,7 +118,7 @@ export default function InsuranceCertificateTemplate({ data, lang }: InsuranceCe
                 <div className="flex justify-end">
                     <div className="text-center">
                          <div className="h-24 w-48 mb-2">
-                           {/* Placeholder for signature image */}
+                           {/* Placeholder for signature/stamp image */}
                         </div>
                         <div className="border-t border-gray-400 pt-2">
                              <p className="font-semibold">Le Responsable des Assurances</p>

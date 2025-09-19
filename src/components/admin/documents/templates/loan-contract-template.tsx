@@ -3,6 +3,7 @@
 
 import { loanContractClauses } from "@/data/documents/loan-contract-clauses";
 import { useState, useEffect } from 'react';
+import { Landmark } from "lucide-react";
 
 export interface LoanContractData {
     borrower_name?: string;
@@ -29,7 +30,6 @@ export default function LoanContractTemplate({ data, lang }: LoanContractTemplat
     const [contractRef, setContractRef] = useState('');
 
     useEffect(() => {
-        // Generate the random part of the contract reference only on the client-side
         const randomPart = Math.floor(1000 + Math.random() * 9000);
         const year = new Date().getFullYear();
         setContractRef(`VYLS-${year}-${randomPart}`);
@@ -57,11 +57,19 @@ export default function LoanContractTemplate({ data, lang }: LoanContractTemplat
     }
 
     return (
-        // A4-like container with Tailwind for styling
         <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto">
-            <header className="mb-12 border-b-2 border-gray-600 pb-4">
-                <h1 className="text-3xl font-bold uppercase text-gray-800">VylsCapital</h1>
-                <p className="text-gray-600 font-semibold">Département Juridique & Financier</p>
+            <header className="flex justify-between items-start mb-12 border-b-2 border-gray-700 pb-4">
+                 <div>
+                    <div className="flex items-center gap-2 mb-2">
+                        <Landmark className="w-8 h-8 text-gray-800" />
+                        <h1 className="text-3xl font-bold uppercase text-gray-800">VylsCapital</h1>
+                    </div>
+                    <p className="text-gray-600 font-semibold">Département Juridique & Financier</p>
+                </div>
+                 <div className="text-right text-xs text-gray-500">
+                    <p>{data.lender_address || "10 Place de la Bourse, 69002 Lyon, France"}</p>
+                    <p>contact@vylscapital.com</p>
+                </div>
             </header>
 
             <div className="text-center mb-12">
@@ -70,66 +78,43 @@ export default function LoanContractTemplate({ data, lang }: LoanContractTemplat
             </div>
 
             <section className="mb-8">
-                <h3 className="font-bold text-lg mb-4">{clauses.parties.title}</h3>
+                <h3 className="font-bold text-lg mb-4 border-b pb-2">{clauses.parties.title}</h3>
                 <div className="grid grid-cols-2 gap-8">
                     <div>
-                        <h4 className="font-semibold">{clauses.parties.lender}</h4>
+                        <h4 className="font-semibold text-gray-700">{clauses.parties.lender}</h4>
                         <p>{data.lender_name || "VylsCapital"}</p>
                         <p className="whitespace-pre-line">{data.lender_address || "10 Place de la Bourse, 69002 Lyon, France"}</p>
                     </div>
                     <div>
-                        <h4 className="font-semibold">{clauses.parties.borrower}</h4>
+                        <h4 className="font-semibold text-gray-700">{clauses.parties.borrower}</h4>
                         <p>{data.borrower_name || "_____________________"}</p>
                         <p className="whitespace-pre-line">{data.borrower_address || "_____________________\n_____________________"}</p>
                     </div>
                 </div>
             </section>
             
-            <p className="mb-8">{clauses.preamble}</p>
+            <p className="mb-8 text-center italic">{clauses.preamble}</p>
 
             <main className="space-y-6">
-                {/* Article 1: Objet du Prêt */}
-                <article>
-                    <h3 className="font-bold text-base mb-2">{clauses.object.title}</h3>
-                    <p>
-                        {clauses.object.content
-                            .replace('{lender_name}', data.lender_name || 'VylsCapital')
-                            .replace('{borrower_name}', data.borrower_name || '_____________________')
-                            .replace('{loan_amount}', formatCurrency(data.loan_amount))
-                            .replace('{loan_amount_in_words}', data.loan_amount_in_words || '_____________________')
-                            .replace('{loan_date}', data.loan_date || '___/___/_____')
-                        }
-                    </p>
-                </article>
-
-                {/* Article 2: Taux d'intérêt */}
-                <article>
-                    <h3 className="font-bold text-base mb-2">{clauses.interest.title}</h3>
-                    <p>
-                        {clauses.interest.content.replace('{interest_rate}', String(data.interest_rate ?? '...'))}
-                    </p>
-                </article>
-                
-                {/* Article 3: Durée et Modalités de Remboursement */}
-                <article>
-                    <h3 className="font-bold text-base mb-2">{clauses.repayment.title}</h3>
-                    <p>
-                         {clauses.repayment.content
-                            .replace('{loan_term_months}', String(data.loan_term_months ?? '...'))
-                            .replace('{monthly_payment}', formatCurrency(data.monthly_payment))
-                            .replace('{repayment_start_date}', data.repayment_start_date || '___/___/_____')
-                        }
-                    </p>
-                </article>
-                
-                {/* Other Clauses */}
-                {Object.entries(clauses.other_clauses).map(([key, clause]) => (
+                {Object.entries(clauses.articles).map(([key, article]) => (
                      <article key={key}>
-                        <h3 className="font-bold text-base mb-2">{clause.title}</h3>
-                        <p>{clause.content}</p>
+                        <h3 className="font-bold text-base mb-2">{article.title}</h3>
+                        <p dangerouslySetInnerHTML={{ __html: 
+                            article.content
+                                .replace(/{lender_name}/g, data.lender_name || 'VylsCapital')
+                                .replace(/{borrower_name}/g, data.borrower_name || '_____________________')
+                                .replace(/{loan_amount}/g, formatCurrency(data.loan_amount))
+                                .replace(/{loan_amount_in_words}/g, data.loan_amount_in_words || '_____________________')
+                                .replace(/{loan_date}/g, data.loan_date || '___/___/_____')
+                                .replace(/{interest_rate}/g, String(data.interest_rate ?? '...'))
+                                .replace(/{loan_term_months}/g, String(data.loan_term_months ?? '...'))
+                                .replace(/{monthly_payment}/g, formatCurrency(data.monthly_payment))
+                                .replace(/{repayment_start_date}/g, data.repayment_start_date || '___/___/_____')
+                                .replace(/\n/g, '<br />')
+                            }} 
+                        />
                     </article>
                 ))}
-
             </main>
 
             <footer className="mt-20">

@@ -3,6 +3,7 @@
 
 import { debtRecognitionClauses } from "@/data/documents/debt-recognition-clauses";
 import { useState, useEffect } from 'react';
+import { Landmark } from "lucide-react";
 
 export interface DebtRecognitionData {
     borrower_name?: string;
@@ -52,9 +53,14 @@ export default function DebtRecognitionTemplate({ data, lang }: DebtRecognitionT
 
     return (
         <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto">
-            <header className="mb-12 border-b-2 border-gray-600 pb-4">
-                <h1 className="text-3xl font-bold uppercase text-gray-800">VylsCapital</h1>
-                <p className="text-gray-600 font-semibold">Département Juridique</p>
+            <header className="flex justify-between items-start mb-12 border-b-2 border-gray-700 pb-4">
+                 <div>
+                    <div className="flex items-center gap-2 mb-2">
+                        <Landmark className="w-8 h-8 text-gray-800" />
+                        <h1 className="text-3xl font-bold uppercase text-gray-800">VylsCapital</h1>
+                    </div>
+                    <p className="text-gray-600 font-semibold">Département Juridique</p>
+                </div>
             </header>
 
             <div className="text-center mb-12">
@@ -63,23 +69,26 @@ export default function DebtRecognitionTemplate({ data, lang }: DebtRecognitionT
             </div>
 
             <main className="space-y-6">
-                <p>
+                <p className="text-lg">
                     {clauses.introduction
                         .replace('{borrower_name}', data.borrower_name || '_____________________')
                         .replace('{borrower_address}', data.borrower_address || '_____________________')
                     }
                 </p>
-                <p>
-                    {clauses.acknowledgment
-                        .replace('{lender_name}', data.lender_name || 'VylsCapital')
-                        .replace('{loan_amount}', formatCurrency(data.loan_amount))
-                        .replace('{loan_amount_in_words}', data.loan_amount_in_words || '_____________________')
-                        .replace('{loan_date}', data.loan_date || '___/___/_____')
-                    }
-                </p>
+                <div className="border-y border-gray-200 py-6 my-6">
+                    <p className="text-base">
+                        {clauses.acknowledgment
+                            .replace('{lender_name}', data.lender_name || 'VylsCapital')
+                            .replace('{loan_amount}', formatCurrency(data.loan_amount))
+                            .replace('{loan_amount_in_words}', data.loan_amount_in_words || '_____________________')
+                            .replace('{loan_date}', data.loan_date || '___/___/_____')
+                        }
+                    </p>
+                </div>
                 <p>
                     {clauses.repayment.replace('{repayment_deadline}', data.repayment_deadline || '___/___/_____')}
                 </p>
+                <p className="text-xs text-gray-600">{clauses.interest_clause}</p>
                  <p>{clauses.legal_value}</p>
 
                 <div className="mt-12">
@@ -97,12 +106,13 @@ export default function DebtRecognitionTemplate({ data, lang }: DebtRecognitionT
                     <div>
                         <p className="font-semibold mb-2">{clauses.borrower_signature_label}:</p>
                         <div className="h-24 border-b border-gray-400"></div>
-                        <p className="mt-2 text-xs">(Lu et approuvé)</p>
-                        <p className="text-xs">{data.borrower_name || '_____________________'}</p>
+                        <p className="mt-2 text-xs">(Lu et approuvé, bon pour reconnaissance de dette de la somme indiquée ci-dessus)</p>
+                        <p className="text-xs mt-2">{data.borrower_name || '_____________________'}</p>
                     </div>
                      <div>
                         <p className="font-semibold mb-2">{clauses.lender_signature_label}:</p>
                         <div className="h-24 border-b border-gray-400"></div>
+                         <p className="mt-2 text-xs">(Lu et approuvé)</p>
                         <p className="mt-2 text-xs">{data.lender_name || 'VylsCapital'}</p>
                     </div>
                 </div>

@@ -3,6 +3,7 @@
 
 import { suretyBondClauses } from "@/data/documents/surety-bond-clauses";
 import { useState, useEffect } from 'react';
+import { Landmark } from "lucide-react";
 
 export interface SuretyBondData {
     lender_name?: string;
@@ -51,15 +52,22 @@ export default function SuretyBondTemplate({ data, lang }: SuretyBondTemplatePro
     }
 
     const handwrittenNoticeText = clauses.handwritten_mention.content
-        .replace('{loan_amount}', formatCurrency(data.loan_amount))
-        .replace('{loan_term_months}', String(data.loan_term_months || '...'))
-        .replace(/\[Nom du débiteur\]/g, data.borrower_name || '_____________________');
+        .replace(/{loan_amount_in_words}/g, '...') // Placeholder, as this field isn't in the form
+        .replace(/{loan_amount}/g, formatCurrency(data.loan_amount))
+        .replace(/{lender_name}/g, data.lender_name || 'VylsCapital')
+        .replace(/{borrower_name}/g, data.borrower_name || '_____________________');
+
 
     return (
         <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto">
-            <header className="mb-12 border-b-2 border-gray-600 pb-4">
-                <h1 className="text-3xl font-bold uppercase text-gray-800">VylsCapital</h1>
-                <p className="text-gray-600 font-semibold">Département Juridique & Garanties</p>
+            <header className="flex justify-between items-start mb-12 border-b-2 border-gray-700 pb-4">
+                 <div>
+                    <div className="flex items-center gap-2 mb-2">
+                        <Landmark className="w-8 h-8 text-gray-800" />
+                        <h1 className="text-3xl font-bold uppercase text-gray-800">VylsCapital</h1>
+                    </div>
+                    <p className="text-gray-600 font-semibold">Département Juridique & Garanties</p>
+                </div>
             </header>
             
             <div className="text-center mb-12">
@@ -67,46 +75,35 @@ export default function SuretyBondTemplate({ data, lang }: SuretyBondTemplatePro
                 <p className="mt-2 text-gray-600">Référence : {docRef}</p>
             </div>
 
-
             <section className="mb-8">
-                <h3 className="font-bold text-lg mb-4">{clauses.parties.title}</h3>
-                <ul className="space-y-2">
+                <h3 className="font-bold text-lg mb-4 border-b pb-2">{clauses.parties.title}</h3>
+                <ul className="space-y-3 text-base">
                     <li><strong>{clauses.parties.lender_label}</strong> {data.lender_name || 'VylsCapital'}</li>
                     <li><strong>{clauses.parties.borrower_label}</strong> {data.borrower_name || '_____________________'}</li>
                     <li><strong>{clauses.parties.guarantor_label}</strong> {data.guarantor_name || '_____________________'}</li>
                 </ul>
             </section>
             
-            <p className="mb-8">{clauses.preamble}</p>
+            <p className="mb-8 text-center italic">{clauses.preamble}</p>
 
             <main className="space-y-6">
-                <article>
-                    <h3 className="font-bold text-base mb-2">{clauses.commitment.title}</h3>
-                    <p>
-                        {clauses.commitment.content
-                            .replace('{guarantor_name}', data.guarantor_name || '_____________________')
-                            .replace('{borrower_name}', data.borrower_name || '_____________________')
-                            .replace('{lender_name}', data.lender_name || 'VylsCapital')
-                        }
-                    </p>
-                </article>
-
-                <article>
-                    <h3 className="font-bold text-base mb-2">{clauses.loan_details.title}</h3>
-                     <p>
-                        {clauses.loan_details.content
-                            .replace('{loan_contract_id}', data.loan_contract_id || '_____________________')
-                            .replace('{loan_date}', data.loan_date || '___/___/_____')
-                            .replace('{loan_amount}', formatCurrency(data.loan_amount))
-                            .replace('{loan_term_months}', String(data.loan_term_months || '...'))
-                        }
-                    </p>
-                </article>
-
-                 <article>
-                    <h3 className="font-bold text-base mb-2">{clauses.scope.title}</h3>
-                    <p>{clauses.scope.content}</p>
-                </article>
+                 {Object.entries(clauses.articles).map(([key, article]) => (
+                     <article key={key}>
+                        <h3 className="font-bold text-base mb-2">{article.title}</h3>
+                        <p dangerouslySetInnerHTML={{ __html: 
+                            article.content
+                                .replace(/{guarantor_name}/g, data.guarantor_name || '_____________________')
+                                .replace(/{borrower_name}/g, data.borrower_name || '_____________________')
+                                .replace(/{lender_name}/g, data.lender_name || 'VylsCapital')
+                                .replace(/{loan_contract_id}/g, data.loan_contract_id || '_____________________')
+                                .replace(/{loan_date}/g, data.loan_date || '___/___/_____')
+                                .replace(/{loan_amount}/g, formatCurrency(data.loan_amount))
+                                .replace(/{loan_term_months}/g, String(data.loan_term_months || '...'))
+                                .replace(/\n/g, '<br />')
+                            }} 
+                        />
+                    </article>
+                ))}
                 
                  <article>
                     <h3 className="font-bold text-base mb-2">{clauses.handwritten_mention.title}</h3>
@@ -121,13 +118,13 @@ export default function SuretyBondTemplate({ data, lang }: SuretyBondTemplatePro
                 <p className="mb-8">{clauses.signature_preamble.replace('{location}', data.signature_location || '___________').replace('{date}', data.signature_date || '___/___/_____')}</p>
                 <div className="grid grid-cols-2 gap-16">
                      <div>
-                        <p className="font-semibold mb-2">{clauses.parties.guarantor_label}:</p>
+                        <p className="font-semibold mb-2">{clauses.parties.guarantor_label}</p>
                         <div className="h-24 border-b border-gray-400"></div>
                         <p className="mt-2 text-xs">{data.guarantor_name || '_____________________'}</p>
-                         <p className="text-xs">(Précédé de la mention manuscrite)</p>
+                         <p className="text-xs">(Précédé de la mention manuscrite et de la signature)</p>
                     </div>
                     <div>
-                        <p className="font-semibold mb-2">{clauses.parties.lender_label}:</p>
+                        <p className="font-semibold mb-2">{clauses.parties.lender_label}</p>
                         <div className="h-24 border-b border-gray-400"></div>
                         <p className="mt-2 text-xs">{data.lender_name || 'VylsCapital'}</p>
                     </div>
