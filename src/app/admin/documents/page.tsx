@@ -19,6 +19,7 @@ import EligibilityCertificateForm, { type EligibilityCertificateFormValues } fro
 import InsuranceNoticeForm, { type InsuranceNoticeFormValues } from "@/components/admin/documents/forms/insurance-notice-form";
 import InsuranceCertificateForm, { type InsuranceCertificateFormValues } from "@/components/admin/documents/forms/insurance-certificate-form";
 import SuretyBondForm, { type SuretyBondFormValues } from "@/components/admin/documents/forms/surety-bond-form";
+import BlankDocumentForm, { type BlankDocumentFormValues } from "@/components/admin/documents/forms/blank-document-form";
 
 import LoanContractTemplate from "@/components/admin/documents/templates/loan-contract-template";
 import DebtRecognitionTemplate from "@/components/admin/documents/templates/debt-recognition-template";
@@ -27,6 +28,7 @@ import EligibilityCertificateTemplate from "@/components/admin/documents/templat
 import InsuranceNoticeTemplate from "@/components/admin/documents/templates/insurance-notice-template";
 import InsuranceCertificateTemplate from "@/components/admin/documents/templates/insurance-certificate-template";
 import SuretyBondTemplate from "@/components/admin/documents/templates/surety-bond-template";
+import BlankDocumentTemplate from "@/components/admin/documents/templates/blank-document-template";
 
 
 const configSchema = z.object({
@@ -37,7 +39,8 @@ const configSchema = z.object({
         "insurance-certificate",
         "loan-contract", 
         "surety-bond",
-        "debt-recognition"
+        "debt-recognition",
+        "blank-document",
     ]),
     docLang: z.enum(["fr", "en"]),
 });
@@ -126,6 +129,11 @@ const defaultSuretyBondValues: SuretyBondFormValues = {
     signature_date: todayFR,
 };
 
+const defaultBlankDocumentValues: BlankDocumentFormValues = {
+    document_title: "Titre du Document",
+    content_placeholder: "",
+}
+
 
 export default function DocumentGeneratorPage() {
     const { generatePDF, isLoading } = usePDFGenerator();
@@ -146,6 +154,7 @@ export default function DocumentGeneratorPage() {
     const insuranceNoticeForm = useForm<InsuranceNoticeFormValues>({ resolver: zodResolver(InsuranceNoticeForm.schema), defaultValues: defaultInsuranceNoticeValues });
     const insuranceCertificateForm = useForm<InsuranceCertificateFormValues>({ resolver: zodResolver(InsuranceCertificateForm.schema), defaultValues: defaultInsuranceCertificateValues });
     const suretyBondForm = useForm<SuretyBondFormValues>({ resolver: zodResolver(SuretyBondForm.schema), defaultValues: defaultSuretyBondValues });
+    const blankDocumentForm = useForm<BlankDocumentFormValues>({ resolver: zodResolver(BlankDocumentForm.schema), defaultValues: defaultBlankDocumentValues });
 
     const docType = configForm.watch("docType");
     const docLang = configForm.watch("docLang");
@@ -183,6 +192,10 @@ export default function DocumentGeneratorPage() {
             activeForm = suretyBondForm;
             docData = suretyBondForm.watch();
             break;
+        case "blank-document":
+            activeForm = blankDocumentForm;
+            docData = blankDocumentForm.watch();
+            break;
     }
 
     const handleGenerateClick = () => {
@@ -194,26 +207,28 @@ export default function DocumentGeneratorPage() {
 
     const renderForm = () => {
         switch (docType) {
-            case "loan-contract": return <LoanContractForm form={loanContractForm} lang={docLang} />;
-            case "debt-recognition": return <DebtRecognitionForm form={debtRecognitionForm} lang={docLang} />;
             case "invoice": return <InvoiceForm form={invoiceForm} lang={docLang} />;
             case "eligibility-certificate": return <EligibilityCertificateForm form={eligibilityCertificateForm} lang={docLang} />;
             case "insurance-notice": return <InsuranceNoticeForm form={insuranceNoticeForm} lang={docLang} />;
             case "insurance-certificate": return <InsuranceCertificateForm form={insuranceCertificateForm} lang={docLang} />;
+            case "loan-contract": return <LoanContractForm form={loanContractForm} lang={docLang} />;
             case "surety-bond": return <SuretyBondForm form={suretyBondForm} lang={docLang} />;
+            case "debt-recognition": return <DebtRecognitionForm form={debtRecognitionForm} lang={docLang} />;
+            case "blank-document": return <BlankDocumentForm form={blankDocumentForm} lang={docLang} />;
             default: return <p>Veuillez sélectionner un type de document.</p>;
         }
     }
 
     const renderTemplate = () => {
         switch (docType) {
-            case "loan-contract": return <LoanContractTemplate data={docData} lang={docLang} />;
-            case "debt-recognition": return <DebtRecognitionTemplate data={docData} lang={docLang} />;
             case "invoice": return <InvoiceTemplate data={docData} lang={docLang} />;
             case "eligibility-certificate": return <EligibilityCertificateTemplate data={docData} lang={docLang} />;
             case "insurance-notice": return <InsuranceNoticeTemplate data={docData} lang={docLang} />;
             case "insurance-certificate": return <InsuranceCertificateTemplate data={docData} lang={docLang} />;
+            case "loan-contract": return <LoanContractTemplate data={docData} lang={docLang} />;
             case "surety-bond": return <SuretyBondTemplate data={docData} lang={docLang} />;
+            case "debt-recognition": return <DebtRecognitionTemplate data={docData} lang={docLang} />;
+            case "blank-document": return <BlankDocumentTemplate data={docData} lang={docLang} />;
             default: return <div id="pdf-preview" className="p-8 text-center text-muted-foreground">Aperçu du document</div>;
         }
     }
@@ -256,6 +271,7 @@ export default function DocumentGeneratorPage() {
                                                                 <SelectItem value="loan-contract">Contrat de Prêt</SelectItem>
                                                                 <SelectItem value="surety-bond">Acte de Cautionnement</SelectItem>
                                                                 <SelectItem value="debt-recognition">Reconnaissance de Dette</SelectItem>
+                                                                <SelectItem value="blank-document">Document Vierge</SelectItem>
                                                             </SelectContent>
                                                         </Select>
                                                     </FormItem>
