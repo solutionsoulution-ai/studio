@@ -294,12 +294,12 @@ export default function DashboardClientPage() {
                                         {completedTransactions.length > 0 ? (
                                             completedTransactions.map((tx) => (
                                                 <TableRow key={tx.id}>
-                                                    <TableCell className="font-medium flex items-center gap-2">
-                                                        {tx.amount > 0 ? <ArrowDownLeft className="w-4 h-4 text-green-500"/> : <ArrowUpRight className="w-4 h-4 text-red-500" />}
-                                                        <div>
-                                                            {tx.reason}
-                                                            {tx.status === 'FAILED' && <span className="text-xs text-destructive block"> (Échoué)</span>}
+                                                    <TableCell className="font-medium">
+                                                        <div className="flex items-center gap-2">
+                                                            {tx.amount > 0 ? <ArrowDownLeft className="w-4 h-4 text-green-500"/> : <ArrowUpRight className="w-4 h-4 text-red-500" />}
+                                                            <span>{tx.reason}</span>
                                                         </div>
+                                                        {tx.status === 'FAILED' && <span className="text-xs text-destructive block ml-6">Échoué</span>}
                                                     </TableCell>
                                                     <TableCell className={`text-right font-semibold ${tx.amount > 0 ? 'text-green-600' : 'text-red-600'}`}>{formatCurrency(tx.amount)}</TableCell>
                                                     <TableCell className="hidden sm:table-cell text-right text-muted-foreground">{new Date(tx.created_at).toLocaleDateString('fr-FR')}</TableCell>
@@ -333,23 +333,23 @@ export default function DashboardClientPage() {
                                 <Ban className="h-4 w-4" />
                                 <AlertTitle>Virements Bloqués</AlertTitle>
                                 <AlertDescription>
-                                    {accountData.transfer_block_reason || "Vos virements sont actuellement suspendus. Veuillez contacter le support."}
+                                    Vos virements sont actuellement suspendus. Une tentative de virement échouera après le délai de traitement.
                                 </AlertDescription>
                             </Alert>
                         ) : (
-                            <>
-                                <Alert className="mb-6">
-                                  <Info className="h-4 w-4" />
-                                  <AlertTitle>Essayer un virement</AlertTitle>
-                                  <AlertDescription>
-                                    Pour tester, vous pouvez utiliser l'IBAN d'un autre client test, par exemple : <code className="font-mono p-1 bg-muted rounded-sm">DE89370400440532013000</code> (appartient à jane.doe@example.com).
-                                  </AlertDescription>
-                                </Alert>
-                                <TransferForm
-                                    onTransferSubmit={handleTransferSubmit}
-                                />
-                            </>
+                             <Alert className="mb-6">
+                                <Info className="h-4 w-4" />
+                                <AlertTitle>Essayer un virement</AlertTitle>
+                                <AlertDescription>
+                                Pour tester, vous pouvez utiliser l'IBAN d'un autre client test, par exemple : <code className="font-mono p-1 bg-muted rounded-sm">DE89370400440532013000</code> (appartient à jane.doe@example.com).
+                                </AlertDescription>
+                            </Alert>
                         )}
+                        <div className="mt-6">
+                             <TransferForm
+                                onTransferSubmit={handleTransferSubmit}
+                            />
+                        </div>
                     </CardContent>
                 </Card>
             </TabsContent>
