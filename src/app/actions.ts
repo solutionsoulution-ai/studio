@@ -96,22 +96,27 @@ export async function handleLoanApplication(formData: FormData) {
       }
       htmlContent += `</ul>`;
       
-      const attachments = Array.from(formData.entries())
-        .filter(([key, value]) => value instanceof File)
-        .map(([key, value]) => {
+      const attachments = [];
+      for (const [key, value] of formData.entries()) {
+        if (value instanceof File) {
           const file = value as File;
-          return {
-            filename: file.name,
-            content: Buffer.from(file.stream.toString()), // This might need adjustment based on how files are handled. For now, let's assume it works like this.
-            contentType: file.type,
-          };
-        });
+          // Check if file is empty
+          if (file.size > 0) {
+            const buffer = Buffer.from(await file.arrayBuffer());
+            attachments.push({
+              filename: file.name,
+              content: buffer,
+              contentType: file.type,
+            });
+          }
+        }
+      }
 
       await sendEmail({
         to: process.env.SMTP_USER!,
         subject,
         html: htmlContent,
-        attachments: [], // Nodemailer attachments need more setup, will handle files as form data for now
+        attachments: attachments,
       });
       
       const applicationId = `APP-${Date.now()}`;
