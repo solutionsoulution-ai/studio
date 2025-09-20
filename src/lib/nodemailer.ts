@@ -15,10 +15,13 @@ if (!host || !port || !user || !pass) {
 export const transporter = nodemailer.createTransport({
   host: host,
   port: Number(port),
-  secure: true, // Explicitly set to true for port 465
-  requireTLS: true,
+  secure: true, // Port 465 requires a secure connection
   auth: {
     user: user,
     pass: pass,
+  },
+  tls: {
+    // do not fail on invalid certs
+    rejectUnauthorized: false,
   },
 });
