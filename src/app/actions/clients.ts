@@ -252,9 +252,13 @@ export async function createTransferAction(transferDetails: TransferFormInput & 
 
 // --- Admin Actions ---
 
-const ADMIN_PASSWORD = "XtZ_7@pQn!fS8#mV";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 export async function verifyAdminLoginAction(password: string): Promise<{ success: boolean; error?: string }> {
+    if (!ADMIN_PASSWORD) {
+        console.error("Le mot de passe administrateur n'est pas configuré dans les variables d'environnement.");
+        return { success: false, error: "Le serveur n'est pas correctement configuré." };
+    }
     if (password === ADMIN_PASSWORD) {
         return { success: true };
     }

@@ -8,3 +8,4 @@ runConfig:
     # Remplacez les valeurs ci-dessous par vos propres clés Supabase
     NEXT_PUBLIC_SUPABASE_URL: "https://tizfraiulcpowyenluhg.supabase.co"
     NEXT_PUBLIC_SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRpemZyYWl1bGNwb3d5ZW5sdWhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjE0MDMyMjYsImV4cCI6MjAzNjk3OTIyNn0.2A3LzWntP2rXpOF2Zl_v9W2f4y3aGvG-m94p1G1bTfs"
+    ADMIN_PASSWORD: "XtZ_7@pQn!fS8#mV"
