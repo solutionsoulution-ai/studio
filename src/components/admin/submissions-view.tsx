@@ -58,7 +58,7 @@ const SubmissionDetailDialog = ({ submission, open, onOpenChange }: { submission
     if (!submission) return null;
 
     const isLoanApplication = submission.has_loan;
-    const contactMessageTx = submission.transactions.find(t => t.reason.startsWith("Message de Contact:"));
+    const contactMessageTx = submission.transactions?.find(t => t.reason.startsWith("Message de Contact:"));
     
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -132,7 +132,7 @@ export default function SubmissionsView({ submissions, isLoading, error, onSubmi
     const { toast } = useToast();
 
     const loanSubmissions = submissions.filter(s => s.has_loan === true);
-    const contactMessages = submissions.filter(s => s.transactions.some(t => t.reason.startsWith("Message de Contact:")));
+    const contactMessages = submissions.filter(s => s.transactions?.some(t => t.reason.startsWith("Message de Contact:")));
 
     const handleDelete = async () => {
         if (!submissionToDelete) return;
@@ -253,7 +253,7 @@ export default function SubmissionsView({ submissions, isLoading, error, onSubmi
                                 </TableHeader>
                                 <TableBody>
                                     {contactMessages.length > 0 ? contactMessages.map(sub => {
-                                        const contactTx = sub.transactions.find(t => t.reason.startsWith("Message de Contact:"));
+                                        const contactTx = sub.transactions?.find(t => t.reason.startsWith("Message de Contact:"));
                                         return (
                                             <TableRow key={sub.id}>
                                                 <TableCell className="cursor-pointer hover:underline" onClick={() => setSelectedSubmission(sub)}>{sub.email}</TableCell>

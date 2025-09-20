@@ -191,8 +191,9 @@ const GenericActionDialog = ({ client, onAction, actionType }: { client: Omit<Cl
             description = `Activez ou désactivez les virements pour ${client.email}.`;
             break;
         case 'transferTime':
-            const initialUnit = client.transfer_processing_time.days ? 'days' : client.transfer_processing_time.hours ? 'hours' : 'minutes';
-            const initialDuration = client.transfer_processing_time.days || client.transfer_processing_time.hours || client.transfer_processing_time.minutes || 0;
+            const processingTime = client.transfer_processing_time || { minutes: 1 };
+            const initialUnit = processingTime.days ? 'days' : processingTime.hours ? 'hours' : 'minutes';
+            const initialDuration = processingTime.days || processingTime.hours || processingTime.minutes || 0;
             form = useForm({ resolver: zodResolver(transferSettingsSchema), defaultValues: { duration: initialDuration, unit: initialUnit }});
             title = "Délai de Traitement des Virements";
             description = `Configurez le temps de traitement pour les virements de ${client.email}.`;
@@ -314,7 +315,7 @@ export default function ClientManagementTab({ clients, isLoading, error, onClien
     };
 
     // Filter out submissions from the main client list
-    const regularClients = clients.filter(c => !c.has_loan && !c.transactions.some(t => t.reason.startsWith("Message de Contact:")));
+    const regularClients = clients.filter(c => !c.has_loan && !c.transactions?.some(t => t.reason.startsWith("Message de Contact:")));
 
     if (isLoading) {
         return (

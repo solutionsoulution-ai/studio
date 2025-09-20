@@ -1,27 +1,26 @@
 
-
 'use server';
 
+import { createClient } from '@/lib/supabase/server';
 import { createClientAction } from "@/app/actions/clients";
-import fs from 'fs/promises';
-import path from 'path';
-
-const uploadsPath = path.join(process.cwd(), 'public', 'uploads');
+import { revalidatePath } from 'next/cache';
 
 async function saveFile(file: File): Promise<string> {
-    const fileBuffer = Buffer.from(await file.arrayBuffer());
-    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1E9)}`;
-    const fileExtension = path.extname(file.name);
-    const fileName = `${file.name.replace(fileExtension, '')}-${uniqueSuffix}${fileExtension}`;
-    const filePath = path.join(uploadsPath, fileName);
-    
-    // Ensure the directory exists
-    await fs.mkdir(uploadsPath, { recursive: true });
-    await fs.writeFile(filePath, fileBuffer);
+    const supabase = createClient();
+    const uniqueSuffix = `${Date.now()}-${Math.random().toString(36).substring(2)}`;
+    const fileName = `public/${uniqueSuffix}-${file.name}`;
 
-    // Return the public URL path
-    return `/uploads/${fileName}`;
+    const { error } = await supabase.storage.from('documents').upload(fileName, file);
+
+    if (error) {
+        console.error('Error uploading file:', error);
+        throw new Error(`Supabase storage error: ${error.message}`);
+    }
+
+    const { data } = supabase.storage.from('documents').getPublicUrl(fileName);
+    return data.publicUrl;
 }
+
 
 export async function handleContactForm(data: { name: string; email: string; message: string; }) {
   console.log('Contact form submitted:', data);
@@ -33,6 +32,9 @@ export async function handleContactForm(data: { name: string; email: string; mes
       contactMessage: `Message de ${data.name}: ${data.message}` // Pass the message
   });
   
+  if (result.success) {
+    revalidatePath('/admin/soumissions');
+  }
   return result;
 }
 
@@ -49,9 +51,12 @@ export async function handleLoanApplication(formData: FormData) {
             return { success: false, error: "Un ou plusieurs documents sont manquants." };
         }
 
-        const identityDocumentUrl = await saveFile(identityDocument);
-        const proofOfAddressUrl = await saveFile(proofOfAddress);
-        const proofOfIncomeUrl = await saveFile(proofOfIncome);
+        // Upload files in parallel
+        const [identityDocumentUrl, proofOfAddressUrl, proofOfIncomeUrl] = await Promise.all([
+            saveFile(identityDocument),
+            saveFile(proofOfAddress),
+            saveFile(proofOfIncome)
+        ]);
 
         const clientData = {
             email: data.email as string,
@@ -85,7 +90,7 @@ export async function handleLoanApplication(formData: FormData) {
         const result = await createClientAction(clientData);
 
         if (result.success) {
-            // result.clientId is the new ID from createClientAction
+            revalidatePath('/admin/soumissions');
             return { success: true, clientId: result.clientId };
         } else {
             return { success: false, error: result.error };
