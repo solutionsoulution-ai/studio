@@ -21,7 +21,6 @@ const serviceLinks = [
 const legalLinks = [
     { href: "/politique-de-confidentialite", label: "Politique de confidentialité" },
     { href: "/conditions-generales", label: "Conditions d'utilisation" },
-    { href: "/mentions-legales", label: "Mentions Légales" },
 ];
 
 const socialLinks = [

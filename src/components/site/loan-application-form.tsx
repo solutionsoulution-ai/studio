@@ -41,7 +41,7 @@ const fileSchema = z
 
 const loanApplicationSchema = z.object({
   // Step 1
-  loanType: z.enum(["immobilier", "consommation", "auto", "entreprise", "rachat"], { required_error: "Veuillez sélectionner un type de prêt." }),
+  loanType: z.enum(["immobilier", "personnel", "auto", "entreprise", "rachat"], { required_error: "Veuillez sélectionner un type de prêt." }),
   loanAmount: z.coerce.number({invalid_type_error: "Le montant est requis."}).positive("Le montant doit être positif."),
   loanTerm: z.coerce.number({invalid_type_error: "La durée est requise."}).int().min(12, "La durée doit être d'au moins 12 mois.").max(360, "La durée ne peut excéder 360 mois."),
   
@@ -191,7 +191,7 @@ export default function LoanApplicationForm() {
                     <FormControl><SelectTrigger><SelectValue placeholder="Sélectionnez le type de projet" /></SelectTrigger></FormControl>
                     <SelectContent>
                       <SelectItem value="immobilier">Prêt Immobilier</SelectItem>
-                      <SelectItem value="consommation">Prêt à la Consommation</SelectItem>
+                      <SelectItem value="personnel">Prêt Personnel</SelectItem>
                       <SelectItem value="auto">Prêt Auto</SelectItem>
                       <SelectItem value="entreprise">Prêt Entreprise</SelectItem>
                       <SelectItem value="rachat">Rachat de Crédit</SelectItem>
