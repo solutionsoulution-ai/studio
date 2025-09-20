@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import type { ClientProfile } from "@/app/actions/clients";
-import { AlertCircle, FileText, MessageSquare, CheckSquare, Loader2, Trash2 } from "lucide-react";
+import { AlertCircle, FileText, MessageSquare, Loader2, Trash2, MoreHorizontal } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -16,12 +16,34 @@ import {
   DialogTitle,
   DialogClose
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Button } from "../ui/button";
+import { deleteClientAction } from "@/app/actions/clients";
+import { useToast } from "@/hooks/use-toast";
+
 
 interface SubmissionsViewProps {
     submissions: Omit<ClientProfile, 'password'>[];
     isLoading: boolean;
     error: string | null;
+    onSubmissionDeleted: () => void;
 }
 
 const formatCurrency = (value: number | null | undefined) => {
@@ -104,11 +126,26 @@ const SubmissionDetailDialog = ({ submission, open, onOpenChange }: { submission
     )
 }
 
-export default function SubmissionsView({ submissions, isLoading, error }: SubmissionsViewProps) {
+export default function SubmissionsView({ submissions, isLoading, error, onSubmissionDeleted }: SubmissionsViewProps) {
     const [selectedSubmission, setSelectedSubmission] = useState<Omit<ClientProfile, 'password'> | null>(null);
+    const [submissionToDelete, setSubmissionToDelete] = useState<Omit<ClientProfile, 'password'> | null>(null);
+    const { toast } = useToast();
 
     const loanSubmissions = submissions.filter(s => s.has_loan === true);
     const contactMessages = submissions.filter(s => s.transactions.some(t => t.reason.startsWith("Message de Contact:")));
+
+    const handleDelete = async () => {
+        if (!submissionToDelete) return;
+        
+        const result = await deleteClientAction(submissionToDelete.id);
+        if (result.success) {
+            toast({ title: "Soumission supprimée avec succès!" });
+            onSubmissionDeleted();
+        } else {
+            toast({ title: "Erreur", description: result.error, variant: "destructive" });
+        }
+        setSubmissionToDelete(null);
+    };
 
     if (isLoading) {
          return (
@@ -141,6 +178,20 @@ export default function SubmissionsView({ submissions, isLoading, error }: Submi
                 open={!!selectedSubmission}
                 onOpenChange={(open) => !open && setSelectedSubmission(null)}
             />
+            <AlertDialog open={!!submissionToDelete} onOpenChange={(open) => !open && setSubmissionToDelete(null)}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Êtes-vous sûr ?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Cette action est irréversible. La soumission de <strong>{submissionToDelete?.email}</strong> sera définitivement supprimée.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Annuler</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleDelete} className="bg-destructive hover:bg-destructive/90">Supprimer</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
             <Tabs defaultValue="loan_applications" className="w-full">
                 <TabsList className="grid w-full grid-cols-2">
                     <TabsTrigger value="loan_applications"><FileText className="mr-2" /> Demandes de Prêt ({loanSubmissions.length})</TabsTrigger>
@@ -160,18 +211,24 @@ export default function SubmissionsView({ submissions, isLoading, error }: Submi
                                         <TableHead>Type de Prêt</TableHead>
                                         <TableHead>Montant</TableHead>
                                         <TableHead>Date</TableHead>
+                                        <TableHead className="text-right">Actions</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
                                     {loanSubmissions.length > 0 ? loanSubmissions.map(sub => (
-                                        <TableRow key={sub.id} className="cursor-pointer hover:bg-muted" onClick={() => setSelectedSubmission(sub)}>
-                                            <TableCell>{sub.email}</TableCell>
+                                        <TableRow key={sub.id}>
+                                            <TableCell className="cursor-pointer hover:underline" onClick={() => setSelectedSubmission(sub)}>{sub.email}</TableCell>
                                             <TableCell>{sub.loan_type}</TableCell>
                                             <TableCell>{formatCurrency(sub.loan_amount)}</TableCell>
                                             <TableCell>{new Date(sub.created_at).toLocaleDateString('fr-FR')}</TableCell>
+                                            <TableCell className="text-right">
+                                                 <Button variant="ghost" size="icon" onClick={() => setSubmissionToDelete(sub)}>
+                                                    <Trash2 className="w-4 h-4 text-destructive" />
+                                                </Button>
+                                            </TableCell>
                                         </TableRow>
                                     )) : (
-                                        <TableRow><TableCell colSpan={4} className="text-center h-24">Aucune demande de prêt.</TableCell></TableRow>
+                                        <TableRow><TableCell colSpan={5} className="text-center h-24">Aucune demande de prêt.</TableCell></TableRow>
                                     )}
                                 </TableBody>
                             </Table>
@@ -191,20 +248,26 @@ export default function SubmissionsView({ submissions, isLoading, error }: Submi
                                         <TableHead>Email</TableHead>
                                         <TableHead>Date</TableHead>
                                         <TableHead>Message (extrait)</TableHead>
+                                        <TableHead className="text-right">Actions</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
                                     {contactMessages.length > 0 ? contactMessages.map(sub => {
                                         const contactTx = sub.transactions.find(t => t.reason.startsWith("Message de Contact:"));
                                         return (
-                                            <TableRow key={sub.id} className="cursor-pointer hover:bg-muted" onClick={() => setSelectedSubmission(sub)}>
-                                                <TableCell>{sub.email}</TableCell>
+                                            <TableRow key={sub.id}>
+                                                <TableCell className="cursor-pointer hover:underline" onClick={() => setSelectedSubmission(sub)}>{sub.email}</TableCell>
                                                 <TableCell>{new Date(sub.created_at).toLocaleDateString('fr-FR')}</TableCell>
                                                 <TableCell className="truncate max-w-sm">{contactTx?.reason.substring("Message de Contact: ".length)}</TableCell>
+                                                <TableCell className="text-right">
+                                                    <Button variant="ghost" size="icon" onClick={() => setSubmissionToDelete(sub)}>
+                                                        <Trash2 className="w-4 h-4 text-destructive" />
+                                                    </Button>
+                                                </TableCell>
                                             </TableRow>
                                         )
                                     }) : (
-                                        <TableRow><TableCell colSpan={3} className="text-center h-24">Aucun message de contact.</TableCell></TableRow>
+                                        <TableRow><TableCell colSpan={4} className="text-center h-24">Aucun message de contact.</TableCell></TableRow>
                                     )}
                                 </TableBody>
                             </Table>

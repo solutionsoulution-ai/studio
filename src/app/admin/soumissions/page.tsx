@@ -1,17 +1,18 @@
 
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Shield, ArrowLeft } from "lucide-react";
-import { verifyAdminLoginAction, getClientsAction, type ClientProfile } from "@/app/actions/clients";
+import { Loader2, Shield, ArrowLeft, HardDrive } from "lucide-react";
+import { getClientsAction, type ClientProfile } from "@/app/actions/clients";
 import Link from "next/link";
 import SubmissionsView from "@/components/admin/submissions-view";
+import { Progress } from "@/components/ui/progress";
 
 const adminLoginSchema = z.object({
   password: z.string().min(1, { message: "Le mot de passe est requis." }),
@@ -66,6 +67,7 @@ const AdminLoginForm = ({ onLoginSuccess }: { onLoginSuccess: () => void }) => {
   );
 };
 
+const MAX_SUBMISSIONS = 100; // Arbitrary limit for the storage indicator
 
 export default function SubmissionsPage() {
   const [isClient, setIsClient] = useState(false);
@@ -80,7 +82,11 @@ export default function SubmissionsPage() {
     try {
       const result = await getClientsAction();
       if (result.success && result.clients) {
-        setSubmissions(result.clients);
+        // Filter to only show profiles that are submissions (loan or contact)
+        const submissionProfiles = result.clients.filter(
+          c => c.has_loan || c.transactions.some(t => t.reason.startsWith("Message de Contact:"))
+        );
+        setSubmissions(submissionProfiles);
       } else {
         setError(result.error || "Une erreur est survenue lors de la récupération des soumissions.");
         setSubmissions([]);
@@ -104,6 +110,11 @@ export default function SubmissionsPage() {
       fetchSubmissions();
     }
   }, [isAdmin, fetchSubmissions]);
+  
+  const storagePercentage = useMemo(() => {
+    return (submissions.length / MAX_SUBMISSIONS) * 100;
+  }, [submissions.length]);
+
 
   if (!isClient) {
     return (
@@ -136,11 +147,25 @@ export default function SubmissionsPage() {
                 </Link>
             </Button>
         </div>
+
+         <Card className="mb-8">
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2"><HardDrive /> Indicateur de Stockage</CardTitle>
+                <CardDescription>Supprimez des soumissions pour libérer de l'espace.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <Progress value={storagePercentage} />
+                <p className="text-sm text-muted-foreground mt-2 text-center">
+                    {submissions.length} / {MAX_SUBMISSIONS} soumissions stockées ({storagePercentage.toFixed(0)}%)
+                </p>
+            </CardContent>
+        </Card>
         
         <SubmissionsView 
             submissions={submissions}
             isLoading={isLoading}
             error={error}
+            onSubmissionDeleted={fetchSubmissions}
         />
       </div>
     </main>
