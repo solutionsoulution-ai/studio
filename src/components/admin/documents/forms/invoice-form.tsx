@@ -85,8 +85,8 @@ export default function InvoiceForm({ form }: InvoiceFormProps) {
                         <h3 className="font-semibold text-lg border-b pb-2 pt-4">Paiement</h3>
                         <FormField control={form.control} name="payment_iban" render={({ field }) => (
                             <FormItem>
-                                <FormLabel>IBAN pour le paiement</FormLabel>
-                                <FormControl><Input {...field} /></FormControl>
+                                <FormLabel>Détails de paiement (RIB)</FormLabel>
+                                <FormControl><Textarea rows={5} {...field} /></FormControl>
                                 <FormMessage />
                             </FormItem>
                         )} />
@@ -98,5 +98,3 @@ export default function InvoiceForm({ form }: InvoiceFormProps) {
 }
 
 InvoiceForm.schema = formSchema;
-
-    

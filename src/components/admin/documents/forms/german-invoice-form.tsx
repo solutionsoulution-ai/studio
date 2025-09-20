@@ -15,7 +15,7 @@ const formSchema = z.object({
     invoice_date: z.string().min(8, "La date de la facture est requise."),
     description: z.string().min(5, "La description est requise."),
     amount: z.coerce.number().positive("Le montant doit être positif."),
-    payment_iban: z.string().min(15, "Un IBAN valide est requis."),
+    payment_iban: z.string().min(1, "Les détails de paiement sont requis."),
 });
 
 export type GermanInvoiceFormValues = z.infer<typeof formSchema>;
@@ -28,40 +28,40 @@ export default function GermanInvoiceForm({ form }: GermanInvoiceFormProps) {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Facture (DE)</CardTitle>
-                <CardDescription>Remplissez les champs pour générer la facture en allemand.</CardDescription>
+                <CardTitle>Rechnung (DE)</CardTitle>
+                <CardDescription>Füllen Sie die Felder aus, um die Rechnung auf Deutsch zu erstellen.</CardDescription>
             </CardHeader>
             <CardContent>
                 <Form {...form}>
                     <form className="space-y-4">
-                        <h3 className="font-semibold text-lg border-b pb-2">Client</h3>
+                        <h3 className="font-semibold text-lg border-b pb-2">Kunde</h3>
                         <FormField control={form.control} name="customer_name" render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Nom du Client</FormLabel>
+                                <FormLabel>Kundenname</FormLabel>
                                 <FormControl><Input {...field} /></FormControl>
                                 <FormMessage />
                             </FormItem>
                         )} />
                         <FormField control={form.control} name="customer_address" render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Adresse du Client</FormLabel>
+                                <FormLabel>Kundenadresse</FormLabel>
                                 <FormControl><Textarea rows={2} {...field} /></FormControl>
                                 <FormMessage />
                             </FormItem>
                         )} />
                         
-                        <h3 className="font-semibold text-lg border-b pb-2 pt-4">Détails de la Facture</h3>
+                        <h3 className="font-semibold text-lg border-b pb-2 pt-4">Rechnungsdetails</h3>
                         <div className="grid grid-cols-2 gap-4">
                            <FormField control={form.control} name="invoice_number" render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>N° de Facture</FormLabel>
+                                    <FormLabel>Rechnungs-Nr.</FormLabel>
                                     <FormControl><Input {...field} /></FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )} />
                             <FormField control={form.control} name="invoice_date" render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Date</FormLabel>
+                                    <FormLabel>Datum</FormLabel>
                                     <FormControl><Input {...field} /></FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -69,24 +69,24 @@ export default function GermanInvoiceForm({ form }: GermanInvoiceFormProps) {
                         </div>
                         <FormField control={form.control} name="description" render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Description</FormLabel>
+                                <FormLabel>Beschreibung</FormLabel>
                                 <FormControl><Input {...field} /></FormControl>
                                 <FormMessage />
                             </FormItem>
                         )} />
                          <FormField control={form.control} name="amount" render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Montant (€)</FormLabel>
+                                <FormLabel>Betrag (€)</FormLabel>
                                 <FormControl><Input type="number" {...field} /></FormControl>
                                 <FormMessage />
                             </FormItem>
                         )} />
                         
-                        <h3 className="font-semibold text-lg border-b pb-2 pt-4">Paiement</h3>
+                        <h3 className="font-semibold text-lg border-b pb-2 pt-4">Zahlung</h3>
                         <FormField control={form.control} name="payment_iban" render={({ field }) => (
                             <FormItem>
-                                <FormLabel>IBAN pour le paiement</FormLabel>
-                                <FormControl><Input {...field} /></FormControl>
+                                <FormLabel>Zahlungsdetails (Bankverbindung)</FormLabel>
+                                <FormControl><Textarea rows={5} {...field} /></FormControl>
                                 <FormMessage />
                             </FormItem>
                         )} />

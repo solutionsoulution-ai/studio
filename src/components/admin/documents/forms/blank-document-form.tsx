@@ -15,7 +15,7 @@ const formSchema = z.object({
     invoice_date: z.string().min(8, "Invoice date is required."),
     description: z.string().min(5, "Description is required."),
     amount: z.coerce.number().positive("Amount must be positive."),
-    payment_iban: z.string().min(15, "A valid IBAN is required."),
+    payment_iban: z.string().min(1, "Payment details are required."),
 });
 
 export type BlankDocumentFormValues = z.infer<typeof formSchema>;
@@ -28,33 +28,33 @@ export default function BlankDocumentForm({ form }: BlankDocumentFormProps) {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Facture (EN)</CardTitle>
-                <CardDescription>Remplissez les champs pour générer la facture en anglais.</CardDescription>
+                <CardTitle>Invoice (EN)</CardTitle>
+                <CardDescription>Fill in the fields to generate the invoice in English.</CardDescription>
             </CardHeader>
             <CardContent>
                 <Form {...form}>
                     <form className="space-y-4">
-                        <h3 className="font-semibold text-lg border-b pb-2">Client</h3>
+                        <h3 className="font-semibold text-lg border-b pb-2">Customer</h3>
                         <FormField control={form.control} name="customer_name" render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Nom du Client</FormLabel>
+                                <FormLabel>Customer Name</FormLabel>
                                 <FormControl><Input {...field} /></FormControl>
                                 <FormMessage />
                             </FormItem>
                         )} />
                         <FormField control={form.control} name="customer_address" render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Adresse du Client</FormLabel>
+                                <FormLabel>Customer Address</FormLabel>
                                 <FormControl><Textarea rows={2} {...field} /></FormControl>
                                 <FormMessage />
                             </FormItem>
                         )} />
                         
-                        <h3 className="font-semibold text-lg border-b pb-2 pt-4">Détails de la Facture</h3>
+                        <h3 className="font-semibold text-lg border-b pb-2 pt-4">Invoice Details</h3>
                         <div className="grid grid-cols-2 gap-4">
                            <FormField control={form.control} name="invoice_number" render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>N° de Facture</FormLabel>
+                                    <FormLabel>Invoice No.</FormLabel>
                                     <FormControl><Input {...field} /></FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -76,17 +76,17 @@ export default function BlankDocumentForm({ form }: BlankDocumentFormProps) {
                         )} />
                          <FormField control={form.control} name="amount" render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Montant (€)</FormLabel>
+                                <FormLabel>Amount (€)</FormLabel>
                                 <FormControl><Input type="number" {...field} /></FormControl>
                                 <FormMessage />
                             </FormItem>
                         )} />
                         
-                        <h3 className="font-semibold text-lg border-b pb-2 pt-4">Paiement</h3>
+                        <h3 className="font-semibold text-lg border-b pb-2 pt-4">Payment</h3>
                         <FormField control={form.control} name="payment_iban" render={({ field }) => (
                             <FormItem>
-                                <FormLabel>IBAN pour le paiement</FormLabel>
-                                <FormControl><Input {...field} /></FormControl>
+                                <FormLabel>Payment Details</FormLabel>
+                                <FormControl><Textarea rows={5} {...field} /></FormControl>
                                 <FormMessage />
                             </FormItem>
                         )} />
@@ -98,5 +98,3 @@ export default function BlankDocumentForm({ form }: BlankDocumentFormProps) {
 }
 
 BlankDocumentForm.schema = formSchema;
-
-    

@@ -108,11 +108,9 @@ export default function GermanInvoiceTemplate({ data }: GermanInvoiceTemplatePro
                     <div>
                         <h3 className="font-bold mb-2 text-primary">{clauses.payment_terms.title}</h3>
                         <p>{clauses.payment_terms.due_date}</p>
-                        <p className="mt-2">
-                            {clauses.payment_terms.iban_label} <span className="font-mono">{data.payment_iban || '...'}</span>
-                        </p>
-                        <p className="mt-2">
-                            {clauses.payment_terms.bic_label} <span className="font-mono">VYLCFR2LXXX</span>
+                        <p className="mt-2 whitespace-pre-wrap">
+                            {clauses.payment_terms.iban_label}<br />
+                            <span className="font-mono">{data.payment_iban || '...'}</span>
                         </p>
                     </div>
                      <div className="text-center">

@@ -17,7 +17,7 @@ export const invoiceClauses = {
         payment_terms: {
             title: "Modalités de Paiement",
             due_date: "Paiement dû sous 30 jours à compter de la date de la facture.",
-            iban_label: "IBAN :",
+            iban_label: "Veuillez utiliser les coordonnées bancaires suivantes pour le paiement :",
             bic_label: "BIC/SWIFT :",
         },
         footer: {
@@ -39,7 +39,7 @@ export const invoiceClauses = {
         payment_terms: {
             title: "Payment Terms",
             due_date: "Payment due within 30 days from the invoice date.",
-            iban_label: "IBAN:",
+            iban_label: "Please use the following bank details for payment:",
             bic_label: "BIC/SWIFT:",
         },
         footer: {
@@ -61,7 +61,7 @@ export const invoiceClauses = {
         payment_terms: {
             title: "Zahlungsbedingungen",
             due_date: "Zahlung fällig innerhalb von 30 Tagen ab Rechnungsdatum.",
-            iban_label: "IBAN:",
+            iban_label: "Bitte verwenden Sie die folgende Bankverbindung für die Zahlung:",
             bic_label: "BIC/SWIFT:",
         },
         footer: {
@@ -83,7 +83,7 @@ export const invoiceClauses = {
         payment_terms: {
             title: "Condiciones de Pago",
             due_date: "Pago a 30 días desde la fecha de la factura.",
-            iban_label: "IBAN:",
+            iban_label: "Utilice los siguientes datos bancarios para el pago:",
             bic_label: "BIC/SWIFT:",
         },
         footer: {
@@ -105,7 +105,7 @@ export const invoiceClauses = {
         payment_terms: {
             title: "Condições de Pagamento",
             due_date: "Pagamento devido no prazo de 30 dias a partir da data da fatura.",
-            iban_label: "IBAN:",
+            iban_label: "Utilize os seguintes dados bancários para o pagamento:",
             bic_label: "BIC/SWIFT:",
         },
         footer: {
@@ -127,7 +127,7 @@ export const invoiceClauses = {
         payment_terms: {
             title: "Termini di Pagamento",
             due_date: "Pagamento dovuto entro 30 giorni dalla data della fattura.",
-            iban_label: "IBAN:",
+            iban_label: "Si prega di utilizzare le seguenti coordinate bancarie per il pagamento:",
             bic_label: "BIC/SWIFT:",
         },
         footer: {
