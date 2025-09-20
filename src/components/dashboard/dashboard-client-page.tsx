@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useState, useMemo, useEffect, useCallback } from "react";
@@ -273,7 +274,7 @@ export default function DashboardClientPage() {
   const completedTransactions = sortedTransactions.filter(tx => tx.status !== 'PENDING');
 
   return (
-    <div className="container mx-auto py-8 md:py-16">
+    <div className="container mx-auto py-4 md:py-8">
         <TransactionDetailDialog 
             transaction={selectedTransaction} 
             open={!!selectedTransaction}
@@ -306,7 +307,7 @@ export default function DashboardClientPage() {
                     <Card className="mt-6 bg-amber-500/10 border-amber-500/30">
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2 text-amber-700">
-                                <Loader2 className="animate-spin" /> Virements en Cours de Traitement
+                                <Loader2 className="animate-spin" /> Virements en Cours
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
@@ -316,7 +317,7 @@ export default function DashboardClientPage() {
                         </CardContent>
                     </Card>
                 )}
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
                     <Card className="md:col-span-2 lg:col-span-1 h-full bg-primary/5">
                         <CardHeader className="flex flex-row items-center justify-between pb-2">
                             <CardTitle className="text-sm font-medium">Solde Actuel</CardTitle>
@@ -446,4 +447,3 @@ export default function DashboardClientPage() {
   );
 }
 
-    

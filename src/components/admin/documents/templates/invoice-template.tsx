@@ -4,6 +4,7 @@
 import { invoiceClauses } from "@/data/documents/invoice-clauses";
 import { FileText } from "lucide-react";
 import Image from "next/image";
+import type { Language } from "@/data/documents/languages";
 
 export interface InvoiceData {
     customer_name?: string;
@@ -17,7 +18,7 @@ export interface InvoiceData {
 
 interface InvoiceTemplateProps {
     data: InvoiceData;
-    lang: 'fr' | 'en';
+    lang: Language;
 }
 
 export default function InvoiceTemplate({ data, lang }: InvoiceTemplateProps) {
