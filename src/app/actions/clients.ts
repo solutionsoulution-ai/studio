@@ -19,9 +19,14 @@ async function readData(): Promise<{ profiles: ClientProfile[], transactions: Tr
         await fs.access(dataFilePath);
     } catch (error) {
         // If /tmp/clients.json doesn't exist, copy it from the project data folder.
-        const initialData = await fs.readFile(initialDataPath, 'utf-8');
-        await fs.writeFile(dataFilePath, initialData, 'utf-8');
-        return JSON.parse(initialData);
+        try {
+            const initialData = await fs.readFile(initialDataPath, 'utf-8');
+            await fs.writeFile(dataFilePath, initialData, 'utf-8');
+            return JSON.parse(initialData);
+        } catch (copyError) {
+             console.error("Error creating initial data file:", copyError);
+             return { profiles: [], transactions: [] };
+        }
     }
 
     try {
@@ -29,7 +34,12 @@ async function readData(): Promise<{ profiles: ClientProfile[], transactions: Tr
         if (!fileContent) {
             return { profiles: [], transactions: [] };
         }
-        return JSON.parse(fileContent);
+        const data = JSON.parse(fileContent);
+        // Ensure the basic structure is always present
+        return {
+            profiles: data.profiles || [],
+            transactions: data.transactions || []
+        };
     } catch (error) {
         console.error("Error reading data file:", error);
         return { profiles: [], transactions: [] };
