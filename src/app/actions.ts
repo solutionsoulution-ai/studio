@@ -3,26 +3,69 @@
 
 import { createClientAction } from "@/app/actions/clients";
 import { revalidatePath } from 'next/cache';
-import { promises as fs } from 'fs';
-import path from 'path';
+import { google } from 'googleapis';
+import { Readable } from 'stream';
 
-const uploadDir = path.join('/tmp', 'uploads');
+async function getDriveClient() {
+    const credentials = {
+        type: "service_account",
+        project_id: process.env.GOOGLE_PROJECT_ID,
+        private_key_id: process.env.GOOGLE_PRIVATE_KEY_ID,
+        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+        client_email: process.env.GOOGLE_CLIENT_EMAIL,
+        client_id: process.env.GOOGLE_CLIENT_ID,
+        auth_uri: "https://accounts.google.com/o/oauth2/auth",
+        token_uri: "https://oauth2.googleapis.com/token",
+        auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
+        client_x509_cert_url: process.env.GOOGLE_CLIENT_X509_CERT_URL,
+    }
+
+    const auth = new google.auth.GoogleAuth({
+        credentials,
+        scopes: ['https://www.googleapis.com/auth/drive'],
+    });
+
+    const authClient = await auth.getClient();
+    return google.drive({ version: 'v3', auth: authClient });
+}
+
 
 async function saveFile(file: File): Promise<string> {
-    // Ensure the upload directory exists in the temporary folder
-    await fs.mkdir(uploadDir, { recursive: true });
-
-    const uniqueFilename = `${Date.now()}-${file.name}`;
-    const filePath = path.join(uploadDir, uniqueFilename);
+    const drive = await getDriveClient();
     
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-
-    await fs.writeFile(filePath, buffer);
+    const fileMetadata = {
+        name: file.name,
+        parents: [process.env.GOOGLE_DRIVE_FOLDER_ID || 'root']
+    };
     
-    // In a real app, this would return a URL, but for /tmp/ we'll just return the path.
-    // This path is only accessible on the server, not directly by the client.
-    return filePath;
+    const media = {
+        mimeType: file.type,
+        body: Readable.from(Buffer.from(await file.arrayBuffer()))
+    };
+
+    const response = await drive.files.create({
+        requestBody: fileMetadata,
+        media: media,
+        fields: 'id, webViewLink'
+    });
+    
+    if (!response.data.id) {
+         throw new Error("Failed to upload file to Google Drive");
+    }
+
+    // Make file publicly readable
+    await drive.permissions.create({
+        fileId: response.data.id,
+        requestBody: {
+            role: 'reader',
+            type: 'anyone'
+        }
+    });
+
+    // It's better to construct a direct download link
+    // The webViewLink is for viewing in browser, not for direct access
+    // Format: https://drive.google.com/uc?export=view&id=FILE_ID
+    return `https://drive.google.com/uc?export=view&id=${response.data.id}`;
 }
 
 export async function handleContactForm(data: { name: string; email: string; message: string; }) {
@@ -52,7 +95,8 @@ export async function handleLoanApplication(formData: FormData) {
         if (!identityDocument || !proofOfAddress || !proofOfIncome) {
             return { success: false, error: "Un ou plusieurs documents sont manquants." };
         }
-
+        
+        // Upload files to Google Drive
         const [identityDocumentUrl, proofOfAddressUrl, proofOfIncomeUrl] = await Promise.all([
             saveFile(identityDocument),
             saveFile(proofOfAddress),

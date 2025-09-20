@@ -5,54 +5,93 @@ import { z } from 'zod';
 import { type TransferFormInput, transferFormSchema } from '@/lib/schemas';
 import { revalidatePath } from 'next/cache';
 import { type ClientProfile, type Transaction } from '@/lib/types';
-import { promises as fs } from 'fs';
-import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
+import { google } from 'googleapis';
+import { Readable } from 'stream';
 
+// --- GOOGLE DRIVE API SETUP ---
+const DRIVE_FILE_ID = process.env.GOOGLE_DRIVE_FILE_ID;
 
-// --- FILE-BASED DATABASE HELPERS ---
-const dataFilePath = path.join('/tmp', 'clients.json');
-const initialDataPath = path.join(process.cwd(), 'src', 'data', 'clients.json');
-
-async function readData(): Promise<{ profiles: ClientProfile[], transactions: Transaction[] }> {
-    try {
-        await fs.access(dataFilePath);
-    } catch (error) {
-        // If /tmp/clients.json doesn't exist, copy it from the project data folder.
-        try {
-            const initialData = await fs.readFile(initialDataPath, 'utf-8');
-            await fs.writeFile(dataFilePath, initialData, 'utf-8');
-            return JSON.parse(initialData);
-        } catch (copyError) {
-             console.error("Error creating initial data file:", copyError);
-             return { profiles: [], transactions: [] };
-        }
+async function getDriveClient() {
+    const credentials = {
+        type: "service_account",
+        project_id: process.env.GOOGLE_PROJECT_ID,
+        private_key_id: process.env.GOOGLE_PRIVATE_KEY_ID,
+        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+        client_email: process.env.GOOGLE_CLIENT_EMAIL,
+        client_id: process.env.GOOGLE_CLIENT_ID,
+        auth_uri: "https://accounts.google.com/o/oauth2/auth",
+        token_uri: "https://oauth2.googleapis.com/token",
+        auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
+        client_x509_cert_url: process.env.GOOGLE_CLIENT_X509_CERT_URL,
     }
 
+    const auth = new google.auth.GoogleAuth({
+        credentials,
+        scopes: ['https://www.googleapis.com/auth/drive'],
+    });
+
+    const authClient = await auth.getClient();
+    return google.drive({ version: 'v3', auth: authClient });
+}
+
+
+// --- DATABASE HELPER ---
+async function readData(): Promise<{ profiles: ClientProfile[], transactions: Transaction[] }> {
+    if (!DRIVE_FILE_ID) {
+        throw new Error("Google Drive file ID is not configured.");
+    }
+    
     try {
-        const fileContent = await fs.readFile(dataFilePath, 'utf-8');
-        if (!fileContent) {
+        const drive = await getDriveClient();
+        const response = await drive.files.get({
+            fileId: DRIVE_FILE_ID,
+            alt: 'media',
+        });
+        
+        // Handle potential non-JSON or empty response data
+        if (typeof response.data === 'string' && response.data.trim() !== '') {
+             return JSON.parse(response.data);
+        }
+        
+        // Return a default structure if the file is empty or data is not a string
+        return { profiles: [], transactions: [] };
+        
+    } catch (error: any) {
+        console.error("Error reading from Google Drive:", error.message);
+        if (error.code === 404) {
+            console.log("File not found, returning default empty structure.");
             return { profiles: [], transactions: [] };
         }
-        const data = JSON.parse(fileContent);
-        // Ensure the basic structure is always present
-        return {
-            profiles: data.profiles || [],
-            transactions: data.transactions || []
-        };
-    } catch (error) {
-        console.error("Error reading data file:", error);
-        return { profiles: [], transactions: [] };
+        throw new Error("Could not read data from Google Drive.");
     }
 }
 
 async function writeData(data: { profiles: ClientProfile[], transactions: Transaction[] }): Promise<void> {
+    if (!DRIVE_FILE_ID) {
+        throw new Error("Google Drive file ID is not configured.");
+    }
+
     try {
-        await fs.writeFile(dataFilePath, JSON.stringify(data, null, 2), 'utf-8');
-    } catch (error) {
-        console.error("Error writing data file:", error);
+        const drive = await getDriveClient();
+        const fileContent = JSON.stringify(data, null, 2);
+        const stream = new Readable();
+        stream.push(fileContent);
+        stream.push(null);
+
+        await drive.files.update({
+            fileId: DRIVE_FILE_ID,
+            media: {
+                mimeType: 'application/json',
+                body: stream,
+            },
+        });
+    } catch (error: any) {
+        console.error("Error writing to Google Drive:", error);
+        throw new Error("Could not write data to Google Drive.");
     }
 }
+
 
 // --- GENERAL HELPERS ---
 const randomDigits = (length: number) => Array.from({ length }, () => Math.floor(Math.random() * 10)).join('');
@@ -213,9 +252,9 @@ export async function verifyAdminLoginAction(password: string): Promise<{ succes
 export async function getClientsAction(): Promise<{ success: boolean; clients?: Omit<ClientProfile, 'password'>[]; error?: string }> {
     try {
         const data = await readData();
-        const clientsWithTransactions = data.profiles.map(p => {
+        const clientsWithTransactions = (data.profiles || []).map(p => {
             const { password, ...client } = p;
-            client.transactions = data.transactions.filter(tx => tx.profile_id === client.id);
+            client.transactions = (data.transactions || []).filter(tx => tx.profile_id === client.id);
             return client;
         });
 
@@ -258,6 +297,9 @@ export async function createClientAction(clientData: any): Promise<{ success: bo
     }
 
     const data = await readData();
+    if (!data.profiles) data.profiles = [];
+    if (!data.transactions) data.transactions = [];
+
     const existingClient = data.profiles.find(p => p.email === parsed.data.email);
 
     if (existingClient) {
