@@ -1,5 +1,4 @@
 
-
 'use server';
 
 import fs from 'fs/promises';
@@ -252,14 +251,13 @@ export async function createTransferAction(transferDetails: TransferFormInput & 
 
 // --- Admin Actions ---
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
-
 export async function verifyAdminLoginAction(password: string): Promise<{ success: boolean; error?: string }> {
-    if (!ADMIN_PASSWORD) {
+    const adminPassword = process.env.ADMIN_PASSWORD;
+    if (!adminPassword) {
         console.error("Le mot de passe administrateur n'est pas configuré dans les variables d'environnement.");
         return { success: false, error: "Le serveur n'est pas correctement configuré." };
     }
-    if (password === ADMIN_PASSWORD) {
+    if (password === adminPassword) {
         return { success: true };
     }
     return { success: false, error: "Mot de passe incorrect." };
@@ -306,7 +304,7 @@ const createClientSchema = z.object({
  * @param clientData - The new client's data.
  * @returns { success: boolean; clientId?: string; error?: string }
  */
-export async function createClientAction(clientData: z.infer<typeof createClientSchema>): Promise<{ success: boolean; clientId?: string; error?: string }> {
+export async function createClientAction(clientData: any): Promise<{ success: boolean; clientId?: string; error?: string }> {
     const parsed = createClientSchema.safeParse(clientData);
     if (!parsed.success) {
         const issues = parsed.error.issues.map(i => i.message).join(', ');
@@ -502,3 +500,5 @@ export async function updateClientTransferSettingsAction(settingsData: z.infer<t
     await writeData(clients);
     return { success: true };
 }
+
+    

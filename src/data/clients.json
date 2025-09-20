@@ -301,5 +301,28 @@
     "identity_document_url": "/uploads/Alléla-1758334586933-826008287.png",
     "proof_of_address_url": "/uploads/applo-1758334586946-636739995.png",
     "proof_of_income_url": "/uploads/boutoir-1758334586955-913499427.png"
+  },
+  {
+    "id": "cly_1758341907553_wj8ygke",
+    "client_id": "VYL-481-865",
+    "email": "ooo@gmail.com",
+    "password": "oooooooo",
+    "balance": 0,
+    "account_number": "FR7654389043482753794938264",
+    "iban": "FR7682874086964212859458215",
+    "bic": "BHUDFRZYXXX",
+    "created_at": "2025-09-20T04:18:27.554Z",
+    "is_transfer_blocked": false,
+    "transfer_block_reason": null,
+    "transfer_processing_time": {
+      "minutes": 1
+    },
+    "has_loan": false,
+    "loan_type": null,
+    "loan_amount": null,
+    "interest_rate": null,
+    "loan_term": null,
+    "transactions": [],
+    "initialBalance": 0
   }
 ]
