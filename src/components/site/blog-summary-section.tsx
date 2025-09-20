@@ -15,7 +15,7 @@ export default function BlogSummarySection() {
         <div className="text-center mb-10">
           <div className="flex items-center gap-3 justify-center">
             <BookOpen className="w-8 h-8 text-primary" />
-            <h2 className="text-3xl font-bold tracking-tight font-headline">Nos Derniers Articles</h2>
+            <h2 className="text-3xl font-bold tracking-tight font-headline">Nos derniers articles</h2>
           </div>
           <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
             Suivez nos conseils d'experts pour prendre les meilleures décisions financières.

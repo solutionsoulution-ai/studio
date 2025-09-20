@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useMemo } from "react";
@@ -18,7 +19,7 @@ type InterestRateCalculatorProps = {
 const FIXED_INTEREST_RATE = 2;
 
 export default function InterestRateCalculator({
-    title = "Calculateur de Remboursement de Prêt",
+    title = "Calculateur de remboursement de prêt",
     description = "Utilisez notre calculateur simple pour estimer vos mensualités. Ajustez les curseurs pour voir comment le montant et la durée du prêt affectent vos paiements.",
     defaultLoanAmount = 50000,
     defaultTerm = 60, // 5 years in months
@@ -66,7 +67,7 @@ export default function InterestRateCalculator({
             <CardContent className="grid md:grid-cols-2 gap-8 p-6 md:p-8">
                 <div className="space-y-8">
                     <div>
-                        <Label htmlFor="loanAmount" className="text-lg">Montant du Prêt</Label>
+                        <Label htmlFor="loanAmount" className="text-lg">Montant du prêt</Label>
                         <p className="text-2xl font-bold text-primary">{formatCurrency(loanAmount)}</p>
                         <Slider
                             id="loanAmount"
@@ -79,7 +80,7 @@ export default function InterestRateCalculator({
                         />
                     </div>
                     <div>
-                        <Label htmlFor="loanTerm" className="text-lg">Durée du Prêt (Mois)</Label>
+                        <Label htmlFor="loanTerm" className="text-lg">Durée du prêt (Mois)</Label>
                         <p className="text-2xl font-bold text-primary">{loanTerm} Mois</p>
                         <Slider
                             id="loanTerm"
@@ -95,7 +96,7 @@ export default function InterestRateCalculator({
                         <div className="flex items-center gap-3">
                             <Percent className="w-6 h-6 text-primary" />
                              <div>
-                                <Label className="text-lg">Taux d'Intérêt Fixe</Label>
+                                <Label className="text-lg">Taux d'intérêt fixe</Label>
                                 <p className="text-2xl font-bold text-primary">{FIXED_INTEREST_RATE}%</p>
                              </div>
                         </div>
@@ -103,7 +104,7 @@ export default function InterestRateCalculator({
                 </div>
 
                 <div className="bg-primary text-primary-foreground rounded-lg p-8 flex flex-col items-center justify-center text-center">
-                    <p className="text-lg font-medium opacity-80">Paiement Mensuel Estimé</p>
+                    <p className="text-lg font-medium opacity-80">Paiement mensuel estimé</p>
                     <p className="text-5xl font-extrabold tracking-tight mt-2">
                         {formatCurrency(monthlyPayment)}
                     </p>

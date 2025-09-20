@@ -1,20 +1,21 @@
+
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Zap, Users, Scaling, Award, Globe, Percent } from "lucide-react";
 
 const features = [
   {
     icon: Zap,
-    title: "Processus 100% en Ligne",
+    title: "Processus 100% en ligne",
     description: "Effectuez votre demande de n'importe où, n'importe quand, grâce à notre plateforme en ligne simple et sécurisée.",
   },
   {
     icon: Users,
-    title: "Conseils d'Experts",
+    title: "Conseils d'experts",
     description: "Nos conseillers financiers vous accompagnent à chaque étape pour trouver la solution la mieux adaptée à votre projet.",
   },
   {
     icon: Percent,
-    title: "Taux Fixe Avantageux de 2%",
+    title: "Taux fixe avantageux de 2%",
     description: "Profitez d'un taux d'intérêt fixe et transparent de 2% pour tous nos produits de financement, sans surprise.",
   },
 ];
@@ -26,7 +27,7 @@ export default function WhyChooseUsSection() {
         <div className="text-center mb-10">
           <div className="flex items-center gap-3 justify-center">
               <Award className="w-8 h-8 text-primary" />
-              <h2 className="text-3xl font-bold tracking-tight font-headline">Pourquoi Nous Choisir ?</h2>
+              <h2 className="text-3xl font-bold tracking-tight font-headline">Pourquoi nous choisir ?</h2>
           </div>
           <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
             Chez VylsCapital, nous combinons technologie et expertise humaine pour vous offrir une expérience de prêt inégalée.

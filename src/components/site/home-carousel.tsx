@@ -18,31 +18,31 @@ const carouselItems = [
   {
     src: "https://i.postimg.cc/JnYy9vXy/arturo-portillo-NRy3-WM22-Sw-Q-unsplash-removebg-preview.png",
     alt: "Personne travaillant sur un ordinateur portable dans un bureau moderne",
-    title: "Sécurisez l'Avenir de Votre Entreprise",
+    title: "Sécurisez l'avenir de votre entreprise",
     description: "VylsCapital fournit des solutions de financement rapides et flexibles pour aider votre entreprise à prospérer. Obtenez le capital dont vous avez besoin pour grandir.",
   },
   {
     src: "https://i.postimg.cc/7YCNSKbG/jonne-makikyro-n-Gp-I-Tvpc-Co-unsplash.jpg",
     alt: "Gros plan sur une poignée de main entre deux professionnels",
-    title: "Des Partenaires de Confiance à Vos Côtés",
+    title: "Des partenaires de confiance à vos côtés",
     description: "Nous construisons des relations solides pour vous garantir les meilleures conditions et un accompagnement sur mesure.",
   },
   {
     src: "https://i.postimg.cc/VknBV5qz/fang-guo-R8-SKm0sa-Yu8-unsplash.jpg",
     alt: "Vue aérienne d'une ville animée avec des gratte-ciels",
-    title: "Financez Vos Plus Grandes Ambitions",
+    title: "Financez vos plus grandes ambitions",
     description: "Que ce soit pour un projet immobilier ou une expansion internationale, nous avons les outils pour vous soutenir.",
   },
   {
     src: "https://i.postimg.cc/26zwvmBr/sam-moghadam-ba-II27-W6z7k-unsplash.jpg",
     alt: "Équipe de travail collaborant autour d'une table avec des graphiques",
-    title: "La Croissance par l'Analyse et la Stratégie",
+    title: "La croissance par l'analyse et la stratégie",
     description: "Notre équipe d'experts analyse votre marché pour vous proposer des solutions de financement qui ont un réel impact.",
   },
   {
     src: "https://i.postimg.cc/PxRwxkW6/austin-distel-mp-N7xj-KQ-Ns-unsplash.jpg",
     alt: "Homme d'affaires souriant regardant des documents financiers",
-    title: "Une Gestion Financière Simplifiée",
+    title: "Une gestion financière simplifiée",
     description: "Profitez d'un processus 100% en ligne et d'un suivi transparent pour vous concentrer sur ce qui compte vraiment.",
   },
 ];

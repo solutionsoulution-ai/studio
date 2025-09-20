@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 import Image from "next/image";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -43,7 +44,7 @@ export default function ServicesSection() {
       <div className="text-center mb-10">
         <div className="flex items-center gap-3 justify-center">
             <Grid3x3 className="w-8 h-8 text-primary" />
-            <h2 className="text-3xl font-bold tracking-tight font-headline">Explorez Nos Solutions de Financement</h2>
+            <h2 className="text-3xl font-bold tracking-tight font-headline">Explorez nos solutions de financement</h2>
         </div>
         <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
           Que vous soyez un particulier ou une entreprise, nous avons une solution de prêt adaptée à vos besoins. Découvrez nos offres.

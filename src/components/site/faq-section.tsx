@@ -1,3 +1,4 @@
+
 import {
   Accordion,
   AccordionContent,
@@ -9,23 +10,23 @@ import { HelpCircle } from "lucide-react";
 const defaultFaqs = [
   {
     question: "Quelles sont les exigences minimales pour un prêt ?",
-    answer: "Généralement, nous recherchons des entreprises avec au moins 1 an d'activité, un score de crédit minimum de 600 et des revenus annuels constants. Cependant, notre vérificateur d'éligibilité peut fournir une évaluation plus personnalisée.",
+    answer: "Généralement, nous recherchons une situation financière stable et une capacité de remboursement démontrable. Chaque dossier est unique, et notre vérificateur d'éligibilité peut fournir une évaluation personnalisée.",
   },
   {
     question: "Combien de temps dure le processus de demande ?",
-    answer: "Notre vérification d'éligibilité initiale est instantanée. Un examen complet de la demande prend généralement entre 24 et 72 heures. Une fois approuvés, les fonds peuvent être déposés en aussi peu qu'un jour ouvrable.",
+    answer: "Notre vérification d'éligibilité initiale est instantanée. Un examen complet de la demande prend généralement entre 24 et 72 heures. Une fois approuvés, les fonds peuvent être débloqués rapidement.",
   },
   {
     question: "Quels types de prêts offrez-vous ?",
-    answer: "VylsCapital se spécialise dans une variété d'options de financement pour les entreprises, y compris les prêts à terme, les lignes de crédit et le financement d'équipement. La meilleure option dépend des besoins spécifiques de votre entreprise et de votre situation financière.",
+    answer: "VylsCapital se spécialise dans une variété d'options de financement, y compris les prêts immobiliers, les prêts à la consommation, les prêts auto, le rachat de crédit et les financements pour entreprises.",
   },
   {
     question: "Puis-je rembourser mon prêt par anticipation ?",
-    answer: "Oui, la plupart de nos produits de prêt permettent un remboursement anticipé sans pénalité. Nous croyons en la fourniture d'options flexibles qui soutiennent la santé financière de votre entreprise.",
+    answer: "Oui, la plupart de nos produits de prêt permettent un remboursement anticipé sans pénalité. Nous croyons en la fourniture d'options flexibles qui soutiennent votre santé financière.",
   },
   {
     question: "De quels documents ai-je besoin pour une demande de prêt complète ?",
-    answer: "Pour une demande complète, vous aurez généralement besoin de relevés bancaires récents (3-6 mois), de vos déclarations de revenus d'entreprise les plus récentes et de documents d'identification de base. Nous visons à minimiser la paperasse autant que possible.",
+    answer: "Pour une demande complète, vous aurez généralement besoin d'une pièce d'identité, d'un justificatif de domicile, et de justificatifs de revenus (comme des bulletins de salaire ou des avis d'imposition).",
   },
 ];
 
@@ -41,7 +42,7 @@ type FaqSectionProps = {
 }
 
 export default function FaqSection({ 
-    title = "Foire Aux Questions",
+    title = "Foire aux questions",
     description = "Vous avez des questions ? Nous avons des réponses. Trouvez des informations sur nos services et processus ci-dessous.",
     faqs = defaultFaqs
 }: FaqSectionProps) {

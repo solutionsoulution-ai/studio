@@ -1,3 +1,4 @@
+
 import { Handshake } from "lucide-react";
 
 const partners = [
@@ -17,7 +18,7 @@ export default function PartnersSection() {
             <div className="flex items-center gap-3 justify-center">
                 <Handshake className="w-8 h-8 text-primary" />
                 <h2 className="text-3xl font-bold tracking-tight font-headline">
-                    Nos Partenaires de Confiance
+                    Nos partenaires de confiance
                 </h2>
             </div>
             <p className="mt-4 text-lg text-muted-foreground">
