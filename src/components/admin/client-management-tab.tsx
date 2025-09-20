@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useState, useCallback } from "react";
@@ -226,7 +227,34 @@ const GenericActionDialog = ({ client, onAction, actionType }: { client: Omit<Cl
             case 'balance': return (
                 <div className="space-y-4">
                     <FormField control={form.control} name="type" render={({ field }) => (
-                        <FormItem><FormLabel>Type d'opération</FormLabel><FormControl><RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex gap-4"><FormItem><FormControl><RadioGroupItem value="credit" /> Crédit</FormControl></FormItem><FormItem><FormControl><RadioGroupItem value="debit" /> Débit</FormControl></FormItem></RadioGroup></FormControl><FormMessage /></FormItem>
+                        <FormItem className="space-y-3">
+                            <FormLabel>Type d'opération</FormLabel>
+                            <FormControl>
+                                <RadioGroup
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                                className="flex flex-col space-y-1"
+                                >
+                                <FormItem className="flex items-center space-x-3 space-y-0">
+                                    <FormControl>
+                                    <RadioGroupItem value="credit" />
+                                    </FormControl>
+                                    <FormLabel className="font-normal">
+                                    Crédit
+                                    </FormLabel>
+                                </FormItem>
+                                <FormItem className="flex items-center space-x-3 space-y-0">
+                                    <FormControl>
+                                    <RadioGroupItem value="debit" />
+                                    </FormControl>
+                                    <FormLabel className="font-normal">
+                                    Débit
+                                    </FormLabel>
+                                </FormItem>
+                                </RadioGroup>
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
                     )} />
                     <FormField control={form.control} name="amount" render={({ field }) => (
                         <FormItem><FormLabel>Montant (€)</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem>
@@ -252,7 +280,36 @@ const GenericActionDialog = ({ client, onAction, actionType }: { client: Omit<Cl
                         <FormItem><FormLabel>Durée</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem>
                     )} />
                     <FormField control={form.control} name="unit" render={({ field }) => (
-                        <FormItem><FormLabel>Unité</FormLabel><FormControl><RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex gap-4"><FormItem><FormControl><RadioGroupItem value="minutes" /> minutes</FormControl></FormItem><FormItem><FormControl><RadioGroupItem value="hours" /> heures</FormControl></FormItem><FormItem><FormControl><RadioGroupItem value="days" /> jours</FormControl></FormItem></RadioGroup></FormControl><FormMessage /></FormItem>
+                       <FormItem className="space-y-3">
+                            <FormLabel>Unité</FormLabel>
+                            <FormControl>
+                                <RadioGroup
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                                className="flex flex-row space-x-4"
+                                >
+                                <FormItem className="flex items-center space-x-3 space-y-0">
+                                    <FormControl>
+                                    <RadioGroupItem value="minutes" />
+                                    </FormControl>
+                                    <FormLabel className="font-normal">minutes</FormLabel>
+                                </FormItem>
+                                <FormItem className="flex items-center space-x-3 space-y-0">
+                                    <FormControl>
+                                    <RadioGroupItem value="hours" />
+                                    </FormControl>
+                                    <FormLabel className="font-normal">heures</FormLabel>
+                                </FormItem>
+                                <FormItem className="flex items-center space-x-3 space-y-0">
+                                    <FormControl>
+                                    <RadioGroupItem value="days" />
+                                    </FormControl>
+                                    <FormLabel className="font-normal">jours</FormLabel>
+                                </FormItem>
+                                </RadioGroup>
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
                     )} />
                 </div>
             );
