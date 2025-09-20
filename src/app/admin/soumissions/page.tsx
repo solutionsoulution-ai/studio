@@ -8,12 +8,11 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Shield, FileText } from "lucide-react";
+import { Loader2, Shield, ArrowLeft } from "lucide-react";
 import { verifyAdminLoginAction, getClientsAction, type ClientProfile } from "@/app/actions/clients";
 import Link from "next/link";
-import ClientManagementTab from "@/components/admin/client-management-tab";
+import SubmissionsView from "@/components/admin/submissions-view";
 
-// Schéma pour le formulaire de connexion admin
 const adminLoginSchema = z.object({
   password: z.string().min(1, { message: "Le mot de passe est requis." }),
 });
@@ -45,8 +44,8 @@ const AdminLoginForm = ({ onLoginSuccess }: { onLoginSuccess: () => void }) => {
   return (
     <Card className="w-full max-w-md shadow-lg">
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold">Accès Administrateur</CardTitle>
-        <CardDescription>Veuillez entrer le mot de passe administrateur.</CardDescription>
+        <CardTitle className="text-2xl font-bold">Accès Sécurisé</CardTitle>
+        <CardDescription>Veuillez entrer le mot de passe administrateur pour voir les soumissions.</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -66,12 +65,12 @@ const AdminLoginForm = ({ onLoginSuccess }: { onLoginSuccess: () => void }) => {
 };
 
 
-export default function AdminPage() {
+export default function SubmissionsPage() {
   const [isClient, setIsClient] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [clients, setClients] = useState<Omit<ClientProfile, 'password'>[]>([]);
-  const [isLoadingClients, setIsLoadingClients] = useState(true);
-  const [errorClients, setErrorClients] = useState<string | null>(null);
+  const [submissions, setSubmissions] = useState<Omit<ClientProfile, 'password'>[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setIsClient(true);
@@ -80,27 +79,27 @@ export default function AdminPage() {
     }
   }, []);
 
-  const fetchClients = useCallback(async () => {
+  const fetchSubmissions = useCallback(async () => {
       if (!isAdmin) return;
-      setIsLoadingClients(true);
-      setErrorClients(null);
+      setIsLoading(true);
+      setError(null);
       
       const result = await getClientsAction();
 
       if (result.success && result.clients) {
-        setClients(result.clients);
+        setSubmissions(result.clients);
       } else {
-        setErrorClients(result.error || "Une erreur est survenue.");
-        setClients([]);
+        setError(result.error || "Une erreur est survenue.");
+        setSubmissions([]);
       }
-      setIsLoadingClients(false);
+      setIsLoading(false);
   }, [isAdmin]);
 
   useEffect(() => {
     if (isAdmin) {
-      fetchClients();
+      fetchSubmissions();
     }
-  }, [isAdmin, fetchClients]);
+  }, [isAdmin, fetchSubmissions]);
 
   if (!isClient) {
     return (
@@ -120,33 +119,24 @@ export default function AdminPage() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-start p-6 sm:p-12">
-      <div className="w-full max-w-6xl">
+      <div className="w-full max-w-7xl">
         <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-8 gap-4">
             <div>
-                 <h1 className="text-3xl font-bold mb-2">Panneau d'Administration</h1>
-                <p className="text-muted-foreground">Gérez les clients de la banque en ligne.</p>
+                 <h1 className="text-3xl font-bold mb-2">Soumissions des Formulaires</h1>
+                <p className="text-muted-foreground">Consultez les demandes de prêt et les messages reçus.</p>
             </div>
-             <div className="flex gap-2">
-                <Button asChild variant="outline">
-                    <Link href="/admin/soumissions">
-                        <FileText className="mr-2" />
-                        Voir les Soumissions
-                    </Link>
-                </Button>
-                 <Button asChild variant="secondary">
-                    <Link href="/admin/documents">
-                        <FileText className="mr-2" />
-                        Générateur de Documents
-                    </Link>
-                </Button>
-            </div>
+            <Button asChild variant="outline">
+                <Link href="/admin">
+                    <ArrowLeft className="mr-2" />
+                    Retour au panneau principal
+                </Link>
+            </Button>
         </div>
         
-        <ClientManagementTab 
-            clients={clients} 
-            isLoading={isLoadingClients} 
-            error={errorClients} 
-            onClientAction={fetchClients} 
+        <SubmissionsView 
+            submissions={submissions}
+            isLoading={isLoading}
+            error={error}
         />
       </div>
     </main>
