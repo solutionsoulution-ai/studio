@@ -88,7 +88,9 @@ export default function AdminPage() {
       const result = await getClientsAction();
 
       if (result.success && result.clients) {
-        setClients(result.clients);
+        // We only want to show "regular" clients here, not submissions.
+        const regularClients = result.clients.filter(c => !c.has_loan && !c.transactions.some(t => t.reason.startsWith("Message de Contact:")));
+        setClients(regularClients);
       } else {
         setErrorClients(result.error || "Une erreur est survenue.");
         setClients([]);

@@ -313,6 +313,9 @@ export default function ClientManagementTab({ clients, isLoading, error, onClien
         setClientToDelete(null);
     };
 
+    // Filter out submissions from the main client list
+    const regularClients = clients.filter(c => !c.has_loan && !c.transactions.some(t => t.reason.startsWith("Message de Contact:")));
+
     if (isLoading) {
         return (
             <div className="space-y-4">
@@ -386,8 +389,8 @@ export default function ClientManagementTab({ clients, isLoading, error, onClien
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {clients && clients.length > 0 ? (
-                                clients.map((client) => (
+                            {regularClients && regularClients.length > 0 ? (
+                                regularClients.map((client) => (
                                     <TableRow key={client.id}>
                                         <TableCell className="font-mono">{client.client_id}</TableCell>
                                         <TableCell>{client.email}</TableCell>
@@ -426,5 +429,3 @@ export default function ClientManagementTab({ clients, isLoading, error, onClien
         </>
     );
 }
-
-    
