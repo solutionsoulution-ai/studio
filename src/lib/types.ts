@@ -30,28 +30,10 @@ export interface ClientProfile {
         hours?: number;
         minutes?: number;
     };
-    // Fields below are for submissions, now handled by SMTP
-    // They can be removed in a future cleanup if no longer needed for any reason.
     has_loan: boolean;
     loan_type: string | null;
     loan_amount: number | null;
     interest_rate: number | null;
     loan_term: number | null;
     transactions?: Transaction[];
-    first_name?: string;
-    last_name?: string;
-    phone?: string;
-    address?: string;
-    city?: string;
-    postal_code?: string;
-    country?: string;
-    marital_status?: string;
-    number_of_children?: number;
-    birth_date?: string;
-    occupation?: string;
-    monthly_income?: number;
-    monthly_expenses?: number;
-    identity_document_url?: string;
-    proof_of_address_url?: string;
-    proof_of_income_url?: string;
 }

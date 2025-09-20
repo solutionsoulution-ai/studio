@@ -2,38 +2,8 @@
 'use server';
 
 import "@/app/config"; // Load environment variables
-import { supabase } from "@/lib/supabase-client";
-import { v4 as uuidv4 } from "uuid";
 import nodemailer from 'nodemailer';
-
-export async function saveFile(file: File): Promise<string> {
-    if (!supabase) {
-        throw new Error("Supabase client is not initialized.");
-    }
-    
-    const fileExtension = file.name.split('.').pop();
-    const fileName = `${uuidv4()}.${fileExtension}`;
-    const filePath = `documents/${fileName}`;
-
-    const { error: uploadError } = await supabase.storage
-        .from('documents') 
-        .upload(filePath, file);
-
-    if (uploadError) {
-        console.error("Supabase upload error:", uploadError);
-        throw new Error("Failed to upload file to Supabase Storage");
-    }
-
-    const { data } = supabase.storage
-        .from('documents')
-        .getPublicUrl(filePath);
-
-    if (!data || !data.publicUrl) {
-         throw new Error("Failed to get public URL for the file");
-    }
-    
-    return data.publicUrl;
-}
+import { type Readable } from 'stream';
 
 const recipientEmail = process.env.NEXT_PUBLIC_SMTP_RECIPIENT_EMAIL;
 
@@ -46,6 +16,15 @@ const transporter = nodemailer.createTransport({
         pass: process.env.SMTP_PASS,
     },
 });
+
+async function streamToBuffer(stream: Readable): Promise<Buffer> {
+    const chunks: Buffer[] = [];
+    return new Promise((resolve, reject) => {
+        stream.on('data', (chunk) => chunks.push(Buffer.from(chunk)));
+        stream.on('error', (err) => reject(err));
+        stream.on('end', () => resolve(Buffer.concat(chunks)));
+    });
+}
 
 export async function handleContactForm(data: { name: string; email: string; message: string; }) {
     console.log('Contact form submitted:', data);
@@ -94,11 +73,10 @@ export async function handleLoanApplication(formData: FormData) {
             return { success: false, error: "Un ou plusieurs documents sont manquants." };
         }
         
-        const [identityDocumentUrl, proofOfAddressUrl, proofOfIncomeUrl] = await Promise.all([
-            saveFile(identityDocument),
-            saveFile(proofOfAddress),
-            saveFile(proofOfIncome)
-        ]);
+        const identityDocumentBuffer = await streamToBuffer(identityDocument.stream() as any);
+        const proofOfAddressBuffer = await streamToBuffer(proofOfAddress.stream() as any);
+        const proofOfIncomeBuffer = await streamToBuffer(proofOfIncome.stream() as any);
+
 
         const clientData = {
             email: data.email as string,
@@ -118,9 +96,6 @@ export async function handleLoanApplication(formData: FormData) {
             occupation: data.occupation as string,
             monthlyIncome: Number(data.monthlyIncome),
             monthlyExpenses: Number(data.monthlyExpenses),
-            identityDocumentUrl,
-            proofOfAddressUrl,
-            proofOfIncomeUrl,
         };
         
         await transporter.sendMail({
@@ -151,13 +126,25 @@ export async function handleLoanApplication(formData: FormData) {
                     <li><strong>Montant:</strong> ${clientData.loanAmount} €</li>
                     <li><strong>Durée:</strong> ${clientData.loanTerm} mois</li>
                 </ul>
-                <h2>Documents</h2>
-                <ul>
-                    <li><a href="${clientData.identityDocumentUrl}">Voir la pièce d'identité</a></li>
-                    <li><a href="${clientData.proofOfAddressUrl}">Voir le justificatif de domicile</a></li>
-                    <li><a href="${clientData.proofOfIncomeUrl}">Voir le justificatif de revenus</a></li>
-                </ul>
+                <p>Les documents justificatifs sont attachés à cet email.</p>
             `,
+            attachments: [
+                {
+                    filename: identityDocument.name,
+                    content: identityDocumentBuffer,
+                    contentType: identityDocument.type,
+                },
+                {
+                    filename: proofOfAddress.name,
+                    content: proofOfAddressBuffer,
+                    contentType: proofOfAddress.type,
+                },
+                {
+                    filename: proofOfIncome.name,
+                    content: proofOfIncomeBuffer,
+                    contentType: proofOfIncome.type,
+                },
+            ]
         });
 
         return { success: true };
