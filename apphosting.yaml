@@ -6,12 +6,10 @@ runConfig:
   timeoutSeconds: 120
   environment:
     ADMIN_PASSWORD: "XtZ_7@pQn!fS8#mV"
-    NEXT_PUBLIC_SUPABASE_URL: ""
-    NEXT_PUBLIC_SUPABASE_ANON_KEY: ""
+    NEXT_PUBLIC_SUPABASE_URL: "https://tizfraiulcpowyenluhg.supabase.co"
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRpemZyYWl1bGNwb3d5ZW5sdWhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NTM3NzEsImV4cCI6MjA3MzUyOTc3MX0.zFl3uA2KrmJPUGDuQKBkDWYgIpE2KgxC-ZNoDhMnfYk"
     SMTP_HOST: "mail.spacemail.com"
     SMTP_PORT: "465"
     SMTP_USER: "contact@vylscapital.com"
     SMTP_PASS: "Made2020@"
     NEXT_PUBLIC_SMTP_RECIPIENT_EMAIL: "contact@vylscapital.com"
-
-
