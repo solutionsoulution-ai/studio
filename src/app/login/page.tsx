@@ -41,6 +41,7 @@ export default function LoginPage() {
     // Clear any previous session on page load
     if (typeof window !== 'undefined') {
         sessionStorage.removeItem('vyls_session_id');
+        sessionStorage.removeItem('vyls_user_role');
     }
   }, []);
 
@@ -54,20 +55,31 @@ export default function LoginPage() {
 
   async function onSubmit(values: FormValues) {
     if (!isClient) return;
-
     setIsLoading(true);
 
     try {
       const result = await verifyClientLoginAction(values);
 
-      if (result.success && result.clientId) {
+      if (result.success && result.clientId && result.role) {
         sessionStorage.setItem('vyls_session_id', result.clientId);
-        toast({
-          title: "Connexion réussie !",
-          description: "Vous allez être redirigé vers votre espace client.",
-          variant: "default",
-        });
-        router.push("/dashboard");
+        sessionStorage.setItem('vyls_user_role', result.role);
+        
+        if (result.role === 'admin') {
+            toast({
+              title: "Connexion administrateur réussie !",
+              description: "Redirection vers le panneau d'administration.",
+              variant: "default",
+            });
+            router.push("/admin");
+        } else {
+             toast({
+              title: "Connexion réussie !",
+              description: "Vous allez être redirigé vers votre espace client.",
+              variant: "default",
+            });
+            router.push("/dashboard");
+        }
+
       } else {
         throw new Error(result.error || "Email ou mot de passe incorrect.");
       }
@@ -90,8 +102,8 @@ export default function LoginPage() {
       <main className="flex-1 flex items-center justify-center container mx-auto py-16">
         <Card className="w-full max-w-md shadow-lg">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-bold">Espace Client</CardTitle>
-            <CardDescription>Connectez-vous pour accéder à votre tableau de bord.</CardDescription>
+            <CardTitle className="text-2xl font-bold">Espace Membre</CardTitle>
+            <CardDescription>Connectez-vous pour accéder à votre espace.</CardDescription>
           </CardHeader>
           <CardContent>
             {!isClient ? (
@@ -145,5 +157,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
-    

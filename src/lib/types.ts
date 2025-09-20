@@ -1,4 +1,6 @@
 
+export type UserRole = 'client' | 'admin';
+
 export interface Transaction {
     id: string;
     profile_id: string;
@@ -30,5 +32,6 @@ export interface ClientProfile {
         hours?: number;
         minutes?: number;
     };
+    role: UserRole;
     transactions?: Transaction[];
 }

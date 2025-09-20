@@ -5,25 +5,10 @@ import "@/app/config"; // Load environment variables
 import { z } from 'zod';
 import { type TransferFormInput, transferFormSchema } from '@/lib/schemas';
 import { revalidatePath } from 'next/cache';
-import { type ClientProfile, type Transaction } from '@/lib/types';
-import { v4 as uuidv4 } from 'uuid';
+import { type ClientProfile, type Transaction, type UserRole } from '@/lib/types';
 import { supabase } from '@/lib/supabase-client';
 
-// --- DATABASE HELPER (Supabase) ---
-async function readData(): Promise<{ profiles: ClientProfile[], transactions: Transaction[] }> {
-    if (!supabase) throw new Error("Supabase client is not initialized.");
-    
-    const { data: profiles, error: profilesError } = await supabase.from('profiles').select('*');
-    if (profilesError) throw profilesError;
-
-    const { data: transactions, error: transactionsError } = await supabase.from('transactions').select('*');
-    if (transactionsError) throw transactionsError;
-
-    return { profiles: profiles || [], transactions: transactions || [] };
-}
-
-
-// --- GENERAL HELPERS ---
+// --- HELPERS ---
 const randomDigits = (length: number) => Array.from({ length }, () => Math.floor(Math.random() * 10)).join('');
 
 function generateIBAN(countryCode = 'FR') {
@@ -41,7 +26,6 @@ function generateBIC() {
     return `${randomLetters(4)}FR${randomLetters(2)}XXX`;
 }
 
-
 // --- VALIDATION SCHEMAS ---
 const loginSchema = z.object({
   email: z.string().email(),
@@ -51,7 +35,7 @@ const loginSchema = z.object({
 
 // --- SERVER ACTIONS ---
 
-export async function verifyClientLoginAction(credentials: z.infer<typeof loginSchema>): Promise<{ success: boolean; clientId?: string; error?: string }> {
+export async function verifyClientLoginAction(credentials: z.infer<typeof loginSchema>): Promise<{ success: boolean; clientId?: string; role?: UserRole, error?: string }> {
   if (!supabase) return { success: false, error: "Database not configured." };
   
   const parsed = loginSchema.safeParse(credentials);
@@ -61,7 +45,7 @@ export async function verifyClientLoginAction(credentials: z.infer<typeof loginS
 
   const { data: client, error } = await supabase
     .from('profiles')
-    .select('id, password')
+    .select('id, password, role')
     .eq('email', parsed.data.email)
     .single();
 
@@ -69,7 +53,7 @@ export async function verifyClientLoginAction(credentials: z.infer<typeof loginS
     return { success: false, error: 'Email ou mot de passe incorrect.' };
   }
   
-  return { success: true, clientId: client.id };
+  return { success: true, clientId: client.id, role: client.role as UserRole };
 }
 
 
@@ -188,22 +172,15 @@ export async function createTransferAction(transferDetails: TransferFormInput & 
     return { success: true };
 }
 
-export async function verifyAdminLoginAction(password: string): Promise<{ success: boolean; error?: string }> {
-    const adminPassword = process.env.ADMIN_PASSWORD;
-    if (!adminPassword) {
-        console.error("Le mot de passe administrateur n'est pas configuré dans les variables d'environnement.");
-        return { success: false, error: "Le serveur n'est pas correctement configuré." };
-    }
-    if (password === adminPassword) {
-        return { success: true };
-    }
-    return { success: false, error: "Mot de passe incorrect." };
-}
 
 export async function getClientsAction(): Promise<{ success: boolean; clients?: Omit<ClientProfile, 'password'>[]; error?: string }> {
     if (!supabase) return { success: false, error: "Database not configured." };
     try {
-        const { data: profiles, error: profilesError } = await supabase.from('profiles').select('*');
+        const { data: profiles, error: profilesError } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('role', 'client'); // On ne récupère que les clients
+            
         if (profilesError) throw profilesError;
 
         const { data: transactions, error: transactionsError } = await supabase.from('transactions').select('*');
@@ -281,6 +258,7 @@ export async function createClientAction(clientData: any): Promise<{ success: bo
         is_transfer_blocked: false,
         transfer_block_reason: null,
         transfer_processing_time: { minutes: 1 },
+        role: 'client',
     };
     
     const { data: insertedClient, error: insertClientError } = await supabase
