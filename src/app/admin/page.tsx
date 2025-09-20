@@ -9,6 +9,7 @@ import { getClientsAction } from "@/app/actions/clients";
 import Link from "next/link";
 import ClientManagementTab from "@/components/admin/client-management-tab";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 export default function AdminPage() {
   const [isAdmin, setIsAdmin] = useState(false);
