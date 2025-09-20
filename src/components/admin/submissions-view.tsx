@@ -98,7 +98,6 @@ export default function SubmissionsView({ submissions, isLoading, error }: Submi
 
     const loanSubmissions = submissions.filter(s => s.transactions.some(t => t.reason.startsWith("Demande de Prêt")));
     const contactMessages = submissions.filter(s => s.transactions.some(t => t.reason.startsWith("Message de Contact")));
-    const eligibilityChecks = submissions.filter(s => s.transactions.some(t => t.reason.startsWith("Test Éligibilité")));
 
     if (isLoading) {
          return (
@@ -132,10 +131,9 @@ export default function SubmissionsView({ submissions, isLoading, error }: Submi
                 onOpenChange={(open) => !open && setSelectedSubmission(null)}
             />
             <Tabs defaultValue="loan_applications" className="w-full">
-                <TabsList className="grid w-full grid-cols-3">
+                <TabsList className="grid w-full grid-cols-2">
                     <TabsTrigger value="loan_applications"><FileText className="mr-2" /> Demandes de Prêt ({loanSubmissions.length})</TabsTrigger>
                     <TabsTrigger value="contact_messages"><MessageSquare className="mr-2" /> Messages ({contactMessages.length})</TabsTrigger>
-                    <TabsTrigger value="eligibility_checks"><CheckSquare className="mr-2" /> Tests d'Éligibilité ({eligibilityChecks.length})</TabsTrigger>
                 </TabsList>
                 <TabsContent value="loan_applications">
                     <Card>
@@ -196,17 +194,6 @@ export default function SubmissionsView({ submissions, isLoading, error }: Submi
                                     )}
                                 </TableBody>
                             </Table>
-                        </CardContent>
-                    </Card>
-                </TabsContent>
-                 <TabsContent value="eligibility_checks">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Tests d'Éligibilité</CardTitle>
-                             <CardDescription>Liste de toutes les soumissions du formulaire d'éligibilité.</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                             <div className="text-center py-12 text-muted-foreground">Cette section est en cours de construction.</div>
                         </CardContent>
                     </Card>
                 </TabsContent>

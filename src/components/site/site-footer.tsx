@@ -5,7 +5,6 @@ import { Landmark, Linkedin, Twitter, Facebook, Mail, Phone, MapPin } from "luci
 const mainNavLinks = [
   { href: "/a-propos", label: "À Propos" },
   { href: "/blog", label: "Blog" },
-  { href: "/eligibilite", label: "Éligibilité" },
   { href: "/#calculateur", label: "Calculateur" },
   { href: "/#faq", label: "FAQ" },
   { href: "/contact", label: "Contact" },
