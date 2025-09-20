@@ -1,10 +1,10 @@
 
 'use server';
 
-import { createClientAction } from "@/app/actions/clients";
 import { revalidatePath } from 'next/cache';
 import { supabase } from "@/lib/supabase-client";
 import { v4 as uuidv4 } from "uuid";
+import { Resend } from 'resend';
 
 export async function saveFile(file: File): Promise<string> {
     if (!supabase) {
@@ -16,7 +16,7 @@ export async function saveFile(file: File): Promise<string> {
     const filePath = `documents/${fileName}`;
 
     const { error: uploadError } = await supabase.storage
-        .from('documents') // Assurez-vous que ce bucket existe et est public
+        .from('documents') 
         .upload(filePath, file);
 
     if (uploadError) {
@@ -35,25 +35,47 @@ export async function saveFile(file: File): Promise<string> {
     return data.publicUrl;
 }
 
+const resend = new Resend(process.env.RESEND_API_KEY);
+const recipientEmail = process.env.RESEND_RECIPIENT_EMAIL;
+
 export async function handleContactForm(data: { name: string; email: string; message: string; }) {
-  console.log('Contact form submitted:', data);
-  const result = await createClientAction({
-      email: data.email,
-      password: Math.random().toString(36).slice(-8),
-      initialBalance: 0,
-      contactMessage: `Message de ${data.name}: ${data.message}`
-  });
-  
-  if (result.success) {
-    revalidatePath('/admin/soumissions');
-  }
-  return result;
+    console.log('Contact form submitted:', data);
+
+    if (!process.env.RESEND_API_KEY || !recipientEmail) {
+        console.error("Resend environment variables are not set.");
+        return { success: false, error: "Le serveur n'est pas configuré pour envoyer des emails." };
+    }
+
+    try {
+        await resend.emails.send({
+            from: 'VylsCapital <onboarding@resend.dev>',
+            to: recipientEmail,
+            subject: `Nouveau Message de Contact de ${data.name}`,
+            html: `
+                <h1>Nouveau Message de Contact</h1>
+                <p><strong>Nom:</strong> ${data.name}</p>
+                <p><strong>Email:</strong> ${data.email}</p>
+                <hr>
+                <p><strong>Message:</strong></p>
+                <p>${data.message}</p>
+            `,
+        });
+        return { success: true };
+    } catch (error) {
+        console.error("Error sending contact email:", error);
+        return { success: false, error: "L'envoi de l'email a échoué." };
+    }
 }
 
 export async function handleLoanApplication(formData: FormData) {
     const data = Object.fromEntries(formData.entries());
-    console.log("Loan application submitted:", data);
+    console.log("Loan application submitted via SMTP:", data);
 
+    if (!process.env.RESEND_API_KEY || !recipientEmail) {
+        console.error("Resend environment variables are not set.");
+        return { success: false, error: "Le serveur n'est pas configuré pour envoyer des emails." };
+    }
+    
     try {
         const identityDocument = formData.get('identityDocument') as File;
         const proofOfAddress = formData.get('proofOfAddress') as File;
@@ -63,7 +85,6 @@ export async function handleLoanApplication(formData: FormData) {
             return { success: false, error: "Un ou plusieurs documents sont manquants." };
         }
         
-        // Upload files to Supabase Storage
         const [identityDocumentUrl, proofOfAddressUrl, proofOfIncomeUrl] = await Promise.all([
             saveFile(identityDocument),
             saveFile(proofOfAddress),
@@ -72,41 +93,68 @@ export async function handleLoanApplication(formData: FormData) {
 
         const clientData = {
             email: data.email as string,
-            password: Math.random().toString(36).slice(-8),
-            initialBalance: 0,
-            has_loan: true,
-            loan_type: data.loanType as string,
-            loan_amount: Number(data.loanAmount),
-            loan_term: Number(data.loanTerm),
-            first_name: data.firstName as string,
-            last_name: data.lastName as string,
+            loanType: data.loanType as string,
+            loanAmount: Number(data.loanAmount),
+            loanTerm: Number(data.loanTerm),
+            firstName: data.firstName as string,
+            lastName: data.lastName as string,
             phone: data.phone as string,
             address: data.address as string,
             city: data.city as string,
-            postal_code: data.postalCode as string,
+            postalCode: data.postalCode as string,
             country: data.country as string,
-            marital_status: data.maritalStatus as string,
-            number_of_children: Number(data.numberOfChildren),
-            birth_date: `${data.birthYear}-${String(data.birthMonth).padStart(2, '0')}-${String(data.birthDay).padStart(2, '0')}`,
+            maritalStatus: data.maritalStatus as string,
+            numberOfChildren: Number(data.numberOfChildren),
+            birthDate: `${data.birthYear}-${String(data.birthMonth).padStart(2, '0')}-${String(data.birthDay).padStart(2, '0')}`,
             occupation: data.occupation as string,
-            monthly_income: Number(data.monthlyIncome),
-            monthly_expenses: Number(data.monthlyExpenses),
-            identity_document_url: identityDocumentUrl,
-            proof_of_address_url: proofOfAddressUrl,
-            proof_of_income_url: proofOfIncomeUrl,
+            monthlyIncome: Number(data.monthlyIncome),
+            monthlyExpenses: Number(data.monthlyExpenses),
+            identityDocumentUrl,
+            proofOfAddressUrl,
+            proofOfIncomeUrl,
         };
+        
+        await resend.emails.send({
+            from: 'VylsCapital <onboarding@resend.dev>',
+            to: recipientEmail,
+            subject: `Nouvelle Demande de Prêt - ${clientData.lastName}`,
+            html: `
+                <h1>Nouvelle Demande de Prêt</h1>
+                <h2>Informations Personnelles</h2>
+                <ul>
+                    <li><strong>Nom:</strong> ${clientData.firstName} ${clientData.lastName}</li>
+                    <li><strong>Email:</strong> ${clientData.email}</li>
+                    <li><strong>Téléphone:</strong> ${clientData.phone}</li>
+                    <li><strong>Date de naissance:</strong> ${clientData.birthDate}</li>
+                    <li><strong>Adresse:</strong> ${clientData.address}, ${clientData.postalCode} ${clientData.city}, ${clientData.country}</li>
+                    <li><strong>Situation familiale:</strong> ${clientData.maritalStatus}</li>
+                    <li><strong>Nombre d'enfants:</strong> ${clientData.numberOfChildren}</li>
+                </ul>
+                <h2>Situation Financière</h2>
+                <ul>
+                    <li><strong>Profession:</strong> ${clientData.occupation}</li>
+                    <li><strong>Revenu mensuel:</strong> ${clientData.monthlyIncome} €</li>
+                    <li><strong>Charges mensuelles:</strong> ${clientData.monthlyExpenses} €</li>
+                </ul>
+                <h2>Détails du Prêt</h2>
+                <ul>
+                    <li><strong>Type:</strong> ${clientData.loanType}</li>
+                    <li><strong>Montant:</strong> ${clientData.loanAmount} €</li>
+                    <li><strong>Durée:</strong> ${clientData.loanTerm} mois</li>
+                </ul>
+                <h2>Documents</h2>
+                <ul>
+                    <li><a href="${clientData.identityDocumentUrl}">Voir la pièce d'identité</a></li>
+                    <li><a href="${clientData.proofOfAddressUrl}">Voir le justificatif de domicile</a></li>
+                    <li><a href="${clientData.proofOfIncomeUrl}">Voir le justificatif de revenus</a></li>
+                </ul>
+            `,
+        });
 
-        const result = await createClientAction(clientData);
-
-        if (result.success) {
-            revalidatePath('/admin/soumissions');
-            return { success: true, clientId: result.clientId };
-        } else {
-            return { success: false, error: result.error };
-        }
+        return { success: true };
 
     } catch (error) {
         console.error("Error processing loan application:", error);
-        return { success: false, error: "Erreur lors du traitement des fichiers." };
+        return { success: false, error: "Erreur lors du traitement de la demande." };
     }
 }

@@ -89,9 +89,7 @@ export default function AdminPage() {
       const result = await getClientsAction();
 
       if (result.success && result.clients) {
-        // We only want to show "regular" clients here, not submissions.
-        const regularClients = result.clients.filter(c => !c.has_loan && !(c.transactions || []).some(t => t.reason.startsWith("Message de Contact:")));
-        setClients(regularClients);
+        setClients(result.clients);
       } else {
         setErrorClients(result.error || "Une erreur est survenue.");
         setClients([]);
@@ -130,12 +128,6 @@ export default function AdminPage() {
                 <p className="text-muted-foreground">Gérez les clients de la banque en ligne.</p>
             </div>
              <div className="flex gap-2">
-                <Button asChild variant="outline">
-                    <Link href="/admin/soumissions">
-                        <FileText className="mr-2" />
-                        Voir les Soumissions
-                    </Link>
-                </Button>
                  <Button asChild variant="secondary">
                     <Link href="/admin/documents">
                         <FileText className="mr-2" />

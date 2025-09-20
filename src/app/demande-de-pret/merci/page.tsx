@@ -22,15 +22,6 @@ function ThankYouContent() {
         <CardDescription>Votre demande a été soumise avec succès.</CardDescription>
       </CardHeader>
       <CardContent className="text-center">
-        {applicationId ? (
-          <p className="text-lg text-muted-foreground">
-            Votre numéro de dossier est le : <strong className="font-mono text-primary">{applicationId}</strong>
-          </p>
-        ) : (
-          <p className="text-lg text-muted-foreground">
-            Nous traitons votre demande.
-          </p>
-        )}
         <p className="mt-4">
           Notre équipe va maintenant examiner votre dossier. Nous vous contacterons par e-mail dans les plus brefs délais avec une réponse.
         </p>
@@ -66,6 +57,3 @@ export default function ThankYouPage() {
     </div>
   );
 }
-
-
-    

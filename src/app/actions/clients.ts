@@ -7,7 +7,6 @@ import { revalidatePath } from 'next/cache';
 import { type ClientProfile, type Transaction } from '@/lib/types';
 import { v4 as uuidv4 } from 'uuid';
 import { supabase } from '@/lib/supabase-client';
-import { saveFile } from '@/app/actions';
 
 // --- DATABASE HELPER (Supabase) ---
 async function readData(): Promise<{ profiles: ClientProfile[], transactions: Transaction[] }> {
@@ -239,7 +238,6 @@ export async function deleteClientAction(clientId: string): Promise<{ success: b
     }
 
     revalidatePath('/admin');
-    revalidatePath('/admin/soumissions');
     return { success: true };
 }
 
@@ -282,27 +280,11 @@ export async function createClientAction(clientData: any): Promise<{ success: bo
         is_transfer_blocked: false,
         transfer_block_reason: null,
         transfer_processing_time: { minutes: 1 },
-        has_loan: clientData.has_loan || false,
-        loan_type: clientData.loan_type || null,
-        loan_amount: clientData.loan_amount || null,
+        has_loan: false,
+        loan_type: null,
+        loan_amount: null,
         interest_rate: null,
-        loan_term: clientData.loan_term || null,
-        first_name: clientData.first_name || '',
-        last_name: clientData.last_name || '',
-        phone: clientData.phone || '',
-        address: clientData.address || '',
-        city: clientData.city || '',
-        postal_code: clientData.postal_code || '',
-        country: clientData.country || '',
-        marital_status: clientData.marital_status || '',
-        number_of_children: clientData.number_of_children || 0,
-        birth_date: clientData.birth_date || '',
-        occupation: clientData.occupation || '',
-        monthly_income: clientData.monthly_income || 0,
-        monthly_expenses: clientData.monthly_expenses || 0,
-        identity_document_url: clientData.identity_document_url || '',
-        proof_of_address_url: clientData.proof_of_address_url || '',
-        proof_of_income_url: clientData.proof_of_income_url || '',
+        loan_term: null,
     };
     
     const { data: insertedClient, error: insertClientError } = await supabase
@@ -316,9 +298,9 @@ export async function createClientAction(clientData: any): Promise<{ success: bo
     }
 
     const newClientId = insertedClient.id;
-    const transactionsToInsert: any[] = [];
+    
     if (newClient.balance > 0) {
-        transactionsToInsert.push({
+        const { error: txError } = await supabase.from('transactions').insert({
              profile_id: newClientId,
              amount: newClient.balance,
              reason: "Dépôt initial",
@@ -326,32 +308,8 @@ export async function createClientAction(clientData: any): Promise<{ success: bo
              recipient_iban: null,
              recipient_name: null
         });
-    }
-    if (clientData.loan_type) {
-         transactionsToInsert.push({
-             profile_id: newClientId,
-             amount: 0,
-             reason: "Demande de Prêt",
-             status: 'COMPLETED' as const,
-             recipient_iban: null,
-             recipient_name: null
-        });
-    } else if (clientData.contactMessage) {
-         transactionsToInsert.push({
-             profile_id: newClientId,
-             amount: 0,
-             reason: `Message de Contact: ${clientData.contactMessage}`,
-             status: 'COMPLETED' as const,
-             recipient_iban: null,
-             recipient_name: null
-        });
-    }
-    
-    if (transactionsToInsert.length > 0) {
-        const { error: txError } = await supabase.from('transactions').insert(transactionsToInsert);
         if (txError) {
-             // Rollback client creation? For now, we'll just log the error.
-             console.error("Error creating initial transactions:", txError.message);
+             console.error("Error creating initial transaction:", txError.message);
         }
     }
     

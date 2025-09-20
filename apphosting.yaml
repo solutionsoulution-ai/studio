@@ -6,3 +6,7 @@ runConfig:
   timeoutSeconds: 120
   environment:
     ADMIN_PASSWORD: "XtZ_7@pQn!fS8#mV"
+    NEXT_PUBLIC_SUPABASE_URL: ""
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: ""
+    RESEND_API_KEY: ""
+    RESEND_RECIPIENT_EMAIL: ""
