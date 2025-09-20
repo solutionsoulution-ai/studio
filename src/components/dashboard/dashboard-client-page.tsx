@@ -70,6 +70,12 @@ const TransactionDetailDialog = ({ transaction, open, onOpenChange }: { transact
         }
     };
     
+    const formatDate = (timestamp: any) => {
+        if (!timestamp) return 'N/A';
+        const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+        return date.toLocaleString('fr-FR');
+    }
+
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent>
@@ -90,7 +96,7 @@ const TransactionDetailDialog = ({ transaction, open, onOpenChange }: { transact
                     </div>
                     <div className="flex justify-between items-center">
                         <span className="text-muted-foreground">Date</span>
-                        <span>{new Date(transaction.created_at).toLocaleString('fr-FR')}</span>
+                        <span>{formatDate(transaction.created_at)}</span>
                     </div>
                      <div className="flex justify-between items-start pt-2">
                         <span className="text-muted-foreground">Motif</span>
@@ -180,13 +186,11 @@ export default function DashboardClientPage() {
             return;
         }
         
-        // Fetch data immediately
         fetchAccountData(clientId);
 
-        // Then set up an interval to poll for updates
-        const intervalId = setInterval(() => fetchAccountData(clientId), 5000); // Poll every 5 seconds
+        const intervalId = setInterval(() => fetchAccountData(clientId), 5000); 
 
-        return () => clearInterval(intervalId); // Cleanup interval on component unmount
+        return () => clearInterval(intervalId); 
     }, [fetchAccountData, router, toast]);
 
     const handleTransferSubmit = async (transferData: TransferFormInput): Promise<{success: boolean}> => {
@@ -198,7 +202,6 @@ export default function DashboardClientPage() {
         });
 
         if (result.success) {
-             // Immediately re-fetch data to update the view
             fetchAccountData(accountData.id);
         } else {
              toast({ title: "Erreur de virement", description: result.error, variant: "destructive"});
@@ -218,7 +221,7 @@ export default function DashboardClientPage() {
     }, [transactions]);
 
 
-  if (isLoading && !accountData) { // Only show full-page skeleton on initial load
+  if (isLoading && !accountData) { 
     return (
         <div className="container mx-auto py-8 md:py-16">
              <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
@@ -259,7 +262,11 @@ export default function DashboardClientPage() {
       )
   }
 
-  const sortedTransactions = [...transactions].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+  const sortedTransactions = [...transactions].sort((a, b) => {
+      const dateA = a.created_at?.toDate ? a.created_at.toDate() : new Date(a.created_at);
+      const dateB = b.created_at?.toDate ? b.created_at.toDate() : new Date(b.created_at);
+      return dateB.getTime() - dateA.getTime();
+  });
   const pendingTransactions = sortedTransactions.filter(tx => tx.status === 'PENDING');
   const completedTransactions = sortedTransactions.filter(tx => tx.status !== 'PENDING');
 
@@ -379,7 +386,7 @@ export default function DashboardClientPage() {
                                                         {tx.status === 'FAILED' && <Badge variant="destructive" className="mt-1">Échoué</Badge>}
                                                     </TableCell>
                                                     <TableCell className={`text-right font-semibold ${tx.amount > 0 ? 'text-green-600' : 'text-red-600'}`}>{formatCurrency(tx.amount)}</TableCell>
-                                                    <TableCell className="hidden sm:table-cell text-right text-muted-foreground">{new Date(tx.created_at).toLocaleDateString('fr-FR')}</TableCell>
+                                                    <TableCell className="hidden sm:table-cell text-muted-foreground">{tx.created_at?.toDate ? tx.created_at.toDate().toLocaleDateString('fr-FR') : new Date(tx.created_at).toLocaleDateString('fr-FR')}</TableCell>
                                                 </TableRow>
                                             ))
                                         ) : (

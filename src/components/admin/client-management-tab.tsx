@@ -89,10 +89,6 @@ const formatCurrency = (value: number) => {
     }).format(value || 0);
 };
 
-const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("fr-FR");
-}
-
 // --- Create Client Form ---
 const createClientSchema = z.object({
     email: z.string().email("L'adresse e-mail est invalide."),
@@ -170,7 +166,6 @@ const GenericActionDialog = ({ client, onAction, actionType }: { client: Omit<Cl
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     let form: UseFormReturn<any>;
-    let schema: z.ZodObject<any>;
     let title: string;
     let description: string;
     

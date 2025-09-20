@@ -60,6 +60,12 @@ const SubmissionDetailDialog = ({ submission, open, onOpenChange }: { submission
     const isLoanApplication = submission.has_loan;
     const contactMessageTx = submission.transactions?.find(t => t.reason.startsWith("Message de Contact:"));
     
+    const formatDate = (timestamp: any) => {
+        if (!timestamp) return 'N/A';
+        const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+        return date.toLocaleString('fr-FR');
+    }
+
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-w-3xl">
@@ -90,7 +96,7 @@ const SubmissionDetailDialog = ({ submission, open, onOpenChange }: { submission
                                 <p><strong>Type:</strong> {submission.loan_type}</p>
                                 <p><strong>Montant:</strong> {formatCurrency(submission.loan_amount)}</p>
                                 <p><strong>Durée:</strong> {submission.loan_term} mois</p>
-                                <p><strong>Date de la demande:</strong> {new Date(submission.created_at).toLocaleString('fr-FR')}</p>
+                                <p><strong>Date de la demande:</strong> {formatDate(submission.created_at)}</p>
                                 <div className="md:col-span-2 border-t pt-2 mt-2 font-bold">Documents fournis</div>
                                 {submission.identity_document_url && (
                                     <p><strong>Pièce d'identité:</strong> <Button variant="link" asChild><a href={submission.identity_document_url} target="_blank" rel="noopener noreferrer">Voir le document</a></Button></p>
@@ -111,7 +117,7 @@ const SubmissionDetailDialog = ({ submission, open, onOpenChange }: { submission
                                 <CardTitle>Message de Contact</CardTitle>
                             </CardHeader>
                             <CardContent className="text-sm space-y-1">
-                                 <p><strong>Date:</strong> {new Date(contactMessageTx.created_at).toLocaleString('fr-FR')}</p>
+                                 <p><strong>Date:</strong> {formatDate(contactMessageTx.created_at)}</p>
                                  <p className="border-t pt-2 mt-2"><strong>Message:</strong></p>
                                  <blockquote className="p-2 bg-muted rounded-md">{contactMessageTx.reason.substring("Message de Contact: ".length)}</blockquote>
                             </CardContent>
@@ -171,6 +177,12 @@ export default function SubmissionsView({ submissions, isLoading, error, onSubmi
         );
     }
 
+    const formatDate = (timestamp: any) => {
+        if (!timestamp) return 'N/A';
+        const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+        return date.toLocaleDateString('fr-FR');
+    }
+
     return (
         <>
             <SubmissionDetailDialog 
@@ -220,7 +232,7 @@ export default function SubmissionsView({ submissions, isLoading, error, onSubmi
                                             <TableCell className="cursor-pointer hover:underline" onClick={() => setSelectedSubmission(sub)}>{sub.email}</TableCell>
                                             <TableCell>{sub.loan_type}</TableCell>
                                             <TableCell>{formatCurrency(sub.loan_amount)}</TableCell>
-                                            <TableCell>{new Date(sub.created_at).toLocaleDateString('fr-FR')}</TableCell>
+                                            <TableCell>{formatDate(sub.created_at)}</TableCell>
                                             <TableCell className="text-right">
                                                  <Button variant="ghost" size="icon" onClick={() => setSubmissionToDelete(sub)}>
                                                     <Trash2 className="w-4 h-4 text-destructive" />
@@ -257,7 +269,7 @@ export default function SubmissionsView({ submissions, isLoading, error, onSubmi
                                         return (
                                             <TableRow key={sub.id}>
                                                 <TableCell className="cursor-pointer hover:underline" onClick={() => setSelectedSubmission(sub)}>{sub.email}</TableCell>
-                                                <TableCell>{new Date(sub.created_at).toLocaleDateString('fr-FR')}</TableCell>
+                                                <TableCell>{formatDate(sub.created_at)}</TableCell>
                                                 <TableCell className="truncate max-w-sm">{contactTx?.reason.substring("Message de Contact: ".length)}</TableCell>
                                                 <TableCell className="text-right">
                                                     <Button variant="ghost" size="icon" onClick={() => setSubmissionToDelete(sub)}>

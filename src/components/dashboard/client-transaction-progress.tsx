@@ -10,9 +10,10 @@ interface Transaction {
     id: string;
     amount: number;
     reason: string;
-    created_at: string;
+    created_at: any;
     status: 'PENDING' | 'COMPLETED' | 'FAILED';
-    estimatedCompletionDate?: string;
+    estimatedCompletionDate?: any;
+    recipient_name?: string | null;
 }
 
 interface ClientTransactionProgressProps {
@@ -39,10 +40,10 @@ export default function ClientTransactionProgress({ transaction }: ClientTransac
     useEffect(() => {
         const calculateProgress = () => {
             const now = new Date().getTime();
-            const startTime = new Date(transaction.created_at).getTime();
-            const endTime = transaction.estimatedCompletionDate
-                ? new Date(transaction.estimatedCompletionDate).getTime()
-                : now;
+            const startTime = transaction.created_at?.toDate ? transaction.created_at.toDate().getTime() : new Date(transaction.created_at).getTime();
+            const endTime = transaction.estimatedCompletionDate?.toDate
+                ? transaction.estimatedCompletionDate.toDate().getTime()
+                : transaction.estimatedCompletionDate ? new Date(transaction.estimatedCompletionDate).getTime() : now;
 
             if (startTime >= endTime) {
                 setProgress(100);
@@ -109,4 +110,3 @@ export default function ClientTransactionProgress({ transaction }: ClientTransac
         </div>
     );
 }
-

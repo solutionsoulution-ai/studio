@@ -4,14 +4,15 @@
 import { z } from 'zod';
 import { type TransferFormInput, transferFormSchema } from '@/lib/schemas';
 import { revalidatePath } from 'next/cache';
-import { createClient } from '@/lib/supabase/server';
+import { db } from '@/lib/firebase/server';
+import { collection, doc, addDoc, getDocs, getDoc, updateDoc, deleteDoc, query, where, Timestamp } from 'firebase/firestore';
 import { type ClientProfile, type Transaction } from '@/lib/types';
+import { v4 as uuidv4 } from 'uuid';
 
-// --- DATABASE HELPERS (Supabase) ---
+// --- DATABASE HELPERS (Firestore) ---
 
-async function getSupabaseClient() {
-    return createClient();
-}
+const profilesCollection = collection(db, 'profiles');
+const transactionsCollection = collection(db, 'transactions');
 
 // --- GENERAL HELPERS ---
 const randomDigits = (length: number) => Array.from({ length }, () => Math.floor(Math.random() * 10)).join('');
@@ -46,23 +47,21 @@ export async function verifyClientLoginAction(credentials: z.infer<typeof loginS
     return { success: false, error: 'Données invalides.' };
   }
 
-  const supabase = await getSupabaseClient();
-  const { data: client, error } = await supabase
-    .from('profiles')
-    .select('id, password')
-    .eq('email', parsed.data.email)
-    .single();
+  const q = query(profilesCollection, where("email", "==", parsed.data.email));
+  const querySnapshot = await getDocs(q);
 
-  if (error || !client) {
+  if (querySnapshot.empty) {
     return { success: false, error: 'Email ou mot de passe incorrect.' };
   }
 
-  // NOTE: This is plain text password comparison. In a real app, use a library like bcrypt.
+  const clientDoc = querySnapshot.docs[0];
+  const client = clientDoc.data() as ClientProfile;
+
   if (client.password !== parsed.data.password) {
     return { success: false, error: 'Email ou mot de passe incorrect.' };
   }
 
-  return { success: true, clientId: client.id };
+  return { success: true, clientId: clientDoc.id };
 }
 
 export async function getClientByIdAction(clientId: string): Promise<{ success: boolean; client?: Omit<ClientProfile, 'password'>; error?: string }> {
@@ -70,42 +69,30 @@ export async function getClientByIdAction(clientId: string): Promise<{ success: 
         return { success: false, error: "ID client non fourni." };
     }
     
-    const supabase = await getSupabaseClient();
+    const clientDocRef = doc(db, 'profiles', clientId);
+    const clientDoc = await getDoc(clientDocRef);
 
-    // First, get the client profile
-    const { data: client, error: clientError } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', clientId)
-        .single();
-        
-    if (clientError || !client) {
+    if (!clientDoc.exists()) {
         return { success: false, error: "Client non trouvé." };
     }
+    const client = { id: clientDoc.id, ...clientDoc.data() } as ClientProfile;
 
-    // Then, get all transactions for that client
-    const { data: transactions, error: txError } = await supabase
-        .from('transactions')
-        .select('*')
-        .eq('profile_id', clientId);
-
-    if (txError) {
-        return { success: false, error: "Erreur lors de la récupération des transactions." };
-    }
+    const txQuery = query(transactionsCollection, where("profile_id", "==", clientId));
+    const txSnapshot = await getDocs(txQuery);
+    const transactions = txSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Transaction[];
     
-    // Process pending transactions
     const now = new Date();
     let newBalance = client.balance;
     let dataWasModified = false;
+    const updatePromises: Promise<any>[] = [];
 
-    const updatedTransactions = (transactions || []).map(tx => {
+    const updatedTransactions = transactions.map(tx => {
         if (tx.status === 'PENDING' && tx.estimatedCompletionDate) {
-            const completionDate = new Date(tx.estimatedCompletionDate);
+            const completionDate = (tx.estimatedCompletionDate as any).toDate ? (tx.estimatedCompletionDate as any).toDate() : new Date(tx.estimatedCompletionDate);
             if (now >= completionDate) {
                 dataWasModified = true;
                 if (client.is_transfer_blocked) {
                     tx.status = 'FAILED';
-                    // The reason will be updated in the DB
                 } else {
                      if (newBalance >= Math.abs(tx.amount)) {
                         newBalance += tx.amount;
@@ -114,9 +101,8 @@ export async function getClientByIdAction(clientId: string): Promise<{ success: 
                         tx.status = 'FAILED';
                     }
                 }
-                
-                // Update transaction in DB
-                supabase.from('transactions').update({ status: tx.status }).eq('id', tx.id).then();
+                const txDocRef = doc(db, 'transactions', tx.id);
+                updatePromises.push(updateDoc(txDocRef, { status: tx.status }));
             }
         }
         return tx;
@@ -124,7 +110,8 @@ export async function getClientByIdAction(clientId: string): Promise<{ success: 
 
     if (dataWasModified) {
         client.balance = newBalance;
-        await supabase.from('profiles').update({ balance: newBalance }).eq('id', client.id);
+        updatePromises.push(updateDoc(clientDocRef, { balance: newBalance }));
+        await Promise.all(updatePromises);
     }
     
     const { password, ...clientWithoutPassword } = client;
@@ -134,17 +121,13 @@ export async function getClientByIdAction(clientId: string): Promise<{ success: 
 }
 
 export async function createTransferAction(transferDetails: TransferFormInput & { clientId: string }): Promise<{ success: boolean; error?: string }> {
-    const supabase = await getSupabaseClient();
+    const clientDocRef = doc(db, 'profiles', transferDetails.clientId);
+    const clientDoc = await getDoc(clientDocRef);
     
-    const { data: client, error: clientError } = await supabase
-        .from('profiles')
-        .select('id, balance, is_transfer_blocked, transfer_block_reason, transfer_processing_time')
-        .eq('id', transferDetails.clientId)
-        .single();
-    
-    if (clientError || !client) {
+    if (!clientDoc.exists()) {
         return { success: false, error: "Client non trouvé." };
     }
+    const client = clientDoc.data() as ClientProfile;
     
     const parsed = transferFormSchema.safeParse(transferDetails);
     if (!parsed.success) {
@@ -167,20 +150,20 @@ export async function createTransferAction(transferDetails: TransferFormInput & 
     if (processingTime.hours) completionDate.setHours(completionDate.getHours() + processingTime.hours);
     if (processingTime.minutes) completionDate.setMinutes(completionDate.getMinutes() + processingTime.minutes);
 
-    const { error: insertError } = await supabase.from('transactions').insert({
-        profile_id: client.id,
-        amount: -parsed.data.amount,
-        reason: parsed.data.reason,
-        recipient_iban: parsed.data.recipientIban,
-        recipient_name: parsed.data.recipientName,
-        recipient_bank_name: parsed.data.recipientBankName,
-        recipient_bic: parsed.data.recipientBic,
-        created_at: creationDate.toISOString(),
-        status: 'PENDING' as const,
-        estimatedCompletionDate: completionDate.toISOString(),
-    });
-
-    if (insertError) {
+    try {
+        await addDoc(transactionsCollection, {
+            profile_id: transferDetails.clientId,
+            amount: -parsed.data.amount,
+            reason: parsed.data.reason,
+            recipient_iban: parsed.data.recipientIban,
+            recipient_name: parsed.data.recipientName,
+            recipient_bank_name: parsed.data.recipientBankName,
+            recipient_bic: parsed.data.recipientBic,
+            created_at: Timestamp.fromDate(creationDate),
+            status: 'PENDING' as const,
+            estimatedCompletionDate: Timestamp.fromDate(completionDate),
+        });
+    } catch (insertError: any) {
         return { success: false, error: "Erreur lors de la création du virement: " + insertError.message };
     }
 
@@ -201,22 +184,23 @@ export async function verifyAdminLoginAction(password: string): Promise<{ succes
 }
 
 export async function getClientsAction(): Promise<{ success: boolean; clients?: Omit<ClientProfile, 'password'>[]; error?: string }> {
-    const supabase = await getSupabaseClient();
-    const { data, error } = await supabase
-        .from('profiles')
-        .select('*, transactions(*)')
-        .order('created_at', { ascending: false });
+    try {
+        const profileSnapshot = await getDocs(profilesCollection);
+        const clients = profileSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as ClientProfile[];
 
-    if (error) {
-        return { success: false, error: "Erreur Supabase: " + error.message };
+        const txSnapshot = await getDocs(transactionsCollection);
+        const allTransactions = txSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Transaction[];
+
+        const clientsWithTransactions = clients.map(c => {
+            const { password, ...client } = c;
+            client.transactions = allTransactions.filter(tx => tx.profile_id === client.id);
+            return client;
+        });
+
+        return { success: true, clients: clientsWithTransactions };
+    } catch (error: any) {
+        return { success: false, error: "Erreur Firestore: " + error.message };
     }
-
-    const clientsWithoutPasswords = data.map(c => {
-        const { password, ...client } = c;
-        return client;
-    });
-
-    return { success: true, clients: clientsWithoutPasswords };
 }
 
 export async function deleteClientAction(clientId: string): Promise<{ success: boolean; error?: string }> {
@@ -224,11 +208,14 @@ export async function deleteClientAction(clientId: string): Promise<{ success: b
         return { success: false, error: "ID client non fourni." };
     }
     
-    const supabase = await getSupabaseClient();
-    const { error } = await supabase.from('profiles').delete().eq('id', clientId);
-
-    if (error) {
-         return { success: false, error: "Erreur Supabase: " + error.message };
+    try {
+        await deleteDoc(doc(db, 'profiles', clientId));
+        const txQuery = query(transactionsCollection, where("profile_id", "==", clientId));
+        const txSnapshot = await getDocs(txQuery);
+        const deletePromises = txSnapshot.docs.map(doc => deleteDoc(doc.ref));
+        await Promise.all(deletePromises);
+    } catch(error: any) {
+         return { success: false, error: "Erreur Firestore: " + error.message };
     }
 
     revalidatePath('/admin');
@@ -249,23 +236,17 @@ export async function createClientAction(clientData: any): Promise<{ success: bo
         return { success: false, error: `Données invalides: ${issues}` };
     }
 
-    const supabase = await getSupabaseClient();
+    const q = query(profilesCollection, where("email", "==", parsed.data.email));
+    const existingClient = await getDocs(q);
 
-    // Check if client exists
-    const { data: existingClient, error: checkError } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('email', parsed.data.email)
-        .single();
-
-    if (existingClient) {
+    if (!existingClient.empty) {
         return { success: false, error: "Un client avec cet e-mail existe déjà." };
     }
     
-    const newClientData: Omit<ClientProfile, 'id' | 'created_at' | 'transactions'> = {
+    const newClientData = {
         client_id: `VYL-${randomDigits(3)}-${randomDigits(3)}`,
         email: parsed.data.email,
-        password: parsed.data.password, // Plain text, should be hashed
+        password: parsed.data.password,
         balance: parsed.data.initialBalance,
         account_number: generateIBAN(),
         iban: generateIBAN(),
@@ -278,73 +259,74 @@ export async function createClientAction(clientData: any): Promise<{ success: bo
         loan_amount: clientData.loan_amount || null,
         interest_rate: null,
         loan_term: clientData.loan_term || null,
-        first_name: clientData.first_name,
-        last_name: clientData.last_name,
-        phone: clientData.phone,
-        address: clientData.address,
-        city: clientData.city,
-        postal_code: clientData.postal_code,
-        country: clientData.country,
-        marital_status: clientData.marital_status,
-        number_of_children: clientData.number_of_children,
-        birth_date: clientData.birth_date,
-        occupation: clientData.occupation,
-        monthly_income: clientData.monthly_income,
-        monthly_expenses: clientData.monthly_expenses,
-        identity_document_url: clientData.identity_document_url,
-        proof_of_address_url: clientData.proof_of_address_url,
-        proof_of_income_url: clientData.proof_of_income_url,
+        first_name: clientData.first_name || '',
+        last_name: clientData.last_name || '',
+        phone: clientData.phone || '',
+        address: clientData.address || '',
+        city: clientData.city || '',
+        postal_code: clientData.postal_code || '',
+        country: clientData.country || '',
+        marital_status: clientData.marital_status || '',
+        number_of_children: clientData.number_of_children || 0,
+        birth_date: clientData.birth_date || '',
+        occupation: clientData.occupation || '',
+        monthly_income: clientData.monthly_income || 0,
+        monthly_expenses: clientData.monthly_expenses || 0,
+        identity_document_url: clientData.identity_document_url || '',
+        proof_of_address_url: clientData.proof_of_address_url || '',
+        proof_of_income_url: clientData.proof_of_income_url || '',
+        created_at: Timestamp.now(),
     };
     
-    const { data: insertedClient, error: insertError } = await supabase
-        .from('profiles')
-        .insert(newClientData)
-        .select('id')
-        .single();
-    
-    if (insertError || !insertedClient) {
-        return { success: false, error: "Erreur Supabase: " + insertError?.message };
-    }
+    try {
+        const docRef = await addDoc(profilesCollection, newClientData);
+        const newClientId = docRef.id;
 
-    const newClientId = insertedClient.id;
-    const transactionsToInsert: Omit<Transaction, 'id' | 'created_at'>[] = [];
-
-    if (newClientData.balance > 0) {
-        transactionsToInsert.push({
-             profile_id: newClientId,
-             amount: newClientData.balance,
-             reason: "Dépôt initial",
-             status: 'COMPLETED' as const,
-             recipient_iban: null,
-             recipient_name: null
-        });
+        const transactionsToInsert: any[] = [];
+        if (newClientData.balance > 0) {
+            transactionsToInsert.push({
+                 profile_id: newClientId,
+                 amount: newClientData.balance,
+                 reason: "Dépôt initial",
+                 status: 'COMPLETED' as const,
+                 created_at: Timestamp.now(),
+                 recipient_iban: null,
+                 recipient_name: null
+            });
+        }
+        if (clientData.loan_type) {
+             transactionsToInsert.push({
+                 profile_id: newClientId,
+                 amount: 0,
+                 reason: "Demande de Prêt",
+                 status: 'COMPLETED' as const,
+                 created_at: Timestamp.now(),
+                 recipient_iban: null,
+                 recipient_name: null
+            });
+        } else if (clientData.contactMessage) {
+             transactionsToInsert.push({
+                 profile_id: newClientId,
+                 amount: 0,
+                 reason: `Message de Contact: ${clientData.contactMessage}`,
+                 status: 'COMPLETED' as const,
+                 created_at: Timestamp.now(),
+                 recipient_iban: null,
+                 recipient_name: null
+            });
+        }
+        
+        if (transactionsToInsert.length > 0) {
+            for (const tx of transactionsToInsert) {
+                await addDoc(transactionsCollection, tx);
+            }
+        }
+        
+        revalidatePath('/admin');
+        return { success: true, clientId: newClientId };
+    } catch (error: any) {
+        return { success: false, error: "Erreur Firestore: " + error.message };
     }
-    if (clientData.loan_type) {
-         transactionsToInsert.push({
-             profile_id: newClientId,
-             amount: 0,
-             reason: "Demande de Prêt",
-             status: 'COMPLETED' as const,
-             recipient_iban: null,
-             recipient_name: null
-        });
-    } else if (clientData.contactMessage) {
-         transactionsToInsert.push({
-             profile_id: newClientId,
-             amount: 0,
-             reason: `Message de Contact: ${clientData.contactMessage}`,
-             status: 'COMPLETED' as const,
-             recipient_iban: null,
-             recipient_name: null
-        });
-    }
-    
-    if (transactionsToInsert.length > 0) {
-        await supabase.from('transactions').insert(transactionsToInsert);
-    }
-    
-    revalidatePath('/admin');
-    return { success: true, clientId: newClientId };
 }
 
 const adjustBalanceSchema = z.object({
@@ -361,41 +343,39 @@ export async function adjustClientBalanceAction(adjustmentData: z.infer<typeof a
     }
 
     const { clientId, amount, reason, type } = parsed.data;
-    const supabase = await getSupabaseClient();
+    const clientDocRef = doc(db, 'profiles', clientId);
     
-    const { data: client, error: clientError } = await supabase
-        .from('profiles').select('balance').eq('id', clientId).single();
-    
-    if (clientError || !client) return { success: false, error: 'Client non trouvé' };
+    try {
+        const clientDoc = await getDoc(clientDocRef);
+        if (!clientDoc.exists()) return { success: false, error: 'Client non trouvé' };
 
-    const transactionAmount = type === 'credit' ? Math.abs(amount) : -Math.abs(amount);
+        const client = clientDoc.data();
+        const transactionAmount = type === 'credit' ? Math.abs(amount) : -Math.abs(amount);
 
-    if (type === 'debit' && client.balance < Math.abs(amount)) {
-        return { success: false, error: "Solde insuffisant pour ce débit." };
+        if (type === 'debit' && client.balance < Math.abs(amount)) {
+            return { success: false, error: "Solde insuffisant pour ce débit." };
+        }
+        
+        const newBalance = client.balance + transactionAmount;
+        
+        await updateDoc(clientDocRef, { balance: newBalance });
+        
+        await addDoc(transactionsCollection, {
+            profile_id: clientId,
+            amount: transactionAmount,
+            reason: reason,
+            recipient_name: "Opération Manuelle Admin",
+            status: 'COMPLETED' as const,
+            created_at: Timestamp.now(),
+            recipient_iban: null,
+        });
+
+        revalidatePath('/admin');
+        revalidatePath('/dashboard');
+        return { success: true };
+    } catch (error: any) {
+        return { success: false, error: 'Erreur Firestore: ' + error.message };
     }
-    
-    const newBalance = client.balance + transactionAmount;
-    
-    const { error: updateError } = await supabase
-        .from('profiles').update({ balance: newBalance }).eq('id', clientId);
-    
-    if(updateError) return { success: false, error: 'Erreur Supabase: ' + updateError.message };
-    
-    const newTransaction = {
-        profile_id: clientId,
-        amount: transactionAmount,
-        reason: reason,
-        recipient_name: "Opération Manuelle Admin",
-        status: 'COMPLETED' as const,
-        recipient_iban: null,
-    };
-
-    const { error: txError } = await supabase.from('transactions').insert(newTransaction);
-    if(txError) return { success: false, error: 'Erreur Supabase (transaction): ' + txError.message };
-    
-    revalidatePath('/admin');
-    revalidatePath('/dashboard');
-    return { success: true };
 }
 
 const blockSettingsSchema = z.object({
@@ -410,13 +390,14 @@ export async function updateClientBlockSettingsAction(settingsData: z.infer<type
     
     const { clientId, is_transfer_blocked, transfer_block_reason } = parsed.data;
     
-    const supabase = await getSupabaseClient();
-    const { error } = await supabase.from('profiles').update({
-        is_transfer_blocked: is_transfer_blocked,
-        transfer_block_reason: is_transfer_blocked ? transfer_block_reason : null,
-    }).eq('id', clientId);
-
-    if(error) return { success: false, error: 'Erreur Supabase: ' + error.message };
+    try {
+        await updateDoc(doc(db, 'profiles', clientId), {
+            is_transfer_blocked: is_transfer_blocked,
+            transfer_block_reason: is_transfer_blocked ? transfer_block_reason : null,
+        });
+    } catch(error: any) {
+        return { success: false, error: 'Erreur Firestore: ' + error.message };
+    }
 
     revalidatePath('/admin');
     revalidatePath('/dashboard');
@@ -434,20 +415,20 @@ export async function updateClientTransferSettingsAction(settingsData: z.infer<t
     if (!parsed.success) return { success: false, error: 'Données invalides' };
     
     const { clientId, duration, unit } = parsed.data;
-
-    const supabase = await getSupabaseClient();
     
     const processingTime = {
-        days: unit === 'days' ? duration : undefined,
-        hours: unit === 'hours' ? duration : undefined,
-        minutes: unit === 'minutes' ? duration : undefined,
+        days: unit === 'days' ? duration : 0,
+        hours: unit === 'hours' ? duration : 0,
+        minutes: unit === 'minutes' ? duration : 0,
     };
     
-    const { error } = await supabase.from('profiles').update({
-        transfer_processing_time: processingTime
-    }).eq('id', clientId);
-    
-    if(error) return { success: false, error: 'Erreur Supabase: ' + error.message };
+    try {
+        await updateDoc(doc(db, 'profiles', clientId), {
+            transfer_processing_time: processingTime
+        });
+    } catch (error: any) {
+        return { success: false, error: 'Erreur Firestore: ' + error.message };
+    }
 
     revalidatePath('/admin');
     revalidatePath('/dashboard');

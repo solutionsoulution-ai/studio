@@ -8,9 +8,9 @@ export interface Transaction {
     recipient_name: string | null;
     recipient_bic?: string | null;
     recipient_bank_name?: string | null;
-    created_at: string;
+    created_at: any; // Firestore Timestamp
     status: 'PENDING' | 'COMPLETED' | 'FAILED';
-    estimatedCompletionDate?: string;
+    estimatedCompletionDate?: any; // Firestore Timestamp
 }
 
 export interface ClientProfile {
@@ -22,7 +22,7 @@ export interface ClientProfile {
     account_number: string;
     iban: string;
     bic: string;
-    created_at: string;
+    created_at: any; // Firestore Timestamp
     is_transfer_blocked: boolean;
     transfer_block_reason: string | null;
     transfer_processing_time: {

@@ -1,28 +1,18 @@
 
 'use server';
 
-import { createClient } from "@/lib/supabase/server";
+import { storage } from "@/lib/firebase/server";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { createClientAction } from "@/app/actions/clients";
 import { revalidatePath } from 'next/cache';
 
 async function saveFile(file: File): Promise<string> {
-    const supabase = createClient();
-    const filePath = `uploads/${Date.now()}-${file.name}`;
+    const storageRef = ref(storage, `uploads/${Date.now()}-${file.name}`);
     
-    const { error } = await supabase.storage.from('documents').upload(filePath, file);
-
-    if (error) {
-        console.error("Erreur d'upload Supabase:", error);
-        throw new Error("Impossible de téléverser le fichier.");
-    }
+    const snapshot = await uploadBytes(storageRef, file);
+    const downloadURL = await getDownloadURL(snapshot.ref);
     
-    const { data } = supabase.storage.from('documents').getPublicUrl(filePath);
-    
-    if (!data.publicUrl) {
-         throw new Error("Impossible d'obtenir l'URL publique du fichier.");
-    }
-    
-    return data.publicUrl;
+    return downloadURL;
 }
 
 export async function handleContactForm(data: { name: string; email: string; message: string; }) {
