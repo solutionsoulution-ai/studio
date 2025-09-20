@@ -1,5 +1,3 @@
-'use server';
-
 import { createClient } from '@supabase/supabase-js';
 
 // Important: These variables are expected to be set in the environment.
