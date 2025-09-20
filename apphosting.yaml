@@ -5,10 +5,7 @@ runConfig:
   memoryMiB: 512
   timeoutSeconds: 120
   environment:
-    SMTP_HOST: "mail.spacemail.com"
-    SMTP_PORT: "465"
-    SMTP_USER: "contact@vylscapital.com"
-    SMTP_PASS: "Made2020@"
+    # Remplacez "REPLACE_THIS_WITH_YOUR_RESEND_API_KEY" par votre clé API Resend.
+    RESEND_API_KEY: "REPLACE_THIS_WITH_YOUR_RESEND_API_KEY"
     RECIPIENT_EMAIL: "contact@vylscapital.com"
-
-
+    SENDER_EMAIL: "onboarding@resend.dev" # Ou un domaine que vous avez vérifié avec Resend

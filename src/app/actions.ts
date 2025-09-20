@@ -2,46 +2,51 @@
 'use server';
 
 import { z } from 'zod';
+import { Resend } from 'resend';
+import { loanApplicationSchema } from '@/components/site/loan-application-form'; // Assurez-vous que ce chemin est correct
 
-// --- IMPORTANT ---
-// Remplacez cette URL par le webhook que vous créerez dans un service comme Make.com ou Zapier.
-// Ce webhook recevra les données des formulaires et déclenchera l'envoi d'e-mails.
-const WEBHOOK_URL = 'https://hook.eu1.make.com/xxxxxxxxxxxxxxxxxxxxxxxx';
+// Initialisation de Resend
+const resend = new Resend(process.env.RESEND_API_KEY);
+const recipientEmail = process.env.RECIPIENT_EMAIL;
+const senderEmail = process.env.SENDER_EMAIL;
 
 
 /**
- * Fonction générique pour envoyer des données à un webhook.
- * @param payload - Les données à envoyer.
- * @param submissionType - Un identifiant pour le type de soumission (ex: 'contact', 'loan').
+ * Fonction générique pour envoyer un e-mail via Resend.
+ * @param subject - Le sujet de l'e-mail.
+ * @param htmlBody - Le corps de l'e-mail au format HTML.
+ * @param textBody - Le corps de l'e-mail au format texte.
  * @returns { success: boolean; error?: string }
  */
-async function sendToWebhook(payload: object, submissionType: string): Promise<{ success: boolean; error?: string }> {
-    if (WEBHOOK_URL.includes('xxxxxxxxxxxxxxxxxxxxxxxx')) {
-        const errorMessage = "L'URL du webhook n'a pas été configurée.";
+async function sendEmail(subject: string, htmlBody: string, textBody: string): Promise<{ success: boolean; error?: string }> {
+    if (!process.env.RESEND_API_KEY || process.env.RESEND_API_KEY === 'REPLACE_THIS_WITH_YOUR_RESEND_API_KEY') {
+        const errorMessage = "La clé API Resend n'est pas configurée.";
+        console.error(errorMessage);
+        return { success: false, error: "La configuration du serveur est incomplète. Veuillez contacter l'administrateur." };
+    }
+     if (!recipientEmail || !senderEmail) {
+        const errorMessage = "L'expéditeur ou le destinataire de l'e-mail n'est pas configuré.";
         console.error(errorMessage);
         return { success: false, error: "La configuration du serveur est incomplète. Veuillez contacter l'administrateur." };
     }
 
     try {
-        const response = await fetch(WEBHOOK_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                type: submissionType,
-                data: payload
-            }),
+        const { data, error } = await resend.emails.send({
+            from: `VylsCapital <${senderEmail}>`,
+            to: [recipientEmail],
+            subject: subject,
+            html: htmlBody,
+            text: textBody,
         });
 
-        if (!response.ok) {
-            throw new Error(`Le serveur a répondu avec le statut : ${response.status}`);
+        if (error) {
+            throw error;
         }
 
         return { success: true };
 
     } catch (error: any) {
-        console.error(`Error sending to webhook for ${submissionType}:`, error);
+        console.error(`Erreur lors de l'envoi de l'e-mail:`, error);
         return { success: false, error: "Impossible d'envoyer les données. Veuillez réessayer plus tard." };
     }
 }
@@ -60,8 +65,29 @@ export async function handleContactForm(formData: z.infer<typeof contactFormSche
     const errorMessages = parsed.error.issues.map(issue => issue.message).join(', ');
     return { success: false, error: `Données invalides: ${errorMessages}` };
   }
-  return await sendToWebhook(parsed.data, 'contact_form');
+
+  const { name, email, message } = parsed.data;
+  
+  const subject = `Nouveau message de contact de ${name}`;
+  const textBody = `
+    Nouveau message depuis le formulaire de contact :
+    - Nom : ${name}
+    - Email : ${email}
+    - Message : ${message}
+  `;
+  const htmlBody = `
+    <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+        <h2>Nouveau Message de Contact</h2>
+        <p><strong>Nom :</strong> ${name}</p>
+        <p><strong>Email :</strong> <a href="mailto:${email}">${email}</a></p>
+        <p><strong>Message :</strong></p>
+        <p style="padding: 10px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">${message}</p>
+    </div>
+  `;
+
+  return await sendEmail(subject, htmlBody, textBody);
 }
+
 
 // --- Eligibility Form ---
 const eligibilityContactSchema = z.object({
@@ -92,42 +118,100 @@ export async function submitEligibilityContact(formData: FormData) {
     return { success: false, error: `Données d'éligibilité invalides: ${errorMessages}` };
   }
 
-  return await sendToWebhook(parsed.data, 'eligibility_form');
+  const { annualRevenue, creditScore, yearsInBusiness, loanAmountRequested, reasonForLoan, eligibilityStatus, confidenceScore } = parsed.data;
+
+  const subject = "Nouvelle demande de contact (Éligibilité)";
+  const textBody = `
+    Une personne a testé son éligibilité et souhaite être contactée :
+    - Revenu Annuel: ${annualRevenue} €
+    - Score de Crédit: ${creditScore}
+    - Années d'activité: ${yearsInBusiness}
+    - Montant demandé: ${loanAmountRequested} €
+    - Raison: ${reasonForLoan}
+    ---
+    Résultat de l'IA :
+    - Statut: ${eligibilityStatus}
+    - Confiance: ${confidenceScore}
+  `;
+  const htmlBody = `
+    <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+        <h2>Nouvelle Demande de Contact (Suite au test d'éligibilité)</h2>
+        <h3>Détails du prospect :</h3>
+        <ul>
+            <li><strong>Revenu Annuel :</strong> ${annualRevenue} €</li>
+            <li><strong>Score de Crédit :</strong> ${creditScore}</li>
+            <li><strong>Années d'activité :</strong> ${yearsInBusiness}</li>
+            <li><strong>Montant demandé :</strong> ${loanAmountRequested} €</li>
+            <li><strong>Raison du prêt :</strong> ${reasonForLoan}</li>
+        </ul>
+        <hr>
+        <h3>Résultat de l'évaluation par l'IA :</h3>
+        <ul>
+            <li><strong>Statut :</strong> ${eligibilityStatus}</li>
+            <li><strong>Score de confiance :</strong> ${confidenceScore}</li>
+        </ul>
+    </div>
+  `;
+
+  return await sendEmail(subject, htmlBody, textBody);
 }
+
 
 // --- Loan Application ---
 export async function handleLoanApplication(formData: FormData) {
   try {
     const applicationId = `APP-${Date.now()}`;
     let submissionData: Record<string, any> = { applicationId };
+    let attachments = [];
+
+    // Validation des données du formulaire avec Zod
+    const rawData = Object.fromEntries(formData.entries());
+    const zodResult = loanApplicationSchema.safeParse(rawData);
     
-    // Nous allons traiter les fichiers différemment, en supposant que le webhook peut les gérer
-    // (par ex. Make.com peut télécharger depuis une URL ou accepter des données binaires).
-    // Pour cet exemple, nous allons juste envoyer les noms et types de fichiers.
-    // L'idéal serait d'uploader vers un stockage et de n'envoyer que les URLs.
+    if (!zodResult.success) {
+        const errorMessages = zodResult.error.issues.map(issue => `${issue.path.join('.')}: ${issue.message}`).join('; ');
+        throw new Error(`Données du formulaire invalides : ${errorMessages}`);
+    }
+    const validatedData = zodResult.data;
+
+    let htmlBody = `
+      <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+        <h2>Nouvelle Demande de Prêt - ${applicationId}</h2>
+        <p>Une nouvelle demande de financement a été soumise. Voici les détails :</p>
+    `;
 
     for (const [key, value] of formData.entries()) {
       if (value instanceof File && value.size > 0) {
-        // Pour un vrai workflow, uploader le fichier sur un service de stockage (ex: S3, GCS, Supabase Storage)
-        // et envoyer l'URL dans le webhook.
-        // Ici, nous envoyons simplement des métadonnées pour la démo.
-        submissionData[key] = {
-            fileName: value.name,
-            fileType: value.type,
-            fileSize: value.size
-        };
+        // Pour les fichiers, on les prépare pour l'envoi en pièce jointe
+        const buffer = Buffer.from(await value.arrayBuffer());
+        attachments.push({
+          filename: value.name,
+          content: buffer,
+        });
+        htmlBody += `<p><strong>Document '${key}' :</strong> ${value.name} (en pièce jointe)</p>`;
       } else if (typeof value === 'string') {
         submissionData[key] = value;
+        htmlBody += `<p><strong>${key} :</strong> ${value}</p>`;
       }
     }
+    
+    htmlBody += `</div>`;
+    
+    const subject = `Nouvelle demande de prêt : ${validatedData.loanType} pour ${validatedData.firstName} ${validatedData.lastName}`;
 
-    const result = await sendToWebhook(submissionData, 'loan_application');
+    const { data, error } = await resend.emails.send({
+        from: `VylsCapital <${senderEmail}>`,
+        to: [recipientEmail as string],
+        subject: subject,
+        html: htmlBody,
+        attachments: attachments,
+    });
 
-    if (result.success) {
-      return { success: true, applicationId };
-    } else {
-      throw new Error(result.error);
+    if (error) {
+        throw error;
     }
+    
+    return { success: true, applicationId };
 
   } catch (error: any) {
     console.error("Error processing loan application:", error);
