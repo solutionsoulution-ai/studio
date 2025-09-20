@@ -281,11 +281,6 @@ export async function createClientAction(clientData: any): Promise<{ success: bo
         is_transfer_blocked: false,
         transfer_block_reason: null,
         transfer_processing_time: { minutes: 1 },
-        has_loan: false,
-        loan_type: null,
-        loan_amount: null,
-        interest_rate: null,
-        loan_term: null,
     };
     
     const { data: insertedClient, error: insertClientError } = await supabase

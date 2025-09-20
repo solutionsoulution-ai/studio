@@ -30,10 +30,5 @@ export interface ClientProfile {
         hours?: number;
         minutes?: number;
     };
-    has_loan: boolean;
-    loan_type: string | null;
-    loan_amount: number | null;
-    interest_rate: number | null;
-    loan_term: number | null;
     transactions?: Transaction[];
 }
