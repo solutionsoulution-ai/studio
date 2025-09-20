@@ -83,6 +83,7 @@ export async function getClientByIdAction(clientId: string): Promise<{ success: 
     }
     
     const now = new Date();
+    let clientBalance = client.balance;
     const transactionsToUpdate = [];
 
     const updatedTransactions = clientTransactions.map(tx => {
@@ -92,8 +93,8 @@ export async function getClientByIdAction(clientId: string): Promise<{ success: 
                 if (client.is_transfer_blocked) {
                     tx.status = 'FAILED';
                 } else {
-                     if (client.balance >= Math.abs(tx.amount)) {
-                        client.balance += tx.amount;
+                     if (clientBalance >= Math.abs(tx.amount)) {
+                        clientBalance += tx.amount;
                         tx.status = 'COMPLETED';
                     } else {
                         tx.status = 'FAILED';
@@ -107,7 +108,8 @@ export async function getClientByIdAction(clientId: string): Promise<{ success: 
 
     if (transactionsToUpdate.length > 0) {
         await Promise.all(transactionsToUpdate);
-        await supabase.from('profiles').update({ balance: client.balance }).eq('id', client.id);
+        await supabase.from('profiles').update({ balance: clientBalance }).eq('id', client.id);
+        client.balance = clientBalance;
     }
     
     const { password, ...clientWithoutPassword } = client;
@@ -385,3 +387,5 @@ export async function updateClientTransferSettingsAction(settingsData: z.infer<t
     revalidatePath('/dashboard');
     return { success: true };
 }
+
+    

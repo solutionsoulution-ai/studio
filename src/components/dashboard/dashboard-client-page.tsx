@@ -29,7 +29,7 @@ const formatCurrency = (value: number) => {
     }).format(value || 0);
 };
 
-const InfoRow = ({ label, value }: { label: string; value: string }) => {
+const InfoRow = ({ label, value }: { label: string; value: string | null | undefined }) => {
     const { toast } = useToast();
 
     const copyToClipboard = () => {
@@ -47,9 +47,11 @@ const InfoRow = ({ label, value }: { label: string; value: string }) => {
                 <p className="text-sm text-muted-foreground">{label}</p>
                 <p className="font-mono text-sm sm:text-base break-all">{value || "N/A"}</p>
             </div>
-            <Button variant="ghost" size="icon" onClick={copyToClipboard} aria-label={`Copier ${label}`} className="shrink-0">
-                <Copy className="w-4 h-4" />
-            </Button>
+            {value && (
+                <Button variant="ghost" size="icon" onClick={copyToClipboard} aria-label={`Copier ${label}`} className="shrink-0">
+                    <Copy className="w-4 h-4" />
+                </Button>
+            )}
         </div>
     );
 };
@@ -150,6 +152,7 @@ export default function DashboardClientPage() {
     const handleLogout = useCallback(() => {
         if (typeof window !== 'undefined') {
             sessionStorage.removeItem('vyls_session_id');
+            sessionStorage.removeItem('vyls_user_role');
         }
         toast({ title: "Déconnexion réussie." });
         router.push("/");
@@ -263,8 +266,8 @@ export default function DashboardClientPage() {
   }
 
   const sortedTransactions = [...transactions].sort((a, b) => {
-      const dateA = a.created_at?.toDate ? a.created_at.toDate() : new Date(a.created_at);
-      const dateB = b.created_at?.toDate ? b.created_at.toDate() : new Date(b.created_at);
+      const dateA = new Date(a.created_at);
+      const dateB = new Date(b.created_at);
       return dateB.getTime() - dateA.getTime();
   });
   const pendingTransactions = sortedTransactions.filter(tx => tx.status === 'PENDING');
@@ -292,6 +295,16 @@ export default function DashboardClientPage() {
                 </Button>
             </div>
         </div>
+
+        {accountData.is_transfer_blocked && (
+             <Alert variant="destructive" className="mb-6">
+                <Ban className="h-4 w-4" />
+                <AlertTitle>Virements Bloqués</AlertTitle>
+                <AlertDescription>
+                   Vos virements sortants sont actuellement bloqués. Motif : {accountData.transfer_block_reason || "Non spécifié"}. Veuillez contacter le support.
+                </AlertDescription>
+            </Alert>
+        )}
 
         <Tabs defaultValue="overview" className="w-full">
             <TabsList className="grid w-full max-w-md grid-cols-3">
@@ -386,7 +399,7 @@ export default function DashboardClientPage() {
                                                         {tx.status === 'FAILED' && <Badge variant="destructive" className="mt-1">Échoué</Badge>}
                                                     </TableCell>
                                                     <TableCell className={`text-right font-semibold ${tx.amount > 0 ? 'text-green-600' : 'text-red-600'}`}>{formatCurrency(tx.amount)}</TableCell>
-                                                    <TableCell className="hidden sm:table-cell text-muted-foreground">{tx.created_at?.toDate ? tx.created_at.toDate().toLocaleDateString('fr-FR') : new Date(tx.created_at).toLocaleDateString('fr-FR')}</TableCell>
+                                                    <TableCell className="hidden sm:table-cell text-muted-foreground">{new Date(tx.created_at).toLocaleDateString('fr-FR')}</TableCell>
                                                 </TableRow>
                                             ))
                                         ) : (
@@ -443,3 +456,5 @@ export default function DashboardClientPage() {
     </div>
   );
 }
+
+    

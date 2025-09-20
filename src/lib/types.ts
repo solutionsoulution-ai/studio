@@ -17,13 +17,13 @@ export interface Transaction {
 
 export interface ClientProfile {
     id: string;
-    client_id: string;
+    client_id: string | null;
     email: string;
     password?: string;
     balance: number;
-    account_number: string;
-    iban: string;
-    bic: string;
+    account_number: string | null;
+    iban: string | null;
+    bic: string | null;
     created_at: string; // ISO 8601 string
     is_transfer_blocked: boolean;
     transfer_block_reason: string | null;
@@ -35,3 +35,5 @@ export interface ClientProfile {
     role: UserRole;
     transactions?: Transaction[];
 }
+
+    
