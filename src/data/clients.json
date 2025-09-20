@@ -116,5 +116,140 @@
     "interest_rate": null,
     "loan_term": null,
     "transactions": []
+  },
+  {
+    "id": "cly_1758333976901_ppcvh7u",
+    "client_id": "VYL-109-285",
+    "email": "ccc@gmail.com",
+    "password": "ted3lu9p",
+    "balance": 0,
+    "account_number": "FR7698683616359605729061292",
+    "iban": "FR7681721036373627055832088",
+    "bic": "JVECFROAXXX",
+    "created_at": "2025-09-20T02:06:16.902Z",
+    "is_transfer_blocked": false,
+    "transfer_block_reason": null,
+    "transfer_processing_time": {
+      "minutes": 1
+    },
+    "has_loan": false,
+    "loan_type": null,
+    "loan_amount": null,
+    "interest_rate": null,
+    "loan_term": null,
+    "transactions": [
+      {
+        "id": "txn_1758333976902_ejzqj67",
+        "profile_id": "cly_1758333976901_ppcvh7u",
+        "amount": 0,
+        "reason": "Message de Contact: Message de Adonis ROEHRIG: BBBBBBBBBBBBQQQQQQQQQQQQQQ",
+        "recipient_iban": null,
+        "recipient_name": null,
+        "created_at": "2025-09-20T02:06:16.902Z",
+        "status": "COMPLETED"
+      }
+    ],
+    "initialBalance": 0,
+    "contactMessage": "Message de Adonis ROEHRIG: BBBBBBBBBBBBQQQQQQQQQQQQQQ"
+  },
+  {
+    "id": "cly_1758334232298_0jucmmq",
+    "client_id": "VYL-481-534",
+    "email": "c@gmail.com",
+    "password": "1xwdtneu",
+    "balance": 0,
+    "account_number": "FR7689828846145124727802844",
+    "iban": "FR7656242526798577515912309",
+    "bic": "RPDQFRFHXXX",
+    "created_at": "2025-09-20T02:10:32.299Z",
+    "is_transfer_blocked": false,
+    "transfer_block_reason": null,
+    "transfer_processing_time": {
+      "minutes": 1
+    },
+    "has_loan": true,
+    "loan_type": "entreprise",
+    "loan_amount": 67000,
+    "interest_rate": null,
+    "loan_term": 67,
+    "transactions": [
+      {
+        "id": "txn_1758334232299_ckq7e6i",
+        "profile_id": "cly_1758334232298_0jucmmq",
+        "amount": 0,
+        "reason": "Demande de Prêt",
+        "recipient_iban": null,
+        "recipient_name": null,
+        "created_at": "2025-09-20T02:10:32.299Z",
+        "status": "COMPLETED"
+      }
+    ],
+    "initialBalance": 0,
+    "first_name": "Adonis",
+    "last_name": "ROEHRIG",
+    "phone": "6788999900900",
+    "address": "vvBBB",
+    "city": "Plouézec",
+    "postal_code": "YYYVVBBBB",
+    "country": "France",
+    "marital_status": "veuf",
+    "number_of_children": 0,
+    "birth_date": "2000-03-08",
+    "occupation": "RRRR",
+    "monthly_income": 5665,
+    "monthly_expenses": 344,
+    "identity_document_url": "/uploads/Alléla-1758334232279-797282160.png",
+    "proof_of_address_url": "/uploads/KOPILOT-1758334232289-837430619.png",
+    "proof_of_income_url": "/uploads/applo-1758334232292-679044571.png"
+  },
+  {
+    "id": "cly_1758334259040_w2dgjf6",
+    "client_id": "VYL-288-270",
+    "email": "8EEc@gmail.com",
+    "password": "mia6mw4i",
+    "balance": 0,
+    "account_number": "FR7624422292550079842231655",
+    "iban": "FR7695582450184142208019369",
+    "bic": "CCWFFRIYXXX",
+    "created_at": "2025-09-20T02:10:59.041Z",
+    "is_transfer_blocked": false,
+    "transfer_block_reason": null,
+    "transfer_processing_time": {
+      "minutes": 1
+    },
+    "has_loan": true,
+    "loan_type": "entreprise",
+    "loan_amount": 67000,
+    "interest_rate": null,
+    "loan_term": 67,
+    "transactions": [
+      {
+        "id": "txn_1758334259041_6pk9lyk",
+        "profile_id": "cly_1758334259040_w2dgjf6",
+        "amount": 0,
+        "reason": "Demande de Prêt",
+        "recipient_iban": null,
+        "recipient_name": null,
+        "created_at": "2025-09-20T02:10:59.041Z",
+        "status": "COMPLETED"
+      }
+    ],
+    "initialBalance": 0,
+    "first_name": "Adonis",
+    "last_name": "ROEHRIG",
+    "phone": "6788999900900",
+    "address": "vvBBB",
+    "city": "Plouézec",
+    "postal_code": "YYYVVBBBB",
+    "country": "France",
+    "marital_status": "veuf",
+    "number_of_children": 0,
+    "birth_date": "2000-03-08",
+    "occupation": "RRRR",
+    "monthly_income": 5665,
+    "monthly_expenses": 344,
+    "identity_document_url": "/uploads/Alléla-1758334259012-628332578.png",
+    "proof_of_address_url": "/uploads/KOPILOT-1758334259025-439228718.png",
+    "proof_of_income_url": "/uploads/applo-1758334259034-174287317.png"
   }
 ]

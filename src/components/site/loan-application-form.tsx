@@ -138,8 +138,8 @@ export default function LoanApplicationForm() {
       const result = await handleLoanApplication(formData);
       setIsLoading(false);
       
-      if (result.success && result.applicationId) {
-          router.push(`/demande-de-pret/merci?id=${result.applicationId}`);
+      if (result.success && result.clientId) {
+          router.push(`/demande-de-pret/merci?id=${result.clientId}`);
       } else {
            toast({
             title: "La soumission a échoué",
