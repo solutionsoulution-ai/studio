@@ -1,9 +1,51 @@
 
 'use server';
 
-import 'dotenv/config';
 import { z } from 'zod';
-import { transporter } from '@/lib/nodemailer';
+
+// --- IMPORTANT ---
+// Remplacez cette URL par le webhook que vous créerez dans un service comme Make.com ou Zapier.
+// Ce webhook recevra les données des formulaires et déclenchera l'envoi d'e-mails.
+const WEBHOOK_URL = 'https://hook.eu1.make.com/xxxxxxxxxxxxxxxxxxxxxxxx';
+
+
+/**
+ * Fonction générique pour envoyer des données à un webhook.
+ * @param payload - Les données à envoyer.
+ * @param submissionType - Un identifiant pour le type de soumission (ex: 'contact', 'loan').
+ * @returns { success: boolean; error?: string }
+ */
+async function sendToWebhook(payload: object, submissionType: string): Promise<{ success: boolean; error?: string }> {
+    if (WEBHOOK_URL.includes('xxxxxxxxxxxxxxxxxxxxxxxx')) {
+        const errorMessage = "L'URL du webhook n'a pas été configurée.";
+        console.error(errorMessage);
+        return { success: false, error: "La configuration du serveur est incomplète. Veuillez contacter l'administrateur." };
+    }
+
+    try {
+        const response = await fetch(WEBHOOK_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                type: submissionType,
+                data: payload
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Le serveur a répondu avec le statut : ${response.status}`);
+        }
+
+        return { success: true };
+
+    } catch (error: any) {
+        console.error(`Error sending to webhook for ${submissionType}:`, error);
+        return { success: false, error: "Impossible d'envoyer les données. Veuillez réessayer plus tard." };
+    }
+}
+
 
 // --- Contact Form ---
 const contactFormSchema = z.object({
@@ -18,30 +60,7 @@ export async function handleContactForm(formData: z.infer<typeof contactFormSche
     const errorMessages = parsed.error.issues.map(issue => issue.message).join(', ');
     return { success: false, error: `Données invalides: ${errorMessages}` };
   }
-
-  const { name, email, message } = parsed.data;
-
-  const mailOptions = {
-    from: `"VylsCapital Site" <${process.env.SMTP_USER}>`,
-    to: process.env.RECIPIENT_EMAIL,
-    subject: `Nouveau Message de Contact de ${name}`,
-    html: `
-      <h1>Nouveau Message de Contact</h1>
-      <p><strong>Nom:</strong> ${name}</p>
-      <p><strong>Email:</strong> ${email}</p>
-      <hr>
-      <h2>Message:</h2>
-      <p style="white-space: pre-wrap;">${message}</p>
-    `,
-  };
-
-  try {
-    await transporter.sendMail(mailOptions);
-    return { success: true };
-  } catch (error: any) {
-    console.error("Error sending contact email:", error);
-    return { success: false, error: "Impossible d'envoyer l'e-mail. Veuillez vérifier la configuration SMTP." };
-  }
+  return await sendToWebhook(parsed.data, 'contact_form');
 }
 
 // --- Eligibility Form ---
@@ -73,74 +92,45 @@ export async function submitEligibilityContact(formData: FormData) {
     return { success: false, error: `Données d'éligibilité invalides: ${errorMessages}` };
   }
 
-  const { annualRevenue, creditScore, yearsInBusiness, loanAmountRequested, reasonForLoan, eligibilityStatus, confidenceScore } = parsed.data;
-
-  const mailOptions = {
-    from: `"VylsCapital Site" <${process.env.SMTP_USER}>`,
-    to: process.env.RECIPIENT_EMAIL,
-    subject: `Nouvelle Demande de Contact (Éligibilité)`,
-    html: `
-      <h1>Nouvelle Demande de Contact (Éligibilité)</h1>
-      <h2>Détails du Prospect:</h2>
-      <ul>
-        <li><strong>Revenu Annuel:</strong> ${annualRevenue} €</li>
-        <li><strong>Score de Crédit:</strong> ${creditScore}</li>
-        <li><strong>Années d'activité:</strong> ${yearsInBusiness}</li>
-        <li><strong>Montant demandé:</strong> ${loanAmountRequested} €</li>
-        <li><strong>Raison:</strong> ${reasonForLoan}</li>
-      </ul>
-      <hr>
-      <h2>Résultats de l'IA:</h2>
-      <ul>
-        <li><strong>Statut d'éligibilité:</strong> ${eligibilityStatus}</li>
-        <li><strong>Score de confiance:</strong> ${confidenceScore}</li>
-      </ul>
-    `,
-  };
-
-  try {
-    await transporter.sendMail(mailOptions);
-    return { success: true };
-  } catch (error: any) {
-    console.error("Error sending eligibility email:", error);
-    return { success: false, error: "Impossible d'envoyer l'e-mail. Veuillez vérifier la configuration SMTP." };
-  }
+  return await sendToWebhook(parsed.data, 'eligibility_form');
 }
 
 // --- Loan Application ---
 export async function handleLoanApplication(formData: FormData) {
   try {
     const applicationId = `APP-${Date.now()}`;
-    let textContent = `<h1>Nouvelle Demande de Prêt - ${applicationId}</h1>`;
-    const attachments = [];
+    let submissionData: Record<string, any> = { applicationId };
+    
+    // Nous allons traiter les fichiers différemment, en supposant que le webhook peut les gérer
+    // (par ex. Make.com peut télécharger depuis une URL ou accepter des données binaires).
+    // Pour cet exemple, nous allons juste envoyer les noms et types de fichiers.
+    // L'idéal serait d'uploader vers un stockage et de n'envoyer que les URLs.
 
-    // Process form fields and files
     for (const [key, value] of formData.entries()) {
       if (value instanceof File && value.size > 0) {
-        attachments.push({
-          filename: value.name,
-          content: Buffer.from(await value.arrayBuffer()),
-          contentType: value.type,
-        });
+        // Pour un vrai workflow, uploader le fichier sur un service de stockage (ex: S3, GCS, Supabase Storage)
+        // et envoyer l'URL dans le webhook.
+        // Ici, nous envoyons simplement des métadonnées pour la démo.
+        submissionData[key] = {
+            fileName: value.name,
+            fileType: value.type,
+            fileSize: value.size
+        };
       } else if (typeof value === 'string') {
-        textContent += `<p><strong>${key}:</strong> ${value}</p>`;
+        submissionData[key] = value;
       }
     }
 
-    const mailOptions = {
-      from: `"VylsCapital Site" <${process.env.SMTP_USER}>`,
-      to: process.env.RECIPIENT_EMAIL,
-      subject: `Nouvelle Demande de Prêt Complète: ${applicationId}`,
-      html: textContent,
-      attachments: attachments,
-    };
+    const result = await sendToWebhook(submissionData, 'loan_application');
 
-    await transporter.sendMail(mailOptions);
-    
-    return { success: true, applicationId };
+    if (result.success) {
+      return { success: true, applicationId };
+    } else {
+      throw new Error(result.error);
+    }
 
   } catch (error: any) {
-    console.error("Error sending loan application email:", error);
-    return { success: false, error: "La soumission a échoué. Veuillez réessayer. Détails: " + error.message };
+    console.error("Error processing loan application:", error);
+    return { success: false, error: "La soumission a échoué. Détails: " + error.message };
   }
 }
