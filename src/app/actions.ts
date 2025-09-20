@@ -1,24 +1,45 @@
 
 'use server';
 
-import { createClient } from '@/lib/supabase/server';
+import { promises as fs } from 'fs';
+import path from 'path';
+import { type ClientProfile } from '@/app/actions/clients';
 import { createClientAction } from "@/app/actions/clients";
 import { revalidatePath } from 'next/cache';
 
+// Chemin vers le fichier JSON qui sert de base de données
+const dataFilePath = path.join(process.cwd(), 'src/data/clients.json');
+
+// --- Fonctions pour lire et écrire dans le fichier JSON ---
+
+async function readData(): Promise<ClientProfile[]> {
+  try {
+    const fileContent = await fs.readFile(dataFilePath, 'utf-8');
+    return JSON.parse(fileContent);
+  } catch (error) {
+    // Si le fichier n'existe pas ou est vide, retourner un tableau vide.
+    return [];
+  }
+}
+
+async function writeData(data: ClientProfile[]): Promise<void> {
+  // NOTE: Cette opération échouera dans un environnement de production en lecture seule.
+  try {
+    await fs.writeFile(dataFilePath, JSON.stringify(data, null, 2), 'utf-8');
+  } catch (error) {
+    console.error("Échec de l'écriture dans le fichier de données. L'environnement est probablement en lecture seule.", error);
+    // Dans un cas réel, on pourrait utiliser une base de données externe (ex: Supabase) pour éviter ce problème.
+  }
+}
+
+// --- Fin des fonctions de lecture/écriture ---
+
+
 async function saveFile(file: File): Promise<string> {
-    const supabase = createClient();
-    const uniqueSuffix = `${Date.now()}-${Math.random().toString(36).substring(2)}`;
-    const fileName = `public/${uniqueSuffix}-${file.name}`;
-
-    const { error } = await supabase.storage.from('documents').upload(fileName, file);
-
-    if (error) {
-        console.error('Error uploading file:', error);
-        throw new Error(`Supabase storage error: ${error.message}`);
-    }
-
-    const { data } = supabase.storage.from('documents').getPublicUrl(fileName);
-    return data.publicUrl;
+    // Cette fonction est un placeholder. En production, il faudrait uploader sur un service de stockage (S3, Supabase Storage, etc.)
+    // Pour l'instant, nous ne sauvegardons pas le fichier mais retournons un chemin fictif.
+    console.warn("La sauvegarde de fichier n'est pas implémentée pour la production. Le fichier n'a pas été sauvegardé.");
+    return `/uploads/${Date.now()}-${file.name}`;
 }
 
 
