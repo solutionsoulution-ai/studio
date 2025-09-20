@@ -1,10 +1,9 @@
 
 'use server';
 
-import { revalidatePath } from 'next/cache';
 import { supabase } from "@/lib/supabase-client";
 import { v4 as uuidv4 } from "uuid";
-import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
 
 export async function saveFile(file: File): Promise<string> {
     if (!supabase) {
@@ -35,20 +34,29 @@ export async function saveFile(file: File): Promise<string> {
     return data.publicUrl;
 }
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-const recipientEmail = process.env.RESEND_RECIPIENT_EMAIL;
+const recipientEmail = process.env.SMTP_RECIPIENT_EMAIL;
+
+const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT),
+    secure: Number(process.env.SMTP_PORT) === 465, // true for 465, false for other ports
+    auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+    },
+});
 
 export async function handleContactForm(data: { name: string; email: string; message: string; }) {
     console.log('Contact form submitted:', data);
 
-    if (!process.env.RESEND_API_KEY || !recipientEmail) {
-        console.error("Resend environment variables are not set.");
+    if (!process.env.SMTP_HOST || !recipientEmail) {
+        console.error("SMTP environment variables are not set.");
         return { success: false, error: "Le serveur n'est pas configuré pour envoyer des emails." };
     }
 
     try {
-        await resend.emails.send({
-            from: 'VylsCapital <onboarding@resend.dev>',
+        await transporter.sendMail({
+            from: `VylsCapital <${process.env.SMTP_USER}>`,
             to: recipientEmail,
             subject: `Nouveau Message de Contact de ${data.name}`,
             html: `
@@ -71,8 +79,8 @@ export async function handleLoanApplication(formData: FormData) {
     const data = Object.fromEntries(formData.entries());
     console.log("Loan application submitted via SMTP:", data);
 
-    if (!process.env.RESEND_API_KEY || !recipientEmail) {
-        console.error("Resend environment variables are not set.");
+    if (!process.env.SMTP_HOST || !recipientEmail) {
+        console.error("SMTP environment variables are not set.");
         return { success: false, error: "Le serveur n'est pas configuré pour envoyer des emails." };
     }
     
@@ -114,8 +122,8 @@ export async function handleLoanApplication(formData: FormData) {
             proofOfIncomeUrl,
         };
         
-        await resend.emails.send({
-            from: 'VylsCapital <onboarding@resend.dev>',
+        await transporter.sendMail({
+            from: `VylsCapital <${process.env.SMTP_USER}>`,
             to: recipientEmail,
             subject: `Nouvelle Demande de Prêt - ${clientData.lastName}`,
             html: `

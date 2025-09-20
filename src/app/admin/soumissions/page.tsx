@@ -1,19 +1,18 @@
 
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Shield, ArrowLeft, HardDrive } from "lucide-react";
-import { getClientsAction } from "@/app/actions/clients";
-import type { ClientProfile } from "@/lib/types";
+import { Loader2, Shield, ArrowLeft, Info } from "lucide-react";
+import { verifyAdminLoginAction } from "@/app/actions/clients";
 import Link from "next/link";
-import SubmissionsView from "@/components/admin/submissions-view";
-import { Progress } from "@/components/ui/progress";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+
 
 const adminLoginSchema = z.object({
   password: z.string().min(1, { message: "Le mot de passe est requis." }),
@@ -49,7 +48,7 @@ const AdminLoginForm = ({ onLoginSuccess }: { onLoginSuccess: () => void }) => {
     <Card className="w-full max-w-md shadow-lg">
       <CardHeader className="text-center">
         <CardTitle className="text-2xl font-bold">Accès Sécurisé</CardTitle>
-        <CardDescription>Veuillez entrer le mot de passe administrateur pour voir les soumissions.</CardDescription>
+        <CardDescription>Veuillez entrer le mot de passe administrateur.</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -68,36 +67,9 @@ const AdminLoginForm = ({ onLoginSuccess }: { onLoginSuccess: () => void }) => {
   );
 };
 
-const MAX_SUBMISSIONS = 100; // Arbitrary limit for the storage indicator
-
 export default function SubmissionsPage() {
   const [isClient, setIsClient] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [submissions, setSubmissions] = useState<Omit<ClientProfile, 'password'>[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchSubmissions = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const result = await getClientsAction();
-      if (result.success && result.clients) {
-        // Filter to only show profiles that are submissions (loan or contact)
-        const submissionProfiles = result.clients.filter(
-          c => c.has_loan || (c.transactions || []).some(t => t.reason.startsWith("Message de Contact:"))
-        );
-        setSubmissions(submissionProfiles);
-      } else {
-        setError(result.error || "Une erreur est survenue lors de la récupération des soumissions.");
-        setSubmissions([]);
-      }
-    } catch (e: any) {
-       setError(e.message || "Une erreur critique est survenue.");
-    } finally {
-        setIsLoading(false);
-    }
-  }, []);
 
   useEffect(() => {
     setIsClient(true);
@@ -105,17 +77,6 @@ export default function SubmissionsPage() {
         setIsAdmin(true);
     }
   }, []);
-
-  useEffect(() => {
-    if (isAdmin) {
-      fetchSubmissions();
-    }
-  }, [isAdmin, fetchSubmissions]);
-  
-  const storagePercentage = useMemo(() => {
-    return (submissions.length / MAX_SUBMISSIONS) * 100;
-  }, [submissions.length]);
-
 
   if (!isClient) {
     return (
@@ -135,11 +96,11 @@ export default function SubmissionsPage() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-start p-6 sm:p-12">
-      <div className="w-full max-w-7xl">
+      <div className="w-full max-w-4xl">
         <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-8 gap-4">
             <div>
                  <h1 className="text-3xl font-bold mb-2">Soumissions des Formulaires</h1>
-                <p className="text-muted-foreground">Consultez les demandes de prêt et les messages reçus.</p>
+                <p className="text-muted-foreground">Les soumissions sont maintenant envoyées par email.</p>
             </div>
             <Button asChild variant="outline">
                 <Link href="/admin">
@@ -149,25 +110,14 @@ export default function SubmissionsPage() {
             </Button>
         </div>
 
-         <Card className="mb-8">
-            <CardHeader>
-                <CardTitle className="flex items-center gap-2"><HardDrive /> Indicateur de Stockage</CardTitle>
-                <CardDescription>Supprimez des soumissions pour libérer de l'espace.</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <Progress value={storagePercentage} />
-                <p className="text-sm text-muted-foreground mt-2 text-center">
-                    {submissions.length} / {MAX_SUBMISSIONS} soumissions stockées ({storagePercentage.toFixed(0)}%)
-                </p>
-            </CardContent>
-        </Card>
-        
-        <SubmissionsView 
-            submissions={submissions}
-            isLoading={isLoading}
-            error={error}
-            onSubmissionDeleted={fetchSubmissions}
-        />
+        <Alert>
+          <Info className="h-4 w-4" />
+          <AlertTitle>Changement de fonctionnement</AlertTitle>
+          <AlertDescription>
+            Toutes les demandes de prêt et les messages de contact sont désormais envoyés directement à votre adresse e-mail configurée ({process.env.NEXT_PUBLIC_SMTP_RECIPIENT_EMAIL || 'non configuré'}). Veuillez consulter votre boîte de réception pour gérer les nouvelles soumissions.
+          </AlertDescription>
+        </Alert>
+
       </div>
     </main>
   );
