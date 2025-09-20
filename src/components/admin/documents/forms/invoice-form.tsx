@@ -15,7 +15,7 @@ const formSchema = z.object({
     invoice_date: z.string().min(8),
     description: z.string().min(5),
     amount: z.coerce.number().positive(),
-    payment_iban: z.string().min(15),
+    payment_iban: z.string(),
 });
 
 export type InvoiceFormValues = z.infer<typeof formSchema>;

@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useEffect } from "react";
 
 const formSchema = z.object({
     // Borrower
@@ -41,6 +42,31 @@ interface LoanContractFormProps {
 
 
 export default function LoanContractForm({ form }: LoanContractFormProps) {
+    const watchedAmount = form.watch("loan_amount");
+    const watchedTerm = form.watch("loan_term_months");
+    const watchedRate = form.watch("interest_rate");
+
+    useEffect(() => {
+        const calculateMonthlyPayment = () => {
+            const principal = Number(watchedAmount);
+            const term = Number(watchedTerm);
+            const rate = Number(watchedRate);
+
+            if (principal > 0 && term > 0 && rate > 0) {
+                const monthlyRate = rate / 100 / 12;
+                const payment =
+                    principal *
+                    (monthlyRate * Math.pow(1 + monthlyRate, term)) /
+                    (Math.pow(1 + monthlyRate, term) - 1);
+                
+                if (isFinite(payment)) {
+                    form.setValue("monthly_payment", parseFloat(payment.toFixed(2)), { shouldValidate: true });
+                }
+            }
+        };
+        calculateMonthlyPayment();
+    }, [watchedAmount, watchedTerm, watchedRate, form]);
+
     return (
         <Card>
             <CardHeader>
@@ -120,7 +146,7 @@ export default function LoanContractForm({ form }: LoanContractFormProps) {
                             <FormField control={form.control} name="monthly_payment" render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Mensualité (€)</FormLabel>
-                                    <FormControl><Input type="number" {...field} /></FormControl>
+                                    <FormControl><Input type="number" {...field} readOnly className="bg-muted/50" /></FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )} />
