@@ -16,7 +16,7 @@ import Autoplay from "embla-carousel-autoplay";
 
 const carouselItems = [
   {
-    src: "https://i.postimg.cc/65yV5L5J/arturo-portillo-NRy3-WM22-Sw-Q-unsplash.jpg",
+    src: "https://i.postimg.cc/JnYy9vXy/arturo-portillo-NRy3-WM22-Sw-Q-unsplash-removebg-preview.png",
     alt: "Personne travaillant sur un ordinateur portable dans un bureau moderne",
     title: "Sécurisez l'Avenir de Votre Entreprise",
     description: "VylsCapital fournit des solutions de financement rapides et flexibles pour aider votre entreprise à prospérer. Obtenez le capital dont vous avez besoin pour grandir.",
