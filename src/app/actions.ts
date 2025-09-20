@@ -3,69 +3,36 @@
 
 import { createClientAction } from "@/app/actions/clients";
 import { revalidatePath } from 'next/cache';
-import { google } from 'googleapis';
-import { Readable } from 'stream';
+import { supabase } from "@/lib/supabase-client";
+import { v4 as uuidv4 } from "uuid";
 
-async function getDriveClient() {
-    const credentials = {
-        type: "service_account",
-        project_id: process.env.GOOGLE_PROJECT_ID,
-        private_key_id: process.env.GOOGLE_PRIVATE_KEY_ID,
-        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-        client_email: process.env.GOOGLE_CLIENT_EMAIL,
-        client_id: process.env.GOOGLE_CLIENT_ID,
-        auth_uri: "https://accounts.google.com/o/oauth2/auth",
-        token_uri: "https://oauth2.googleapis.com/token",
-        auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
-        client_x509_cert_url: process.env.GOOGLE_CLIENT_X509_CERT_URL,
+export async function saveFile(file: File): Promise<string> {
+    if (!supabase) {
+        throw new Error("Supabase client is not initialized.");
+    }
+    
+    const fileExtension = file.name.split('.').pop();
+    const fileName = `${uuidv4()}.${fileExtension}`;
+    const filePath = `documents/${fileName}`;
+
+    const { error: uploadError } = await supabase.storage
+        .from('documents') // Assurez-vous que ce bucket existe et est public
+        .upload(filePath, file);
+
+    if (uploadError) {
+        console.error("Supabase upload error:", uploadError);
+        throw new Error("Failed to upload file to Supabase Storage");
     }
 
-    const auth = new google.auth.GoogleAuth({
-        credentials,
-        scopes: ['https://www.googleapis.com/auth/drive'],
-    });
+    const { data } = supabase.storage
+        .from('documents')
+        .getPublicUrl(filePath);
 
-    const authClient = await auth.getClient();
-    return google.drive({ version: 'v3', auth: authClient });
-}
-
-
-async function saveFile(file: File): Promise<string> {
-    const drive = await getDriveClient();
-    
-    const fileMetadata = {
-        name: file.name,
-        parents: [process.env.GOOGLE_DRIVE_FOLDER_ID || 'root']
-    };
-    
-    const media = {
-        mimeType: file.type,
-        body: Readable.from(Buffer.from(await file.arrayBuffer()))
-    };
-
-    const response = await drive.files.create({
-        requestBody: fileMetadata,
-        media: media,
-        fields: 'id, webViewLink'
-    });
-    
-    if (!response.data.id) {
-         throw new Error("Failed to upload file to Google Drive");
+    if (!data || !data.publicUrl) {
+         throw new Error("Failed to get public URL for the file");
     }
-
-    // Make file publicly readable
-    await drive.permissions.create({
-        fileId: response.data.id,
-        requestBody: {
-            role: 'reader',
-            type: 'anyone'
-        }
-    });
-
-    // It's better to construct a direct download link
-    // The webViewLink is for viewing in browser, not for direct access
-    // Format: https://drive.google.com/uc?export=view&id=FILE_ID
-    return `https://drive.google.com/uc?export=view&id=${response.data.id}`;
+    
+    return data.publicUrl;
 }
 
 export async function handleContactForm(data: { name: string; email: string; message: string; }) {
@@ -96,7 +63,7 @@ export async function handleLoanApplication(formData: FormData) {
             return { success: false, error: "Un ou plusieurs documents sont manquants." };
         }
         
-        // Upload files to Google Drive
+        // Upload files to Supabase Storage
         const [identityDocumentUrl, proofOfAddressUrl, proofOfIncomeUrl] = await Promise.all([
             saveFile(identityDocument),
             saveFile(proofOfAddress),
