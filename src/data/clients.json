@@ -251,5 +251,55 @@
     "identity_document_url": "/uploads/Alléla-1758334259012-628332578.png",
     "proof_of_address_url": "/uploads/KOPILOT-1758334259025-439228718.png",
     "proof_of_income_url": "/uploads/applo-1758334259034-174287317.png"
+  },
+  {
+    "id": "cly_1758334586971_2bmnohx",
+    "client_id": "VYL-146-059",
+    "email": "cVXc@gmail.com",
+    "password": "av9znpir",
+    "balance": 0,
+    "account_number": "FR7663394761820236953034540",
+    "iban": "FR7646750042052230919493626",
+    "bic": "QRQEFRKPXXX",
+    "created_at": "2025-09-20T02:16:26.971Z",
+    "is_transfer_blocked": false,
+    "transfer_block_reason": null,
+    "transfer_processing_time": {
+      "minutes": 1
+    },
+    "has_loan": true,
+    "loan_type": "rachat",
+    "loan_amount": 34000,
+    "interest_rate": null,
+    "loan_term": 45,
+    "transactions": [
+      {
+        "id": "txn_1758334586971_ioc7h48",
+        "profile_id": "cly_1758334586971_2bmnohx",
+        "amount": 0,
+        "reason": "Demande de Prêt",
+        "recipient_iban": null,
+        "recipient_name": null,
+        "created_at": "2025-09-20T02:16:26.971Z",
+        "status": "COMPLETED"
+      }
+    ],
+    "initialBalance": 0,
+    "first_name": "Adonis",
+    "last_name": "ROEHRIG",
+    "phone": "6788999900900",
+    "address": "vvBBB",
+    "city": "Plouézec",
+    "postal_code": "YYYVVBBBB",
+    "country": "France",
+    "marital_status": "veuf",
+    "number_of_children": 0,
+    "birth_date": "2000-06-05",
+    "occupation": "RRRR",
+    "monthly_income": 5667,
+    "monthly_expenses": 45,
+    "identity_document_url": "/uploads/Alléla-1758334586933-826008287.png",
+    "proof_of_address_url": "/uploads/applo-1758334586946-636739995.png",
+    "proof_of_income_url": "/uploads/boutoir-1758334586955-913499427.png"
   }
 ]

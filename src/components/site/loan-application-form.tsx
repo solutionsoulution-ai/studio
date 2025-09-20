@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -19,7 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Loader2, Send, FileText, User, Banknote, UploadCloud } from "lucide-react";
+import { Loader2, Send, FileText, User, Banknote, UploadCloud, Calculator } from "lucide-react";
 import { handleLoanApplication } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 
@@ -84,6 +84,8 @@ const loanApplicationSchema = z.object({
 
 type LoanApplicationFormValues = z.infer<typeof loanApplicationSchema>;
 
+const FIXED_INTEREST_RATE = 2;
+
 export default function LoanApplicationForm() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -117,6 +119,25 @@ export default function LoanApplicationForm() {
       proofOfIncome: undefined,
     },
   });
+
+  const watchedAmount = form.watch("loanAmount");
+  const watchedTerm = form.watch("loanTerm");
+
+  const monthlyPayment = useMemo(() => {
+    const loanAmount = Number(watchedAmount);
+    const loanTerm = Number(watchedTerm);
+    if (loanAmount <= 0 || FIXED_INTEREST_RATE <= 0 || loanTerm <= 0) {
+      return 0;
+    }
+    const monthlyRate = FIXED_INTEREST_RATE / 100 / 12;
+    const numberOfPayments = loanTerm;
+    const payment =
+      loanAmount *
+      (monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) /
+      (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
+    return payment;
+  }, [watchedAmount, watchedTerm]);
+
 
   async function onSubmit(data: LoanApplicationFormValues) {
       setIsLoading(true);
@@ -196,6 +217,20 @@ export default function LoanApplicationForm() {
                 </FormItem>
               )} />
             </div>
+
+            {monthlyPayment > 0 && (
+                <div className="bg-primary/10 text-primary p-4 rounded-md mt-4">
+                    <div className="flex items-center gap-3">
+                        <Calculator className="w-6 h-6" />
+                        <div>
+                            <p className="text-sm font-semibold">Mensualité Estimée (à 2% fixe)</p>
+                            <p className="text-2xl font-bold">
+                                {new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" }).format(monthlyPayment)} / mois
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            )}
           </CardContent>
         </Card>
 
