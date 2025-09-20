@@ -5,7 +5,6 @@ runConfig:
   memoryMiB: 512
   timeoutSeconds: 120
   environment:
-    # Remplacez "REPLACE_THIS_WITH_YOUR_RESEND_API_KEY" par votre clé API Resend.
-    RESEND_API_KEY: "REPLACE_THIS_WITH_YOUR_RESEND_API_KEY"
-    RECIPIENT_EMAIL: "contact@vylscapital.com"
-    SENDER_EMAIL: "onboarding@resend.dev" # Ou un domaine que vous avez vérifié avec Resend
+    # Remplacez les valeurs ci-dessous par vos propres clés Supabase
+    NEXT_PUBLIC_SUPABASE_URL: "https://tizfraiulcpowyenluhg.supabase.co"
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRpemZyYWl1bGNwb3d5ZW5sdWhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjE0MDMyMjYsImV4cCI6MjAzNjk3OTIyNn0.2A3LzWntP2rXpOF2Zl_v9W2f4y3aGvG-m94p1G1bTfs"
