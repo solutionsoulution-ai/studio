@@ -5,9 +5,10 @@ runConfig:
   memoryMiB: 512
   timeoutSeconds: 120
   environment:
-    SMTP_HOST: ""
-    SMTP_PORT: ""
-    SMTP_USER: ""
-    SMTP_PASS: ""
-    RECIPIENT_EMAIL: ""
+    SMTP_HOST: "mail.spacemail.com"
+    SMTP_PORT: "465"
+    SMTP_USER: "contact@vylscapital.com"
+    SMTP_PASS: "Made2020@"
+    RECIPIENT_EMAIL: "contact@vylscapital.com"
+
 
