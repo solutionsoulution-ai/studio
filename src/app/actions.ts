@@ -1,7 +1,9 @@
 
 'use server';
 
-import "@/app/config"; // Load environment variables
+import dotenv from 'dotenv';
+dotenv.config();
+
 import nodemailer from 'nodemailer';
 import { type Readable } from 'stream';
 
