@@ -46,15 +46,19 @@ export default function LoginPage() {
   async function onSubmit(values: FormValues) {
     setIsLoading(true);
     // Clear any previous session on form submission, just in case
-    sessionStorage.removeItem('vyls_session_id');
-    sessionStorage.removeItem('vyls_user_role');
+    if (typeof window !== 'undefined') {
+        sessionStorage.removeItem('vyls_session_id');
+        sessionStorage.removeItem('vyls_user_role');
+    }
 
     try {
       const result = await verifyClientLoginAction(values);
 
       if (result.success && result.clientId && result.role) {
-        sessionStorage.setItem('vyls_session_id', result.clientId);
-        sessionStorage.setItem('vyls_user_role', result.role);
+        if (typeof window !== 'undefined') {
+            sessionStorage.setItem('vyls_session_id', result.clientId);
+            sessionStorage.setItem('vyls_user_role', result.role);
+        }
         
         if (result.role === 'admin') {
             toast({

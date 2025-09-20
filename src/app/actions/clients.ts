@@ -1,7 +1,7 @@
 
 'use server';
 
-import "@/app/config"; // Load environment variables
+import 'dotenv/config'; // Load environment variables
 import { z } from 'zod';
 import { type TransferFormInput, transferFormSchema } from '@/lib/schemas';
 import { revalidatePath } from 'next/cache';
@@ -387,5 +387,3 @@ export async function updateClientTransferSettingsAction(settingsData: z.infer<t
     revalidatePath('/dashboard');
     return { success: true };
 }
-
-    
