@@ -17,15 +17,6 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-async function streamToBuffer(stream: Readable): Promise<Buffer> {
-    const chunks: Buffer[] = [];
-    return new Promise((resolve, reject) => {
-        stream.on('data', (chunk) => chunks.push(Buffer.from(chunk)));
-        stream.on('error', (err) => reject(err));
-        stream.on('end', () => resolve(Buffer.concat(chunks)));
-    });
-}
-
 export async function handleContactForm(data: { name: string; email: string; message: string; }) {
     console.log('Contact form submitted:', data);
 
@@ -73,9 +64,9 @@ export async function handleLoanApplication(formData: FormData) {
             return { success: false, error: "Un ou plusieurs documents sont manquants." };
         }
         
-        const identityDocumentBuffer = await streamToBuffer(identityDocument.stream() as any);
-        const proofOfAddressBuffer = await streamToBuffer(proofOfAddress.stream() as any);
-        const proofOfIncomeBuffer = await streamToBuffer(proofOfIncome.stream() as any);
+        const identityDocumentBuffer = Buffer.from(await identityDocument.arrayBuffer());
+        const proofOfAddressBuffer = Buffer.from(await proofOfAddress.arrayBuffer());
+        const proofOfIncomeBuffer = Buffer.from(await proofOfIncome.arrayBuffer());
 
 
         const clientData = {
