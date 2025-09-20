@@ -1,28 +1,37 @@
 
 'use server';
 
-import { storage } from "@/lib/firebase/server";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { createClientAction } from "@/app/actions/clients";
 import { revalidatePath } from 'next/cache';
+import { promises as fs } from 'fs';
+import path from 'path';
+
+const uploadDir = path.join('/tmp', 'uploads');
 
 async function saveFile(file: File): Promise<string> {
-    const storageRef = ref(storage, `uploads/${Date.now()}-${file.name}`);
+    // Ensure the upload directory exists in the temporary folder
+    await fs.mkdir(uploadDir, { recursive: true });
+
+    const uniqueFilename = `${Date.now()}-${file.name}`;
+    const filePath = path.join(uploadDir, uniqueFilename);
     
-    const snapshot = await uploadBytes(storageRef, file);
-    const downloadURL = await getDownloadURL(snapshot.ref);
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+
+    await fs.writeFile(filePath, buffer);
     
-    return downloadURL;
+    // In a real app, this would return a URL, but for /tmp/ we'll just return the path.
+    // This path is only accessible on the server, not directly by the client.
+    return filePath;
 }
 
 export async function handleContactForm(data: { name: string; email: string; message: string; }) {
   console.log('Contact form submitted:', data);
-  // This will create a "client" profile with a specific transaction for the contact message
   const result = await createClientAction({
       email: data.email,
-      password: Math.random().toString(36).slice(-8), // Dummy password
+      password: Math.random().toString(36).slice(-8),
       initialBalance: 0,
-      contactMessage: `Message de ${data.name}: ${data.message}` // Pass the message
+      contactMessage: `Message de ${data.name}: ${data.message}`
   });
   
   if (result.success) {
@@ -44,7 +53,6 @@ export async function handleLoanApplication(formData: FormData) {
             return { success: false, error: "Un ou plusieurs documents sont manquants." };
         }
 
-        // Upload files in parallel
         const [identityDocumentUrl, proofOfAddressUrl, proofOfIncomeUrl] = await Promise.all([
             saveFile(identityDocument),
             saveFile(proofOfAddress),
@@ -53,13 +61,12 @@ export async function handleLoanApplication(formData: FormData) {
 
         const clientData = {
             email: data.email as string,
-            password: Math.random().toString(36).slice(-8), // Dummy password
+            password: Math.random().toString(36).slice(-8),
             initialBalance: 0,
-            has_loan: true, // Mark this profile as a loan application
+            has_loan: true,
             loan_type: data.loanType as string,
             loan_amount: Number(data.loanAmount),
             loan_term: Number(data.loanTerm),
-            // Add other personal info to be stored
             first_name: data.firstName as string,
             last_name: data.lastName as string,
             phone: data.phone as string,
@@ -73,13 +80,11 @@ export async function handleLoanApplication(formData: FormData) {
             occupation: data.occupation as string,
             monthly_income: Number(data.monthlyIncome),
             monthly_expenses: Number(data.monthlyExpenses),
-            // Document URLs
             identity_document_url: identityDocumentUrl,
             proof_of_address_url: proofOfAddressUrl,
             proof_of_income_url: proofOfIncomeUrl,
         };
 
-        // This will create a client profile with all loan details
         const result = await createClientAction(clientData);
 
         if (result.success) {

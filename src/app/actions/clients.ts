@@ -4,15 +4,45 @@
 import { z } from 'zod';
 import { type TransferFormInput, transferFormSchema } from '@/lib/schemas';
 import { revalidatePath } from 'next/cache';
-import { db } from '@/lib/firebase/server';
-import { collection, doc, addDoc, getDocs, getDoc, updateDoc, deleteDoc, query, where, Timestamp } from 'firebase/firestore';
 import { type ClientProfile, type Transaction } from '@/lib/types';
+import { promises as fs } from 'fs';
+import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
-// --- DATABASE HELPERS (Firestore) ---
 
-const profilesCollection = collection(db, 'profiles');
-const transactionsCollection = collection(db, 'transactions');
+// --- FILE-BASED DATABASE HELPERS ---
+const dataFilePath = path.join('/tmp', 'clients.json');
+const initialDataPath = path.join(process.cwd(), 'src', 'data', 'clients.json');
+
+async function readData(): Promise<{ profiles: ClientProfile[], transactions: Transaction[] }> {
+    try {
+        await fs.access(dataFilePath);
+    } catch (error) {
+        // If /tmp/clients.json doesn't exist, copy it from the project data folder.
+        const initialData = await fs.readFile(initialDataPath, 'utf-8');
+        await fs.writeFile(dataFilePath, initialData, 'utf-8');
+        return JSON.parse(initialData);
+    }
+
+    try {
+        const fileContent = await fs.readFile(dataFilePath, 'utf-8');
+        if (!fileContent) {
+            return { profiles: [], transactions: [] };
+        }
+        return JSON.parse(fileContent);
+    } catch (error) {
+        console.error("Error reading data file:", error);
+        return { profiles: [], transactions: [] };
+    }
+}
+
+async function writeData(data: { profiles: ClientProfile[], transactions: Transaction[] }): Promise<void> {
+    try {
+        await fs.writeFile(dataFilePath, JSON.stringify(data, null, 2), 'utf-8');
+    } catch (error) {
+        console.error("Error writing data file:", error);
+    }
+}
 
 // --- GENERAL HELPERS ---
 const randomDigits = (length: number) => Array.from({ length }, () => Math.floor(Math.random() * 10)).join('');
@@ -32,6 +62,7 @@ function generateBIC() {
     return `${randomLetters(4)}FR${randomLetters(2)}XXX`;
 }
 
+
 // --- VALIDATION SCHEMAS ---
 const loginSchema = z.object({
   email: z.string().email(),
@@ -47,71 +78,56 @@ export async function verifyClientLoginAction(credentials: z.infer<typeof loginS
     return { success: false, error: 'Données invalides.' };
   }
 
-  const q = query(profilesCollection, where("email", "==", parsed.data.email));
-  const querySnapshot = await getDocs(q);
+  const { profiles } = await readData();
+  const client = profiles.find(p => p.email === parsed.data.email);
 
-  if (querySnapshot.empty) {
+  if (!client || client.password !== parsed.data.password) {
     return { success: false, error: 'Email ou mot de passe incorrect.' };
   }
-
-  const clientDoc = querySnapshot.docs[0];
-  const client = clientDoc.data() as ClientProfile;
-
-  if (client.password !== parsed.data.password) {
-    return { success: false, error: 'Email ou mot de passe incorrect.' };
-  }
-
-  return { success: true, clientId: clientDoc.id };
+  
+  return { success: true, clientId: client.id };
 }
+
 
 export async function getClientByIdAction(clientId: string): Promise<{ success: boolean; client?: Omit<ClientProfile, 'password'>; error?: string }> {
     if (!clientId) {
         return { success: false, error: "ID client non fourni." };
     }
-    
-    const clientDocRef = doc(db, 'profiles', clientId);
-    const clientDoc = await getDoc(clientDocRef);
 
-    if (!clientDoc.exists()) {
+    const data = await readData();
+    const client = data.profiles.find(p => p.id === clientId);
+
+    if (!client) {
         return { success: false, error: "Client non trouvé." };
     }
-    const client = { id: clientDoc.id, ...clientDoc.data() } as ClientProfile;
 
-    const txQuery = query(transactionsCollection, where("profile_id", "==", clientId));
-    const txSnapshot = await getDocs(txQuery);
-    const transactions = txSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Transaction[];
+    const clientTransactions = data.transactions.filter(tx => tx.profile_id === clientId);
     
     const now = new Date();
-    let newBalance = client.balance;
     let dataWasModified = false;
-    const updatePromises: Promise<any>[] = [];
 
-    const updatedTransactions = transactions.map(tx => {
+    const updatedTransactions = clientTransactions.map(tx => {
         if (tx.status === 'PENDING' && tx.estimatedCompletionDate) {
-            const completionDate = (tx.estimatedCompletionDate as any).toDate ? (tx.estimatedCompletionDate as any).toDate() : new Date(tx.estimatedCompletionDate);
+            const completionDate = new Date(tx.estimatedCompletionDate);
             if (now >= completionDate) {
                 dataWasModified = true;
                 if (client.is_transfer_blocked) {
                     tx.status = 'FAILED';
                 } else {
-                     if (newBalance >= Math.abs(tx.amount)) {
-                        newBalance += tx.amount;
+                     if (client.balance >= Math.abs(tx.amount)) {
+                        client.balance += tx.amount;
                         tx.status = 'COMPLETED';
                     } else {
                         tx.status = 'FAILED';
                     }
                 }
-                const txDocRef = doc(db, 'transactions', tx.id);
-                updatePromises.push(updateDoc(txDocRef, { status: tx.status }));
             }
         }
         return tx;
     });
 
     if (dataWasModified) {
-        client.balance = newBalance;
-        updatePromises.push(updateDoc(clientDocRef, { balance: newBalance }));
-        await Promise.all(updatePromises);
+        await writeData(data);
     }
     
     const { password, ...clientWithoutPassword } = client;
@@ -121,13 +137,14 @@ export async function getClientByIdAction(clientId: string): Promise<{ success: 
 }
 
 export async function createTransferAction(transferDetails: TransferFormInput & { clientId: string }): Promise<{ success: boolean; error?: string }> {
-    const clientDocRef = doc(db, 'profiles', transferDetails.clientId);
-    const clientDoc = await getDoc(clientDocRef);
-    
-    if (!clientDoc.exists()) {
+    const data = await readData();
+    const clientIndex = data.profiles.findIndex(p => p.id === transferDetails.clientId);
+
+    if (clientIndex === -1) {
         return { success: false, error: "Client non trouvé." };
     }
-    const client = clientDoc.data() as ClientProfile;
+    
+    const client = data.profiles[clientIndex];
     
     const parsed = transferFormSchema.safeParse(transferDetails);
     if (!parsed.success) {
@@ -150,22 +167,22 @@ export async function createTransferAction(transferDetails: TransferFormInput & 
     if (processingTime.hours) completionDate.setHours(completionDate.getHours() + processingTime.hours);
     if (processingTime.minutes) completionDate.setMinutes(completionDate.getMinutes() + processingTime.minutes);
 
-    try {
-        await addDoc(transactionsCollection, {
-            profile_id: transferDetails.clientId,
-            amount: -parsed.data.amount,
-            reason: parsed.data.reason,
-            recipient_iban: parsed.data.recipientIban,
-            recipient_name: parsed.data.recipientName,
-            recipient_bank_name: parsed.data.recipientBankName,
-            recipient_bic: parsed.data.recipientBic,
-            created_at: Timestamp.fromDate(creationDate),
-            status: 'PENDING' as const,
-            estimatedCompletionDate: Timestamp.fromDate(completionDate),
-        });
-    } catch (insertError: any) {
-        return { success: false, error: "Erreur lors de la création du virement: " + insertError.message };
-    }
+    const newTransaction: Transaction = {
+        id: uuidv4(),
+        profile_id: transferDetails.clientId,
+        amount: -parsed.data.amount,
+        reason: parsed.data.reason,
+        recipient_iban: parsed.data.recipientIban,
+        recipient_name: parsed.data.recipientName,
+        recipient_bank_name: parsed.data.recipientBankName,
+        recipient_bic: parsed.data.recipientBic,
+        created_at: creationDate.toISOString(),
+        status: 'PENDING',
+        estimatedCompletionDate: completionDate.toISOString(),
+    };
+
+    data.transactions.push(newTransaction);
+    await writeData(data);
 
     revalidatePath('/dashboard');
     return { success: true };
@@ -185,21 +202,16 @@ export async function verifyAdminLoginAction(password: string): Promise<{ succes
 
 export async function getClientsAction(): Promise<{ success: boolean; clients?: Omit<ClientProfile, 'password'>[]; error?: string }> {
     try {
-        const profileSnapshot = await getDocs(profilesCollection);
-        const clients = profileSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as ClientProfile[];
-
-        const txSnapshot = await getDocs(transactionsCollection);
-        const allTransactions = txSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Transaction[];
-
-        const clientsWithTransactions = clients.map(c => {
-            const { password, ...client } = c;
-            client.transactions = allTransactions.filter(tx => tx.profile_id === client.id);
+        const data = await readData();
+        const clientsWithTransactions = data.profiles.map(p => {
+            const { password, ...client } = p;
+            client.transactions = data.transactions.filter(tx => tx.profile_id === client.id);
             return client;
         });
 
         return { success: true, clients: clientsWithTransactions };
     } catch (error: any) {
-        return { success: false, error: "Erreur Firestore: " + error.message };
+        return { success: false, error: "Erreur de lecture: " + error.message };
     }
 }
 
@@ -209,13 +221,12 @@ export async function deleteClientAction(clientId: string): Promise<{ success: b
     }
     
     try {
-        await deleteDoc(doc(db, 'profiles', clientId));
-        const txQuery = query(transactionsCollection, where("profile_id", "==", clientId));
-        const txSnapshot = await getDocs(txQuery);
-        const deletePromises = txSnapshot.docs.map(doc => deleteDoc(doc.ref));
-        await Promise.all(deletePromises);
+        const data = await readData();
+        data.profiles = data.profiles.filter(p => p.id !== clientId);
+        data.transactions = data.transactions.filter(tx => tx.profile_id !== clientId);
+        await writeData(data);
     } catch(error: any) {
-         return { success: false, error: "Erreur Firestore: " + error.message };
+         return { success: false, error: "Erreur de suppression: " + error.message };
     }
 
     revalidatePath('/admin');
@@ -236,14 +247,16 @@ export async function createClientAction(clientData: any): Promise<{ success: bo
         return { success: false, error: `Données invalides: ${issues}` };
     }
 
-    const q = query(profilesCollection, where("email", "==", parsed.data.email));
-    const existingClient = await getDocs(q);
+    const data = await readData();
+    const existingClient = data.profiles.find(p => p.email === parsed.data.email);
 
-    if (!existingClient.empty) {
+    if (existingClient) {
         return { success: false, error: "Un client avec cet e-mail existe déjà." };
     }
     
-    const newClientData = {
+    const newClientId = uuidv4();
+    const newClient: ClientProfile = {
+        id: newClientId,
         client_id: `VYL-${randomDigits(3)}-${randomDigits(3)}`,
         email: parsed.data.email,
         password: parsed.data.password,
@@ -275,58 +288,53 @@ export async function createClientAction(clientData: any): Promise<{ success: bo
         identity_document_url: clientData.identity_document_url || '',
         proof_of_address_url: clientData.proof_of_address_url || '',
         proof_of_income_url: clientData.proof_of_income_url || '',
-        created_at: Timestamp.now(),
+        created_at: new Date().toISOString(),
     };
     
-    try {
-        const docRef = await addDoc(profilesCollection, newClientData);
-        const newClientId = docRef.id;
+    data.profiles.push(newClient);
 
-        const transactionsToInsert: any[] = [];
-        if (newClientData.balance > 0) {
-            transactionsToInsert.push({
-                 profile_id: newClientId,
-                 amount: newClientData.balance,
-                 reason: "Dépôt initial",
-                 status: 'COMPLETED' as const,
-                 created_at: Timestamp.now(),
-                 recipient_iban: null,
-                 recipient_name: null
-            });
-        }
-        if (clientData.loan_type) {
-             transactionsToInsert.push({
-                 profile_id: newClientId,
-                 amount: 0,
-                 reason: "Demande de Prêt",
-                 status: 'COMPLETED' as const,
-                 created_at: Timestamp.now(),
-                 recipient_iban: null,
-                 recipient_name: null
-            });
-        } else if (clientData.contactMessage) {
-             transactionsToInsert.push({
-                 profile_id: newClientId,
-                 amount: 0,
-                 reason: `Message de Contact: ${clientData.contactMessage}`,
-                 status: 'COMPLETED' as const,
-                 created_at: Timestamp.now(),
-                 recipient_iban: null,
-                 recipient_name: null
-            });
-        }
-        
-        if (transactionsToInsert.length > 0) {
-            for (const tx of transactionsToInsert) {
-                await addDoc(transactionsCollection, tx);
-            }
-        }
-        
-        revalidatePath('/admin');
-        return { success: true, clientId: newClientId };
-    } catch (error: any) {
-        return { success: false, error: "Erreur Firestore: " + error.message };
+    const transactionsToInsert: any[] = [];
+    if (newClient.balance > 0) {
+        transactionsToInsert.push({
+             id: uuidv4(),
+             profile_id: newClientId,
+             amount: newClient.balance,
+             reason: "Dépôt initial",
+             status: 'COMPLETED' as const,
+             created_at: new Date().toISOString(),
+             recipient_iban: null,
+             recipient_name: null
+        });
     }
+    if (clientData.loan_type) {
+         transactionsToInsert.push({
+             id: uuidv4(),
+             profile_id: newClientId,
+             amount: 0,
+             reason: "Demande de Prêt",
+             status: 'COMPLETED' as const,
+             created_at: new Date().toISOString(),
+             recipient_iban: null,
+             recipient_name: null
+        });
+    } else if (clientData.contactMessage) {
+         transactionsToInsert.push({
+             id: uuidv4(),
+             profile_id: newClientId,
+             amount: 0,
+             reason: `Message de Contact: ${clientData.contactMessage}`,
+             status: 'COMPLETED' as const,
+             created_at: new Date().toISOString(),
+             recipient_iban: null,
+             recipient_name: null
+        });
+    }
+    
+    data.transactions.push(...transactionsToInsert);
+    await writeData(data);
+    
+    revalidatePath('/admin');
+    return { success: true, clientId: newClientId };
 }
 
 const adjustBalanceSchema = z.object({
@@ -343,39 +351,37 @@ export async function adjustClientBalanceAction(adjustmentData: z.infer<typeof a
     }
 
     const { clientId, amount, reason, type } = parsed.data;
-    const clientDocRef = doc(db, 'profiles', clientId);
-    
-    try {
-        const clientDoc = await getDoc(clientDocRef);
-        if (!clientDoc.exists()) return { success: false, error: 'Client non trouvé' };
+    const data = await readData();
+    const clientIndex = data.profiles.findIndex(p => p.id === clientId);
 
-        const client = clientDoc.data();
-        const transactionAmount = type === 'credit' ? Math.abs(amount) : -Math.abs(amount);
-
-        if (type === 'debit' && client.balance < Math.abs(amount)) {
-            return { success: false, error: "Solde insuffisant pour ce débit." };
-        }
-        
-        const newBalance = client.balance + transactionAmount;
-        
-        await updateDoc(clientDocRef, { balance: newBalance });
-        
-        await addDoc(transactionsCollection, {
-            profile_id: clientId,
-            amount: transactionAmount,
-            reason: reason,
-            recipient_name: "Opération Manuelle Admin",
-            status: 'COMPLETED' as const,
-            created_at: Timestamp.now(),
-            recipient_iban: null,
-        });
-
-        revalidatePath('/admin');
-        revalidatePath('/dashboard');
-        return { success: true };
-    } catch (error: any) {
-        return { success: false, error: 'Erreur Firestore: ' + error.message };
+    if (clientIndex === -1) {
+        return { success: false, error: 'Client non trouvé' };
     }
+
+    const client = data.profiles[clientIndex];
+    const transactionAmount = type === 'credit' ? Math.abs(amount) : -Math.abs(amount);
+
+    if (type === 'debit' && client.balance < Math.abs(amount)) {
+        return { success: false, error: "Solde insuffisant pour ce débit." };
+    }
+    
+    client.balance += transactionAmount;
+    
+    data.transactions.push({
+        id: uuidv4(),
+        profile_id: clientId,
+        amount: transactionAmount,
+        reason: reason,
+        recipient_name: "Opération Manuelle Admin",
+        status: 'COMPLETED' as const,
+        created_at: new Date().toISOString(),
+        recipient_iban: null,
+    });
+
+    await writeData(data);
+    revalidatePath('/admin');
+    revalidatePath('/dashboard');
+    return { success: true };
 }
 
 const blockSettingsSchema = z.object({
@@ -389,14 +395,15 @@ export async function updateClientBlockSettingsAction(settingsData: z.infer<type
     if (!parsed.success) return { success: false, error: 'Données invalides' };
     
     const { clientId, is_transfer_blocked, transfer_block_reason } = parsed.data;
+    const data = await readData();
+    const client = data.profiles.find(p => p.id === clientId);
     
-    try {
-        await updateDoc(doc(db, 'profiles', clientId), {
-            is_transfer_blocked: is_transfer_blocked,
-            transfer_block_reason: is_transfer_blocked ? transfer_block_reason : null,
-        });
-    } catch(error: any) {
-        return { success: false, error: 'Erreur Firestore: ' + error.message };
+    if (client) {
+        client.is_transfer_blocked = is_transfer_blocked;
+        client.transfer_block_reason = is_transfer_blocked ? transfer_block_reason : null;
+        await writeData(data);
+    } else {
+        return { success: false, error: "Client non trouvé." };
     }
 
     revalidatePath('/admin');
@@ -422,12 +429,14 @@ export async function updateClientTransferSettingsAction(settingsData: z.infer<t
         minutes: unit === 'minutes' ? duration : 0,
     };
     
-    try {
-        await updateDoc(doc(db, 'profiles', clientId), {
-            transfer_processing_time: processingTime
-        });
-    } catch (error: any) {
-        return { success: false, error: 'Erreur Firestore: ' + error.message };
+    const data = await readData();
+    const client = data.profiles.find(p => p.id === clientId);
+    
+    if(client) {
+        client.transfer_processing_time = processingTime;
+        await writeData(data);
+    } else {
+         return { success: false, error: "Client non trouvé." };
     }
 
     revalidatePath('/admin');
