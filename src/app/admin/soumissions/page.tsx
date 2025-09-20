@@ -9,7 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Shield, ArrowLeft, HardDrive } from "lucide-react";
-import { getClientsAction, type ClientProfile } from "@/app/actions/clients";
+import { getClientsAction } from "@/app/actions/clients";
+import type { ClientProfile } from "@/lib/types";
 import Link from "next/link";
 import SubmissionsView from "@/components/admin/submissions-view";
 import { Progress } from "@/components/ui/progress";
@@ -84,7 +85,7 @@ export default function SubmissionsPage() {
       if (result.success && result.clients) {
         // Filter to only show profiles that are submissions (loan or contact)
         const submissionProfiles = result.clients.filter(
-          c => c.has_loan || c.transactions.some(t => t.reason.startsWith("Message de Contact:"))
+          c => c.has_loan || (c.transactions || []).some(t => t.reason.startsWith("Message de Contact:"))
         );
         setSubmissions(submissionProfiles);
       } else {

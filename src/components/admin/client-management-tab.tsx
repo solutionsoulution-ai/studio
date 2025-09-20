@@ -5,7 +5,7 @@ import { useState, useCallback } from "react";
 import { useForm, type UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import type { ClientProfile } from "@/app/actions/clients";
+import type { ClientProfile } from "@/lib/types";
 import {
     createClientAction,
     deleteClientAction,

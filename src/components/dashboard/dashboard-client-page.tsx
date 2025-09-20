@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { useState, useMemo, useEffect, useCallback } from "react";
@@ -16,23 +15,12 @@ import { useRouter } from "next/navigation";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
 import { getClientByIdAction, createTransferAction } from "@/app/actions/clients";
-import type { ClientProfile } from "@/app/actions/clients";
+import type { ClientProfile, Transaction } from "@/lib/types";
 import type { TransferFormInput } from "@/lib/schemas";
 import ClientTransactionProgress from "./client-transaction-progress";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
-interface Transaction {
-    id: string;
-    profile_id: string;
-    amount: number;
-    reason: string;
-    recipient_iban: string | null;
-    recipient_name: string | null;
-    created_at: string;
-    status: 'PENDING' | 'COMPLETED' | 'FAILED';
-    estimatedCompletionDate?: string;
-}
 
 const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("fr-FR", {
@@ -154,7 +142,9 @@ export default function DashboardClientPage() {
     const router = useRouter();
 
     const handleLogout = useCallback(() => {
-        sessionStorage.removeItem('vyls_session_id');
+        if (typeof window !== 'undefined') {
+            sessionStorage.removeItem('vyls_session_id');
+        }
         toast({ title: "Déconnexion réussie." });
         router.push("/");
     }, [router, toast]);
@@ -446,4 +436,3 @@ export default function DashboardClientPage() {
     </div>
   );
 }
-

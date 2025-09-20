@@ -9,7 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Shield, FileText } from "lucide-react";
-import { verifyAdminLoginAction, getClientsAction, type ClientProfile } from "@/app/actions/clients";
+import { verifyAdminLoginAction, getClientsAction } from "@/app/actions/clients";
+import type { ClientProfile } from "@/lib/types";
 import Link from "next/link";
 import ClientManagementTab from "@/components/admin/client-management-tab";
 
@@ -89,7 +90,7 @@ export default function AdminPage() {
 
       if (result.success && result.clients) {
         // We only want to show "regular" clients here, not submissions.
-        const regularClients = result.clients.filter(c => !c.has_loan && !c.transactions.some(t => t.reason.startsWith("Message de Contact:")));
+        const regularClients = result.clients.filter(c => !c.has_loan && !(c.transactions || []).some(t => t.reason.startsWith("Message de Contact:")));
         setClients(regularClients);
       } else {
         setErrorClients(result.error || "Une erreur est survenue.");

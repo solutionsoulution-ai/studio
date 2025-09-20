@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import type { ClientProfile } from "@/app/actions/clients";
+import type { ClientProfile } from "@/lib/types";
 import { AlertCircle, FileText, MessageSquare, Loader2, Trash2, MoreHorizontal } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
