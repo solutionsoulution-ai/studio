@@ -24,8 +24,8 @@ interface SubmissionsViewProps {
     error: string | null;
 }
 
-const formatCurrency = (value: number | undefined) => {
-    if (value === undefined) return 'N/A';
+const formatCurrency = (value: number | null | undefined) => {
+    if (value === undefined || value === null) return 'N/A';
     return new Intl.NumberFormat("fr-FR", {
         style: "currency",
         currency: "EUR",
@@ -35,30 +35,41 @@ const formatCurrency = (value: number | undefined) => {
 const SubmissionDetailDialog = ({ submission, open, onOpenChange }: { submission: Omit<ClientProfile, 'password'> | null, open: boolean, onOpenChange: (open: boolean) => void }) => {
     if (!submission) return null;
 
-    const loanApplication = submission.transactions.find(t => t.reason.startsWith("Demande de Prêt"));
-    const eligibilityCheck = submission.transactions.find(t => t.reason.startsWith("Test Éligibilité"));
-    const contactMessage = submission.transactions.find(t => t.reason.startsWith("Message de Contact"));
-
+    const isLoanApplication = submission.has_loan;
+    const contactMessageTx = submission.transactions.find(t => t.reason.startsWith("Message de Contact:"));
+    
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-w-3xl">
                 <DialogHeader>
                     <DialogTitle>Détails de la Soumission</DialogTitle>
                     <DialogDescription>
-                        Client: {submission.email} (ID: {submission.client_id})
+                        Client: {submission.email} (ID Interne: {submission.id})
                     </DialogDescription>
                 </DialogHeader>
                 <div className="max-h-[70vh] overflow-y-auto pr-4 space-y-6">
-                    {loanApplication && (
+                    {isLoanApplication && (
                         <Card>
                             <CardHeader>
                                 <CardTitle>Demande de Prêt</CardTitle>
                             </CardHeader>
-                            <CardContent className="text-sm space-y-1">
+                            <CardContent className="text-sm space-y-2 grid grid-cols-1 md:grid-cols-2 gap-x-4">
+                                <p><strong>Nom:</strong> {submission.first_name} {submission.last_name}</p>
+                                <p><strong>Email:</strong> {submission.email}</p>
+                                <p><strong>Téléphone:</strong> {submission.phone}</p>
+                                <p><strong>Date de naissance:</strong> {submission.birth_date ? new Date(submission.birth_date).toLocaleDateString('fr-FR') : 'N/A'}</p>
+                                <p className="md:col-span-2"><strong>Adresse:</strong> {`${submission.address}, ${submission.postal_code} ${submission.city}, ${submission.country}`}</p>
+                                <p><strong>Situation:</strong> {submission.marital_status}</p>
+                                <p><strong>Enfants:</strong> {submission.number_of_children}</p>
+                                <p><strong>Profession:</strong> {submission.occupation}</p>
+                                <p><strong>Revenu Mensuel:</strong> {formatCurrency(submission.monthly_income)}</p>
+                                <p><strong>Charges Mensuelles:</strong> {formatCurrency(submission.monthly_expenses)}</p>
+                                <p className="md:col-span-2 border-t pt-2 mt-2 font-bold">Détails du prêt demandé</p>
                                 <p><strong>Type:</strong> {submission.loan_type}</p>
                                 <p><strong>Montant:</strong> {formatCurrency(submission.loan_amount)}</p>
                                 <p><strong>Durée:</strong> {submission.loan_term} mois</p>
-                                <p><strong>Date de la demande:</strong> {new Date(loanApplication.created_at).toLocaleString('fr-FR')}</p>
+                                <p><strong>Date de la demande:</strong> {new Date(submission.created_at).toLocaleString('fr-FR')}</p>
+                                <div className="md:col-span-2 border-t pt-2 mt-2 font-bold">Documents fournis</div>
                                 {submission.identity_document_url && (
                                     <p><strong>Pièce d'identité:</strong> <Button variant="link" asChild><a href={submission.identity_document_url} target="_blank" rel="noopener noreferrer">Voir le document</a></Button></p>
                                 )}
@@ -72,15 +83,15 @@ const SubmissionDetailDialog = ({ submission, open, onOpenChange }: { submission
                         </Card>
                     )}
                     
-                     {contactMessage && (
+                     {contactMessageTx && (
                         <Card>
                             <CardHeader>
                                 <CardTitle>Message de Contact</CardTitle>
                             </CardHeader>
                             <CardContent className="text-sm space-y-1">
-                                 <p><strong>Date:</strong> {new Date(contactMessage.created_at).toLocaleString('fr-FR')}</p>
+                                 <p><strong>Date:</strong> {new Date(contactMessageTx.created_at).toLocaleString('fr-FR')}</p>
                                  <p className="border-t pt-2 mt-2"><strong>Message:</strong></p>
-                                 <blockquote className="p-2 bg-muted rounded-md">{contactMessage.reason.substring("Message de Contact: ".length)}</blockquote>
+                                 <blockquote className="p-2 bg-muted rounded-md">{contactMessageTx.reason.substring("Message de Contact: ".length)}</blockquote>
                             </CardContent>
                         </Card>
                     )}
@@ -96,8 +107,8 @@ const SubmissionDetailDialog = ({ submission, open, onOpenChange }: { submission
 export default function SubmissionsView({ submissions, isLoading, error }: SubmissionsViewProps) {
     const [selectedSubmission, setSelectedSubmission] = useState<Omit<ClientProfile, 'password'> | null>(null);
 
-    const loanSubmissions = submissions.filter(s => s.transactions.some(t => t.reason.startsWith("Demande de Prêt")));
-    const contactMessages = submissions.filter(s => s.transactions.some(t => t.reason.startsWith("Message de Contact")));
+    const loanSubmissions = submissions.filter(s => s.has_loan === true);
+    const contactMessages = submissions.filter(s => s.transactions.some(t => t.reason.startsWith("Message de Contact:")));
 
     if (isLoading) {
          return (
@@ -153,7 +164,7 @@ export default function SubmissionsView({ submissions, isLoading, error }: Submi
                                 </TableHeader>
                                 <TableBody>
                                     {loanSubmissions.length > 0 ? loanSubmissions.map(sub => (
-                                        <TableRow key={sub.id} className="cursor-pointer" onClick={() => setSelectedSubmission(sub)}>
+                                        <TableRow key={sub.id} className="cursor-pointer hover:bg-muted" onClick={() => setSelectedSubmission(sub)}>
                                             <TableCell>{sub.email}</TableCell>
                                             <TableCell>{sub.loan_type}</TableCell>
                                             <TableCell>{formatCurrency(sub.loan_amount)}</TableCell>
@@ -183,13 +194,16 @@ export default function SubmissionsView({ submissions, isLoading, error }: Submi
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {contactMessages.length > 0 ? contactMessages.map(sub => (
-                                        <TableRow key={sub.id} className="cursor-pointer" onClick={() => setSelectedSubmission(sub)}>
-                                            <TableCell>{sub.email}</TableCell>
-                                            <TableCell>{new Date(sub.created_at).toLocaleDateString('fr-FR')}</TableCell>
-                                            <TableCell className="truncate max-w-sm">{sub.transactions.find(t => t.reason.startsWith("Message de Contact"))?.reason.substring("Message de Contact: ".length)}</TableCell>
-                                        </TableRow>
-                                    )) : (
+                                    {contactMessages.length > 0 ? contactMessages.map(sub => {
+                                        const contactTx = sub.transactions.find(t => t.reason.startsWith("Message de Contact:"));
+                                        return (
+                                            <TableRow key={sub.id} className="cursor-pointer hover:bg-muted" onClick={() => setSelectedSubmission(sub)}>
+                                                <TableCell>{sub.email}</TableCell>
+                                                <TableCell>{new Date(sub.created_at).toLocaleDateString('fr-FR')}</TableCell>
+                                                <TableCell className="truncate max-w-sm">{contactTx?.reason.substring("Message de Contact: ".length)}</TableCell>
+                                            </TableRow>
+                                        )
+                                    }) : (
                                         <TableRow><TableCell colSpan={3} className="text-center h-24">Aucun message de contact.</TableCell></TableRow>
                                     )}
                                 </TableBody>

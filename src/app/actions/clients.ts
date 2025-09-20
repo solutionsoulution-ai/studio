@@ -45,9 +45,26 @@ export interface ClientProfile {
     has_loan: boolean;
     loan_type: string | null;
     loan_amount: number | null;
-    interest_rate: number | null;
+    interest_rate: number | null; // This can be null for applications
     loan_term: number | null;
     transactions: Transaction[];
+    // Add fields for loan applications that are not part of a standard client
+    first_name?: string;
+    last_name?: string;
+    phone?: string;
+    address?: string;
+    city?: string;
+    postal_code?: string;
+    country?: string;
+    marital_status?: string;
+    number_of_children?: number;
+    birth_date?: string;
+    occupation?: string;
+    monthly_income?: number;
+    monthly_expenses?: number;
+    identity_document_url?: string;
+    proof_of_address_url?: string;
+    proof_of_income_url?: string;
 }
 
 // Helpers
@@ -72,7 +89,6 @@ async function writeData(data: ClientProfile[]): Promise<void> {
 const randomDigits = (length: number) => Array.from({ length }, () => Math.floor(Math.random() * 10)).join('');
 
 function generateIBAN(countryCode = 'FR') {
-    // Ceci est une simplification et ne produit pas d'IBAN valides selon la norme.
     const countryPart = '76';
     const bankCode = randomDigits(5);
     const branchCode = randomDigits(5);
@@ -113,8 +129,6 @@ export async function verifyClientLoginAction(credentials: z.infer<typeof loginS
     return { success: false, error: 'Email ou mot de passe incorrect.' };
   }
 
-  // NOTE: In a real app, passwords should be hashed.
-  // This is a simplified check for the prototype.
   if (client.password !== parsed.data.password) {
     return { success: false, error: 'Email ou mot de passe incorrect.' };
   }
@@ -142,21 +156,18 @@ export async function getClientByIdAction(clientId: string): Promise<{ success: 
 
     let dataWasModified = false;
 
-    // Simulate time passing to process PENDING transactions
     client.transactions.forEach(tx => {
         if (tx.status === 'PENDING') {
             const completionDate = tx.estimatedCompletionDate ? new Date(tx.estimatedCompletionDate) : new Date();
             const now = new Date();
 
             if (now >= completionDate) {
-                // If account is blocked, fail the transaction. Otherwise, complete it and debit the balance.
                 if (client.is_transfer_blocked) {
                     tx.status = 'FAILED';
                     tx.reason = `[Échec] ${tx.reason} - ${client.transfer_block_reason || 'Compte bloqué'}`
                 } else {
-                    // Check balance before completing
                     if (client.balance >= Math.abs(tx.amount)) {
-                        client.balance += tx.amount; // tx.amount is negative for a debit
+                        client.balance += tx.amount;
                         tx.status = 'COMPLETED';
                     } else {
                         tx.status = 'FAILED';
@@ -176,7 +187,6 @@ export async function getClientByIdAction(clientId: string): Promise<{ success: 
         }
     }
     
-    // Omit password from the returned client object
     const { password, ...clientWithoutPassword } = client;
 
     return { success: true, client: clientWithoutPassword };
@@ -202,6 +212,10 @@ export async function createTransferAction(transferDetails: TransferFormInput & 
 
     const client = clients[clientIndex];
 
+    if (client.is_transfer_blocked) {
+        return { success: false, error: `Les virements sont bloqués pour ce compte: ${client.transfer_block_reason}` };
+    }
+
     if (client.balance < parsed.data.amount) {
         return { success: false, error: "Solde insuffisant pour initier ce virement." };
     }
@@ -214,7 +228,6 @@ export async function createTransferAction(transferDetails: TransferFormInput & 
     completionDate.setHours(completionDate.getHours() + (processingTime.hours || 0));
     completionDate.setMinutes(completionDate.getMinutes() + (processingTime.minutes || 0));
     
-    // Create new transaction without debiting balance immediately
     const newTransaction: Transaction = {
         id: `txn_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
         profile_id: client.id,
@@ -239,13 +252,8 @@ export async function createTransferAction(transferDetails: TransferFormInput & 
 
 // --- Admin Actions ---
 
-const ADMIN_PASSWORD = "XtZ_7@pQn!fS8#mV"; // Hardcoded for prototype
+const ADMIN_PASSWORD = "XtZ_7@pQn!fS8#mV";
 
-/**
- * Verifies the admin password.
- * @param password - The password to verify.
- * @returns { success: boolean; error?: string }
- */
 export async function verifyAdminLoginAction(password: string): Promise<{ success: boolean; error?: string }> {
     if (password === ADMIN_PASSWORD) {
         return { success: true };
@@ -253,14 +261,9 @@ export async function verifyAdminLoginAction(password: string): Promise<{ succes
     return { success: false, error: "Mot de passe incorrect." };
 }
 
-/**
- * Fetches all client profiles for the admin dashboard.
- * @returns { success: boolean; clients?: ClientProfile[]; error?: string }
- */
 export async function getClientsAction(): Promise<{ success: boolean; clients?: Omit<ClientProfile, 'password'>[]; error?: string }> {
     try {
         const clients = await readData();
-        // Remove password from the returned objects
         const clientsWithoutPasswords = clients.map(c => {
             const { password, ...rest } = c;
             return rest;
@@ -272,11 +275,6 @@ export async function getClientsAction(): Promise<{ success: boolean; clients?: 
 }
 
 
-/**
- * Deletes a client profile.
- * @param clientId - The ID of the client to delete.
- * @returns { success: boolean; error?: string }
- */
 export async function deleteClientAction(clientId: string): Promise<{ success: boolean; error?: string }> {
     if (!clientId) {
         return { success: false, error: "ID client non fourni." };
@@ -293,19 +291,18 @@ export async function deleteClientAction(clientId: string): Promise<{ success: b
     return { success: true };
 }
 
-
 const createClientSchema = z.object({
     email: z.string().email("L'adresse e-mail est invalide."),
     password: z.string().min(8, "Le mot de passe doit comporter au moins 8 caractères."),
     initialBalance: z.coerce.number().min(0, "Le solde initial ne peut pas être négatif."),
-});
+}).passthrough(); // Allow extra fields for submissions
 
 /**
- * Creates a new client.
+ * Creates a new client OR a submission profile.
  * @param clientData - The new client's data.
- * @returns { success: boolean; error?: string }
+ * @returns { success: boolean; clientId?: string; error?: string }
  */
-export async function createClientAction(clientData: z.infer<typeof createClientSchema>): Promise<{ success: boolean; error?: string }> {
+export async function createClientAction(clientData: z.infer<typeof createClientSchema>): Promise<{ success: boolean; clientId?: string; error?: string }> {
     const parsed = createClientSchema.safeParse(clientData);
     if (!parsed.success) {
         const issues = parsed.error.issues.map(i => i.message).join(', ');
@@ -314,13 +311,14 @@ export async function createClientAction(clientData: z.infer<typeof createClient
 
     const clients = await readData();
 
-    // Check if email already exists
     if (clients.some(c => c.email === parsed.data.email)) {
         return { success: false, error: "Un client avec cet e-mail existe déjà." };
     }
+    
+    const newId = `cly_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 
     const newClient: ClientProfile = {
-        id: `cly_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
+        id: newId,
         client_id: `VYL-${randomDigits(3)}-${randomDigits(3)}`,
         email: parsed.data.email,
         password: parsed.data.password,
@@ -332,16 +330,17 @@ export async function createClientAction(clientData: z.infer<typeof createClient
         is_transfer_blocked: false,
         transfer_block_reason: null,
         transfer_processing_time: { minutes: 1 },
-        has_loan: false,
-        loan_type: null,
-        loan_amount: null,
-        interest_rate: null,
-        loan_term: null,
+        has_loan: clientData.has_loan || false,
+        loan_type: clientData.loan_type || null,
+        loan_amount: clientData.loan_amount || null,
+        interest_rate: null, // Always null on creation
+        loan_term: clientData.loan_term || null,
         transactions: [],
+        ...clientData, // Spread the rest of the data (for loan applications)
     };
     
     if(newClient.balance > 0) {
-        const initialTransaction: Transaction = {
+        newClient.transactions.push({
              id: `txn_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
              profile_id: newClient.id,
              amount: newClient.balance,
@@ -350,14 +349,38 @@ export async function createClientAction(clientData: z.infer<typeof createClient
              recipient_name: null,
              created_at: new Date().toISOString(),
              status: 'COMPLETED',
-        };
-        newClient.transactions.push(initialTransaction);
+        });
+    }
+
+    // Add specific transaction for submissions
+    if (clientData.loan_type) {
+         newClient.transactions.push({
+             id: `txn_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
+             profile_id: newClient.id,
+             amount: 0,
+             reason: "Demande de Prêt",
+             recipient_iban: null,
+             recipient_name: null,
+             created_at: new Date().toISOString(),
+             status: 'COMPLETED', // This is just a marker, not a financial tx
+        });
+    } else if (clientData.contactMessage) {
+         newClient.transactions.push({
+             id: `txn_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
+             profile_id: newClient.id,
+             amount: 0,
+             reason: `Message de Contact: ${clientData.contactMessage}`,
+             recipient_iban: null,
+             recipient_name: null,
+             created_at: new Date().toISOString(),
+             status: 'COMPLETED', // Marker
+        });
     }
 
     clients.push(newClient);
     await writeData(clients);
 
-    return { success: true };
+    return { success: true, clientId: newId };
 }
 
 
@@ -368,11 +391,6 @@ const adjustBalanceSchema = z.object({
   type: z.enum(['credit', 'debit']),
 });
 
-/**
- * Adjusts a client's balance (credit or debit).
- * @param adjustmentData - The adjustment details.
- * @returns { success: boolean; error?: string }
- */
 export async function adjustClientBalanceAction(adjustmentData: z.infer<typeof adjustBalanceSchema>): Promise<{ success: boolean; error?: string }> {
     const parsed = adjustBalanceSchema.safeParse(adjustmentData);
     if (!parsed.success) {
@@ -392,15 +410,12 @@ export async function adjustClientBalanceAction(adjustmentData: z.infer<typeof a
     const client = clients[clientIndex];
     const transactionAmount = type === 'credit' ? Math.abs(amount) : -Math.abs(amount);
 
-    // Check for sufficient funds on debit
     if (type === 'debit' && client.balance < Math.abs(amount)) {
         return { success: false, error: "Solde insuffisant pour ce débit." };
     }
     
-    // Update balance
     client.balance += transactionAmount;
     
-    // Create new transaction
     const newTransaction: Transaction = {
         id: `txn_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
         profile_id: client.id,
@@ -426,11 +441,6 @@ const blockSettingsSchema = z.object({
   transfer_block_reason: z.string().nullable(),
 });
 
-/**
- * Updates a client's transfer block settings.
- * @param settingsData - The new block settings.
- * @returns { success: boolean; error?: string }
- */
 export async function updateClientBlockSettingsAction(settingsData: z.infer<typeof blockSettingsSchema>): Promise<{ success: boolean; error?: string }> {
     const parsed = blockSettingsSchema.safeParse(settingsData);
     if (!parsed.success) {
@@ -461,11 +471,6 @@ const transferSettingsSchema = z.object({
   unit: z.enum(['minutes', 'hours', 'days']),
 });
 
-/**
- * Updates a client's transfer processing time.
- * @param settingsData - The new transfer processing time settings.
- * @returns { success: boolean; error?: string }
- */
 export async function updateClientTransferSettingsAction(settingsData: z.infer<typeof transferSettingsSchema>): Promise<{ success: boolean; error?: string }> {
     const parsed = transferSettingsSchema.safeParse(settingsData);
     if (!parsed.success) {
@@ -493,5 +498,3 @@ export async function updateClientTransferSettingsAction(settingsData: z.infer<t
     await writeData(clients);
     return { success: true };
 }
-
-    

@@ -34,7 +34,9 @@ const AdminLoginForm = ({ onLoginSuccess }: { onLoginSuccess: () => void }) => {
 
     if (result.success) {
       toast({ title: "Accès autorisé" });
-      sessionStorage.setItem('vyls_admin_session', 'true');
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('vyls_admin_session', 'true');
+      }
       onLoginSuccess();
     } else {
       toast({ title: "Accès refusé", description: result.error, variant: "destructive" });
@@ -72,28 +74,30 @@ export default function SubmissionsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    setIsClient(true);
-    if (sessionStorage.getItem('vyls_admin_session') === 'true') {
-        setIsAdmin(true);
-    }
-  }, []);
-
   const fetchSubmissions = useCallback(async () => {
-      if (!isAdmin) return;
-      setIsLoading(true);
-      setError(null);
-      
+    setIsLoading(true);
+    setError(null);
+    try {
       const result = await getClientsAction();
-
       if (result.success && result.clients) {
         setSubmissions(result.clients);
       } else {
-        setError(result.error || "Une erreur est survenue.");
+        setError(result.error || "Une erreur est survenue lors de la récupération des soumissions.");
         setSubmissions([]);
       }
-      setIsLoading(false);
-  }, [isAdmin]);
+    } catch (e: any) {
+       setError(e.message || "Une erreur critique est survenue.");
+    } finally {
+        setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    setIsClient(true);
+    if (typeof window !== 'undefined' && sessionStorage.getItem('vyls_admin_session') === 'true') {
+        setIsAdmin(true);
+    }
+  }, []);
 
   useEffect(() => {
     if (isAdmin) {
@@ -104,7 +108,7 @@ export default function SubmissionsPage() {
   if (!isClient) {
     return (
        <main className="flex min-h-screen flex-col items-center justify-center p-6 sm:p-24">
-            <Loader2 className="animate-spin" />
+            <Loader2 className="animate-spin text-primary" size={48} />
       </main>
     );
   }
