@@ -12,5 +12,6 @@ runConfig:
     SMTP_PORT: "465"
     SMTP_USER: "contact@vylscapital.com"
     SMTP_PASS: "Made2020@"
-    SMTP_RECIPIENT_EMAIL: "contact@vylscapital.com"
+    NEXT_PUBLIC_SMTP_RECIPIENT_EMAIL: "contact@vylscapital.com"
+
 

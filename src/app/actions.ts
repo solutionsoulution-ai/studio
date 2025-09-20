@@ -34,7 +34,7 @@ export async function saveFile(file: File): Promise<string> {
     return data.publicUrl;
 }
 
-const recipientEmail = process.env.SMTP_RECIPIENT_EMAIL;
+const recipientEmail = process.env.NEXT_PUBLIC_SMTP_RECIPIENT_EMAIL;
 
 const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
