@@ -3,50 +3,48 @@
 
 import 'dotenv/config';
 import { z } from 'zod';
-import { supabase } from '@/lib/supabase';
+import { transporter } from '@/lib/nodemailer';
 
+// --- Contact Form ---
 const contactFormSchema = z.object({
   name: z.string().min(2, { message: "Le nom doit comporter au moins 2 caractères." }),
   email: z.string().email({ message: "Veuillez entrer une adresse e-mail valide." }),
   message: z.string().min(10, { message: "Le message doit comporter au moins 10 caractères." }),
 });
 
-/**
- * Handles the contact form submission by saving data to Supabase.
- * @param formData - The validated form data.
- * @returns An object indicating success or failure.
- */
 export async function handleContactForm(formData: z.infer<typeof contactFormSchema>) {
-    const parsed = contactFormSchema.safeParse(formData);
-    if (!parsed.success) {
-      const errorMessages = parsed.error.issues.map(issue => issue.message).join(', ');
-      return { success: false, error: `Données invalides: ${errorMessages}` };
-    }
-    
-    try {
-       const { data, error } = await supabase
-         .from('contacts')
-         .insert([
-           { 
-             name: parsed.data.name,
-             email: parsed.data.email,
-             message: parsed.data.message
-           }
-         ]);
+  const parsed = contactFormSchema.safeParse(formData);
+  if (!parsed.success) {
+    const errorMessages = parsed.error.issues.map(issue => issue.message).join(', ');
+    return { success: false, error: `Données invalides: ${errorMessages}` };
+  }
 
-       if (error) {
-         throw error;
-       }
+  const { name, email, message } = parsed.data;
 
-       return { success: true };
+  const mailOptions = {
+    from: `"VylsCapital Site" <${process.env.SMTP_USER}>`,
+    to: process.env.RECIPIENT_EMAIL,
+    subject: `Nouveau Message de Contact de ${name}`,
+    html: `
+      <h1>Nouveau Message de Contact</h1>
+      <p><strong>Nom:</strong> ${name}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <hr>
+      <h2>Message:</h2>
+      <p style="white-space: pre-wrap;">${message}</p>
+    `,
+  };
 
-    } catch (error: any) {
-        console.error("Error sending contact form to Supabase:", error);
-        return { success: false, error: error.message || "Impossible d'envoyer le message." };
-    }
+  try {
+    await transporter.sendMail(mailOptions);
+    return { success: true };
+  } catch (error: any) {
+    console.error("Error sending contact email:", error);
+    return { success: false, error: "Impossible d'envoyer l'e-mail. Veuillez vérifier la configuration SMTP." };
+  }
 }
 
-
+// --- Eligibility Form ---
 const eligibilityContactSchema = z.object({
   annualRevenue: z.string(),
   creditScore: z.string(),
@@ -57,11 +55,6 @@ const eligibilityContactSchema = z.object({
   confidenceScore: z.string(),
 });
 
-/**
- * Handles the eligibility contact form submission to Supabase.
- * @param formData - Raw form data from the client.
- * @returns An object indicating success or failure.
- */
 export async function submitEligibilityContact(formData: FormData) {
   const rawData = Object.fromEntries(formData.entries());
   
@@ -80,96 +73,74 @@ export async function submitEligibilityContact(formData: FormData) {
     return { success: false, error: `Données d'éligibilité invalides: ${errorMessages}` };
   }
 
+  const { annualRevenue, creditScore, yearsInBusiness, loanAmountRequested, reasonForLoan, eligibilityStatus, confidenceScore } = parsed.data;
+
+  const mailOptions = {
+    from: `"VylsCapital Site" <${process.env.SMTP_USER}>`,
+    to: process.env.RECIPIENT_EMAIL,
+    subject: `Nouvelle Demande de Contact (Éligibilité)`,
+    html: `
+      <h1>Nouvelle Demande de Contact (Éligibilité)</h1>
+      <h2>Détails du Prospect:</h2>
+      <ul>
+        <li><strong>Revenu Annuel:</strong> ${annualRevenue} €</li>
+        <li><strong>Score de Crédit:</strong> ${creditScore}</li>
+        <li><strong>Années d'activité:</strong> ${yearsInBusiness}</li>
+        <li><strong>Montant demandé:</strong> ${loanAmountRequested} €</li>
+        <li><strong>Raison:</strong> ${reasonForLoan}</li>
+      </ul>
+      <hr>
+      <h2>Résultats de l'IA:</h2>
+      <ul>
+        <li><strong>Statut d'éligibilité:</strong> ${eligibilityStatus}</li>
+        <li><strong>Score de confiance:</strong> ${confidenceScore}</li>
+      </ul>
+    `,
+  };
+
   try {
-    const { data, error } = await supabase
-      .from('eligibility_contacts')
-      .insert([
-        { 
-          annual_revenue: parsed.data.annualRevenue,
-          credit_score: parsed.data.creditScore,
-          years_in_business: parsed.data.yearsInBusiness,
-          loan_amount_requested: parsed.data.loanAmountRequested,
-          reason_for_loan: parsed.data.reasonForLoan,
-          eligibility_status: parsed.data.eligibilityStatus,
-          confidence_score: parsed.data.confidenceScore
-        }
-      ]);
-
-    if (error) {
-      throw error;
-    }
-
+    await transporter.sendMail(mailOptions);
     return { success: true };
   } catch (error: any) {
-    console.error("Error submitting eligibility contact to Supabase:", error);
-    return { success: false, error: error.message || "Impossible d'envoyer la demande de contact." };
+    console.error("Error sending eligibility email:", error);
+    return { success: false, error: "Impossible d'envoyer l'e-mail. Veuillez vérifier la configuration SMTP." };
   }
 }
 
-/**
- * Handles the full loan application submission, including file uploads to Supabase.
- * @param formData - Raw form data from the client, including files.
- * @returns An object indicating success or failure, with an application ID.
- */
+// --- Loan Application ---
 export async function handleLoanApplication(formData: FormData) {
   try {
-      const applicationId = `APP-${Date.now()}`;
-      const applicationData: {[key: string]: any} = {
-        application_id: applicationId,
-      };
+    const applicationId = `APP-${Date.now()}`;
+    let textContent = `<h1>Nouvelle Demande de Prêt - ${applicationId}</h1>`;
+    const attachments = [];
 
-      const fileUploadPromises = [];
-
-      // Helper to convert camelCase to snake_case
-      const toSnakeCase = (str: string) => str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
-
-      // Process form fields and files
-      for (const [key, value] of formData.entries()) {
-          if (value instanceof File && value.size > 0) {
-              const safeFileName = value.name.replace(/[^a-zA-Z0-9.\-]/g, '_');
-              const filePath = `${applicationId}/${key}-${safeFileName}`;
-              
-              // Add file upload promise to the array
-              fileUploadPromises.push(
-                supabase.storage
-                  .from('loan_documents')
-                  .upload(filePath, value)
-              );
-
-              // Store the path in the data to be inserted in the table
-              const snakeCaseKey = toSnakeCase(`${key}_url`);
-              applicationData[snakeCaseKey] = filePath;
-
-          } else if (typeof value === 'string') {
-              // Convert camelCase to snake_case for DB consistency
-              const snakeCaseKey = toSnakeCase(key);
-              applicationData[snakeCaseKey] = value;
-          }
+    // Process form fields and files
+    for (const [key, value] of formData.entries()) {
+      if (value instanceof File && value.size > 0) {
+        attachments.push({
+          filename: value.name,
+          content: Buffer.from(await value.arrayBuffer()),
+          contentType: value.type,
+        });
+      } else if (typeof value === 'string') {
+        textContent += `<p><strong>${key}:</strong> ${value}</p>`;
       }
-      
-      // Execute all file uploads in parallel
-      const uploadResults = await Promise.all(fileUploadPromises);
+    }
 
-      // Check for any upload errors
-      for (const result of uploadResults) {
-        if (result.error) {
-          throw new Error(`Erreur de téléversement de fichier: ${result.error.message}`);
-        }
-      }
+    const mailOptions = {
+      from: `"VylsCapital Site" <${process.env.SMTP_USER}>`,
+      to: process.env.RECIPIENT_EMAIL,
+      subject: `Nouvelle Demande de Prêt Complète: ${applicationId}`,
+      html: textContent,
+      attachments: attachments,
+    };
 
-      // Once all files are uploaded, insert the record into the database
-      const { data: dbData, error: dbError } = await supabase
-        .from('loan_applications')
-        .insert([applicationData]);
-
-      if (dbError) {
-        throw dbError;
-      }
-
-      return { success: true, applicationId };
+    await transporter.sendMail(mailOptions);
+    
+    return { success: true, applicationId };
 
   } catch (error: any) {
-      console.error("Error processing loan application with Supabase:", error);
-      return { success: false, error: error.message || "La soumission a échoué. Veuillez réessayer." };
+    console.error("Error sending loan application email:", error);
+    return { success: false, error: "La soumission a échoué. Veuillez réessayer. Détails: " + error.message };
   }
 }

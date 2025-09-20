@@ -5,6 +5,9 @@ runConfig:
   memoryMiB: 512
   timeoutSeconds: 120
   environment:
-    NEXT_PUBLIC_SUPABASE_URL: "https://tizfraiulcpowyenluhg.supabase.co"
-    NEXT_PUBLIC_SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRpemZyYWl1bGNwb3d5ZW5sdWhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NTM3NzEsImV4cCI6MjA3MzUyOTc3MX0.zFl3uA2KrmJPUGDuQKBkDWYgIpE2KgxC-ZNoDhMnfYk"
+    SMTP_HOST: ""
+    SMTP_PORT: ""
+    SMTP_USER: ""
+    SMTP_PASS: ""
+    RECIPIENT_EMAIL: ""
 
