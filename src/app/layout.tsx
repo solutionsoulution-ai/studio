@@ -24,11 +24,6 @@ export default function RootLayout({
       <body className="font-body antialiased">
         {children}
         <Toaster />
-        <div className="gtranslate_wrapper"></div>
-        <Script id="gtranslate-settings">
-          {`window.gtranslateSettings = {"default_language":"fr","native_language_names":true,"languages":["fr","it","es","de","en","pt"],"wrapper_selector":".gtranslate_wrapper","switcher_horizontal_position":"right"}`}
-        </Script>
-        <Script src="https://cdn.gtranslate.net/widgets/latest/float.js" strategy="afterInteractive" />
       </body>
     </html>
   );
