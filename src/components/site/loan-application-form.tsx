@@ -7,19 +7,20 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Send, FileText, User, Banknote, UploadCloud, Calculator, Wallet } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Send, FileText, User, Banknote, UploadCloud, Wallet } from "lucide-react";
 
 const FIXED_INTEREST_RATE = 2;
 
 export default function LoanApplicationForm() {
-  const router = useRouter();
   const [loanAmount, setLoanAmount] = useState<number>(0);
   const [loanTerm, setLoanTerm] = useState<number>(0);
 
   const handleSubmit = (e: React.FormEvent) => {
+    // This is a static site, so we prevent the default form submission.
+    // The form validation is handled by the browser's `required` attribute.
+    // In WordPress, a plugin will handle the submission logic.
     e.preventDefault();
-    router.push('/demande-de-pret/merci');
+    alert("Dans un site fonctionnel, le formulaire serait envoyé. Pour cette maquette statique, l'envoi est désactivé.");
   };
 
   const monthlyPayment = useMemo(() => {
@@ -124,9 +125,9 @@ export default function LoanApplicationForm() {
             <div>
               <Label>Date de naissance</Label>
               <div className="grid grid-cols-3 gap-2">
-                <div><Input type="number" placeholder="Jour" required /></div>
-                <div><Input type="number" placeholder="Mois" required /></div>
-                <div><Input type="number" placeholder="Année" required /></div>
+                <div><Input type="number" placeholder="Jour" required min="1" max="31" /></div>
+                <div><Input type="number" placeholder="Mois" required min="1" max="12" /></div>
+                <div><Input type="number" placeholder="Année" required min="1900" max={new Date().getFullYear() - 18} /></div>
               </div>
             </div>
             <div><Label>Adresse</Label><Input placeholder="123 rue de Paris" required /></div>
@@ -148,7 +149,7 @@ export default function LoanApplicationForm() {
                     </SelectContent>
                 </Select>
               </div>
-              <div><Label>Nombre d'enfants</Label><Input type="number" placeholder="0" required /></div>
+              <div><Label>Nombre d'enfants</Label><Input type="number" placeholder="0" required min="0" /></div>
             </div>
           </CardContent>
         </Card>
@@ -162,8 +163,8 @@ export default function LoanApplicationForm() {
           <CardContent className="space-y-4">
             <div><Label>Profession</Label><Input placeholder="Développeur, médecin, etc." required /></div>
             <div className="grid sm:grid-cols-2 gap-4">
-              <div><Label>Revenu Mensuel Net (€)</Label><Input type="number" placeholder="3000" required /></div>
-              <div><Label>Charges Mensuelles (€)</Label><Input type="number" placeholder="1200" required /></div>
+              <div><Label>Revenu Mensuel Net (€)</Label><Input type="number" placeholder="3000" required min="0"/></div>
+              <div><Label>Charges Mensuelles (€)</Label><Input type="number" placeholder="1200" required min="0"/></div>
             </div>
           </CardContent>
         </Card>
@@ -177,15 +178,15 @@ export default function LoanApplicationForm() {
           <CardContent className="space-y-4">
             <div>
               <Label>Pièce d'identité (PDF, JPG, PNG)</Label>
-              <Input type="file" required />
+              <Input type="file" required accept=".pdf,.jpg,.jpeg,.png"/>
             </div>
             <div>
               <Label>Justificatif de domicile de moins de 3 mois</Label>
-              <Input type="file" required />
+              <Input type="file" required accept=".pdf,.jpg,.jpeg,.png"/>
             </div>
             <div>
               <Label>Justificatif de revenus (3 derniers bulletins)</Label>
-              <Input type="file" required />
+              <Input type="file" required accept=".pdf,.jpg,.jpeg,.png"/>
             </div>
           </CardContent>
         </Card>

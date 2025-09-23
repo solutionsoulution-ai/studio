@@ -7,14 +7,15 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { Send } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 export default function ContactForm() {
-  const router = useRouter();
   
   const handleSubmit = (e: React.FormEvent) => {
+    // This is a static site, so we prevent the default form submission.
+    // The form validation is handled by the browser's `required` attribute.
+    // In WordPress, a plugin will handle the submission logic.
     e.preventDefault();
-    router.push('/contact/merci');
+    alert("Dans un site fonctionnel, le formulaire serait envoyé. Pour cette maquette statique, l'envoi est désactivé.");
   };
 
   return (
