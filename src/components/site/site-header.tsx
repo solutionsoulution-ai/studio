@@ -75,12 +75,6 @@ export default function SiteHeader() {
           ))}
         </nav>
         <div className="flex flex-1 items-center justify-end space-x-2 md:flex-none lg:flex-1 lg:justify-end">
-          <Button asChild variant="outline">
-            <Link href="/login">
-              <UserSquare className="mr-2 h-4 w-4" />
-              Espace Client
-            </Link>
-          </Button>
           <Button asChild>
             <Link href="/demande-de-pret">Faire une demande</Link>
           </Button>
@@ -110,9 +104,6 @@ export default function SiteHeader() {
                    <Link href="/demande-de-pret" className="text-lg font-medium transition-colors hover:text-primary" onClick={closeMobileMenu}>
                       Faire une demande
                     </Link>
-                   <Link href="/login" className="text-lg font-medium transition-colors hover:text-primary" onClick={closeMobileMenu}>
-                      Espace Client
-                    </Link>
                   <p className="text-sm font-semibold text-muted-foreground pt-4">Menu</p>
                   {mainNavLinks.map(({ href, label }) => (
                      <Link
@@ -133,4 +124,3 @@ export default function SiteHeader() {
     </header>
   );
 }
-
