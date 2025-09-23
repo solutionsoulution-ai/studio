@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import * as React from "react";
@@ -64,10 +65,10 @@ export default function HomeCarousel() {
         <CarouselContent>
           {carouselItems.map((item, index) => (
             <CarouselItem key={index}>
-              <div className="container mx-auto">
+              <div className="container mx-auto px-4">
                 <div className="grid md:grid-cols-2 items-center gap-8 py-12 md:py-24 min-h-[70dvh] md:min-h-[60dvh]">
                   <div className="flex flex-col items-start text-center md:text-left">
-                    <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl font-headline">
+                    <h1 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl font-headline">
                       {item.title}
                     </h1>
                     <p className="mt-4 max-w-2xl text-lg text-muted-foreground mx-auto md:mx-0">

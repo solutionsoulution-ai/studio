@@ -8,12 +8,12 @@ export default function ContactPage() {
   return (
     <div className="flex flex-col min-h-dvh bg-background">
       <SiteHeader />
-      <main className="flex-1 container mx-auto py-16 md:py-24">
+      <main className="flex-1 container mx-auto py-12 md:py-24 px-4">
         <div className="mx-auto max-w-5xl">
           <div className="text-center mb-10">
               <div className="flex items-center gap-3 justify-center">
                   <Mail className="w-8 h-8 text-primary" />
-                  <h1 className="text-4xl font-bold tracking-tight font-headline">Contactez-nous</h1>
+                  <h1 className="text-3xl md:text-4xl font-bold tracking-tight font-headline">Contactez-nous</h1>
               </div>
               <p className="mt-4 text-lg text-muted-foreground">
                 Une question ? Une demande spécifique ? Notre équipe est à votre écoute.

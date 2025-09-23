@@ -1,24 +1,20 @@
 
+
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { Send } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function ContactForm() {
+  const router = useRouter();
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert("Dans un vrai site, ce formulaire enverrait des données.");
+    router.push('/contact/merci');
   };
 
   return (
@@ -28,16 +24,16 @@ export default function ContactForm() {
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="name">Nom Complet</Label>
-                <Input id="name" placeholder="Jean Dupont" />
+                <Input id="name" placeholder="Jean Dupont" required />
               </div>
               <div>
                 <Label htmlFor="email">Adresse E-mail</Label>
-                <Input id="email" type="email" placeholder="vous@exemple.com" />
+                <Input id="email" type="email" placeholder="vous@exemple.com" required />
               </div>
             </div>
             <div>
               <Label htmlFor="message">Votre Message</Label>
-              <Textarea id="message" rows={5} placeholder="Comment pouvons-nous vous aider aujourd'hui ?" />
+              <Textarea id="message" rows={5} placeholder="Comment pouvons-nous vous aider aujourd'hui ?" required />
             </div>
             <Button type="submit" size="lg" className="w-full">
               <Send />
@@ -49,7 +45,4 @@ export default function ContactForm() {
   );
 }
 
-// Minimal hook form setup to satisfy component dependencies without functionality
-import { useForm } from "react-hook-form";
-const useFormHook = useForm;
-const Label = (props: any) => <label {...props} />;
+const Label = (props: any) => <label {...props} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block" />;

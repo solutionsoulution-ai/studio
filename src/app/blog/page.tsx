@@ -1,4 +1,5 @@
 
+
 import SiteHeader from "@/components/site/site-header";
 import SiteFooter from "@/components/site/site-footer";
 import { blogPosts, type BlogPost } from "@/data/blog-posts";
@@ -19,11 +20,11 @@ export default function BlogPage() {
     <div className="flex flex-col min-h-dvh bg-background">
       <SiteHeader />
       <main className="flex-1">
-        <section className="container mx-auto py-16 md:py-24">
+        <section className="container mx-auto py-16 md:py-24 px-4">
            <div className="text-center mb-16">
               <div className="flex items-center gap-3 justify-center">
                   <BookOpen className="w-8 h-8 text-primary" />
-                  <h1 className="text-4xl font-bold tracking-tight font-headline">Notre Blog</h1>
+                  <h1 className="text-3xl md:text-4xl font-bold tracking-tight font-headline">Notre Blog</h1>
               </div>
               <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
                 Nos experts partagent leurs analyses et conseils pour vous aider à naviguer dans le monde du financement.

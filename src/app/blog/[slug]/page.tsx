@@ -1,4 +1,5 @@
 
+
 import { blogPosts } from "@/data/blog-posts";
 import { notFound } from "next/navigation";
 import SiteHeader from "@/components/site/site-header";
@@ -58,7 +59,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
       <SiteHeader />
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative h-96 bg-muted/30">
+        <section className="relative h-80 md:h-96 bg-muted/30">
             <Image
                 src={post.imageUrl}
                 alt={post.imageAlt}
@@ -68,9 +69,9 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                 priority
             />
             <div className="absolute inset-0 bg-black/60" />
-            <div className="relative container mx-auto h-full flex flex-col justify-center items-center text-center text-white">
+            <div className="relative container mx-auto h-full flex flex-col justify-center items-center text-center text-white px-4">
                 <h1 className="text-3xl md:text-5xl font-bold font-headline max-w-4xl">{post.title}</h1>
-                <div className="mt-6 flex items-center gap-6 text-sm">
+                <div className="mt-6 flex flex-col sm:flex-row items-center gap-4 sm:gap-6 text-sm">
                     <div className="flex items-center gap-2">
                         <Calendar className="w-4 h-4" />
                         <span>{post.date}</span>
@@ -84,7 +85,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         </section>
 
         {/* Article Content */}
-        <section className="container mx-auto py-16 md:py-24">
+        <section className="container mx-auto py-12 md:py-24 px-4">
             <div className="grid lg:grid-cols-4 gap-12">
                 <article className="lg:col-span-3 prose lg:prose-lg max-w-none prose-headings:text-primary prose-p:text-muted-foreground prose-strong:text-foreground prose-ul:space-y-2 prose-li:text-muted-foreground prose-blockquote:border-primary prose-blockquote:text-muted-foreground prose-blockquote:bg-primary/5 prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded-r-lg">
                     <div className="space-y-6">
@@ -159,7 +160,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
 
         {/* Comments Section */}
         <section className="bg-muted/30 py-16 md:py-24">
-            <div className="container mx-auto max-w-4xl">
+            <div className="container mx-auto max-w-4xl px-4">
                  <div className="text-center mb-12">
                     <div className="flex items-center gap-3 justify-center">
                         <MessageSquare className="w-8 h-8 text-primary" />
@@ -177,9 +178,9 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                                         <AvatarFallback>{comment.name.charAt(0)}</AvatarFallback>
                                     </Avatar>
                                     <div className="flex-1">
-                                        <div className="flex justify-between items-center">
+                                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
                                             <p className="font-semibold">{comment.name}</p>
-                                             <div className="flex items-center gap-0.5">
+                                             <div className="flex items-center gap-0.5 mt-2 sm:mt-0">
                                                 {Array.from({ length: 5 }).map((_, i) => (
                                                     <Star key={i} className={`w-4 h-4 ${i < comment.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`} />
                                                 ))}
