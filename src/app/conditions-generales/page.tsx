@@ -6,7 +6,7 @@ export default function ConditionsGeneralesPage() {
     <div className="flex flex-col min-h-dvh bg-background">
       <SiteHeader />
       <main className="flex-1 container mx-auto py-16 md:py-24">
-        <div className="prose lg:prose-xl mx-auto space-y-6">
+        <div className="prose-content lg:prose-xl mx-auto space-y-6">
           <h1>Conditions Générales d'Utilisation</h1>
           <p>Dernière mise à jour : {new Date().toLocaleDateString('fr-FR')}</p>
 

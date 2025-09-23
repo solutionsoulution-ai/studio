@@ -87,7 +87,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         {/* Article Content */}
         <section className="container mx-auto py-12 md:py-24 px-4">
             <div className="grid lg:grid-cols-4 gap-12">
-                <article className="lg:col-span-3 prose lg:prose-lg max-w-none prose-headings:text-primary prose-p:text-muted-foreground prose-strong:text-foreground prose-ul:space-y-2 prose-li:text-muted-foreground prose-blockquote:border-primary prose-blockquote:text-muted-foreground prose-blockquote:bg-primary/5 prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded-r-lg">
+                <article className="lg:col-span-3 prose-content lg:prose-lg max-w-none">
                     <div className="space-y-6">
                          <h2>Introduction</h2>
                         <p>
