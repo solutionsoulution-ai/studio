@@ -20,7 +20,6 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Loader2, Send, FileText, User, Banknote, UploadCloud, Calculator } from "lucide-react";
-import { handleLoanApplication } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 
 
@@ -29,6 +28,7 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024;
 // Types de fichiers autorisés
 const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "application/pdf"];
 
+// We keep the validation for a good user experience, but we won't submit the files.
 const fileSchema = z
   .any()
   .refine((files) => files?.[0], "Ce document est requis.")
@@ -142,32 +142,16 @@ export default function LoanApplicationForm() {
   async function onSubmit(data: LoanApplicationFormValues) {
       setIsLoading(true);
 
-      const formData = new FormData();
-
-      // Append all form data to FormData object
-      for (const key in data) {
-        const valueKey = key as keyof LoanApplicationFormValues;
-        const value = data[valueKey];
-
-        if (value instanceof FileList && value.length > 0) {
-            formData.append(valueKey, value[0]);
-        } else if (value !== undefined && value !== null && !(value instanceof FileList)) {
-            formData.append(String(key), String(value));
-        }
-      }
+      // Simulate network request for static site
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
-      const result = await handleLoanApplication(formData);
       setIsLoading(false);
       
-      if (result.success) {
-          router.push(`/demande-de-pret/merci`);
-      } else {
-           toast({
-            title: "La soumission a échoué",
-            description: result.error || "Une erreur inattendue est survenue.",
-            variant: "destructive",
-          });
-      }
+      toast({
+        title: "Démonstration de la soumission",
+        description: "Votre demande a été simulée avec succès.",
+      });
+      router.push(`/demande-de-pret/merci`);
   }
 
   return (

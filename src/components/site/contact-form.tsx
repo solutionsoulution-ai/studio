@@ -17,7 +17,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { Send, Loader2 } from "lucide-react";
-import { handleContactForm } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -46,22 +45,15 @@ export default function ContactForm() {
 
   async function onSubmit(data: FormValues) {
     setIsLoading(true);
-    const result = await handleContactForm(data);
+    // Simulate a network request
+    await new Promise(resolve => setTimeout(resolve, 1500));
     setIsLoading(false);
 
-    if (result.success) {
-      toast({
-        title: "Message Envoyé !",
-        description: "Merci de nous avoir contactés. Nous reviendrons vers vous bientôt.",
-      });
-      router.push("/contact/merci");
-    } else {
-      toast({
-        title: "Erreur",
-        description: result.error || "L'envoi du message a échoué.",
-        variant: "destructive",
-      });
-    }
+    toast({
+      title: "Démonstration",
+      description: "Dans une vraie application, ce formulaire enverrait un message.",
+    });
+    router.push("/contact/merci");
   }
 
 

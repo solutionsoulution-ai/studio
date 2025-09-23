@@ -74,9 +74,6 @@ export default function SiteHeader() {
           ))}
         </nav>
         <div className="flex flex-1 items-center justify-end space-x-2 md:flex-none lg:flex-1 lg:justify-end">
-          <Button variant="outline" asChild>
-            <Link href="/login">Espace Client</Link>
-          </Button>
           <Button asChild>
             <Link href="/demande-de-pret">Faire une demande</Link>
           </Button>
@@ -103,9 +100,6 @@ export default function SiteHeader() {
                   </SheetTrigger>
                 </div>
                 <nav className="flex flex-col space-y-4 p-4">
-                   <Link href="/login" className="text-lg font-medium transition-colors hover:text-primary" onClick={closeMobileMenu}>
-                      Espace Client
-                    </Link>
                    <Link href="/demande-de-pret" className="text-lg font-medium transition-colors hover:text-primary" onClick={closeMobileMenu}>
                       Faire une demande
                     </Link>

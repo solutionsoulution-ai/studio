@@ -5,18 +5,15 @@ const faviconSvg = "data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg'
 
 const nextConfig: NextConfig = {
   /* config options here */
+  output: 'export',
   typescript: {
     ignoreBuildErrors: true,
   },
   eslint: {
     ignoreDuringBuilds: true,
   },
-  experimental: {
-    serverActions: {
-      bodySizeLimit: '4.5mb',
-    },
-  },
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
