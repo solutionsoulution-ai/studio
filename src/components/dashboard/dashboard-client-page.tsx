@@ -72,10 +72,9 @@ const TransactionDetailDialog = ({ transaction, open, onOpenChange }: { transact
         }
     };
     
-    const formatDate = (timestamp: any) => {
+    const formatDate = (timestamp: string) => {
         if (!timestamp) return 'N/A';
-        const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-        return date.toLocaleString('fr-FR');
+        return new Date(timestamp).toLocaleString('fr-FR');
     }
 
     return (
@@ -191,9 +190,9 @@ export default function DashboardClientPage() {
         
         fetchAccountData(clientId);
 
-        const intervalId = setInterval(() => fetchAccountData(clientId), 5000); 
-
-        return () => clearInterval(intervalId); 
+        // No interval needed for mock data
+        // const intervalId = setInterval(() => fetchAccountData(clientId), 5000); 
+        // return () => clearInterval(intervalId); 
     }, [fetchAccountData, router, toast]);
 
     const handleTransferSubmit = async (transferData: TransferFormInput): Promise<{success: boolean}> => {
@@ -205,7 +204,7 @@ export default function DashboardClientPage() {
         });
 
         if (result.success) {
-            fetchAccountData(accountData.id);
+            fetchAccountData(accountData.id); // Refresh data after transfer
         } else {
              toast({ title: "Erreur de virement", description: result.error, variant: "destructive"});
         }
@@ -456,5 +455,3 @@ export default function DashboardClientPage() {
     </div>
   );
 }
-
-    

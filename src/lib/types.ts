@@ -35,5 +35,3 @@ export interface ClientProfile {
     role: UserRole;
     transactions?: Transaction[];
 }
-
-    

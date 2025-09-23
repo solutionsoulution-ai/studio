@@ -6,25 +6,7 @@ import { z } from 'zod';
 import { type TransferFormInput, transferFormSchema } from '@/lib/schemas';
 import { revalidatePath } from 'next/cache';
 import { type ClientProfile, type Transaction, type UserRole } from '@/lib/types';
-import { supabase } from '@/lib/supabase-client';
-
-// --- HELPERS ---
-const randomDigits = (length: number) => Array.from({ length }, () => Math.floor(Math.random() * 10)).join('');
-
-function generateIBAN(countryCode = 'FR') {
-    const countryPart = '76';
-    const bankCode = randomDigits(5);
-    const branchCode = randomDigits(5);
-    const accountNumber = randomDigits(11);
-    const nationalCheckDigits = randomDigits(2);
-    return `${countryCode}${countryPart}${bankCode}${branchCode}${accountNumber}${nationalCheckDigits}`;
-}
-
-function generateBIC() {
-    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const randomLetters = (length: number) => Array.from({ length }, () => letters.charAt(Math.floor(Math.random() * letters.length))).join('');
-    return `${randomLetters(4)}FR${randomLetters(2)}XXX`;
-}
+import { MOCK_DB } from '@/data/mock-db';
 
 // --- VALIDATION SCHEMAS ---
 const loginSchema = z.object({
@@ -32,83 +14,82 @@ const loginSchema = z.object({
   password: z.string(),
 });
 
-
 // --- SERVER ACTIONS ---
 
 export async function verifyClientLoginAction(credentials: z.infer<typeof loginSchema>): Promise<{ success: boolean; clientId?: string; role?: UserRole, error?: string }> {
-  if (!supabase) return { success: false, error: "Database not configured." };
-  
   const parsed = loginSchema.safeParse(credentials);
   if (!parsed.success) {
     return { success: false, error: 'Données invalides.' };
   }
 
-  const { data: client, error } = await supabase
-    .from('profiles')
-    .select('id, password, role')
-    .eq('email', parsed.data.email)
-    .single();
+  const client = MOCK_DB.profiles.find(p => p.email === parsed.data.email);
 
-  if (error || !client || client.password !== parsed.data.password) {
+  if (!client) {
     return { success: false, error: 'Email ou mot de passe incorrect.' };
+  }
+  
+  // For admin, check password against env variable. For clients, simulate success.
+  if (client.role === 'admin') {
+      if (parsed.data.password !== process.env.ADMIN_PASSWORD) {
+          return { success: false, error: 'Email ou mot de passe incorrect.' };
+      }
+  } else {
+      if (client.password !== parsed.data.password) {
+          return { success: false, error: 'Email ou mot de passe incorrect.' };
+      }
   }
   
   return { success: true, clientId: client.id, role: client.role as UserRole };
 }
 
-
 export async function getClientByIdAction(clientId: string): Promise<{ success: boolean; client?: Omit<ClientProfile, 'password'>; error?: string }> {
-    if (!supabase) return { success: false, error: "Database not configured." };
     if (!clientId) {
         return { success: false, error: "ID client non fourni." };
     }
 
-    const { data: client, error: clientError } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', clientId)
-        .single();
+    const client = MOCK_DB.profiles.find(p => p.id === clientId);
     
-    if (clientError || !client) {
+    if (!client) {
         return { success: false, error: "Client non trouvé." };
     }
     
-    const { data: clientTransactions, error: txError } = await supabase
-        .from('transactions')
-        .select('*')
-        .eq('profile_id', clientId);
+    const clientTransactions = MOCK_DB.transactions.filter(tx => tx.profile_id === clientId);
         
-    if (txError) {
-        return { success: false, error: "Erreur lors de la récupération des transactions." };
-    }
-    
     const now = new Date();
     let clientBalance = client.balance;
-    const transactionsToUpdate = [];
+    const transactionsToUpdate: Transaction[] = [];
 
     const updatedTransactions = clientTransactions.map(tx => {
-        if (tx.status === 'PENDING' && tx.estimatedCompletionDate) {
-            const completionDate = new Date(tx.estimatedCompletionDate);
+        const txCopy = {...tx};
+        if (txCopy.status === 'PENDING' && txCopy.estimatedCompletionDate) {
+            const completionDate = new Date(txCopy.estimatedCompletionDate);
             if (now >= completionDate) {
                 if (client.is_transfer_blocked) {
-                    tx.status = 'FAILED';
+                    txCopy.status = 'FAILED';
                 } else {
-                     if (clientBalance >= Math.abs(tx.amount)) {
-                        clientBalance += tx.amount;
-                        tx.status = 'COMPLETED';
+                     if (clientBalance >= Math.abs(txCopy.amount)) {
+                        clientBalance += txCopy.amount;
+                        txCopy.status = 'COMPLETED';
                     } else {
-                        tx.status = 'FAILED';
+                        txCopy.status = 'FAILED';
                     }
                 }
-                transactionsToUpdate.push(supabase.from('transactions').update({ status: tx.status }).eq('id', tx.id));
+                transactionsToUpdate.push(txCopy);
             }
         }
-        return tx;
+        return txCopy;
     });
 
     if (transactionsToUpdate.length > 0) {
-        await Promise.all(transactionsToUpdate);
-        await supabase.from('profiles').update({ balance: clientBalance }).eq('id', client.id);
+        // In a real scenario, we would update the DB. Here we just update the in-memory mock data.
+        MOCK_DB.transactions = MOCK_DB.transactions.map(tx => {
+            const updated = transactionsToUpdate.find(utx => utx.id === tx.id);
+            return updated || tx;
+        });
+        const profileIndex = MOCK_DB.profiles.findIndex(p => p.id === client.id);
+        if (profileIndex > -1) {
+            MOCK_DB.profiles[profileIndex].balance = clientBalance;
+        }
         client.balance = clientBalance;
     }
     
@@ -119,15 +100,9 @@ export async function getClientByIdAction(clientId: string): Promise<{ success: 
 }
 
 export async function createTransferAction(transferDetails: TransferFormInput & { clientId: string }): Promise<{ success: boolean; error?: string }> {
-    if (!supabase) return { success: false, error: "Database not configured." };
-    
-    const { data: client, error: clientError } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', transferDetails.clientId)
-        .single();
+    const client = MOCK_DB.profiles.find(p => p.id === transferDetails.clientId);
 
-    if (clientError || !client) {
+    if (!client) {
         return { success: false, error: "Client non trouvé." };
     }
     
@@ -152,7 +127,8 @@ export async function createTransferAction(transferDetails: TransferFormInput & 
     if (processingTime.hours) completionDate.setHours(completionDate.getHours() + processingTime.hours);
     if (processingTime.minutes) completionDate.setMinutes(completionDate.getMinutes() + processingTime.minutes);
 
-    const newTransaction: Omit<Transaction, 'id' | 'created_at'> & {id?:string, created_at?: string} = {
+    const newTransaction: Transaction = {
+        id: `tx_${Date.now()}_${Math.random()}`,
         profile_id: transferDetails.clientId,
         amount: -parsed.data.amount,
         reason: parsed.data.reason,
@@ -160,37 +136,25 @@ export async function createTransferAction(transferDetails: TransferFormInput & 
         recipient_name: parsed.data.recipientName,
         recipient_bank_name: parsed.data.recipientBankName,
         recipient_bic: parsed.data.recipientBic,
+        created_at: creationDate.toISOString(),
         status: 'PENDING',
         estimatedCompletionDate: completionDate.toISOString(),
     };
 
-    const { error: insertError } = await supabase.from('transactions').insert([newTransaction]);
+    MOCK_DB.transactions.push(newTransaction);
     
-    if(insertError) {
-        return { success: false, error: "Erreur lors de la création du virement." };
-    }
-
     revalidatePath('/dashboard');
     return { success: true };
 }
 
-
 export async function getClientsAction(): Promise<{ success: boolean; clients?: Omit<ClientProfile, 'password'>[]; error?: string }> {
-    if (!supabase) return { success: false, error: "Database not configured." };
     try {
-        const { data: profiles, error: profilesError } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('role', 'client'); // On ne récupère que les clients
-            
-        if (profilesError) throw profilesError;
+        const profiles = MOCK_DB.profiles.filter(p => p.role === 'client');
+        const transactions = MOCK_DB.transactions;
 
-        const { data: transactions, error: transactionsError } = await supabase.from('transactions').select('*');
-        if (transactionsError) throw transactionsError;
-
-        const clientsWithTransactions = (profiles || []).map(p => {
+        const clientsWithTransactions = profiles.map(p => {
             const { password, ...client } = p;
-            client.transactions = (transactions || []).filter(tx => tx.profile_id === client.id);
+            client.transactions = transactions.filter(tx => tx.profile_id === client.id);
             return client;
         });
 
@@ -201,18 +165,13 @@ export async function getClientsAction(): Promise<{ success: boolean; clients?: 
 }
 
 export async function deleteClientAction(clientId: string): Promise<{ success: boolean; error?: string }> {
-    if (!supabase) return { success: false, error: "Database not configured." };
     if (!clientId) {
         return { success: false, error: "ID client non fourni." };
     }
     
     try {
-        const { error: txError } = await supabase.from('transactions').delete().eq('profile_id', clientId);
-        if (txError) throw new Error(`Erreur lors de la suppression des transactions: ${txError.message}`);
-
-        const { error: profileError } = await supabase.from('profiles').delete().eq('id', clientId);
-        if (profileError) throw new Error(`Erreur lors de la suppression du client: ${profileError.message}`);
-
+        MOCK_DB.transactions = MOCK_DB.transactions.filter(tx => tx.profile_id !== clientId);
+        MOCK_DB.profiles = MOCK_DB.profiles.filter(p => p.id !== clientId);
     } catch(error: any) {
          return { success: false, error: "Erreur de suppression: " + error.message };
     }
@@ -227,66 +186,59 @@ const createClientSchema = z.object({
     initialBalance: z.coerce.number().min(0, "Le solde initial ne peut pas être négatif."),
 }).passthrough();
 
+const randomDigits = (length: number) => Array.from({ length }, () => Math.floor(Math.random() * 10)).join('');
+function generateIBAN(countryCode = 'FR') {
+    const countryPart = '76';
+    const bankCode = randomDigits(5);
+    const branchCode = randomDigits(5);
+    const accountNumber = randomDigits(11);
+    const nationalCheckDigits = randomDigits(2);
+    return `${countryCode}${countryPart}${bankCode}${branchCode}${accountNumber}${nationalCheckDigits}`;
+}
+
 export async function createClientAction(clientData: any): Promise<{ success: boolean; clientId?: string; error?: string }> {
-    if (!supabase) return { success: false, error: "Database not configured." };
-    
     const parsed = createClientSchema.safeParse(clientData);
     if (!parsed.success) {
         const issues = parsed.error.issues.map(i => i.message).join(', ');
         return { success: false, error: `Données invalides: ${issues}` };
     }
 
-    const { data: existingClient, error: findError } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('email', parsed.data.email)
-        .single();
-    
-    if (findError && findError.code !== 'PGRST116') { // PGRST116: row not found, which is good
-        return { success: false, error: "Erreur lors de la vérification de l'e-mail." };
-    }
+    const existingClient = MOCK_DB.profiles.find(p => p.email === parsed.data.email);
     if (existingClient) {
         return { success: false, error: "Un client avec cet e-mail existe déjà." };
     }
     
-    const newClient: Omit<ClientProfile, 'id' | 'created_at'> = {
+    const newClientId = `user_${Date.now()}`;
+    const newClient: ClientProfile = {
+        id: newClientId,
         client_id: `VYL-${randomDigits(3)}-${randomDigits(3)}`,
         email: parsed.data.email,
         password: parsed.data.password,
         balance: parsed.data.initialBalance,
+        created_at: new Date().toISOString(),
         account_number: generateIBAN(),
         iban: generateIBAN(),
-        bic: generateBIC(),
+        bic: `${randomDigits(4)}FR${randomDigits(2)}XXX`,
         is_transfer_blocked: false,
         transfer_block_reason: null,
         transfer_processing_time: { minutes: 1 },
         role: 'client',
     };
     
-    const { data: insertedClient, error: insertClientError } = await supabase
-        .from('profiles')
-        .insert([newClient])
-        .select('id')
-        .single();
-    
-    if (insertClientError || !insertedClient) {
-         return { success: false, error: "Erreur lors de la création du client." };
-    }
-
-    const newClientId = insertedClient.id;
+    MOCK_DB.profiles.push(newClient);
     
     if (newClient.balance > 0) {
-        const { error: txError } = await supabase.from('transactions').insert({
+        const initialTx: Transaction = {
+             id: `tx_${Date.now()}`,
              profile_id: newClientId,
              amount: newClient.balance,
              reason: "Dépôt initial",
              status: 'COMPLETED' as const,
              recipient_iban: null,
-             recipient_name: null
-        });
-        if (txError) {
-             console.error("Error creating initial transaction:", txError.message);
-        }
+             recipient_name: null,
+             created_at: new Date().toISOString(),
+        };
+        MOCK_DB.transactions.push(initialTx);
     }
     
     revalidatePath('/admin');
@@ -301,7 +253,6 @@ const adjustBalanceSchema = z.object({
 });
 
 export async function adjustClientBalanceAction(adjustmentData: z.infer<typeof adjustBalanceSchema>): Promise<{ success: boolean; error?: string }> {
-    if (!supabase) return { success: false, error: "Database not configured." };
     const parsed = adjustBalanceSchema.safeParse(adjustmentData);
     if (!parsed.success) {
         return { success: false, error: 'Données invalides' };
@@ -310,26 +261,28 @@ export async function adjustClientBalanceAction(adjustmentData: z.infer<typeof a
     const { clientId, amount, reason, type } = parsed.data;
     const transactionAmount = type === 'credit' ? Math.abs(amount) : -Math.abs(amount);
 
-    const { data: client, error: clientError } = await supabase.from('profiles').select('balance').eq('id', clientId).single();
-    if (clientError || !client) return { success: false, error: 'Client non trouvé' };
-
+    const clientIndex = MOCK_DB.profiles.findIndex(p => p.id === clientId);
+    if (clientIndex === -1) return { success: false, error: 'Client non trouvé' };
+    
+    const client = MOCK_DB.profiles[clientIndex];
     const newBalance = client.balance + transactionAmount;
     if (newBalance < 0) {
          return { success: false, error: "Solde insuffisant pour ce débit." };
     }
 
-    const { error: updateError } = await supabase.from('profiles').update({ balance: newBalance }).eq('id', clientId);
-    if (updateError) return { success: false, error: "Erreur lors de la mise à jour du solde." };
+    MOCK_DB.profiles[clientIndex].balance = newBalance;
 
-    const { error: txError } = await supabase.from('transactions').insert({
+    const newTx: Transaction = {
+        id: `tx_${Date.now()}`,
         profile_id: clientId,
         amount: transactionAmount,
         reason: reason,
         recipient_name: "Opération Manuelle Admin",
         status: 'COMPLETED' as const,
+        created_at: new Date().toISOString(),
         recipient_iban: null,
-    });
-    if (txError) return { success: false, error: "Erreur lors de la création de la transaction." };
+    };
+    MOCK_DB.transactions.push(newTx);
 
     revalidatePath('/admin');
     revalidatePath('/dashboard');
@@ -343,18 +296,16 @@ const blockSettingsSchema = z.object({
 });
 
 export async function updateClientBlockSettingsAction(settingsData: z.infer<typeof blockSettingsSchema>): Promise<{ success: boolean; error?: string }> {
-    if (!supabase) return { success: false, error: "Database not configured." };
     const parsed = blockSettingsSchema.safeParse(settingsData);
     if (!parsed.success) return { success: false, error: 'Données invalides' };
     
     const { clientId, is_transfer_blocked, transfer_block_reason } = parsed.data;
     
-    const { error } = await supabase.from('profiles').update({ 
-        is_transfer_blocked, 
-        transfer_block_reason: is_transfer_blocked ? transfer_block_reason : null 
-    }).eq('id', clientId);
+    const clientIndex = MOCK_DB.profiles.findIndex(p => p.id === clientId);
+    if (clientIndex === -1) return { success: false, error: 'Client non trouvé' };
 
-    if (error) return { success: false, error: "Erreur de mise à jour." };
+    MOCK_DB.profiles[clientIndex].is_transfer_blocked = is_transfer_blocked;
+    MOCK_DB.profiles[clientIndex].transfer_block_reason = is_transfer_blocked ? transfer_block_reason : null;
 
     revalidatePath('/admin');
     revalidatePath('/dashboard');
@@ -368,7 +319,6 @@ const transferSettingsSchema = z.object({
 });
 
 export async function updateClientTransferSettingsAction(settingsData: z.infer<typeof transferSettingsSchema>): Promise<{ success: boolean; error?: string }> {
-    if (!supabase) return { success: false, error: "Database not configured." };
     const parsed = transferSettingsSchema.safeParse(settingsData);
     if (!parsed.success) return { success: false, error: 'Données invalides' };
     
@@ -380,12 +330,12 @@ export async function updateClientTransferSettingsAction(settingsData: z.infer<t
         minutes: unit === 'minutes' ? duration : 0,
     };
     
-    const { error } = await supabase.from('profiles').update({ transfer_processing_time: processingTime }).eq('id', clientId);
-    if (error) return { success: false, error: "Erreur de mise à jour." };
+    const clientIndex = MOCK_DB.profiles.findIndex(p => p.id === clientId);
+    if (clientIndex === -1) return { success: false, error: 'Client non trouvé' };
 
+    MOCK_DB.profiles[clientIndex].transfer_processing_time = processingTime;
+    
     revalidatePath('/admin');
     revalidatePath('/dashboard');
     return { success: true };
 }
-
-    

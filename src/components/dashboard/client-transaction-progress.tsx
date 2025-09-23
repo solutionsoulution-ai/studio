@@ -5,16 +5,7 @@ import { useState, useEffect } from "react";
 import { Progress } from "@/components/ui/progress";
 import { CheckCircle, Loader, CircleDashed, Send } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-interface Transaction {
-    id: string;
-    amount: number;
-    reason: string;
-    created_at: any;
-    status: 'PENDING' | 'COMPLETED' | 'FAILED';
-    estimatedCompletionDate?: any;
-    recipient_name?: string | null;
-}
+import type { Transaction } from "@/lib/types";
 
 interface ClientTransactionProgressProps {
     transaction: Transaction;
@@ -39,12 +30,19 @@ export default function ClientTransactionProgress({ transaction }: ClientTransac
 
     useEffect(() => {
         const calculateProgress = () => {
+            if (!transaction.created_at || !transaction.estimatedCompletionDate) {
+                setProgress(0);
+                return;
+            }
             const now = new Date().getTime();
-            const startTime = transaction.created_at?.toDate ? transaction.created_at.toDate().getTime() : new Date(transaction.created_at).getTime();
-            const endTime = transaction.estimatedCompletionDate?.toDate
-                ? transaction.estimatedCompletionDate.toDate().getTime()
-                : transaction.estimatedCompletionDate ? new Date(transaction.estimatedCompletionDate).getTime() : now;
+            const startTime = new Date(transaction.created_at).getTime();
+            const endTime = new Date(transaction.estimatedCompletionDate).getTime();
 
+            if (now >= endTime) {
+                setProgress(100);
+                return;
+            }
+            
             if (startTime >= endTime) {
                 setProgress(100);
                 return;
