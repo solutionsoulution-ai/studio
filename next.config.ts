@@ -5,7 +5,6 @@ const faviconSvg = "data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg'
 
 const nextConfig: NextConfig = {
   /* config options here */
-  output: 'export',
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -13,7 +12,6 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
-    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',

@@ -20,6 +20,7 @@ import { Send, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { submitContactForm } from "@/app/actions";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Le nom doit comporter au moins 2 caractères." }),
@@ -45,15 +46,18 @@ export default function ContactForm() {
 
   async function onSubmit(data: FormValues) {
     setIsLoading(true);
-    // Simulate a network request
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    setIsLoading(false);
-
-    toast({
-      title: "Démonstration",
-      description: "Dans une vraie application, ce formulaire enverrait un message.",
-    });
-    router.push("/contact/merci");
+    try {
+      await submitContactForm(data);
+      router.push("/contact/merci");
+    } catch (error) {
+      toast({
+        title: "Erreur",
+        description: "Une erreur est survenue lors de l'envoi du message. Veuillez réessayer.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   }
 
 

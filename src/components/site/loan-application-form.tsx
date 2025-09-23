@@ -21,22 +21,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Loader2, Send, FileText, User, Banknote, UploadCloud, Calculator } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { submitLoanApplication } from "@/app/actions";
 
 
 // Limite de taille de fichier à 5MB
 const MAX_FILE_SIZE = 5 * 1024 * 1024; 
 // Types de fichiers autorisés
 const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "application/pdf"];
-
-// We keep the validation for a good user experience, but we won't submit the files.
-const fileSchema = z
-  .any()
-  .refine((files) => files?.[0], "Ce document est requis.")
-  .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `La taille maximale du fichier est de 5Mo.`)
-  .refine(
-    (files) => ACCEPTED_FILE_TYPES.includes(files?.[0]?.type),
-    "Seuls les formats .jpg, .png et .pdf sont acceptés."
-  );
 
 
 const loanApplicationSchema = z.object({
@@ -66,9 +57,9 @@ const loanApplicationSchema = z.object({
   monthlyExpenses: z.coerce.number({invalid_type_error: "Les charges sont requises."}).nonnegative("Les charges ne peuvent être négatives."),
   
   // Step 4
-  identityDocument: fileSchema,
-  proofOfAddress: fileSchema,
-  proofOfIncome: fileSchema,
+  identityDocument: z.any(),
+  proofOfAddress: z.any(),
+  proofOfIncome: z.any(),
 }).refine(data => {
   try {
     const date = new Date(data.birthYear, data.birthMonth - 1, data.birthDay);
@@ -140,18 +131,33 @@ export default function LoanApplicationForm() {
 
 
   async function onSubmit(data: LoanApplicationFormValues) {
-      setIsLoading(true);
+    setIsLoading(true);
+    const formData = new FormData();
+    
+    // Append all fields to FormData
+    Object.entries(data).forEach(([key, value]) => {
+      if (key === 'identityDocument' || key === 'proofOfAddress' || key === 'proofOfIncome') {
+        if (value && value[0]) {
+          formData.append(key, value[0]);
+        }
+      } else {
+        formData.append(key, String(value));
+      }
+    });
 
-      // Simulate network request for static site
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      setIsLoading(false);
-      
-      toast({
-        title: "Démonstration de la soumission",
-        description: "Votre demande a été simulée avec succès.",
-      });
-      router.push(`/demande-de-pret/merci`);
+    try {
+        await submitLoanApplication(formData);
+        router.push(`/demande-de-pret/merci`);
+    } catch (error) {
+        console.error(error);
+        toast({
+            title: "Erreur",
+            description: "Une erreur est survenue lors de la soumission de votre demande. Veuillez réessayer.",
+            variant: "destructive",
+        });
+    } finally {
+        setIsLoading(false);
+    }
   }
 
   return (
