@@ -2,19 +2,46 @@
 
 "use client";
 
+import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Send, FileText, User, Banknote, UploadCloud, Calculator } from "lucide-react";
+import { Send, FileText, User, Banknote, UploadCloud, Calculator, Wallet } from "lucide-react";
 import { useRouter } from "next/navigation";
+
+const FIXED_INTEREST_RATE = 2;
 
 export default function LoanApplicationForm() {
   const router = useRouter();
+  const [loanAmount, setLoanAmount] = useState<number>(0);
+  const [loanTerm, setLoanTerm] = useState<number>(0);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     router.push('/demande-de-pret/merci');
+  };
+
+  const monthlyPayment = useMemo(() => {
+    if (loanAmount <= 0 || FIXED_INTEREST_RATE <= 0 || loanTerm <= 0) {
+      return 0;
+    }
+    const monthlyRate = FIXED_INTEREST_RATE / 100 / 12;
+    const numberOfPayments = loanTerm;
+    const payment =
+      loanAmount *
+      (monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) /
+      (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
+    return payment;
+  }, [loanAmount, loanTerm]);
+
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat("fr-FR", {
+      style: "currency",
+      currency: "EUR",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(value);
   };
 
   return (
@@ -43,13 +70,39 @@ export default function LoanApplicationForm() {
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
                 <Label>Montant souhaité (€)</Label>
-                <Input type="number" placeholder="ex: 50000" required />
+                <Input 
+                  type="number" 
+                  placeholder="ex: 50000" 
+                  required 
+                  onChange={(e) => setLoanAmount(Number(e.target.value))}
+                />
               </div>
               <div>
                 <Label>Durée de remboursement (mois)</Label>
-                <Input type="number" placeholder="ex: 120" required />
+                <Input 
+                  type="number" 
+                  placeholder="ex: 120" 
+                  required 
+                  onChange={(e) => setLoanTerm(Number(e.target.value))}
+                />
               </div>
             </div>
+
+            {monthlyPayment > 0 && (
+              <div className="bg-muted/50 p-4 rounded-md border">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Wallet className="w-4 h-4" />
+                    <span>Estimation de la mensualité</span>
+                  </div>
+                  <span className="font-bold text-primary">{formatCurrency(monthlyPayment)} / mois</span>
+                </div>
+                 <p className="text-xs text-muted-foreground/80 mt-2">
+                    Basé sur un taux fixe de {FIXED_INTEREST_RATE}%. Ceci est une estimation et ne constitue pas une offre.
+                  </p>
+              </div>
+            )}
+
           </CardContent>
         </Card>
 
