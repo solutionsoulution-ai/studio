@@ -4,7 +4,7 @@
 import { useState, useEffect, useCallback } from "react";
 import type { ClientProfile } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, FileText, User } from "lucide-react";
+import { Loader2, User } from "lucide-react";
 import { getClientsAction } from "@/app/actions/clients";
 import Link from "next/link";
 import ClientManagementTab from "@/components/admin/client-management-tab";
@@ -62,15 +62,9 @@ export default function AdminPage() {
         <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-8 gap-4">
           <div>
             <h1 className="text-3xl font-bold mb-2">Panneau d'Administration</h1>
-            <p className="text-muted-foreground">Gérez les clients, les soumissions et les documents.</p>
+            <p className="text-muted-foreground">Gérez les clients et consultez les soumissions de formulaires.</p>
           </div>
           <div className="flex gap-2">
-            <Button asChild variant="secondary">
-              <Link href="/admin/documents">
-                <FileText className="mr-2" />
-                Générateur de Documents
-              </Link>
-            </Button>
              <Button asChild variant="outline">
               <Link href="/admin/soumissions">
                 <User className="mr-2" />
