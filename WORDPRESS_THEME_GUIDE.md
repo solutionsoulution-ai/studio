@@ -24,7 +24,8 @@ Allez dans le dossier `wp-content/themes/` de votre installation WordPress et cr
 
 Copiez **tout** le contenu ci-dessous et collez-le dans votre fichier `style.css`.
 
-**Tâche importante :** Vous devrez remplacer le commentaire `/* ... COLLEZ VOTRE CSS ICI ... */` par le contenu réel de votre fichier CSS généré, que vous trouverez dans `out/_next/static/css/`.
+**Tâche importante :** Vous devrez remplacer le commentaire `/* ... COLLEZ VOTRE CSS ICI ... */` par le contenu réel de votre fichier CSS généré.
+**Où trouver le CSS ?** Après avoir lancé `npm run build`, ouvrez le dossier `out/_next/static/css/`. Vous y verrez un fichier `.css` avec un nom long (par exemple `xxxxxxxx.css`). Ouvrez ce fichier, copiez **TOUT** son contenu et collez-le à la place du commentaire ci-dessous.
 
 ```css
 /*
@@ -261,7 +262,7 @@ Copiez ce bloc entier et collez-le dans `footer.php`.
 
 ### A. Créez le fichier `front-page.php`
 
-Ce fichier est le modèle spécifique pour votre page d'accueil. Copiez ce bloc entier et collez-le dans `front-page.php`. Il contient toutes les sections de votre page d'accueil, y compris le calculateur.
+Ce fichier est le modèle spécifique pour votre page d'accueil. Copiez ce bloc entier et collez-le dans `front-page.php`. Il contient toutes les sections de votre page d'accueil.
 
 **Code à copier dans `front-page.php` :**
 ```php
@@ -291,7 +292,7 @@ Ce fichier est le modèle spécifique pour votre page d'accueil. Copiez ce bloc 
                                 </div>
                             </div>
                             <div class="relative h-64 md:h-96 w-full rounded-lg overflow-hidden order-first md:order-last">
-                                <!-- Remplacez par le chemin de votre image dans le thème -->
+                                <!-- Important : Créez un dossier /assets/images/ dans votre thème et placez-y cette image -->
                                 <img src="<?php echo get_template_directory_uri(); ?>/assets/images/home-carousel-1.png" alt="Personne travaillant sur un ordinateur portable" class="object-cover w-full h-full">
                             </div>
                         </div>
@@ -303,15 +304,15 @@ Ce fichier est le modèle spécifique pour votre page d'accueil. Copiez ce bloc 
 
     <!-- Section: Nos Services -->
     <section id="services" class="container mx-auto py-16 md:py-24">
-        <!-- Contenu de la section services à copier depuis out/index.html -->
+        <!-- Contenu de la section services à copier depuis le fichier out/index.html généré -->
     </section>
 
     <!-- Section: Calculateur -->
     <section id="calculateur" class="w-full py-16 md:py-24 bg-muted/30">
-        <!-- Le calculateur est interactif et nécessite du JavaScript. -->
-        <!-- Pour WordPress, la meilleure solution est d'utiliser un plugin de formulaire avec calcul (ex: "Calculated Fields Form") -->
-        <!-- ou d'intégrer ce composant comme un "bloc React" avec l'éditeur Gutenberg. -->
-        <!-- Pour une intégration simple, voici une image statique du calculateur. -->
+        <!-- NOTE IMPORTANTE SUR LE CALCULATEUR: -->
+        <!-- Le calculateur est interactif et dépend de JavaScript (React), qui ne fonctionnera pas par un simple copier-coller. -->
+        <!-- Pour WordPress, la meilleure solution est d'utiliser un plugin de formulaire avec calcul (ex: "Calculated Fields Form"). -->
+        <!-- En attendant, le HTML ci-dessous est une version statique non-interactive. -->
         <div class="container mx-auto text-center">
              <div class="flex items-center gap-3 justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-primary"><path d="M19 5H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Z"></path><path d="M7 15h0"></path><path d="M17 15h0"></path><path d="M17 11h0"></path><path d="M7 11h0"></path><path d="M12 15h0"></path><path d="M12 11h0"></path><path d="M12 7h0"></path></svg>
@@ -322,7 +323,7 @@ Ce fichier est le modèle spécifique pour votre page d'accueil. Copiez ce bloc 
             </p>
             <div class="mt-10 max-w-4xl mx-auto shadow-lg rounded-lg border bg-card p-6 md:p-8 text-left">
                 <!-- Contenu statique du calculateur -->
-                 <p class="text-center text-muted-foreground">Le calculateur interactif sera disponible via un plugin WordPress dédié.</p>
+                 <p class="text-center text-muted-foreground">Le calculateur interactif doit être recréé avec un plugin WordPress dédié (ex: Calculated Fields Form).</p>
             </div>
         </div>
     </section>
@@ -364,8 +365,9 @@ Ce fichier est le modèle spécifique pour votre page d'accueil. Copiez ce bloc 
 **Notes importantes sur le code ci-dessus :**
 
 1.  **Images :** J'ai remplacé les chemins des images par une fonction PHP comme ceci : `<?php echo get_template_directory_uri(); ?>/assets/images/votre-image.jpg`. Vous devrez créer un dossier `assets/images` dans votre thème, y placer vos images, et mettre à jour les noms de fichiers.
-2.  **Calculateur et Carrousel :** Ces éléments sont interactifs grâce à JavaScript (React). Pour les faire fonctionner dans WordPress, la meilleure méthode est d'utiliser des plugins dédiés. J'ai ajouté des commentaires dans le code pour vous l'indiquer et j'ai mis un contenu statique en attendant. Pour le reste des sections, vous pouvez simplement copier le HTML depuis votre dossier `out/index.html` et le coller dans les sections vides.
-3.  **Chemins des liens :** Assurez-vous que tous les liens (`<a href="...">`) pointent vers les bonnes pages WordPress (par exemple, `/contact/` au lieu de `/contact.html`). J'ai déjà corrigé la plupart d'entre eux.
+2.  **Calculateur et Carrousel :** Ces éléments sont interactifs et ne peuvent pas être simplement copiés/collés. J'ai ajouté des commentaires clairs dans le code pour vous l'indiquer et j'ai mis un contenu statique en attendant. La meilleure approche est d'utiliser des plugins WordPress spécialisés pour ces fonctionnalités.
+3.  **Contenu des Sections :** Pour remplir les sections vides (comme "Pourquoi nous choisir"), ouvrez le fichier `out/index.html`, trouvez la section correspondante et copiez son contenu HTML.
+4.  **Chemins des liens :** Assurez-vous que tous les liens (`<a href="...">`) pointent vers les bonnes pages WordPress (par exemple, `/contact/` au lieu de `/contact.html`). J'ai déjà corrigé la plupart d'entre eux.
 
 ---
 
@@ -374,7 +376,8 @@ Ce fichier est le modèle spécifique pour votre page d'accueil. Copiez ce bloc 
 Vous avez maintenant la structure de base. Pour les autres pages ("À Propos", "Contact", etc.), le processus est similaire :
 1.  Dans WordPress, créez la page correspondante (ex: "À Propos").
 2.  Dans votre thème, créez un fichier `page-a-propos.php`.
-3.  Copiez-collez le contenu de `out/a-propos.html` entre `<?php get_header(); ?>` et `<?php get_footer(); ?>`.
-4.  Pour les formulaires, installez **Contact Form 7**, créez votre formulaire, et collez le shortcode dans l'éditeur de la page WordPress.
+3.  Copiez-collez le contenu de `out/a-propos.html` (ce qui se trouve dans `<body>`) entre `<?php get_header(); ?>` et `<?php get_footer(); ?>`.
+4.  Pour les formulaires de contact ou de demande, installez un plugin comme **Contact Form 7**, créez votre formulaire, et collez le shortcode dans l'éditeur de la page WordPress correspondante.
 
 Bon courage !
+
