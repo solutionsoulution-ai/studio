@@ -128,10 +128,7 @@ class VylsCapital_Walker_Nav_Menu extends Walker_Nav_Menu {
         $classes = empty( $item->classes ) ? array() : (array) $item->classes;
         $class_names = join(' ', apply_filters('nav_menu_css_class', array_filter($classes), $item, $args));
         
-        // Use the classes from WordPress menu item and add our own for styling
-        $final_classes = 'transition-colors hover:text-primary ' . esc_attr($class_names);
-
-        $output .= '<a href="' . esc_url($item->url) . '" class="' . $final_classes . '">' . esc_html($item->title) . '</a>';
+        $output .= '<a href="' . esc_url($item->url) . '" class="transition-colors hover:text-primary ' . esc_attr($class_names) . '">' . esc_html($item->title) . '</a>';
     }
     function end_el(&$output, $item, $depth = 0, $args = null) {
         $output .= "";
