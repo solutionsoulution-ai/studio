@@ -46,7 +46,8 @@ get_header();
 
     <!-- Section: Nos Services -->
     <section id="services" class="container mx-auto py-16 md:py-24">
-        <div class="text-center mb-10">
+        <!-- Contenu de la section services à copier depuis le fichier out/index.html généré -->
+         <div class="text-center mb-10">
             <div class="flex items-center gap-3 justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-primary"><path d="M3.8 2.3c.2-.2.5-.3.8-.3h14.8c.3 0 .6.1.8.3.2.2.3.5.3.8v14.8c0 .3-.1.6-.3.8-.2.2-.5.3-.8.3H4.7c-.3 0-.6-.1-.8-.3-.2-.2-.3-.5-.3-.8V3.1c0-.3.1-.6.3-.8z"></path><path d="M8 7h8"></path><path d="M8 12h8"></path><path d="M8 17h8"></path></svg>
                 <h2 class="text-3xl font-bold tracking-tight font-headline">Explorez nos solutions de financement</h2>
@@ -55,10 +56,9 @@ get_header();
               Que vous soyez un particulier ou une entreprise, nous avons une solution de prêt adaptée à vos besoins. Découvrez nos offres.
             </p>
         </div>
+        <!-- Remplacer le contenu ci-dessous par celui de la section services du fichier out/index.html -->
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Remplacer les images et liens -->
-            <div class="flex flex-col group hover:border-primary transition-all overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm">...</div>
-            <div class="flex flex-col group hover:border-primary transition-all overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm">...</div>
+            <!-- Exemple d'une carte service, à répéter pour les 5 services -->
             <div class="flex flex-col group hover:border-primary transition-all overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm">...</div>
         </div>
     </section>
@@ -66,9 +66,8 @@ get_header();
     <!-- Section: Calculateur -->
     <section id="calculateur" class="w-full py-16 md:py-24 bg-muted/30">
         <!-- NOTE IMPORTANTE SUR LE CALCULATEUR: -->
-        <!-- Le calculateur est interactif et dépend de JavaScript (React), qui ne fonctionnera pas par un simple copier-coller. -->
-        <!-- Pour WordPress, la meilleure solution est d'utiliser un plugin de formulaire avec calcul (ex: "Calculated Fields Form"). -->
-        <!-- En attendant, le HTML ci-dessous est une version statique non-interactive. -->
+        <!-- Le calculateur est interactif et dépend de JavaScript (React). -->
+        <!-- Pour WordPress, utilisez un plugin de formulaire avec calcul (ex: "Calculated Fields Form") et remplacez cette section par le shortcode du plugin. -->
         <div class="container mx-auto text-center">
              <div class="flex items-center gap-3 justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-primary"><path d="M19 5H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Z"></path><path d="M7 15h0"></path><path d="M17 15h0"></path><path d="M17 11h0"></path><path d="M7 11h0"></path><path d="M12 15h0"></path><path d="M12 11h0"></path><path d="M12 7h0"></path></svg>
@@ -78,7 +77,6 @@ get_header();
                 Utilisez notre calculateur simple pour estimer vos mensualités. Ajustez les curseurs pour voir comment le montant et la durée du prêt affectent vos paiements.
             </p>
             <div class="mt-10 max-w-4xl mx-auto shadow-lg rounded-lg border bg-card p-6 md:p-8 text-left">
-                <!-- Contenu statique du calculateur -->
                  <p class="text-center text-muted-foreground">Le calculateur interactif doit être recréé avec un plugin WordPress dédié (ex: Calculated Fields Form).</p>
             </div>
         </div>
@@ -86,29 +84,29 @@ get_header();
 
     <!-- Section: Pourquoi Nous Choisir -->
     <section id="why-us" class="w-full py-16 md:py-24 bg-muted/30">
-        <!-- Contenu à copier depuis out/index.html -->
+        <!-- Contenu à copier depuis la section 'why-us' de out/index.html -->
     </section>
 
     <!-- Section: Parcours en Bref -->
     <section class="container mx-auto py-16 md:py-24">
-         <!-- Contenu à copier depuis out/index.html -->
+         <!-- Contenu à copier depuis la section 'timeline-summary' de out/index.html -->
     </section>
 
     <!-- Section: Derniers Articles -->
     <section class="bg-background py-16 md:py-24">
-         <!-- Contenu à copier depuis out/index.html -->
+         <!-- Contenu à copier depuis la section 'blog-summary' de out/index.html -->
     </section>
 
     <!-- Section: Partenaires -->
     <section class="bg-background py-16 md:py-24 sm:py-32">
-        <!-- Contenu à copier depuis out/index.html -->
+        <!-- Contenu à copier depuis la section 'partners' de out/index.html -->
     </section>
 
     <!-- Section: Témoignages -->
     <section class="w-full py-16 md:py-24">
         <!-- NOTE: Le défilement des témoignages est interactif. -->
         <!-- Utilisez un plugin de slider/carrousel dans WordPress pour recréer cet effet. -->
-        <!-- Le HTML ci-dessous n'affiche que quelques avis de manière statique. -->
+        <!-- Le HTML ci-dessous est statique. Copiez le contenu de la section depuis out/index.html -->
         <div class="container mx-auto">
             <!-- ... contenu des témoignages ... -->
         </div>
@@ -116,7 +114,7 @@ get_header();
 
     <!-- Section: FAQ -->
     <section id="faq" class="container mx-auto py-16 md:py-24">
-         <!-- Contenu à copier depuis out/index.html -->
+         <!-- Contenu à copier depuis la section 'faq' de out/index.html -->
     </section>
 
 </main>
