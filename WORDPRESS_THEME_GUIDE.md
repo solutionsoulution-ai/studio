@@ -6,19 +6,19 @@ Ce guide contient les blocs de code exacts dont vous avez besoin pour créer les
 
 ## Étape 0 : Prérequis - Générer le site statique
 
-Avant toute chose, vous devez générer la version HTML/CSS pure de votre site. Exécutez la commande suivante à la racine de votre projet :
+Avant toute chose, vous devez générer les fichiers JavaScript nécessaires à l'interactivité. Exécutez la commande suivante à la racine de votre projet :
 
 ```bash
 npm run build
 ```
 
-Cela crée un dossier `build/` contenant tous vos fichiers `.html` et assets (CSS, JS, images). **Tous les extraits de code HTML ci-dessous proviennent de ces fichiers.**
+Cela crée un dossier `build/` contenant les fichiers `calculator.js` et `calculator.css` qui seront utilisés par le thème WordPress.
 
 ---
 
 ## Étape 1 : Structure de base du thème
 
-Allez dans le dossier `wp-content/themes/` de votre installation WordPress et créez un nouveau dossier `vylscapital-theme`. Tous les fichiers suivants seront créés à l'intérieur de ce dossier.
+Allez dans le dossier `wp-content/themes/` de votre installation WordPress et créez un nouveau dossier pour votre thème, par exemple `vylscapital-theme`. Tous les fichiers suivants seront créés à l'intérieur de ce dossier.
 
 ### A. Créez le fichier `style.css`
 
@@ -88,10 +88,16 @@ Pour chaque fichier `.php` dans le dossier `workspace/` qui commence par `templa
 
 ### A. JavaScript
 
-1.  Créez un dossier `assets/js/` dans votre thème `vylscapital-theme/`.
-2.  Copiez le contenu de `workspace/assets/js/main.js` dans `vylscapital-theme/assets/js/main.js`.
-3.  Après avoir lancé `npm run build`, allez dans `build/static/js/`. Copiez les fichiers `calculator.js` et `main.js` dans un nouveau dossier `build/` à l'intérieur de votre thème : `vylscapital-theme/build/static/js/`.
-4.  Faites de même pour le CSS du calculateur : copiez `build/static/css/calculator.css` dans `vylscapital-theme/build/static/css/`.
+1.  **JavaScript pour l'interactivité de base (Menu/FAQ) :**
+    *   Créez un dossier `assets/js/` dans votre thème `vylscapital-theme/`.
+    *   Copiez le contenu du fichier `workspace/assets/js/main.js` dans `vylscapital-theme/assets/js/main.js`.
+
+2.  **JavaScript pour le Calculateur (React) :**
+    *   Après avoir lancé `npm run build`, allez dans le dossier `build/static/js/` de votre projet.
+    *   Copiez le fichier `calculator.js` dans un nouveau dossier `build/static/js/` à l'intérieur de votre thème. Le chemin final doit être : `vylscapital-theme/build/static/js/calculator.js`.
+
+3.  **CSS pour le Calculateur :**
+    *   De même, copiez le fichier `build/static/css/calculator.css` dans `vylscapital-theme/build/static/css/calculator.css`.
 
 Votre `functions.php` est déjà configuré pour charger ces scripts aux bons endroits.
 
@@ -110,6 +116,6 @@ Une fois tous les fichiers copiés, allez dans votre admin WordPress.
 2.  **Créez vos pages** ("À Propos", "Contact", "Prêt Auto", etc.) dans `Pages > Ajouter`.
 3.  Pour chaque page, dans l'éditeur, trouvez le panneau "Attributs de la page" et **assignez le bon "Modèle"** dans le menu déroulant (ex: assignez le modèle "Service - Prêt Auto" à la page "Prêt Auto").
 4.  **Créez le menu principal** dans `Apparence > Menus` et assignez-le à l'emplacement "Menu Principal".
-5.  **Installez les plugins** nécessaires pour les formulaires de contact et le carrousel si vous souhaitez cette interactivité.
+5.  **Installez les plugins** nécessaires pour les formulaires de contact (`template-contact.php` et `template-demande-de-pret.php`) et le carrousel si vous souhaitez cette interactivité.
 
 Ce guide devrait couvrir tout le processus. Bon courage !
