@@ -1,149 +1,289 @@
+# Guide d'Intégration WordPress : Copier-Coller
 
-# Guide d'Intégration : De Next.js à un Thème WordPress
+Ce guide contient les blocs de code exacts dont vous avez besoin pour créer les fichiers de base de votre thème WordPress. Suivez les étapes dans l'ordre.
 
-Ce guide vous explique comment transformer le site statique que nous avons créé en un thème WordPress fonctionnel. Ce processus est manuel mais a été grandement simplifié grâce à la préparation du code.
+---
 
 ## Étape 0 : Prérequis - Générer le site statique
 
-Avant de commencer, assurez-vous d'avoir la version HTML/CSS pure de votre site. Pour cela, exécutez la commande suivante à la racine de votre projet :
+Avant toute chose, vous devez générer la version HTML/CSS pure de votre site. Exécutez la commande suivante à la racine de votre projet :
 
 ```bash
 npm run build
 ```
 
-Cela créera un dossier `out/` qui contient tous vos fichiers `.html`, ainsi que les assets (CSS, JS, images). C'est ce dossier que nous utiliserons comme source.
+Cela crée un dossier `out/` contenant tous vos fichiers `.html` et assets (CSS, JS, images). **Tous les extraits de code HTML ci-dessous proviennent de ces fichiers.**
 
 ---
 
-## Étape 1 : Créer la structure de base du thème
+## Étape 1 : Structure de base du thème
 
-1.  Allez dans le dossier d'installation de WordPress, puis dans `wp-content/themes/`.
-2.  Créez un nouveau dossier pour votre thème : `vylscapital-theme`.
-3.  Ouvrez ce dossier. Nous allons y créer les fichiers essentiels.
+Allez dans le dossier `wp-content/themes/` de votre installation WordPress et créez un nouveau dossier `vylscapital-theme`. Tous les fichiers suivants seront créés à l'intérieur de ce dossier.
 
-#### A. Fichier `style.css` (Obligatoire)
+### A. Créez le fichier `style.css`
 
-Ce fichier donne à WordPress les informations sur votre thème.
+Copiez **tout** le contenu ci-dessous et collez-le dans votre fichier `style.css`.
 
-1.  Créez un fichier `style.css` dans `vylscapital-theme/`.
-2.  Collez-y ce bloc de commentaire :
+**Tâche importante :** Vous devrez remplacer le commentaire `/* ... COLLEZ VOTRE CSS ICI ... */` par le contenu réel de votre fichier CSS généré, que vous trouverez dans `out/_next/static/css/`.
 
-    ```css
-    /*
-    Theme Name: VylsCapital Theme
-    Author: Votre Nom
-    Description: Thème sur mesure pour le site VylsCapital, basé sur un design statique.
-    Version: 1.0
-    */
-    ```
+```css
+/*
+Theme Name: VylsCapital Theme
+Author: Votre Nom
+Description: Thème sur mesure pour le site VylsCapital.
+Version: 1.0
+*/
 
-3.  Maintenant, ouvrez le fichier CSS de votre site statique, qui se trouve dans `out/_next/static/css/`. Il aura un nom complexe, comme `a1b2c3d4e5f6.css`. Ouvrez-le.
-4.  Copiez **tout le contenu** de ce fichier CSS et collez-le dans votre `style.css`, juste **après** le bloc de commentaire.
+/* --- DÉBUT DU CSS - NE MODIFIEZ PAS CI-DESSOUS --- */
+/* Après avoir lancé "npm run build", ouvrez le fichier CSS dans "out/_next/static/css/" */
+/* Copiez TOUT son contenu et collez-le ici, en remplacement de ce commentaire. */
+/* ... COLLEZ VOTRE CSS ICI ... */
+/* --- FIN DU CSS --- */
+```
 
-#### B. Fichier `functions.php`
+### B. Créez le fichier `functions.php`
 
-Ce fichier permet de charger les styles et les scripts.
+Copiez le code ci-dessous et collez-le dans `functions.php`. Ce fichier charge votre `style.css` et la police Google Fonts.
 
-1.  Créez un fichier `functions.php` dans votre dossier de thème.
-2.  Collez-y le code PHP suivant. Ce code dit à WordPress de charger votre fichier `style.css` et les polices Google Fonts.
+```php
+<?php
+function vylscapital_enqueue_styles() {
+    // Charger le fichier CSS principal qui contient les styles du thème
+    wp_enqueue_style(
+        'vylscapital-main-style',
+        get_stylesheet_uri()
+    );
 
-    ```php
-    <?php
-    function vylscapital_enqueue_styles() {
-        // Charger le fichier CSS principal
-        wp_enqueue_style('vylscapital-main-style', get_stylesheet_uri());
+    // Charger Google Fonts (Inter)
+    wp_enqueue_style(
+        'vylscapital-google-fonts',
+        'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
+        array(),
+        null
+    );
+}
+add_action('wp_enqueue_scripts', 'vylscapital_enqueue_styles');
 
-        // Charger Google Fonts
-        wp_enqueue_style('vylscapital-google-fonts', 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap', array(), null);
-    }
-    add_action('wp_enqueue_scripts', 'vylscapital_enqueue_styles');
-    ?>
-    ```
+// Activer les menus de navigation
+function register_vylscapital_menus() {
+    register_nav_menus(
+        array(
+            'main-menu' => __('Menu Principal'),
+        )
+    );
+}
+add_action('init', 'register_vylscapital_menus');
+?>
+```
 
-#### C. Fichier `index.php`
+### C. Créez le fichier `index.php`
 
-C'est le modèle par défaut si aucun autre n'est trouvé.
+C'est le modèle de base qui sera utilisé pour la page du blog. Copiez et collez ce code dans `index.php`.
 
-1.  Créez un fichier `index.php`.
-2.  Collez-y ce code de base. Il sera utilisé pour afficher les articles de blog par défaut.
+```php
+<?php get_header(); ?>
 
-    ```php
-    <?php get_header(); ?>
+<main class="container mx-auto py-16 md:py-24 px-4">
+    <div class="text-center mb-16">
+        <h1 class="text-3xl md:text-4xl font-bold tracking-tight font-headline"><?php single_post_title(); ?></h1>
+    </div>
 
-    <main class="container mx-auto py-12">
-        <h1><?php the_archive_title(); ?></h1>
-        <?php if (have_posts()) : ?>
+    <?php if (have_posts()) : ?>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <?php while (have_posts()) : the_post(); ?>
-                <article>
-                    <h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
-                    <div><?php the_excerpt(); ?></div>
+                <article class="flex flex-col group hover:border-primary transition-all overflow-hidden border rounded-lg bg-card">
+                    <a href="<?php the_permalink(); ?>" class="block">
+                        <?php if (has_post_thumbnail()) : ?>
+                            <div class="relative h-56 w-full">
+                                <!-- L'image à la une sera gérée ici -->
+                                <?php the_post_thumbnail('full', ['class' => 'object-cover w-full h-full']); ?>
+                            </div>
+                        <?php endif; ?>
+                    </a>
+                    <div class="flex flex-col flex-grow p-6">
+                        <header class="p-0">
+                            <h2 class="text-xl leading-tight group-hover:text-primary transition-colors">
+                                <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+                            </h2>
+                            <p class="pt-2 text-sm text-muted-foreground"><?php echo get_the_date(); ?> &bull; <?php the_author(); ?></p>
+                        </header>
+                        <div class="p-0 pt-4 flex-grow">
+                            <div class="text-muted-foreground"><?php the_excerpt(); ?></div>
+                        </div>
+                        <footer class="p-0 pt-6">
+                            <a href="<?php the_permalink(); ?>" class="text-primary hover:underline">
+                                Lire la suite &rarr;
+                            </a>
+                        </footer>
+                    </div>
                 </article>
             <?php endwhile; ?>
-        <?php else : ?>
-            <p>Aucun article trouvé.</p>
-        <?php endif; ?>
-    </main>
+        </div>
+    <?php else : ?>
+        <p>Aucun article trouvé.</p>
+    <?php endif; ?>
+</main>
 
-    <?php get_footer(); ?>
-    ```
-
-À ce stade, vous pouvez aller dans **Apparence > Thèmes** dans votre admin WordPress et activer "VylsCapital Theme". Le site sera moche, mais c'est normal. On passe à la suite.
-
----
-
-## Étape 2 : Créer l'en-tête (`header.php`) et le pied de page (`footer.php`)
-
-Ce sont les parties réutilisables de votre site.
-
-#### A. Fichier `header.php`
-
-1.  Créez le fichier `header.php`.
-2.  Ouvrez le fichier HTML de votre page d'accueil : `out/index.html`.
-3.  Copiez tout le code depuis `<!DOCTYPE html>` jusqu'à la fin de la balise `<header>`.
-4.  Collez ce code dans `header.php`.
-5.  Faites les remplacements PHP suivants :
-    *   Remplacez `<html lang="fr">` par `<html <?php language_attributes(); ?>>`.
-    *   Remplacez le contenu de la balise `<title>` par `<title><?php wp_title('|', true, 'right'); ?></title>`.
-    *   Juste avant la balise `</head>`, ajoutez `<?php wp_head(); ?>`.
-    *   Juste après la balise `<body>`, ajoutez `<?php wp_body_open(); ?>`.
-    *   **IMPORTANT :** Pour l'instant, laissez le menu de navigation en HTML. Vous le remplacerez plus tard par `<?php wp_nav_menu(); ?>` après l'avoir configuré dans l'admin WordPress.
-
-#### B. Fichier `footer.php`
-
-1.  Créez le fichier `footer.php`.
-2.  Ouvrez à nouveau `out/index.html`.
-3.  Copiez tout le code depuis le début de la balise `<footer>` jusqu'à la fin du fichier (`</html>`).
-4.  Collez ce code dans `footer.php`.
-5.  Juste avant la balise `</body>`, ajoutez `<?php wp_footer(); ?>`.
+<?php get_footer(); ?>
+```
 
 ---
 
-## Étape 3 : Créer le modèle de la page d'accueil
+## Étape 2 : L'en-tête et le pied de page
 
-1.  Créez un fichier `front-page.php`.
-2.  Au début du fichier, ajoutez : `<?php get_header(); ?>`.
-3.  Ouvrez `out/index.html`. Copiez tout le contenu qui se trouve **entre** la balise `</header>` et la balise `<footer>`.
-4.  Collez ce contenu dans `front-page.php`, après la ligne `get_header()`.
-5.  À la toute fin du fichier, ajoutez : `<?php get_footer(); ?>`.
+Ces fichiers définissent les parties communes de votre site.
 
-Maintenant, si vous visitez votre site WordPress, votre page d'accueil devrait s'afficher correctement !
+### A. Créez le fichier `header.php`
+
+Ouvrez le fichier `out/index.html` (généré par `npm run build`). Copiez la partie supérieure du code comme indiqué, puis collez-la dans `header.php` et faites les remplacements demandés.
+
+**Code à copier dans `header.php` :**
+```php
+<!DOCTYPE html>
+<html <?php language_attributes(); ?>>
+<head>
+    <meta charset="<?php bloginfo('charset'); ?>">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><?php wp_title('|', true, 'right'); ?></title>
+    <?php wp_head(); ?>
+</head>
+<body <?php body_class('font-body antialiased'); ?>>
+<?php wp_body_open(); ?>
+<header class="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <div class="container flex h-16 max-w-screen-2xl items-center">
+        <a href="<?php echo esc_url(home_url('/')); ?>" class="mr-6 flex items-center space-x-2">
+            <!-- Remplacez par votre logo si nécessaire -->
+            <span class="font-bold sm:inline-block">VylsCapital</span>
+        </a>
+        <nav class="hidden lg:flex flex-1 items-center space-x-4 text-sm font-medium">
+             <?php
+                wp_nav_menu(array(
+                    'theme_location' => 'main-menu',
+                    'container' => false,
+                    'items_wrap' => '%3$s', // Affiche les liens sans <ul>
+                    'walker' => new VylsCapital_Walker_Nav_Menu()
+                ));
+            ?>
+        </nav>
+        <div class="flex flex-1 items-center justify-end space-x-2 md:flex-none lg:flex-1 lg:justify-end">
+            <a href="/demande-de-pret" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">Faire une demande</a>
+            <!-- Le menu mobile sera géré par un plugin ou du JS custom si besoin -->
+        </div>
+    </div>
+</header>
+```
+
+### B. Créez le fichier `footer.php`
+
+Ouvrez `out/index.html`. Copiez la partie inférieure du code (tout ce qui est dans et après `<footer>`), puis collez-la dans `footer.php`.
+
+**Code à copier dans `footer.php` :**
+```php
+<footer class="bg-muted/30 border-t">
+    <div class="container mx-auto py-12 px-6">
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
+            <div class="col-span-2 md:col-span-2">
+                <a href="<?php echo esc_url(home_url('/')); ?>" class="flex items-center space-x-2 mb-4">
+                    <span class="text-xl font-bold">VylsCapital</span>
+                </a>
+                <p class="text-sm text-muted-foreground max-w-sm">Solutions de financement rapides et flexibles pour aider votre entreprise à prospérer.</p>
+                <div class="mt-6 space-y-2 text-sm text-muted-foreground">
+                    <p class="flex items-center gap-2">contact@vylscapital.com</p>
+                    <p class="flex items-center gap-2">+33 7 56 98 67 69</p>
+                    <p class="flex items-center gap-2">Lyon, France</p>
+                </div>
+            </div>
+            <div>
+                <h3 class="font-semibold mb-4">Navigation</h3>
+                <ul class="space-y-2">
+                    <li><a href="/a-propos" class="text-sm text-muted-foreground hover:text-primary">À Propos</a></li>
+                    <li><a href="/blog" class="text-sm text-muted-foreground hover:text-primary">Blog</a></li>
+                    <li><a href="/#calculateur" class="text-sm text-muted-foreground hover:text-primary">Calculateur</a></li>
+                    <li><a href="/#faq" class="text-sm text-muted-foreground hover:text-primary">FAQ</a></li>
+                    <li><a href="/contact" class="text-sm text-muted-foreground hover:text-primary">Contact</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="font-semibold mb-4">Nos Services</h3>
+                <ul class="space-y-2">
+                    <li><a href="/services/pret-entreprise" class="text-sm text-muted-foreground hover:text-primary">Prêt Entreprise</a></li>
+                    <li><a href="/services/pret-personnel" class="text-sm text-muted-foreground hover:text-primary">Prêt Personnel</a></li>
+                    <li><a href="/services/pret-immo" class="text-sm text-muted-foreground hover:text-primary">Prêt Immobilier</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="font-semibold mb-4">Légal</h3>
+                <ul class="space-y-2">
+                    <li><a href="/politique-de-confidentialite" class="text-sm text-muted-foreground hover:text-primary">Politique de confidentialité</a></li>
+                    <li><a href="/conditions-generales" class="text-sm text-muted-foreground hover:text-primary">Conditions d'utilisation</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="mt-12 border-t pt-6 text-center">
+            <p class="text-sm text-muted-foreground">&copy; <?php echo date('Y'); ?> VylsCapital. Tous droits réservés.</p>
+        </div>
+    </div>
+</footer>
+<?php wp_footer(); ?>
+</body>
+</html>
+```
 
 ---
 
-## Prochaines étapes
+## Étape 3 : Créer la page d'accueil
 
-Vous avez maintenant la base. Le processus pour les autres pages est similaire :
-1.  **Pour la page "À Propos" :**
-    *   Créez la page "À Propos" dans l'admin WordPress.
-    *   Créez un fichier `page-a-propos.php` dans votre thème.
-    *   Copiez-collez le contenu de `out/a-propos.html` entre `get_header()` et `get_footer()`.
-2.  **Pour le blog :**
-    *   Créez un fichier `single.php` pour l'affichage d'un article.
-    *   Utilisez le HTML de `out/blog/5-strategies...html` comme modèle.
-    *   Remplacez les titres/contenus statiques par les fonctions WordPress : `<?php the_title(); ?>`, `<?php the_content(); ?>`.
-3.  **Pour les formulaires :**
-    *   Installez un plugin comme **Contact Form 7**.
-    *   Créez vos formulaires dans l'interface du plugin.
-    *   Collez le shortcode du plugin (ex: `[contact-form-7 id="123"]`) dans l'éditeur de la page WordPress correspondante.
+### A. Créez le fichier `front-page.php`
 
-Ce guide devrait vous donner un excellent point de départ. Bon courage !
+Ce fichier est le modèle spécifique pour votre page d'accueil. Ouvrez `out/index.html` et copiez tout le contenu qui se trouve **entre** la balise `</header>` et la balise `<footer>`.
+
+**Code à copier dans `front-page.php` :**
+```php
+<?php get_header(); ?>
+
+<main class="flex-1">
+    <!-- Le contenu de votre page d'accueil commence ici -->
+    <!-- Collez ici tout le contenu de la balise <main> de votre fichier out/index.html -->
+    
+    <!-- Exemple de section (Carousel) : -->
+    <section class="w-full bg-background">
+      <div class="container mx-auto px-4">
+          <div class="grid md:grid-cols-2 items-center gap-8 py-12 md:py-24 min-h-[70dvh] md:min-h-[60dvh]">
+              <div class="flex flex-col items-start text-center md:text-left">
+                  <h1 class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl font-headline">
+                      Sécurisez l'avenir de votre entreprise
+                  </h1>
+                  <p class="mt-4 max-w-2xl text-lg text-muted-foreground mx-auto md:mx-0">
+                      VylsCapital fournit des solutions de financement rapides et flexibles pour aider votre entreprise à prospérer. Obtenez le capital dont vous avez besoin pour grandir.
+                  </p>
+                  <div class="mt-8 mx-auto md:mx-0">
+                      <a href="/demande-de-pret" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 rounded-md px-8">Commencer ma demande</a>
+                  </div>
+              </div>
+              <div class="relative h-64 md:h-96 w-full rounded-lg overflow-hidden order-first md:order-last">
+                  <img src="<?php echo get_template_directory_uri(); ?>/assets/images/home-carousel-1.png" alt="Personne travaillant sur un ordinateur portable" class="object-cover w-full h-full">
+              </div>
+          </div>
+      </div>
+    </section>
+
+    <!-- Vous devez copier/coller TOUTES les autres sections de out/index.html ici -->
+    <!-- (Services, Calculateur, Pourquoi nous choisir, etc.) -->
+
+</main>
+
+<?php get_footer(); ?>
+```
+**Note importante sur les images :** Dans le code ci-dessus, j'ai remplacé le chemin d'une image par un exemple PHP : `<?php echo get_template_directory_uri(); ?>/assets/images/votre-image.jpg`. Vous devrez créer un dossier `assets/images` dans votre thème, y placer vos images, et mettre à jour les chemins dans votre code HTML.
+
+---
+
+## Prochaines Étapes
+
+Vous avez maintenant la structure de base. Pour les autres pages ("À Propos", "Contact", etc.), le processus est similaire :
+1.  Dans WordPress, créez la page correspondante (ex: "À Propos").
+2.  Dans votre thème, créez un fichier `page-a-propos.php`.
+3.  Copiez-collez le contenu de `out/a-propos.html` entre `get_header()` et `get_footer()`.
+4.  Pour les formulaires, installez **Contact Form 7**, créez votre formulaire, et collez le shortcode dans l'éditeur de la page WordPress.
+
+Bon courage !
