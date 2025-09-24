@@ -45,9 +45,26 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      config.output.filename = 'static/js/main.js';
+  webpack: (config, { isServer, dev }) => {
+    if (!isServer && !dev) {
+      // Garde la configuration pour le build principal
+      const originalEntry = config.entry;
+      config.entry = async () => {
+        const entries = await originalEntry();
+        
+        // Ajoute notre point d'entrée pour le calculateur
+        entries['calculator'] = './src/app/calculator-entry.tsx';
+        
+        // Ajuste le point d'entrée principal pour qu'il soit bien nommé 'main'
+        if (entries['app/page']) {
+           entries['main'] = entries['app/page'];
+           delete entries['app/page'];
+        }
+
+        return entries;
+      };
+
+      config.output.filename = 'static/js/[name].js';
       config.output.chunkFilename = 'static/js/[name].chunk.js';
       
       if (config.optimization) {
@@ -62,8 +79,9 @@ const nextConfig: NextConfig = {
       const miniCssExtractPlugin = config.plugins.find(
         (plugin) => plugin.constructor.name === 'MiniCssExtractPlugin'
       );
+      
       if (miniCssExtractPlugin) {
-        miniCssExtractPlugin.options.filename = 'static/css/main.css';
+        miniCssExtractPlugin.options.filename = 'static/css/[name].css';
         miniCssExtractPlugin.options.chunkFilename = 'static/css/[name].chunk.css';
       }
     }

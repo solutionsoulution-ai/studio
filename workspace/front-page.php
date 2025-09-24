@@ -78,7 +78,7 @@ get_header();
     <!-- Section: Calculateur -->
     <section id="calculateur" class="w-full py-16 md:py-24 bg-muted/30">
         <div id="calculator-root">
-            <!-- This div is the mount point for the React calculator. -->
+            <!-- This div is the mount point for the React calculator. It will be hydrated by calculator.js -->
         </div>
     </section>
 

@@ -122,14 +122,24 @@ function vylscapital_enqueue_assets() {
         true
     );
 
-    // React App JS (from build)
-    wp_enqueue_script(
-        'vylscapital-react-app',
-        get_template_directory_uri() . '/build/static/js/main.js',
-        array('wp-element'), // Dependency on wp-element for React in WP
-        null,
-        true
-    );
+    // Conditionally load the calculator script
+    if ( is_front_page() || is_page_template( 'template-pret-auto.php' ) || is_page_template( 'template-pret-immo.php' ) || is_page_template( 'template-pret-personnel.php' ) || is_page_template( 'template-rachat-de-credit.php' ) || is_page_template( 'template-pret-entreprise.php' ) ) {
+        // Enqueue React Calculator App JS
+        wp_enqueue_script(
+            'vylscapital-calculator-app',
+            get_template_directory_uri() . '/build/static/js/calculator.js',
+            array('wp-element'), // Dependency on wp-element for React in WP
+            null,
+            true
+        );
+        // Enqueue its specific CSS if it exists
+         wp_enqueue_style(
+            'vylscapital-calculator-style',
+            get_template_directory_uri() . '/build/static/css/calculator.css',
+            array(),
+            null
+        );
+    }
 
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
