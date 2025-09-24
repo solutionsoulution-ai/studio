@@ -102,7 +102,7 @@ class VylsCapital_Walker_Nav_Menu extends Walker_Nav_Menu {
 
 ### C. Créez le fichier `index.php`
 
-C'est le modèle de base qui sera utilisé pour la page du blog. Copiez et collez ce code dans `index.php`.
+C'est le modèle de base qui sera utilisé pour la page du blog (l'archive des articles). Copiez et collez ce code dans `index.php`.
 
 ```php
 <?php get_header(); ?>
