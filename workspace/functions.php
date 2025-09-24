@@ -89,12 +89,20 @@ add_action( 'widgets_init', 'vyls_widgets_init' );
  * Enqueue scripts and styles.
  */
 function vylscapital_enqueue_assets() {
-    // Main stylesheet
+    // Main theme stylesheet
     wp_enqueue_style(
-        'vylscapital-main-style',
+        'vylscapital-theme-style',
         get_stylesheet_uri(),
         array(),
         _S_VERSION
+    );
+
+    // React App CSS (from build)
+    wp_enqueue_style(
+        'vylscapital-react-style',
+        get_template_directory_uri() . '/build/static/css/main.css',
+        array('vylscapital-theme-style'),
+        null
     );
 
     // Google Fonts (Inter)
@@ -105,12 +113,21 @@ function vylscapital_enqueue_assets() {
         null
     );
 
-    // Main JavaScript file
+    // Main JavaScript file (for simple interactions like menu/FAQ)
     wp_enqueue_script(
         'vylscapital-main-js',
         get_template_directory_uri() . '/assets/js/main.js',
         array(),
         _S_VERSION,
+        true
+    );
+
+    // React App JS (from build)
+    wp_enqueue_script(
+        'vylscapital-react-app',
+        get_template_directory_uri() . '/build/static/js/main.js',
+        array('wp-element'), // Dependency on wp-element for React in WP
+        null,
         true
     );
 

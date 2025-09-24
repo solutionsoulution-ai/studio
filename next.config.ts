@@ -2,7 +2,8 @@
 import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  output: 'export',
+  distDir: 'build',
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -43,6 +44,30 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
     ],
+  },
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.output.filename = 'static/js/main.js';
+      config.output.chunkFilename = 'static/js/[name].chunk.js';
+      
+      if (config.optimization) {
+        config.optimization.splitChunks = {
+          cacheGroups: {
+            default: false,
+          },
+        };
+        config.optimization.runtimeChunk = false;
+      }
+      
+      const miniCssExtractPlugin = config.plugins.find(
+        (plugin) => plugin.constructor.name === 'MiniCssExtractPlugin'
+      );
+      if (miniCssExtractPlugin) {
+        miniCssExtractPlugin.options.filename = 'static/css/main.css';
+        miniCssExtractPlugin.options.chunkFilename = 'static/css/[name].chunk.css';
+      }
+    }
+    return config;
   },
 };
 

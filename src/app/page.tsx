@@ -1,46 +1,34 @@
 
+"use client";
 
-import SiteHeader from '@/components/site/site-header';
-import HomeCarousel from '@/components/site/home-carousel';
-import ServicesSection from '@/components/site/services-section';
-import WhyChooseUsSection from '@/components/site/why-choose-us-section';
 import InterestRateCalculator from '@/components/site/interest-rate-calculator';
-import FaqSection from '@/components/site/faq-section';
-import SiteFooter from '@/components/site/site-footer';
-import TestimonialsSection from '@/components/site/testimonials-section';
-import PartnersSection from '@/components/site/partners-section';
-import TimelineSummary from '@/components/site/timeline-summary';
-import BlogSummarySection from '@/components/site/blog-summary-section';
+import { useEffect } from 'react';
+import { createRoot } from 'react-dom/client';
 
+// This function checks for the mount point and renders the React component.
+function App() {
+  useEffect(() => {
+    const calculatorRoot = document.getElementById('calculator-root');
+    if (calculatorRoot) {
+      const root = createRoot(calculatorRoot);
+      root.render(<InterestRateCalculator />);
+    }
+  }, []);
+
+  return null; // This component doesn't render anything itself
+}
+
+
+// Since this is now an "entry point" for a non-Next.js app, we render it directly.
+if (typeof window !== 'undefined') {
+  const rootElement = document.createElement('div');
+  rootElement.id = 'vyls-react-app-root';
+  document.body.appendChild(rootElement);
+  const root = createRoot(rootElement);
+  root.render(<App />);
+}
+
+// We export a default component to satisfy Next.js build process, but it does nothing.
 export default function Home() {
-  return (
-    <div className="flex flex-col min-h-dvh bg-background">
-      <SiteHeader />
-      <main className="flex-1">
-        <HomeCarousel />
-        
-        <ServicesSection />
-
-        <section id="calculateur" className="w-full py-16 md:py-24 bg-muted/30">
-          <InterestRateCalculator />
-        </section>
-
-        <WhyChooseUsSection />
-
-        <TimelineSummary />
-
-        <BlogSummarySection />
-
-        <PartnersSection />
-
-        <TestimonialsSection />
-
-        <section id="faq" className="container mx-auto py-16 md:py-24">
-          <FaqSection />
-        </section>
-
-      </main>
-      <SiteFooter />
-    </div>
-  );
+  return null;
 }
