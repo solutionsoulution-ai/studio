@@ -4,15 +4,15 @@ Ce guide contient les blocs de code exacts dont vous avez besoin pour créer les
 
 ---
 
-## Étape 0 : Prérequis - Générer le site statique
+## Étape 0 : Prérequis - Générer les fichiers statiques
 
-Avant toute chose, vous devez générer les fichiers JavaScript nécessaires à l'interactivité. Exécutez la commande suivante à la racine de votre projet :
+Avant toute chose, vous devez générer les fichiers JavaScript et CSS nécessaires à l'interactivité et au style. Exécutez la commande suivante à la racine de votre projet :
 
 ```bash
 npm run build
 ```
 
-Cela crée un dossier `build/` contenant les fichiers `calculator.js` et `calculator.css` qui seront utilisés par le thème WordPress.
+Cela crée un dossier `build/` contenant les fichiers `calculator.js`, `calculator.css` et `main.css`.
 
 ---
 
@@ -25,7 +25,7 @@ Allez dans le dossier `wp-content/themes/` de votre installation WordPress et cr
 Copiez **tout** le contenu ci-dessous et collez-le dans votre fichier `style.css`.
 
 **Tâche importante :** Vous devrez remplacer le commentaire `/* ... COLLEZ VOTRE CSS ICI ... */` par le contenu réel de votre fichier CSS généré.
-**Où trouver le CSS ?** Après avoir lancé `npm run build`, ouvrez le dossier `build/static/css/`. Vous y verrez un fichier `main.css`. Ouvrez ce fichier, copiez **TOUT** son contenu et collez-le à la place du commentaire ci-dessous.
+**Où trouver le CSS ?** Après avoir lancé `npm run build`, ouvrez le fichier `build/static/css/main.css`. Ouvrez ce fichier, copiez **TOUT** son contenu et collez-le à la place du commentaire ci-dessous.
 
 ```css
 /*
@@ -71,14 +71,17 @@ Pour chaque fichier `.php` dans le dossier `workspace/` qui commence par `templa
 1.  **Page d'accueil** : Copiez `workspace/front-page.php` vers `vylscapital-theme/front-page.php`.
 2.  **Article de blog** : Copiez `workspace/single.php` vers `vylscapital-theme/single.php`.
 3.  **Page standard** : Copiez `workspace/page.php` vers `vylscapital-theme/page.php`.
-4.  **Page "À Propos"** : Copiez `workspace/template-a-propos.php` vers `vylscapital-theme/template-a-propos.php`.
-5.  **Page "Contact"** : Copiez `workspace/template-contact.php` vers `vylscapital-theme/template-contact.php`.
-6.  **Page "Demande de Prêt"** : Copiez `workspace/template-demande-de-pret.php` vers `vylscapital-theme/template-demande-de-pret.php`.
-7.  **Pages de Services** :
+4.  **Pages de remerciement** :
+    *   Copiez `workspace/template-merci-contact.php` vers `vylscapital-theme/template-merci-contact.php`.
+    *   Copiez `workspace/template-merci-demande.php` vers `vylscapital-theme/template-merci-demande.php`.
+5.  **Page "À Propos"** : Copiez `workspace/template-a-propos.php` vers `vylscapital-theme/template-a-propos.php`.
+6.  **Page "Contact"** : Copiez `workspace/template-contact.php` vers `vylscapital-theme/template-contact.php`.
+7.  **Page "Demande de Prêt"** : Copiez `workspace/template-demande-de-pret.php` vers `vylscapital-theme/template-demande-de-pret.php`.
+8.  **Pages de Services** :
     *   Copiez `workspace/template-pret-entreprise.php` vers `vylscapital-theme/template-pret-entreprise.php`.
     *   Copiez `workspace/template-pret-immo.php` vers `vylscapital-theme/template-pret-immo.php`.
-    *   ... Faites de même pour **tous les autres fichiers de service**.
-8.  **Pages Légales** :
+    *   ... Faites de même pour **tous les autres fichiers de service** (`-personnel`, `-auto`, `-rachat-de-credit`).
+9.  **Pages Légales** :
     *   Copiez `workspace/template-politique-de-confidentialite.php` vers `vylscapital-theme/template-politique-de-confidentialite.php`.
     *   Copiez `workspace/template-conditions-generales.php` vers `vylscapital-theme/template-conditions-generales.php`.
 

@@ -89,20 +89,12 @@ add_action( 'widgets_init', 'vyls_widgets_init' );
  * Enqueue scripts and styles.
  */
 function vylscapital_enqueue_assets() {
-    // Main theme stylesheet
+    // Main theme stylesheet from style.css (which will contain the built CSS)
     wp_enqueue_style(
         'vylscapital-theme-style',
         get_stylesheet_uri(),
         array(),
         _S_VERSION
-    );
-
-    // React App CSS (from build)
-    wp_enqueue_style(
-        'vylscapital-react-style',
-        get_template_directory_uri() . '/build/static/css/main.css',
-        array('vylscapital-theme-style'),
-        null
     );
 
     // Google Fonts (Inter)
@@ -122,8 +114,15 @@ function vylscapital_enqueue_assets() {
         true
     );
 
-    // Conditionally load the calculator script
+    // Conditionally load the calculator script on specific pages
     if ( is_front_page() || is_page_template( 'template-pret-auto.php' ) || is_page_template( 'template-pret-immo.php' ) || is_page_template( 'template-pret-personnel.php' ) || is_page_template( 'template-rachat-de-credit.php' ) || is_page_template( 'template-pret-entreprise.php' ) ) {
+        // Enqueue its specific CSS
+         wp_enqueue_style(
+            'vylscapital-calculator-style',
+            get_template_directory_uri() . '/build/static/css/calculator.css',
+            array(),
+            null
+        );
         // Enqueue React Calculator App JS
         wp_enqueue_script(
             'vylscapital-calculator-app',
@@ -131,13 +130,6 @@ function vylscapital_enqueue_assets() {
             array('wp-element'), // Dependency on wp-element for React in WP
             null,
             true
-        );
-        // Enqueue its specific CSS if it exists
-         wp_enqueue_style(
-            'vylscapital-calculator-style',
-            get_template_directory_uri() . '/build/static/css/calculator.css',
-            array(),
-            null
         );
     }
 
@@ -149,23 +141,29 @@ function vylscapital_enqueue_assets() {
 add_action( 'wp_enqueue_scripts', 'vylscapital_enqueue_assets' );
 
 /**
- * Custom Walker to remove <li> tags from nav menu items
+ * Custom Walker to remove <li> tags from nav menu items for desktop
  */
-class VylsCapital_Walker_Nav_Menu extends Walker_Nav_Menu {
-    // Don't start the top level
-    function start_lvl(&$output, $depth = 0, $args = null) {
-        $output .= "";
-    }
-    // Don't end the top level
-    function end_lvl(&$output, $depth = 0, $args = null) {
-        $output .= "";
-    }
-    // Don't print sub-menus
+class VylsCapital_Walker_Nav_Menu_Desktop extends Walker_Nav_Menu {
     function start_el(&$output, $item, $depth = 0, $args = null, $id = 0) {
         $classes = empty( $item->classes ) ? array() : (array) $item->classes;
         $class_names = join(' ', apply_filters('nav_menu_css_class', array_filter($classes), $item, $args));
         
         $output .= '<a href="' . esc_url($item->url) . '" class="transition-colors hover:text-primary ' . esc_attr($class_names) . '">' . esc_html($item->title) . '</a>';
+    }
+    function end_el(&$output, $item, $depth = 0, $args = null) {
+        $output .= "";
+    }
+}
+
+/**
+ * Custom Walker for the mobile menu to keep a simpler structure
+ */
+class VylsCapital_Walker_Nav_Menu_Mobile extends Walker_Nav_Menu {
+    function start_el(&$output, $item, $depth = 0, $args = null, $id = 0) {
+        $classes = empty( $item->classes ) ? array() : (array) $item->classes;
+        $class_names = join(' ', apply_filters('nav_menu_css_class', array_filter($classes), $item, $args));
+        
+        $output .= '<a data-mobile-menu-close href="' . esc_url($item->url) . '" class="text-lg font-medium transition-colors hover:text-primary pl-2 ' . esc_attr($class_names) . '">' . esc_html($item->title) . '</a>';
     }
     function end_el(&$output, $item, $depth = 0, $args = null) {
         $output .= "";
