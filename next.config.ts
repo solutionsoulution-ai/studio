@@ -47,17 +47,14 @@ const nextConfig: NextConfig = {
   },
   webpack: (config, { isServer, dev }) => {
     if (!isServer && !dev) {
-      // Garde la configuration pour le build principal
       const originalEntry = config.entry;
       config.entry = async () => {
         const entries = await originalEntry();
         
-        // Ajoute notre point d'entrée pour le calculateur
         entries['calculator'] = './src/app/calculator-entry.tsx';
         
-        // Ajuste le point d'entrée principal pour qu'il soit bien nommé 'main'
         if (entries['app/page']) {
-           entries['main'] = entries['app/page'];
+           entries['main-app'] = entries['app/page']; // Renomme pour éviter conflit
            delete entries['app/page'];
         }
 
@@ -65,8 +62,8 @@ const nextConfig: NextConfig = {
       };
 
       config.output.filename = 'static/js/[name].js';
-      config.output.chunkFilename = 'static/js/[name].chunk.js';
       
+      // On ne génère plus de chunk JS séparés pour simplifier l'intégration
       if (config.optimization) {
         config.optimization.splitChunks = {
           cacheGroups: {
@@ -81,8 +78,9 @@ const nextConfig: NextConfig = {
       );
       
       if (miniCssExtractPlugin) {
-        miniCssExtractPlugin.options.filename = 'static/css/[name].css';
-        miniCssExtractPlugin.options.chunkFilename = 'static/css/[name].chunk.css';
+        // Force la sortie de tout le CSS dans un seul fichier
+        miniCssExtractPlugin.options.filename = 'static/css/main.css';
+        delete miniCssExtractPlugin.options.chunkFilename;
       }
     }
     return config;

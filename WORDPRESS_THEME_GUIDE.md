@@ -12,7 +12,7 @@ Avant toute chose, vous devez générer les fichiers JavaScript et CSS nécessai
 npm run build
 ```
 
-Cela crée un dossier `build/` contenant les fichiers `calculator.js`, `calculator.css` et `main.css`.
+Cela crée un dossier `build/` contenant le fichier `calculator.js` et `main.css`.
 
 ---
 
@@ -99,10 +99,7 @@ Pour chaque fichier `.php` dans le dossier `workspace/` qui commence par `templa
     *   Après avoir lancé `npm run build`, allez dans le dossier `build/static/js/` de votre projet.
     *   Copiez le fichier `calculator.js` dans un nouveau dossier `build/static/js/` à l'intérieur de votre thème. Le chemin final doit être : `vylscapital-theme/build/static/js/calculator.js`.
 
-3.  **CSS pour le Calculateur :**
-    *   De même, copiez le fichier `build/static/css/calculator.css` dans `vylscapital-theme/build/static/css/calculator.css`.
-
-Votre `functions.php` est déjà configuré pour charger ces scripts aux bons endroits.
+Votre `functions.php` est déjà configuré pour charger ces scripts aux bons endroits. Il n'y a pas de fichier `calculator.css` à copier.
 
 ### B. Images
 
