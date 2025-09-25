@@ -4,117 +4,72 @@ Ce guide contient les blocs de code exacts et les étapes à suivre pour créer 
 
 ---
 
-## Étape 0 : Prérequis - Générer les fichiers statiques
+## Étape 1 : Préparation de la structure du thème
 
-Avant toute chose, vous devez générer les fichiers JavaScript et CSS. Exécutez la commande suivante à la racine de votre projet :
+1.  Quelque part sur votre ordinateur, créez un nouveau dossier que vous nommerez `vylscapital-theme`. C'est ce dossier qui contiendra votre thème final.
+2.  Copiez **TOUT** le contenu du dossier `workspace/` (qui se trouve dans ce projet) et collez-le à l'intérieur de votre dossier `vylscapital-theme`.
+
+---
+
+## Étape 2 : Générer les fichiers statiques (CSS & JS)
+
+Ouvrez votre terminal à la racine de **ce projet Next.js** (pas votre dossier de thème) et exécutez la commande suivante :
 
 ```bash
 npm run build
 ```
 
-Cela crée un dossier `build/` contenant `calculator.js` et `main.css`.
+Cette commande va créer un dossier `build/` qui contient les fichiers `main.css` et `calculator.js` dont nous avons besoin.
 
 ---
 
-## Étape 1 : Structure de base du thème
+## Étape 3 : Gérer le CSS (Étape cruciale)
 
-1.  Allez dans le dossier `wp-content/themes/` de votre installation WordPress.
-2.  Créez un nouveau dossier pour votre thème, par exemple `vylscapital-theme`.
-3.  Si vous utilisez une base comme "Underscores", copiez tous ses fichiers dans `vylscapital-theme`.
-
----
-
-## Étape 2 : Copier les fichiers PHP principaux
-
-Copiez les fichiers suivants depuis le dossier `workspace/` de ce projet et utilisez-les pour **remplacer** les fichiers du même nom dans votre thème `vylscapital-theme/`.
-
-*   `workspace/functions.php` -> `vylscapital-theme/functions.php`
-*   `workspace/header.php` -> `vylscapital-theme/header.php`
-*   `workspace/footer.php` -> `vylscapital-theme/footer.php`
-*   `workspace/index.php` -> `vylscapital-theme/index.php` (pour le blog)
-*   `workspace/page.php` -> `vylscapital-theme/page.php` (pour les pages simples)
-*   `workspace/single.php` -> `vylscapital-theme/single.php` (pour les articles de blog)
+1.  Ouvrez le fichier `build/static/css/main.css` qui vient d'être créé.
+2.  Sélectionnez et copiez **TOUT** le contenu de ce fichier.
+3.  Maintenant, allez dans votre dossier de thème `vylscapital-theme` et ouvrez le fichier `style.css`.
+4.  À l'intérieur de `style.css`, collez tout le contenu que vous venez de copier, juste **en dessous** du bloc de commentaire d'en-tête. **Ne supprimez pas l'en-tête existant.**
 
 ---
 
-## Étape 3 : Copier les modèles de page personnalisés
+## Étape 4 : Gérer le JavaScript
 
-Copiez **tous les fichiers** du dossier `workspace/` qui commencent par `template-` ou `front-page` dans votre thème `vylscapital-theme/`.
+1.  **JavaScript pour le Calculateur (React) :**
+    *   Allez dans `build/static/js/`.
+    *   Créez les dossiers `build/static/js/` à l'intérieur de votre thème `vylscapital-theme/`.
+    *   Copiez le fichier `calculator.js` depuis `build/static/js/calculator.js` vers `vylscapital-theme/build/static/js/calculator.js`.
 
-*   `workspace/front-page.php` -> `vylscapital-theme/front-page.php`
-*   `workspace/template-a-propos.php` -> `vylscapital-theme/template-a-propos.php`
-*   `workspace/template-contact.php` -> `vylscapital-theme/template-contact.php`
-*   `workspace/template-demande-de-pret.php` -> `vylscapital-theme/template-demande-de-pret.php`
-*   `workspace/template-merci-contact.php` -> `vylscapital-theme/template-merci-contact.php`
-*   `workspace/template-merci-demande.php` -> `vylscapital-theme/template-merci-demande.php`
-*   `workspace/template-politique-de-confidentialite.php` -> `vylscapital-theme/template-politique-de-confidentialite.php`
-*   `workspace/template-conditions-generales.php` -> `vylscapital-theme/template-conditions-generales.php`
-*   **Et tous les modèles de services** (`template-pret-auto.php`, `template-pret-immo.php`, etc.).
+Le fichier `functions.php` est déjà configuré pour charger `main.js` (déjà présent dans `assets/js`) et `calculator.js`. Il n'y a rien d'autre à faire.
 
 ---
 
-## Étape 4 : Gérer le CSS
-
-1.  Ouvrez le fichier `vylscapital-theme/style.css`.
-2.  Assurez-vous que l'en-tête du thème est correct :
-    ```css
-    /*
-    Theme Name: VylsCapital Theme
-    Author: Votre Nom
-    Description: Thème sur mesure pour le site VylsCapital.
-    Version: 1.0
-    */
-    ```
-3.  **Action cruciale :** Après l'en-tête, supprimez tout le reste du CSS par défaut.
-4.  Ouvrez le fichier `build/static/css/main.css` généré par `npm run build`.
-5.  Copiez **TOUT** son contenu et collez-le dans votre `vylscapital-theme/style.css` (juste après l'en-tête).
-
----
-
-## Étape 5 : Gérer le JavaScript
-
-1.  **JavaScript pour l'interactivité de base (Menu/FAQ) :**
-    *   Créez le chemin de dossiers `assets/js/` dans votre thème `vylscapital-theme/`.
-    *   Copiez le fichier `workspace/assets/js/main.js` dans `vylscapital-theme/assets/js/main.js`.
-
-2.  **JavaScript pour le Calculateur (React) :**
-    *   Après `npm run build`, allez dans `build/static/js/`.
-    *   Créez le chemin de dossiers `build/static/js/` à l'intérieur de votre thème.
-    *   Copiez le fichier `calculator.js` à cet endroit. Le chemin final sera : `vylscapital-theme/build/static/js/calculator.js`.
-
-Votre `functions.php` est déjà configuré pour charger ces scripts. **Il n'y a pas de fichier `calculator.css` à copier.**
-
----
-
-## Étape 6 : Copier les Images
+## Étape 5 : Gérer les Images
 
 1.  Créez un dossier `assets/images/` dans votre thème `vylscapital-theme/`.
-2.  Les fichiers PHP font référence à des images (ex: `pret-auto.jpg`, `home-carousel-1.png`). Vous devez trouver ces images dans le projet Next.js (`src/components/site/` ou `public/`) et les copier dans `vylscapital-theme/assets/images/`.
+2.  Vous devez trouver les images utilisées dans le projet Next.js (principalement dans `src/components/site/` et `public/`) et les copier dans `vylscapital-theme/assets/images/`. Les fichiers PHP font référence à des noms comme `pret-auto.jpg`, `home-carousel-1.png`, etc.
 
 ---
 
-## Étape 7 : Nettoyage des fichiers Underscores (Optionnel mais recommandé)
+## Étape 6 : Créer l'archive .ZIP (La bonne méthode)
 
-Les fichiers suivants du thème Underscores ne sont plus nécessaires car nos propres fichiers les remplacent. Vous pouvez les supprimer pour garder un thème propre :
-*   Le dossier `template-parts/` et tout son contenu.
-*   Le dossier `js/` (nous utilisons notre propre `assets/js/`).
+C'est l'étape qui cause l'erreur "feuille de style manquante". Suivez-la attentivement.
 
-**Fichiers à conserver d'Underscores :**
-*   `404.php` (page d'erreur)
-*   `search.php` (résultats de recherche)
-*   `archive.php` (archives par date/catégorie)
-*   `comments.php` (affichage des commentaires)
-*   `screenshot.png`
+1.  **N'archivez PAS le dossier `vylscapital-theme` lui-même.**
+2.  **Ouvrez** le dossier `vylscapital-theme`.
+3.  À l'intérieur, sélectionnez **tous les fichiers et dossiers** (`style.css`, `index.php`, `assets/`, `build/`, etc.).
+4.  Faites un clic droit sur votre sélection et choisissez :
+    *   Sur **Windows** : `Envoyer vers` > `Dossier compressé (.zip)`.
+    *   Sur **macOS** : `Compresser X éléments`.
+5.  Renommez le fichier `.zip` nouvellement créé en `vylscapital-theme.zip`.
+
+**Ce nouveau fichier .zip est celui que vous devez téléverser sur WordPress.** Il a maintenant la bonne structure, avec `style.css` directement à la racine.
 
 ---
 
-## Étape 8 : Configuration dans WordPress
+## Étape 7 : Configuration dans WordPress
 
-Une fois tous les fichiers en place :
-1.  **Activez le thème** dans `Apparence > Thèmes`.
-2.  **Créez les pages** ("À Propos", "Contact", "Prêt Auto", etc.) dans l'admin WordPress.
-3.  Pour chaque page, dans l'éditeur, assignez le bon **"Modèle"** dans le panneau "Attributs de la page".
-4.  **Créez le menu** dans `Apparence > Menus` et assignez-le à l'emplacement "Menu Principal".
-5.  **Installez les plugins** nécessaires pour les formulaires de contact et le carrousel si vous souhaitez cette interactivité.
-
-Bon courage !
+1.  Allez dans `Apparence > Thèmes > Ajouter > Téléverser un thème` et téléversez votre `vylscapital-theme.zip`.
+2.  Activez le thème.
+3.  Créez les pages ("À Propos", "Contact", "Prêt Auto", etc.) et assignez le bon **"Modèle"** de page dans l'éditeur.
+4.  Créez le menu dans `Apparence > Menus`.
+5.  Installez un plugin de formulaire de contact (ex: WPForms, Contact Form 7) et remplacez les formulaires statiques dans les fichiers `template-contact.php` et `template-demande-de-pret.php` par le shortcode du plugin.
