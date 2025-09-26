@@ -10,6 +10,7 @@
  */
 
 ?>
+</div> <!-- Fermeture de la div #page-content -->
 <footer class="bg-muted/30 border-t">
     <div class="container mx-auto py-12 px-6">
         <div class="grid grid-cols-2 md:grid-cols-5 gap-8">

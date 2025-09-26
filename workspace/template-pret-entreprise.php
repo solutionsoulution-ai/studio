@@ -68,9 +68,8 @@ get_header();
 
     <!-- Section: Calculateur -->
     <section class="w-full py-16 md:py-24 bg-muted/30">
-        <div class="container mx-auto text-center">
-            <!-- NOTE: Le calculateur doit être implémenté via un plugin WordPress. -->
-            <p class="text-muted-foreground">Recréer le calculateur de prêt professionnel avec un plugin et insérer le shortcode ici.</p>
+        <div id="calculator-root">
+            <!-- This div is the mount point for the React calculator. It will be hydrated by calculator.js -->
         </div>
     </section>
 

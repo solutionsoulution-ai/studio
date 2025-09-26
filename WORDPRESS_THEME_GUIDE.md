@@ -75,9 +75,10 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
     *   Activez le thème.
 
 2.  **Configurer la Page d'Accueil (Très Important) :**
+    *   Allez dans `Pages > Ajouter`. Créez une page simple que vous nommerez `Accueil`. Laissez le contenu vide et le modèle sur "Défaut", puis publiez-la.
     *   Allez dans `Réglages > Lecture`.
     *   À côté de "La page d'accueil affiche", cochez **"Une page statique"**.
-    *   Laissez le menu déroulant "Page d'accueil" tel quel. Notre thème utilise `front-page.php` qui sera détecté automatiquement.
+    *   Dans le menu déroulant "Page d'accueil", sélectionnez la page **"Accueil"** que vous venez de créer.
     *   Cliquez sur **"Enregistrer les modifications"**.
 
 3.  **Créer les Pages :**

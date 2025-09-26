@@ -76,3 +76,4 @@
         </div>
     </div>
 </header>
+<div id="page-content" class="relative"> <!-- Ajout de cette div pour gérer le stacking context -->
