@@ -85,3 +85,15 @@
     @apply font-code text-sm bg-muted text-muted-foreground px-1 py-0.5 rounded-sm;
   }
 }
+
+@layer utilities {
+  .fade-in-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+  .fade-in-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
