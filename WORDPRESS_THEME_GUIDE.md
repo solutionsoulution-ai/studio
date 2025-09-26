@@ -66,10 +66,69 @@ C'est l'étape qui cause l'erreur "feuille de style manquante". Suivez-la attent
 
 ---
 
-## Étape 7 : Configuration dans WordPress
+## Étape 7 : Configuration du contenu dans WordPress (Étape Finale)
 
-1.  Allez dans `Apparence > Thèmes > Ajouter > Téléverser un thème` et téléversez votre `vylscapital-theme.zip`.
-2.  Activez le thème.
-3.  Créez les pages ("À Propos", "Contact", "Prêt Auto", etc.) et assignez le bon **"Modèle"** de page dans l'éditeur.
-4.  Créez le menu dans `Apparence > Menus`.
-5.  Installez un plugin de formulaire de contact (ex: WPForms, Contact Form 7) et remplacez les formulaires statiques dans les fichiers `template-contact.php` et `template-demande-de-pret.php` par le shortcode du plugin.
+Une fois le thème activé, votre site peut afficher des erreurs "Page non trouvée". C'est normal. Vous devez maintenant créer les pages dans WordPress.
+
+1.  **Activer le Thème :**
+    *   Allez dans `Apparence > Thèmes > Ajouter > Téléverser un thème` et téléversez votre `vylscapital-theme.zip`.
+    *   Activez le thème.
+
+2.  **Créer les Pages :**
+    Pour chaque page de votre site, vous devez créer une page dans WordPress et lui assigner le bon "Modèle".
+    *   Allez dans `Pages > Ajouter`.
+    *   Donnez un titre à la page (ex: "Contact").
+    *   Dans la colonne de droite, sous `Résumé > Modèle`, sélectionnez le modèle correspondant (ex: "Page - Contact").
+    *   Cliquez sur `Publier`.
+
+    **Répétez cette opération pour les pages suivantes :**
+    *   **Titre :** `À Propos` -> **Modèle :** `Page - À Propos`
+    *   **Titre :** `Contact` -> **Modèle :** `Page - Contact`
+    *   **Titre :** `Demande de Financement` -> **Modèle :** `Page - Demande de Prêt`
+    *   **Titre :** `Prêt Entreprise` -> **Modèle :** `Service - Prêt Entreprise`
+    *   **Titre :** `Prêt Immobilier` -> **Modèle :** `Service - Prêt Immobilier`
+    *   **Titre :** `Prêt Personnel` -> **Modèle :** `Service - Prêt Personnel`
+    *   **Titre :** `Prêt Auto` -> **Modèle :** `Service - Prêt Auto`
+    *   **Titre :** `Rachat de Crédit` -> **Modèle :** `Service - Rachat de Crédit`
+    *   **Titre :** `Politique de Confidentialité` -> **Modèle :** `Page - Politique de Confidentialité`
+    *   **Titre :** `Conditions Générales` -> **Modèle :** `Page - Conditions Générales`
+    
+3.  **Configurer la Page d'Accueil :**
+    *   Allez dans `Réglages > Lecture`.
+    *   Cochez "Une page statique".
+    *   Pour "Page d'accueil", sélectionnez la page d'accueil que vous avez créée (si nécessaire, sinon WordPress utilise `front-page.php` par défaut).
+    *   Pour "Page des articles", sélectionnez une page que vous nommerez "Blog" (si vous voulez un blog séparé).
+    
+4.  **Créer le Menu :**
+    *   Allez dans `Apparence > Menus`.
+    *   Créez un nouveau menu.
+    *   Ajoutez les pages que vous venez de créer au menu.
+    *   En bas, dans "Emplacements du menu", cochez la case "Menu Principal".
+    *   Enregistrez le menu.
+
+5.  **Permaliens (Très Important) :**
+    *   Allez dans `Réglages > Permaliens`.
+    *   Choisissez la structure `Titre de la publication`.
+    *   Cliquez sur `Enregistrer les modifications`. Cela rafraîchit les règles de liens de WordPress et résout beaucoup de problèmes de "page non trouvée".
+
+6.  **Installer les Plugins :**
+    *   Pour que les formulaires de contact et de demande de prêt fonctionnent, installez un plugin comme **WPForms** ou **Contact Form 7**.
+    *   Créez vos formulaires dans le plugin.
+    *   Modifiez les fichiers `template-contact.php` et `template-demande-de-pret.php` en remplaçant les formulaires HTML statiques par le shortcode du plugin (ex: `<?php echo do_shortcode('[wpforms id="123"]'); ?>`).
+    *   Pour les carrousels (page d'accueil, témoignages), installez un plugin de slider comme **Smart Slider 3** ou **Slider Revolution** et recréez les carrousels, puis insérez leur shortcode dans les fichiers PHP correspondants.
+
+---
+
+### Nettoyage du Thème Underscores (Optionnel mais recommandé)
+
+Votre thème de base peut contenir des fichiers dont nous n'avons plus besoin. Vous pouvez les supprimer pour garder votre thème propre :
+*   `404.php` (gardez-le, il est utile)
+*   `archive.php` (gardez-le)
+*   `comments.php` (gardez-le)
+*   `search.php` (gardez-le)
+*   `screenshot.png` (à garder ou à remplacer par votre propre capture d'écran)
+*   Le dossier `inc/`
+*   Le dossier `template-parts/`
+*   Le dossier `js/` (celui qui vient avec Underscores, pas votre dossier `assets/js/`)
+*   Le dossier `sass/` ou `css/`
+*   `README.txt` (celui d'Underscores)
