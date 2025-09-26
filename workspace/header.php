@@ -15,7 +15,6 @@
 <head>
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?php wp_title('|', true, 'right'); ?></title>
     <?php wp_head(); ?>
 </head>
 <body <?php body_class('font-body antialiased'); ?>>
@@ -31,17 +30,17 @@
                 wp_nav_menu(array(
                     'theme_location' => 'main-menu',
                     'container' => false,
-                    'items_wrap' => '%3$s', // Affiche les liens sans <ul>
-                    'walker' => new VylsCapital_Walker_Nav_Menu()
+                    'items_wrap' => '%3$s', // Display links without ul
+                    'walker' => new VylsCapital_Walker_Nav_Menu_Desktop()
                 ));
             ?>
         </nav>
         <div class="flex flex-1 items-center justify-end space-x-2 md:flex-none lg:flex-1 lg:justify-end">
             <a href="/demande-de-pret" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">Faire une demande</a>
             
-            <!-- Mobile Menu -->
+            <!-- Mobile Menu Button -->
             <div class="lg:hidden">
-                <button data-mobile-menu-button aria-label="Ouvrir le menu" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                <button data-mobile-menu-button aria-label="Ouvrir le menu" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white focus:outline-none">
                     <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                 </button>
             </div>
@@ -63,14 +62,16 @@
             <nav class="flex flex-col space-y-4 p-4">
                  <a href="/demande-de-pret" data-mobile-menu-close class="text-lg font-medium transition-colors hover:text-primary">Faire une demande</a>
                  <p class="text-sm font-semibold text-muted-foreground pt-4">Menu</p>
-                 <?php
-                    wp_nav_menu(array(
-                        'theme_location' => 'main-menu',
-                        'container' => false,
-                        'items_wrap' => '%3$s', // No ul
-                        'walker' => new VylsCapital_Walker_Nav_Menu() 
-                    ));
-                ?>
+                 <div class="flex flex-col space-y-4">
+                    <?php
+                        wp_nav_menu(array(
+                            'theme_location' => 'main-menu',
+                            'container' => false,
+                            'items_wrap' => '%3$s', // No ul
+                            'walker' => new VylsCapital_Walker_Nav_Menu_Mobile() 
+                        ));
+                    ?>
+                 </div>
             </nav>
         </div>
     </div>
