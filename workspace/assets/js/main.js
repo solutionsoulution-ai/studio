@@ -45,4 +45,23 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  // Scroll Animations
+  const animatedElements = document.querySelectorAll('section, .fade-in-item');
+  animatedElements.forEach(el => el.classList.add('fade-in-on-scroll'));
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.1
+  });
+
+  animatedElements.forEach(element => {
+    observer.observe(element);
+  });
+
 });
