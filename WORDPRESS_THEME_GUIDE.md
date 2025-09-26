@@ -74,7 +74,13 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
     *   Allez dans `Apparence > Thèmes > Ajouter > Téléverser un thème` et téléversez votre `vylscapital-theme.zip`.
     *   Activez le thème.
 
-2.  **Créer les Pages :**
+2.  **Configurer la Page d'Accueil (Très Important) :**
+    *   Allez dans `Réglages > Lecture`.
+    *   À côté de "La page d'accueil affiche", cochez **"Une page statique"**.
+    *   Laissez le menu déroulant "Page d'accueil" tel quel. Notre thème utilise `front-page.php` qui sera détecté automatiquement.
+    *   Cliquez sur **"Enregistrer les modifications"**.
+
+3.  **Créer les Pages :**
     Pour chaque page de votre site, vous devez créer une page dans WordPress et lui assigner le bon "Modèle".
     *   Allez dans `Pages > Ajouter`.
     *   Donnez un titre à la page (ex: "Contact").
@@ -92,12 +98,6 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
     *   **Titre :** `Rachat de Crédit` -> **Modèle :** `Service - Rachat de Crédit`
     *   **Titre :** `Politique de Confidentialité` -> **Modèle :** `Page - Politique de Confidentialité`
     *   **Titre :** `Conditions Générales` -> **Modèle :** `Page - Conditions Générales`
-    
-3.  **Configurer la Page d'Accueil :**
-    *   Allez dans `Réglages > Lecture`.
-    *   Cochez "Une page statique".
-    *   Pour "Page d'accueil", sélectionnez la page d'accueil que vous avez créée (si nécessaire, sinon WordPress utilise `front-page.php` par défaut).
-    *   Pour "Page des articles", sélectionnez une page que vous nommerez "Blog" (si vous voulez un blog séparé).
     
 4.  **Créer le Menu :**
     *   Allez dans `Apparence > Menus`.
