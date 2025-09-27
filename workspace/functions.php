@@ -114,31 +114,23 @@ function vylsfond_enqueue_assets() {
         true
     );
 
-    // Conditionally load the calculator script
-    $calculator_pages = [
-        'template-demande-de-pret.php',
-        'template-pret-auto.php',
-        'template-pret-immo.php',
-        'template-pret-personnel.php',
-        'template-rachat-de-credit.php',
-        'template-pret-entreprise.php',
-    ];
-    if ( is_front_page() || is_page_template($calculator_pages) ) {
+    // Conditionally load the React calculator app
+    if ( is_front_page() || is_page_template( 'template-pret-auto.php' ) || is_page_template( 'template-pret-immo.php' ) || is_page_template( 'template-pret-personnel.php' ) || is_page_template( 'template-rachat-de-credit.php' ) || is_page_template( 'template-pret-entreprise.php' ) ) {
         wp_enqueue_script(
             'vylsfond-calculator-app',
             get_template_directory_uri() . '/build/static/js/calculator.js',
-            array('wp-element'),
+            array('wp-element'), // Dependency for React in WP
             null,
             true
         );
     }
 
-    // Conditionally load the banking app script
-    if (is_page_template('template-banque.php')) {
+    // Conditionally load the React banking app
+    if ( is_page_template( 'template-banque.php' ) ) {
         wp_enqueue_script(
             'vylsfond-banking-app',
             get_template_directory_uri() . '/build/static/js/banking.js',
-            array('wp-element'),
+            array('wp-element'), // Dependency for React in WP
             null,
             true
         );

@@ -24,28 +24,28 @@ get_header();
          <div>
             <!--
             ====================================================================================================
-            INSTRUCTIONS POUR RENDRE CE FORMULAIRE FONCTIONNEL (SANS DÉVELOPPEUR)
+            INSTRUCTIONS POUR RENDRE CE FORMULAIRE FONCTIONNEL
             ====================================================================================================
             
-            Ce formulaire est une maquette. Pour qu'il envoie des e-mails, suivez ces étapes simples :
+            Ce formulaire est une maquette. Pour qu'il envoie des e-mails, suivez ces étapes :
 
-            1. INSTALLEZ LE PLUGIN WPFORMS :
+            1. INSTALLEZ WPFORMS :
                - Dans votre admin WordPress, allez à "Extensions" > "Ajouter".
                - Recherchez, installez et activez le plugin "WPForms".
 
-            2. CRÉEZ LE FORMULAIRE DANS WPFORMS :
-               - Allez dans le menu "WPForms" et créez un nouveau formulaire.
-               - Recréez les champs ci-dessous en utilisant les types de champs suivants :
+            2. CRÉEZ LE FORMULAIRE :
+               - Allez dans le menu "WPForms", créez un nouveau formulaire.
+               - Recréez les champs ci-dessous :
                  - Nom Complet -> Champ "Nom" (utilisez le format "Simple")
                  - Adresse E-mail -> Champ "E-mail"
                  - Votre Message -> Champ "Paragraphe de texte"
-               - Dans "Réglages" > "Notifications" du formulaire, mettez VOTRE adresse e-mail pour recevoir les messages.
+               - Dans "Réglages" > "Notifications", mettez VOTRE adresse e-mail.
                - Dans "Réglages" > "Confirmation", choisissez "Rediriger vers une URL" et mettez le lien de votre page "Merci Contact".
                - Enregistrez le formulaire.
 
-            3. REMPLACEZ LE CODE CI-DESSOUS :
-               - Une fois le formulaire enregistré, WPForms vous donnera un "shortcode" qui ressemble à : [wpforms id="123"]. Copiez-le.
-               - Supprimez tout le bloc HTML <div class="rounded-lg..."> qui se trouve juste en dessous de ce commentaire (jusqu'au commentaire de fin).
+            3. REMPLACEZ LE CODE CI-DESSOUS PAR LE SHORTCODE :
+               - WPForms vous donnera un "shortcode" (ex: [wpforms id="123"]). Copiez-le.
+               - Supprimez le bloc <div class="rounded-lg..."> (entre les commentaires DEBUT et FIN).
                - À la place, collez votre shortcode, comme ceci :
                  <?php echo do_shortcode('[wpforms id="123"]'); ?>
             

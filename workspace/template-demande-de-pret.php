@@ -16,33 +16,35 @@ get_header();
                 Remplissez le formulaire pour soumettre votre demande. C'est simple, rapide et sécurisé.
             </p>
         </div>
-
+        
         <!--
         ====================================================================================================
-        INSTRUCTIONS POUR RENDRE CE FORMULAIRE FONCTIONNEL (SANS DÉVELOPPEUR)
+        INSTRUCTIONS POUR RENDRE CE FORMULAIRE FONCTIONNEL
         ====================================================================================================
         
         Ce formulaire est actuellement une maquette. Pour qu'il envoie les demandes par e-mail, suivez ces étapes :
 
-        1. INSTALLEZ LE PLUGIN WPFORMS :
+        1. INSTALLEZ UN PLUGIN DE FORMULAIRE (Ex: WPForms) :
            - Dans votre admin WordPress, allez à "Extensions" > "Ajouter".
-           - Recherchez, installez et activez le plugin "WPForms".
+           - Recherchez, installez et activez "WPForms".
 
         2. CRÉEZ LE FORMULAIRE DANS WPFORMS :
-           - Allez dans le menu "WPForms" et créez un nouveau formulaire.
-           - Recréez les champs ci-dessous. C'est très simple : pour chaque champ, utilisez le type indiqué.
+           - Allez dans le menu "WPForms" > "Ajouter" et créez un nouveau formulaire.
+           - Recréez les champs ci-dessous en utilisant les types de champs indiqués.
              - Type de Prêt -> Champ "Liste déroulante"
              - Montant souhaité -> Champ "Nombre"
-             - Prénom, Nom, etc. -> Champ "Texte simple"
-             - Email -> Champ "E-mail"
-             - Fichiers -> Le champ "Envoi de fichier" est une option pro. Une alternative gratuite est de ne pas mettre ce champ et de demander au client de vous envoyer les documents par e-mail après sa demande.
-           - Dans "Réglages" > "Notifications" du formulaire, mettez VOTRE adresse e-mail.
-           - Dans "Réglages" > "Confirmation", choisissez "Rediriger vers une URL" et mettez le lien de votre page "Merci".
+             - Durée de remboursement -> Champ "Nombre"
+             - Prénom, Nom, Adresse, etc. -> Champ "Texte simple"
+             - Email -> Champ "Email"
+             - Date de naissance -> Trois champs "Nombre" (Jour, Mois, Année)
+             - Téléchargement de fichiers -> Utilisez le champ "Envoi de fichier" (peut nécessiter la version pro).
+           - Dans "Réglages" > "Notifications", mettez VOTRE adresse e-mail.
+           - Dans "Réglages" > "Confirmation", choisissez "Rediriger vers une URL" et mettez le lien de votre page "Merci Demande".
            - Enregistrez le formulaire.
 
-        3. REMPLACEZ LE CODE CI-DESSOUS :
-           - Une fois le formulaire enregistré, WPForms vous donnera un "shortcode" qui ressemble à : [wpforms id="123"]. Copiez-le.
-           - Supprimez tout le code HTML qui se trouve entre les commentaires "DÉBUT DU FORMULAIRE À REMPLACER" et "FIN DU FORMULAIRE À REMPLACER".
+        3. REMPLACEZ LE CODE STATIQUE PAR LE SHORTCODE :
+           - WPForms vous donnera un "shortcode" qui ressemble à : [wpforms id="123"]. Copiez-le.
+           - Supprimez tout le contenu HTML de la balise <form> (entre les commentaires DEBUT et FIN ci-dessous).
            - À la place, collez votre shortcode, comme ceci :
              <?php echo do_shortcode('[wpforms id="123"]'); ?>
         
@@ -50,41 +52,6 @@ get_header();
         -->
         
         <!-- ▼▼▼ DÉBUT DU FORMULAIRE À REMPLACER ▼▼▼ -->
-        
-        <div class="container mx-auto p-0 mb-10">
-            <div class="rounded-lg border bg-card text-card-foreground shadow-lg">
-                <div class="flex flex-col space-y-1.5 p-6">
-                    <h3 class="flex items-center gap-2 text-2xl font-semibold leading-none tracking-tight">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-primary"><path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 1.2 4.4 3 6 1.2 1 2.4 1 3 1 1.2 0 2.2-1.2 3-3 1.4-2.8 2.8-4.4 3-6 .2-1.8-1-2-3-2Z"/><path d="M7 14s-1.5 2-3 2c-1.5 0-3-2-3-4s1.5-4 3-4c1.5 0 3 2 3 4"/><path d="M19 14s1.5 2 3 2c1.5 0 3-2 3-4s-1.5-4-3-4c-1.5 0-3 2-3 4"/></svg>
-                        Estimez vos mensualités
-                    </h3>
-                    <p class="text-sm text-muted-foreground">
-                        Ceci est une simulation d'exemple et n'est pas interactive.
-                    </p>
-                </div>
-                <div class="grid md:grid-cols-2 gap-8 p-6 pt-0">
-                    <div class="space-y-8">
-                        <div>
-                            <label class="text-lg">Montant du prêt</label>
-                            <p class="text-2xl font-bold text-primary">50.000 €</p>
-                        </div>
-                        <div>
-                            <label class="text-lg">Durée du prêt (Mois)</label>
-                            <p class="text-2xl font-bold text-primary">120 Mois</p>
-                        </div>
-                    </div>
-                    <div class="bg-primary text-primary-foreground rounded-lg p-8 flex flex-col items-center justify-center text-center">
-                        <p class="text-lg font-medium opacity-80">Paiement mensuel estimé</p>
-                        <p class="text-5xl font-extrabold tracking-tight mt-2">460 €</p>
-                        <p class="mt-4 opacity-80 text-sm flex items-center gap-2">
-                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" x2="5" y1="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
-                             Taux fixe de 2%
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <form class="space-y-8" method="post" action="">
             <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
                 <div class="p-6"><h3 class="flex items-center gap-2 text-2xl font-semibold">1. Informations sur le Prêt</h3><p class="text-sm text-muted-foreground">Décrivez le financement dont vous avez besoin.</p></div>
@@ -172,7 +139,6 @@ get_header();
             </button>
         </form>
         <!-- ▲▲▲ FIN DU FORMULAIRE À REMPLACER ▲▲▲ -->
-
     </div>
 </main>
 
