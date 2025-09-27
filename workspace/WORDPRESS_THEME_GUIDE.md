@@ -79,14 +79,16 @@ Une fois le thème activé, vous devez créer les pages dans WordPress.
 3.  **Créer les Pages avec les bons Modèles :**
     Pour chaque page, allez dans `Pages > Ajouter`, donnez un titre, et dans la colonne de droite `Résumé > Modèle`, sélectionnez le modèle correspondant.
 
-    *   **Titre :** `Espace Client` -> **Modèle :** `Banque - Iframe`
+    *   **Titre :** `Espace Client` -> **Modèle :** `Espace Client (Iframe)`
+    *   **Titre :** `Transactions` -> **Modèle :** `Banque - Transactions`
+    *   **Titre :** `Virements` -> **Modèle :** `Banque - Virements`
     *   **Titre :** `À Propos` -> **Modèle :** `Page - À Propos`
     *   **Titre :** `Contact` -> **Modèle :** `Page - Contact`
     *   ... (et toutes les autres pages)
 
 4.  **Configurer la page Iframe :**
-    *   Ouvrez le fichier `template-iframe.php` dans votre thème.
-    *   Remplacez `"https://VOTRE_APP_BANCAIRE_ICI.com"` par l'URL réelle de votre application bancaire hébergée.
+    *   Ouvrez le fichier `template-espace-client.php` dans votre thème.
+    *   Remplacez `"https://vyls-banking.web.app"` par l'URL réelle de votre application bancaire hébergée.
 
 5.  **Créer le Menu :**
     *   Allez dans `Apparence > Menus`, créez un nouveau menu et ajoutez-y vos pages.
