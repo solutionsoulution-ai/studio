@@ -7,42 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Send, FileText, User, Banknote, UploadCloud, Wallet } from "lucide-react";
-
-const FIXED_INTEREST_RATE = 2;
+import { Send, FileText, User, Banknote, UploadCloud } from "lucide-react";
 
 export default function LoanApplicationForm() {
-  const [loanAmount, setLoanAmount] = useState<number>(0);
-  const [loanTerm, setLoanTerm] = useState<number>(0);
-
+  
   const handleSubmit = (e: React.FormEvent) => {
-    // This is a static site, so we prevent the default form submission.
-    // The form validation is handled by the browser's `required` attribute.
-    // In WordPress, a plugin will handle the submission logic.
     e.preventDefault();
-    alert("Dans un site fonctionnel, le formulaire serait envoyé. Pour cette maquette statique, l'envoi est désactivé.");
-  };
-
-  const monthlyPayment = useMemo(() => {
-    if (loanAmount <= 0 || FIXED_INTEREST_RATE <= 0 || loanTerm <= 0) {
-      return 0;
-    }
-    const monthlyRate = FIXED_INTEREST_RATE / 100 / 12;
-    const numberOfPayments = loanTerm;
-    const payment =
-      loanAmount *
-      (monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) /
-      (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
-    return payment;
-  }, [loanAmount, loanTerm]);
-
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat("fr-FR", {
-      style: "currency",
-      currency: "EUR",
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(value);
+    alert("Dans un site fonctionnel, le formulaire serait envoyé. Pour cette maquette statique, l'envoi est désactivé. Dans WordPress, utilisez un plugin de formulaire pour gérer l'envoi.");
   };
 
   return (
@@ -51,7 +22,7 @@ export default function LoanApplicationForm() {
         {/* Section 1: Informations sur le Prêt */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2"><FileText />Informations sur le Prêt</CardTitle>
+            <CardTitle className="flex items-center gap-2"><FileText />1. Informations sur le Prêt</CardTitle>
             <CardDescription>Décrivez le financement dont vous avez besoin.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -75,7 +46,6 @@ export default function LoanApplicationForm() {
                   type="number" 
                   placeholder="ex: 50000" 
                   required 
-                  onChange={(e) => setLoanAmount(Number(e.target.value))}
                 />
               </div>
               <div>
@@ -84,33 +54,16 @@ export default function LoanApplicationForm() {
                   type="number" 
                   placeholder="ex: 120" 
                   required 
-                  onChange={(e) => setLoanTerm(Number(e.target.value))}
                 />
               </div>
             </div>
-
-            {monthlyPayment > 0 && (
-              <div className="bg-muted/50 p-4 rounded-md border">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Wallet className="w-4 h-4" />
-                    <span>Estimation de la mensualité</span>
-                  </div>
-                  <span className="font-bold text-primary">{formatCurrency(monthlyPayment)} / mois</span>
-                </div>
-                 <p className="text-xs text-muted-foreground/80 mt-2">
-                    Basé sur un taux fixe de {FIXED_INTEREST_RATE}%. Ceci est une estimation et ne constitue pas une offre.
-                  </p>
-              </div>
-            )}
-
           </CardContent>
         </Card>
 
         {/* Section 2: Informations Personnelles */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2"><User />Informations Personnelles</CardTitle>
+            <CardTitle className="flex items-center gap-2"><User />2. Informations Personnelles</CardTitle>
             <CardDescription>Aidez-nous à mieux vous connaître.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -157,7 +110,7 @@ export default function LoanApplicationForm() {
         {/* Section 3: Situation Financière */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2"><Banknote />Situation Financière</CardTitle>
+            <CardTitle className="flex items-center gap-2"><Banknote />3. Situation Financière</CardTitle>
             <CardDescription>Informations sur vos revenus et charges.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -172,7 +125,7 @@ export default function LoanApplicationForm() {
         {/* Section 4: Documents */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2"><UploadCloud />Documents</CardTitle>
+            <CardTitle className="flex items-center gap-2"><UploadCloud />4. Documents</CardTitle>
             <CardDescription>Téléchargez les documents requis (max 5Mo par fichier).</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
