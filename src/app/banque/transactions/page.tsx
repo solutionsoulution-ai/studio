@@ -11,17 +11,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Card } from "@/components/ui/card";
+import { Info } from "lucide-react";
 
-const transactions = [
-  { date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), description: "Paiement CB - Amazon.fr", amount: -49.99, type: "debit" },
-  { date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), description: "Virement - Salaire", amount: 2500.00, type: "credit" },
-  { date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), description: "Prélèvement - Loyer", amount: -850.00, type: "debit" },
-  { date: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000), description: "Paiement CB - Super U", amount: -78.50, type: "debit" },
-  { date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), description: "Virement à - John Doe", amount: -100.00, type: "debit" },
-  { date: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000), description: "Paiement CB - SNCF", amount: -124.00, type: "debit" },
-  { date: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000), description: "Paiement sans contact - Boulangerie", amount: -5.60, type: "debit" },
-  { date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000), description: "Virement de - Jane Smith", amount: 50.00, type: "credit" },
-];
 
 export default function TransactionsPage() {
   return (
@@ -43,16 +34,12 @@ export default function TransactionsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {transactions.map((transaction, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{transaction.date.toLocaleDateString("fr-FR")}</TableCell>
-                    <TableCell className="font-medium">{transaction.description}</TableCell>
-                    <TableCell className={`text-right font-medium ${transaction.type === 'credit' ? 'text-green-600' : ''}`}>
-                      {transaction.type === 'credit' ? '+' : ''}
-                      {transaction.amount.toLocaleString("fr-FR", { style: 'currency', currency: 'EUR' })}
-                    </TableCell>
-                  </TableRow>
-                ))}
+                <TableRow>
+                  <TableCell colSpan={3} className="h-48 text-center text-muted-foreground">
+                    <Info className="mx-auto mb-2" />
+                    Aucune transaction à afficher pour le moment.
+                  </TableCell>
+                </TableRow>
               </TableBody>
             </Table>
           </Card>

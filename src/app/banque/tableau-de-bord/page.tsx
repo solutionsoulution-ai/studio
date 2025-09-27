@@ -4,7 +4,8 @@ import SiteFooter from "@/components/site/site-footer";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { HelpCircle, Send } from "lucide-react";
+import { HelpCircle, Send, Home, Percent } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
 
 export default function DashboardPage() {
   return (
@@ -23,7 +24,7 @@ export default function DashboardPage() {
                   <div className="flex justify-between items-start">
                     <div>
                       <p className="text-sm font-medium text-muted-foreground">Compte Courant</p>
-                      <p className="text-4xl font-bold tracking-tight">12,345.67 €</p>
+                      <p className="text-4xl font-bold tracking-tight">0,00 €</p>
                       <p className="text-xs text-muted-foreground">
                         Solde au {new Date().toLocaleDateString("fr-FR")}
                       </p>
@@ -42,26 +43,9 @@ export default function DashboardPage() {
                   </Button>
                 </CardHeader>
                 <CardContent>
-                  <table className="w-full">
-                    <tbody className="divide-y divide-border">
-                      <tr className="text-sm">
-                        <td className="p-4">Paiement CB - Amazon.fr</td>
-                        <td className="p-4 text-right font-medium">- 49,99 €</td>
-                      </tr>
-                      <tr className="text-sm">
-                        <td className="p-4">Virement - Salaire</td>
-                        <td className="p-4 text-right font-medium text-green-600">+ 2,500.00 €</td>
-                      </tr>
-                      <tr className="text-sm">
-                        <td className="p-4">Prélèvement - Loyer</td>
-                        <td className="p-4 text-right font-medium">- 850,00 €</td>
-                      </tr>
-                      <tr className="text-sm">
-                        <td className="p-4">Paiement CB - Super U</td>
-                        <td className="p-4 text-right font-medium">- 78,50 €</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <div className="text-center py-8 text-muted-foreground">
+                    <p>Aucune transaction pour le moment.</p>
+                  </div>
                 </CardContent>
               </Card>
             </div>
@@ -89,15 +73,26 @@ export default function DashboardPage() {
                 </CardContent>
               </Card>
 
-              {/* Carte d'Épargne */}
+              {/* Mes Prêts en cours */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-sm font-medium text-muted-foreground">Livret A</CardTitle>
+                  <CardTitle className="text-lg">Mes Prêts en Cours</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-2xl font-bold tracking-tight">5,120.50 €</p>
+                <CardContent className="space-y-6">
+                    <div>
+                        <div className="flex justify-between items-center mb-2">
+                            <span className="font-semibold flex items-center gap-2"><Home className="w-4 h-4 text-primary" /> Prêt Immobilier</span>
+                            <span className="text-sm font-mono text-muted-foreground">#IMMO-789</span>
+                        </div>
+                        <Progress value={60} aria-label="60% remboursé" />
+                        <div className="flex justify-between items-center mt-2 text-xs text-muted-foreground">
+                            <span>150/300 mois</span>
+                            <span className="font-semibold">125,450.12 € restants</span>
+                        </div>
+                    </div>
                 </CardContent>
               </Card>
+
             </div>
           </div>
         </div>
