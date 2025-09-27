@@ -98,7 +98,7 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
     *   **Titre :** `Rachat de Crédit` -> **Modèle :** `Service - Rachat de Crédit`
     *   **Titre :** `Politique de Confidentialité` -> **Modèle :** `Page - Politique de Confidentialité`
     *   **Titre :** `Conditions Générales` -> **Modèle :** `Page - Conditions Générales`
-    *   **Titre :** `Banque en ligne` -> **Modèle :** `Banque - Tableau de Bord`
+    *   **Titre :** `Tableau de Bord` -> **Modèle :** `Banque - Tableau de Bord`
     
 4.  **Créer le Menu :**
     *   Allez dans `Apparence > Menus`.
@@ -128,4 +128,3 @@ Votre thème contient des fichiers de base dont nous n'avons plus besoin. Vous p
 *   `comments.php` (gardez-le)
 *   `search.php` (gardez-le)
 *   `screenshot.png` (à garder ou à remplacer par votre propre capture d'écran)
-

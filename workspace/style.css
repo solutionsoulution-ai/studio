@@ -1,6 +1,6 @@
 /*
 Theme Name: VylsFond Theme
-Author: Votre Nom
+Author: Your Name
 Description: Thème sur mesure pour le site VylsFond, généré depuis un projet Next.js.
 Version: 1.0
 */
@@ -13,8 +13,3 @@ GÉNÉRÉ PAR "npm run build" JUSTE EN DESSOUS DE CE BLOC DE COMMENTAIRE.
 NE SUPPRIMEZ PAS LE BLOC DE COMMENTAIRE CI-DESSUS.
 --------------------------------------------------------------------------------
 */
-
-/* Styles pour l'animation de l'accordéon FAQ */
-[data-state='open'] > [data-accordion-trigger] .icon-chevron {
-  transform: rotate(180deg);
-}

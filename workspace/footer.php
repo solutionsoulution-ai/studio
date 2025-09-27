@@ -2,10 +2,13 @@
 /**
  * The template for displaying the footer
  *
+ * Contains the closing of the #content div and all content after.
+ *
  * @link https://developer.wordpress.org/themes/basics/template-files/#template-partials
  *
  * @package vyls
  */
+
 ?>
 <footer class="bg-muted/30 border-t">
     <div class="container mx-auto py-12 px-6">
