@@ -1,3 +1,4 @@
+"use client";
 
 import { Rocket, Milestone, UsersRound, Euro, Telescope } from 'lucide-react';
 import { Button } from '../ui/button';

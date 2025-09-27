@@ -1,3 +1,4 @@
+"use client";
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Zap, Users, Scaling, Award, Globe, Percent } from "lucide-react";
