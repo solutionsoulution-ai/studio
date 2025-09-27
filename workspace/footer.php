@@ -2,15 +2,15 @@
 /**
  * The template for displaying the footer
  *
- * Contains the closing of the #content div and all content after.
- *
  * @link https://developer.wordpress.org/themes/basics/template-files/#template-partials
  *
  * @package vyls
  */
 
+$is_iframe_page = is_page_template('template-iframe.php');
 ?>
 </div> <!-- Fermeture de la div #page-content -->
+<?php if (!$is_iframe_page) : ?>
 <footer class="bg-muted/30 border-t">
     <div class="container mx-auto py-12 px-6">
         <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
@@ -50,10 +50,10 @@
                 <h3 class="font-semibold mb-4">Espace Client</h3>
                 <ul class="space-y-2">
                     <?php if (is_user_logged_in()): ?>
-                        <li><a href="/tableau-de-bord" class="text-sm text-muted-foreground hover:text-primary">Tableau de Bord</a></li>
+                        <li><a href="/espace-client" class="text-sm text-muted-foreground hover:text-primary">Accéder à mon espace</a></li>
                         <li><a href="<?php echo wp_logout_url(home_url()); ?>" class="text-sm text-muted-foreground hover:text-primary">Déconnexion</a></li>
                     <?php else: ?>
-                        <li><a href="<?php echo wp_login_url(); ?>" class="text-sm text-muted-foreground hover:text-primary">Connexion</a></li>
+                        <li><a href="<?php echo wp_login_url(home_url('/espace-client')); ?>" class="text-sm text-muted-foreground hover:text-primary">Connexion</a></li>
                     <?php endif; ?>
                 </ul>
             </div>
@@ -70,6 +70,7 @@
         </div>
     </div>
 </footer>
+<?php endif; ?>
 <?php wp_footer(); ?>
 </body>
 </html>

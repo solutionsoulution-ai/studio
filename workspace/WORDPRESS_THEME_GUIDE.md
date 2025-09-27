@@ -19,7 +19,7 @@ Ouvrez votre terminal à la racine de **ce projet Next.js** (pas votre dossier d
 npm run build
 ```
 
-Cette commande va créer un dossier `build/` qui contient les fichiers `main.css`, `calculator.js` et `banking.js` dont nous avons besoin.
+Cette commande va créer un dossier `build/` qui contient les fichiers `main.css` et `calculator.js` dont nous avons besoin.
 
 ---
 
@@ -34,19 +34,18 @@ Cette commande va créer un dossier `build/` qui contient les fichiers `main.css
 
 ## Étape 4 : Gérer le JavaScript
 
-1.  **Copier les fichiers JS :**
-    *   Créez la structure de dossiers `build/static/js/` à l'intérieur de votre thème `vylsfond-theme/`.
-    *   Copiez `calculator.js` depuis `build/static/js/calculator.js` vers `vylsfond-theme/build/static/js/calculator.js`.
-    *   Copiez `banking.js` depuis `build/static/js/banking.js` vers `vylsfond-theme/build/static/js/banking.js`.
+1.  **JavaScript pour le Calculateur (React) :**
+    *   Créez les dossiers `build/static/js/` à l'intérieur de votre thème `vylsfond-theme/`.
+    *   Copiez le fichier `calculator.js` depuis `build/static/js/calculator.js` vers `vylsfond-theme/build/static/js/calculator.js`.
 
-Le fichier `functions.php` est déjà configuré pour charger `main.js`, `calculator.js` et `banking.js` sur les bonnes pages. Il n'y a rien d'autre à faire.
+Le fichier `functions.php` est déjà configuré pour charger `main.js` (déjà présent dans `assets/js`) et `calculator.js`. Il n'y a rien d'autre à faire.
 
 ---
 
 ## Étape 5 : Gérer les Images
 
 1.  Créez un dossier `assets/images/` dans votre thème `vylsfond-theme/`.
-2.  Copiez les images depuis `public/` et `src/components/site/` du projet Next.js vers `vylsfond-theme/assets/images/`.
+2.  Vous devez trouver les images utilisées dans le projet Next.js (principalement dans `src/components/site/` et `public/`) et les copier dans `vylsfond-theme/assets/images/`. Les fichiers PHP font référence à des noms comme `pret-auto.jpg`, `home-carousel-1.png`, etc.
 
 ---
 
@@ -80,33 +79,23 @@ Une fois le thème activé, vous devez créer les pages dans WordPress.
 3.  **Créer les Pages avec les bons Modèles :**
     Pour chaque page, allez dans `Pages > Ajouter`, donnez un titre, et dans la colonne de droite `Résumé > Modèle`, sélectionnez le modèle correspondant.
 
+    *   **Titre :** `Espace Client` -> **Modèle :** `Banque - Iframe`
     *   **Titre :** `À Propos` -> **Modèle :** `Page - À Propos`
     *   **Titre :** `Contact` -> **Modèle :** `Page - Contact`
-    *   **Titre :** `Demande de Financement` -> **Modèle :** `Page - Demande de Prêt`
-    *   **Titre :** `Prêt Entreprise` -> **Modèle :** `Service - Prêt Entreprise`
-    *   **Titre :** `Prêt Immobilier` -> **Modèle :** `Service - Prêt Immobilier`
-    *   **Titre :** `Prêt Personnel` -> **Modèle :** `Service - Prêt Personnel`
-    *   **Titre :** `Prêt Auto` -> **Modèle :** `Service - Prêt Auto`
-    *   **Titre :** `Rachat de Crédit` -> **Modèle :** `Service - Rachat de Crédit`
-    *   **Titre :** `Politique de Confidentialité` -> **Modèle :** `Page - Politique de Confidentialité`
-    *   **Titre :** `Conditions Générales` -> **Modèle :** `Page - Conditions Générales`
-    *   **Titre :** `Merci pour votre message` -> **Modèle :** `Page - Merci Contact`
-    *   **Titre :** `Merci pour votre demande` -> **Modèle :** `Page - Merci Demande`
-    *   **Titre :** `Banque en Ligne` -> **Modèle :** `Banque - Application`
+    *   ... (et toutes les autres pages)
 
-4.  **Créer le Menu :**
+4.  **Configurer la page Iframe :**
+    *   Ouvrez le fichier `template-iframe.php` dans votre thème.
+    *   Remplacez `"https://VOTRE_APP_BANCAIRE_ICI.com"` par l'URL réelle de votre application bancaire hébergée.
+
+5.  **Créer le Menu :**
     *   Allez dans `Apparence > Menus`, créez un nouveau menu et ajoutez-y vos pages.
     *   Cochez "Menu Principal" comme emplacement.
 
-5.  **Permaliens :**
+6.  **Permaliens :**
     *   Allez dans `Réglages > Permaliens` et choisissez `Titre de la publication`. Enregistrez.
-
-6.  **Gérer les Utilisateurs (Pour la Banque Fictive) :**
-    *   Pour créer un compte pour un client, allez dans `Utilisateurs > Ajouter`.
-    *   Remplissez son nom d'utilisateur, son e-mail, et créez un mot de passe. Le rôle "Abonné" est suffisant.
-    *   Le client pourra se connecter via la page de connexion standard de WordPress (`/wp-login.php`) et accéder à la page "Banque en Ligne".
 
 7.  **Installer les Plugins de Formulaire :**
     *   Installez un plugin comme **WPForms**.
     *   Créez vos formulaires dans le plugin.
-    *   Modifiez les fichiers `template-contact.php` et `template-demande-de-pret.php` en remplaçant les formulaires HTML par le shortcode du plugin (ex: `<?php echo do_shortcode('[wpforms id="123"]'); ?>`). Les instructions détaillées sont dans les fichiers.
+    *   Modifiez les fichiers `template-contact.php` et `template-demande-de-pret.php` en remplaçant les formulaires HTML par le shortcode du plugin (ex: `<?php echo do_shortcode('[wpforms id="123"]'); ?>`).

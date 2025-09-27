@@ -1,54 +1,56 @@
 <?php
 /**
- * Template Name: Banque - Application
+ * Template Name: Banque - Iframe
  *
  * @package vyls
  */
 
-// Sécurité : Redirige les utilisateurs non connectés vers la page de connexion de WordPress.
-if (!is_user_logged_in()) {
-    auth_redirect();
-}
+// Si vous voulez que cette page soit uniquement accessible aux utilisateurs connectés, décommentez la ligne suivante.
+// if (!is_user_logged_in()) { auth_redirect(); }
 
 get_header();
 ?>
 
 <main class="flex-1">
-    <div id="banking-app-root">
+    <div class="iframe-container h-full w-full">
         <!-- 
-            =========================================================================================
-            POINT D'INJECTION DE L'APPLICATION REACT
-            =========================================================================================
-            
-            Cette div est le point d'entrée unique pour notre application de banque en ligne.
-            Le processus est le suivant :
-            
-            1. COMPILATION : Dans le projet Next.js, la commande `npm run build` compile toute 
-               l'application bancaire (qui se trouve dans /src/app/banque/) en un seul 
-               fichier JavaScript optimisé : /build/static/js/banking.js.
+        ====================================================================================================
+        INSTRUCTIONS POUR L'INTÉGRATION DE VOTRE APPLICATION EXTERNE
+        ====================================================================================================
+        
+        Cette page est conçue pour afficher votre application bancaire externe dans une "iframe".
+        Une iframe est comme une fenêtre de navigateur intégrée directement dans votre page WordPress.
 
-            2. INJECTION PHP : Le fichier `functions.php` de ce thème contient une logique qui
-               détecte si un utilisateur est connecté et s'il visite une page utilisant ce
-               template. Si c'est le cas, il charge le script `banking.js` dans la page.
+        Pour que cela fonctionne :
 
-            3. HYDRATATION REACT : Une fois chargé, le script `banking.js` s'exécute. Son rôle est
-               de trouver cette div (grâce à son ID "banking-app-root") et d'y "dessiner" 
-               l'interface interactive de l'application bancaire.
+        1. HÉBERGEZ VOTRE APPLICATION BANCAIRE :
+           - Vous devez d'abord déployer votre application Next.js (ou autre) sur un service d'hébergement
+             comme Vercel, Netlify, ou un serveur personnel. Vous obtiendrez une URL publique
+             (par exemple : https://mon-app-bancaire.vercel.app).
 
-            4. INJECTION DE DONNÉES : `functions.php` utilise également `wp_localize_script` pour
-               passer des données spécifiques à l'utilisateur (définies dans la "base de données"
-               fictive) à l'application React. C'est ce qui permet d'afficher le bon solde, 
-               les bonnes transactions, etc., pour chaque client.
-            
-            Cette approche "micro-frontend" permet de bénéficier de la puissance de React pour
-            l'interface utilisateur tout en s'appuyant sur WordPress pour la gestion des
-            utilisateurs et des pages.
-            
-            =========================================================================================
+        2. MODIFIEZ L'URL CI-DESSOUS :
+           - Dans la ligne `src="..."` de la balise `<iframe>` ci-dessous, remplacez 
+             "https://VOTRE_APP_BANCAIRE_ICI.com" par l'URL réelle de votre application hébergée.
+
+        3. STYLE PLEIN ÉCRAN :
+           - Le fichier header.php contient des styles CSS spécifiques pour ce modèle de page afin que
+             l'iframe prenne 100% de la hauteur et de la largeur de la fenêtre, sans barres de défilement
+             gênantes, pour une intégration transparente.
+
+        Cette méthode est très simple car elle ne nécessite aucune communication entre WordPress
+        et votre application externe. Votre application bancaire gère sa propre base de données,
+        ses propres utilisateurs et sa propre logique.
+        
+        ====================================================================================================
         -->
-        <div class="flex items-center justify-center min-h-[50vh]">
-            <p>Chargement de votre espace bancaire sécurisé...</p>
-        </div>
+        <iframe 
+            src="https://VOTRE_APP_BANCAIRE_ICI.com"
+            class="w-full h-full border-0"
+            title="Application Bancaire VylsFond"
+            allow="fullscreen"
+        >
+            Votre navigateur ne supporte pas les iframes.
+        </iframe>
     </div>
 </main>
 
