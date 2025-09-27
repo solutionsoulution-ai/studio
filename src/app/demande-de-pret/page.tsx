@@ -1,11 +1,9 @@
 
-
 "use client";
 
 import SiteHeader from "@/components/site/site-header";
 import SiteFooter from "@/components/site/site-footer";
 import LoanApplicationForm from "@/components/site/loan-application-form";
-import InterestRateCalculator from "@/components/site/interest-rate-calculator";
 
 export default function DemandeDePretPage() {
   return (
@@ -16,16 +14,9 @@ export default function DemandeDePretPage() {
            <div className="text-center mb-10">
                 <h1 className="text-3xl md:text-4xl font-bold tracking-tight font-headline">Demande de Financement</h1>
                 <p className="mt-4 text-lg text-muted-foreground">
-                    Simulez votre prêt puis remplissez le formulaire pour soumettre votre demande. C'est simple, rapide et sécurisé.
+                    Remplissez le formulaire pour soumettre votre demande. C'est simple, rapide et sécurisé.
                 </p>
             </div>
-            
-            <section className="mb-12">
-              <InterestRateCalculator 
-                title="Estimez vos mensualités"
-                description="Ajustez le montant et la durée pour avoir une idée de votre remboursement mensuel."
-              />
-            </section>
 
             <LoanApplicationForm />
         </div>

@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Send, FileText, User, Banknote, UploadCloud } from "lucide-react";
+import { Send, FileText, User, Banknote, UploadCloud, Calculator, Percent } from "lucide-react";
+import { Slider } from "../ui/slider";
 
 export default function LoanApplicationForm() {
   
@@ -16,9 +17,67 @@ export default function LoanApplicationForm() {
     alert("Dans un site fonctionnel, le formulaire serait envoyé. Pour cette maquette statique, l'envoi est désactivé. Dans WordPress, utilisez un plugin de formulaire pour gérer l'envoi.");
   };
 
-  return (
-      <form onSubmit={handleSubmit} className="space-y-8">
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat("fr-FR", {
+      style: "currency",
+      currency: "EUR",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(value);
+  };
 
+  return (
+    <div>
+        <div className="container mx-auto p-0 mb-10">
+            <Card className="max-w-4xl mx-auto shadow-lg">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                        <Calculator className="w-6 h-6 text-primary" />
+                        Estimez vos mensualités
+                    </CardTitle>
+                    <CardDescription>
+                        Ceci est une simulation. Ajustez les curseurs pour voir l'impact sur vos paiements.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="grid md:grid-cols-2 gap-8 pt-2">
+                    <div className="space-y-8">
+                        <div>
+                            <Label>Montant du prêt</Label>
+                            <p className="text-2xl font-bold text-primary">{formatCurrency(50000)}</p>
+                            <Slider
+                                defaultValue={[50000]}
+                                max={500000}
+                                step={1000}
+                                className="mt-2"
+                                disabled
+                            />
+                        </div>
+                        <div>
+                            <Label>Durée du prêt (Mois)</Label>
+                            <p className="text-2xl font-bold text-primary">120 Mois</p>
+                            <Slider
+                                defaultValue={[120]}
+                                max={360}
+                                step={12}
+                                className="mt-2"
+                                disabled
+                            />
+                        </div>
+                    </div>
+
+                    <div className="bg-primary text-primary-foreground rounded-lg p-8 flex flex-col items-center justify-center text-center">
+                        <p className="text-lg font-medium opacity-80">Paiement mensuel estimé</p>
+                        <p className="text-5xl font-extrabold tracking-tight mt-2">
+                            {formatCurrency(460)}
+                        </p>
+                        <p className="mt-4 opacity-80 text-sm flex items-center gap-2">
+                            <Percent className="w-4 h-4" /> Taux fixe de 2%
+                        </p>
+                    </div>
+                </CardContent>
+            </Card>
+        </div>
+      <form onSubmit={handleSubmit} className="space-y-8">
         {/* Section 1: Informations sur le Prêt */}
         <Card>
           <CardHeader>
@@ -151,6 +210,7 @@ export default function LoanApplicationForm() {
           Envoyer ma demande
         </Button>
       </form>
+    </div>
   );
 }
 

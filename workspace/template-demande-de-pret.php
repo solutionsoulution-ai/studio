@@ -13,26 +13,43 @@ get_header();
        <div class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold tracking-tight font-headline">Demande de Financement</h1>
             <p class="mt-4 text-lg text-muted-foreground">
-                Simulez votre prêt puis remplissez le formulaire pour soumettre votre demande. C'est simple, rapide et sécurisé.
+                Remplissez le formulaire pour soumettre votre demande. C'est simple, rapide et sécurisé.
             </p>
         </div>
-
-        <section class="mb-12">
-            <div id="calculator-root">
-                <!-- Le calculateur React sera monté ici. Assurez-vous que le script `calculator.js` est bien chargé sur cette page via functions.php -->
-                <p class="text-center text-muted-foreground">Chargement du calculateur...</p>
-            </div>
-        </section>
         
         <!--
         INSTRUCTIONS POUR LE FORMULAIRE CI-DESSOUS :
         1. Installez un plugin de formulaire (ex: WPForms, Contact Form 7).
-        2. Créez un formulaire dans le plugin avec les champs correspondants (Type de prêt, Montant, Durée, Prénom, Nom, etc.).
-        3. Configurez le formulaire pour qu'il vous envoie un e-mail à la soumission.
-        4. Remplacez tout le contenu de la balise <form> ci-dessous par le shortcode fourni par votre plugin. Par exemple : <?php echo do_shortcode('[wpforms id="123"]'); ?>
+        2. Créez un formulaire dans le plugin avec tous les champs listés ci-dessous.
+        3. Configurez le formulaire pour qu'il vous envoie un e-mail à la soumission et redirige vers la page "Merci Demande".
+        4. Remplacez tout le contenu de la balise <form> ci-dessous par le shortcode fourni par votre plugin. 
+           Par exemple : <?php echo do_shortcode('[wpforms id="123"]'); ?>
         -->
-        <form class="space-y-8">
 
+        <div class="container mx-auto p-0 mb-10">
+            <div class="max-w-4xl mx-auto shadow-lg rounded-lg border bg-card text-card-foreground">
+                <div class="p-6"><h3 class="flex items-center gap-2 text-2xl font-semibold">Estimez vos mensualités</h3><p class="text-sm text-muted-foreground">Ceci est une simulation basée sur des valeurs d'exemple.</p></div>
+                <div class="p-6 pt-0 grid md:grid-cols-2 gap-8">
+                    <div class="space-y-8">
+                        <div>
+                            <label class="text-lg">Montant du prêt</label>
+                            <p class="text-2xl font-bold text-primary">50.000 €</p>
+                        </div>
+                        <div>
+                            <label class="text-lg">Durée du prêt (Mois)</label>
+                            <p class="text-2xl font-bold text-primary">120 Mois</p>
+                        </div>
+                    </div>
+                    <div class="bg-primary text-primary-foreground rounded-lg p-8 flex flex-col items-center justify-center text-center">
+                        <p class="text-lg font-medium opacity-80">Paiement mensuel estimé</p>
+                        <p class="text-5xl font-extrabold tracking-tight mt-2">460 €</p>
+                        <p class="mt-4 opacity-80 text-sm flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" x2="5" y1="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg> Taux fixe de 2%</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <form class="space-y-8">
             <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
                 <div class="p-6"><h3 class="flex items-center gap-2 text-2xl font-semibold">1. Informations sur le Prêt</h3></div>
                 <div class="p-6 pt-0 space-y-4">
@@ -42,7 +59,7 @@ get_header();
                             <option value="">Sélectionnez le type de projet</option>
                             <option value="immobilier">Prêt Immobilier</option>
                             <option value="personnel">Prêt Personnel</option>
-                             <option value="auto">Prêt Auto</option>
+                            <option value="auto">Prêt Auto</option>
                             <option value="entreprise">Prêt Entreprise</option>
                             <option value="rachat">Rachat de Crédit</option>
                         </select>
@@ -54,7 +71,7 @@ get_header();
                 </div>
             </div>
 
-            <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+             <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
                 <div class="p-6"><h3 class="flex items-center gap-2 text-2xl font-semibold">2. Informations Personnelles</h3></div>
                 <div class="p-6 pt-0 space-y-4">
                     <div class="grid sm:grid-cols-2 gap-4">
@@ -64,6 +81,14 @@ get_header();
                     <div class="grid sm:grid-cols-2 gap-4">
                         <div><label class="text-sm font-medium leading-none mb-2 block">Email</label><input type="email" placeholder="vous@exemple.com" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
                         <div><label class="text-sm font-medium leading-none mb-2 block">Numéro WhatsApp</label><input type="tel" placeholder="0612345678" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                    </div>
+                     <div>
+                        <label class="text-sm font-medium leading-none mb-2 block">Date de naissance</label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div><input type="number" placeholder="Jour" required min="1" max="31" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                            <div><input type="number" placeholder="Mois" required min="1" max="12" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                            <div><input type="number" placeholder="Année" required min="1900" max="<?php echo date('Y') - 18; ?>" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                        </div>
                     </div>
                 </div>
             </div>
