@@ -66,13 +66,6 @@ get_header();
         </div>
     </section>
 
-    <!-- Section: Calculateur -->
-    <section class="w-full py-16 md:py-24 bg-muted/30">
-        <div id="calculator-root">
-            <!-- This div is the mount point for the React calculator. It will be hydrated by calculator.js -->
-        </div>
-    </section>
-
     <!-- Section: FAQ -->
     <section class="container mx-auto py-16 md:py-24">
         <div class="max-w-3xl mx-auto">

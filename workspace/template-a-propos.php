@@ -112,7 +112,7 @@ get_header();
 
     <!-- CTA Section -->
     <section class="bg-primary text-primary-foreground">
-        <div class="container mx-auto text-center py-16">
+        <div class="container mx-auto text-center py-16 px-4">
             <h2 class="text-3xl font-bold">Prêt à démarrer votre projet ?</h2>
             <p class="mt-2 text-lg max-w-xl mx-auto opacity-90">
                 Notre équipe est là pour vous aider à trouver la meilleure solution de financement.

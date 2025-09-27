@@ -8,138 +8,123 @@
 get_header();
 ?>
 
-<main class="flex-1 container mx-auto py-12 md:py-24 px-4">
-    <div class="mx-auto max-w-3xl">
-       <div class="text-center mb-10">
-            <h1 class="text-3xl md:text-4xl font-bold tracking-tight font-headline">Demande de Financement</h1>
-            <p class="mt-4 text-lg text-muted-foreground">
-                Remplissez le formulaire pour soumettre votre demande. C'est simple, rapide et sécurisé.
-            </p>
-        </div>
-        
-        <!--
-        ====================================================================================================
-        INSTRUCTIONS POUR RENDRE CE FORMULAIRE FONCTIONNEL
-        ====================================================================================================
-        
-        Ce formulaire est actuellement une maquette. Pour qu'il envoie les demandes par e-mail, suivez ces étapes :
-
-        1. INSTALLEZ UN PLUGIN DE FORMULAIRE (Ex: WPForms) :
-           - Dans votre admin WordPress, allez à "Extensions" > "Ajouter".
-           - Recherchez, installez et activez "WPForms".
-
-        2. CRÉEZ LE FORMULAIRE DANS WPFORMS :
-           - Allez dans le menu "WPForms" > "Ajouter" et créez un nouveau formulaire.
-           - Recréez les champs ci-dessous en utilisant les types de champs indiqués.
-             - Type de Prêt -> Champ "Liste déroulante"
-             - Montant souhaité -> Champ "Nombre"
-             - Durée de remboursement -> Champ "Nombre"
-             - Prénom, Nom, Adresse, etc. -> Champ "Texte simple"
-             - Email -> Champ "Email"
-             - Date de naissance -> Trois champs "Nombre" (Jour, Mois, Année)
-             - Téléchargement de fichiers -> Utilisez le champ "Envoi de fichier" (peut nécessiter la version pro).
-           - Dans "Réglages" > "Notifications", mettez VOTRE adresse e-mail.
-           - Dans "Réglages" > "Confirmation", choisissez "Rediriger vers une URL" et mettez le lien de votre page "Merci Demande".
-           - Enregistrez le formulaire.
-
-        3. REMPLACEZ LE CODE STATIQUE PAR LE SHORTCODE :
-           - WPForms vous donnera un "shortcode" qui ressemble à : [wpforms id="123"]. Copiez-le.
-           - Supprimez tout le contenu HTML de la balise <form> (entre les commentaires DEBUT et FIN ci-dessous).
-           - À la place, collez votre shortcode, comme ceci :
-             <?php echo do_shortcode('[wpforms id="123"]'); ?>
-        
-        ====================================================================================================
-        -->
-        
-        <!-- ▼▼▼ DÉBUT DU FORMULAIRE À REMPLACER ▼▼▼ -->
-        <form class="space-y-8" method="post" action="">
-            <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
-                <div class="p-6"><h3 class="flex items-center gap-2 text-2xl font-semibold">1. Informations sur le Prêt</h3><p class="text-sm text-muted-foreground">Décrivez le financement dont vous avez besoin.</p></div>
-                <div class="p-6 pt-0 space-y-4">
-                    <div>
-                        <label class="text-sm font-medium leading-none mb-2 block">Type de Prêt</label>
-                        <select required class="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm"><option value="">Sélectionnez le type de projet</option><option value="immobilier">Prêt Immobilier</option><option value="personnel">Prêt Personnel</option><option value="auto">Prêt Auto</option><option value="entreprise">Prêt Entreprise</option><option value="rachat">Rachat de Crédit</option></select>
-                    </div>
-                    <div class="grid sm:grid-cols-2 gap-4">
-                        <div><label class="text-sm font-medium leading-none mb-2 block">Montant souhaité (€)</label><input type="number" placeholder="ex: 50000" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
-                        <div><label class="text-sm font-medium leading-none mb-2 block">Durée de remboursement (mois)</label><input type="number" placeholder="ex: 120" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
-                    </div>
-                </div>
+<main class="flex-1">
+    <div class="container mx-auto py-12 md:py-24 px-4">
+        <div class="mx-auto max-w-3xl">
+           <div class="text-center mb-10">
+                <h1 class="text-3xl md:text-4xl font-bold tracking-tight font-headline">Demande de Financement</h1>
+                <p class="mt-4 text-lg text-muted-foreground">
+                    Remplissez le formulaire pour soumettre votre demande. C'est simple, rapide et sécurisé.
+                </p>
             </div>
 
-            <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
-                <div class="p-6"><h3 class="flex items-center gap-2 text-2xl font-semibold">2. Informations Personnelles</h3><p class="text-sm text-muted-foreground">Aidez-nous à mieux vous connaître.</p></div>
-                <div class="p-6 pt-0 space-y-4">
-                    <div class="grid sm:grid-cols-2 gap-4">
-                        <div><label class="text-sm font-medium leading-none mb-2 block">Prénom</label><input placeholder="Jean" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
-                        <div><label class="text-sm font-medium leading-none mb-2 block">Nom</label><input placeholder="Dupont" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
-                    </div>
-                    <div class="grid sm:grid-cols-2 gap-4">
-                        <div><label class="text-sm font-medium leading-none mb-2 block">Email</label><input type="email" placeholder="vous@exemple.com" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
-                        <div><label class="text-sm font-medium leading-none mb-2 block">Numéro WhatsApp</label><input type="tel" placeholder="0612345678" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
-                    </div>
-                    <div>
-                        <label class="text-sm font-medium leading-none mb-2 block">Date de naissance</label>
-                        <div class="grid grid-cols-3 gap-2">
-                            <div><input type="number" placeholder="Jour" required min="1" max="31" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
-                            <div><input type="number" placeholder="Mois" required min="1" max="12" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
-                            <div><input type="number" placeholder="Année" required min="1900" max="2006" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
-                        </div>
-                    </div>
-                    <div><label class="text-sm font-medium leading-none mb-2 block">Adresse</label><input placeholder="123 rue de Paris" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
-                    <div class="grid sm:grid-cols-3 gap-4">
-                        <div><label class="text-sm font-medium leading-none mb-2 block">Ville</label><input placeholder="Paris" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
-                        <div><label class="text-sm font-medium leading-none mb-2 block">Code Postal</label><input placeholder="75001" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
-                        <div><label class="text-sm font-medium leading-none mb-2 block">Pays</label><input value="France" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
-                    </div>
-                    <div class="grid sm:grid-cols-2 gap-4">
+             <!-- NOTE: This is a static version. For WordPress, use a form plugin like WPForms or Contact Form 7 -->
+             <!-- and replace the <form> content with the plugin's shortcode. -->
+             <!-- Example: <?php echo do_shortcode('[wpforms id="123"]'); ?> -->
+            <form class="space-y-8">
+                <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+                    <div class="p-6"><h3 class="flex items-center gap-2 text-2xl font-semibold">1. Informations sur le Prêt</h3><p class="text-sm text-muted-foreground">Décrivez le financement dont vous avez besoin.</p></div>
+                    <div class="p-6 pt-0 space-y-4">
                         <div>
-                            <label class="text-sm font-medium leading-none mb-2 block">Situation familiale</label>
-                            <select required class="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm"><option value="">Sélectionnez...</option><option value="celibataire">Célibataire</option><option value="marie">Marié(e)</option><option value="divorce">Divorcé(e)</option><option value="veuf">Veuf(ve)</option></select>
+                            <label class="text-sm font-medium leading-none mb-2 block">Type de Prêt</label>
+                            <select required class="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm"><option value="">Sélectionnez le type de projet</option><option value="immobilier">Prêt Immobilier</option><option value="personnel">Prêt Personnel</option><option value="auto">Prêt Auto</option><option value="entreprise">Prêt Entreprise</option><option value="rachat">Rachat de Crédit</option></select>
                         </div>
-                        <div><label class="text-sm font-medium leading-none mb-2 block">Nombre d'enfants</label><input type="number" placeholder="0" required min="0" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div><label class="text-sm font-medium leading-none mb-2 block">Montant souhaité (€)</label><input type="number" placeholder="ex: 50000" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                            <div><label class="text-sm font-medium leading-none mb-2 block">Durée de remboursement (mois)</label><input type="number" placeholder="ex: 120" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
-                <div class="p-6"><h3 class="flex items-center gap-2 text-2xl font-semibold">3. Situation Financière</h3><p class="text-sm text-muted-foreground">Informations sur vos revenus et charges.</p></div>
-                <div class="p-6 pt-0 space-y-4">
-                    <div><label class="text-sm font-medium leading-none mb-2 block">Profession</label><input placeholder="Développeur, médecin, etc." required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
-                    <div class="grid sm:grid-cols-2 gap-4">
-                        <div><label class="text-sm font-medium leading-none mb-2 block">Revenu Mensuel Net (€)</label><input type="number" placeholder="3000" required min="0" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
-                        <div><label class="text-sm font-medium leading-none mb-2 block">Charges Mensuelles (€)</label><input type="number" placeholder="1200" required min="0" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+                    <div class="p-6"><h3 class="flex items-center gap-2 text-2xl font-semibold">2. Informations Personnelles</h3><p class="text-sm text-muted-foreground">Aidez-nous à mieux vous connaître.</p></div>
+                    <div class="p-6 pt-0 space-y-4">
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div><label class="text-sm font-medium leading-none mb-2 block">Prénom</label><input placeholder="Jean" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                            <div><label class="text-sm font-medium leading-none mb-2 block">Nom</label><input placeholder="Dupont" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                        </div>
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div><label class="text-sm font-medium leading-none mb-2 block">Email</label><input type="email" placeholder="vous@exemple.com" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                            <div><label class="text-sm font-medium leading-none mb-2 block">Numéro WhatsApp</label><input type="tel" placeholder="0612345678" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium leading-none mb-2 block">Date de naissance</label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <div><input type="number" placeholder="Jour" required min="1" max="31" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                                <div><input type="number" placeholder="Mois" required min="1" max="12" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                                <div><input type="number" placeholder="Année" required min="1900" max="<?php echo date('Y') - 18; ?>" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                            </div>
+                        </div>
+                        <div><label class="text-sm font-medium leading-none mb-2 block">Adresse</label><input placeholder="123 rue de Paris" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                        <div class="grid sm:grid-cols-3 gap-4">
+                            <div><label class="text-sm font-medium leading-none mb-2 block">Ville</label><input placeholder="Paris" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                            <div><label class="text-sm font-medium leading-none mb-2 block">Code Postal</label><input placeholder="75001" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                            <div><label class="text-sm font-medium leading-none mb-2 block">Pays</label><input value="France" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                        </div>
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-sm font-medium leading-none mb-2 block">Situation familiale</label>
+                                <select required class="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm"><option value="">Sélectionnez...</option><option value="celibataire">Célibataire</option><option value="marie">Marié(e)</option><option value="divorce">Divorcé(e)</option><option value="veuf">Veuf(ve)</option></select>
+                            </div>
+                            <div><label class="text-sm font-medium leading-none mb-2 block">Nombre d'enfants</label><input type="number" placeholder="0" required min="0" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
-                <div class="p-6"><h3 class="flex items-center gap-2 text-2xl font-semibold">4. Documents</h3><p class="text-sm text-muted-foreground">Téléchargez les documents requis (max 5Mo par fichier).</p></div>
-                <div class="p-6 pt-0 space-y-4">
-                    <div>
-                        <label class="text-sm font-medium leading-none mb-2 block">Pièce d'identité (PDF, JPG, PNG)</label>
-                        <input type="file" required accept=".pdf,.jpg,.jpeg,.png" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
-                    </div>
-                    <div>
-                        <label class="text-sm font-medium leading-none mb-2 block">Justificatif de domicile de moins de 3 mois</label>
-                        <input type="file" required accept=".pdf,.jpg,.jpeg,.png" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
-                    </div>
-                    <div>
-                        <label class="text-sm font-medium leading-none mb-2 block">Justificatif de revenus (3 derniers bulletins)</label>
-                        <input type="file" required accept=".pdf,.jpg,.jpeg,.png" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
+                <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+                    <div class="p-6"><h3 class="flex items-center gap-2 text-2xl font-semibold">3. Situation Financière</h3><p class="text-sm text-muted-foreground">Informations sur vos revenus et charges.</p></div>
+                    <div class="p-6 pt-0 space-y-4">
+                        <div><label class="text-sm font-medium leading-none mb-2 block">Profession</label><input placeholder="Développeur, médecin, etc." required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div><label class="text-sm font-medium leading-none mb-2 block">Revenu Mensuel Net (€)</label><input type="number" placeholder="3000" required min="0" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                            <div><label class="text-sm font-medium leading-none mb-2 block">Charges Mensuelles (€)</label><input type="number" placeholder="1200" required min="0" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <p class="text-xs text-muted-foreground text-center">En cliquant sur "Envoyer ma demande", vous confirmez que les informations fournies sont exactes et complètes, et vous acceptez nos conditions générales et notre politique de confidentialité.</p>
-            
-            <button type="submit" class="w-full inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"></path><path d="m22 2-7 20-4-9-9-4 20-7z"></path></svg>
-              Envoyer ma demande
-            </button>
-        </form>
-        <!-- ▲▲▲ FIN DU FORMULAIRE À REMPLACER ▲▲▲ -->
+                <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+                    <div class="p-6"><h3 class="flex items-center gap-2 text-2xl font-semibold">4. Documents</h3><p class="text-sm text-muted-foreground">Téléchargez les documents requis (max 5Mo par fichier).</p></div>
+                    <div class="p-6 pt-0 space-y-4">
+                        <div>
+                            <label class="text-sm font-medium leading-none mb-2 block">Pièce d'identité (PDF, JPG, PNG)</label>
+                            <input type="file" required accept=".pdf,.jpg,.jpeg,.png" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium leading-none mb-2 block">Justificatif de domicile de moins de 3 mois</label>
+                            <input type="file" required accept=".pdf,.jpg,.jpeg,.png" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium leading-none mb-2 block">Justificatif de revenus (3 derniers bulletins)</label>
+                            <input type="file" required accept=".pdf,.jpg,.jpeg,.png" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-xs text-muted-foreground text-center">En cliquant sur "Envoyer ma demande", vous confirmez que les informations fournies sont exactes et complètes, et vous acceptez nos conditions générales et notre politique de confidentialité.</p>
+                
+                <button type="submit" class="w-full inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg>
+                  Envoyer ma demande
+                </button>
+            </form>
+        </div>
     </div>
+
+    <!-- CTA Section -->
+    <section class="bg-primary text-primary-foreground mt-16">
+        <div class="container mx-auto text-center py-16 px-4">
+            <h2 class="text-3xl font-bold">Une question sur votre demande ?</h2>
+            <p class="mt-2 text-lg max-w-xl mx-auto opacity-90">
+                Notre service client est disponible pour vous accompagner à chaque étape.
+            </p>
+            <div class="mt-8">
+                <a href="/contact" class="bg-secondary text-secondary-foreground hover:bg-secondary/80 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-11 rounded-md px-8">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    Contacter un conseiller
+                </a>
+            </div>
+        </div>
+    </section>
 </main>
 
 <?php

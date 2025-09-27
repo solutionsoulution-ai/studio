@@ -8,65 +8,83 @@
 get_header();
 ?>
 
-<main class="flex-1 container mx-auto py-16 md:py-24">
-    <div class="prose-content lg:prose-xl mx-auto space-y-6">
-        <h1>Conditions Générales d'Utilisation</h1>
-        <p>Dernière mise à jour : <?php echo date_i18n('j F Y'); ?></p>
+<main class="flex-1">
+    <div class="container mx-auto py-16 md:py-24">
+        <div class="prose-content lg:prose-xl mx-auto space-y-6">
+            <h1>Conditions Générales d'Utilisation</h1>
+            <p>Dernière mise à jour : <?php echo date_i18n('j F Y'); ?></p>
 
-        <div>
-            <h2>1. Objet</h2>
-            <p>
-            Les présentes Conditions Générales d'Utilisation (CGU) ont pour objet de définir les modalités de mise à disposition des services du site VylsFond et les conditions d'utilisation par l'Utilisateur.
-            </p>
-            <p>
-            Tout accès et/ou utilisation du site suppose l'acceptation et le respect de l'ensemble des termes des présentes Conditions.
-            </p>
-        </div>
+            <div>
+                <h2>1. Objet</h2>
+                <p>
+                Les présentes Conditions Générales d'Utilisation (CGU) ont pour objet de définir les modalités de mise à disposition des services du site VylsFond et les conditions d'utilisation par l'Utilisateur.
+                </p>
+                <p>
+                Tout accès et/ou utilisation du site suppose l'acceptation et le respect de l'ensemble des termes des présentes Conditions.
+                </p>
+            </div>
 
-        <div>
-            <h2>2. Accès au site</h2>
-            <p>
-            L'accès au site est gratuit pour tout Utilisateur disposant d'un accès à Internet. Tous les coûts afférents à l'accès, que ce soient les frais matériels, logiciels ou d'accès à Internet, sont exclusivement à la charge de l'Utilisateur.
-            </p>
-        </div>
+            <div>
+                <h2>2. Accès au site</h2>
+                <p>
+                L'accès au site est gratuit pour tout Utilisateur disposant d'un accès à Internet. Tous les coûts afférents à l'accès, que ce soient les frais matériels, logiciels ou d'accès à Internet, sont exclusivement à la charge de l'Utilisateur.
+                </p>
+            </div>
 
-        <div>
-            <h2>3. Propriété intellectuelle</h2>
-            <p>
-            L'ensemble de ce site relève de la législation française et internationale sur le droit d'auteur et la propriété intellectuelle. Tous les droits de reproduction sont réservés, y compris pour les documents téléchargeables et les représentations iconographiques et photographiques.
-            </p>
-            <p>
-            La reproduction de tout ou partie de ce site sur un support électronique quel qu'il soit est formellement interdite sauf autorisation expresse du directeur de la publication.
-            </p>
-        </div>
-        
-        <div>
-            <h2>4. Responsabilité</h2>
-            <p>
-            Les informations fournies sur le site VylsFond le sont à titre indicatif. Les résultats des simulateurs et des outils d'éligibilité ne constituent en aucun cas une offre de prêt et n'engagent pas VylsFond. Seule une étude approfondie de votre dossier permettra de définir les conditions de financement exactes.
-            </p>
-            <p>
-            VylsFond ne saurait être tenu pour responsable des dommages directs ou indirects qui pourraient résulter de l'accès ou de l'utilisation du site, y compris l'inaccessibilité, les pertes de données, et/ou la présence de virus sur le site.
-            </p>
-        </div>
+            <div>
+                <h2>3. Propriété intellectuelle</h2>
+                <p>
+                L'ensemble de ce site relève de la législation française et internationale sur le droit d'auteur et la propriété intellectuelle. Tous les droits de reproduction sont réservés, y compris pour les documents téléchargeables et les représentations iconographiques et photographiques.
+                </p>
+                <p>
+                La reproduction de tout ou partie de ce site sur un support électronique quel qu'il soit est formellement interdite sauf autorisation expresse du directeur de la publication.
+                </p>
+            </div>
+            
+            <div>
+                <h2>4. Responsabilité</h2>
+                <p>
+                Les informations fournies sur le site VylsFond le sont à titre indicatif. Les résultats des simulateurs et des outils d'éligibilité ne constituent en aucun cas une offre de prêt et n'engagent pas VylsFond. Seule une étude approfondie de votre dossier permettra de définir les conditions de financement exactes.
+                </p>
+                <p>
+                VylsFond ne saurait être tenu pour responsable des dommages directs ou indirects qui pourraient résulter de l'accès ou de l'utilisation du site, y compris l'inaccessibilité, les pertes de données, et/ou la présence de virus sur le site.
+                </p>
+            </div>
 
-        <div>
-            <h2>5. Liens hypertextes</h2>
-            <p>
-            Le site peut contenir des liens hypertextes vers d'autres sites présents sur le réseau Internet. Les liens vers ces autres ressources vous font quitter le site VylsFond.
-            </p>
-            <p>
-            Il est possible de créer un lien vers la page de présentation de ce site sans autorisation expresse de l'ÉDITEUR. Aucune autorisation ou demande d’information préalable ne peut être exigée par l’éditeur à l’égard d’un site qui souhaite établir un lien vers le site de l’éditeur.
-            </p>
-        </div>
+            <div>
+                <h2>5. Liens hypertextes</h2>
+                <p>
+                Le site peut contenir des liens hypertextes vers d'autres sites présents sur le réseau Internet. Les liens vers ces autres ressources vous font quitter le site VylsFond.
+                </p>
+                <p>
+                Il est possible de créer un lien vers la page de présentation de ce site sans autorisation expresse de l'ÉDITEUR. Aucune autorisation ou demande d’information préalable ne peut être exigée par l’éditeur à l’égard d’un site qui souhaite établir un lien vers le site de l’éditeur.
+                </p>
+            </div>
 
-        <div>
-            <h2>6. Droit applicable et juridiction compétente</h2>
-            <p>
-            Les présentes CGU sont soumises au droit français. En cas de litige, et après une tentative de recherche d'une solution amiable, les tribunaux français seront seuls compétents.
-            </p>
+            <div>
+                <h2>6. Droit applicable et juridiction compétente</h2>
+                <p>
+                Les présentes CGU sont soumises au droit français. En cas de litige, et après une tentative de recherche d'une solution amiable, les tribunaux français seront seuls compétents.
+                </p>
+            </div>
         </div>
     </div>
+
+    <!-- CTA Section -->
+    <section class="bg-primary text-primary-foreground">
+        <div class="container mx-auto text-center py-16 px-4">
+            <h2 class="text-3xl font-bold">Prêt à démarrer votre projet ?</h2>
+            <p class="mt-2 text-lg max-w-xl mx-auto opacity-90">
+                Notre équipe est là pour vous aider à trouver la meilleure solution de financement.
+            </p>
+            <div class="mt-8">
+                <a href="/demande-de-pret" class="bg-secondary text-secondary-foreground hover:bg-secondary/80 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-11 rounded-md px-8">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                    Faire une demande
+                </a>
+            </div>
+        </div>
+    </section>
 </main>
 
 <?php

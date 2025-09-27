@@ -8,82 +8,100 @@
 get_header();
 ?>
 
-<main class="flex-1 container mx-auto py-16 md:py-24">
-    <div class="prose-content lg:prose-xl mx-auto space-y-8">
-      <h1>Politique de Confidentialité</h1>
-      <p>Dernière mise à jour : <?php echo date_i18n('j F Y'); ?></p>
+<main class="flex-1">
+    <div class="container mx-auto py-16 md:py-24">
+        <div class="prose-content lg:prose-xl mx-auto space-y-8">
+          <h1>Politique de Confidentialité</h1>
+          <p>Dernière mise à jour : <?php echo date_i18n('j F Y'); ?></p>
 
-      <div>
-        <h2>1. Introduction</h2>
-        <p>
-          VylsFond s'engage à protéger la vie privée de ses utilisateurs. Cette politique de confidentialité explique quelles informations nous collectons, comment nous les utilisons, et quels sont vos droits concernant vos données personnelles.
-        </p>
-      </div>
+          <div>
+            <h2>1. Introduction</h2>
+            <p>
+              VylsFond s'engage à protéger la vie privée de ses utilisateurs. Cette politique de confidentialité explique quelles informations nous collectons, comment nous les utilisons, et quels sont vos droits concernant vos données personnelles.
+            </p>
+          </div>
 
-      <div>
-        <h2>2. Collecte des informations</h2>
-        <p>
-          Nous collectons des informations lorsque vous utilisez notre site, notamment lorsque vous remplissez notre formulaire de vérification d'éligibilité ou notre formulaire de contact. Les informations collectées peuvent inclure :
-        </p>
-        <ul>
-          <li>Votre nom et votre adresse e-mail.</li>
-          <li>Les informations financières que vous fournissez (revenu annuel, score de crédit, etc.).</li>
-          <li>Des informations techniques comme votre adresse IP, votre type de navigateur, etc.</li>
-        </ul>
-      </div>
+          <div>
+            <h2>2. Collecte des informations</h2>
+            <p>
+              Nous collectons des informations lorsque vous utilisez notre site, notamment lorsque vous remplissez notre formulaire de vérification d'éligibilité ou notre formulaire de contact. Les informations collectées peuvent inclure :
+            </p>
+            <ul>
+              <li>Votre nom et votre adresse e-mail.</li>
+              <li>Les informations financières que vous fournissez (revenu annuel, score de crédit, etc.).</li>
+              <li>Des informations techniques comme votre adresse IP, votre type de navigateur, etc.</li>
+            </ul>
+          </div>
 
-      <div>
-        <h2>3. Utilisation des informations</h2>
-        <p>
-          Les informations que nous collectons sont utilisées pour :
-        </p>
-        <ul>
-          <li>Fournir et améliorer nos services.</li>
-          <li>Évaluer votre éligibilité à un prêt.</li>
-          <li>Vous contacter en réponse à vos demandes.</li>
-          <li>Communiquer avec vous sur nos produits et services.</li>
-        </ul>
-      </div>
+          <div>
+            <h2>3. Utilisation des informations</h2>
+            <p>
+              Les informations que nous collectons sont utilisées pour :
+            </p>
+            <ul>
+              <li>Fournir et améliorer nos services.</li>
+              <li>Évaluer votre éligibilité à un prêt.</li>
+              <li>Vous contacter en réponse à vos demandes.</li>
+              <li>Communiquer avec vous sur nos produits et services.</li>
+            </ul>
+          </div>
 
-      <div>
-        <h2>4. Partage des informations</h2>
-        <p>
-          Nous ne vendons, n'échangeons ni ne transférons vos informations personnelles identifiables à des tiers sans votre consentement, sauf dans les cas suivants :
-        </p>
-        <ul>
-          <li>À des partenaires de confiance qui nous aident à exploiter notre site ou à mener nos affaires, tant qu'ils acceptent de garder ces informations confidentielles.</li>
-          <li>Pour se conformer à la loi, appliquer les politiques de notre site, ou protéger nos droits, notre propriété ou notre sécurité.</li>
-        </ul>
-      </div>
-      
-      <div>
-        <h2>5. Sécurité de vos données</h2>
-        <p>
-          Nous mettons en œuvre une variété de mesures de sécurité pour préserver la sécurité de vos informations personnelles. Nous utilisons des technologies de cryptage pour protéger les informations sensibles transmises en ligne.
-        </p>
-      </div>
+          <div>
+            <h2>4. Partage des informations</h2>
+            <p>
+              Nous ne vendons, n'échangeons ni ne transférons vos informations personnelles identifiables à des tiers sans votre consentement, sauf dans les cas suivants :
+            </p>
+            <ul>
+              <li>À des partenaires de confiance qui nous aident à exploiter notre site ou à mener nos affaires, tant qu'ils acceptent de garder ces informations confidentielles.</li>
+              <li>Pour se conformer à la loi, appliquer les politiques de notre site, ou protéger nos droits, notre propriété ou notre sécurité.</li>
+            </ul>
+          </div>
+          
+          <div>
+            <h2>5. Sécurité de vos données</h2>
+            <p>
+              Nous mettons en œuvre une variété de mesures de sécurité pour préserver la sécurité de vos informations personnelles. Nous utilisons des technologies de cryptage pour protéger les informations sensibles transmises en ligne.
+            </p>
+          </div>
 
-      <div>
-        <h2>6. Vos droits</h2>
-        <p>
-          Conformément à la réglementation, vous disposez d'un droit d'accès, de rectification, de suppression et d'opposition au traitement de vos données personnelles. Vous pouvez exercer ces droits en nous contactant via notre formulaire de contact.
-        </p>
-      </div>
-      
-      <div>
-        <h2>7. Modifications de notre politique de confidentialité</h2>
-        <p>
-          Si nous décidons de changer notre politique de confidentialité, nous publierons ces changements sur cette page. Nous vous encourageons à consulter cette page régulièrement pour rester informé.
-        </p>
-      </div>
+          <div>
+            <h2>6. Vos droits</h2>
+            <p>
+              Conformément à la réglementation, vous disposez d'un droit d'accès, de rectification, de suppression et d'opposition au traitement de vos données personnelles. Vous pouvez exercer ces droits en nous contactant via notre formulaire de contact.
+            </p>
+          </div>
+          
+          <div>
+            <h2>7. Modifications de notre politique de confidentialité</h2>
+            <p>
+              Si nous décidons de changer notre politique de confidentialité, nous publierons ces changements sur cette page. Nous vous encourageons à consulter cette page régulièrement pour rester informé.
+            </p>
+          </div>
 
-      <div>
-        <h2>8. Nous contacter</h2>
-        <p>
-          Si vous avez des questions concernant cette politique de confidentialité, vous pouvez nous contacter via la section "Contact" de notre site.
-        </p>
-      </div>
+          <div>
+            <h2>8. Nous contacter</h2>
+            <p>
+              Si vous avez des questions concernant cette politique de confidentialité, vous pouvez nous contacter via la section "Contact" de notre site.
+            </p>
+          </div>
+        </div>
     </div>
+    
+    <!-- CTA Section -->
+    <section class="bg-primary text-primary-foreground">
+        <div class="container mx-auto text-center py-16 px-4">
+            <h2 class="text-3xl font-bold">Prêt à démarrer votre projet ?</h2>
+            <p class="mt-2 text-lg max-w-xl mx-auto opacity-90">
+                Notre équipe est là pour vous aider à trouver la meilleure solution de financement.
+            </p>
+            <div class="mt-8">
+                <a href="/demande-de-pret" class="bg-secondary text-secondary-foreground hover:bg-secondary/80 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-11 rounded-md px-8">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                    Faire une demande
+                </a>
+            </div>
+        </div>
+    </section>
 </main>
 
 <?php

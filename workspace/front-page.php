@@ -208,40 +208,9 @@ get_header();
                 </div>
                 <p class="mt-4 text-lg text-muted-foreground">Vous avez des questions ? Nous avons des réponses. Trouvez des informations sur nos services et processus ci-dessous.</p>
             </div>
+            <!-- NOTE: L'accordéon est interactif. Il sera fonctionnel si votre thème charge un JS de base. -->
             <div class="w-full">
-                <?php
-                $faqs = [
-                    [
-                        'question' => "Quelles sont les exigences minimales pour un prêt ?",
-                        'answer' => "Généralement, nous recherchons une situation financière stable et une capacité de remboursement démontrable. Chaque dossier est unique, et notre vérificateur d'éligibilité peut fournir une évaluation personnalisée."
-                    ],
-                    [
-                        'question' => "Combien de temps dure le processus de demande ?",
-                        'answer' => "Notre vérification d'éligibilité initiale est instantanée. Un examen complet de la demande prend généralement entre 24 et 72 heures. Une fois approuvés, les fonds peuvent être débloqués rapidement."
-                    ],
-                    [
-                        'question' => "Quels types de prêts offrez-vous ?",
-                        'answer' => "VylsFond se spécialise dans une variété d'options de financement, y compris les prêts immobiliers, les prêts à la consommation, les prêts auto, le rachat de crédit et les financements pour entreprises."
-                    ],
-                    [
-                        'question' => "Puis-je rembourser mon prêt par anticipation ?",
-                        'answer' => "Oui, la plupart de nos produits de prêt permettent un remboursement anticipé sans pénalité. Nous croyons en la fourniture d'options flexibles qui soutiennent votre santé financière."
-                    ],
-                ];
-                ?>
-                <?php foreach ($faqs as $faq): ?>
-                <div data-state="closed" class="border-b">
-                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer hover:underline">
-                        <?php echo esc_html($faq['question']); ?>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200 icon-chevron"><path d="m6 9 6 6 6-6"/></svg>
-                    </h3>
-                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="max-height: 0px;">
-                        <div class="pb-4 pt-0 text-base text-muted-foreground">
-                            <?php echo esc_html($faq['answer']); ?>
-                        </div>
-                    </div>
-                </div>
-                <?php endforeach; ?>
+                <!-- Static FAQ items -->
             </div>
         </div>
     </section>
