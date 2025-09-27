@@ -3,7 +3,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { RouterProvider, createHashRouter, Outlet } from 'react-router-dom';
+import { RouterProvider, createHashRouter } from 'react-router-dom';
 import BanqueLayout from './layout';
 import DashboardPage from './tableau-de-bord/page';
 import TransactionsPage from './transactions/page';
@@ -16,10 +16,11 @@ import { BankingProvider } from '@/hooks/use-banking-store.tsx';
 // and we don't want to interfere with WordPress's URL routing.
 const router = createHashRouter([
   {
+    path: '/',
     element: <BanqueLayout />,
     children: [
         {
-            path: '/',
+            index: true,
             element: <DashboardPage />,
         },
         {

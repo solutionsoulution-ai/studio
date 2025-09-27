@@ -17,6 +17,15 @@ const navLinks = [
 export default function BanqueLayout() {
   const location = useLocation();
 
+  const getActivePath = () => {
+    // The hash router uses paths like `#/profil`, so we extract `profil`
+    const path = location.hash.substring(2) || 'tableau-de-bord';
+    if (path === '/') return 'tableau-de-bord';
+    return path;
+  }
+  
+  const activePath = getActivePath();
+
   const SidebarContent = () => (
     <div className="flex flex-col h-full bg-muted/40">
         <div className="p-4 border-b">
@@ -26,17 +35,20 @@ export default function BanqueLayout() {
             </a>
         </div>
         <nav className="flex-1 p-4 space-y-2">
-            {navLinks.map((link) => (
+            {navLinks.map((link) => {
+              const linkPath = link.href.substring(2);
+              return (
                 <a key={link.href} href={link.href}>
                     <Button
-                        variant={location.pathname === link.href.substring(1) || (location.pathname === '/' && link.href === '#/tableau-de-bord') ? "secondary" : "ghost"}
+                        variant={activePath === linkPath ? "secondary" : "ghost"}
                         className="w-full justify-start gap-3"
                     >
                         <link.icon className="h-5 w-5" />
                         {link.label}
                     </Button>
                 </a>
-            ))}
+              )
+            })}
         </nav>
         <div className="p-4 mt-auto border-t">
             <Button variant="ghost" className="w-full justify-start gap-3">
