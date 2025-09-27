@@ -22,7 +22,37 @@ get_header();
       
       <div class="grid md:grid-cols-2 gap-12 items-start">
          <div>
-            <!-- NOTE: Remplacez ce bloc par le shortcode de votre plugin de formulaire (ex: [contact-form-7 id="123" title="Formulaire de contact"]) -->
+            <!--
+            ====================================================================================================
+            INSTRUCTIONS POUR RENDRE CE FORMULAIRE FONCTIONNEL (SANS DÉVELOPPEUR)
+            ====================================================================================================
+            
+            Ce formulaire est une maquette. Pour qu'il envoie des e-mails, suivez ces étapes simples :
+
+            1. INSTALLEZ LE PLUGIN WPFORMS :
+               - Dans votre admin WordPress, allez à "Extensions" > "Ajouter".
+               - Recherchez, installez et activez le plugin "WPForms".
+
+            2. CRÉEZ LE FORMULAIRE DANS WPFORMS :
+               - Allez dans le menu "WPForms" et créez un nouveau formulaire.
+               - Recréez les champs ci-dessous en utilisant les types de champs suivants :
+                 - Nom Complet -> Champ "Nom" (utilisez le format "Simple")
+                 - Adresse E-mail -> Champ "E-mail"
+                 - Votre Message -> Champ "Paragraphe de texte"
+               - Dans "Réglages" > "Notifications" du formulaire, mettez VOTRE adresse e-mail pour recevoir les messages.
+               - Dans "Réglages" > "Confirmation", choisissez "Rediriger vers une URL" et mettez le lien de votre page "Merci Contact".
+               - Enregistrez le formulaire.
+
+            3. REMPLACEZ LE CODE CI-DESSOUS :
+               - Une fois le formulaire enregistré, WPForms vous donnera un "shortcode" qui ressemble à : [wpforms id="123"]. Copiez-le.
+               - Supprimez tout le bloc HTML <div class="rounded-lg..."> qui se trouve juste en dessous de ce commentaire (jusqu'au commentaire de fin).
+               - À la place, collez votre shortcode, comme ceci :
+                 <?php echo do_shortcode('[wpforms id="123"]'); ?>
+            
+            ====================================================================================================
+            -->
+            
+            <!-- ▼▼▼ DÉBUT DU FORMULAIRE À REMPLACER PAR VOTRE SHORTCODE ▼▼▼ -->
             <div class="rounded-lg border bg-card text-card-foreground shadow-lg">
                 <div class="p-6 md:p-8">
                     <form class="space-y-6">
@@ -41,6 +71,8 @@ get_header();
                     </form>
                 </div>
             </div>
+            <!-- ▲▲▲ FIN DU FORMULAIRE À REMPLACER PAR VOTRE SHORTCODE ▲▲▲ -->
+
          </div>
          <div class="space-y-6">
             <h2 class="text-2xl font-semibold">Nos Coordonnées</h2>
