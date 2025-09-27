@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const isOpen = parentItem.getAttribute('data-state') === 'open';
 
       // Close all other open items
-      parentItem.parentElement.querySelectorAll('[data-state="open"]').forEach(openItem => {
+      document.querySelectorAll('[data-state="open"]').forEach(openItem => {
         if (openItem !== parentItem) {
           openItem.setAttribute('data-state', 'closed');
           const openContent = openItem.querySelector('[data-accordion-content]');
