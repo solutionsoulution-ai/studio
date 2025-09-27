@@ -5,7 +5,7 @@ import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Check, Target, Handshake, Lightbulb, Users, Phone, Rocket, Milestone, Telescope, BrainCircuit, UsersRound, Euro } from 'lucide-react';
+import { Check, Target, Handshake, Lightbulb, Users, Phone, Rocket, Milestone, Telescope, BrainCircuit, UsersRound, Euro, CheckCircle } from 'lucide-react';
 import { Button } from "../ui/button";
 import Link from "next/link";
 import {
@@ -73,36 +73,55 @@ const timelineEvents = [
 ]
 
 export default function AboutUsSection() {
-    const heroImage = PlaceHolderImages.find((img) => img.id === "about-us-hero");
+    const imageUrl = "https://i.postimg.cc/Hx8SZ01Q/undraw-finance-guy-avatar-vhop-removebg-preview.png";
     const plugin = React.useRef(
       Autoplay({ delay: 4000, stopOnInteraction: true })
     );
 
     return (
         <div>
-            {/* Hero Section */}
-            <section className="relative h-80 bg-muted/30">
-                {heroImage && (
-                    <Image
-                    src={heroImage.imageUrl}
-                    alt={heroImage.description}
-                    fill
-                    className="object-cover"
-                    data-ai-hint={heroImage.imageHint}
-                    />
-                )}
-                <div className="absolute inset-0 bg-black/50" />
-                <div className="relative container mx-auto h-full flex flex-col justify-center items-center text-center text-white">
-                    <h1 className="text-4xl md:text-5xl font-bold font-headline">À Propos de VylsFond</h1>
-                    <p className="mt-4 max-w-2xl text-lg text-neutral-200">
-                        Notre mission : rendre le financement plus accessible, plus rapide et plus humain.
+            <section className="container mx-auto py-16 md:py-24">
+                <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-center">
+                    <div className="order-2 md:order-1">
+                    <h1 className="text-4xl md:text-5xl font-bold font-headline mb-4">
+                        À Propos de VylsFond
+                    </h1>
+                    <p className="text-lg text-muted-foreground mb-6">
+                        Notre mission : rendre le financement plus accessible, plus rapide et plus humain en combinant le meilleur de la technologie et une expertise humaine.
                     </p>
+                    <ul className="space-y-3 mb-8">
+                        <li className="flex items-center gap-3">
+                        <CheckCircle className="w-5 h-5 text-accent" />
+                        <span>Solutions de prêt rapides et transparentes.</span>
+                        </li>
+                        <li className="flex items-center gap-3">
+                        <CheckCircle className="w-5 h-5 text-accent" />
+                        <span>Accompagnement par des experts dédiés.</span>
+                        </li>
+                        <li className="flex items-center gap-3">
+                        <CheckCircle className="w-5 h-5 text-accent" />
+                        <span>Partenaire de confiance pour particuliers et entreprises.</span>
+                        </li>
+                    </ul>
+                    <Button size="lg" asChild>
+                        <Link href="/contact">Nous Contacter</Link>
+                    </Button>
+                    </div>
+                    <div className="order-1 md:order-2">
+                    <Image
+                        src={imageUrl}
+                        alt="Illustration d'un conseiller financier"
+                        width={600}
+                        height={400}
+                        className="rounded-lg object-cover w-full"
+                    />
+                    </div>
                 </div>
             </section>
 
             {/* Mission & Vision Section */}
-            <section className="container mx-auto py-16 md:py-24">
-                <div className="grid md:grid-cols-2 gap-12 items-center">
+            <section className="container mx-auto pb-16 md:pb-24">
+                <div className="grid md:grid-cols-2 gap-12 items-start">
                     <div>
                         <h2 className="text-3xl font-bold font-headline mb-4">Notre Histoire</h2>
                         <p className="text-muted-foreground text-base leading-relaxed">
@@ -218,9 +237,9 @@ export default function AboutUsSection() {
                     </p>
                     <div className="mt-8">
                         <Button size="lg" variant="secondary" asChild>
-                            <Link href="/contact">
-                                <Phone className="mr-2" />
-                                Contactez-nous
+                            <Link href="/demande-de-pret">
+                                <FilePen className="mr-2" />
+                                Faire une demande
                             </Link>
                         </Button>
                     </div>

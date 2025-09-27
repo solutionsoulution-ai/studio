@@ -1,6 +1,6 @@
 
 import Link from "next/link";
-import { Landmark, Linkedin, Twitter, Facebook, Mail, Phone, MapPin } from "lucide-react";
+import { Landmark, Linkedin, Twitter, Facebook, Mail, Phone, MapPin, FilePen } from "lucide-react";
 
 const mainNavLinks = [
   { href: "/a-propos", label: "À Propos" },
