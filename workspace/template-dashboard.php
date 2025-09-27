@@ -20,8 +20,8 @@ get_header();
 
         <!-- NOTE POUR L'ADMINISTRATEUR DU SITE -->
         <!-- Les informations ci-dessous sont statiques (données d'exemple). Elles sont ici pour la démonstration visuelle. -->
-        <!-- Pour un client spécifique, vous pouvez dupliquer ce modèle et modifier manuellement les valeurs ci-dessous. -->
-        <!-- Un développement WordPress personnalisé serait nécessaire pour rendre ces données dynamiques (connectées à une base de données). -->
+        <!-- Pour un client spécifique, vous pouvez dupliquer ce modèle de page (Pages > Ajouter, puis choisir ce modèle), et modifier manuellement les valeurs ci-dessous dans l'éditeur de code de la page. -->
+        <!-- Un développement WordPress personnalisé serait nécessaire pour rendre ces données dynamiques et les lier à chaque utilisateur. -->
 
         <div class="grid lg:grid-cols-3 gap-8">
             <!-- Colonne principale -->
@@ -34,9 +34,10 @@ get_header();
                             <div>
                                 <p class="text-sm font-medium text-muted-foreground">Compte Courant</p>
                                 <!-- MODIFIER ICI : SOLDE DU COMPTE -->
-                                <p class="text-4xl font-bold tracking-tight">12,345.67 €</p>
+                                <p class="text-4xl font-bold tracking-tight">0,00 €</p>
                                 <p class="text-xs text-muted-foreground">Solde au <?php echo date_i18n('j F Y'); ?></p>
                             </div>
+                            <!-- MODIFIER ICI : RIB DU CLIENT (PARTIEL) -->
                             <div class="text-sm font-semibold text-primary">FR76 ... 1234</div>
                         </div>
                     </div>
@@ -48,28 +49,8 @@ get_header();
                         <h3 class="text-lg font-semibold">Transactions Récentes</h3>
                         <a href="/transactions" class="text-sm font-medium text-primary hover:underline">Voir tout</a>
                     </div>
-                    <div class="border-t">
-                        <table class="w-full">
-                            <tbody class="divide-y divide-border">
-                                <!-- MODIFIER ICI : EXEMPLES DE TRANSACTIONS -->
-                                <tr class="text-sm">
-                                    <td class="p-4">Paiement CB - Amazon.fr</td>
-                                    <td class="p-4 text-right font-medium">- 49,99 €</td>
-                                </tr>
-                                <tr class="text-sm">
-                                    <td class="p-4">Virement - Salaire</td>
-                                    <td class="p-4 text-right font-medium text-green-600">+ 2,500.00 €</td>
-                                </tr>
-                                <tr class="text-sm">
-                                    <td class="p-4">Prélèvement - Loyer</td>
-                                    <td class="p-4 text-right font-medium">- 850,00 €</td>
-                                </tr>
-                                <tr class="text-sm">
-                                    <td class="p-4">Paiement CB - Super U</td>
-                                    <td class="p-4 text-right font-medium">- 78,50 €</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="p-6 pt-0 text-center text-muted-foreground">
+                        <p>Aucune transaction pour le moment.</p>
                     </div>
                 </div>
 
@@ -93,12 +74,27 @@ get_header();
                     </div>
                 </div>
 
-                <!-- Carte d'Épargne -->
+                <!-- Mes Prêts en cours -->
                 <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
-                    <div class="p-6">
-                        <p class="text-sm font-medium text-muted-foreground">Livret A</p>
-                        <!-- MODIFIER ICI : SOLDE ÉPARGNE -->
-                        <p class="text-2xl font-bold tracking-tight">5,120.50 €</p>
+                    <div class="p-6"><h3 class="text-lg font-semibold">Mes Prêts en Cours</h3></div>
+                    <div class="p-6 pt-0 space-y-6">
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-semibold flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> Prêt Immobilier</span>
+                                <!-- MODIFIER ICI : ID DU PRÊT -->
+                                <span class="text-sm font-mono text-muted-foreground">#IMMO-789</span>
+                            </div>
+                            <!-- MODIFIER ICI : PROGRESSION (valeur de 0 à 100) et libellé aria-label -->
+                            <div class="relative h-2 w-full overflow-hidden rounded-full bg-secondary">
+                                <div class="h-full w-full flex-1 bg-primary transition-transform" style="transform: translateX(-40%);"></div>
+                            </div>
+                            <div class="flex justify-between items-center mt-2 text-xs text-muted-foreground">
+                                <!-- MODIFIER ICI : REMBOURSEMENT -->
+                                <span>150/300 mois</span>
+                                <!-- MODIFIER ICI : MONTANT RESTANT -->
+                                <span class="font-semibold">125,450.12 € restants</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
