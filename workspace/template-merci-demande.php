@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: Page - Merci Demande de Prêt
+ * Template Name: Page - Merci Demande
  *
  * @package vyls
  */
