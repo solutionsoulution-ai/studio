@@ -19,7 +19,7 @@ export default function BanqueLayout() {
 
   const getActivePath = () => {
     // The hash router uses paths like `#/profil`, so we extract `profil`
-    const path = location.hash.substring(2) || 'tableau-de-bord';
+    const path = location.pathname.substring(1) || 'tableau-de-bord';
     if (path === '/') return 'tableau-de-bord';
     return path;
   }
