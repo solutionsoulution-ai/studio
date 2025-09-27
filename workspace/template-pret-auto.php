@@ -62,6 +62,12 @@ get_header();
             <div class="relative"><div class="absolute top-1/2 left-0 w-full h-0.5 border-t-2 border-dashed border-border -translate-y-1/2 hidden md:block" aria-hidden="true"></div><div class="relative grid md:grid-cols-3 gap-12"><div class="flex flex-col items-center text-center"><div class="relative z-10 flex items-center justify-center w-20 h-20 rounded-full bg-primary text-primary-foreground mb-4 ring-8 ring-background"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></div><h3 class="text-xl font-bold mb-2">1. Demande Rapide</h3><p class="text-muted-foreground">Faites votre demande en quelques minutes et recevez une réponse de principe immédiate.</p></div><div class="flex flex-col items-center text-center"><div class="relative z-10 flex items-center justify-center w-20 h-20 rounded-full bg-primary text-primary-foreground mb-4 ring-8 ring-background"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div><h3 class="text-xl font-bold mb-2">2. Approbation Intelligente</h3><p class="text-muted-foreground">Notre IA analyse votre profil pour vous fournir une offre ferme rapidement, souvent en quelques heures.</p></div><div class="flex flex-col items-center text-center"><div class="relative z-10 flex items-center justify-center w-20 h-20 rounded-full bg-primary text-primary-foreground mb-4 ring-8 ring-background"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10"><path d="M2 12v3c0 1.1.9 2 2 2h16a2 2 0 0 0 2-2v-3"/><path d="M12 16v-1"/><path d="m15 12-3-3-3 3"/><path d="M12 3v1"/></svg></div><h3 class="text-xl font-bold mb-2">3. Prenez la Route</h3><p class="text-muted-foreground">Après signature électronique, les fonds sont virés au vendeur et vous pouvez récupérer votre voiture.</p></div></div></div>
         </div>
     </section>
+    
+    <section class="w-full py-16 md:py-24 bg-muted/30">
+        <div id="calculator-root">
+            <!-- Le composant React du calculateur sera monté ici -->
+        </div>
+    </section>
 
     <section id="faq" class="container mx-auto py-16 md:py-24">
         <div class="max-w-3xl mx-auto">
@@ -71,35 +77,19 @@ get_header();
                     <h2 class="text-3xl font-bold tracking-tight font-headline">Questions Fréquentes - Prêt Auto</h2>
                 </div>
             </div>
-            <div class="space-y-6">
-                <div class="border-b pb-4">
-                    <h3 class="font-medium text-lg">Le prêt auto peut-il financer un véhicule d'occasion ?</h3>
-                    <p class="text-muted-foreground mt-2">Oui, nos solutions de financement couvrent aussi bien les véhicules neufs que les véhicules d'occasion achetés auprès d'un professionnel ou d'un particulier.</p>
+            <div class="w-full">
+                <div data-state="closed" class="border-b">
+                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Le prêt auto peut-il financer un véhicule d'occasion ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="max-height: 0px;"><div class="pb-4 pt-0 text-base text-muted-foreground">Oui, nos solutions de financement couvrent aussi bien les véhicules neufs que les véhicules d'occasion achetés auprès d'un professionnel ou d'un particulier.</div></div>
                 </div>
-                <div class="border-b pb-4">
-                    <h3 class="font-medium text-lg">Est-ce que l'assurance du véhicule est incluse ?</h3>
-                    <p class="text-muted-foreground mt-2">L'assurance du véhicule n'est pas directement incluse dans le prêt auto. Cependant, nous pouvons vous proposer des solutions d'assurance partenaires à des tarifs préférentiels.</p>
+                <div data-state="closed" class="border-b">
+                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Est-ce que l'assurance du véhicule est incluse ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="max-height: 0px;"><div class="pb-4 pt-0 text-base text-muted-foreground">L'assurance du véhicule n'est pas directement incluse dans le prêt auto. Cependant, nous pouvons vous proposer des solutions d'assurance partenaires à des tarifs préférentiels.</div></div>
                 </div>
-                <div class="border-b pb-4">
-                    <h3 class="font-medium text-lg">Puis-je faire un remboursement anticipé de mon prêt auto ?</h3>
-                    <p class="text-muted-foreground mt-2">Oui, vous pouvez rembourser tout ou partie de votre prêt auto par anticipation, conformément à la législation en vigueur. Des indemnités peuvent s'appliquer dans certains cas.</p>
+                <div data-state="closed" class="border-b">
+                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Puis-je faire un remboursement anticipé de mon prêt auto ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="max-height: 0px;"><div class="pb-4 pt-0 text-base text-muted-foreground">Oui, vous pouvez rembourser tout ou partie de votre prêt auto par anticipation, conformément à la législation en vigueur. Des indemnités peuvent s'appliquer dans certains cas.</div></div>
                 </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- CTA Section -->
-    <section class="bg-primary text-primary-foreground">
-        <div class="container mx-auto text-center py-16 px-4">
-            <h2 class="text-3xl font-bold">Prêt à démarrer votre projet ?</h2>
-            <p class="mt-2 text-lg max-w-xl mx-auto opacity-90">
-                Notre équipe est là pour vous aider à trouver la meilleure solution de financement.
-            </p>
-            <div class="mt-8">
-                <a href="/demande-de-pret" class="bg-secondary text-secondary-foreground hover:bg-secondary/80 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-11 rounded-md px-8">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-                    Faire une demande
-                </a>
             </div>
         </div>
     </section>

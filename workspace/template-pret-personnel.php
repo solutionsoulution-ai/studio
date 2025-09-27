@@ -62,6 +62,12 @@ get_header();
             <div class="relative"><div class="absolute top-1/2 left-0 w-full h-0.5 border-t-2 border-dashed border-border -translate-y-1/2 hidden md:block" aria-hidden="true"></div><div class="relative grid md:grid-cols-3 gap-12"><div class="flex flex-col items-center text-center"><div class="relative z-10 flex items-center justify-center w-20 h-20 rounded-full bg-primary text-primary-foreground mb-4 ring-8 ring-background"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></div><h3 class="text-xl font-bold mb-2">1. Définissez votre projet</h3><p class="text-muted-foreground">Simulez votre prêt en ligne pour déterminer le montant et la durée qui vous conviennent.</p></div><div class="flex flex-col items-center text-center"><div class="relative z-10 flex items-center justify-center w-20 h-20 rounded-full bg-primary text-primary-foreground mb-4 ring-8 ring-background"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div><h3 class="text-xl font-bold mb-2">2. Obtenez une réponse</h3><p class="text-muted-foreground">Soumettez votre demande en ligne et notre technologie nous permet de vous donner une réponse de principe immédiate.</p></div><div class="flex flex-col items-center text-center"><div class="relative z-10 flex items-center justify-center w-20 h-20 rounded-full bg-primary text-primary-foreground mb-4 ring-8 ring-background"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10"><path d="M2 12v3c0 1.1.9 2 2 2h16a2 2 0 0 0 2-2v-3"/><path d="M12 16v-1"/><path d="m15 12-3-3-3 3"/><path d="M12 3v1"/></svg></div><h3 class="text-xl font-bold mb-2">3. Recevez les fonds</h3><p class="text-muted-foreground">Après accord définitif, les fonds sont versés sur votre compte bancaire sous 48h pour réaliser vos projets.</p></div></div></div>
         </div>
     </section>
+    
+    <section class="w-full py-16 md:py-24 bg-muted/30">
+        <div id="calculator-root">
+            <!-- Le composant React du calculateur sera monté ici -->
+        </div>
+    </section>
 
     <section id="faq" class="container mx-auto py-16 md:py-24">
         <div class="max-w-3xl mx-auto">
@@ -71,35 +77,19 @@ get_header();
                     <h2 class="text-3xl font-bold tracking-tight font-headline">Questions Fréquentes - Prêt Personnel</h2>
                 </div>
             </div>
-            <div class="space-y-6">
-                <div class="border-b pb-4">
-                    <h3 class="font-medium text-lg">Dois-je justifier l'utilisation des fonds pour un prêt personnel ?</h3>
-                    <p class="text-muted-foreground mt-2">Non, l'un des principaux avantages du prêt personnel est que vous n'avez pas besoin de justifier vos dépenses. Vous pouvez utiliser les fonds librement pour tout type de projet.</p>
+            <div class="w-full">
+                <div data-state="closed" class="border-b">
+                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Dois-je justifier l'utilisation des fonds pour un prêt personnel ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="max-height: 0px;"><div class="pb-4 pt-0 text-base text-muted-foreground">Non, l'un des principaux avantages du prêt personnel est que vous n'avez pas besoin de justifier vos dépenses. Vous pouvez utiliser les fonds librement pour tout type de projet.</div></div>
                 </div>
-                <div class="border-b pb-4">
-                    <h3 class="font-medium text-lg">Quel est le montant maximum que je peux emprunter ?</h3>
-                    <p class="text-muted-foreground mt-2">Le montant maximum pour un prêt personnel est généralement de 75 000 €. Le montant qui vous sera accordé dépendra de votre capacité de remboursement et de votre situation financière.</p>
+                <div data-state="closed" class="border-b">
+                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Quel est le montant maximum que je peux emprunter ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="max-height: 0px;"><div class="pb-4 pt-0 text-base text-muted-foreground">Le montant maximum pour un prêt personnel est généralement de 75 000 €. Le montant qui vous sera accordé dépendra de votre capacité de remboursement et de votre situation financière.</div></div>
                 </div>
-                <div class="border-b pb-4">
-                    <h3 class="font-medium text-lg">Le taux du prêt personnel est-il fixe ou variable ?</h3>
-                    <p class="text-muted-foreground mt-2">Nous proposons principalement des prêts personnels à taux fixe. Cela signifie que votre taux d'intérêt et vos mensualités restent les mêmes pendant toute la durée du prêt, pour une meilleure maîtrise de votre budget.</p>
+                <div data-state="closed" class="border-b">
+                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Le taux du prêt personnel est-il fixe ou variable ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="max-height: 0px;"><div class="pb-4 pt-0 text-base text-muted-foreground">Nous proposons principalement des prêts personnels à taux fixe. Cela signifie que votre taux d'intérêt et vos mensualités restent les mêmes pendant toute la durée du prêt, pour une meilleure maîtrise de votre budget.</div></div>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="bg-primary text-primary-foreground">
-        <div class="container mx-auto text-center py-16 px-4">
-            <h2 class="text-3xl font-bold">Prêt à démarrer votre projet ?</h2>
-            <p class="mt-2 text-lg max-w-xl mx-auto opacity-90">
-                Notre équipe est là pour vous aider à trouver la meilleure solution de financement.
-            </p>
-            <div class="mt-8">
-                <a href="/demande-de-pret" class="bg-secondary text-secondary-foreground hover:bg-secondary/80 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-11 rounded-md px-8">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-                    Faire une demande
-                </a>
             </div>
         </div>
     </section>

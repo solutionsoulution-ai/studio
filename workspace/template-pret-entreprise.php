@@ -66,6 +66,13 @@ get_header();
         </div>
     </section>
 
+    <!-- Section: Calculateur -->
+    <section class="w-full py-16 md:py-24 bg-muted/30">
+        <div id="calculator-root">
+            <!-- Le composant React du calculateur sera monté ici -->
+        </div>
+    </section>
+
     <!-- Section: FAQ -->
     <section class="container mx-auto py-16 md:py-24">
         <div class="max-w-3xl mx-auto">
@@ -75,35 +82,31 @@ get_header();
                     <h2 class="text-3xl font-bold tracking-tight font-headline">Questions Fréquentes - Prêt Entreprise</h2>
                 </div>
             </div>
-             <div class="space-y-6">
-                <div class="border-b pb-4">
-                    <h3 class="font-medium text-lg">Quels types de financements proposez-vous aux entreprises ?</h3>
-                    <p class="text-muted-foreground mt-2">Nous offrons une gamme complète de solutions, incluant des prêts à terme pour les investissements, des lignes de crédit pour la gestion de la trésorerie, du financement d'équipement, et des solutions de fonds de roulement.</p>
+            <div class="w-full">
+                <div data-state="closed" class="border-b">
+                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Quels types de financements proposez-vous aux entreprises ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="max-height: 0px;">
+                        <div class="pb-4 pt-0 text-base text-muted-foreground">
+                            Nous offrons une gamme complète de solutions, incluant des prêts à terme pour les investissements, des lignes de crédit pour la gestion de la trésorerie, du financement d'équipement, et des solutions de fonds de roulement.
+                        </div>
+                    </div>
                 </div>
-                <div class="border-b pb-4">
-                    <h3 class="font-medium text-lg">Mon entreprise est jeune, suis-je éligible ?</h3>
-                    <p class="text-muted-foreground mt-2">Oui, nous finançons également les startups et les jeunes entreprises. L'éligibilité dépendra de votre business plan, de vos projections financières et du profil des fondateurs. N'hésitez pas à utiliser notre simulateur pour une première évaluation.</p>
+                <div data-state="closed" class="border-b">
+                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Mon entreprise est jeune, suis-je éligible ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="max-height: 0px;">
+                        <div class="pb-4 pt-0 text-base text-muted-foreground">
+                            Oui, nous finançons également les startups et les jeunes entreprises. L'éligibilité dépendra de votre business plan, de vos projections financières et du profil des fondateurs. N'hésitez pas à utiliser notre simulateur pour une première évaluation.
+                        </div>
+                    </div>
                 </div>
-                <div class="border-b pb-4">
-                    <h3 class="font-medium text-lg">Quels documents sont nécessaires pour une demande de prêt entreprise ?</h3>
-                    <p class="text-muted-foreground mt-2">Pour une analyse complète, préparez votre Kbis, vos derniers bilans comptables (si existants), un prévisionnel financier, les statuts de la société et les pièces d'identité des dirigeants.</p>
+                <div data-state="closed" class="border-b">
+                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Quels documents sont nécessaires pour une demande de prêt entreprise ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="max-height: 0px;">
+                        <div class="pb-4 pt-0 text-base text-muted-foreground">
+                            Pour une analyse complète, préparez votre Kbis, vos derniers bilans comptables (si existants), un prévisionnel financier, les statuts de la société et les pièces d'identité des dirigeants.
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- CTA Section -->
-    <section class="bg-primary text-primary-foreground">
-        <div class="container mx-auto text-center py-16 px-4">
-            <h2 class="text-3xl font-bold">Prêt à démarrer votre projet ?</h2>
-            <p class="mt-2 text-lg max-w-xl mx-auto opacity-90">
-                Notre équipe est là pour vous aider à trouver la meilleure solution de financement.
-            </p>
-            <div class="mt-8">
-                <a href="/demande-de-pret" class="bg-secondary text-secondary-foreground hover:bg-secondary/80 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-11 rounded-md px-8">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-                    Faire une demande
-                </a>
             </div>
         </div>
     </section>

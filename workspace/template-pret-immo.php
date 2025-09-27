@@ -63,6 +63,12 @@ get_header();
         </div>
     </section>
 
+    <section class="w-full py-16 md:py-24 bg-muted/30">
+        <div id="calculator-root">
+            <!-- Le composant React du calculateur sera monté ici -->
+        </div>
+    </section>
+
     <section id="faq" class="container mx-auto py-16 md:py-24">
         <div class="max-w-3xl mx-auto">
             <div class="text-center mb-10">
@@ -71,38 +77,23 @@ get_header();
                     <h2 class="text-3xl font-bold tracking-tight font-headline">Questions Fréquentes - Prêt Immobilier</h2>
                 </div>
             </div>
-             <div class="space-y-6">
-                <div class="border-b pb-4">
-                    <h3 class="font-medium text-lg">Quel est l'apport personnel recommandé pour un prêt immobilier ?</h3>
-                    <p class="text-muted-foreground mt-2">Un apport d'au moins 10% du prix d'achat est généralement conseillé pour couvrir les frais de notaire et de garantie. Un apport plus important peut vous aider à obtenir de meilleures conditions de prêt.</p>
+            <div class="w-full">
+                <div data-state="closed" class="border-b">
+                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Quel est l'apport personnel recommandé pour un prêt immobilier ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="max-height: 0px;"><div class="pb-4 pt-0 text-base text-muted-foreground">Un apport d'au moins 10% du prix d'achat est généralement conseillé pour couvrir les frais de notaire et de garantie. Un apport plus important peut vous aider à obtenir de meilleures conditions de prêt.</div></div>
                 </div>
-                <div class="border-b pb-4">
-                    <h3 class="font-medium text-lg">Puis-je emprunter sans apport ?</h3>
-                    <p class="text-muted-foreground mt-2">C'est de plus en plus rare, mais possible sous certaines conditions, notamment si vous avez un profil financier très solide (stabilité professionnelle, épargne existante, etc.). Chaque dossier est étudié au cas par cas.</p>
+                <div data-state="closed" class="border-b">
+                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Puis-je emprunter sans apport ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="max-height: 0px;"><div class="pb-4 pt-0 text-base text-muted-foreground">C'est de plus en plus rare, mais possible sous certaines conditions, notamment si vous avez un profil financier très solide (stabilité professionnelle, épargne existante, etc.). Chaque dossier est étudié au cas par cas.</div></div>
                 </div>
-                <div class="border-b pb-4">
-                    <h3 class="font-medium text-lg">Quelle est la durée maximale pour un prêt immobilier ?</h3>
-                    <p class="text-muted-foreground mt-2">La durée de remboursement peut aller jusqu'à 25 ans (300 mois), voire 30 ans (360 mois) dans de très rares cas. Une durée plus courte signifie des mensualités plus élevées mais un coût total du crédit plus faible.</p>
+                <div data-state="closed" class="border-b">
+                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Quelle est la durée maximale pour un prêt immobilier ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="max-height: 0px;"><div class="pb-4 pt-0 text-base text-muted-foreground">La durée de remboursement peut aller jusqu'à 25 ans (300 mois), voire 30 ans (360 mois) dans de très rares cas. Une durée plus courte signifie des mensualités plus élevées mais un coût total du crédit plus faible.</div></div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="bg-primary text-primary-foreground">
-        <div class="container mx-auto text-center py-16 px-4">
-            <h2 class="text-3xl font-bold">Prêt à démarrer votre projet ?</h2>
-            <p class="mt-2 text-lg max-w-xl mx-auto opacity-90">
-                Notre équipe est là pour vous aider à trouver la meilleure solution de financement.
-            </p>
-            <div class="mt-8">
-                <a href="/demande-de-pret" class="bg-secondary text-secondary-foreground hover:bg-secondary/80 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-11 rounded-md px-8">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-                    Faire une demande
-                </a>
-            </div>
-        </div>
-    </section>
 </main>
 
 <?php
