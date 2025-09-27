@@ -19,8 +19,8 @@ const carouselItems = [
   {
     src: "https://i.postimg.cc/JnYy9vXy/arturo-portillo-NRy3-WM22-Sw-Q-unsplash-removebg-preview.png",
     alt: "Personne travaillant sur un ordinateur portable dans un bureau moderne",
-    title: "Sécurisez l'avenir de votre entreprise",
-    description: "VylsFond fournit des solutions de financement rapides et flexibles pour aider votre entreprise à prospérer. Obtenez le capital dont vous avez besoin pour grandir.",
+    title: "Le financement que vous méritez, simplifié",
+    description: "Crédits, prêts et solutions financières pour particuliers et professionnels. Rapide, transparent et humain.",
   },
   {
     src: "https://i.postimg.cc/7YCNSKbG/jonne-makikyro-n-Gp-I-Tvpc-Co-unsplash.jpg",

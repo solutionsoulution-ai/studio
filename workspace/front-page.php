@@ -12,28 +12,23 @@ get_header();
 
 <main class="flex-1">
     
-    <!-- Section: Carrousel Principal -->
+    <!-- Section: Héros Statique -->
     <section class="w-full bg-background">
-        <div class="relative overflow-hidden">
-            <!-- NOTE: Carrousel interactif via plugin -->
-            <div class="min-w-0 shrink-0 grow-0 basis-full">
-                <div class="container mx-auto px-4">
-                    <div class="grid md:grid-cols-2 items-center gap-8 py-12 md:py-24 min-h-[70dvh] md:min-h-[60dvh]">
-                        <div class="flex flex-col items-start text-center md:text-left">
-                            <h1 class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl font-headline">
-                                Sécurisez l'avenir de votre entreprise
-                            </h1>
-                            <p class="mt-4 max-w-2xl text-lg text-muted-foreground mx-auto md:mx-0">
-                                VylsFond fournit des solutions de financement rapides et flexibles pour aider votre entreprise à prospérer. Obtenez le capital dont vous avez besoin pour grandir.
-                            </p>
-                            <div class="mt-8 mx-auto md:mx-0">
-                                <a href="/demande-de-pret" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 rounded-md px-8">Commencer ma demande</a>
-                            </div>
-                        </div>
-                        <div class="relative h-64 md:h-96 w-full rounded-lg overflow-hidden order-first md:order-last">
-                            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/home-carousel-1.png" alt="Personne travaillant sur un ordinateur portable" class="object-cover w-full h-full">
-                        </div>
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-2 items-center gap-8 py-12 md:py-24 min-h-[70dvh] md:min-h-[60dvh]">
+                <div class="flex flex-col items-start text-center md:text-left">
+                    <h1 class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl font-headline">
+                        Le financement que vous méritez, simplifié
+                    </h1>
+                    <p class="mt-4 max-w-2xl text-lg text-muted-foreground mx-auto md:mx-0">
+                        Crédits, prêts et solutions financières pour particuliers et professionnels. Rapide, transparent et humain.
+                    </p>
+                    <div class="mt-8 mx-auto md:mx-0">
+                        <a href="/demande-de-pret" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 rounded-md px-8">Commencer ma demande</a>
                     </div>
+                </div>
+                <div class="relative h-64 md:h-96 w-full rounded-lg overflow-hidden order-first md:order-last">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/images/home-carousel-1.png" alt="Personne travaillant sur un ordinateur portable" class="object-cover w-full h-full">
                 </div>
             </div>
         </div>
