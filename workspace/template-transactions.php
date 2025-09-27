@@ -7,7 +7,7 @@
 
 // Sécurité de base : redirige si l'utilisateur n'est pas connecté
 if (!is_user_logged_in()) {
-    wp_redirect(wp_login_url());
+    wp_redirect(wp_login_url(get_permalink()));
     exit;
 }
 
@@ -21,8 +21,8 @@ get_header();
         </div>
 
         <!-- NOTE POUR L'ADMINISTRATEUR DU SITE -->
-        <!-- Le contenu de ce tableau est statique. Il ne se mettra pas à jour automatiquement. -->
-        <!-- Un développement WordPress personnalisé serait nécessaire pour le connecter à de vraies données. -->
+        <!-- Le contenu de ce tableau est statique (données d'exemple). Il ne se mettra pas à jour automatiquement. -->
+        <!-- Vous pouvez éditer ce fichier pour modifier les données affichées. -->
 
         <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
             <div class="w-full overflow-auto">

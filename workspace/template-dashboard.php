@@ -7,7 +7,7 @@
 
 // Sécurité de base : redirige si l'utilisateur n'est pas connecté
 if (!is_user_logged_in()) {
-    wp_redirect(wp_login_url());
+    wp_redirect(wp_login_url(get_permalink()));
     exit;
 }
 
@@ -19,8 +19,9 @@ get_header();
         <h1 class="text-3xl font-bold font-headline mb-8">Tableau de Bord</h1>
 
         <!-- NOTE POUR L'ADMINISTRATEUR DU SITE -->
-        <!-- Les informations ci-dessous sont statiques. Elles sont ici pour la démonstration. -->
-        <!-- Un développement WordPress personnalisé serait nécessaire pour les rendre dynamiques (connectées à une base de données). -->
+        <!-- Les informations ci-dessous sont statiques (données d'exemple). Elles sont ici pour la démonstration visuelle. -->
+        <!-- Pour un client spécifique, vous pouvez dupliquer ce modèle et modifier manuellement les valeurs ci-dessous. -->
+        <!-- Un développement WordPress personnalisé serait nécessaire pour rendre ces données dynamiques (connectées à une base de données). -->
 
         <div class="grid lg:grid-cols-3 gap-8">
             <!-- Colonne principale -->

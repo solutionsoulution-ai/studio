@@ -7,7 +7,7 @@
 
 // Sécurité de base : redirige si l'utilisateur n'est pas connecté
 if (!is_user_logged_in()) {
-    wp_redirect(wp_login_url());
+    wp_redirect(wp_login_url(get_permalink()));
     exit;
 }
 
@@ -20,11 +20,11 @@ get_header();
 
         <!--
         ====================================================================================================
-        INSTRUCTIONS POUR RENDRE CE FORMULAIRE FONCTIONNEL (SANS DÉVELOPPEUR)
+        INSTRUCTIONS POUR L'ADMINISTRATEUR
         ====================================================================================================
         
-        Ce formulaire est une maquette. Pour qu'il vous envoie les demandes de virement par e-mail,
-        vous pouvez utiliser un plugin de formulaire comme WPForms (version gratuite) :
+        Ce formulaire est une maquette pour la banque fictive. Il ne réalise PAS de vraies transactions.
+        Pour simuler une demande de virement de la part du client, vous pouvez utiliser un plugin de formulaire comme WPForms.
 
         1. INSTALLEZ WPFORMS :
            - Dans votre admin WordPress : "Extensions" > "Ajouter" > Recherchez, installez et activez "WPForms".
@@ -37,14 +37,14 @@ get_header();
              - Montant (€) -> Champ "Nombre"
              - Motif du virement -> Champ "Texte"
            - Dans "Réglages" > "Notifications", mettez VOTRE adresse e-mail pour recevoir les demandes.
-           - Dans "Réglages" > "Confirmation", choisissez "Afficher une page" et sélectionnez votre page "Merci".
+           - Dans "Réglages" > "Confirmation", redirigez vers une page de confirmation si vous le souhaitez.
            - Enregistrez le formulaire.
 
         3. REMPLACEZ LE CODE CI-DESSOUS :
-           - WPForms vous donnera un "shortcode" (ex: [wpforms id="123"]). Copiez-le.
-           - Supprimez tout le bloc HTML <div class="rounded-lg..."> qui se trouve juste en dessous (jusqu'au commentaire de fin).
+           - WPForms vous donnera un "shortcode" (ex: [wpforms id="456"]). Copiez-le.
+           - Supprimez tout le bloc <div class="rounded-lg..."> qui se trouve juste en dessous (jusqu'au commentaire de fin).
            - À la place, collez votre shortcode comme ceci :
-             <?php echo do_shortcode('[wpforms id="123"]'); ?>
+             <?php echo do_shortcode('[wpforms id="456"]'); ?>
         
         ====================================================================================================
         -->

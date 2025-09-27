@@ -99,6 +99,9 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
     *   **Titre :** `Rachat de Crédit` -> **Modèle :** `Service - Rachat de Crédit`
     *   **Titre :** `Politique de Confidentialité` -> **Modèle :** `Page - Politique de Confidentialité`
     *   **Titre :** `Conditions Générales` -> **Modèle :** `Page - Conditions Générales`
+    *   **Titre :** `Tableau de Bord` -> **Modèle :** `Banque - Tableau de Bord`
+    *   **Titre :** `Transactions` -> **Modèle :** `Banque - Transactions`
+    *   **Titre :** `Virements` -> **Modèle :** `Banque - Virements`
     
 4.  **Créer le Menu :**
     *   Allez dans `Apparence > Menus`.
@@ -112,24 +115,25 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
     *   Choisissez la structure `Titre de la publication`.
     *   Cliquez sur `Enregistrer les modifications`. Cela rafraîchit les règles de liens de WordPress et résout beaucoup de problèmes de "page non trouvée".
 
-6.  **Installer les Plugins :**
+6.  **Gérer les Utilisateurs (Pour la Banque Fictive) :**
+    *   Pour créer un compte pour un client, allez dans `Utilisateurs > Ajouter`.
+    *   Remplissez son nom d'utilisateur, son e-mail, et créez un mot de passe.
+    *   Le rôle "Abonné" est suffisant.
+    *   Envoyez-lui ses identifiants. Il pourra se connecter via la page de connexion standard de WordPress (`/wp-login.php`) et accéder aux pages de la banque en ligne.
+
+7.  **Installer les Plugins :**
     *   Pour que les formulaires de contact et de demande de prêt fonctionnent, installez un plugin comme **WPForms** ou **Contact Form 7**.
     *   Créez vos formulaires dans le plugin.
-    *   Modifiez les fichiers `template-contact.php` et `template-demande-de-pret.php` en remplaçant les formulaires HTML statiques par le shortcode du plugin (ex: `<?php echo do_shortcode('[wpforms id="123"]'); ?>`).
+    *   Modifiez les fichiers `template-contact.php` et `template-demande-de-pret.php` en remplaçant les formulaires HTML statiques par le shortcode du plugin (ex: `<?php echo do_shortcode('[wpforms id="123"]'); ?>`). Les instructions sont dans les fichiers.
     *   Pour les carrousels (page d'accueil, témoignages), installez un plugin de slider comme **Smart Slider 3** ou **Slider Revolution** et recréez les carrousels, puis insérez leur shortcode dans les fichiers PHP correspondants.
 
 ---
 
-### Nettoyage du Thème Underscores (Optionnel mais recommandé)
+### Nettoyage du Thème (Optionnel mais recommandé)
 
-Votre thème de base peut contenir des fichiers dont nous n'avons plus besoin. Vous pouvez les supprimer pour garder votre thème propre :
+Votre thème contient des fichiers de base dont nous n'avons plus besoin. Vous pouvez les supprimer pour garder votre thème propre :
 *   `404.php` (gardez-le, il est utile)
 *   `archive.php` (gardez-le)
 *   `comments.php` (gardez-le)
 *   `search.php` (gardez-le)
 *   `screenshot.png` (à garder ou à remplacer par votre propre capture d'écran)
-*   Le dossier `inc/`
-*   Le dossier `template-parts/`
-*   Le dossier `js/` (celui qui vient avec Underscores, pas votre dossier `assets/js/`)
-*   Le dossier `sass/` ou `css/`
-*   `README.txt` (celui d'Underscores)
