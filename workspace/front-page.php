@@ -186,9 +186,36 @@ get_header();
                 </div>
                 <p class="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">Découvrez les expériences de particuliers et d'entrepreneurs à travers l'Europe qui nous ont fait confiance.</p>
             </div>
-            <!-- NOTE: Le carrousel est interactif. Utilisez un plugin WordPress pour recréer cet effet. -->
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                 <!-- Static example of testimonials -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 fade-in-item">
+                <?php
+                $testimonials = [
+                    ["name" => "Marie Dubois", "location" => "Paris, France", "quote" => "Le processus de prêt a été incroyablement simple et rapide. VylsFond a vraiment compris mes besoins d'entrepreneur."],
+                    ["name" => "Lukas Schmidt", "location" => "Berlin, Allemagne", "quote" => "J'ai pu financer mon nouvel équipement sans tracas. Leur équipe est professionnelle et très réactive. Je recommande vivement."],
+                    ["name" => "Sofia Rossi", "location" => "Rome, Italie", "quote" => "Grâce à VylsFond, j'ai consolidé mes dettes avec un rachat de crédit avantageux. Ma situation financière est bien meilleure maintenant."],
+                    ["name" => "Liam O'Sullivan", "location" => "Dublin, Irlande", "quote" => "Obtenir un prêt immobilier semblait compliqué, mais ils ont simplifié chaque étape. Je suis maintenant propriétaire !"],
+                    ["name" => "Isabella Johansson", "location" => "Stockholm, Suède", "quote" => "Le prêt personnel m'a permis de réaliser le voyage de mes rêves. Service client exceptionnel et conditions claires."],
+                    ["name" => "Carlos Garcia", "location" => "Madrid, Espagne", "quote" => "J'ai financé ma startup grâce à leur soutien. Une équipe qui croit vraiment aux projets innovants."],
+                    ["name" => "Anna Petrova", "location" => "Varsovie, Pologne", "quote" => "Leur plateforme en ligne est très intuitive. J'ai soumis ma demande et obtenu une réponse en un temps record."],
+                    ["name" => "David Nagy", "location" => "Budapest, Hongrie", "quote" => "Excellent service pour le financement de ma nouvelle voiture. Des taux compétitifs et aucune surprise."],
+                    ["name" => "Elena Popescu", "location" => "Bucarest, Roumanie", "quote" => "J'ai apprécié la transparence et l'honnêteté de mon conseiller. On se sent en confiance."],
+                    ["name" => "Nikos Papadopoulos", "location" => "Athènes, Grèce", "quote" => "Le rachat de mes crédits a été une bouffée d'air frais pour mon budget. Merci VylsFond !"],
+                    ["name" => "Fatima Al-Sayed", "location" => "Lisbonne, Portugal", "quote" => "Ils m'ont aidée à financer des rénovations importantes dans ma maison. Je suis ravie du résultat."],
+                    ["name" => "Jan Novak", "location" => "Prague, République Tchèque", "quote" => "En tant que freelance, obtenir un prêt est souvent difficile. VylsFond a su analyser ma situation avec justesse."],
+                    ["name" => "Freja Hansen", "location" => "Copenhague, Danemark", "quote" => "Simple, efficace et humain. Une expérience bancaire comme on en voit rarement."],
+                    ["name" => "Lars Jansen", "location" => "Amsterdam, Pays-Bas", "quote" => "Le financement de ma flotte de véhicules d'entreprise a été géré de manière impeccable."],
+                    ["name" => "Emilia Virtanen", "location" => "Helsinki, Finlande", "quote" => "Leur calculateur en ligne m'a donné une idée claire de mes options avant même de faire ma demande."],
+                ];
+                foreach ($testimonials as $testimonial) : ?>
+                    <div class="flex flex-col rounded-lg border bg-card text-card-foreground shadow-sm">
+                        <div class="flex flex-col items-start gap-4 p-6 flex-grow">
+                            <p class="text-muted-foreground italic flex-grow">"<?php echo esc_html($testimonial['quote']); ?>"</p>
+                            <div class="pt-4 border-t w-full">
+                                <p class="font-semibold"><?php echo esc_html($testimonial['name']); ?></p>
+                                <p class="text-sm text-muted-foreground"><?php echo esc_html($testimonial['location']); ?></p>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
             </div>
         </div>
     </section>
@@ -215,3 +242,5 @@ get_header();
 <?php
 get_footer();
 ?>
+
+    
