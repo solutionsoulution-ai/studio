@@ -17,7 +17,7 @@ import { BankingProvider } from '@/hooks/use-banking-store.tsx';
 const router = createHashRouter([
   {
     path: '/',
-    element: <BanqueLayout><Outlet /></BanqueLayout>,
+    element: <BanqueLayout />,
     children: [
         {
             index: true,

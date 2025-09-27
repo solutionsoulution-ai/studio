@@ -2,12 +2,10 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { Menu, Home, ArrowLeftRight, Send, Settings, Bell, UserCircle, User } from "lucide-react";
-import Link from "next/link";
-import { useLocation } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 const navLinks = [
   { href: "#/tableau-de-bord", label: "Tableau de bord", icon: Home },
@@ -16,20 +14,16 @@ const navLinks = [
   { href: "#/profil", label: "Profil", icon: User },
 ];
 
-export default function BanqueLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function AppContent() {
   const location = useLocation();
 
   const SidebarContent = () => (
     <div className="flex flex-col h-full bg-muted/40">
         <div className="p-4 border-b">
-            <Link href="/" className="flex items-center gap-2">
+            <a href="/" className="flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-7 w-7 text-primary"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
                 <span className="font-bold text-lg">VylsFond</span>
-            </Link>
+            </a>
         </div>
         <nav className="flex-1 p-4 space-y-2">
             {navLinks.map((link) => (
@@ -88,9 +82,13 @@ export default function BanqueLayout({
             </Button>
         </header>
         <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 bg-muted/40">
-          {children}
+          <Outlet />
         </main>
       </div>
     </div>
   );
+}
+
+export default function BanqueLayout() {
+  return <AppContent />;
 }
