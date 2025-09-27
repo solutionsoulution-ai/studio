@@ -52,6 +52,7 @@ const nextConfig: NextConfig = {
         const entries = await originalEntry();
         
         entries['calculator'] = './src/app/calculator-entry.tsx';
+        entries['banking'] = './src/app/banque/banque-entry.tsx'; // Nouvelle entrée pour la banque
         
         if (entries['app/page']) {
            entries['main-app'] = entries['app/page']; // Renomme pour éviter conflit
