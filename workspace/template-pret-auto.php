@@ -87,6 +87,22 @@ get_header();
             </div>
         </div>
     </section>
+    
+    <!-- CTA Section -->
+    <section class="bg-primary text-primary-foreground">
+        <div class="container mx-auto text-center py-16 px-4">
+            <h2 class="text-3xl font-bold">Prêt à démarrer votre projet ?</h2>
+            <p class="mt-2 text-lg max-w-xl mx-auto opacity-90">
+                Notre équipe est là pour vous aider à trouver la meilleure solution de financement.
+            </p>
+            <div class="mt-8">
+                <a href="/demande-de-pret" class="bg-secondary text-secondary-foreground hover:bg-secondary/80 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-11 rounded-md px-8">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                    Faire une demande
+                </a>
+            </div>
+        </div>
+    </section>
 </main>
 
 <?php
