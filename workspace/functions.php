@@ -126,7 +126,7 @@ function vylsfond_enqueue_assets() {
     }
 
     // Conditionally load the React banking app
-    if ( is_page_template( 'template-banque.php' ) ) {
+    if ( is_page_template( 'template-banque.php' ) && is_user_logged_in() ) {
         wp_enqueue_script(
             'vylsfond-banking-app',
             get_template_directory_uri() . '/build/static/js/banking.js',
@@ -134,6 +134,34 @@ function vylsfond_enqueue_assets() {
             null,
             true
         );
+
+        // =========================================================================================
+        // INJECTION DES DONNÉES DU CLIENT DANS L'APPLICATION REACT
+        // =========================================================================================
+        // C'est ici que l'on peut "passer" des données de WordPress à notre application.
+        // Pour un vrai site, un développeur remplacerait ces données d'exemple par
+        // de vraies données venant de la base de données WordPress (avec get_user_meta).
+        $current_user = wp_get_current_user();
+        $initial_banking_data = array(
+            'user' => array(
+                'name' => $current_user->display_name,
+                'email' => $current_user->user_email,
+                'memberSince' => date_i18n('d M Y', strtotime($current_user->user_registered)),
+            ),
+            'account' => array(
+                'iban' => 'FR76 3000 4000 05' . substr(md5($current_user->ID), 0, 15), // IBAN d'exemple basé sur l'ID utilisateur
+                'bic' => 'BNPAFRPPXXX',
+                'initialBalance' => 12345.67, // Solde d'exemple
+                'initialTransactions' => array(
+                     array( 'id' => 'tx1', 'date' => '15 Juil 2024', 'description' => 'Virement entrant - Salaire', 'amount' => 2500.00, 'type' => 'credit' ),
+                     array( 'id' => 'tx2', 'date' => '16 Juil 2024', 'description' => 'Paiement CB - Supermarché', 'amount' => -85.40, 'type' => 'debit' ),
+                     array( 'id' => 'tx3', 'date' => '17 Juil 2024', 'description' => 'Prélèvement - Loyer', 'amount' => -750.00, 'type' => 'debit' ),
+                )
+            )
+        );
+
+        wp_localize_script( 'vylsfond-banking-app', 'vylsBankingData', $initial_banking_data );
+        // =========================================================================================
     }
 
 

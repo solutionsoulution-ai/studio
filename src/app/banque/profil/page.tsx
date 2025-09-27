@@ -1,21 +1,20 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useBankingStore } from "@/hooks/use-banking-store.tsx";
 import { User, Mail, Phone, MapPin, Building, Briefcase } from "lucide-react";
 
-const userData = {
-  name: "Alexandre Dubois",
-  email: "alexandre.dubois.client@email.com",
-  phone: "+33 6 12 34 56 78",
-  address: "123 Rue de la République, 69002 Lyon, France",
-  company: "Dubois & Fils Tech",
-  role: "Directeur Général",
-  memberSince: "14 Mai 2018",
-  rib: "FR76 3000 4000 0512 3456 7890 123",
-  iban: "FR7630004000051234567890123",
-  bic: "BNPAFRPPXXX"
-};
-
 export default function ProfilPage() {
+  const { user, account } = useBankingStore();
+  
+  const userData = {
+    ...user,
+    phone: "+33 6 12 34 56 78",
+    address: "123 Rue de la République, 69002 Lyon, France",
+    company: "Dubois & Fils Tech",
+    role: "Directeur Général",
+    ...account,
+  };
+
+
   return (
     <div className="flex flex-col min-h-dvh bg-background">
       <main className="flex-1">

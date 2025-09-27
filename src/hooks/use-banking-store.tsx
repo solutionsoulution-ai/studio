@@ -13,7 +13,22 @@ export interface Transaction {
     type: TransactionType;
 }
 
+interface UserData {
+    name: string;
+    email: string;
+    memberSince: string;
+}
+
+interface AccountData {
+    iban: string;
+    bic: string;
+    initialBalance?: number;
+    initialTransactions?: Transaction[];
+}
+
 interface BankingState {
+    user: UserData;
+    account: AccountData;
     balance: number;
     transactions: Transaction[];
     addTransaction: (tx: Omit<Transaction, 'id' | 'date'>) => void;
@@ -21,9 +36,34 @@ interface BankingState {
 
 const BankingContext = createContext<BankingState | undefined>(undefined);
 
+// Accès aux données injectées par WordPress
+const getInitialData = () => {
+    if (typeof window !== 'undefined' && (window as any).vylsBankingData) {
+        return (window as any).vylsBankingData;
+    }
+    return null;
+}
+
 export const BankingProvider = ({ children }: { children: ReactNode }) => {
-    const [balance, setBalance] = useState<number>(0);
-    const [transactions, setTransactions] = useState<Transaction[]>([]);
+    const initialData = getInitialData();
+    
+    const defaultUser: UserData = {
+        name: "Client Démo",
+        email: "client@example.com",
+        memberSince: new Date().toLocaleDateString('fr-FR'),
+    };
+
+    const defaultAccount: AccountData = {
+        iban: "FR00 0000 0000 0000 0000 0000 000",
+        bic: "DEMOFRPP",
+        initialBalance: 0,
+        initialTransactions: [],
+    };
+    
+    const [user] = useState<UserData>(initialData?.user || defaultUser);
+    const [account] = useState<AccountData>(initialData?.account || defaultAccount);
+    const [balance, setBalance] = useState<number>(account.initialBalance ?? 0);
+    const [transactions, setTransactions] = useState<Transaction[]>(account.initialTransactions ?? []);
 
     const addTransaction = (tx: Omit<Transaction, 'id' | 'date'>) => {
         const newTransaction: Transaction = {
@@ -37,7 +77,7 @@ export const BankingProvider = ({ children }: { children: ReactNode }) => {
     };
 
     return (
-        <BankingContext.Provider value={{ balance, transactions, addTransaction }}>
+        <BankingContext.Provider value={{ user, account, balance, transactions, addTransaction }}>
             {children}
         </BankingContext.Provider>
     );

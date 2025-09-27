@@ -1,7 +1,5 @@
-
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { HelpCircle, Send, Home, Info, ArrowLeftCircle, ArrowRightCircle } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { useBankingStore } from "@/hooks/use-banking-store.tsx";
@@ -9,8 +7,8 @@ import { Table, TableBody, TableCell, TableHeader, TableHead, TableRow } from "@
 import { cn } from "@/lib/utils";
 
 export default function DashboardPage() {
-  const { balance, transactions, addTransaction } = useBankingStore();
-  const recentTransactions = transactions.slice(-3).reverse();
+  const { balance, transactions, addTransaction, user, account } = useBankingStore();
+  const recentTransactions = [...transactions].reverse().slice(0, 3);
 
   const simulateCredit = () => {
     addTransaction({
@@ -32,7 +30,8 @@ export default function DashboardPage() {
     <div className="flex flex-col min-h-dvh bg-background">
       <main className="flex-1">
         <div className="container mx-auto py-12 px-4">
-          <h1 className="text-3xl font-bold font-headline mb-8">Tableau de Bord</h1>
+           <h1 className="text-3xl font-bold font-headline mb-2">Bienvenue, {user.name}</h1>
+          <p className="text-muted-foreground mb-8">Voici un aperçu de vos finances.</p>
 
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Colonne principale */}
@@ -51,7 +50,7 @@ export default function DashboardPage() {
                         Solde au {new Date().toLocaleDateString("fr-FR")}
                       </p>
                     </div>
-                    <div className="text-sm font-semibold text-primary">FR76 ... 1234</div>
+                    <div className="text-sm font-semibold text-primary">{account.iban}</div>
                   </div>
                 </CardContent>
               </Card>
@@ -126,10 +125,10 @@ export default function DashboardPage() {
                     - Payer 49,99 € (Simulation)
                   </Button>
                   <Button variant="secondary" asChild className="w-full justify-start">
-                    <Link href="/contact">
+                    <a href="/contact">
                       <HelpCircle className="mr-2"/>
                       Aide et Support
-                    </Link>
+                    </a>
                   </Button>
                 </CardContent>
               </Card>
