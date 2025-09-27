@@ -230,22 +230,26 @@ get_header();
                 </div>
                 <p class="mt-4 text-lg text-muted-foreground">Vous avez des questions ? Nous avons des réponses. Trouvez des informations sur nos services et processus ci-dessous.</p>
             </div>
-            <div class="w-full">
-                <div data-state="closed" class="border-b">
-                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Quelles sont les exigences minimales pour un prêt ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
-                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="display: none;"><div class="pb-4 pt-0 text-base text-muted-foreground">Généralement, nous recherchons une situation financière stable et une capacité de remboursement démontrable. Chaque dossier est unique, et notre vérificateur d'éligibilité peut fournir une évaluation personnalisée.</div></div>
+             <div class="space-y-6">
+                <div class="border-b pb-4">
+                    <h3 class="font-medium text-lg">Quelles sont les exigences minimales pour un prêt ?</h3>
+                    <p class="text-muted-foreground mt-2">Généralement, nous recherchons une situation financière stable et une capacité de remboursement démontrable. Chaque dossier est unique, et notre vérificateur d'éligibilité peut fournir une évaluation personnalisée.</p>
                 </div>
-                <div data-state="closed" class="border-b">
-                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Combien de temps dure le processus de demande ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
-                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="display: none;"><div class="pb-4 pt-0 text-base text-muted-foreground">Notre vérification d'éligibilité initiale est instantanée. Un examen complet de la demande prend généralement entre 24 et 72 heures. Une fois approuvés, les fonds peuvent être débloqués rapidement.</div></div>
+                <div class="border-b pb-4">
+                    <h3 class="font-medium text-lg">Combien de temps dure le processus de demande ?</h3>
+                    <p class="text-muted-foreground mt-2">Notre vérification d'éligibilité initiale est instantanée. Un examen complet de la demande prend généralement entre 24 et 72 heures. Une fois approuvés, les fonds peuvent être débloqués rapidement.</p>
                 </div>
-                <div data-state="closed" class="border-b">
-                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Quels types de prêts offrez-vous ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
-                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="display: none;"><div class="pb-4 pt-0 text-base text-muted-foreground">VylsFond se spécialise dans une variété d'options de financement, y compris les prêts immobiliers, les prêts à la consommation, les prêts auto, le rachat de crédit et les financements pour entreprises.</div></div>
+                <div class="border-b pb-4">
+                    <h3 class="font-medium text-lg">Quels types de prêts offrez-vous ?</h3>
+                    <p class="text-muted-foreground mt-2">VylsFond se spécialise dans une variété d'options de financement, y compris les prêts immobiliers, les prêts à la consommation, les prêts auto, le rachat de crédit et les financements pour entreprises.</p>
                 </div>
-                <div data-state="closed" class="border-b">
-                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Puis-je rembourser mon prêt par anticipation ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
-                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="display: none;"><div class="pb-4 pt-0 text-base text-muted-foreground">Oui, la plupart de nos produits de prêt permettent un remboursement anticipé sans pénalité. Nous croyons en la fourniture d'options flexibles qui soutiennent votre santé financière.</div></div>
+                <div class="border-b pb-4">
+                    <h3 class="font-medium text-lg">Puis-je rembourser mon prêt par anticipation ?</h3>
+                    <p class="text-muted-foreground mt-2">Oui, la plupart de nos produits de prêt permettent un remboursement anticipé sans pénalité. Nous croyons en la fourniture d'options flexibles qui soutiennent votre santé financière.</p>
+                </div>
+                 <div class="border-b pb-4">
+                    <h3 class="font-medium text-lg">De quels documents ai-je besoin pour une demande de prêt complète ?</h3>
+                    <p class="text-muted-foreground mt-2">Pour une demande complète, vous aurez généralement besoin d'une pièce d'identité, d'un justificatif de domicile, et de justificatifs de revenus (comme des bulletins de salaire ou des avis d'imposition).</p>
                 </div>
             </div>
         </div>
