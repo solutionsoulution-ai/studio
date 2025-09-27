@@ -27,12 +27,14 @@
         </a>
         <nav class="hidden lg:flex flex-1 items-center space-x-4 text-sm font-medium">
              <?php
-                wp_nav_menu(array(
-                    'theme_location' => 'main-menu',
-                    'container' => false,
-                    'items_wrap' => '%3$s', // Display links without ul
-                    'walker' => new VylsFond_Walker_Nav_Menu_Desktop()
-                ));
+                if ( has_nav_menu( 'main-menu' ) ) {
+                    wp_nav_menu(array(
+                        'theme_location' => 'main-menu',
+                        'container' => false,
+                        'items_wrap' => '%3$s', // Display links without ul
+                        'walker' => new VylsFond_Walker_Nav_Menu_Desktop()
+                    ));
+                }
             ?>
         </nav>
         <div class="flex flex-1 items-center justify-end space-x-2 md:flex-none lg:flex-1 lg:justify-end">
@@ -66,12 +68,14 @@
                  <p class="text-sm font-semibold text-muted-foreground pt-4">Menu</p>
                  <div class="flex flex-col space-y-4">
                     <?php
-                        wp_nav_menu(array(
-                            'theme_location' => 'main-menu',
-                            'container' => false,
-                            'items_wrap' => '%3$s', // No ul
-                            'walker' => new VylsFond_Walker_Nav_Menu_Mobile() 
-                        ));
+                        if ( has_nav_menu( 'main-menu' ) ) {
+                            wp_nav_menu(array(
+                                'theme_location' => 'main-menu',
+                                'container' => false,
+                                'items_wrap' => '%3$s', // No ul
+                                'walker' => new VylsFond_Walker_Nav_Menu_Mobile() 
+                            ));
+                        }
                     ?>
                  </div>
             </nav>
