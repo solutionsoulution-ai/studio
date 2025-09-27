@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/toaster"
 import Script from "next/script";
 
 export const metadata: Metadata = {
-  title: 'VylsCapital - Centre de Prêt',
+  title: 'VylsFond - Centre de Prêt',
   description: 'Solutions de financement rapides et flexibles pour aider votre entreprise à prospérer.',
 };
 

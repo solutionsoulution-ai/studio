@@ -37,7 +37,7 @@ const timelineEvents = [
     {
         year: "2012",
         title: "Fondation et Lancement",
-        description: "VylsCapital est créé avec la mission de rendre le prêt plus simple, rapide et accessible pour tous en Europe.",
+        description: "VylsFond est créé avec la mission de rendre le prêt plus simple, rapide et accessible pour tous en Europe.",
         icon: Rocket
     },
      {
@@ -93,7 +93,7 @@ export default function AboutUsSection() {
                 )}
                 <div className="absolute inset-0 bg-black/50" />
                 <div className="relative container mx-auto h-full flex flex-col justify-center items-center text-center text-white">
-                    <h1 className="text-4xl md:text-5xl font-bold font-headline">À Propos de VylsCapital</h1>
+                    <h1 className="text-4xl md:text-5xl font-bold font-headline">À Propos de VylsFond</h1>
                     <p className="mt-4 max-w-2xl text-lg text-neutral-200">
                         Notre mission : rendre le financement plus accessible, plus rapide et plus humain.
                     </p>
@@ -106,7 +106,7 @@ export default function AboutUsSection() {
                     <div>
                         <h2 className="text-3xl font-bold font-headline mb-4">Notre Histoire</h2>
                         <p className="text-muted-foreground text-base leading-relaxed">
-                            Fondée en 2012, VylsCapital est née d'une ambition simple : révolutionner l'accès au financement pour les particuliers et les entreprises en Europe. Frustrés par la lenteur et la complexité des systèmes bancaires traditionnels, nous avons décidé de créer une plateforme qui allie le meilleur de la technologie et une expertise humaine pour offrir des solutions de prêt rapides, transparentes et adaptées aux besoins réels de nos clients.
+                            Fondée en 2012, VylsFond est née d'une ambition simple : révolutionner l'accès au financement pour les particuliers et les entreprises en Europe. Frustrés par la lenteur et la complexité des systèmes bancaires traditionnels, nous avons décidé de créer une plateforme qui allie le meilleur de la technologie et une expertise humaine pour offrir des solutions de prêt rapides, transparentes et adaptées aux besoins réels de nos clients.
                         </p>
                     </div>
                      <div>
@@ -125,7 +125,7 @@ export default function AboutUsSection() {
                     <div className="text-center mb-16">
                         <h2 className="text-3xl font-bold font-headline">Notre Parcours</h2>
                         <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-                            Les grandes étapes qui ont façonné VylsCapital.
+                            Les grandes étapes qui ont façonné VylsFond.
                         </p>
                     </div>
                     <Carousel

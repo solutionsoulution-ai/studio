@@ -4,7 +4,7 @@ import AboutUsSection from "@/components/site/about-us-section";
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'À Propos | VylsCapital',
+  title: 'À Propos | VylsFond',
   description: 'Découvrez notre histoire, notre mission, et l\'équipe qui travaille pour rendre le financement plus accessible et humain.',
 };
 

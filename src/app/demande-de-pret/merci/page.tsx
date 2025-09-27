@@ -8,7 +8,7 @@ import { CheckCircle, ArrowLeft } from "lucide-react";
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Demande Envoyée | VylsCapital',
+  title: 'Demande Envoyée | VylsFond',
   description: 'Page de remerciement suite à la soumission d\'une demande de prêt.',
 };
 

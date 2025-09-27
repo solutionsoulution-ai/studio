@@ -21,7 +21,7 @@ export const invoiceClauses = {
             bic_label: "BIC/SWIFT :",
         },
         footer: {
-            thank_you: "Nous vous remercions pour votre confiance. Pour toute question concernant cette facture, veuillez nous contacter à comptabilite@vylscapital.com.",
+            thank_you: "Nous vous remercions pour votre confiance. Pour toute question concernant cette facture, veuillez nous contacter à comptabilite@vylsfond.com.",
         }
     },
     en: {
@@ -43,7 +43,7 @@ export const invoiceClauses = {
             bic_label: "BIC/SWIFT:",
         },
         footer: {
-            thank_you: "Thank you for your business. If you have any questions about this invoice, please contact us at accounting@vylscapital.com.",
+            thank_you: "Thank you for your business. If you have any questions about this invoice, please contact us at accounting@vylsfond.com.",
         }
     },
     de: {
@@ -65,7 +65,7 @@ export const invoiceClauses = {
             bic_label: "BIC/SWIFT:",
         },
         footer: {
-            thank_you: "Vielen Dank für Ihr Vertrauen. Bei Fragen zu dieser Rechnung kontaktieren Sie uns bitte unter accounting@vylscapital.com.",
+            thank_you: "Vielen Dank für Ihr Vertrauen. Bei Fragen zu dieser Rechnung kontaktieren Sie uns bitte unter accounting@vylsfond.com.",
         }
     },
     es: {
@@ -87,7 +87,7 @@ export const invoiceClauses = {
             bic_label: "BIC/SWIFT:",
         },
         footer: {
-            thank_you: "Gracias por su confianza. Si tiene alguna pregunta sobre esta factura, contáctenos en accounting@vylscapital.com.",
+            thank_you: "Gracias por su confianza. Si tiene alguna pregunta sobre esta factura, contáctenos en accounting@vylsfond.com.",
         }
     },
     pt: {
@@ -109,7 +109,7 @@ export const invoiceClauses = {
             bic_label: "BIC/SWIFT:",
         },
         footer: {
-            thank_you: "Obrigado pela sua preferência. Se tiver alguma dúvida sobre esta fatura, entre em contato conosco pelo e-mail accounting@vylscapital.com.",
+            thank_you: "Obrigado pela sua preferência. Se tiver alguma dúvida sobre esta fatura, entre em contato conosco pelo e-mail accounting@vylsfond.com.",
         }
     },
     it: {
@@ -131,7 +131,7 @@ export const invoiceClauses = {
             bic_label: "BIC/SWIFT:",
         },
         footer: {
-            thank_you: "Grazie per la vostra fiducia. Per qualsiasi domanda su questa fattura, vi preghiamo di contattarci a accounting@vylscapital.com.",
+            thank_you: "Grazie per la vostra fiducia. Per qualsiasi domanda su questa fattura, vi preghiamo di contattarci a accounting@vylsfond.com.",
         }
     }
 }
