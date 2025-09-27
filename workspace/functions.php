@@ -138,14 +138,24 @@ function vylsfond_enqueue_assets() {
         // =========================================================================================
         // INJECTION DES DONNÉES DU CLIENT DANS L'APPLICATION REACT
         // =========================================================================================
+        // La fonction wp_localize_script est une méthode WordPress pour passer des données de PHP
+        // à un script JavaScript. Ici, nous l'utilisons pour "injecter" les informations
+        // du client connecté dans notre application React (banking.js).
+        // L'application React pourra alors accéder à ces données via l'objet `window.vylsBankingData`.
+        // -----------------------------------------------------------------------------------------
+        
         $current_user = wp_get_current_user();
         
+        // On récupère l'identifiant de l'utilisateur WordPress connecté.
         $user_login = $current_user->user_login;
 
+        // On charge notre "base de données" fictive définie plus bas dans ce fichier.
         $customer_database = get_fictive_customer_database();
 
+        // On cherche si un client avec cet identifiant existe dans notre base de données.
         $customer_data = isset($customer_database[$user_login]) ? $customer_database[$user_login] : null;
 
+        // On prépare le paquet de données à envoyer à l'application React.
         if ($customer_data) {
             $initial_banking_data = array(
                 'user' => array(
@@ -165,6 +175,7 @@ function vylsfond_enqueue_assets() {
                 )
             );
         } else {
+            // Si l'utilisateur connecté n'est pas dans notre base de données fictive, on lui donne un compte par défaut.
              $initial_banking_data = array(
                 'user' => array(
                     'login' => $user_login,
@@ -183,7 +194,8 @@ function vylsfond_enqueue_assets() {
                 )
             );
         }
-
+        
+        // On envoie les données.
         wp_localize_script( 'vylsfond-banking-app', 'vylsBankingData', $initial_banking_data );
     }
 
@@ -299,4 +311,68 @@ function get_fictive_customer_database() {
         // 'client65' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
         // 'client66' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
         // 'client67' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
-        // 'client68' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds'
+        // 'client68' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client69' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client70' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client71' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client72' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client73' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client74' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client75' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client76' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client77' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client78' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client79' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client80' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client81' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client82' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client83' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client84' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client85' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client86' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client87' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client88' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client89' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client90' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client91' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client92' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client93' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client94' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client95' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client96' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client97' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client98' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client99' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+        // 'client100' => array('iban' => '', 'bic' => '', 'balance' => 0, 'isTransferBlocked' => false, 'transferBlockReason' => '', 'transferDurationSeconds' => 5, 'transactions' => array()),
+    );
+}
+
+/**
+ * Custom Walker to remove <li> tags from nav menu items for desktop
+ */
+class VylsFond_Walker_Nav_Menu_Desktop extends Walker_Nav_Menu {
+    function start_el(&$output, $item, $depth = 0, $args = null, $id = 0) {
+        $classes = empty( $item->classes ) ? array() : (array) $item->classes;
+        $class_names = join(' ', apply_filters('nav_menu_css_class', array_filter($classes), $item, $args));
+        
+        $output .= '<a href="' . esc_url($item->url) . '" class="transition-colors hover:text-primary ' . esc_attr($class_names) . '">' . esc_html($item->title) . '</a>';
+    }
+    function end_el(&$output, $item, $depth = 0, $args = null) {
+        $output .= "";
+    }
+}
+
+/**
+ * Custom Walker for the mobile menu to keep a simpler structure
+ */
+class VylsFond_Walker_Nav_Menu_Mobile extends Walker_Nav_Menu {
+    function start_el(&$output, $item, $depth = 0, $args = null, $id = 0) {
+        $classes = empty( $item->classes ) ? array() : (array) $item->classes;
+        $class_names = join(' ', apply_filters('nav_menu_css_class', array_filter($classes), $item, $args));
+        
+        $output .= '<a data-mobile-menu-close href="' . esc_url($item->url) . '" class="text-lg font-medium transition-colors hover:text-primary pl-2 ' . esc_attr($class_names) . '">' . esc_html($item->title) . '</a>';
+    }
+    function end_el(&$output, $item, $depth = 0, $args = null) {
+        $output .= "";
+    }
+}
