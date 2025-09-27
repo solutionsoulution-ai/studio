@@ -74,9 +74,6 @@ export default function SiteHeader() {
           ))}
         </nav>
         <div className="flex flex-1 items-center justify-end space-x-2 md:flex-none lg:flex-1 lg:justify-end">
-          <Button variant="outline" className="hidden sm:inline-flex" asChild>
-            <Link href="/banque/tableau-de-bord">Espace Client</Link>
-          </Button>
           <Button asChild>
             <Link href="/demande-de-pret">Faire une demande</Link>
           </Button>
@@ -117,10 +114,6 @@ export default function SiteHeader() {
                       {label}
                     </Link>
                   ))}
-                   <p className="text-sm font-semibold text-muted-foreground pt-4">Espace Client</p>
-                   <Link href="/banque/tableau-de-bord" className="text-lg font-medium transition-colors hover:text-primary pl-2" onClick={closeMobileMenu}>
-                      Tableau de bord
-                    </Link>
                 </nav>
               </div>
             </SheetContent>

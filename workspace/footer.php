@@ -6,11 +6,7 @@
  *
  * @package vyls
  */
-
-$is_iframe_page = is_page_template('template-espace-client.php');
 ?>
-</div> <!-- Fermeture de la div #page-content -->
-<?php if (!$is_iframe_page) : ?>
 <footer class="bg-muted/30 border-t">
     <div class="container mx-auto py-12 px-6">
         <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
@@ -46,17 +42,6 @@ $is_iframe_page = is_page_template('template-espace-client.php');
                     <li><a href="/services/rachat-de-credit" class="text-sm text-muted-foreground hover:text-primary">Rachat de Crédit</a></li>
                 </ul>
             </div>
-             <div>
-                <h3 class="font-semibold mb-4">Espace Client</h3>
-                <ul class="space-y-2">
-                     <li><a href="/espace-client" class="text-sm text-muted-foreground hover:text-primary">Mon Espace</a></li>
-                    <?php if (is_user_logged_in()): ?>
-                        <li><a href="<?php echo wp_logout_url(home_url()); ?>" class="text-sm text-muted-foreground hover:text-primary">Déconnexion</a></li>
-                    <?php else: ?>
-                        <li><a href="<?php echo wp_login_url(home_url('/espace-client')); ?>" class="text-sm text-muted-foreground hover:text-primary">Connexion</a></li>
-                    <?php endif; ?>
-                </ul>
-            </div>
             <div>
                 <h3 class="font-semibold mb-4">Légal</h3>
                 <ul class="space-y-2">
@@ -70,7 +55,6 @@ $is_iframe_page = is_page_template('template-espace-client.php');
         </div>
     </div>
 </footer>
-<?php endif; ?>
 <?php wp_footer(); ?>
 </body>
 </html>

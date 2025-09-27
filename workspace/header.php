@@ -9,8 +9,6 @@
  * @package vyls
  */
 
-$is_iframe_page = is_page_template('template-iframe.php');
-
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -18,27 +16,9 @@ $is_iframe_page = is_page_template('template-iframe.php');
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php wp_head(); ?>
-    <?php if ($is_iframe_page) : ?>
-    <style>
-        html, body, #page-content, #page-content > main, #page-content > main > .iframe-container {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
-        body {
-            display: flex;
-            flex-direction: column;
-        }
-        #page-content {
-            flex-grow: 1;
-        }
-    </style>
-    <?php endif; ?>
 </head>
 <body <?php body_class('font-body antialiased'); ?>>
 <?php wp_body_open(); ?>
-<?php if (!$is_iframe_page) : ?>
 <header class="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
     <div class="container flex h-16 max-w-screen-2xl items-center">
         <a href="<?php echo esc_url(home_url('/')); ?>" class="mr-6 flex items-center space-x-2">
@@ -56,11 +36,6 @@ $is_iframe_page = is_page_template('template-iframe.php');
             ?>
         </nav>
         <div class="flex flex-1 items-center justify-end space-x-2 md:flex-none lg:flex-1 lg:justify-end">
-             <?php if (is_user_logged_in()): ?>
-                <a href="/espace-client" class="hidden sm:inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
-                    Espace Client
-                </a>
-            <?php endif; ?>
             <a href="/demande-de-pret" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">Faire une demande</a>
             
             <!-- Mobile Menu Button -->
@@ -97,18 +72,7 @@ $is_iframe_page = is_page_template('template-iframe.php');
                         ));
                     ?>
                  </div>
-                 <p class="text-sm font-semibold text-muted-foreground pt-4">Espace Client</p>
-                 <div class="flex flex-col space-y-4">
-                    <?php if (is_user_logged_in()): ?>
-                        <a href="/espace-client" data-mobile-menu-close class="text-lg font-medium transition-colors hover:text-primary pl-2">Espace Client</a>
-                        <a href="<?php echo wp_logout_url(home_url()); ?>" data-mobile-menu-close class="text-lg font-medium transition-colors hover:text-primary pl-2">Déconnexion</a>
-                    <?php else: ?>
-                         <a href="<?php echo wp_login_url(); ?>" data-mobile-menu-close class="text-lg font-medium transition-colors hover:text-primary pl-2">Connexion</a>
-                    <?php endif; ?>
-                 </div>
             </nav>
         </div>
     </div>
 </header>
-<?php endif; ?>
-<div id="page-content" class="relative"> <!-- Ajout de cette div pour gérer le stacking context -->

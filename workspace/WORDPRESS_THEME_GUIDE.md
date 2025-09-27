@@ -56,46 +56,74 @@ C'est l'étape qui cause l'erreur "feuille de style manquante". Suivez-la attent
 1.  **N'archivez PAS le dossier `vylsfond-theme` lui-même.**
 2.  **Ouvrez** le dossier `vylsfond-theme`.
 3.  À l'intérieur, sélectionnez **tous les fichiers et dossiers** (`style.css`, `index.php`, `assets/`, `build/`, etc.).
-4.  Faites un clic droit sur votre sélection et choisissez `Compresser` ou `Envoyer vers > Dossier compressé`.
-5.  Renommez le fichier `.zip` en `vylsfond-theme.zip`.
+4.  Faites un clic droit sur votre sélection et choisissez :
+    *   Sur **Windows** : `Envoyer vers` > `Dossier compressé (.zip)`.
+    *   Sur **macOS** : `Compresser X éléments`.
+5.  Renommez le fichier `.zip` nouvellement créé en `vylsfond-theme.zip`.
 
-**Ce nouveau fichier .zip est celui que vous devez téléverser sur WordPress.**
+**Ce nouveau fichier .zip est celui que vous devez téléverser sur WordPress.** Il a maintenant la bonne structure, avec `style.css` directement à la racine.
 
 ---
 
-## Étape 7 : Configuration du contenu dans WordPress
+## Étape 7 : Configuration du contenu dans WordPress (Étape Finale)
 
-Une fois le thème activé, vous devez créer les pages dans WordPress.
+Une fois le thème activé, votre site peut afficher des erreurs "Page non trouvée". C'est normal. Vous devez maintenant créer les pages dans WordPress.
 
 1.  **Activer le Thème :**
     *   Allez dans `Apparence > Thèmes > Ajouter > Téléverser un thème` et téléversez votre `vylsfond-theme.zip`.
     *   Activez le thème.
 
-2.  **Configurer la Page d'Accueil :**
-    *   Allez dans `Pages > Ajouter`, créez une page `Accueil`.
-    *   Allez dans `Réglages > Lecture`, cochez **"Une page statique"** et sélectionnez la page "Accueil".
-    *   Enregistrez.
+2.  **Configurer la Page d'Accueil (Très Important) :**
+    *   Allez dans `Pages > Ajouter`. Créez une page simple que vous nommerez `Accueil`. Laissez le contenu vide et le modèle sur "Défaut", puis publiez-la.
+    *   Allez dans `Réglages > Lecture`.
+    *   À côté de "La page d'accueil affiche", cochez **"Une page statique"**.
+    *   Dans le menu déroulant "Page d'accueil", sélectionnez la page **"Accueil"** que vous venez de créer.
+    *   Cliquez sur **"Enregistrer les modifications"**.
 
-3.  **Créer les Pages avec les bons Modèles :**
-    Pour chaque page, allez dans `Pages > Ajouter`, donnez un titre, et dans la colonne de droite `Résumé > Modèle`, sélectionnez le modèle correspondant.
+3.  **Créer les Pages :**
+    Pour chaque page de votre site, vous devez créer une page dans WordPress et lui assigner le bon "Modèle".
+    *   Allez dans `Pages > Ajouter`.
+    *   Donnez un titre à la page (ex: "Contact").
+    *   Dans la colonne de droite, sous `Résumé > Modèle`, sélectionnez le modèle correspondant (ex: "Page - Contact").
+    *   Cliquez sur `Publier`.
 
-    *   **Titre :** `Espace Client` -> **Modèle :** `Espace Client (Iframe)`
+    **Répétez cette opération pour les pages suivantes :**
     *   **Titre :** `À Propos` -> **Modèle :** `Page - À Propos`
     *   **Titre :** `Contact` -> **Modèle :** `Page - Contact`
-    *   ... (et toutes les autres pages nécessaires pour les services, etc.)
+    *   **Titre :** `Demande de Financement` -> **Modèle :** `Page - Demande de Prêt`
+    *   **Titre :** `Prêt Entreprise` -> **Modèle :** `Service - Prêt Entreprise`
+    *   **Titre :** `Prêt Immobilier` -> **Modèle :** `Service - Prêt Immobilier`
+    *   **Titre :** `Prêt Personnel` -> **Modèle :** `Service - Prêt Personnel`
+    *   **Titre :** `Prêt Auto` -> **Modèle :** `Service - Prêt Auto`
+    *   **Titre :** `Rachat de Crédit` -> **Modèle :** `Service - Rachat de Crédit`
+    *   **Titre :** `Politique de Confidentialité` -> **Modèle :** `Page - Politique de Confidentialité`
+    *   **Titre :** `Conditions Générales` -> **Modèle :** `Page - Conditions Générales`
+    
+4.  **Créer le Menu :**
+    *   Allez dans `Apparence > Menus`.
+    *   Créez un nouveau menu.
+    *   Ajoutez les pages que vous venez de créer au menu.
+    *   En bas, dans "Emplacements du menu", cochez la case "Menu Principal".
+    *   Enregistrez le menu.
 
-4.  **Configurer la page Iframe :**
-    *   Ouvrez le fichier `template-espace-client.php` dans votre thème.
-    *   Remplacez `"https://votre-app-bancaire-externe.com"` par l'URL réelle de votre application bancaire hébergée.
+5.  **Permaliens (Très Important) :**
+    *   Allez dans `Réglages > Permaliens`.
+    *   Choisissez la structure `Titre de la publication`.
+    *   Cliquez sur `Enregistrer les modifications`. Cela rafraîchit les règles de liens de WordPress et résout beaucoup de problèmes de "page non trouvée".
 
-5.  **Créer le Menu :**
-    *   Allez dans `Apparence > Menus`, créez un nouveau menu et ajoutez-y vos pages.
-    *   Cochez "Menu Principal" comme emplacement.
-
-6.  **Permaliens :**
-    *   Allez dans `Réglages > Permaliens` et choisissez `Titre de la publication`. Enregistrez.
-
-7.  **Installer les Plugins de Formulaire :**
-    *   Installez un plugin comme **WPForms**.
+6.  **Installer les Plugins :**
+    *   Pour que les formulaires de contact et de demande de prêt fonctionnent, installez un plugin comme **WPForms** ou **Contact Form 7**.
     *   Créez vos formulaires dans le plugin.
-    *   Modifiez les fichiers `template-contact.php` et `template-demande-de-pret.php` en remplaçant les formulaires HTML par le shortcode du plugin (ex: `<?php echo do_shortcode('[wpforms id="123"]'); ?>`).
+    *   Modifiez les fichiers `template-contact.php` et `template-demande-de-pret.php` en remplaçant les formulaires HTML statiques par le shortcode du plugin (ex: `<?php echo do_shortcode('[wpforms id="123"]'); ?>`). Les instructions sont dans les fichiers.
+    *   Pour les carrousels (page d'accueil, témoignages), installez un plugin de slider comme **Smart Slider 3** ou **Slider Revolution** et recréez les carrousels, puis insérez leur shortcode dans les fichiers PHP correspondants.
+
+---
+
+### Nettoyage du Thème (Optionnel mais recommandé)
+
+Votre thème contient des fichiers de base dont nous n'avons plus besoin. Vous pouvez les supprimer pour garder votre thème propre :
+*   `404.php` (gardez-le, il est utile)
+*   `archive.php` (gardez-le)
+*   `comments.php` (gardez-le)
+*   `search.php` (gardez-le)
+*   `screenshot.png` (à garder ou à remplacer par votre propre capture d'écran)

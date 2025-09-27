@@ -87,17 +87,9 @@ export default function SiteFooter() {
             </ul>
           </div>
 
-          {/* Section Espace Client & Légal */}
+          {/* Section Légal */}
           <div>
-             <h3 className="font-semibold mb-4">Espace Client</h3>
-            <ul className="space-y-2">
-                <li>
-                    <Link href="/espace-client" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                        Mon Espace
-                    </Link>
-                </li>
-            </ul>
-             <h3 className="font-semibold mb-4 mt-6">Légal</h3>
+             <h3 className="font-semibold mb-4">Légal</h3>
             <ul className="space-y-2">
               {legalLinks.map(({ href, label }) => (
                 <li key={label}>
