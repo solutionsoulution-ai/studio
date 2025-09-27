@@ -138,27 +138,48 @@ function vylsfond_enqueue_assets() {
         // =========================================================================================
         // INJECTION DES DONNÉES DU CLIENT DANS L'APPLICATION REACT
         // =========================================================================================
-        // C'est ici que l'on peut "passer" des données de WordPress à notre application.
-        // Pour un vrai site, un développeur remplacerait ces données d'exemple par
-        // de vraies données venant de la base de données WordPress (avec get_user_meta).
         $current_user = wp_get_current_user();
-        $initial_banking_data = array(
-            'user' => array(
-                'name' => $current_user->display_name,
-                'email' => $current_user->user_email,
-                'memberSince' => date_i18n('d M Y', strtotime($current_user->user_registered)),
-            ),
-            'account' => array(
-                'iban' => 'FR76 3000 4000 05' . substr(md5($current_user->ID), 0, 15), // IBAN d'exemple basé sur l'ID utilisateur
-                'bic' => 'BNPAFRPPXXX',
-                'initialBalance' => 12345.67, // Solde d'exemple
-                'initialTransactions' => array(
-                     array( 'id' => 'tx1', 'date' => '15 Juil 2024', 'description' => 'Virement entrant - Salaire', 'amount' => 2500.00, 'type' => 'credit' ),
-                     array( 'id' => 'tx2', 'date' => '16 Juil 2024', 'description' => 'Paiement CB - Supermarché', 'amount' => -85.40, 'type' => 'debit' ),
-                     array( 'id' => 'tx3', 'date' => '17 Juil 2024', 'description' => 'Prélèvement - Loyer', 'amount' => -750.00, 'type' => 'debit' ),
+        
+        // On récupère le nom d'utilisateur qui sert de clé
+        $user_login = $current_user->user_login;
+
+        // On récupère les données de la "base de données" fictive définie plus bas.
+        $customer_database = get_fictive_customer_database();
+
+        // On cherche si l'utilisateur connecté existe dans notre base de données fictive.
+        $customer_data = isset($customer_database[$user_login]) ? $customer_database[$user_login] : null;
+
+        // Si on a trouvé des données pour ce client, on les prépare.
+        if ($customer_data) {
+            $initial_banking_data = array(
+                'user' => array(
+                    'name' => $current_user->display_name,
+                    'email' => $current_user->user_email,
+                    'memberSince' => date_i18n('d M Y', strtotime($current_user->user_registered)),
+                ),
+                'account' => array(
+                    'iban' => $customer_data['iban'],
+                    'bic' => $customer_data['bic'],
+                    'initialBalance' => $customer_data['balance'],
+                    'initialTransactions' => $customer_data['transactions']
                 )
-            )
-        );
+            );
+        } else {
+            // Sinon, on prépare un compte vierge pour cet utilisateur.
+             $initial_banking_data = array(
+                'user' => array(
+                    'name' => $current_user->display_name,
+                    'email' => $current_user->user_email,
+                    'memberSince' => date_i18n('d M Y', strtotime($current_user->user_registered)),
+                ),
+                'account' => array(
+                    'iban' => 'FR00 0000 0000 0000 0000 0000 000',
+                    'bic' => 'VYLSFRPP',
+                    'initialBalance' => 0,
+                    'initialTransactions' => []
+                )
+            );
+        }
 
         wp_localize_script( 'vylsfond-banking-app', 'vylsBankingData', $initial_banking_data );
         // =========================================================================================
@@ -170,6 +191,47 @@ function vylsfond_enqueue_assets() {
 	}
 }
 add_action( 'wp_enqueue_scripts', 'vylsfond_enqueue_assets' );
+
+/**
+ * =======================================================================================
+ * "BASE DE DONNÉES" FICTIVE DES CLIENTS
+ * =======================================================================================
+ * INSTRUCTIONS : Pour ajouter ou modifier les informations d'un client, suivez ce modèle.
+ * Le nom d'utilisateur ('client1', 'client2') doit correspondre EXACTEMENT au nom 
+ * d'utilisateur que vous avez créé dans l'admin WordPress.
+ */
+function get_fictive_customer_database() {
+    return array(
+        // -- EXEMPLE POUR L'UTILISATEUR "client1" --
+        'client1' => array(
+            'iban' => 'FR76 1234 5678 9012 3456 7890 123',
+            'bic' => 'VYLFFR21XXX',
+            'balance' => 12345.67,
+            'transactions' => array(
+                array( 'id' => 'tx1-c1', 'date' => '20 Juil 2024', 'description' => 'Virement entrant - Salaire Juillet', 'amount' => 2850.00, 'type' => 'credit' ),
+                array( 'id' => 'tx2-c1', 'date' => '21 Juil 2024', 'description' => 'Paiement CB - FNAC', 'amount' => -129.99, 'type' => 'debit' ),
+                array( 'id' => 'tx3-c1', 'date' => '22 Juil 2024', 'description' => 'Prélèvement - Loyer', 'amount' => -850.00, 'type' => 'debit' ),
+            )
+        ),
+        // -- EXEMPLE POUR L'UTILISATEUR "client2" --
+        'client2' => array(
+            'iban' => 'FR76 9876 5432 1098 7654 3210 987',
+            'bic' => 'VYLFFR21XXX',
+            'balance' => 750.25,
+            'transactions' => array(
+                array( 'id' => 'tx1-c2', 'date' => '18 Juil 2024', 'description' => 'Dépôt Chèque', 'amount' => 500.00, 'type' => 'credit' ),
+                array( 'id' => 'tx2-c2', 'date' => '19 Juil 2024', 'description' => 'Retrait DAB', 'amount' => -100.00, 'type' => 'debit' ),
+            )
+        ),
+        // -- AJOUTEZ VOS AUTRES CLIENTS ICI EN SUIVANT LE MÊME MODÈLE --
+        // 'nom_utilisateur_wordpress' => array(
+        //     'iban' => '...',
+        //     'bic' => '...',
+        //     'balance' => ...,
+        //     'transactions' => array(...)
+        // ),
+    );
+}
 
 /**
  * Custom Walker to remove <li> tags from nav menu items for desktop

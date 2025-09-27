@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 type TransactionType = 'credit' | 'debit';
@@ -22,10 +22,9 @@ interface UserData {
 interface AccountData {
     iban: string;
     bic: string;
-    initialBalance?: number;
-    initialTransactions?: Transaction[];
 }
 
+// L'état de l'application est maintenant plus complet
 interface BankingState {
     user: UserData;
     account: AccountData;
@@ -36,7 +35,7 @@ interface BankingState {
 
 const BankingContext = createContext<BankingState | undefined>(undefined);
 
-// Accès aux données injectées par WordPress
+// Fonction pour récupérer les données injectées par WordPress
 const getInitialData = () => {
     if (typeof window !== 'undefined' && (window as any).vylsBankingData) {
         return (window as any).vylsBankingData;
@@ -45,25 +44,31 @@ const getInitialData = () => {
 }
 
 export const BankingProvider = ({ children }: { children: ReactNode }) => {
-    const initialData = getInitialData();
-    
-    const defaultUser: UserData = {
-        name: "Client Démo",
-        email: "client@example.com",
-        memberSince: new Date().toLocaleDateString('fr-FR'),
-    };
+    const [user, setUser] = useState<UserData>({ name: 'Chargement...', email: '', memberSince: '' });
+    const [account, setAccount] = useState<AccountData>({ iban: '', bic: '' });
+    const [balance, setBalance] = useState<number>(0);
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
+    const [isInitialized, setIsInitialized] = useState(false);
 
-    const defaultAccount: AccountData = {
-        iban: "FR00 0000 0000 0000 0000 0000 000",
-        bic: "DEMOFRPP",
-        initialBalance: 0,
-        initialTransactions: [],
-    };
-    
-    const [user] = useState<UserData>(initialData?.user || defaultUser);
-    const [account] = useState<AccountData>(initialData?.account || defaultAccount);
-    const [balance, setBalance] = useState<number>(account.initialBalance ?? 0);
-    const [transactions, setTransactions] = useState<Transaction[]>(account.initialTransactions ?? []);
+    // Initialisation unique des données
+    useEffect(() => {
+        if (!isInitialized) {
+            const initialData = getInitialData();
+            if (initialData && initialData.user && initialData.account) {
+                setUser(initialData.user);
+                setAccount({ iban: initialData.account.iban, bic: initialData.account.bic });
+                setBalance(initialData.account.initialBalance || 0);
+                setTransactions(initialData.account.initialTransactions || []);
+            } else {
+                // Données par défaut si rien n'est injecté
+                setUser({ name: 'Client Démo', email: 'demo@vylsfond.com', memberSince: new Date().toLocaleDateString('fr-FR') });
+                setAccount({ iban: 'FR00 0000 0000 0000 0000 0000 000', bic: 'DEMOFRPP' });
+                setBalance(0);
+                setTransactions([]);
+            }
+            setIsInitialized(true);
+        }
+    }, [isInitialized]);
 
     const addTransaction = (tx: Omit<Transaction, 'id' | 'date'>) => {
         const newTransaction: Transaction = {
@@ -75,6 +80,11 @@ export const BankingProvider = ({ children }: { children: ReactNode }) => {
         setTransactions(prev => [...prev, newTransaction]);
         setBalance(prev => prev + newTransaction.amount);
     };
+
+    // On affiche un loader tant que les données ne sont pas prêtes
+    if (!isInitialized) {
+        return <div className="flex items-center justify-center min-h-screen">Chargement de votre espace personnel...</div>;
+    }
 
     return (
         <BankingContext.Provider value={{ user, account, balance, transactions, addTransaction }}>
