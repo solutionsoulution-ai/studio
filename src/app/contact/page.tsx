@@ -26,9 +26,9 @@ export default function ContactPage() {
                 <h2 className="text-2xl font-semibold">Nos Coordonnées</h2>
                 <Card>
                     <CardContent className="p-6 space-y-4 text-muted-foreground">
-                        <a href="mailto:contact@vylscapital.com" className="flex items-center gap-3 group">
+                        <a href="mailto:contact@vylsfond.com" className="flex items-center gap-3 group">
                             <Mail className="w-5 h-5 text-primary"/>
-                            <span className="group-hover:text-primary transition-colors">contact@vylscapital.com</span>
+                            <span className="group-hover:text-primary transition-colors">contact@vylsfond.com</span>
                         </a>
                         <a href="tel:+33756986769" className="flex items-center gap-3 group">
                             <Phone className="w-5 h-5 text-primary"/>

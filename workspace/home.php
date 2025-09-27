@@ -24,7 +24,7 @@ get_header();
                                 Sécurisez l'avenir de votre entreprise
                             </h1>
                             <p class="mt-4 max-w-2xl text-lg text-muted-foreground mx-auto md:mx-0">
-                                VylsCapital fournit des solutions de financement rapides et flexibles pour aider votre entreprise à prospérer. Obtenez le capital dont vous avez besoin pour grandir.
+                                VylsFond fournit des solutions de financement rapides et flexibles pour aider votre entreprise à prospérer. Obtenez le capital dont vous avez besoin pour grandir.
                             </p>
                             <div class="mt-8 mx-auto md:mx-0">
                                 <a href="/demande-de-pret" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 rounded-md px-8">Commencer ma demande</a>
@@ -90,7 +90,7 @@ get_header();
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-primary"><path d="M12 17.5 7.5 20l1-5.2-4-3.6 5.3-.6L12 6l2.2 5.2 5.3.6-4 3.6 1 5.2z"/></svg>
                     <h2 class="text-3xl font-bold tracking-tight font-headline">Pourquoi nous choisir ?</h2>
                 </div>
-                <p class="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">Chez VylsCapital, nous combinons technologie et expertise humaine pour vous offrir une expérience de prêt inégalée.</p>
+                <p class="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">Chez VylsFond, nous combinons technologie et expertise humaine pour vous offrir une expérience de prêt inégalée.</p>
             </div>
             <div class="grid md:grid-cols-3 gap-6">
                 <div class="text-center border-transparent shadow-md hover:shadow-xl hover:border-primary transition-all rounded-lg border bg-card text-card-foreground">
@@ -113,7 +113,7 @@ get_header();
     <section class="container mx-auto py-16 md:py-24">
         <div class="text-center mb-16">
             <h2 class="text-3xl font-bold tracking-tight font-headline">Notre parcours en bref</h2>
-            <p class="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">De l'idée à la réalité, les étapes qui ont fait de VylsCapital ce que nous sommes aujourd'hui.</p>
+            <p class="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">De l'idée à la réalité, les étapes qui ont fait de VylsFond ce que nous sommes aujourd'hui.</p>
         </div>
         <div class="relative">
             <div class="absolute top-1/2 left-0 w-full h-0.5 bg-border -translate-y-1/2" aria-hidden="true"></div>

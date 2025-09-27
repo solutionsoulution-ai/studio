@@ -18,7 +18,7 @@ const defaultFaqs = [
   },
   {
     question: "Quels types de prêts offrez-vous ?",
-    answer: "VylsCapital se spécialise dans une variété d'options de financement, y compris les prêts immobiliers, les prêts à la consommation, les prêts auto, le rachat de crédit et les financements pour entreprises.",
+    answer: "VylsFond se spécialise dans une variété d'options de financement, y compris les prêts immobiliers, les prêts à la consommation, les prêts auto, le rachat de crédit et les financements pour entreprises.",
   },
   {
     question: "Puis-je rembourser mon prêt par anticipation ?",
