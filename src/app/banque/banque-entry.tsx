@@ -16,11 +16,10 @@ import { BankingProvider } from '@/hooks/use-banking-store.tsx';
 // and we don't want to interfere with WordPress's URL routing.
 const router = createHashRouter([
   {
-    path: '/',
     element: <BanqueLayout />,
     children: [
         {
-            index: true,
+            path: '/',
             element: <DashboardPage />,
         },
         {

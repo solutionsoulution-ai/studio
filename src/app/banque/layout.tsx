@@ -14,7 +14,7 @@ const navLinks = [
   { href: "#/profil", label: "Profil", icon: User },
 ];
 
-function AppContent() {
+export default function BanqueLayout() {
   const location = useLocation();
 
   const SidebarContent = () => (
@@ -29,7 +29,7 @@ function AppContent() {
             {navLinks.map((link) => (
                 <a key={link.href} href={link.href}>
                     <Button
-                        variant={location.hash === link.href.substring(1) || (location.hash === '' && link.href === '#/tableau-de-bord') ? "secondary" : "ghost"}
+                        variant={location.pathname === link.href.substring(1) || (location.pathname === '/' && link.href === '#/tableau-de-bord') ? "secondary" : "ghost"}
                         className="w-full justify-start gap-3"
                     >
                         <link.icon className="h-5 w-5" />
@@ -87,8 +87,4 @@ function AppContent() {
       </div>
     </div>
   );
-}
-
-export default function BanqueLayout() {
-  return <AppContent />;
 }
