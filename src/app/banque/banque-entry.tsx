@@ -2,11 +2,12 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { RouterProvider, createHashRouter } from 'react-router-dom';
+import { RouterProvider, createHashRouter, Outlet } from 'react-router-dom';
 import BanqueLayout from './layout';
 import DashboardPage from './tableau-de-bord/page';
 import TransactionsPage from './transactions/page';
 import VirementsPage from './virements/page';
+import ProfilPage from './profil/page';
 import '../globals.css';
 
 // We use a hash router because this app will be embedded in a WordPress page,
@@ -14,7 +15,7 @@ import '../globals.css';
 const router = createHashRouter([
   {
     path: '/',
-    element: <BanqueLayout><DashboardPage /></BanqueLayout>,
+    element: <BanqueLayout><Outlet /></BanqueLayout>,
     children: [
         {
             index: true,
@@ -31,6 +32,10 @@ const router = createHashRouter([
         {
             path: 'virements',
             element: <VirementsPage />,
+        },
+        {
+            path: 'profil',
+            element: <ProfilPage />,
         }
     ]
   },

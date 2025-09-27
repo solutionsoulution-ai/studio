@@ -4,14 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { Menu, Home, ArrowLeftRight, Send, Settings, Bell, UserCircle } from "lucide-react";
+import { Menu, Home, ArrowLeftRight, Send, Settings, Bell, UserCircle, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navLinks = [
-  { href: "/banque/tableau-de-bord", label: "Tableau de bord", icon: Home },
-  { href: "/banque/transactions", label: "Transactions", icon: ArrowLeftRight },
-  { href: "/banque/virements", label: "Virements", icon: Send },
+  { href: "#/tableau-de-bord", label: "Tableau de bord", icon: Home },
+  { href: "#/transactions", label: "Transactions", icon: ArrowLeftRight },
+  { href: "#/virements", label: "Virements", icon: Send },
+  { href: "#/profil", label: "Profil", icon: User },
 ];
 
 export default function BanqueLayout({
@@ -31,7 +32,7 @@ export default function BanqueLayout({
         </div>
         <nav className="flex-1 p-4 space-y-2">
             {navLinks.map((link) => (
-                <Link key={link.href} href={link.href}>
+                <a key={link.href} href={link.href}>
                     <Button
                         variant={pathname === link.href ? "secondary" : "ghost"}
                         className="w-full justify-start gap-3"
@@ -39,7 +40,7 @@ export default function BanqueLayout({
                         <link.icon className="h-5 w-5" />
                         {link.label}
                     </Button>
-                </Link>
+                </a>
             ))}
         </nav>
         <div className="p-4 mt-auto border-t">
