@@ -10,7 +10,24 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Send, FileText, User, Banknote, UploadCloud, Calculator, Percent } from "lucide-react";
 import { Slider } from "../ui/slider";
 
+const FIXED_INTEREST_RATE = 2;
+
 export default function LoanApplicationForm() {
+  const [loanAmount, setLoanAmount] = useState(50000);
+  const [loanTerm, setLoanTerm] = useState(120);
+
+  const monthlyPayment = useMemo(() => {
+    if (loanAmount <= 0 || FIXED_INTEREST_RATE <= 0 || loanTerm <= 0) {
+      return 0;
+    }
+    const monthlyRate = FIXED_INTEREST_RATE / 100 / 12;
+    const numberOfPayments = loanTerm;
+    const payment =
+      loanAmount *
+      (monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) /
+      (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
+    return payment;
+  }, [loanAmount, loanTerm]);
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,6 +42,16 @@ export default function LoanApplicationForm() {
       maximumFractionDigits: 0,
     }).format(value);
   };
+  
+  const handleAmountChange = (value: number) => {
+    const newAmount = Math.max(1000, Math.min(500000, value));
+    setLoanAmount(newAmount);
+  };
+
+  const handleTermChange = (value: number) => {
+    const newTerm = Math.max(12, Math.min(360, value));
+    setLoanTerm(newTerm);
+  };
 
   return (
     <div>
@@ -36,39 +63,56 @@ export default function LoanApplicationForm() {
                         Estimez vos mensualités
                     </CardTitle>
                     <CardDescription>
-                        Ceci est une simulation. Ajustez les curseurs pour voir l'impact sur vos paiements.
+                        Ceci est une simulation. Ajustez les curseurs ou entrez les valeurs pour voir l'impact sur vos paiements.
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="grid md:grid-cols-2 gap-8 pt-2">
                     <div className="space-y-8">
                         <div>
-                            <Label>Montant du prêt</Label>
-                            <p className="text-2xl font-bold text-primary">{formatCurrency(50000)}</p>
-                            <Slider
-                                defaultValue={[50000]}
-                                max={500000}
-                                step={1000}
-                                className="mt-2"
-                                disabled
-                            />
+                            <Label htmlFor="loanAmountInput">Montant du prêt</Label>
+                            <div className="flex items-center gap-4 mt-2">
+                                <Input
+                                    id="loanAmountInput"
+                                    type="number"
+                                    value={loanAmount}
+                                    onChange={(e) => handleAmountChange(Number(e.target.value))}
+                                    className="w-32"
+                                    step="1000"
+                                />
+                                <Slider
+                                    value={[loanAmount]}
+                                    onValueChange={(value) => handleAmountChange(value[0])}
+                                    max={500000}
+                                    min={1000}
+                                    step={1000}
+                                />
+                            </div>
                         </div>
                         <div>
-                            <Label>Durée du prêt (Mois)</Label>
-                            <p className="text-2xl font-bold text-primary">120 Mois</p>
-                            <Slider
-                                defaultValue={[120]}
-                                max={360}
-                                step={12}
-                                className="mt-2"
-                                disabled
-                            />
+                            <Label htmlFor="loanTermInput">Durée du prêt (Mois)</Label>
+                            <div className="flex items-center gap-4 mt-2">
+                                <Input
+                                    id="loanTermInput"
+                                    type="number"
+                                    value={loanTerm}
+                                    onChange={(e) => handleTermChange(Number(e.target.value))}
+                                    className="w-32"
+                                />
+                                <Slider
+                                    value={[loanTerm]}
+                                    onValueChange={(value) => handleTermChange(value[0])}
+                                    max={360}
+                                    min={12}
+                                    step={1}
+                                />
+                            </div>
                         </div>
                     </div>
 
                     <div className="bg-primary text-primary-foreground rounded-lg p-8 flex flex-col items-center justify-center text-center">
                         <p className="text-lg font-medium opacity-80">Paiement mensuel estimé</p>
                         <p className="text-5xl font-extrabold tracking-tight mt-2">
-                            {formatCurrency(460)}
+                            {formatCurrency(monthlyPayment)}
                         </p>
                         <p className="mt-4 opacity-80 text-sm flex items-center gap-2">
                             <Percent className="w-4 h-4" /> Taux fixe de 2%
@@ -105,6 +149,8 @@ export default function LoanApplicationForm() {
                   type="number" 
                   placeholder="ex: 50000" 
                   required 
+                  value={loanAmount}
+                  onChange={(e) => setLoanAmount(Number(e.target.value))}
                 />
               </div>
               <div>
@@ -113,6 +159,8 @@ export default function LoanApplicationForm() {
                   type="number" 
                   placeholder="ex: 120" 
                   required 
+                  value={loanTerm}
+                  onChange={(e) => setLoanTerm(Number(e.target.value))}
                 />
               </div>
             </div>
