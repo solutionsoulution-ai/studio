@@ -149,14 +149,38 @@ add_action( 'wp_enqueue_scripts', 'vylsfond_enqueue_assets' );
 class VylsFond_Walker_Nav_Menu_Desktop extends Walker_Nav_Menu {
     function start_el(&$output, $item, $depth = 0, $args = null, $id = 0) {
         $classes = empty( $item->classes ) ? array() : (array) $item->classes;
-        $class_names = join(' ', apply_filters('nav_menu_css_class', array_filter($classes), $item, $args));
         
-        $output .= '<a href="' . esc_url($item->url) . '" class="transition-colors hover:text-primary ' . esc_attr($class_names) . '">' . esc_html($item->title) . '</a>';
+        // Gérer le cas où le menu de service est un dropdown
+        $is_service_parent = in_array('menu-item-has-children', $classes);
+        $link_class = 'transition-colors hover:text-primary ' . esc_attr(join(' ', apply_filters('nav_menu_css_class', array_filter($classes), $item, $args)));
+        
+        if ($is_service_parent) {
+             $output .= '<div class="relative group">';
+             $output .= '<a href="' . esc_url($item->url) . '" class="' . $link_class . ' flex items-center gap-1"> ' . esc_html($item->title);
+             $output .= '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
+             $output .= '</a>';
+        } else {
+             $output .= '<a href="' . esc_url($item->url) . '" class="' . $link_class . '">' . esc_html($item->title) . '</a>';
+        }
     }
+
     function end_el(&$output, $item, $depth = 0, $args = null) {
+        $classes = empty( $item->classes ) ? array() : (array) $item->classes;
+        if (in_array('menu-item-has-children', $classes)) {
+            $output .= "</div>";
+        }
         $output .= "";
     }
+
+    function start_lvl( &$output, $depth = 0, $args = null ) {
+        $output .= '<div class="absolute top-full left-0 mt-2 w-56 rounded-md shadow-lg bg-background ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 p-1">';
+    }
+
+    function end_lvl( &$output, $depth = 0, $args = null ) {
+        $output .= '</div>';
+    }
 }
+
 
 /**
  * Custom Walker for the mobile menu to keep a simpler structure
