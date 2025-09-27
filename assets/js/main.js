@@ -25,22 +25,22 @@ document.addEventListener('DOMContentLoaded', function () {
       const parentItem = this.parentElement;
       const isOpen = parentItem.getAttribute('data-state') === 'open';
 
-      // Close all other items
+      // Close all other open items
       parentItem.parentElement.querySelectorAll('[data-state="open"]').forEach(openItem => {
         if (openItem !== parentItem) {
-            openItem.setAttribute('data-state', 'closed');
-            const openContent = openItem.querySelector('[data-accordion-content]');
-            if(openContent) openContent.style.maxHeight = null;
+          openItem.setAttribute('data-state', 'closed');
+          const openContent = openItem.querySelector('[data-accordion-content]');
+          if (openContent) openContent.style.display = 'none';
         }
       });
       
       // Toggle current item
       if (isOpen) {
         parentItem.setAttribute('data-state', 'closed');
-        content.style.maxHeight = null;
+        content.style.display = 'none';
       } else {
         parentItem.setAttribute('data-state', 'open');
-        content.style.maxHeight = content.scrollHeight + "px";
+        content.style.display = 'block';
       }
     });
   });
