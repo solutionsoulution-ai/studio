@@ -13,3 +13,8 @@ GÉNÉRÉ PAR "npm run build" JUSTE EN DESSOUS DE CE BLOC DE COMMENTAIRE.
 NE SUPPRIMEZ PAS LE BLOC DE COMMENTAIRE CI-DESSUS.
 --------------------------------------------------------------------------------
 */
+
+/* Styles pour l'animation de l'accordéon FAQ */
+[data-state='open'] > [data-accordion-trigger] .icon-chevron {
+  transform: rotate(180deg);
+}
