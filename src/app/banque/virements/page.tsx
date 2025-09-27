@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -7,7 +8,8 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { CheckCircle, XCircle, Hourglass, Send, RotateCw } from "lucide-react";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, FormEvent } from "react";
+import { useBankingStore } from "@/hooks/use-banking-store.tsx";
 
 
 type TransferStatus = 'idle' | 'processing' | 'success' | 'failed';
@@ -15,6 +17,8 @@ type TransferStatus = 'idle' | 'processing' | 'success' | 'failed';
 export default function VirementsPage() {
   const [status, setStatus] = useState<TransferStatus>('idle');
   const [progress, setProgress] = useState(0);
+  const { addTransaction } = useBankingStore();
+  const [formData, setFormData] = useState({ amount: '', reason: ''});
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -26,23 +30,43 @@ export default function VirementsPage() {
         setProgress(currentProgress);
         if (currentProgress >= 100) {
           clearInterval(timer);
-          // Simulate a random success or failure
           const isBlocked = Math.random() > 0.8; // 20% chance of failure
-          setStatus(isBlocked ? 'failed' : 'success');
+          
+          if (isBlocked) {
+            setStatus('failed');
+          } else {
+            const amount = parseFloat(formData.amount);
+            addTransaction({
+                description: `Virement sortant - ${formData.reason}`,
+                amount: -amount,
+                type: 'debit'
+            });
+            setStatus('success');
+          }
         }
       }, 300); // 3 seconds total
     }
     return () => clearInterval(timer);
-  }, [status]);
+  }, [status, addTransaction, formData]);
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    const amountInput = form.elements.namedItem('amount') as HTMLInputElement;
+    const reasonInput = form.elements.namedItem('reason') as HTMLInputElement;
+    
+    setFormData({
+        amount: amountInput.value,
+        reason: reasonInput.value
+    });
+
     setStatus('processing');
   };
 
   const handleReset = () => {
     setStatus('idle');
     setProgress(0);
+    setFormData({ amount: '', reason: '' });
   }
 
   const renderStatus = () => {
@@ -110,11 +134,11 @@ export default function VirementsPage() {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="amount">Montant (€)</Label>
-                      <Input id="amount" type="number" placeholder="100.00" required />
+                      <Input id="amount" name="amount" type="number" step="0.01" placeholder="100.00" required />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="reason">Motif du virement</Label>
-                      <Input id="reason" placeholder="Facture N°123" required />
+                      <Input id="reason" name="reason" placeholder="Facture N°123" required />
                     </div>
                   </div>
                 </CardContent>

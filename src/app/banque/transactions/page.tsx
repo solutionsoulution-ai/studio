@@ -8,20 +8,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Info, ArrowRightCircle, ArrowLeftCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-const transactions = [
-    { date: "15 Juil. 2024", description: "Virement entrant - Salaire", amount: 2850.75, type: 'credit' },
-    { date: "14 Juil. 2024", description: "Prélèvement - Loyer", amount: -850.00, type: 'debit' },
-    { date: "12 Juil. 2024", description: "Paiement CB - Supermarché", amount: -78.45, type: 'debit' },
-    { date: "10 Juil. 2024", description: "Virement SEPA - John Doe", amount: -150.00, type: 'debit' },
-    { date: "08 Juil. 2024", description: "Paiement CB - Restaurant", amount: -45.50, type: 'debit' },
-    { date: "05 Juil. 2024", description: "Virement entrant - Vente en ligne", amount: 250.00, type: 'credit' },
-];
+import { useBankingStore } from "@/hooks/use-banking-store.tsx";
 
 export default function TransactionsPage() {
+  const { transactions } = useBankingStore();
+
   return (
     <div className="flex flex-col min-h-dvh bg-background">
       <main className="flex-1">
@@ -41,8 +35,8 @@ export default function TransactionsPage() {
                 </TableHeader>
                 <TableBody>
                     {transactions.length > 0 ? (
-                    transactions.map((transaction, index) => (
-                        <TableRow key={index}>
+                    [...transactions].reverse().map((transaction) => (
+                        <TableRow key={transaction.id}>
                         <TableCell className="font-medium">{transaction.date}</TableCell>
                         <TableCell>{transaction.description}</TableCell>
                         <TableCell className={cn(

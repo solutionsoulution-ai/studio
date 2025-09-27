@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -6,7 +7,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { Menu, Home, ArrowLeftRight, Send, Settings, Bell, UserCircle, User } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useLocation } from "react-router-dom";
 
 const navLinks = [
   { href: "#/tableau-de-bord", label: "Tableau de bord", icon: Home },
@@ -20,7 +21,7 @@ export default function BanqueLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const pathname = usePathname();
+  const location = useLocation();
 
   const SidebarContent = () => (
     <div className="flex flex-col h-full bg-muted/40">
@@ -34,7 +35,7 @@ export default function BanqueLayout({
             {navLinks.map((link) => (
                 <a key={link.href} href={link.href}>
                     <Button
-                        variant={pathname === link.href ? "secondary" : "ghost"}
+                        variant={location.hash === link.href.substring(1) || (location.hash === '' && link.href === '#/tableau-de-bord') ? "secondary" : "ghost"}
                         className="w-full justify-start gap-3"
                     >
                         <link.icon className="h-5 w-5" />

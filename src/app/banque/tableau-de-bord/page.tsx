@@ -1,10 +1,33 @@
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { HelpCircle, Send, Home, Percent, ArrowRight, TrendingUp, TrendingDown } from "lucide-react";
+import { HelpCircle, Send, Home, Info, ArrowLeftCircle, ArrowRightCircle } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import { useBankingStore } from "@/hooks/use-banking-store.tsx";
+import { Table, TableBody, TableCell, TableHeader, TableHead, TableRow } from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 
 export default function DashboardPage() {
+  const { balance, transactions, addTransaction } = useBankingStore();
+  const recentTransactions = transactions.slice(-3).reverse();
+
+  const simulateCredit = () => {
+    addTransaction({
+      description: "Virement entrant - Dépôt simulé",
+      amount: 1000,
+      type: 'credit'
+    });
+  };
+
+  const simulateDebit = () => {
+    addTransaction({
+      description: "Paiement CB - Achat simulé",
+      amount: -49.99,
+      type: 'debit'
+    });
+  };
+
   return (
     <div className="flex flex-col min-h-dvh bg-background">
       <main className="flex-1">
@@ -21,7 +44,9 @@ export default function DashboardPage() {
                   <div className="flex justify-between items-start">
                     <div>
                       <p className="text-sm font-medium text-muted-foreground">Compte Courant</p>
-                      <p className="text-4xl font-bold tracking-tight">0,00 €</p>
+                      <p className="text-4xl font-bold tracking-tight">
+                        {balance.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}
+                      </p>
                       <p className="text-xs text-muted-foreground">
                         Solde au {new Date().toLocaleDateString("fr-FR")}
                       </p>
@@ -40,9 +65,41 @@ export default function DashboardPage() {
                   </Button>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-center py-8 text-muted-foreground">
-                    <p>Aucune transaction pour le moment.</p>
-                  </div>
+                    {recentTransactions.length > 0 ? (
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Date</TableHead>
+                                    <TableHead>Description</TableHead>
+                                    <TableHead className="text-right">Montant</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {recentTransactions.map((tx) => (
+                                    <TableRow key={tx.id}>
+                                        <TableCell>{tx.date}</TableCell>
+                                        <TableCell>{tx.description}</TableCell>
+                                        <TableCell className={cn(
+                                            "text-right font-semibold",
+                                            tx.type === 'credit' ? 'text-green-600' : 'text-slate-800'
+                                        )}>
+                                            <span className="flex items-center justify-end gap-2">
+                                                {tx.type === 'credit' ? 
+                                                    <ArrowRightCircle className="w-4 h-4 text-green-500"/> : 
+                                                    <ArrowLeftCircle className="w-4 h-4 text-slate-400"/>}
+                                                {tx.amount.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}
+                                            </span>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    ) : (
+                        <div className="text-center py-8 text-muted-foreground">
+                            <Info className="mx-auto mb-2" />
+                            <p>Aucune transaction pour le moment.</p>
+                        </div>
+                    )}
                 </CardContent>
               </Card>
             </div>
@@ -62,7 +119,13 @@ export default function DashboardPage() {
                       Faire un virement
                     </a>
                   </Button>
-                  <Button variant="outline" asChild className="w-full justify-start">
+                  <Button variant="outline" onClick={simulateCredit} className="w-full justify-start">
+                    + Créditer 1 000 € (Simulation)
+                  </Button>
+                   <Button variant="outline" onClick={simulateDebit} className="w-full justify-start">
+                    - Payer 49,99 € (Simulation)
+                  </Button>
+                  <Button variant="secondary" asChild className="w-full justify-start">
                     <Link href="/contact">
                       <HelpCircle className="mr-2"/>
                       Aide et Support

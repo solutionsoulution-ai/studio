@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from 'react';
@@ -9,6 +10,7 @@ import TransactionsPage from './transactions/page';
 import VirementsPage from './virements/page';
 import ProfilPage from './profil/page';
 import '../globals.css';
+import { BankingProvider } from '@/hooks/use-banking-store.tsx';
 
 // We use a hash router because this app will be embedded in a WordPress page,
 // and we don't want to interfere with WordPress's URL routing.
@@ -46,7 +48,9 @@ if (container) {
   const root = ReactDOM.createRoot(container);
   root.render(
     <React.StrictMode>
-       <RouterProvider router={router} />
+       <BankingProvider>
+         <RouterProvider router={router} />
+       </BankingProvider>
     </React.StrictMode>
   );
 }
