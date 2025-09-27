@@ -24,7 +24,7 @@ get_header();
         ====================================================================================================
         
         Ce formulaire est une maquette pour la banque fictive. Il ne réalise PAS de vraies transactions.
-        Pour simuler une demande de virement de la part du client, vous pouvez utiliser un plugin de formulaire comme WPForms.
+        Pour que les clients puissent vous soumettre une "demande de virement", vous pouvez utiliser un plugin de formulaire comme WPForms.
 
         1. INSTALLEZ WPFORMS :
            - Dans votre admin WordPress : "Extensions" > "Ajouter" > Recherchez, installez et activez "WPForms".
@@ -37,7 +37,7 @@ get_header();
              - Montant (€) -> Champ "Nombre"
              - Motif du virement -> Champ "Texte"
            - Dans "Réglages" > "Notifications", mettez VOTRE adresse e-mail pour recevoir les demandes.
-           - Dans "Réglages" > "Confirmation", redirigez vers une page de confirmation si vous le souhaitez.
+           - Dans "Réglages" > "Confirmation", vous pouvez afficher un message comme "Votre demande de virement a été prise en compte."
            - Enregistrez le formulaire.
 
         3. REMPLACEZ LE CODE CI-DESSOUS :
@@ -51,7 +51,7 @@ get_header();
         
         <!-- ▼▼▼ DÉBUT DU FORMULAIRE À REMPLACER PAR VOTRE SHORTCODE ▼▼▼ -->
         <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
-            <form>
+            <form onsubmit="alert('Ceci est une simulation. Le formulaire doit être géré par un plugin WordPress pour fonctionner.'); return false;">
                 <div class="p-6 space-y-4">
                     <div class="space-y-2">
                         <label for="beneficiary-name" class="text-sm font-medium">Nom du bénéficiaire</label>

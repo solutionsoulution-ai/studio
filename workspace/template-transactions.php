@@ -22,7 +22,7 @@ get_header();
 
         <!-- NOTE POUR L'ADMINISTRATEUR DU SITE -->
         <!-- Le contenu de ce tableau est statique (données d'exemple). Il ne se mettra pas à jour automatiquement. -->
-        <!-- Vous pouvez éditer ce fichier pour modifier les données affichées. -->
+        <!-- Pour simuler un compte pour un client, vous pouvez éditer cette page dans l'éditeur WordPress et modifier manuellement les lignes (tr) du tableau ci-dessous. -->
 
         <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
             <div class="w-full overflow-auto">
@@ -36,36 +36,26 @@ get_header();
                     </thead>
                     <tbody class="[&_tr:last-child]:border-0">
                         <!-- MODIFIER ICI : LISTE DES TRANSACTIONS -->
-                        <tr>
-                            <td class="p-4 align-middle"><?php echo date_i18n('j M Y', strtotime('-1 day')); ?></td>
-                            <td class="p-4 align-middle font-medium">Paiement CB - Amazon.fr</td>
-                            <td class="p-4 align-middle text-right font-medium">- 49,99 €</td>
+                         <tr>
+                            <td class="p-4 align-middle" colspan="3">
+                                <div class="text-center py-8 text-muted-foreground">
+                                    <p>Aucune transaction à afficher pour le moment.</p>
+                                </div>
+                            </td>
                         </tr>
-                         <tr class="bg-muted/50">
-                            <td class="p-4 align-middle"><?php echo date_i18n('j M Y', strtotime('-2 days')); ?></td>
-                            <td class="p-4 align-middle font-medium text-green-600">Virement - Salaire</td>
+                        <!-- Exemple de transactions que vous pouvez décommenter et modifier -->
+                        <!--
+                        <tr class="bg-muted/50">
+                            <td class="p-4 align-middle"><?php echo date_i18n('j M Y', strtotime('-1 day')); ?></td>
+                            <td class="p-4 align-middle font-medium text-green-600">Virement entrant - Salaire</td>
                             <td class="p-4 align-middle text-right font-medium text-green-600">+ 2,500.00 €</td>
                         </tr>
                         <tr>
-                            <td class="p-4 align-middle"><?php echo date_i18n('j M Y', strtotime('-3 days')); ?></td>
-                            <td class="p-4 align-middle font-medium">Prélèvement - Loyer</td>
-                            <td class="p-4 align-middle text-right font-medium">- 850,00 €</td>
+                            <td class="p-4 align-middle"><?php echo date_i18n('j M Y', strtotime('-2 days')); ?></td>
+                            <td class="p-4 align-middle font-medium">Paiement CB - Amazon.fr</td>
+                            <td class="p-4 align-middle text-right font-medium">- 49,99 €</td>
                         </tr>
-                        <tr class="bg-muted/50">
-                            <td class="p-4 align-middle"><?php echo date_i18n('j M Y', strtotime('-4 days')); ?></td>
-                            <td class="p-4 align-middle font-medium">Paiement CB - Super U</td>
-                            <td class="p-4 align-middle text-right font-medium">- 78,50 €</td>
-                        </tr>
-                        <tr>
-                            <td class="p-4 align-middle"><?php echo date_i18n('j M Y', strtotime('-5 days')); ?></td>
-                            <td class="p-4 align-middle font-medium">Virement à - John Doe</td>
-                            <td class="p-4 align-middle text-right font-medium">- 100,00 €</td>
-                        </tr>
-                        <tr class="bg-muted/50">
-                            <td class="p-4 align-middle"><?php echo date_i18n('j M Y', strtotime('-6 days')); ?></td>
-                            <td class="p-4 align-middle font-medium">Paiement CB - SNCF</td>
-                            <td class="p-4 align-middle text-right font-medium">- 124,00 €</td>
-                        </tr>
+                        -->
                     </tbody>
                 </table>
             </div>
