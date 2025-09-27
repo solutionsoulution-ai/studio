@@ -44,8 +44,7 @@ Le fichier `functions.php` est déjà configuré pour charger `main.js` (déjà 
 
 ## Étape 5 : Gérer les Images
 
-1.  Créez un dossier `assets/images/` dans votre thème `vylsfond-theme/`.
-2.  Vous devez trouver les images utilisées dans le projet Next.js (principalement dans `src/components/site/` et `public/`) et les copier dans `vylsfond-theme/assets/images/`. Les fichiers PHP font référence à des noms comme `pret-auto.jpg`, `home-carousel-1.png`, etc.
+Cette étape n'est plus nécessaire car toutes les images sont chargées via des liens URL directs. Vous n'avez pas besoin de créer de dossier `assets/images`.
 
 ---
 
@@ -116,7 +115,6 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
     *   Pour que les formulaires de contact et de demande de prêt fonctionnent, installez un plugin comme **WPForms** ou **Contact Form 7**.
     *   Créez vos formulaires dans le plugin.
     *   Modifiez les fichiers `template-contact.php` et `template-demande-de-pret.php` en remplaçant les formulaires HTML statiques par le shortcode du plugin (ex: `<?php echo do_shortcode('[wpforms id="123"]'); ?>`). Les instructions sont dans les fichiers.
-    *   Pour les carrousels (page d'accueil, témoignages), installez un plugin de slider comme **Smart Slider 3** ou **Slider Revolution** et recréez les carrousels, puis insérez leur shortcode dans les fichiers PHP correspondants.
 
 ---
 
@@ -128,3 +126,5 @@ Votre thème contient des fichiers de base dont nous n'avons plus besoin. Vous p
 *   `comments.php` (gardez-le)
 *   `search.php` (gardez-le)
 *   `screenshot.png` (à garder ou à remplacer par votre propre capture d'écran)
+
+    

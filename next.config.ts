@@ -54,7 +54,7 @@ const nextConfig: NextConfig = {
         entries['calculator'] = './src/app/calculator-entry.tsx';
         
         if (entries['app/page']) {
-           entries['main-app'] = entries['app/page']; // Renomme pour éviter conflit
+           entries['main'] = entries['app/page'];
            delete entries['app/page'];
         }
 

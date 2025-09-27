@@ -35,7 +35,7 @@ get_header();
               <a href="/demande-de-pret" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 rounded-md px-8">Commencer ma demande</a>
             </div>
             <div class="order-1 md:order-2">
-              <img src="<?php echo get_template_directory_uri(); ?>/assets/images/pret-auto.jpg" alt="Gros plan sur le phare d'une voiture neuve et brillante." width="600" height="400" class="rounded-lg shadow-lg object-cover w-full">
+              <img src="https://i.postimg.cc/QMyhG9GF/pexels-pixabay-210019.jpg" alt="Gros plan sur le phare d'une voiture neuve et brillante." width="600" height="400" class="rounded-lg shadow-lg object-cover w-full">
             </div>
         </div>
     </section>
@@ -74,15 +74,15 @@ get_header();
             <div class="w-full">
                 <div data-state="closed" class="border-b">
                     <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Le prêt auto peut-il financer un véhicule d'occasion ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
-                    <div data-accordion-content style="display: none;" class="overflow-hidden text-sm transition-all"><div class="pb-4 pt-0 text-base text-muted-foreground">Oui, nos solutions de financement couvrent aussi bien les véhicules neufs que les véhicules d'occasion achetés auprès d'un professionnel ou d'un particulier.</div></div>
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="display: none;"><div class="pb-4 pt-0 text-base text-muted-foreground">Oui, nos solutions de financement couvrent aussi bien les véhicules neufs que les véhicules d'occasion achetés auprès d'un professionnel ou d'un particulier.</div></div>
                 </div>
                 <div data-state="closed" class="border-b">
                     <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Est-ce que l'assurance du véhicule est incluse ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
-                    <div data-accordion-content style="display: none;" class="overflow-hidden text-sm transition-all"><div class="pb-4 pt-0 text-base text-muted-foreground">L'assurance du véhicule n'est pas directement incluse dans le prêt auto. Cependant, nous pouvons vous proposer des solutions d'assurance partenaires à des tarifs préférentiels.</div></div>
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="display: none;"><div class="pb-4 pt-0 text-base text-muted-foreground">L'assurance du véhicule n'est pas directement incluse dans le prêt auto. Cependant, nous pouvons vous proposer des solutions d'assurance partenaires à des tarifs préférentiels.</div></div>
                 </div>
                 <div data-state="closed" class="border-b">
                     <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Puis-je faire un remboursement anticipé de mon prêt auto ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
-                    <div data-accordion-content style="display: none;" class="overflow-hidden text-sm transition-all"><div class="pb-4 pt-0 text-base text-muted-foreground">Oui, vous pouvez rembourser tout ou partie de votre prêt auto par anticipation, conformément à la législation en vigueur. Des indemnités peuvent s'appliquer dans certains cas.</div></div>
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="display: none;"><div class="pb-4 pt-0 text-base text-muted-foreground">Oui, vous pouvez rembourser tout ou partie de votre prêt auto par anticipation, conformément à la législation en vigueur. Des indemnités peuvent s'appliquer dans certains cas.</div></div>
                 </div>
             </div>
         </div>
@@ -92,3 +92,5 @@ get_header();
 <?php
 get_footer();
 ?>
+
+    

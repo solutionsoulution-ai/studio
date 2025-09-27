@@ -36,7 +36,7 @@ get_header();
             <a href="/demande-de-pret" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 rounded-md px-8">Commencer ma demande</a>
         </div>
         <div class="order-1 md:order-2">
-            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/pret-entreprise.jpg" alt="Réunion de travail dans un bureau avec des graphiques en arrière-plan." width="600" height="400" class="rounded-lg shadow-lg object-cover w-full">
+            <img src="https://i.postimg.cc/Fzj4LTfS/pret-entreprise.jpg" alt="Réunion de travail dans un bureau avec des graphiques en arrière-plan." width="600" height="400" class="rounded-lg shadow-lg object-cover w-full">
         </div>
         </div>
     </section>
@@ -108,3 +108,5 @@ get_header();
 <?php
 get_footer();
 ?>
+
+    
