@@ -5,8 +5,10 @@
  * @package vyls
  */
 
-// Si vous voulez que cette page soit uniquement accessible aux utilisateurs connectés, décommentez la ligne suivante.
-// if (!is_user_logged_in()) { auth_redirect(); }
+// Redirige l'utilisateur vers la page de connexion s'il n'est pas connecté.
+if (!is_user_logged_in()) {
+    auth_redirect();
+}
 
 get_header();
 ?>
@@ -24,13 +26,13 @@ get_header();
         Pour que cela fonctionne :
 
         1. HÉBERGEZ VOTRE APPLICATION BANCAIRE :
-           - Vous devez d'abord déployer votre application (conçue avec Next.js ou autre) sur un service 
-             d'hébergement comme Vercel, Netlify, ou un serveur personnel. Vous obtiendrez une URL publique
-             (par exemple : https://mon-app-bancaire.vercel.app).
+           - Vous devez d'abord déployer votre application (conçue avec Next.js, React, Vue, etc.) sur un 
+             service d'hébergement comme Vercel, Netlify, ou un serveur personnel. Vous obtiendrez une URL 
+             publique (par exemple : https://mon-app-bancaire.vercel.app).
 
         2. MODIFIEZ L'URL CI-DESSOUS :
            - Dans la ligne `src="..."` de la balise `<iframe>` ci-dessous, remplacez 
-             "https://VOTRE_APP_BANCAIRE_ICI.com" par l'URL réelle de votre application hébergée.
+             "https://votre-app-bancaire-externe.com" par l'URL réelle de votre application hébergée.
 
         3. STYLE PLEIN ÉCRAN :
            - Le fichier header.php contient des styles CSS spécifiques pour ce modèle de page afin que
@@ -40,7 +42,7 @@ get_header();
         ====================================================================================================
         -->
         <iframe 
-            src="https://vyls-banking.web.app"
+            src="https://votre-app-bancaire-externe.com"
             class="w-full h-full border-0"
             title="Application Bancaire VylsFond"
             allow="fullscreen"

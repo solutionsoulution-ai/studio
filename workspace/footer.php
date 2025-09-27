@@ -7,7 +7,7 @@
  * @package vyls
  */
 
-$is_iframe_page = is_page_template('template-iframe.php');
+$is_iframe_page = is_page_template('template-espace-client.php');
 ?>
 </div> <!-- Fermeture de la div #page-content -->
 <?php if (!$is_iframe_page) : ?>
@@ -49,8 +49,8 @@ $is_iframe_page = is_page_template('template-iframe.php');
              <div>
                 <h3 class="font-semibold mb-4">Espace Client</h3>
                 <ul class="space-y-2">
+                     <li><a href="/espace-client" class="text-sm text-muted-foreground hover:text-primary">Mon Espace</a></li>
                     <?php if (is_user_logged_in()): ?>
-                        <li><a href="/espace-client" class="text-sm text-muted-foreground hover:text-primary">Accéder à mon espace</a></li>
                         <li><a href="<?php echo wp_logout_url(home_url()); ?>" class="text-sm text-muted-foreground hover:text-primary">Déconnexion</a></li>
                     <?php else: ?>
                         <li><a href="<?php echo wp_login_url(home_url('/espace-client')); ?>" class="text-sm text-muted-foreground hover:text-primary">Connexion</a></li>
