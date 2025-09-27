@@ -18,6 +18,12 @@ get_header();
                 </p>
             </div>
 
+            <div class="mb-12">
+                <div id="calculator-root">
+                    <!-- Le composant React du calculateur sera monté ici -->
+                </div>
+            </div>
+
              <!-- NOTE: This is a static version. For WordPress, use a form plugin like WPForms or Contact Form 7 -->
              <!-- and replace the <form> content with the plugin's shortcode. -->
              <!-- Example: <?php echo do_shortcode('[wpforms id="123"]'); ?> -->
