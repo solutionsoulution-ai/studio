@@ -36,6 +36,11 @@
             ?>
         </nav>
         <div class="flex flex-1 items-center justify-end space-x-2 md:flex-none lg:flex-1 lg:justify-end">
+             <?php if (is_user_logged_in()): ?>
+                <a href="/tableau-de-bord" class="hidden sm:inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+                    Mon Espace
+                </a>
+            <?php endif; ?>
             <a href="/demande-de-pret" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">Faire une demande</a>
             
             <!-- Mobile Menu Button -->
@@ -71,6 +76,15 @@
                             'walker' => new VylsFond_Walker_Nav_Menu_Mobile() 
                         ));
                     ?>
+                 </div>
+                 <p class="text-sm font-semibold text-muted-foreground pt-4">Espace Client</p>
+                 <div class="flex flex-col space-y-4">
+                    <?php if (is_user_logged_in()): ?>
+                        <a href="/tableau-de-bord" data-mobile-menu-close class="text-lg font-medium transition-colors hover:text-primary pl-2">Tableau de Bord</a>
+                        <a href="<?php echo wp_logout_url(home_url()); ?>" data-mobile-menu-close class="text-lg font-medium transition-colors hover:text-primary pl-2">Déconnexion</a>
+                    <?php else: ?>
+                         <a href="<?php echo wp_login_url(); ?>" data-mobile-menu-close class="text-lg font-medium transition-colors hover:text-primary pl-2">Connexion</a>
+                    <?php endif; ?>
                  </div>
             </nav>
         </div>

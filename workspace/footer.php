@@ -46,6 +46,17 @@
                     <li><a href="/services/rachat-de-credit" class="text-sm text-muted-foreground hover:text-primary">Rachat de Crédit</a></li>
                 </ul>
             </div>
+             <div>
+                <h3 class="font-semibold mb-4">Espace Client</h3>
+                <ul class="space-y-2">
+                    <?php if (is_user_logged_in()): ?>
+                        <li><a href="/tableau-de-bord" class="text-sm text-muted-foreground hover:text-primary">Tableau de Bord</a></li>
+                        <li><a href="<?php echo wp_logout_url(home_url()); ?>" class="text-sm text-muted-foreground hover:text-primary">Déconnexion</a></li>
+                    <?php else: ?>
+                        <li><a href="<?php echo wp_login_url(); ?>" class="text-sm text-muted-foreground hover:text-primary">Connexion</a></li>
+                    <?php endif; ?>
+                </ul>
+            </div>
             <div>
                 <h3 class="font-semibold mb-4">Légal</h3>
                 <ul class="space-y-2">
