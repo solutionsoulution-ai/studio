@@ -5,7 +5,7 @@ import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Check, Target, Handshake, Lightbulb, Users, Phone, Rocket, Milestone, Telescope, BrainCircuit, UsersRound, Euro, CheckCircle } from 'lucide-react';
+import { Check, Target, Handshake, Lightbulb, Users, Phone, Rocket, Milestone, Telescope, BrainCircuit, UsersRound, Euro, CheckCircle, FilePen } from 'lucide-react';
 import { Button } from "../ui/button";
 import Link from "next/link";
 import {
@@ -251,6 +251,3 @@ export default function AboutUsSection() {
 
     
 }
-
-    
-    
