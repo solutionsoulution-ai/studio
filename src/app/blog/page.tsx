@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { ArrowRight, BookOpen } from "lucide-react";
 import type { Metadata } from 'next';
+import CtaSection from "@/components/site/cta-section";
 
 export const metadata: Metadata = {
   title: 'Blog | VylsFond',
@@ -69,6 +70,7 @@ export default function BlogPage() {
           </div>
 
         </section>
+        <CtaSection />
       </main>
       <SiteFooter />
     </div>

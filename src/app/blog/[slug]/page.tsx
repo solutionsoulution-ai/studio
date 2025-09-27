@@ -11,6 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Calendar, User, MessageSquare, Phone, Send, Star } from "lucide-react";
 import type { Metadata, ResolvingMetadata } from 'next';
+import CtaSection from "@/components/site/cta-section";
 
 type Props = {
   params: { slug: string }
@@ -195,6 +196,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                 </div>
             </div>
         </section>
+        <CtaSection />
       </main>
       <SiteFooter />
     </div>

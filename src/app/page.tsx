@@ -10,6 +10,7 @@ import InterestRateCalculator from "@/components/site/interest-rate-calculator";
 import PartnersSection from "@/components/site/partners-section";
 import BlogSummarySection from "@/components/site/blog-summary-section";
 import TimelineSummary from "@/components/site/timeline-summary";
+import CtaSection from "@/components/site/cta-section";
 
 export default function Home() {
   return (
@@ -29,6 +30,7 @@ export default function Home() {
         <section id="faq" className="container mx-auto py-16 md:py-24">
             <FaqSection />
         </section>
+        <CtaSection />
       </main>
       <SiteFooter />
     </div>

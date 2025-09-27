@@ -2,10 +2,7 @@
 "use client";
 
 import Image from "next/image";
-import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Check, Target, Handshake, Lightbulb, Users, Phone, Rocket, Milestone, Telescope, BrainCircuit, UsersRound, Euro, CheckCircle, FilePen } from 'lucide-react';
 import { Button } from "../ui/button";
 import Link from "next/link";
 import {
@@ -17,6 +14,7 @@ import {
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import * as React from "react";
+import { CheckCircle, Users, Handshake, Lightbulb, Target, Rocket, Euro, UsersRound, BrainCircuit, Milestone, Telescope, FilePen } from 'lucide-react';
 
 
 const teamMembers = [
@@ -225,24 +223,6 @@ export default function AboutUsSection() {
                             <p className="text-sm text-primary">{member.role}</p>
                         </div>
                     ))}
-                </div>
-            </section>
-
-            {/* CTA Section */}
-            <section className="bg-primary text-primary-foreground">
-                <div className="container mx-auto text-center py-16">
-                    <h2 className="text-3xl font-bold">Prêt à démarrer votre projet ?</h2>
-                    <p className="mt-2 text-lg max-w-xl mx-auto opacity-90">
-                        Notre équipe est là pour vous aider à trouver la meilleure solution de financement.
-                    </p>
-                    <div className="mt-8">
-                        <Button size="lg" variant="secondary" asChild>
-                            <Link href="/demande-de-pret">
-                                <FilePen className="mr-2" />
-                                Faire une demande
-                            </Link>
-                        </Button>
-                    </div>
                 </div>
             </section>
 
