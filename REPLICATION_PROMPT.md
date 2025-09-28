@@ -34,10 +34,10 @@
 -   **Témoignages** : Un carrousel dynamique présentant environ **30 avis clients** qui défilent.
 -   **FAQ** : Une section "Foire aux questions" avec les questions les plus courantes sur l'entreprise en général.
 
-### Pages de Service (ex: `/services/pret-auto`)
+### Pages de Service (Prêt Entreprise, Prêt Immobilier, Prêt Personnel, Prêt Auto, Rachat de Crédit)
 
--   Chaque service (Prêt Auto, Prêt Entreprise, etc.) doit avoir sa propre page.
--   La structure doit inclure :
+-   Chaque service doit avoir sa propre page dédiée.
+-   La structure de chaque page de service doit inclure :
     -   Une section d'introduction avec un titre, une description et une image principale.
     -   Une section expliquant pourquoi souscrire à ce service.
     -   Une section "Comment ça marche ?" avec les étapes clés.
