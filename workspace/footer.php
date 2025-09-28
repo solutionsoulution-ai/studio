@@ -38,11 +38,11 @@
             <div>
                 <h3 class="font-semibold mb-4">Nos Services</h3>
                 <ul class="space-y-2">
-                    <li><a href="/services/pret-entreprise" class="text-sm text-muted-foreground hover:text-primary">Prêt Entreprise</a></li>
-                    <li><a href="/services/pret-personnel" class="text-sm text-muted-foreground hover:text-primary">Prêt Personnel</a></li>
-                    <li><a href="/services/pret-immo" class="text-sm text-muted-foreground hover:text-primary">Prêt Immobilier</a></li>
-                    <li><a href="/services/pret-auto" class="text-sm text-muted-foreground hover:text-primary">Prêt Auto</a></li>
-                    <li><a href="/services/rachat-de-credit" class="text-sm text-muted-foreground hover:text-primary">Rachat de Crédit</a></li>
+                    <li><a href="/pret-entreprise" class="text-sm text-muted-foreground hover:text-primary">Prêt Entreprise</a></li>
+                    <li><a href="/pret-personnel" class="text-sm text-muted-foreground hover:text-primary">Prêt Personnel</a></li>
+                    <li><a href="/pret-immobilier" class="text-sm text-muted-foreground hover:text-primary">Prêt Immobilier</a></li>
+                    <li><a href="/pret-auto" class="text-sm text-muted-foreground hover:text-primary">Prêt Auto</a></li>
+                    <li><a href="/rachat-de-credit" class="text-sm text-muted-foreground hover:text-primary">Rachat de Crédit</a></li>
                 </ul>
             </div>
             <div>

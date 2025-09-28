@@ -67,3 +67,12 @@
 ### Pages Légales (ex: `/politique-de-confidentialite`)
 
 -   Des pages simples, principalement textuelles, pour le contenu légal.
+
+---
+
+## 3. Informations Clés de l'Entreprise
+
+-   **Nom** : VylsFond
+-   **Email** : contact@vylsfond.com
+-   **Téléphone** : +33 7 56 98 67 69
+-   **Adresse** : Lyon, France
