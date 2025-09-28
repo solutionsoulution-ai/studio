@@ -6,7 +6,111 @@ import { z } from 'zod';
 import { type TransferFormInput, transferFormSchema } from '@/lib/schemas';
 import { revalidatePath } from 'next/cache';
 import { type ClientProfile, type Transaction, type UserRole } from '@/lib/types';
-import { supabase } from '@/lib/supabase-client';
+import { v4 as uuidv4 } from 'uuid';
+
+// --- MOCK DATABASE ---
+const adminPassword = process.env.ADMIN_PASSWORD || 'adminpassword';
+let mockProfiles: ClientProfile[] = [
+    {
+        id: 'admin-user',
+        client_id: 'VYL-ADM-001',
+        email: 'admin@vylsfond.com',
+        password: adminPassword,
+        balance: 0,
+        account_number: 'ADMIN-ACCOUNT',
+        iban: 'FR0000000000000000000000000',
+        bic: 'VYLSFRADMIN',
+        created_at: new Date().toISOString(),
+        is_transfer_blocked: false,
+        transfer_block_reason: null,
+        transfer_processing_time: { minutes: 0 },
+        role: 'admin',
+        transactions: [],
+    },
+    {
+        id: 'client-user-1',
+        client_id: 'VYL-123-456',
+        email: 'client@vylsfond.com',
+        password: 'password123',
+        balance: 15320.75,
+        account_number: '0123456789',
+        iban: 'FR7630004000011234567890123',
+        bic: 'BNPAFRPPXXX',
+        created_at: new Date('2023-01-15').toISOString(),
+        is_transfer_blocked: false,
+        transfer_block_reason: null,
+        transfer_processing_time: { minutes: 1 },
+        role: 'client',
+        transactions: [],
+    },
+    {
+        id: 'client-user-2',
+        client_id: 'VYL-789-012',
+        email: 'blocked@vylsfond.com',
+        password: 'password456',
+        balance: 500.00,
+        account_number: '9876543210',
+        iban: 'FR7630002005500000157845Z25',
+        bic: 'SOGEFRPPXXX',
+        created_at: new Date('2022-11-20').toISOString(),
+        is_transfer_blocked: true,
+        transfer_block_reason: 'Activité suspecte détectée.',
+        transfer_processing_time: { days: 2 },
+        role: 'client',
+        transactions: [],
+    },
+];
+
+let mockTransactions: Transaction[] = [
+    {
+        id: 'tx-1',
+        profile_id: 'client-user-1',
+        amount: -50.25,
+        reason: 'Abonnement Netflix',
+        recipient_name: 'NETFLIX',
+        created_at: new Date('2024-07-20T10:00:00Z').toISOString(),
+        status: 'COMPLETED',
+        recipient_iban: 'IE64CLIE93105479885566',
+        recipient_bic: null,
+        recipient_bank_name: null,
+    },
+    {
+        id: 'tx-2',
+        profile_id: 'client-user-1',
+        amount: 1800.00,
+        reason: 'Salaire Juillet',
+        recipient_name: 'VOTRE EMPLOYEUR',
+        created_at: new Date('2024-07-28T09:00:00Z').toISOString(),
+        status: 'COMPLETED',
+        recipient_iban: null,
+        recipient_name: null,
+    },
+    {
+        id: 'tx-3',
+        profile_id: 'client-user-2',
+        amount: -150.00,
+        reason: 'Loyer',
+        recipient_name: 'Agence Immobilière',
+        created_at: new Date('2024-08-01T14:00:00Z').toISOString(),
+        status: 'FAILED',
+        recipient_iban: 'FR1420041010050500013M02606',
+        recipient_bic: null,
+        recipient_bank_name: null,
+    },
+    {
+        id: 'tx-4',
+        profile_id: 'client-user-1',
+        amount: -200,
+        reason: 'Virement pour M. Dupont',
+        recipient_name: 'M. Dupont',
+        created_at: new Date().toISOString(),
+        status: 'PENDING',
+        estimatedCompletionDate: new Date(Date.now() + 1 * 60000).toISOString(),
+        recipient_iban: 'FR1420041010050500013M02606',
+        recipient_bic: 'SOGEFRPPXXX',
+        recipient_bank_name: 'Société Générale',
+    }
+];
 
 // --- HELPERS ---
 const randomDigits = (length: number) => Array.from({ length }, () => Math.floor(Math.random() * 10)).join('');
@@ -36,20 +140,14 @@ const loginSchema = z.object({
 // --- SERVER ACTIONS ---
 
 export async function verifyClientLoginAction(credentials: z.infer<typeof loginSchema>): Promise<{ success: boolean; clientId?: string; role?: UserRole, error?: string }> {
-  if (!supabase) return { success: false, error: "Database not configured." };
-  
   const parsed = loginSchema.safeParse(credentials);
   if (!parsed.success) {
     return { success: false, error: 'Données invalides.' };
   }
 
-  const { data: client, error } = await supabase
-    .from('profiles')
-    .select('id, password, role')
-    .eq('email', parsed.data.email)
-    .single();
+  const client = mockProfiles.find(p => p.email === parsed.data.email);
 
-  if (error || !client || client.password !== parsed.data.password) {
+  if (!client || client.password !== parsed.data.password) {
     return { success: false, error: 'Email ou mot de passe incorrect.' };
   }
   
@@ -58,33 +156,20 @@ export async function verifyClientLoginAction(credentials: z.infer<typeof loginS
 
 
 export async function getClientByIdAction(clientId: string): Promise<{ success: boolean; client?: Omit<ClientProfile, 'password'>; error?: string }> {
-    if (!supabase) return { success: false, error: "Database not configured." };
     if (!clientId) {
         return { success: false, error: "ID client non fourni." };
     }
 
-    const { data: client, error: clientError } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', clientId)
-        .single();
+    const client = mockProfiles.find(p => p.id === clientId);
     
-    if (clientError || !client) {
+    if (!client) {
         return { success: false, error: "Client non trouvé." };
     }
     
-    const { data: clientTransactions, error: txError } = await supabase
-        .from('transactions')
-        .select('*')
-        .eq('profile_id', clientId);
+    const clientTransactions = mockTransactions.filter(tx => tx.profile_id === clientId);
         
-    if (txError) {
-        return { success: false, error: "Erreur lors de la récupération des transactions." };
-    }
-    
     const now = new Date();
     let clientBalance = client.balance;
-    const transactionsToUpdate = [];
 
     const updatedTransactions = clientTransactions.map(tx => {
         if (tx.status === 'PENDING' && tx.estimatedCompletionDate) {
@@ -100,17 +185,11 @@ export async function getClientByIdAction(clientId: string): Promise<{ success: 
                         tx.status = 'FAILED';
                     }
                 }
-                transactionsToUpdate.push(supabase.from('transactions').update({ status: tx.status }).eq('id', tx.id));
+                client.balance = clientBalance; // Update mock client balance
             }
         }
         return tx;
     });
-
-    if (transactionsToUpdate.length > 0) {
-        await Promise.all(transactionsToUpdate);
-        await supabase.from('profiles').update({ balance: clientBalance }).eq('id', client.id);
-        client.balance = clientBalance;
-    }
     
     const { password, ...clientWithoutPassword } = client;
     clientWithoutPassword.transactions = updatedTransactions;
@@ -119,15 +198,9 @@ export async function getClientByIdAction(clientId: string): Promise<{ success: 
 }
 
 export async function createTransferAction(transferDetails: TransferFormInput & { clientId: string }): Promise<{ success: boolean; error?: string }> {
-    if (!supabase) return { success: false, error: "Database not configured." };
-    
-    const { data: client, error: clientError } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', transferDetails.clientId)
-        .single();
+    const client = mockProfiles.find(p => p.id === transferDetails.clientId);
 
-    if (clientError || !client) {
+    if (!client) {
         return { success: false, error: "Client non trouvé." };
     }
     
@@ -152,7 +225,8 @@ export async function createTransferAction(transferDetails: TransferFormInput & 
     if (processingTime.hours) completionDate.setHours(completionDate.getHours() + processingTime.hours);
     if (processingTime.minutes) completionDate.setMinutes(completionDate.getMinutes() + processingTime.minutes);
 
-    const newTransaction: Omit<Transaction, 'id' | 'created_at'> & {id?:string, created_at?: string} = {
+    const newTransaction: Transaction = {
+        id: uuidv4(),
         profile_id: transferDetails.clientId,
         amount: -parsed.data.amount,
         reason: parsed.data.reason,
@@ -161,36 +235,24 @@ export async function createTransferAction(transferDetails: TransferFormInput & 
         recipient_bank_name: parsed.data.recipientBankName,
         recipient_bic: parsed.data.recipientBic,
         status: 'PENDING',
+        created_at: creationDate.toISOString(),
         estimatedCompletionDate: completionDate.toISOString(),
     };
 
-    const { error: insertError } = await supabase.from('transactions').insert([newTransaction]);
+    mockTransactions.push(newTransaction);
     
-    if(insertError) {
-        return { success: false, error: "Erreur lors de la création du virement." };
-    }
-
     revalidatePath('/dashboard');
     return { success: true };
 }
 
 
 export async function getClientsAction(): Promise<{ success: boolean; clients?: Omit<ClientProfile, 'password'>[]; error?: string }> {
-    if (!supabase) return { success: false, error: "Database not configured." };
     try {
-        const { data: profiles, error: profilesError } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('role', 'client'); // On ne récupère que les clients
-            
-        if (profilesError) throw profilesError;
+        const clients = mockProfiles.filter(p => p.role === 'client');
 
-        const { data: transactions, error: transactionsError } = await supabase.from('transactions').select('*');
-        if (transactionsError) throw transactionsError;
-
-        const clientsWithTransactions = (profiles || []).map(p => {
+        const clientsWithTransactions = clients.map(p => {
             const { password, ...client } = p;
-            client.transactions = (transactions || []).filter(tx => tx.profile_id === client.id);
+            client.transactions = mockTransactions.filter(tx => tx.profile_id === client.id);
             return client;
         });
 
@@ -201,18 +263,21 @@ export async function getClientsAction(): Promise<{ success: boolean; clients?: 
 }
 
 export async function deleteClientAction(clientId: string): Promise<{ success: boolean; error?: string }> {
-    if (!supabase) return { success: false, error: "Database not configured." };
     if (!clientId) {
         return { success: false, error: "ID client non fourni." };
     }
     
+    const clientIndex = mockProfiles.findIndex(p => p.id === clientId);
+
+    if (clientIndex === -1) {
+        return { success: false, error: "Client non trouvé." };
+    }
+    
     try {
-        const { error: txError } = await supabase.from('transactions').delete().eq('profile_id', clientId);
-        if (txError) throw new Error(`Erreur lors de la suppression des transactions: ${txError.message}`);
-
-        const { error: profileError } = await supabase.from('profiles').delete().eq('id', clientId);
-        if (profileError) throw new Error(`Erreur lors de la suppression du client: ${profileError.message}`);
-
+        // Remove transactions for the client
+        mockTransactions = mockTransactions.filter(tx => tx.profile_id !== clientId);
+        // Remove the client
+        mockProfiles.splice(clientIndex, 1);
     } catch(error: any) {
          return { success: false, error: "Erreur de suppression: " + error.message };
     }
@@ -228,28 +293,21 @@ const createClientSchema = z.object({
 }).passthrough();
 
 export async function createClientAction(clientData: any): Promise<{ success: boolean; clientId?: string; error?: string }> {
-    if (!supabase) return { success: false, error: "Database not configured." };
-    
     const parsed = createClientSchema.safeParse(clientData);
     if (!parsed.success) {
         const issues = parsed.error.issues.map(i => i.message).join(', ');
         return { success: false, error: `Données invalides: ${issues}` };
     }
 
-    const { data: existingClient, error: findError } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('email', parsed.data.email)
-        .single();
+    const existingClient = mockProfiles.find(p => p.email === parsed.data.email);
     
-    if (findError && findError.code !== 'PGRST116') { // PGRST116: row not found, which is good
-        return { success: false, error: "Erreur lors de la vérification de l'e-mail." };
-    }
     if (existingClient) {
         return { success: false, error: "Un client avec cet e-mail existe déjà." };
     }
     
-    const newClient: Omit<ClientProfile, 'id' | 'created_at'> = {
+    const newClientId = uuidv4();
+    const newClient: ClientProfile = {
+        id: newClientId,
         client_id: `VYL-${randomDigits(3)}-${randomDigits(3)}`,
         email: parsed.data.email,
         password: parsed.data.password,
@@ -257,36 +315,26 @@ export async function createClientAction(clientData: any): Promise<{ success: bo
         account_number: generateIBAN(),
         iban: generateIBAN(),
         bic: generateBIC(),
+        created_at: new Date().toISOString(),
         is_transfer_blocked: false,
         transfer_block_reason: null,
         transfer_processing_time: { minutes: 1 },
         role: 'client',
     };
     
-    const { data: insertedClient, error: insertClientError } = await supabase
-        .from('profiles')
-        .insert([newClient])
-        .select('id')
-        .single();
-    
-    if (insertClientError || !insertedClient) {
-         return { success: false, error: "Erreur lors de la création du client." };
-    }
-
-    const newClientId = insertedClient.id;
+    mockProfiles.push(newClient);
     
     if (newClient.balance > 0) {
-        const { error: txError } = await supabase.from('transactions').insert({
+        mockTransactions.push({
+             id: uuidv4(),
              profile_id: newClientId,
              amount: newClient.balance,
              reason: "Dépôt initial",
              status: 'COMPLETED' as const,
+             created_at: new Date().toISOString(),
              recipient_iban: null,
              recipient_name: null
         });
-        if (txError) {
-             console.error("Error creating initial transaction:", txError.message);
-        }
     }
     
     revalidatePath('/admin');
@@ -301,7 +349,6 @@ const adjustBalanceSchema = z.object({
 });
 
 export async function adjustClientBalanceAction(adjustmentData: z.infer<typeof adjustBalanceSchema>): Promise<{ success: boolean; error?: string }> {
-    if (!supabase) return { success: false, error: "Database not configured." };
     const parsed = adjustBalanceSchema.safeParse(adjustmentData);
     if (!parsed.success) {
         return { success: false, error: 'Données invalides' };
@@ -310,26 +357,26 @@ export async function adjustClientBalanceAction(adjustmentData: z.infer<typeof a
     const { clientId, amount, reason, type } = parsed.data;
     const transactionAmount = type === 'credit' ? Math.abs(amount) : -Math.abs(amount);
 
-    const { data: client, error: clientError } = await supabase.from('profiles').select('balance').eq('id', clientId).single();
-    if (clientError || !client) return { success: false, error: 'Client non trouvé' };
+    const client = mockProfiles.find(p => p.id === clientId);
+    if (!client) return { success: false, error: 'Client non trouvé' };
 
     const newBalance = client.balance + transactionAmount;
     if (newBalance < 0) {
          return { success: false, error: "Solde insuffisant pour ce débit." };
     }
 
-    const { error: updateError } = await supabase.from('profiles').update({ balance: newBalance }).eq('id', clientId);
-    if (updateError) return { success: false, error: "Erreur lors de la mise à jour du solde." };
+    client.balance = newBalance;
 
-    const { error: txError } = await supabase.from('transactions').insert({
+    mockTransactions.push({
+        id: uuidv4(),
         profile_id: clientId,
         amount: transactionAmount,
         reason: reason,
         recipient_name: "Opération Manuelle Admin",
         status: 'COMPLETED' as const,
+        created_at: new Date().toISOString(),
         recipient_iban: null,
     });
-    if (txError) return { success: false, error: "Erreur lors de la création de la transaction." };
 
     revalidatePath('/admin');
     revalidatePath('/dashboard');
@@ -343,18 +390,16 @@ const blockSettingsSchema = z.object({
 });
 
 export async function updateClientBlockSettingsAction(settingsData: z.infer<typeof blockSettingsSchema>): Promise<{ success: boolean; error?: string }> {
-    if (!supabase) return { success: false, error: "Database not configured." };
     const parsed = blockSettingsSchema.safeParse(settingsData);
     if (!parsed.success) return { success: false, error: 'Données invalides' };
     
     const { clientId, is_transfer_blocked, transfer_block_reason } = parsed.data;
     
-    const { error } = await supabase.from('profiles').update({ 
-        is_transfer_blocked, 
-        transfer_block_reason: is_transfer_blocked ? transfer_block_reason : null 
-    }).eq('id', clientId);
+    const client = mockProfiles.find(p => p.id === clientId);
+    if (!client) return { success: false, error: 'Client non trouvé' };
 
-    if (error) return { success: false, error: "Erreur de mise à jour." };
+    client.is_transfer_blocked = is_transfer_blocked;
+    client.transfer_block_reason = is_transfer_blocked ? transfer_block_reason : null;
 
     revalidatePath('/admin');
     revalidatePath('/dashboard');
@@ -368,21 +413,20 @@ const transferSettingsSchema = z.object({
 });
 
 export async function updateClientTransferSettingsAction(settingsData: z.infer<typeof transferSettingsSchema>): Promise<{ success: boolean; error?: string }> {
-    if (!supabase) return { success: false, error: "Database not configured." };
     const parsed = transferSettingsSchema.safeParse(settingsData);
     if (!parsed.success) return { success: false, error: 'Données invalides' };
     
     const { clientId, duration, unit } = parsed.data;
     
-    const processingTime = {
+    const client = mockProfiles.find(p => p.id === clientId);
+    if (!client) return { success: false, error: 'Client non trouvé' };
+
+    client.transfer_processing_time = {
         days: unit === 'days' ? duration : 0,
         hours: unit === 'hours' ? duration : 0,
         minutes: unit === 'minutes' ? duration : 0,
     };
     
-    const { error } = await supabase.from('profiles').update({ transfer_processing_time: processingTime }).eq('id', clientId);
-    if (error) return { success: false, error: "Erreur de mise à jour." };
-
     revalidatePath('/admin');
     revalidatePath('/dashboard');
     return { success: true };
