@@ -7,7 +7,7 @@ Ce document détaille les textes, les images et les palettes de couleurs utilis�
 
 ## 1. Palette de Couleurs
 
-La charte graphique est définie dans `src/app/globals.css` et utilise des variables HSL pour une flexibilité maximale.
+La charte graphique est définie dans le CSS global du projet et utilise des variables HSL pour une flexibilité maximale.
 
 -   **Couleur Principale (Primary)**: `hsl(231, 48%, 48%)`
     -   Description : Un bleu profond et professionnel, utilisé pour les boutons principaux, les icônes, les titres importants et les éléments d'accentuation.
@@ -36,7 +36,7 @@ La charte graphique est définie dans `src/app/globals.css` et utilise des varia
 
 ## 2. Contenu par Page
 
-### Page d'Accueil (`front-page.php`)
+### Page d'Accueil
 
 #### Section 1: Héros
 -   **Titre**: "Le financement que vous méritez, simplifié"
@@ -71,7 +71,7 @@ La charte graphique est définie dans `src/app/globals.css` et utilise des varia
 -   **Jalons**: "2012: Fondation", "2015: 100M€ Prêtés", "2018: Expansion", "2021: Innovation IA", "2024+: Avenir"
 
 #### Section 5: Derniers Articles & Partenaires
--   Contenu dynamique géré par WordPress.
+-   Contenu dynamique géré depuis le système de gestion de contenu (CMS).
 
 #### Section 6: Témoignages
 -   **Titre**: "Ce que disent nos clients"
@@ -84,11 +84,11 @@ La charte graphique est définie dans `src/app/globals.css` et utilise des varia
 
 ---
 
-### Pages de Service (`template-pret-*.php`)
+### Pages de Service
 
 Chaque page de service suit une structure similaire.
 
-#### Exemple: Page Prêt Auto (`template-pret-auto.php`)
+#### Exemple: Page Prêt Auto
 
 -   **Titre**: "Prêt Auto"
 -   **Description**: "Financez l'achat de votre véhicule neuf ou d'occasion avec nos solutions de crédit auto. Profitez d'une procédure rapide pour prendre la route en toute sérénité."
@@ -111,34 +111,33 @@ Chaque page de service suit une structure similaire.
 
 ---
 
-### Page Blog (`index.php`)
+### Page Blog
 
 -   **Titre**: "Blog"
 -   **Description**: "Nos experts partagent leurs analyses et conseils pour vous aider à naviguer dans le monde du financement."
--   **Contenu**: Boucle WordPress qui affiche les articles avec leur image à la une, titre, date, auteur, et extrait.
+-   **Contenu**: Affiche la liste des articles avec leur image à la une, titre, date, auteur, et extrait.
     -   Disposition Image: L'image à la une est affichée en haut de la carte de l'article.
 
-### Page Article de Blog (`single.php`)
+### Page Article de Blog
 
--   **Titre de l'article**: Dynamique (Titre de l'article WordPress)
+-   **Titre de l'article**: Dynamique (Titre de l'article depuis le CMS)
 -   **Image d'en-tête**: Affiche l'image à la une de l'article en grand format.
     -   Disposition: Bannière en pleine largeur en haut de la page, avec le titre et les métadonnées superposés sur un fond assombri.
 -   **Contenu**: Le corps de l'article est affiché dans la colonne principale (à gauche). La colonne latérale (droite) contient des informations sur l'auteur et un appel à l'action.
 
 ---
 
-### Page Contact (`template-contact.php`)
+### Page Contact
 
 -   **Titre**: "Contactez-nous"
 -   **Description**: "Une question ? Une demande spécifique ? Notre équipe est à votre écoute."
 -   **Contenu**: La page est divisée en deux colonnes.
-    -   **Colonne de gauche**: Contient le formulaire de contact (à remplacer par un shortcode de plugin).
+    -   **Colonne de gauche**: Contient le formulaire de contact.
     -   **Colonne de droite**: Affiche les coordonnées (email, téléphone, adresse) et les horaires d'ouverture.
 
 ---
 
-### Pages Légales (`template-conditions-generales.php`, `template-politique-de-confidentialite.php`)
+### Pages Légales (Conditions Générales, Politique de Confidentialité)
 
 -   Ces pages contiennent principalement du texte juridique structuré avec des titres et des paragraphes. Elles n'ont pas d'images spécifiques.
 -   Elles se terminent par une section d'appel à l'action pour encourager l'utilisateur à poursuivre sa navigation.
-
