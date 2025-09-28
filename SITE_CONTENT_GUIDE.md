@@ -1,7 +1,7 @@
 
 # Guide du Contenu et du Design du Site VylsFond
 
-Ce document détaille les textes, les images et les palettes de couleurs utilisés sur les principales pages publiques du site, à l'exception des pages "À Propos", "Demande de Prêt" et de la section "Banque en Ligne".
+Ce document détaille les textes, les images et les palettes de couleurs utilisés on the main public pages of the site, à l'exception des pages "À Propos", "Demande de Prêt" et de la section "Banque en Ligne".
 
 ---
 
@@ -34,7 +34,21 @@ La charte graphique est définie dans le CSS global du projet et utilise des var
 
 ---
 
-## 2. Contenu par Page
+## 2. Éléments de Design
+
+-   **Cartes (Cards)**:
+    -   **Usage**: Les cartes sont utilisées pour présenter des informations de manière concise et visuelle (services, articles de blog, témoignages).
+    -   **Style de base**: Bords arrondis (`rounded-lg`), bordure fine et discrète (`border`), fond blanc (`bg-card`), et une ombre portée subtile (`shadow-sm`).
+    -   **Interaction**: Au survol, la bordure de la carte devient de la couleur principale (`hover:border-primary`) et l'ombre portée peut s'intensifier (`hover:shadow-xl`), donnant une impression de relief et d'interactivité.
+
+-   **Boutons (Buttons)**:
+    -   **Bouton Principal**: Fond bleu (`bg-primary`), texte blanc (`text-primary-foreground`). Utilisé pour les appels à l'action les plus importants comme "Commencer ma demande".
+    -   **Bouton Secondaire**: Fond gris clair (`bg-secondary`), texte gris moyen (`text-secondary-foreground`). Utilisé pour les actions secondaires.
+    -   **Bouton "Outline"**: Sans fond (`bg-background`), avec une bordure (`border`). Utilisé pour les actions moins prioritaires comme "Voir tous les articles".
+
+---
+
+## 3. Contenu par Page
 
 ### Page d'Accueil
 
