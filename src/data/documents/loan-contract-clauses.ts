@@ -363,5 +363,3 @@ export const loanContractClauses: Clauses = {
         borrower_signature_instruction: "(Letto e approvato)",
     }
 }
-
-    

@@ -10,7 +10,7 @@ import { ArrowRight, BookOpen } from "lucide-react";
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Blog | VylsCapital',
+  title: 'Blog | Vylsfond',
   description: 'Conseils et actualités sur le financement, les prêts et la gestion financière pour les particuliers et les entreprises.',
 };
 

@@ -57,7 +57,7 @@ export default function SuretyBondTemplate({ data, lang }: SuretyBondTemplatePro
     const handwrittenNoticeText = clauses.handwritten_mention.content
         .replace(/{loan_amount_in_words}/g, data.loan_amount_in_words || '_____________________')
         .replace(/{loan_amount}/g, formatCurrency(data.loan_amount))
-        .replace(/{lender_name}/g, data.lender_name || 'VylsCapital')
+        .replace(/{lender_name}/g, data.lender_name || 'Vylsfond')
         .replace(/{borrower_name}/g, data.borrower_name || '_____________________');
 
 
@@ -65,7 +65,7 @@ export default function SuretyBondTemplate({ data, lang }: SuretyBondTemplatePro
         <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto relative">
             <header className="flex justify-between items-start mb-12 border-b-2 border-primary pb-4">
                  <div>
-                    <h1 className="text-3xl font-bold uppercase text-primary">VylsCapital</h1>
+                    <h1 className="text-3xl font-bold uppercase text-primary">Vylsfond</h1>
                     <p className="text-gray-600 font-semibold">{clauses.department}</p>
                 </div>
             </header>
@@ -85,7 +85,7 @@ export default function SuretyBondTemplate({ data, lang }: SuretyBondTemplatePro
             <section className="mb-8">
                 <h3 className="font-bold text-lg mb-4 border-b-2 border-primary pb-2 text-primary">{clauses.parties.title}</h3>
                 <ul className="space-y-3 text-base">
-                    <li><strong>{clauses.parties.lender_label}</strong> {data.lender_name || 'VylsCapital'}</li>
+                    <li><strong>{clauses.parties.lender_label}</strong> {data.lender_name || 'Vylsfond'}</li>
                     <li><strong>{clauses.parties.borrower_label}</strong> {data.borrower_name || '_____________________'}</li>
                     <li><strong>{clauses.parties.guarantor_label}</strong> {data.guarantor_name || '_____________________'}</li>
                 </ul>
@@ -101,7 +101,7 @@ export default function SuretyBondTemplate({ data, lang }: SuretyBondTemplatePro
                             article.content
                                 .replace(/{guarantor_name}/g, data.guarantor_name || '_____________________')
                                 .replace(/{borrower_name}/g, data.borrower_name || '_____________________')
-                                .replace(/{lender_name}/g, data.lender_name || 'VylsCapital')
+                                .replace(/{lender_name}/g, data.lender_name || 'Vylsfond')
                                 .replace(/{loan_contract_id}/g, data.loan_contract_id || '_____________________')
                                 .replace(/{loan_date}/g, data.loan_date || '___/___/_____')
                                 .replace(/{loan_amount}/g, formatCurrency(data.loan_amount))
@@ -136,12 +136,10 @@ export default function SuretyBondTemplate({ data, lang }: SuretyBondTemplatePro
                            <Image src="https://i.postimg.cc/jSrRkPWD/signature.png" alt="Signature" layout="fill" objectFit="contain" objectPosition="bottom left"/>
                         </div>
                         <p className="mt-2 text-xs font-semibold">David Rousseau</p>
-                        <p className="text-xs">{clauses.lender_title}, VylsCapital</p>
+                        <p className="text-xs">{clauses.lender_title}, Vylsfond</p>
                     </div>
                 </div>
             </footer>
         </div>
     );
 }
-
-    

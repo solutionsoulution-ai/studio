@@ -23,13 +23,13 @@ export async function generateMetadata(
 
   if (!post) {
     return {
-      title: 'Article non trouvé | VylsCapital',
+      title: 'Article non trouvé | Vylsfond',
       description: "L'article que vous cherchez n'existe pas ou a été déplacé.",
     }
   }
 
   return {
-    title: `${post.title} | VylsCapital`,
+    title: `${post.title} | Vylsfond`,
     description: post.description,
   }
 }

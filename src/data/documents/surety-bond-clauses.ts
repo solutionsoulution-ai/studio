@@ -279,5 +279,3 @@ export const suretyBondClauses: Clauses = {
         lender_title: "Direttore Legale",
     }
 }
-
-    

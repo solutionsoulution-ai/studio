@@ -110,5 +110,3 @@ export default function DebtRecognitionForm({ form }: DebtRecognitionFormProps) 
 
 // Attach schema to component for easy access in parent
 DebtRecognitionForm.schema = formSchema;
-
-    

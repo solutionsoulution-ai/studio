@@ -57,12 +57,12 @@ export default function EligibilityCertificateTemplate({ data, lang }: Eligibili
         <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto relative">
             <header className="flex justify-between items-start mb-12 border-b-2 border-primary pb-4">
                  <div>
-                    <h1 className="text-3xl font-bold uppercase text-primary">VylsCapital</h1>
+                    <h1 className="text-3xl font-bold uppercase text-primary">Vylsfond</h1>
                     <p className="text-gray-600 font-semibold">{clauses.department}</p>
                 </div>
                  <div className="text-right text-xs text-gray-500">
                     <p>10 Place de la Bourse, 69002 Lyon, France</p>
-                    <p>contact@vylscapital.com</p>
+                    <p>contact@vylsfond.com</p>
                 </div>
             </header>
 
@@ -109,12 +109,10 @@ export default function EligibilityCertificateTemplate({ data, lang }: Eligibili
                     </div>
                     <div className="border-t border-border pt-2">
                         <p className="font-semibold">{data.analyst_name || "Benoît Leroy"}</p>
-                        <p className="text-xs">{clauses.analyst_title}, VylsCapital</p>
+                        <p className="text-xs">{clauses.analyst_title}, Vylsfond</p>
                     </div>
                 </div>
             </footer>
         </div>
     );
 }
-
-    

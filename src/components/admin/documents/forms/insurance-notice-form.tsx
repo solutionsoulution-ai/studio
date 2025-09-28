@@ -51,5 +51,3 @@ export default function InsuranceNoticeForm({ form }: InsuranceNoticeFormProps) 
 }
 
 InsuranceNoticeForm.schema = formSchema;
-
-    

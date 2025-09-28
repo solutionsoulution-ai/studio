@@ -82,7 +82,7 @@ export default function InsuranceNoticeTemplate({ data, lang }: InsuranceNoticeT
                     <h2 className="font-bold text-base mb-2 text-primary">{clauses.contact.title}</h2>
                     <p>
                         {clauses.contact.description
-                            .replace('{company_name}', data.company_name || "VylsCapital Assurance")
+                            .replace('{company_name}', data.company_name || "Vylsfond Assurance")
                             .replace('{company_address}', data.company_address || "10 Place de la Bourse, 69002 Lyon, France")
                         }
                     </p>
@@ -95,5 +95,3 @@ export default function InsuranceNoticeTemplate({ data, lang }: InsuranceNoticeT
         </div>
     );
 }
-
-    

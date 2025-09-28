@@ -37,7 +37,7 @@ export default function GermanInvoiceTemplate({ data }: GermanInvoiceTemplatePro
         <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto relative">
             <header className="flex justify-between items-start mb-16">
                 <div>
-                    <h1 className="text-3xl font-bold uppercase text-primary">VylsCapital</h1>
+                    <h1 className="text-3xl font-bold uppercase text-primary">Vylsfond</h1>
                     <p className="text-gray-600 font-semibold">Buchhaltung</p>
                     <p className="text-gray-600 text-xs mt-2">10 Place de la Bourse, 69002 Lyon, France</p>
                 </div>
@@ -119,7 +119,7 @@ export default function GermanInvoiceTemplate({ data }: GermanInvoiceTemplatePro
                         </div>
                         <div className="border-t border-border pt-1">
                             <p className="font-semibold text-sm">Julien Moreau</p>
-                            <p className="text-xs">Finanzvorstand, VylsCapital</p>
+                            <p className="text-xs">Finanzvorstand, Vylsfond</p>
                         </div>
                     </div>
                 </div>

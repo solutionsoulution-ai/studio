@@ -11,7 +11,7 @@ export const testimonials: Testimonial[] = [
   {
     name: "Marie Dubois",
     location: "Paris, France",
-    quote: "Le processus de prêt a été incroyablement simple et rapide. VylsCapital a vraiment compris mes besoins d'entrepreneur.",
+    quote: "Le processus de prêt a été incroyablement simple et rapide. Vylsfond a vraiment compris mes besoins d'entrepreneur.",
     avatarUrl: "https://i.pravatar.cc/150?img=1",
     rating: 5,
   },
@@ -25,7 +25,7 @@ export const testimonials: Testimonial[] = [
   {
     name: "Sofia Rossi",
     location: "Rome, Italie",
-    quote: "Grâce à VylsCapital, j'ai consolidé mes dettes avec un rachat de crédit avantageux. Ma situation financière est bien meilleure maintenant.",
+    quote: "Grâce à Vylsfond, j'ai consolidé mes dettes avec un rachat de crédit avantageux. Ma situation financière est bien meilleure maintenant.",
     avatarUrl: "https://i.pravatar.cc/150?img=3",
     rating: 4,
   },
@@ -74,7 +74,7 @@ export const testimonials: Testimonial[] = [
   {
     name: "Nikos Papadopoulos",
     location: "Athènes, Grèce",
-    quote: "Le rachat de mes crédits a été une bouffée d'air frais pour mon budget. Merci VylsCapital !",
+    quote: "Le rachat de mes crédits a été une bouffée d'air frais pour mon budget. Merci Vylsfond !",
     avatarUrl: "https://i.pravatar.cc/150?img=10",
     rating: 4,
   },
@@ -88,7 +88,7 @@ export const testimonials: Testimonial[] = [
   {
     name: "Jan Novak",
     location: "Prague, République Tchèque",
-    quote: "En tant que freelance, obtenir un prêt est souvent difficile. VylsCapital a su analyser ma situation avec justesse.",
+    quote: "En tant que freelance, obtenir un prêt est souvent difficile. Vylsfond a su analyser ma situation avec justesse.",
     avatarUrl: "https://i.pravatar.cc/150?img=12",
     rating: 5,
   },
@@ -165,7 +165,7 @@ export const testimonials: Testimonial[] = [
   {
     name: "Zuzana Varga",
     location: "Bratislava, Slovaquie",
-    quote: "Je suis passée par VylsCapital pour mon premier achat immobilier. Accompagnement parfait du début à la fin.",
+    quote: "Je suis passée par Vylsfond pour mon premier achat immobilier. Accompagnement parfait du début à la fin.",
     avatarUrl: "https://i.pravatar.cc/150?img=23",
     rating: 5,
   },

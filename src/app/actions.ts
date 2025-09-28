@@ -27,7 +27,7 @@ export async function handleContactForm(data: { name: string; email: string; mes
 
     try {
         await transporter.sendMail({
-            from: `VylsCapital <${process.env.SMTP_USER}>`,
+            from: `Vylsfond <${process.env.SMTP_USER}>`,
             to: recipientEmail,
             subject: `Nouveau Message de Contact de ${data.name}`,
             html: `
@@ -90,7 +90,7 @@ export async function handleLoanApplication(formData: FormData) {
         };
         
         await transporter.sendMail({
-            from: `VylsCapital <${process.env.SMTP_USER}>`,
+            from: `Vylsfond <${process.env.SMTP_USER}>`,
             to: recipientEmail,
             subject: `Nouvelle Demande de Prêt - ${clientData.lastName}`,
             html: `

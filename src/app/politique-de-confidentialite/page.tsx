@@ -1,3 +1,4 @@
+
 import SiteHeader from "@/components/site/site-header";
 import SiteFooter from "@/components/site/site-footer";
 
@@ -13,7 +14,7 @@ export default function PolitiqueDeConfidentialitePage() {
           <div>
             <h2>1. Introduction</h2>
             <p>
-              VylsCapital s'engage à protéger la vie privée de ses utilisateurs. Cette politique de confidentialité explique quelles informations nous collectons, comment nous les utilisons, et quels sont vos droits concernant vos données personnelles.
+              Vylsfond s'engage à protéger la vie privée de ses utilisateurs. Cette politique de confidentialité explique quelles informations nous collectons, comment nous les utilisons, et quels sont vos droits concernant vos données personnelles.
             </p>
           </div>
 

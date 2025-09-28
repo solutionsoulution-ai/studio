@@ -309,5 +309,3 @@ export const insuranceNoticeClauses: Clauses = {
         footer: "Questo documento è un riassunto non contrattuale delle garanzie."
     }
 }
-
-    

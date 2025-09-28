@@ -62,12 +62,12 @@ export default function LoanContractTemplate({ data, lang }: LoanContractTemplat
         <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto relative">
             <header className="flex justify-between items-start mb-12 border-b-2 border-primary pb-4">
                  <div>
-                    <h1 className="text-3xl font-bold uppercase text-primary">VylsCapital</h1>
+                    <h1 className="text-3xl font-bold uppercase text-primary">Vylsfond</h1>
                     <p className="text-gray-600 font-semibold">{clauses.department}</p>
                 </div>
                  <div className="text-right text-xs text-gray-500">
                     <p>{data.lender_address || "10 Place de la Bourse, 69002 Lyon, France"}</p>
-                    <p>contact@vylscapital.com</p>
+                    <p>contact@vylsfond.com</p>
                 </div>
             </header>
 
@@ -88,7 +88,7 @@ export default function LoanContractTemplate({ data, lang }: LoanContractTemplat
                 <div className="grid grid-cols-2 gap-8">
                     <div>
                         <h4 className="font-semibold text-gray-700">{clauses.parties.lender}</h4>
-                        <p>{data.lender_name || "VylsCapital"}</p>
+                        <p>{data.lender_name || "Vylsfond"}</p>
                         <p className="whitespace-pre-line">{data.lender_address || "10 Place de la Bourse, 69002 Lyon, France"}</p>
                     </div>
                     <div>
@@ -107,7 +107,7 @@ export default function LoanContractTemplate({ data, lang }: LoanContractTemplat
                         <h3 className="font-bold text-base mb-2 text-primary">{article.title}</h3>
                         <p dangerouslySetInnerHTML={{ __html: 
                             article.content
-                                .replace(/{lender_name}/g, data.lender_name || 'VylsCapital')
+                                .replace(/{lender_name}/g, data.lender_name || 'Vylsfond')
                                 .replace(/{borrower_name}/g, data.borrower_name || '_____________________')
                                 .replace(/{loan_amount}/g, formatCurrency(data.loan_amount))
                                 .replace(/{loan_amount_in_words}/g, data.loan_amount_in_words || '_____________________')
@@ -132,7 +132,7 @@ export default function LoanContractTemplate({ data, lang }: LoanContractTemplat
                             <Image src="https://i.postimg.cc/2jZhBMkV/signature-1.png" alt="Signature" layout="fill" objectFit="contain" objectPosition="bottom left"/>
                         </div>
                         <p className="mt-2 text-xs font-semibold">Alexandre Dubois</p>
-                        <p className="text-xs">{clauses.lender_title}, VylsCapital</p>
+                        <p className="text-xs">{clauses.lender_title}, Vylsfond</p>
                     </div>
                     <div>
                         <p className="font-semibold mb-2">{clauses.parties.borrower} :</p>
@@ -145,5 +145,3 @@ export default function LoanContractTemplate({ data, lang }: LoanContractTemplat
         </div>
     );
 }
-
-    

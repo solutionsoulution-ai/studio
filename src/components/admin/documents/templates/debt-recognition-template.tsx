@@ -57,7 +57,7 @@ export default function DebtRecognitionTemplate({ data, lang }: DebtRecognitionT
         <div id="pdf-preview" className="bg-white text-black text-sm font-serif shadow-2xl p-16 w-[210mm] min-h-[297mm] mx-auto relative">
             <header className="flex justify-between items-start mb-12 border-b-2 border-primary pb-4">
                  <div>
-                    <h1 className="text-3xl font-bold uppercase text-primary">VylsCapital</h1>
+                    <h1 className="text-3xl font-bold uppercase text-primary">Vylsfond</h1>
                     <p className="text-gray-600 font-semibold">{clauses.department}</p>
                 </div>
             </header>
@@ -84,7 +84,7 @@ export default function DebtRecognitionTemplate({ data, lang }: DebtRecognitionT
                 <div className="border-y border-border py-6 my-6">
                     <p className="text-base">
                         {clauses.acknowledgment
-                            .replace('{lender_name}', data.lender_name || 'VylsCapital')
+                            .replace('{lender_name}', data.lender_name || 'Vylsfond')
                             .replace('{loan_amount}', formatCurrency(data.loan_amount))
                             .replace('{loan_amount_in_words}', data.loan_amount_in_words || '_____________________')
                             .replace('{loan_date}', data.loan_date || '___/___/_____')
@@ -121,12 +121,10 @@ export default function DebtRecognitionTemplate({ data, lang }: DebtRecognitionT
                              <Image src="https://i.postimg.cc/jSrRkPWD/signature.png" alt="Signature" layout="fill" objectFit="contain" objectPosition="bottom left"/>
                         </div>
                          <p className="mt-2 text-xs font-semibold">David Rousseau</p>
-                        <p className="text-xs">{clauses.lender_title}, VylsCapital</p>
+                        <p className="text-xs">{clauses.lender_title}, Vylsfond</p>
                     </div>
                 </div>
             </footer>
         </div>
     );
 }
-
-    

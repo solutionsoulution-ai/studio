@@ -107,5 +107,3 @@ export default function InsuranceCertificateForm({ form }: InsuranceCertificateF
 }
 
 InsuranceCertificateForm.schema = formSchema;
-
-    
