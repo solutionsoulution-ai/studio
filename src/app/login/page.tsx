@@ -45,7 +45,6 @@ export default function LoginPage() {
 
   async function onSubmit(values: FormValues) {
     setIsLoading(true);
-    // Clear any previous session on form submission, just in case
     if (typeof window !== 'undefined') {
         sessionStorage.removeItem('vyls_session_id');
         sessionStorage.removeItem('vyls_user_role');
@@ -77,14 +76,18 @@ export default function LoginPage() {
         }
 
       } else {
-        throw new Error(result.error || "Email ou mot de passe incorrect.");
+        toast({
+            title: "Erreur de connexion",
+            description: result.error || "Email ou mot de passe incorrect.",
+            variant: "destructive",
+        });
       }
 
     } catch (error: any) {
       console.error("Login error:", error);
       toast({
         title: "Erreur de connexion",
-        description: error.message || "Un problème est survenu.",
+        description: "Un problème inattendu est survenu.",
         variant: "destructive",
       });
     } finally {
