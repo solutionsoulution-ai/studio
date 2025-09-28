@@ -57,10 +57,12 @@
 -   Un titre, une description.
 -   Un **formulaire de contact** (Nom, E-mail, Message).
 -   Les coordonnées de l'entreprise (email, téléphone, adresse).
+-   Après soumission réussie du formulaire, l'utilisateur doit être redirigé vers une **page de remerciement** confirmant l'envoi.
 
 ### Page Demande de Prêt (`/demande-de-pret`)
 
 -   Une page dédiée avec un **formulaire de demande de financement complet** et détaillé. Ce formulaire doit permettre aux utilisateurs de soumettre toutes les informations nécessaires à leur demande de prêt.
+-   Après soumission réussie, l'utilisateur doit être redirigé vers une **page de remerciement** confirmant l'envoi et expliquant les prochaines étapes.
 
 ### Pages Légales (ex: `/politique-de-confidentialite`)
 
