@@ -6,8 +6,3 @@ runConfig:
   timeoutSeconds: 120
   environment:
     ADMIN_PASSWORD: "XtZ_7@pQn!fS8#mV"
-    SMTP_HOST: "mail.spacemail.com"
-    SMTP_PORT: "465"
-    SMTP_USER: "contact@vylsfond.com"
-    SMTP_PASS: "Made2020@"
-    NEXT_PUBLIC_SMTP_RECIPIENT_EMAIL: "contact@vylsfond.com"
