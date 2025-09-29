@@ -27,21 +27,6 @@ get_header();
             </div>
         </div>
     </div>
-
-    <!-- CTA Section -->
-    <section class="bg-primary text-primary-foreground mt-16">
-        <div class="container mx-auto text-center py-16 px-4">
-            <h2 class="text-3xl font-bold">Des questions sur une autre service ?</h2>
-            <p class="mt-2 text-lg max-w-xl mx-auto opacity-90">
-                Explorez nos autres solutions de financement ou contactez un conseiller.
-            </p>
-            <div class="mt-8">
-                <a href="/#services" class="bg-secondary text-secondary-foreground hover:bg-secondary/80 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-11 rounded-md px-8">
-                    Voir nos services
-                </a>
-            </div>
-        </div>
-    </section>
 </main>
 
 <?php

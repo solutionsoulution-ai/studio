@@ -32,13 +32,7 @@ Cette commande va créer un dossier `build/` qui contient le fichier `main.css` 
 
 ---
 
-## Étape 4 : Gérer le JavaScript et les Images
-
-Aucune action n'est requise. Les scripts `main.js` et `calculator.js` sont déjà dans le dossier `assets/js/` et les images sont chargées depuis des URLs externes. Le fichier `functions.php` est déjà configuré pour tout charger correctement.
-
----
-
-## Étape 5 : Créer l'archive .ZIP (La bonne méthode)
+## Étape 4 : Créer l'archive .ZIP (La bonne méthode)
 
 C'est l'étape qui cause l'erreur "feuille de style manquante". Suivez-la attentivement.
 
@@ -54,7 +48,7 @@ C'est l'étape qui cause l'erreur "feuille de style manquante". Suivez-la attent
 
 ---
 
-## Étape 6 : Configuration du contenu dans WordPress (Étape Finale)
+## Étape 5 : Configuration du contenu dans WordPress (Étape Finale)
 
 Une fois le thème activé, votre site peut afficher des erreurs "Page non trouvée". C'est normal. Vous devez maintenant créer les pages dans WordPress.
 

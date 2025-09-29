@@ -30,8 +30,8 @@
                 <ul class="space-y-2">
                     <li><a href="/a-propos" class="text-sm text-muted-foreground hover:text-primary">À Propos</a></li>
                     <li><a href="/blog" class="text-sm text-muted-foreground hover:text-primary">Blog</a></li>
-                    <li><a href="/#calculateur" class="text-sm text-muted-foreground hover:text-primary">Calculateur</a></li>
-                    <li><a href="/#faq" class="text-sm text-muted-foreground hover:text-primary">FAQ</a></li>
+                    <li><a href="#calculateur" class="text-sm text-muted-foreground hover:text-primary">Calculateur</a></li>
+                    <li><a href="#faq" class="text-sm text-muted-foreground hover:text-primary">FAQ</a></li>
                     <li><a href="/contact" class="text-sm text-muted-foreground hover:text-primary">Contact</a></li>
                 </ul>
             </div>

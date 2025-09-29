@@ -72,7 +72,18 @@ get_header();
 
     <!-- Section: Calculateur -->
     <section id="calculateur" class="w-full py-16 md:py-24 bg-muted/30">
-        <?php get_template_part('template-parts/calculator'); ?>
+        <?php 
+        $calculator_args = [
+            'title' => 'Calculateur de Prêt',
+            'description' => 'Simulez vos mensualités pour n\'importe quel projet.',
+            'default_amount' => 50000,
+            'max_amount' => 500000,
+            'default_term' => 120,
+            'max_term' => 360,
+        ];
+        set_query_var('calculator_args', $calculator_args);
+        get_template_part('template-parts/calculator'); 
+        ?>
     </section>
 
     <!-- Section: Pourquoi Nous Choisir -->
@@ -146,9 +157,9 @@ get_header();
                 </div>
                 <p class="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">Suivez nos conseils d'experts pour prendre les meilleures décisions financières.</p>
             </div>
-            <!-- NOTE: Ce contenu est dynamique. Il faudra le remplacer par une boucle WordPress (WP_Query) pour afficher les vrais articles du blog. -->
+            <!-- Ce contenu est dynamique. Il faudra le remplacer par une boucle WordPress (WP_Query) pour afficher les vrais articles du blog. -->
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Static example of blog posts -->
+                <!-- Statique pour l'export, sera remplacé par la boucle WP -->
             </div>
             <div class="mt-12 text-center"><a class="border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-10 px-4 py-2" href="/blog">Voir tous les articles</a></div>
          </div>
@@ -169,7 +180,13 @@ get_header();
                 </p>
             </div>
             <div class="mx-auto mt-16 grid grid-cols-2 items-center gap-x-8 gap-y-10 sm:grid-cols-3 lg:mx-0 lg:grid-cols-6">
-                <!-- Static partners logos/names -->
+                <!-- Noms statiques des partenaires -->
+                <p class="col-span-1 text-center text-xl font-semibold text-muted-foreground/60">Global Finance</p>
+                <p class="col-span-1 text-center text-xl font-semibold text-muted-foreground/60">Innovate Capital</p>
+                <p class="col-span-1 text-center text-xl font-semibold text-muted-foreground/60">Secure Funds</p>
+                <p class="col-span-1 text-center text-xl font-semibold text-muted-foreground/60">Equity Partners</p>
+                <p class="col-span-1 text-center text-xl font-semibold text-muted-foreground/60">VentureNet</p>
+                <p class="col-span-1 text-center text-xl font-semibold text-muted-foreground/60">Trust Capital</p>
             </div>
         </div>
     </section>
