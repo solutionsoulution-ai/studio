@@ -41,7 +41,7 @@ get_header();
         </div>
     </section>
 
-    <section class="w-full py-16 md:py-24 bg-background">
+    <section class="w-full py-16 md:py-24">
         <div class="container mx-auto">
             <div class="text-center mb-10">
                 <div class="flex items-center gap-3 justify-center">
@@ -64,7 +64,7 @@ get_header();
         </div>
     </section>
 
-    <section class="w-full py-16 md:py-24 bg-background">
+    <section class="w-full py-16 md:py-24">
         <?php 
         $calculator_args = [
             'title' => 'Estimez vos mensualités auto',

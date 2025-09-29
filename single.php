@@ -14,7 +14,7 @@ get_header();
     <?php while (have_posts()) : the_post(); ?>
 
         <!-- Hero Section -->
-        <section class="relative h-80 md:h-96 bg-muted/30">
+        <section class="relative h-80 md:h-96">
             <?php if (has_post_thumbnail()) : ?>
                 <div class="absolute inset-0">
                     <?php the_post_thumbnail('full', ['class' => 'object-cover w-full h-full']); ?>
@@ -77,7 +77,7 @@ get_header();
 
         <!-- Comments Section -->
         <?php if (comments_open() || get_comments_number()) : ?>
-            <section class="bg-muted/30 py-16 md:py-24">
+            <section class="py-16 md:py-24">
                 <div class="container mx-auto max-w-3xl px-4">
                     <?php comments_template(); ?>
                 </div>

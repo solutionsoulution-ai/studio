@@ -13,7 +13,7 @@ get_header();
 <main class="flex-1">
     
     <!-- Section: Héros Statique -->
-    <section class="w-full bg-background">
+    <section class="w-full">
         <div class="container mx-auto px-4">
             <div class="grid md:grid-cols-2 items-center gap-8 py-12 md:py-24 min-h-[70vh] md:min-h-[60vh]">
                 <div class="flex flex-col items-start text-center md:text-left">
@@ -71,7 +71,7 @@ get_header();
     </section>
 
     <!-- Section: Calculateur -->
-    <section id="calculateur" class="w-full py-16 md:py-24 bg-background">
+    <section id="calculateur" class="w-full py-16 md:py-24">
         <?php 
         $calculator_args = [
             'title' => 'Calculateur de Prêt',
@@ -144,7 +144,7 @@ get_header();
     </section>
 
     <!-- Section: Derniers Articles -->
-    <section class="bg-background py-16 md:py-24">
+    <section class="py-16 md:py-24">
          <div class="container mx-auto">
             <div class="text-center mb-10">
                 <div class="flex items-center gap-3 justify-center">
@@ -162,7 +162,7 @@ get_header();
     </section>
 
     <!-- Section: Partenaires -->
-    <section class="bg-background py-16 md:py-24 sm:py-32">
+    <section class="py-16 md:py-24 sm:py-32">
         <div class="mx-auto max-w-7xl px-6 lg:px-8">
             <div class="mx-auto max-w-2xl lg:max-w-none text-center">
                 <div class="flex items-center gap-3 justify-center">
@@ -188,7 +188,7 @@ get_header();
     </section>
 
     <!-- Section: Témoignages -->
-    <section class="w-full py-16 md:py-24 bg-background">
+    <section class="w-full py-16 md:py-24">
         <div class="container mx-auto">
              <div class="text-center mb-10">
                 <div class="flex items-center gap-3 justify-center">
