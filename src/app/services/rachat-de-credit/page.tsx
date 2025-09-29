@@ -1,3 +1,4 @@
+
 "use client";
 
 import SiteHeader from "@/components/site/site-header";
@@ -73,7 +74,7 @@ export default function RachatCreditPage() {
           <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-center">
             <div className="order-2 md:order-1">
               <h1 className="text-4xl md:text-5xl font-bold font-headline mb-4 flex items-center gap-3">
-                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fe1c04" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16c-1.2 1-2 2.5-2 4.5 0 2.8 2.2 5 5 5 2.5 0 4-1.2 5-3-1.2-1-2.5-2-4.5-2-2.8 0-5 2.2-5 5M10 5c-1.2-1-2.5-2-4.5-2-2.8 0-5 2.2-5 5 0 1.2 1 2.5 2 4.5C3.8 13.5 5 14.8 3 16c1-1.2 2-2.5 2-4.5S3.8 6.5 5 5.5c1.2-1 2.5-2 4.5-2 2.8 0 5 2.2 5 5"/><path d="M14 21c1.2-1 2.5-2 4.5-2 2.8 0 5-2.2 5-5s-2.2-5-5-5c-1.2 0-2.5 1-3.5 2-1 1-1.5 2.2-1.5 3.5 0 2.8 2.2 5 5 5Z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fe1c04" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 16c-1.2 1-2 2.5-2 4.5 0 2.8 2.2 5 5 5 2.5 0 4-1.2 5-3-1.2-1-2.5-2-4.5-2-2.8 0-5 2.2-5 5M10 5c-1.2-1-2.5-2-4.5-2-2.8 0-5 2.2-5 5 0 1.2 1 2.5 2 4.5C3.8 13.5 5 14.8 3 16c1-1.2 2-2.5 2-4.5S3.8 6.5 5 5.5c1.2-1 2.5-2 4.5-2 2.8 0 5 2.2 5 5"/><path d="M14 21c1.2-1 2.5-2 4.5-2 2.8 0 5-2.2 5-5s-2.2-5-5-5c-1.2 0-2.5 1-3.5 2-1 1-1.5 2.2-1.5 3.5 0 2.8 2.2 5 5 5Z"/></svg>
                 Rachat de Crédit
               </h1>
               <p className="text-lg text-muted-foreground mb-6">
