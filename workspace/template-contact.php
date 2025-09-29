@@ -30,24 +30,20 @@ get_header();
                 
                 Ce formulaire est une maquette. Pour qu'il envoie des e-mails, suivez ces étapes :
 
-                1. INSTALLEZ WPFORMS :
+                1. INSTALLEZ UN PLUGIN DE FORMULAIRE (ex: WPForms) :
                    - Dans votre admin WordPress, allez à "Extensions" > "Ajouter".
-                   - Recherchez, installez et activez le plugin "WPForms".
+                   - Recherchez, installez et activez un plugin comme "WPForms".
 
                 2. CRÉEZ LE FORMULAIRE :
-                   - Allez dans le menu "WPForms", créez un nouveau formulaire.
-                   - Recréez les champs ci-dessous :
-                     - Nom Complet -> Champ "Nom" (utilisez le format "Simple")
-                     - Adresse E-mail -> Champ "E-mail"
-                     - Votre Message -> Champ "Paragraphe de texte"
-                   - Dans "Réglages" > "Notifications", mettez VOTRE adresse e-mail.
-                   - Dans "Réglages" > "Confirmation", choisissez "Rediriger vers une URL" et mettez le lien de votre page "Merci Contact".
+                   - Allez dans le menu du plugin, créez un nouveau formulaire.
+                   - Recréez les champs (Nom, E-mail, Message).
+                   - Dans les réglages du formulaire, configurez les notifications pour recevoir les messages sur VOTRE adresse e-mail.
                    - Enregistrez le formulaire.
 
                 3. REMPLACEZ LE CODE CI-DESSOUS PAR LE SHORTCODE :
-                   - WPForms vous donnera un "shortcode" (ex: [wpforms id="123"]). Copiez-le.
-                   - Supprimez le bloc <div class="rounded-lg..."> (entre les commentaires DEBUT et FIN).
-                   - À la place, collez votre shortcode, comme ceci :
+                   - Le plugin vous donnera un "shortcode" (ex: [wpforms id="123"]). Copiez-le.
+                   - Supprimez tout le bloc <div class="rounded-lg..."> ci-dessous (entre les commentaires DEBUT et FIN).
+                   - À la place, collez votre shortcode comme ceci :
                      <?php echo do_shortcode('[wpforms id="123"]'); ?>
                 
                 ====================================================================================================
@@ -56,7 +52,7 @@ get_header();
                 <!-- ▼▼▼ DÉBUT DU FORMULAIRE À REMPLACER PAR VOTRE SHORTCODE ▼▼▼ -->
                 <div class="rounded-lg border bg-card text-card-foreground shadow-lg">
                     <div class="p-6 md:p-8">
-                        <form class="space-y-6">
+                        <form action="/merci-contact" method="post" class="space-y-6">
                             <div class="grid sm:grid-cols-2 gap-4">
                                 <div><label class="text-sm font-medium leading-none mb-2 block">Nom Complet</label><input type="text" placeholder="Jean Dupont" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
                                 <div><label class="text-sm font-medium leading-none mb-2 block">Adresse E-mail</label><input type="email" placeholder="vous@exemple.com" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
@@ -101,22 +97,6 @@ get_header();
              </div>
           </div>
         </div>
-
-        <!-- CTA Section -->
-        <section class="bg-primary text-primary-foreground mt-24">
-            <div class="container mx-auto text-center py-16 px-4">
-                <h2 class="text-3xl font-bold">Prêt à démarrer votre projet ?</h2>
-                <p class="mt-2 text-lg max-w-xl mx-auto opacity-90">
-                    Notre équipe est là pour vous aider à trouver la meilleure solution de financement.
-                </p>
-                <div class="mt-8">
-                    <a href="/demande-de-pret" class="bg-secondary text-secondary-foreground hover:bg-secondary/80 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-11 rounded-md px-8">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-                        Faire une demande
-                    </a>
-                </div>
-            </div>
-        </section>
     </div>
 </main>
 

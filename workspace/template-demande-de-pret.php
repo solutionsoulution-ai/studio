@@ -17,26 +17,37 @@ get_header();
                     Remplissez le formulaire pour soumettre votre demande. C'est simple, rapide et sécurisé.
                 </p>
             </div>
+            
+            <!--
+            ====================================================================================================
+            INSTRUCTIONS POUR LE FORMULAIRE DE DEMANDE
+            ====================================================================================================
+            
+            Ce formulaire est une maquette complexe. La meilleure façon de le gérer dans WordPress est
+            d'utiliser un plugin de formulaire avancé comme WPForms (la version Pro peut être nécessaire
+            pour les champs de téléversement de fichiers et la logique complexe).
 
-            <div class="mb-12">
-                <?php 
-                $calculator_args = [
-                    'title' => 'Estimez vos mensualités',
-                    'description' => "Ajustez les curseurs pour voir l'impact sur vos paiements.",
-                    'default_amount' => 50000,
-                    'max_amount' => 500000,
-                    'default_term' => 120,
-                    'max_term' => 360,
-                ];
-                set_query_var('calculator_args', $calculator_args);
-                get_template_part('template-parts/calculator'); 
-                ?>
-            </div>
+            1. INSTALLEZ WPFORMS :
+               - Installez et activez le plugin depuis le menu "Extensions" de WordPress.
 
-             <!-- NOTE: This is a static version. For WordPress, use a form plugin like WPForms or Contact Form 7 -->
-             <!-- and replace the <form> content with the plugin's shortcode. -->
-             <!-- Example: <?php echo do_shortcode('[wpforms id="123"]'); ?> -->
-            <form class="space-y-8">
+            2. CRÉEZ LE FORMULAIRE DE DEMANDE :
+               - Dans WPForms, créez un nouveau formulaire.
+               - Ajoutez tous les champs nécessaires : Type de prêt, Montant, Durée, Informations personnelles,
+                 Situation financière, et surtout les champs de "Téléversement de fichier".
+               - Configurez les notifications pour recevoir les demandes complètes par e-mail.
+               - Dans "Réglages" > "Confirmation", redirigez vers votre page "Merci pour la demande".
+
+            3. REMPLACEZ LE CODE CI-DESSOUS PAR LE SHORTCODE :
+               - Copiez le shortcode généré par WPForms.
+               - Supprimez toute la balise <form> ci-dessous (entre les commentaires DEBUT et FIN).
+               - Collez le shortcode à la place :
+                 <?php echo do_shortcode('[wpforms id="456"]'); ?>
+            
+            ====================================================================================================
+            -->
+
+            <!-- ▼▼▼ DÉBUT DU FORMULAIRE À REMPLACER PAR VOTRE SHORTCODE ▼▼▼ -->
+            <form class="space-y-8" action="/merci-demande" method="post">
                 <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
                     <div class="p-6"><h3 class="flex items-center gap-2 text-2xl font-semibold">1. Informations sur le Prêt</h3><p class="text-sm text-muted-foreground">Décrivez le financement dont vous avez besoin.</p></div>
                     <div class="p-6 pt-0 space-y-4">
@@ -122,6 +133,7 @@ get_header();
                   Envoyer ma demande
                 </button>
             </form>
+            <!-- ▲▲▲ FIN DU FORMULAIRE À REMPLACER PAR VOTRE SHORTCODE ▲▲▲ -->
         </div>
     </div>
 </main>
