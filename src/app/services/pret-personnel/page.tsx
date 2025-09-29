@@ -6,7 +6,6 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { CheckCircle, FilePen, Search, HandCoins, Plane, Wrench, GraduationCap } from "lucide-react";
-import InterestRateCalculator from "@/components/site/interest-rate-calculator";
 import FaqSection from "@/components/site/faq-section";
 import HowItWorksSection, { HowItWorksStep } from "@/components/site/how-it-works-section";
 import WhySubscribeSection, { type Feature } from "@/components/site/why-subscribe-section";
@@ -74,7 +73,8 @@ export default function PretPersonnelPage() {
         <section className="container mx-auto py-16 md:py-24">
           <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-center">
             <div className="order-2 md:order-1">
-              <h1 className="text-4xl md:text-5xl font-bold font-headline mb-4">
+              <h1 className="text-4xl md:text-5xl font-bold font-headline mb-4 flex items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fe1c04" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 Prêt Personnel
               </h1>
               <p className="text-lg text-muted-foreground mb-6">
@@ -115,14 +115,7 @@ export default function PretPersonnelPage() {
         <HowItWorksSection steps={howItWorksSteps} />
 
         <section className="w-full py-16 md:py-24 bg-muted/30">
-          <InterestRateCalculator 
-            title="Simulez votre prêt personnel"
-            description="Estimez vos remboursements mensuels pour vos projets personnels."
-            defaultLoanAmount={10000} 
-            defaultTerm={48} 
-            maxAmount={75000}
-            maxTerm={120}
-          />
+          {/* Calculateur retiré pour la compilation Next.js */}
         </section>
 
         <section className="container mx-auto py-16 md:py-24">

@@ -6,7 +6,6 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { CheckCircle, FilePen, Search, HandCoins, Wallet, TrendingDown, Lightbulb } from "lucide-react";
-import InterestRateCalculator from "@/components/site/interest-rate-calculator";
 import FaqSection from "@/components/site/faq-section";
 import HowItWorksSection, { HowItWorksStep } from "@/components/site/how-it-works-section";
 import WhySubscribeSection, { type Feature } from "@/components/site/why-subscribe-section";
@@ -73,7 +72,8 @@ export default function RachatCreditPage() {
         <section className="container mx-auto py-16 md:py-24">
           <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-center">
             <div className="order-2 md:order-1">
-              <h1 className="text-4xl md:text-5xl font-bold font-headline mb-4">
+              <h1 className="text-4xl md:text-5xl font-bold font-headline mb-4 flex items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fe1c04" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16c-1.2 1-2 2.5-2 4.5 0 2.8 2.2 5 5 5 2.5 0 4-1.2 5-3-1.2-1-2.5-2-4.5-2-2.8 0-5 2.2-5 5M10 5c-1.2-1-2.5-2-4.5-2-2.8 0-5 2.2-5 5 0 1.2 1 2.5 2 4.5C3.8 13.5 5 14.8 3 16c1-1.2 2-2.5 2-4.5S3.8 6.5 5 5.5c1.2-1 2.5-2 4.5-2 2.8 0 5 2.2 5 5"/><path d="M14 21c1.2-1 2.5-2 4.5-2 2.8 0 5-2.2 5-5s-2.2-5-5-5c-1.2 0-2.5 1-3.5 2-1 1-1.5 2.2-1.5 3.5 0 2.8 2.2 5 5 5Z"/></svg>
                 Rachat de Crédit
               </h1>
               <p className="text-lg text-muted-foreground mb-6">
@@ -114,14 +114,7 @@ export default function RachatCreditPage() {
         <HowItWorksSection steps={howItWorksSteps} />
 
         <section className="w-full py-16 md:py-24 bg-muted/30">
-          <InterestRateCalculator 
-            title="Simulez votre rachat de crédit"
-            description="Voyez comment le regroupement de vos prêts peut affecter vos paiements mensuels."
-            defaultLoanAmount={40000} 
-            defaultTerm={120} 
-            maxAmount={250000}
-            maxTerm={180}
-          />
+          {/* Calculateur retiré pour la compilation Next.js */}
         </section>
 
         <section className="container mx-auto py-16 md:py-24">

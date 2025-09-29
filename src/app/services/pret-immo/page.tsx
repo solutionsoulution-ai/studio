@@ -6,7 +6,6 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { CheckCircle, FilePen, Search, HandCoins, Home, Brush, Building } from "lucide-react";
-import InterestRateCalculator from "@/components/site/interest-rate-calculator";
 import FaqSection from "@/components/site/faq-section";
 import HowItWorksSection, { HowItWorksStep } from "@/components/site/how-it-works-section";
 import WhySubscribeSection, { type Feature } from "@/components/site/why-subscribe-section";
@@ -72,7 +71,8 @@ export default function PretImmobilierPage() {
         <section className="container mx-auto py-16 md:py-24">
           <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-center">
             <div className="order-2 md:order-1">
-              <h1 className="text-4xl md:text-5xl font-bold font-headline mb-4">
+              <h1 className="text-4xl md:text-5xl font-bold font-headline mb-4 flex items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fe1c04" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                 Prêt Immobilier
               </h1>
               <p className="text-lg text-muted-foreground mb-6">
@@ -113,14 +113,7 @@ export default function PretImmobilierPage() {
         <HowItWorksSection steps={howItWorksSteps} />
 
         <section className="w-full py-16 md:py-24 bg-muted/30">
-          <InterestRateCalculator 
-            title="Calculez votre prêt immobilier"
-            description="Simulez les mensualités de votre futur achat immobilier en ajustant le montant et la durée."
-            defaultLoanAmount={200000} 
-            defaultTerm={300} 
-            maxAmount={1500000}
-            maxTerm={360}
-          />
+          {/* Calculateur retiré pour la compilation Next.js */}
         </section>
 
         <section className="container mx-auto py-16 md:py-24">
