@@ -72,7 +72,7 @@ get_header();
 
     <!-- Section: Calculateur -->
     <section id="calculateur" class="w-full py-16 md:py-24 bg-muted/30">
-        <?php include('template-parts/calculator.php'); ?>
+        <?php get_template_part('template-parts/calculator'); ?>
     </section>
 
     <!-- Section: Pourquoi Nous Choisir -->

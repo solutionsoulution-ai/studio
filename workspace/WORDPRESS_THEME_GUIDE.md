@@ -11,7 +11,7 @@ Ce guide contient les blocs de code exacts et les étapes à suivre pour créer 
 
 ---
 
-## Étape 2 : Générer les fichiers statiques (CSS & JS)
+## Étape 2 : Générer le fichier CSS
 
 Ouvrez votre terminal à la racine de **ce projet Next.js** (pas votre dossier de thème) et exécutez la commande suivante :
 
@@ -19,7 +19,7 @@ Ouvrez votre terminal à la racine de **ce projet Next.js** (pas votre dossier d
 npm run build
 ```
 
-Cette commande va créer un dossier `build/` qui contient les fichiers `main.css` et `calculator.js` dont nous avons besoin.
+Cette commande va créer un dossier `build/` qui contient le fichier `main.css` dont nous avons besoin.
 
 ---
 
@@ -32,22 +32,13 @@ Cette commande va créer un dossier `build/` qui contient les fichiers `main.css
 
 ---
 
-## Étape 4 : Gérer le JavaScript
+## Étape 4 : Gérer le JavaScript et les Images
 
-Le fichier `functions.php` est déjà configuré pour charger `main.js` (déjà présent dans `assets/js`) et `calculator.js` (que vous allez copier).
-
-1.  **Copier le script du calculateur :**
-    *   Le fichier `calculator.js` n'est pas généré par `npm run build`, il est déjà dans `workspace/assets/js/`. Vous n'avez rien de plus à faire, car vous avez déjà copié tout le dossier `workspace/`.
+Aucune action n'est requise. Les scripts `main.js` et `calculator.js` sont déjà dans le dossier `assets/js/` et les images sont chargées depuis des URLs externes. Le fichier `functions.php` est déjà configuré pour tout charger correctement.
 
 ---
 
-## Étape 5 : Gérer les Images
-
-Cette étape n'est plus nécessaire car toutes les images sont chargées via des liens URL directs. Vous n'avez pas besoin de créer de dossier `assets/images`.
-
----
-
-## Étape 6 : Créer l'archive .ZIP (La bonne méthode)
+## Étape 5 : Créer l'archive .ZIP (La bonne méthode)
 
 C'est l'étape qui cause l'erreur "feuille de style manquante". Suivez-la attentivement.
 
@@ -63,7 +54,7 @@ C'est l'étape qui cause l'erreur "feuille de style manquante". Suivez-la attent
 
 ---
 
-## Étape 7 : Configuration du contenu dans WordPress (Étape Finale)
+## Étape 6 : Configuration du contenu dans WordPress (Étape Finale)
 
 Une fois le thème activé, votre site peut afficher des erreurs "Page non trouvée". C'est normal. Vous devez maintenant créer les pages dans WordPress.
 
@@ -114,14 +105,3 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
     *   Pour que les formulaires de contact et de demande de prêt fonctionnent, installez un plugin comme **WPForms** ou **Contact Form 7**.
     *   Créez vos formulaires dans le plugin.
     *   Modifiez les fichiers `template-contact.php` et `template-demande-de-pret.php` en remplaçant les formulaires HTML statiques par le shortcode du plugin (ex: `<?php echo do_shortcode('[wpforms id="123"]'); ?>`). Les instructions sont dans les fichiers.
-
----
-
-### Nettoyage du Thème (Optionnel mais recommandé)
-
-Votre thème contient des fichiers de base dont nous n'avons plus besoin. Vous pouvez les supprimer pour garder votre thème propre :
-*   `404.php` (gardez-le, il est utile)
-*   `archive.php` (gardez-le)
-*   `comments.php` (gardez-le)
-*   `search.php` (gardez-le)
-*   `screenshot.png` (à garder ou à remplacer par votre propre capture d'écran)

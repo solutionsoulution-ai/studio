@@ -6,7 +6,6 @@ import WhyChooseUsSection from "@/components/site/why-choose-us-section";
 import TestimonialsSection from "@/components/site/testimonials-section";
 import FaqSection from "@/components/site/faq-section";
 import SiteFooter from "@/components/site/site-footer";
-import InterestRateCalculator from "@/components/site/interest-rate-calculator";
 import PartnersSection from "@/components/site/partners-section";
 import BlogSummarySection from "@/components/site/blog-summary-section";
 import TimelineSummary from "@/components/site/timeline-summary";
@@ -20,7 +19,7 @@ export default function Home() {
         <HomeCarousel />
         <ServicesSection />
         <section id="calculateur" className="w-full py-16 md:py-24 bg-muted/30">
-            <InterestRateCalculator />
+            {/* Le calculateur est maintenant injecté via PHP */}
         </section>
         <WhyChooseUsSection />
         <TimelineSummary />

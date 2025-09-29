@@ -114,16 +114,14 @@ function vylsfond_enqueue_assets() {
         true
     );
 
-    // Conditionally load the calculator script
-    if ( is_front_page() || is_page_template( 'template-demande-de-pret.php' ) || is_page_template( 'template-pret-auto.php' ) || is_page_template( 'template-pret-immo.php' ) || is_page_template( 'template-pret-personnel.php' ) || is_page_template( 'template-rachat-de-credit.php' ) || is_page_template( 'template-pret-entreprise.php' ) ) {
-      wp_enqueue_script(
-          'vylsfond-calculator-js',
-          get_template_directory_uri() . '/assets/js/calculator.js',
-          array(),
-          _S_VERSION,
-          true
-      );
-    }
+    // Always load calculator script
+    wp_enqueue_script(
+        'vylsfond-calculator-js',
+        get_template_directory_uri() . '/assets/js/calculator.js',
+        array(),
+        _S_VERSION,
+        true
+    );
 
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
