@@ -1,8 +1,6 @@
 <?php
 /**
- * The template for displaying the front page
- *
- * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
+ * Template Name: Page - Accueil
  *
  * @package vyls
  */
@@ -13,7 +11,7 @@ get_header();
 <main class="flex-1">
     
     <!-- Section: Héros Statique -->
-    <section class="w-full bg-background">
+    <section class="w-full">
         <div class="container mx-auto px-4">
             <div class="grid md:grid-cols-2 items-center gap-8 py-12 md:py-24 min-h-[70vh] md:min-h-[60vh]">
                 <div class="flex flex-col items-start text-center md:text-left">
@@ -71,15 +69,11 @@ get_header();
     </section>
 
     <!-- Section: Calculateur -->
-    <section id="calculateur" class="w-full py-16 md:py-24 bg-muted/30">
+    <section id="calculateur" class="w-full py-16 md:py-24">
         <?php 
         $calculator_args = [
             'title' => 'Calculateur de Prêt',
             'description' => 'Simulez vos mensualités pour n\'importe quel projet.',
-            'default_amount' => 50000,
-            'max_amount' => 500000,
-            'default_term' => 120,
-            'max_term' => 360,
         ];
         set_query_var('calculator_args', $calculator_args);
         get_template_part('template-parts/calculator'); 
@@ -148,7 +142,7 @@ get_header();
     </section>
 
     <!-- Section: Derniers Articles -->
-    <section class="bg-muted/30 py-16 md:py-24">
+    <section class="py-16 md:py-24">
          <div class="container mx-auto">
             <div class="text-center mb-10">
                 <div class="flex items-center gap-3 justify-center">
@@ -157,7 +151,7 @@ get_header();
                 </div>
                 <p class="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">Suivez nos conseils d'experts pour prendre les meilleures décisions financières.</p>
             </div>
-            <!-- Ce contenu est dynamique. Il faudra le remplacer par une boucle WordPress (WP_Query) pour afficher les vrais articles du blog. -->
+            <!-- NOTE: Ce contenu est dynamique. Il faudra le remplacer par une boucle WordPress (WP_Query) pour afficher les vrais articles du blog. -->
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Statique pour l'export, sera remplacé par la boucle WP -->
             </div>
@@ -166,7 +160,7 @@ get_header();
     </section>
 
     <!-- Section: Partenaires -->
-    <section class="bg-background py-16 md:py-24 sm:py-32">
+    <section class="py-16 md:py-24 sm:py-32">
         <div class="mx-auto max-w-7xl px-6 lg:px-8">
             <div class="mx-auto max-w-2xl lg:max-w-none text-center">
                 <div class="flex items-center gap-3 justify-center">
@@ -192,7 +186,7 @@ get_header();
     </section>
 
     <!-- Section: Témoignages -->
-    <section class="w-full py-16 md:py-24 bg-muted/30">
+    <section class="w-full py-16 md:py-24">
         <div class="container mx-auto">
              <div class="text-center mb-10">
                 <div class="flex items-center gap-3 justify-center">
