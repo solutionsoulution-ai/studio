@@ -12,7 +12,8 @@ get_header();
     <section class="container mx-auto py-16 md:py-24">
         <div class="grid md:grid-cols-2 gap-8 lg:gap-16 items-center">
             <div class="order-2 md:order-1">
-              <h1 class="text-4xl md:text-5xl font-bold font-headline mb-4">
+              <h1 class="text-4xl md:text-5xl font-bold font-headline mb-4 flex items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                 Prêt Immobilier
               </h1>
               <p class="text-lg text-muted-foreground mb-6">
@@ -35,12 +36,12 @@ get_header();
               <a href="/demande-de-pret" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 rounded-md px-8">Commencer ma demande</a>
             </div>
             <div class="order-1 md:order-2">
-              <img src="<?php echo get_template_directory_uri(); ?>/assets/images/pret-immo.jpg" alt="Maquette d'une maison posée sur des plans d'architecte." width="600" height="400" class="rounded-lg shadow-lg object-cover w-full">
+              <img src="https://i.postimg.cc/SxmyWbfx/pexels-jakubzerdzicki-29799518.jpg" alt="Maquette d'une maison posée sur des plans d'architecte." width="600" height="400" class="rounded-lg shadow-lg object-cover w-full">
             </div>
         </div>
     </section>
 
-     <section class="w-full py-16 md:py-24 bg-muted/30">
+     <section class="w-full py-16 md:py-24 bg-background">
         <div class="container mx-auto">
             <div class="text-center mb-10">
                 <div class="flex items-center gap-3 justify-center">
@@ -63,6 +64,17 @@ get_header();
         </div>
     </section>
 
+    <section class="w-full py-16 md:py-24 bg-background">
+        <?php 
+        $calculator_args = [
+            'title' => 'Calculez votre prêt immobilier',
+            'description' => "Simulez les mensualités de votre futur achat immobilier en ajustant le montant et la durée.",
+        ];
+        set_query_var('calculator_args', $calculator_args);
+        get_template_part('template-parts/calculator'); 
+        ?>
+    </section>
+
     <section id="faq" class="container mx-auto py-16 md:py-24">
         <div class="max-w-3xl mx-auto">
             <div class="text-center mb-10">
@@ -74,15 +86,15 @@ get_header();
             <div class="w-full">
                 <div data-state="closed" class="border-b">
                     <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Quel est l'apport personnel recommandé pour un prêt immobilier ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
-                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="max-height: 0px;"><div class="pb-4 pt-0 text-base text-muted-foreground">Un apport d'au moins 10% du prix d'achat est généralement conseillé pour couvrir les frais de notaire et de garantie. Un apport plus important peut vous aider à obtenir de meilleures conditions de prêt.</div></div>
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="display: none;"><div class="pb-4 pt-0 text-base text-muted-foreground">Un apport d'au moins 10% du prix d'achat est généralement conseillé pour couvrir les frais de notaire et de garantie. Un apport plus important peut vous aider à obtenir de meilleures conditions de prêt.</div></div>
                 </div>
                 <div data-state="closed" class="border-b">
                     <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Puis-je emprunter sans apport ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
-                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="max-height: 0px;"><div class="pb-4 pt-0 text-base text-muted-foreground">C'est de plus en plus rare, mais possible sous certaines conditions, notamment si vous avez un profil financier très solide (stabilité professionnelle, épargne existante, etc.). Chaque dossier est étudié au cas par cas.</div></div>
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="display: none;"><div class="pb-4 pt-0 text-base text-muted-foreground">C'est de plus en plus rare, mais possible sous certaines conditions, notamment si vous avez un profil financier très solide (stabilité professionnelle, épargne existante, etc.). Chaque dossier est étudié au cas par cas.</div></div>
                 </div>
                 <div data-state="closed" class="border-b">
                     <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Quelle est la durée maximale pour un prêt immobilier ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
-                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="max-height: 0px;"><div class="pb-4 pt-0 text-base text-muted-foreground">La durée de remboursement peut aller jusqu'à 25 ans (300 mois), voire 30 ans (360 mois) dans de très rares cas. Une durée plus courte signifie des mensualités plus élevées mais un coût total du crédit plus faible.</div></div>
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="display: none;"><div class="pb-4 pt-0 text-base text-muted-foreground">La durée de remboursement peut aller jusqu'à 25 ans (300 mois), voire 30 ans (360 mois) dans de très rares cas. Une durée plus courte signifie des mensualités plus élevées mais un coût total du crédit plus faible.</div></div>
                 </div>
             </div>
         </div>

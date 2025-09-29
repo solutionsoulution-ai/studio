@@ -12,28 +12,23 @@ get_header();
 
 <main class="flex-1">
     
-    <!-- Section: Carrousel Principal -->
+    <!-- Section: Héros Statique -->
     <section class="w-full bg-background">
-        <div class="relative overflow-hidden">
-            <!-- NOTE: Carrousel interactif via plugin -->
-            <div class="min-w-0 shrink-0 grow-0 basis-full">
-                <div class="container mx-auto px-4">
-                    <div class="grid md:grid-cols-2 items-center gap-8 py-12 md:py-24 min-h-[70dvh] md:min-h-[60dvh]">
-                        <div class="flex flex-col items-start text-center md:text-left">
-                            <h1 class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl font-headline">
-                                Sécurisez l'avenir de votre entreprise
-                            </h1>
-                            <p class="mt-4 max-w-2xl text-lg text-muted-foreground mx-auto md:mx-0">
-                                VylsFond fournit des solutions de financement rapides et flexibles pour aider votre entreprise à prospérer. Obtenez le capital dont vous avez besoin pour grandir.
-                            </p>
-                            <div class="mt-8 mx-auto md:mx-0">
-                                <a href="/demande-de-pret" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 rounded-md px-8">Commencer ma demande</a>
-                            </div>
-                        </div>
-                        <div class="relative h-64 md:h-96 w-full rounded-lg overflow-hidden order-first md:order-last">
-                            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/home-carousel-1.png" alt="Personne travaillant sur un ordinateur portable" class="object-cover w-full h-full">
-                        </div>
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-2 items-center gap-8 py-12 md:py-24 min-h-[70vh] md:min-h-[60vh]">
+                <div class="flex flex-col items-start text-center md:text-left">
+                    <h1 class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl font-headline">
+                        Le financement que vous méritez, simplifié
+                    </h1>
+                    <p class="mt-4 max-w-2xl text-lg text-muted-foreground mx-auto md:mx-0">
+                        Crédits, prêts et solutions financières pour particuliers et professionnels. Rapide, transparent et humain.
+                    </p>
+                    <div class="mt-8 mx-auto md:mx-0">
+                        <a href="/demande-de-pret" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 rounded-md px-8">Commencer ma demande</a>
                     </div>
+                </div>
+                <div class="relative h-64 md:h-96 w-full rounded-lg overflow-hidden order-first md:order-last">
+                    <img src="https://i.postimg.cc/JnYy9vXy/arturo-portillo-NRy3-WM22-Sw-Q-unsplash-removebg-preview.png" alt="Personne travaillant sur un ordinateur portable" class="object-cover w-full h-full">
                 </div>
             </div>
         </div>
@@ -52,34 +47,39 @@ get_header();
         </div>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div class="flex flex-col group hover:border-primary transition-all overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm fade-in-item">
-                <a href="/services/pret-entreprise" class="block"><div class="relative h-48 w-full"><img src="<?php echo get_template_directory_uri(); ?>/assets/images/pret-entreprise.jpg" alt="Image pour Prêt Entreprise" class="object-cover w-full h-full"></div></a>
+                <a href="/pret-entreprise" class="block"><div class="relative h-48 w-full"><img src="https://i.postimg.cc/Fzj4LTfS/pret-entreprise.jpg" alt="Image pour Prêt Entreprise" class="object-cover w-full h-full"></div></a>
                 <div class="flex flex-col flex-grow p-6">
                     <div class="p-0 mb-4"><h3 class="text-2xl font-semibold leading-none tracking-tight">Prêt Entreprise</h3><p class="text-sm text-muted-foreground">Des solutions pour financer vos investissements, votre croissance et votre trésorerie.</p></div>
-                    <div class="p-0 flex-grow flex items-end"><a href="/services/pret-entreprise" class="text-primary underline-offset-4 hover:underline inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium">En savoir plus <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a></div>
+                    <div class="p-0 flex-grow flex items-end"><a href="/pret-entreprise" class="text-primary underline-offset-4 hover:underline inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium">En savoir plus <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a></div>
                 </div>
             </div>
             <div class="flex flex-col group hover:border-primary transition-all overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm fade-in-item">
-                <a href="/services/pret-immo" class="block"><div class="relative h-48 w-full"><img src="<?php echo get_template_directory_uri(); ?>/assets/images/pret-immo.jpg" alt="Image pour Prêt Immobilier" class="object-cover w-full h-full"></div></a>
+                <a href="/pret-immobilier" class="block"><div class="relative h-48 w-full"><img src="https://i.postimg.cc/SxmyWbfx/pexels-jakubzerdzicki-29799518.jpg" alt="Image pour Prêt Immobilier" class="object-cover w-full h-full"></div></a>
                 <div class="flex flex-col flex-grow p-6">
                     <div class="p-0 mb-4"><h3 class="text-2xl font-semibold leading-none tracking-tight">Prêt Immobilier</h3><p class="text-sm text-muted-foreground">Devenez propriétaire de votre résidence principale ou réalisez un investissement locatif.</p></div>
-                    <div class="p-0 flex-grow flex items-end"><a href="/services/pret-immo" class="text-primary underline-offset-4 hover:underline inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium">En savoir plus <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a></div>
+                    <div class="p-0 flex-grow flex items-end"><a href="/pret-immobilier" class="text-primary underline-offset-4 hover:underline inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium">En savoir plus <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a></div>
                 </div>
             </div>
             <div class="flex flex-col group hover:border-primary transition-all overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm fade-in-item">
-                <a href="/services/pret-personnel" class="block"><div class="relative h-48 w-full"><img src="<?php echo get_template_directory_uri(); ?>/assets/images/pret-personnel.jpg" alt="Image pour Prêt Personnel" class="object-cover w-full h-full"></div></a>
+                <a href="/pret-personnel" class="block"><div class="relative h-48 w-full"><img src="https://i.postimg.cc/bvVGdwbn/service-personal-loan.jpg" alt="Image pour Prêt Personnel" class="object-cover w-full h-full"></div></a>
                 <div class="flex flex-col flex-grow p-6">
                     <div class="p-0 mb-4"><h3 class="text-2xl font-semibold leading-none tracking-tight">Prêt Personnel</h3><p class="text-sm text-muted-foreground">Financez un projet, un voyage, des travaux, ou un besoin de trésorerie sans justificatif.</p></div>
-                    <div class="p-0 flex-grow flex items-end"><a href="/services/pret-personnel" class="text-primary underline-offset-4 hover:underline inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium">En savoir plus <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a></div>
+                    <div class="p-0 flex-grow flex items-end"><a href="/pret-personnel" class="text-primary underline-offset-4 hover:underline inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium">En savoir plus <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a></div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Section: Calculateur -->
-    <section id="calculateur" class="w-full py-16 md:py-24 bg-muted/30">
-        <div id="calculator-root">
-            <!-- This div is the mount point for the React calculator. It will be hydrated by calculator.js -->
-        </div>
+    <section id="calculateur" class="w-full py-16 md:py-24 bg-background">
+        <?php 
+        $calculator_args = [
+            'title' => 'Calculateur de Prêt',
+            'description' => 'Simulez vos mensualités pour n\'importe quel projet.',
+        ];
+        set_query_var('calculator_args', $calculator_args);
+        get_template_part('template-parts/calculator'); 
+        ?>
     </section>
 
     <!-- Section: Pourquoi Nous Choisir -->
@@ -144,7 +144,7 @@ get_header();
     </section>
 
     <!-- Section: Derniers Articles -->
-    <section class="bg-muted/30 py-16 md:py-24">
+    <section class="bg-background py-16 md:py-24">
          <div class="container mx-auto">
             <div class="text-center mb-10">
                 <div class="flex items-center gap-3 justify-center">
@@ -155,7 +155,7 @@ get_header();
             </div>
             <!-- NOTE: Ce contenu est dynamique. Il faudra le remplacer par une boucle WordPress (WP_Query) pour afficher les vrais articles du blog. -->
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Static example of blog posts -->
+                <!-- Statique pour l'export, sera remplacé par la boucle WP -->
             </div>
             <div class="mt-12 text-center"><a class="border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-10 px-4 py-2" href="/blog">Voir tous les articles</a></div>
          </div>
@@ -176,13 +176,19 @@ get_header();
                 </p>
             </div>
             <div class="mx-auto mt-16 grid grid-cols-2 items-center gap-x-8 gap-y-10 sm:grid-cols-3 lg:mx-0 lg:grid-cols-6">
-                <!-- Static partners logos/names -->
+                <!-- Noms statiques des partenaires -->
+                <p class="col-span-1 text-center text-xl font-semibold text-muted-foreground/60">Global Finance</p>
+                <p class="col-span-1 text-center text-xl font-semibold text-muted-foreground/60">Innovate Capital</p>
+                <p class="col-span-1 text-center text-xl font-semibold text-muted-foreground/60">Secure Funds</p>
+                <p class="col-span-1 text-center text-xl font-semibold text-muted-foreground/60">Equity Partners</p>
+                <p class="col-span-1 text-center text-xl font-semibold text-muted-foreground/60">VentureNet</p>
+                <p class="col-span-1 text-center text-xl font-semibold text-muted-foreground/60">Trust Capital</p>
             </div>
         </div>
     </section>
 
     <!-- Section: Témoignages -->
-    <section class="w-full py-16 md:py-24 bg-muted/30">
+    <section class="w-full py-16 md:py-24 bg-background">
         <div class="container mx-auto">
              <div class="text-center mb-10">
                 <div class="flex items-center gap-3 justify-center">
@@ -191,9 +197,24 @@ get_header();
                 </div>
                 <p class="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">Découvrez les expériences de particuliers et d'entrepreneurs à travers l'Europe qui nous ont fait confiance.</p>
             </div>
-            <!-- NOTE: Le carrousel est interactif. Utilisez un plugin WordPress pour recréer cet effet. -->
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                 <!-- Static example of testimonials -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 fade-in-item">
+                <?php
+                $testimonials = [
+                    ["name" => "Marie Dubois", "location" => "Paris, France", "quote" => "Le processus de prêt a été incroyablement simple et rapide. VylsFond a vraiment compris mes besoins d'entrepreneur."],
+                    ["name" => "Lukas Schmidt", "location" => "Berlin, Allemagne", "quote" => "J'ai pu financer mon nouvel équipement sans tracas. Leur équipe est professionnelle et très réactive. Je recommande vivement."],
+                    ["name" => "Sofia Rossi", "location" => "Rome, Italie", "quote" => "Grâce à VylsFond, j'ai consolidé mes dettes avec un rachat de crédit avantageux. Ma situation financière est bien meilleure maintenant."],
+                ];
+                foreach ($testimonials as $testimonial) : ?>
+                    <div class="flex flex-col rounded-lg border bg-card text-card-foreground shadow-sm">
+                        <div class="flex flex-col items-start gap-4 p-6 flex-grow">
+                            <p class="text-muted-foreground italic flex-grow">"<?php echo esc_html($testimonial['quote']); ?>"</p>
+                            <div class="pt-4 border-t w-full">
+                                <p class="font-semibold"><?php echo esc_html($testimonial['name']); ?></p>
+                                <p class="text-sm text-muted-foreground"><?php echo esc_html($testimonial['location']); ?></p>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
             </div>
         </div>
     </section>
@@ -208,9 +229,23 @@ get_header();
                 </div>
                 <p class="mt-4 text-lg text-muted-foreground">Vous avez des questions ? Nous avons des réponses. Trouvez des informations sur nos services et processus ci-dessous.</p>
             </div>
-            <!-- NOTE: L'accordéon est interactif. Il sera fonctionnel si votre thème charge un JS de base. -->
-            <div class="w-full">
-                <!-- Static FAQ items -->
+             <div class="space-y-6">
+                <div class="border-b pb-4">
+                    <h3 class="font-medium text-lg">Quelles sont les exigences minimales pour un prêt ?</h3>
+                    <p class="text-muted-foreground mt-2">Généralement, nous recherchons une situation financière stable et une capacité de remboursement démontrable. Chaque dossier est unique, et notre vérificateur d'éligibilité peut fournir une évaluation personnalisée.</p>
+                </div>
+                <div class="border-b pb-4">
+                    <h3 class="font-medium text-lg">Combien de temps dure le processus de demande ?</h3>
+                    <p class="text-muted-foreground mt-2">Notre vérification d'éligibilité initiale est instantanée. Un examen complet de la demande prend généralement entre 24 et 72 heures. Une fois approuvés, les fonds peuvent être débloqués rapidement.</p>
+                </div>
+                <div class="border-b pb-4">
+                    <h3 class="font-medium text-lg">Quels types de prêts offrez-vous ?</h3>
+                    <p class="text-muted-foreground mt-2">VylsFond se spécialise dans une variété d'options de financement, y compris les prêts immobiliers, les prêts à la consommation, les prêts auto, le rachat de crédit et les financements pour entreprises.</p>
+                </div>
+                <div class="border-b pb-4">
+                    <h3 class="font-medium text-lg">Puis-je rembourser mon prêt par anticipation ?</h3>
+                    <p class="text-muted-foreground mt-2">Oui, la plupart de nos produits de prêt permettent un remboursement anticipé sans pénalité. Nous croyons en la fourniture d'options flexibles qui soutiennent votre santé financière.</p>
+                </div>
             </div>
         </div>
     </section>

@@ -13,7 +13,7 @@ get_header();
         <div class="grid md:grid-cols-2 gap-8 lg:gap-16 items-center">
         <div class="order-2 md:order-1">
             <h1 class="text-4xl md:text-5xl font-bold font-headline mb-4 flex items-center gap-3">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10 text-primary"><path d="M4 22h16a2 2 0 0 0 2-2V7.5L14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2z"/><polyline points="14 2 14 8 20 8"/><path d="M12 18v-6"/><path d="m9 15 3-3 3 3"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg>
                 Prêt Entreprise
             </h1>
             <p class="text-lg text-muted-foreground mb-6">
@@ -36,13 +36,13 @@ get_header();
             <a href="/demande-de-pret" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 rounded-md px-8">Commencer ma demande</a>
         </div>
         <div class="order-1 md:order-2">
-            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/pret-entreprise.jpg" alt="Réunion de travail dans un bureau avec des graphiques en arrière-plan." width="600" height="400" class="rounded-lg shadow-lg object-cover w-full">
+            <img src="https://i.postimg.cc/Fzj4LTfS/pret-entreprise.jpg" alt="Réunion de travail dans un bureau avec des graphiques en arrière-plan." width="600" height="400" class="rounded-lg shadow-lg object-cover w-full">
         </div>
         </div>
     </section>
 
     <!-- Section: Pourquoi souscrire -->
-    <section class="w-full py-16 md:py-24 bg-muted/30">
+    <section class="w-full py-16 md:py-24 bg-background">
         <div class="container mx-auto">
             <div class="text-center mb-10">
                 <div class="flex items-center gap-3 justify-center">
@@ -67,11 +67,15 @@ get_header();
     </section>
 
     <!-- Section: Calculateur -->
-    <section class="w-full py-16 md:py-24 bg-muted/30">
-        <div class="container mx-auto text-center">
-            <!-- NOTE: Le calculateur doit être implémenté via un plugin WordPress. -->
-            <p class="text-muted-foreground">Recréer le calculateur de prêt professionnel avec un plugin et insérer le shortcode ici.</p>
-        </div>
+    <section class="w-full py-16 md:py-24 bg-background">
+        <?php 
+        $calculator_args = [
+            'title' => 'Simulez votre financement professionnel',
+            'description' => "Estimez les remboursements pour vos projets d'investissement, de développement ou de trésorerie.",
+        ];
+        set_query_var('calculator_args', $calculator_args);
+        get_template_part('template-parts/calculator'); 
+        ?>
     </section>
 
     <!-- Section: FAQ -->
@@ -86,7 +90,7 @@ get_header();
             <div class="w-full">
                 <div data-state="closed" class="border-b">
                     <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Quels types de financements proposez-vous aux entreprises ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
-                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="max-height: 0px;">
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="display: none;">
                         <div class="pb-4 pt-0 text-base text-muted-foreground">
                             Nous offrons une gamme complète de solutions, incluant des prêts à terme pour les investissements, des lignes de crédit pour la gestion de la trésorerie, du financement d'équipement, et des solutions de fonds de roulement.
                         </div>
@@ -94,7 +98,7 @@ get_header();
                 </div>
                 <div data-state="closed" class="border-b">
                     <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Mon entreprise est jeune, suis-je éligible ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
-                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="max-height: 0px;">
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="display: none;">
                         <div class="pb-4 pt-0 text-base text-muted-foreground">
                             Oui, nous finançons également les startups et les jeunes entreprises. L'éligibilité dépendra de votre business plan, de vos projections financières et du profil des fondateurs. N'hésitez pas à utiliser notre simulateur pour une première évaluation.
                         </div>
@@ -102,7 +106,7 @@ get_header();
                 </div>
                 <div data-state="closed" class="border-b">
                     <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Quels documents sont nécessaires pour une demande de prêt entreprise ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
-                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="max-height: 0px;">
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="display: none;">
                         <div class="pb-4 pt-0 text-base text-muted-foreground">
                             Pour une analyse complète, préparez votre Kbis, vos derniers bilans comptables (si existants), un prévisionnel financier, les statuts de la société et les pièces d'identité des dirigeants.
                         </div>
