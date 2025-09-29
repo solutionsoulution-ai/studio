@@ -47,24 +47,24 @@ get_header();
         </div>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div class="flex flex-col group hover:border-primary transition-all overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm fade-in-item">
-                <a href="/services/pret-entreprise" class="block"><div class="relative h-48 w-full"><img src="https://i.postimg.cc/Fzj4LTfS/pret-entreprise.jpg" alt="Image pour Prêt Entreprise" class="object-cover w-full h-full"></div></a>
+                <a href="/pret-entreprise" class="block"><div class="relative h-48 w-full"><img src="https://i.postimg.cc/Fzj4LTfS/pret-entreprise.jpg" alt="Image pour Prêt Entreprise" class="object-cover w-full h-full"></div></a>
                 <div class="flex flex-col flex-grow p-6">
                     <div class="p-0 mb-4"><h3 class="text-2xl font-semibold leading-none tracking-tight">Prêt Entreprise</h3><p class="text-sm text-muted-foreground">Des solutions pour financer vos investissements, votre croissance et votre trésorerie.</p></div>
-                    <div class="p-0 flex-grow flex items-end"><a href="/services/pret-entreprise" class="text-primary underline-offset-4 hover:underline inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium">En savoir plus <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a></div>
+                    <div class="p-0 flex-grow flex items-end"><a href="/pret-entreprise" class="text-primary underline-offset-4 hover:underline inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium">En savoir plus <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a></div>
                 </div>
             </div>
             <div class="flex flex-col group hover:border-primary transition-all overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm fade-in-item">
-                <a href="/services/pret-immo" class="block"><div class="relative h-48 w-full"><img src="https://i.postimg.cc/SxmyWbfx/pexels-jakubzerdzicki-29799518.jpg" alt="Image pour Prêt Immobilier" class="object-cover w-full h-full"></div></a>
+                <a href="/pret-immobilier" class="block"><div class="relative h-48 w-full"><img src="https://i.postimg.cc/SxmyWbfx/pexels-jakubzerdzicki-29799518.jpg" alt="Image pour Prêt Immobilier" class="object-cover w-full h-full"></div></a>
                 <div class="flex flex-col flex-grow p-6">
                     <div class="p-0 mb-4"><h3 class="text-2xl font-semibold leading-none tracking-tight">Prêt Immobilier</h3><p class="text-sm text-muted-foreground">Devenez propriétaire de votre résidence principale ou réalisez un investissement locatif.</p></div>
-                    <div class="p-0 flex-grow flex items-end"><a href="/services/pret-immo" class="text-primary underline-offset-4 hover:underline inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium">En savoir plus <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a></div>
+                    <div class="p-0 flex-grow flex items-end"><a href="/pret-immobilier" class="text-primary underline-offset-4 hover:underline inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium">En savoir plus <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a></div>
                 </div>
             </div>
             <div class="flex flex-col group hover:border-primary transition-all overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm fade-in-item">
-                <a href="/services/pret-personnel" class="block"><div class="relative h-48 w-full"><img src="https://i.postimg.cc/bvVGdwbn/service-personal-loan.jpg" alt="Image pour Prêt Personnel" class="object-cover w-full h-full"></div></a>
+                <a href="/pret-personnel" class="block"><div class="relative h-48 w-full"><img src="https://i.postimg.cc/bvVGdwbn/service-personal-loan.jpg" alt="Image pour Prêt Personnel" class="object-cover w-full h-full"></div></a>
                 <div class="flex flex-col flex-grow p-6">
                     <div class="p-0 mb-4"><h3 class="text-2xl font-semibold leading-none tracking-tight">Prêt Personnel</h3><p class="text-sm text-muted-foreground">Financez un projet, un voyage, des travaux, ou un besoin de trésorerie sans justificatif.</p></div>
-                    <div class="p-0 flex-grow flex items-end"><a href="/services/pret-personnel" class="text-primary underline-offset-4 hover:underline inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium">En savoir plus <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a></div>
+                    <div class="p-0 flex-grow flex items-end"><a href="/pret-personnel" class="text-primary underline-offset-4 hover:underline inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium">En savoir plus <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a></div>
                 </div>
             </div>
         </div>
@@ -195,15 +195,6 @@ get_header();
                     ["name" => "Liam O'Sullivan", "location" => "Dublin, Irlande", "quote" => "Obtenir un prêt immobilier semblait compliqué, mais ils ont simplifié chaque étape. Je suis maintenant propriétaire !"],
                     ["name" => "Isabella Johansson", "location" => "Stockholm, Suède", "quote" => "Le prêt personnel m'a permis de réaliser le voyage de mes rêves. Service client exceptionnel et conditions claires."],
                     ["name" => "Carlos Garcia", "location" => "Madrid, Espagne", "quote" => "J'ai financé ma startup grâce à leur soutien. Une équipe qui croit vraiment aux projets innovants."],
-                    ["name" => "Anna Petrova", "location" => "Varsovie, Pologne", "quote" => "Leur plateforme en ligne est très intuitive. J'ai soumis ma demande et obtenu une réponse en un temps record."],
-                    ["name" => "David Nagy", "location" => "Budapest, Hongrie", "quote" => "Excellent service pour le financement de ma nouvelle voiture. Des taux compétitifs et aucune surprise."],
-                    ["name" => "Elena Popescu", "location" => "Bucarest, Roumanie", "quote" => "J'ai apprécié la transparence et l'honnêteté de mon conseiller. On se sent en confiance."],
-                    ["name" => "Nikos Papadopoulos", "location" => "Athènes, Grèce", "quote" => "Le rachat de mes crédits a été une bouffée d'air frais pour mon budget. Merci VylsFond !"],
-                    ["name" => "Fatima Al-Sayed", "location" => "Lisbonne, Portugal", "quote" => "Ils m'ont aidée à financer des rénovations importantes dans ma maison. Je suis ravie du résultat."],
-                    ["name" => "Jan Novak", "location" => "Prague, République Tchèque", "quote" => "En tant que freelance, obtenir un prêt est souvent difficile. VylsFond a su analyser ma situation avec justesse."],
-                    ["name" => "Freja Hansen", "location" => "Copenhague, Danemark", "quote" => "Simple, efficace et humain. Une expérience bancaire comme on en voit rarement."],
-                    ["name" => "Lars Jansen", "location" => "Amsterdam, Pays-Bas", "quote" => "Le financement de ma flotte de véhicules d'entreprise a été géré de manière impeccable."],
-                    ["name" => "Emilia Virtanen", "location" => "Helsinki, Finlande", "quote" => "Leur calculateur en ligne m'a donné une idée claire de mes options avant même de faire ma demande."],
                 ];
                 foreach ($testimonials as $testimonial) : ?>
                     <div class="flex flex-col rounded-lg border bg-card text-card-foreground shadow-sm">
