@@ -34,11 +34,10 @@ Cette commande va créer un dossier `build/` qui contient les fichiers `main.css
 
 ## Étape 4 : Gérer le JavaScript
 
-1.  **JavaScript pour le Calculateur (React) :**
-    *   Créez les dossiers `build/static/js/` à l'intérieur de votre thème `vylsfond-theme/`.
-    *   Copiez le fichier `calculator.js` depuis `build/static/js/calculator.js` vers `vylsfond-theme/build/static/js/calculator.js`.
+Le fichier `functions.php` est déjà configuré pour charger `main.js` (déjà présent dans `assets/js`) et `calculator.js` (que vous allez copier).
 
-Le fichier `functions.php` est déjà configuré pour charger `main.js` (déjà présent dans `assets/js`) et `calculator.js`. Il n'y a rien d'autre à faire.
+1.  **Copier le script du calculateur :**
+    *   Le fichier `calculator.js` n'est pas généré par `npm run build`, il est déjà dans `workspace/assets/js/`. Vous n'avez rien de plus à faire, car vous avez déjà copié tout le dossier `workspace/`.
 
 ---
 
@@ -54,7 +53,7 @@ C'est l'étape qui cause l'erreur "feuille de style manquante". Suivez-la attent
 
 1.  **N'archivez PAS le dossier `vylsfond-theme` lui-même.**
 2.  **Ouvrez** le dossier `vylsfond-theme`.
-3.  À l'intérieur, sélectionnez **tous les fichiers et dossiers** (`style.css`, `index.php`, `assets/`, `build/`, etc.).
+3.  À l'intérieur, sélectionnez **tous les fichiers et dossiers** (`style.css`, `index.php`, `assets/`, etc.).
 4.  Faites un clic droit sur votre sélection et choisissez :
     *   Sur **Windows** : `Envoyer vers` > `Dossier compressé (.zip)`.
     *   Sur **macOS** : `Compresser X éléments`.
@@ -126,5 +125,3 @@ Votre thème contient des fichiers de base dont nous n'avons plus besoin. Vous p
 *   `comments.php` (gardez-le)
 *   `search.php` (gardez-le)
 *   `screenshot.png` (à garder ou à remplacer par votre propre capture d'écran)
-
-    

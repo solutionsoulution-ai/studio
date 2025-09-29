@@ -15,7 +15,7 @@ get_header();
     <!-- Section: Héros Statique -->
     <section class="w-full bg-background">
         <div class="container mx-auto px-4">
-            <div class="grid md:grid-cols-2 items-center gap-8 py-12 md:py-24 min-h-[70dvh] md:min-h-[60dvh]">
+            <div class="grid md:grid-cols-2 items-center gap-8 py-12 md:py-24 min-h-[70vh] md:min-h-[60vh]">
                 <div class="flex flex-col items-start text-center md:text-left">
                     <h1 class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl font-headline">
                         Le financement que vous méritez, simplifié
@@ -72,9 +72,7 @@ get_header();
 
     <!-- Section: Calculateur -->
     <section id="calculateur" class="w-full py-16 md:py-24 bg-muted/30">
-        <div id="calculator-root">
-            <!-- This div is the mount point for the React calculator. It will be hydrated by calculator.js -->
-        </div>
+        <?php include('template-parts/calculator.php'); ?>
     </section>
 
     <!-- Section: Pourquoi Nous Choisir -->
@@ -192,9 +190,6 @@ get_header();
                     ["name" => "Marie Dubois", "location" => "Paris, France", "quote" => "Le processus de prêt a été incroyablement simple et rapide. VylsFond a vraiment compris mes besoins d'entrepreneur."],
                     ["name" => "Lukas Schmidt", "location" => "Berlin, Allemagne", "quote" => "J'ai pu financer mon nouvel équipement sans tracas. Leur équipe est professionnelle et très réactive. Je recommande vivement."],
                     ["name" => "Sofia Rossi", "location" => "Rome, Italie", "quote" => "Grâce à VylsFond, j'ai consolidé mes dettes avec un rachat de crédit avantageux. Ma situation financière est bien meilleure maintenant."],
-                    ["name" => "Liam O'Sullivan", "location" => "Dublin, Irlande", "quote" => "Obtenir un prêt immobilier semblait compliqué, mais ils ont simplifié chaque étape. Je suis maintenant propriétaire !"],
-                    ["name" => "Isabella Johansson", "location" => "Stockholm, Suède", "quote" => "Le prêt personnel m'a permis de réaliser le voyage de mes rêves. Service client exceptionnel et conditions claires."],
-                    ["name" => "Carlos Garcia", "location" => "Madrid, Espagne", "quote" => "J'ai financé ma startup grâce à leur soutien. Une équipe qui croit vraiment aux projets innovants."],
                 ];
                 foreach ($testimonials as $testimonial) : ?>
                     <div class="flex flex-col rounded-lg border bg-card text-card-foreground shadow-sm">
@@ -237,10 +232,6 @@ get_header();
                 <div class="border-b pb-4">
                     <h3 class="font-medium text-lg">Puis-je rembourser mon prêt par anticipation ?</h3>
                     <p class="text-muted-foreground mt-2">Oui, la plupart de nos produits de prêt permettent un remboursement anticipé sans pénalité. Nous croyons en la fourniture d'options flexibles qui soutiennent votre santé financière.</p>
-                </div>
-                 <div class="border-b pb-4">
-                    <h3 class="font-medium text-lg">De quels documents ai-je besoin pour une demande de prêt complète ?</h3>
-                    <p class="text-muted-foreground mt-2">Pour une demande complète, vous aurez généralement besoin d'une pièce d'identité, d'un justificatif de domicile, et de justificatifs de revenus (comme des bulletins de salaire ou des avis d'imposition).</p>
                 </div>
             </div>
         </div>

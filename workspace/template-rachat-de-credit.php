@@ -64,9 +64,18 @@ get_header();
     </section>
 
     <section class="w-full py-16 md:py-24 bg-muted/30">
-        <div id="calculator-root">
-            <!-- Le composant React du calculateur sera monté ici -->
-        </div>
+        <?php 
+        $calculator_args = [
+            'title' => 'Simulez votre rachat de crédit',
+            'description' => "Voyez comment le regroupement de vos prêts peut affecter vos paiements mensuels.",
+            'default_amount' => 40000,
+            'max_amount' => 250000,
+            'default_term' => 120,
+            'max_term' => 180,
+        ];
+        set_query_var('calculator_args', $calculator_args);
+        get_template_part('template-parts/calculator'); 
+        ?>
     </section>
 
     <section id="faq" class="container mx-auto py-16 md:py-24">
@@ -77,18 +86,18 @@ get_header();
                     <h2 class="text-3xl font-bold tracking-tight font-headline">Questions Fréquentes - Rachat de Crédit</h2>
                 </div>
             </div>
-            <div class="w-full">
-                <div data-state="closed" class="border-b">
-                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Quels types de crédits peuvent être rachetés ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
-                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="max-height: 0px;"><div class="pb-4 pt-0 text-base text-muted-foreground">Nous pouvons regrouper la plupart de vos crédits à la consommation : prêts personnels, crédits renouvelables, prêts auto, etc. Les prêts immobiliers peuvent aussi être inclus dans l'opération sous certaines conditions.</div></div>
+            <div class="w-full space-y-4">
+                <div class="border-b pb-4">
+                    <h3 class="font-medium text-lg">Quels types de crédits peuvent être rachetés ?</h3>
+                    <p class="text-muted-foreground mt-2">Nous pouvons regrouper la plupart de vos crédits à la consommation : prêts personnels, crédits renouvelables, prêts auto, etc. Les prêts immobiliers peuvent aussi être inclus dans l'opération sous certaines conditions.</p>
                 </div>
-                <div data-state="closed" class="border-b">
-                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Le rachat de crédit entraîne-t-il des frais ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
-                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="max-height: 0px;"><div class="pb-4 pt-0 text-base text-muted-foreground">L'opération peut inclure des frais de dossier. De plus, le remboursement anticipé de vos anciens crédits peut engendrer des pénalités. Cependant, l'objectif est que le gain sur vos mensualités compense largement ces frais.</div></div>
+                <div class="border-b pb-4">
+                    <h3 class="font-medium text-lg">Le rachat de crédit entraîne-t-il des frais ?</h3>
+                    <p class="text-muted-foreground mt-2">L'opération peut inclure des frais de dossier. De plus, le remboursement anticipé de vos anciens crédits peut engendrer des pénalités. Cependant, l'objectif est que le gain sur vos mensualités compense largement ces frais.</p>
                 </div>
-                <div data-state="closed" class="border-b">
-                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Est-ce que le rachat de crédit va vraiment améliorer mon taux d'endettement ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
-                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="max-height: 0px;"><div class="pb-4 pt-0 text-base text-muted-foreground">Oui, c'est l'un des principaux objectifs. En allongeant la durée de remboursement et en négociant un taux unique, nous réduisons le montant total de vos mensualités, ce qui diminue mécaniquement votre taux d'endettement.</div></div>
+                <div class="border-b pb-4">
+                    <h3 class="font-medium text-lg">Est-ce que le rachat de crédit va vraiment améliorer mon taux d'endettement ?</h3>
+                    <p class="text-muted-foreground mt-2">Oui, c'est l'un des principaux objectifs. En allongeant la durée de remboursement et en négociant un taux unique, nous réduisons le montant total de vos mensualités, ce qui diminue mécaniquement votre taux d'endettement.</p>
                 </div>
             </div>
         </div>
