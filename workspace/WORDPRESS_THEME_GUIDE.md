@@ -11,7 +11,7 @@ Ce guide contient les blocs de code exacts et les étapes à suivre pour créer 
 
 ---
 
-## Étape 2 : Générer les fichiers statiques (CSS & JS)
+## Étape 2 : Générer les fichiers statiques (CSS)
 
 Ouvrez votre terminal à la racine de **ce projet Next.js** (pas votre dossier de thème) et exécutez la commande suivante :
 
@@ -19,7 +19,7 @@ Ouvrez votre terminal à la racine de **ce projet Next.js** (pas votre dossier d
 npm run build
 ```
 
-Cette commande va créer un dossier `build/` qui contient les fichiers `main.css` et `calculator.js` dont nous avons besoin.
+Cette commande va créer un dossier `build/` qui contient le fichier `main.css` dont nous avons besoin.
 
 ---
 
@@ -35,17 +35,17 @@ Cette commande va créer un dossier `build/` qui contient les fichiers `main.css
 ## Étape 4 : Gérer les Images
 
 1.  Créez un dossier `assets/images/` dans votre thème `vylsfond-theme/`.
-2.  Vous devez trouver les images utilisées dans le projet Next.js (principalement dans `src/components/site/` et `public/`) et les copier dans `vylsfond-theme/assets/images/`. Les fichiers PHP font référence à des noms comme `pret-auto.jpg`, `home-carousel-1.png`, etc.
+2.  Vous devez trouver les images utilisées dans le projet Next.js et les copier dans `vylsfond-theme/assets/images/`. Les fichiers PHP font référence à des noms comme `pret-auto.jpg`, `home-carousel-1.png`, etc. Assurez-vous que les noms correspondent.
 
 ---
 
 ## Étape 5 : Créer l'archive .ZIP (La bonne méthode)
 
-C'est l'étape qui cause l'erreur "feuille de style manquante". Suivez-la attentivement.
+C'est l'étape qui cause souvent l'erreur "feuille de style manquante". Suivez-la attentivement.
 
 1.  **N'archivez PAS le dossier `vylsfond-theme` lui-même.**
 2.  **Ouvrez** le dossier `vylsfond-theme`.
-3.  À l'intérieur, sélectionnez **tous les fichiers et dossiers** (`style.css`, `index.php`, `assets/`, `build/`, etc.).
+3.  À l'intérieur, sélectionnez **tous les fichiers et dossiers** (`style.css`, `index.php`, `assets/`, etc.).
 4.  Faites un clic droit sur votre sélection et choisissez :
     *   Sur **Windows** : `Envoyer vers` > `Dossier compressé (.zip)`.
     *   Sur **macOS** : `Compresser X éléments`.
@@ -57,20 +57,26 @@ C'est l'étape qui cause l'erreur "feuille de style manquante". Suivez-la attent
 
 ## Étape 6 : Configuration du contenu dans WordPress (Étape Finale)
 
-Une fois le thème activé, votre site peut afficher des erreurs "Page non trouvée". C'est normal. Vous devez maintenant créer les pages dans WordPress.
+Une fois le thème activé, votre site peut afficher des erreurs "Page non trouvée" ou ne pas afficher la bonne page d'accueil. C'est normal. Suivez ces étapes pour tout configurer.
 
 1.  **Activer le Thème :**
     *   Allez dans `Apparence > Thèmes > Ajouter > Téléverser un thème` et téléversez votre `vylsfond-theme.zip`.
     *   Activez le thème.
 
-2.  **Configurer la Page d'Accueil (TRÈS IMPORTANT) :**
-    *   Allez dans `Pages > Ajouter`. Créez une page simple que vous nommerez `Accueil`. Laissez le contenu vide et le modèle sur "Défaut", puis publiez-la.
+2.  **Configurer la Page d'Accueil (ACTION REQUISE ET TRÈS IMPORTANTE) :**
+    *   **C'est l'étape la plus importante pour que votre page d'accueil s'affiche correctement.**
+    *   Allez dans `Pages > Ajouter`. Créez une page simple que vous nommerez `Accueil`. Laissez le contenu vide, puis publiez-la.
     *   Allez dans `Réglages > Lecture`.
     *   À côté de "La page d'accueil affiche", cochez **"Une page statique"**.
     *   Dans le menu déroulant "Page d'accueil", sélectionnez la page **"Accueil"** que vous venez de créer.
-    *   Cliquez sur **"Enregistrer les modifications"**. Cette étape est cruciale pour que WordPress utilise votre fichier `front-page.php`.
+    *   Cliquez sur **"Enregistrer les modifications"**.
 
-3.  **Créer les Pages :**
+3.  **Permaliens (TRÈS IMPORTANT) :**
+    *   Allez dans `Réglages > Permaliens`.
+    *   Choisissez la structure `Titre de la publication`.
+    *   Cliquez sur `Enregistrer les modifications`. Cela rafraîchit les règles de liens de WordPress et résout beaucoup de problèmes de "page non trouvée".
+
+4.  **Créer les Pages :**
     Pour chaque page de votre site, vous devez créer une page dans WordPress et lui assigner le bon "Modèle".
     *   Allez dans `Pages > Ajouter`.
     *   Donnez un titre à la page (ex: "Contact").
@@ -90,22 +96,17 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
     *   **Titre :** `Conditions Générales` -> **Modèle :** `Page - Conditions Générales`
     *   **Titre :** `Espace Client` -> **Modèle :** `Banque - Espace Client` (Ce modèle est protégé)
     
-4.  **Créer le Menu :**
+5.  **Créer le Menu :**
     *   Allez dans `Apparence > Menus`.
     *   Créez un nouveau menu.
     *   Ajoutez les pages que vous venez de créer au menu.
     *   En bas, dans "Emplacements du menu", cochez la case "Menu Principal".
     *   Enregistrez le menu.
 
-5.  **Permaliens (TRÈS IMPORTANT) :**
-    *   Allez dans `Réglages > Permaliens`.
-    *   Choisissez la structure `Titre de la publication`.
-    *   Cliquez sur `Enregistrer les modifications`. Cela rafraîchit les règles de liens de WordPress et résout beaucoup de problèmes de "page non trouvée".
-
 6.  **Installer les Plugins :**
     *   Pour que les formulaires de contact et de demande de prêt fonctionnent, installez un plugin comme **WPForms** ou **Contact Form 7**.
     *   Créez vos formulaires dans le plugin.
     *   Modifiez les fichiers `template-contact.php` et `template-demande-de-pret.php` en remplaçant les formulaires HTML statiques par le shortcode du plugin (ex: `<?php echo do_shortcode('[wpforms id="123"]'); ?>`). Les instructions sont dans les fichiers.
-    *   Pour les carrousels (page d'accueil, témoignages), installez un plugin de slider comme **Smart Slider 3** ou **Slider Revolution** et recréez les carrousels, puis insérez leur shortcode dans les fichiers PHP correspondants.
+    *   Pour les carrousels (témoignages, etc.), installez un plugin de slider comme **Smart Slider 3** et recréez les carrousels, puis insérez leur shortcode dans les fichiers PHP correspondants.
 
 ---
