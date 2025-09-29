@@ -80,10 +80,3 @@ get_header();
         </div>
 
     <?php else : ?>
-        <p class="text-center">Aucun article trouvé.</p>
-    <?php endif; ?>
-</main>
-
-<?php
-get_footer();
-?>
