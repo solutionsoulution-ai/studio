@@ -194,7 +194,7 @@ $unique_id = spl_object_hash((object)$args);
 <div class="calc-container-outer">
     <div class="calc-container">
         <div class="calc-panel calc-input-panel">
-            <div class="calc-logo">Vyls<span>Fond</span></div>
+            <div class="calc-logo">VylsFond</div>
             <h2 class="calc-h2"><?php echo esc_html($args['title']); ?></h2>
             <p class="calc-subtitle"><?php echo esc_html($args['description']); ?> Taux fixe annuel : <strong style="color: hsl(231, 48%, 48%);">2 %</strong></p>
 

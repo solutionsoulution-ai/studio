@@ -22,8 +22,7 @@
 <header class="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
     <div class="container flex h-16 max-w-screen-2xl items-center">
         <a href="<?php echo esc_url(home_url('/')); ?>" class="mr-6 flex items-center space-x-2">
-             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6 text-primary"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-            <span class="font-bold sm:inline-block">VylsFond</span>
+            <span class="font-bold text-lg sm:inline-block">VylsFond</span>
         </a>
         <nav class="hidden lg:flex flex-1 items-center space-x-4 text-sm font-medium">
              <?php
@@ -55,8 +54,7 @@
         <div class="flex h-full flex-col">
             <div class="flex items-center justify-between border-b p-4">
                 <a href="<?php echo esc_url(home_url('/')); ?>" data-mobile-menu-close class="flex items-center space-x-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6 text-primary"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                    <span class="font-bold">VylsFond</span>
+                    <span class="font-bold text-lg">VylsFond</span>
                 </a>
                 <button data-mobile-menu-close aria-label="Fermer le menu" class="p-2">
                     <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
