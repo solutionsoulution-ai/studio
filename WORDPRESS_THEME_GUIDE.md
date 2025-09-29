@@ -137,3 +137,4 @@ Votre thème contient des fichiers de base dont nous n'avons plus besoin. Vous p
 *   `comments.php` (gardez-le)
 *   `search.php` (gardez-le)
 *   `screenshot.png` (à garder ou à remplacer par votre propre capture d'écran)
+
