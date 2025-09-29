@@ -41,7 +41,7 @@ get_header();
         </div>
     </section>
 
-    <section class="w-full py-16 md:py-24 bg-muted/30">
+    <section class="w-full py-16 md:py-24">
         <div class="container mx-auto">
             <div class="text-center mb-10">
                 <div class="flex items-center gap-3 justify-center">
@@ -50,7 +50,7 @@ get_header();
                 </div>
             </div>
             <div class="grid md:grid-cols-3 gap-6">
-                <div class="text-center border-transparent shadow-md hover:shadow-xl hover:border-primary transition-all rounded-lg border bg-card text-card-foreground"><div class="p-6"><div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8 text-primary"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2Z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg></div><h3 class="text-2xl font-semibold leading-none tracking-tight">Réduire vos mensualités</h3></div><div class="p-6 pt-0"><p class="text-sm text-muted-foreground">Allégez votre charge de remboursement mensuelle en regroupant vos prêts et en allongeant la durée, et gagnez en pouvoir d'achat.</p></div></div>
+                <div class="text-center border-transparent shadow-md hover:shadow-xl hover:border-primary transition-all rounded-lg border bg-card text-card-foreground"><div class="p-6"><div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8 text-primary"><line x1="12" x2="12" y1="20" y2="4"/><path d="M16 16l-4-4-4 4"/></svg></div><h3 class="text-2xl font-semibold leading-none tracking-tight">Réduire vos mensualités</h3></div><div class="p-6 pt-0"><p class="text-sm text-muted-foreground">Allégez votre charge de remboursement mensuelle en regroupant vos prêts et en allongeant la durée, et gagnez en pouvoir d'achat.</p></div></div>
                 <div class="text-center border-transparent shadow-md hover:shadow-xl hover:border-primary transition-all rounded-lg border bg-card text-card-foreground"><div class="p-6"><div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8 text-primary"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9"/><path d="M3 10h18"/></svg></div><h3 class="text-2xl font-semibold leading-none tracking-tight">Simplifier votre budget</h3></div><div class="p-6 pt-0"><p class="text-sm text-muted-foreground">Ne gérez plus qu'un seul prélèvement et un seul interlocuteur. La gestion de vos finances personnelles devient plus claire et plus simple.</p></div></div>
                 <div class="text-center border-transparent shadow-md hover:shadow-xl hover:border-primary transition-all rounded-lg border bg-card text-card-foreground"><div class="p-6"><div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8 text-primary"><path d="M15 12h-5"/><path d="M12.5 14.5v-5"/><circle cx="12" cy="12" r="10"/></svg></div><h3 class="text-2xl font-semibold leading-none tracking-tight">Financer un nouveau projet</h3></div><div class="p-6 pt-0"><p class="text-sm text-muted-foreground">Profitez du regroupement pour inclure le financement d'un nouveau projet (voiture, travaux...) sans alourdir votre endettement.</p></div></div>
             </div>
@@ -64,15 +64,11 @@ get_header();
         </div>
     </section>
 
-    <section class="w-full py-16 md:py-24 bg-muted/30">
+    <section class="w-full py-16 md:py-24">
         <?php 
         $calculator_args = [
             'title' => 'Simulez votre rachat de crédit',
             'description' => "Voyez comment le regroupement de vos prêts peut affecter vos paiements mensuels.",
-            'default_amount' => 40000,
-            'max_amount' => 250000,
-            'default_term' => 120,
-            'max_term' => 180,
         ];
         set_query_var('calculator_args', $calculator_args);
         get_template_part('template-parts/calculator'); 
@@ -87,18 +83,18 @@ get_header();
                     <h2 class="text-3xl font-bold tracking-tight font-headline">Questions Fréquentes - Rachat de Crédit</h2>
                 </div>
             </div>
-            <div class="w-full space-y-4">
-                <div class="border-b pb-4">
-                    <h3 class="font-medium text-lg">Quels types de crédits peuvent être rachetés ?</h3>
-                    <p class="text-muted-foreground mt-2">Nous pouvons regrouper la plupart de vos crédits à la consommation : prêts personnels, crédits renouvelables, prêts auto, etc. Les prêts immobiliers peuvent aussi être inclus dans l'opération sous certaines conditions.</p>
+            <div class="w-full">
+                <div data-state="closed" class="border-b">
+                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Quels types de crédits peuvent être rachetés ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="display: none;"><div class="pb-4 pt-0 text-base text-muted-foreground">Nous pouvons regrouper la plupart de vos crédits à la consommation : prêts personnels, crédits renouvelables, prêts auto, etc. Les prêts immobiliers peuvent aussi être inclus dans l'opération sous certaines conditions.</div></div>
                 </div>
-                <div class="border-b pb-4">
-                    <h3 class="font-medium text-lg">Le rachat de crédit entraîne-t-il des frais ?</h3>
-                    <p class="text-muted-foreground mt-2">L'opération peut inclure des frais de dossier. De plus, le remboursement anticipé de vos anciens crédits peut engendrer des pénalités. Cependant, l'objectif est que le gain sur vos mensualités compense largement ces frais.</p>
+                <div data-state="closed" class="border-b">
+                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Le rachat de crédit entraîne-t-il des frais ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="display: none;"><div class="pb-4 pt-0 text-base text-muted-foreground">L'opération peut inclure des frais de dossier. De plus, le remboursement anticipé de vos anciens crédits peut engendrer des pénalités. Cependant, l'objectif est que le gain sur vos mensualités compense largement ces frais.</div></div>
                 </div>
-                <div class="border-b pb-4">
-                    <h3 class="font-medium text-lg">Est-ce que le rachat de crédit va vraiment améliorer mon taux d'endettement ?</h3>
-                    <p class="text-muted-foreground mt-2">Oui, c'est l'un des principaux objectifs. En allongeant la durée de remboursement et en négociant un taux unique, nous réduisons le montant total de vos mensualités, ce qui diminue mécaniquement votre taux d'endettement.</p>
+                <div data-state="closed" class="border-b">
+                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Est-ce que le rachat de crédit va vraiment améliorer mon taux d'endettement ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="display: none;"><div class="pb-4 pt-0 text-base text-muted-foreground">Oui, c'est l'un des principaux objectifs. En allongeant la durée de remboursement et en négociant un taux unique, nous réduisons le montant total de vos mensualités, ce qui diminue mécaniquement votre taux d'endettement.</div></div>
                 </div>
             </div>
         </div>
