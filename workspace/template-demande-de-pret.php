@@ -21,35 +21,34 @@ get_header();
             <div class="mt-12">
                 <!--
                 ====================================================================================================
-                INSTRUCTIONS POUR LE FORMULAIRE DE DEMANDE (AVEC TÉLÉVERSEMENT GRATUIT)
+                INSTRUCTIONS POUR LE FORMULAIRE DE DEMANDE
                 ====================================================================================================
                 
-                Pour que ce formulaire fonctionne avec le téléversement de fichiers sans payer, la meilleure
-                solution gratuite est d'utiliser le plugin "Contact Form 7".
+                Le code HTML ci-dessous est une MAQUETTE VISUELLE. Il ne fonctionne pas.
+                Pour le rendre fonctionnel (envoi d'e-mail, réception des fichiers), suivez ces étapes :
 
-                1. INSTALLEZ CONTACT FORM 7 :
-                   - Allez dans "Extensions" > "Ajouter" et installez "Contact Form 7".
+                1. CRÉEZ VOTRE FORMULAIRE :
+                   - Dans votre admin WordPress, avec "Contact Form 7", créez un nouveau formulaire.
+                   - Recréez tous les champs (Type de prêt, Nom, Email, etc.).
+                   - Pour les documents, utilisez le champ "fichier" (ex: [file piece-identite]).
+                   - Configurez l'envoi des e-mails. TRÈS IMPORTANT : dans l'onglet "E-mail",
+                     ajoutez les balises de vos fichiers (ex: [piece-identite]) dans la section
+                     "Pièces jointes" pour les recevoir.
 
-                2. INSTALLEZ WP MAIL SMTP (RECOMMANDÉ) :
-                   - Installez aussi "WP Mail SMTP" pour garantir que les e-mails sont bien envoyés.
+                2. OBTENEZ LE SHORTCODE :
+                   - Le plugin vous donnera un "shortcode" qui ressemble à [contact-form-7 id="..."]
 
-                3. CRÉEZ LE FORMULAIRE DANS CONTACT FORM 7 :
-                   - Allez dans le nouveau menu "Contact" et créez un formulaire.
-                   - Ajoutez les champs (texte, email, etc.) et pour les documents, ajoutez des champs "file".
-                     Exemple pour la pièce d'identité : [file file-id class:your-css-class]
-                   - Dans l'onglet "E-mail" de Contact Form 7, assurez-vous d'ajouter les balises de vos fichiers
-                     (ex: [file-id]) dans la section "Pièces jointes".
-                   - Enregistrez et copiez le shortcode.
-
-                4. REMPLACEZ LE CODE CI-DESSOUS PAR LE SHORTCODE :
-                   - Supprimez toute la balise <form> ci-dessous (entre les commentaires DEBUT et FIN).
-                   - Collez le shortcode à la place :
-                     <?php echo do_shortcode('[contact-form-7 id="123" title="Formulaire de demande"]'); ?>
+                3. REMPLACEZ LA MAQUETTE PAR LE SHORTCODE :
+                   - Supprimez toute la balise <form>...</form> ci-dessous.
+                   - À la place, collez votre shortcode comme ceci :
+                     <?php echo do_shortcode('[VOTRE_SHORTCODE_ICI]'); ?>
+                
+                Le design sera conservé car le plugin utilisera les styles déjà en place.
                 
                 ====================================================================================================
                 -->
 
-                <!-- ▼▼▼ DÉBUT DU FORMULAIRE À REMPLACER PAR VOTRE SHORTCODE ▼▼▼ -->
+                <!-- ▼▼▼ DÉBUT DE LA MAQUETTE À REMPLACER PAR VOTRE SHORTCODE ▼▼▼ -->
                 <form class="space-y-8" action="/merci-demande" method="post">
                     <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
                         <div class="p-6"><h3 class="flex items-center gap-2 text-2xl font-semibold">1. Informations sur le Prêt</h3><p class="text-sm text-muted-foreground">Décrivez le financement dont vous avez besoin.</p></div>
@@ -136,7 +135,7 @@ get_header();
                       Envoyer ma demande
                     </button>
                 </form>
-                <!-- ▲▲▲ FIN DU FORMULAIRE À REMPLACER PAR VOTRE SHORTCODE ▲▲▲ -->
+                <!-- ▲▲▲ FIN DE LA MAQUETTE À REMPLACER ▲▲▲ -->
             </div>
         </div>
     </div>
@@ -145,5 +144,3 @@ get_header();
 <?php
 get_footer();
 ?>
-
-    
