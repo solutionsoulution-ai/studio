@@ -51,6 +51,8 @@ const nextConfig: NextConfig = {
       config.entry = async () => {
         const entries = await originalEntry();
         
+        // This keeps the calculator entry separate if needed.
+        // If not, it can be removed. For now, we keep it.
         entries['calculator'] = './src/app/calculator-entry.tsx';
         
         if (entries['app/page']) {
@@ -65,12 +67,8 @@ const nextConfig: NextConfig = {
       
       // On ne génère plus de chunk JS séparés pour simplifier l'intégration
       if (config.optimization) {
-        config.optimization.splitChunks = {
-          cacheGroups: {
-            default: false,
-          },
-        };
-        config.optimization.runtimeChunk = false;
+        config.optimization.splitChunks = false; // Disable code splitting
+        config.optimization.runtimeChunk = false; // Do not create a runtime chunk
       }
       
       const miniCssExtractPlugin = config.plugins.find(
