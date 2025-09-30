@@ -70,46 +70,42 @@ C'est l'étape qui cause l'erreur "feuille de style manquante". Suivez-la attent
 
 Une fois le thème activé, votre site peut afficher des erreurs "Page non trouvée". C'est normal. Vous devez maintenant créer les pages dans WordPress.
 
-### Séquence Correcte de Configuration :
-
-Suivez cet ordre pour éviter les problèmes de menus déroulants vides.
-
 1.  **Activer le Thème :**
     *   Allez dans `Apparence > Thèmes > Ajouter > Téléverser un thème` et téléversez votre `vylsfond-theme.zip`.
     *   Activez le thème.
 
-2.  **Créer les Pages d'Abord :**
-    *   Allez dans `Pages > Ajouter`.
-    *   Créez une page nommée `Accueil`. **Ne lui assignez pas de modèle pour l'instant**. Publiez-la.
-    *   Répétez l'opération et créez toutes les autres pages (`Contact`, `À Propos`, etc.). Ne vous souciez pas des modèles pour le moment.
-
-3.  **Configurer la Page d'Accueil Statique (Très Important) :**
+2.  **Configurer la Page d'Accueil (Très Important) :**
+    *   Allez dans `Pages > Ajouter`. Créez une page simple que vous nommerez `Accueil`. Laissez le contenu vide, **n'assignez pas de modèle**, puis publiez-la.
     *   Allez dans `Réglages > Lecture`.
     *   À côté de "La page d'accueil affiche", cochez **"Une page statique"**.
     *   Dans le menu déroulant "Page d'accueil", sélectionnez la page **"Accueil"** que vous venez de créer.
-    *   **Ne sélectionnez rien** pour la "Page des articles". Laissez-la vide.
+    *   **IMPORTANT : Laissez le menu déroulant "Page des articles" sur "— Sélectionner —". Ne choisissez rien.**
     *   Cliquez sur **"Enregistrer les modifications"**.
 
-4.  **Assigner les Modèles de Page :**
-    *   Retournez dans `Pages > Toutes les pages`.
-    *   Modifiez chaque page une par une.
-    *   Dans la colonne de droite, sous `Résumé > Modèle`, sélectionnez le modèle correspondant dans le menu déroulant.
-    *   **Pour votre page "Accueil", sélectionnez le modèle "Page - Accueil".**
-    *   Enregistrez chaque page.
+3.  **Permaliens (TRÈS IMPORTANT POUR ÉVITER L'ERREUR 403) :**
+    *   Allez dans `Réglages > Permaliens`.
+    *   Choisissez la structure `Titre de la publication`.
+    *   Cliquez sur `Enregistrer les modifications`. **Même si l'option est déjà cochée, cliquez sur le bouton pour forcer WordPress à réécrire les règles de liens.** Cela résout la majorité des erreurs 403 et 404.
 
-    **Voici la liste des correspondances :**
-    *   **Page :** `Accueil` -> **Modèle :** `Page - Accueil`
-    *   **Page :** `À Propos` -> **Modèle :** `Page - À Propos`
-    *   **Page :** `Contact` -> **Modèle :** `Page - Contact`
-    *   **Page :** `Demande de Financement` -> **Modèle :** `Page - Demande de Prêt`
-    *   **Page :** `Prêt Entreprise` -> **Modèle :** `Service - Prêt Entreprise`
-    *   **Page :** `Prêt Immobilier` -> **Modèle :** `Service - Prêt Immobilier`
-    *   **Page :** `Prêt Personnel` -> **Modèle :** `Service - Prêt Personnel`
-    *   **Page :** `Prêt Auto` -> **Modèle :** `Service - Prêt Auto`
-    *   **Page :** `Rachat de Crédit` -> **Modèle :** `Service - Rachat de Crédit`
-    *   **Page :** `Politique de Confidentialité` -> **Modèle :** `Page - Politique de Confidentialité`
-    *   **Page :** `Conditions Générales` -> **Modèle :** `Page - Conditions Générales`
-    *   **Page :** `Tableau de Bord` -> **Modèle :** `Banque - Tableau de Bord`
+4.  **Créer les Pages :**
+    Pour chaque page de votre site, vous devez créer une page dans WordPress et lui assigner le bon "Modèle".
+    *   Allez dans `Pages > Ajouter`.
+    *   Donnez un titre à la page (ex: "Contact").
+    *   Dans la colonne de droite, sous `Résumé > Modèle`, sélectionnez le modèle correspondant (ex: "Page - Contact").
+    *   Cliquez sur `Publier`.
+
+    **Répétez cette opération pour les pages suivantes :**
+    *   **Titre :** `À Propos` -> **Modèle :** `Page - À Propos`
+    *   **Titre :** `Contact` -> **Modèle :** `Page - Contact`
+    *   **Titre :** `Demande de Financement` -> **Modèle :** `Page - Demande de Prêt`
+    *   **Titre :** `Prêt Entreprise` -> **Modèle :** `Service - Prêt Entreprise`
+    *   **Titre :** `Prêt Immobilier` -> **Modèle :** `Service - Prêt Immobilier`
+    *   **Titre :** `Prêt Personnel` -> **Modèle :** `Service - Prêt Personnel`
+    *   **Titre :** `Prêt Auto` -> **Modèle :** `Service - Prêt Auto`
+    *   **Titre :** `Rachat de Crédit` -> **Modèle :** `Service - Rachat de Crédit`
+    *   **Titre :** `Politique de Confidentialité` -> **Modèle :** `Page - Politique de Confidentialité`
+    *   **Titre :** `Conditions Générales` -> **Modèle :** `Page - Conditions Générales`
+    *   **Titre :** `Tableau de Bord` -> **Modèle :** `Banque - Tableau de Bord`
     
 5.  **Créer le Menu :**
     *   Allez dans `Apparence > Menus`.
@@ -118,16 +114,11 @@ Suivez cet ordre pour éviter les problèmes de menus déroulants vides.
     *   En bas, dans "Emplacements du menu", cochez la case "Menu Principal".
     *   Enregistrez le menu.
 
-6.  **Permaliens (Très Important) :**
-    *   Allez dans `Réglages > Permaliens`.
-    *   Choisissez la structure `Titre de la publication`.
-    *   Cliquez sur `Enregistrer les modifications`. Cela rafraîchit les règles de liens de WordPress et résout beaucoup de problèmes de "page non trouvée".
-
-7.  **Installer les Plugins :**
+6.  **Installer les Plugins :**
     *   Pour que les formulaires de contact et de demande de prêt fonctionnent, installez un plugin comme **WPForms** ou **Contact Form 7**.
     *   Créez vos formulaires dans le plugin.
     *   Modifiez les fichiers `template-contact.php` et `template-demande-de-pret.php` en remplaçant les formulaires HTML statiques par le shortcode du plugin (ex: `<?php echo do_shortcode('[wpforms id="123"]'); ?>`). Les instructions sont dans les fichiers.
-    *   Pour les carrousels (page d'accueil), installez un plugin de slider comme **Smart Slider 3** ou **Slider Revolution** et recréez les carrousels, puis insérez leur shortcode dans les fichiers PHP correspondants.
+    *   Pour les carrousels (page d'accueil, témoignages), installez un plugin de slider comme **Smart Slider 3** ou **Slider Revolution** et recréez les carrousels, puis insérez leur shortcode dans les fichiers PHP correspondants.
 
 ---
 
