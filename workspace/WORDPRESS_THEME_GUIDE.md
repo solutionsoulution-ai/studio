@@ -69,24 +69,20 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
     *   Allez dans `Apparence > Thèmes > Ajouter > Téléverser un thème` et téléversez votre `vylsfond-theme.zip`.
     *   Activez le thème.
 
-2.  **Créer les pages de base :**
-    *   Allez dans `Pages > Ajouter`. Créez une page nommée `Accueil`. Laissez le contenu vide. Publiez.
-    *   Allez dans `Pages > Ajouter`. Créez une page nommée `Blog`. Laissez le contenu vide. Publiez.
-
-3.  **Configurer la lecture (TRÈS IMPORTANT) :**
+2.  **Configurer la Page d'Accueil (Très Important) :**
+    *   Allez dans `Pages > Ajouter`. Créez une page simple que vous nommerez `Accueil`. Laissez le contenu vide, puis publiez-la.
     *   Allez dans `Réglages > Lecture`.
     *   À côté de "La page d'accueil affiche", cochez **"Une page statique"**.
     *   Dans le menu déroulant "Page d'accueil", sélectionnez la page **"Accueil"** que vous venez de créer.
-    *   Dans le menu déroulant "Page des articles", sélectionnez la page **"Blog"** que vous venez de créer.
-    *   Cliquez sur **"Enregistrer les modifications"**. WordPress saura maintenant utiliser `front-page.php` (ou `index.php`) pour l'accueil et `home.php` pour le blog.
+    *   Cliquez sur **"Enregistrer les modifications"**. WordPress saura maintenant utiliser `index.php` pour l'accueil.
 
-4.  **Permaliens (L'ÉTAPE LA PLUS IMPORTANTE POUR CORRIGER LES ERREURS 403) :**
+3.  **Permaliens (L'ÉTAPE LA PLUS IMPORTANTE POUR CORRIGER LES ERREURS 403) :**
     *   Allez dans `Réglages > Permaliens`.
     *   Assurez-vous que l'option `Titre de la publication` est cochée.
     *   Cliquez sur le bouton **`Enregistrer les modifications`** en bas de la page.
-    *   **Même si l'option était déjà cochée, cliquez quand même sur le bouton.** Cette action force WordPress à rafraîchir ses règles de liens (le fichier `.htaccess`) et résout la majorité des erreurs 403 et 404. Si vous créez une nouvelle page et qu'elle affiche une erreur 403, revenez ici et cliquez à nouveau sur ce bouton.
+    *   **Même si l'option était déjà cochée, cliquez quand même sur le bouton.** Cette action force WordPress à rafraîchir ses règles de liens (le fichier `.htaccess`) et résout la majorité des erreurs 403 et 404.
 
-5.  **Créer le reste des pages avec les modèles :**
+4.  **Créer les Pages avec les Modèles :**
     Pour chaque autre page, vous devez créer une page et lui assigner le bon "Modèle".
     *   Allez dans `Pages > Ajouter`.
     *   Donnez un titre à la page (ex: "Rachat de Crédit").
@@ -94,35 +90,42 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
     *   Cliquez sur `Publier`.
 
     **Répétez cette opération pour les pages suivantes :**
-    *   **Titre :** `À Propos` -> **Modèle :** `Page - À Propos`
-    *   **Titre :** `Contact` -> **Modèle :** `Page - Contact`
-    *   **Titre :** `Demande de Financement` -> **Modèle :** `Page - Demande de Prêt`
-    *   **Titre :** `Prêt Entreprise` -> **Modèle :** `Service - Prêt Entreprise`
-    *   **Titre :** `Prêt Immobilier` -> **Modèle :** `Service - Prêt Immobilier`
-    *   **Titre :** `Prêt Personnel` -> **Modèle :** `Service - Prêt Personnel`
-    *   **Titre :** `Prêt Auto` -> **Modèle :** `Service - Prêt Auto`
-    *   **Titre :** `Rachat de Crédit` -> **Modèle :** `Service - Rachat de Crédit`
-    *   **Titre :** `Politique de Confidentialité` -> **Modèle :** `Page - Politique de Confidentialité`
-    *   **Titre :** `Conditions Générales` -> **Modèle :** `Page - Conditions Générales`
-    *   **Titre :** `Tableau de Bord` -> **Modèle :** `Banque - Tableau de Bord`
+    *   `À Propos` -> `Page - À Propos`
+    *   `Contact` -> `Page - Contact`
+    *   `Demande de Financement` -> `Page - Demande de Prêt`
+    *   `Prêt Entreprise` -> `Service - Prêt Entreprise`
+    *   `Prêt Immobilier` -> `Service - Prêt Immobilier`
+    *   `Prêt Personnel` -> `Service - Prêt Personnel`
+    *   `Prêt Auto` -> `Service - Prêt Auto`
+    *   `Rachat de Crédit` -> `Service - Rachat de Crédit`
+    *   `Politique de Confidentialité` -> `Page - Politique de Confidentialité`
+    *   `Conditions Générales` -> `Page - Conditions Générales`
+    *   `Tableau de Bord` -> `Banque - Tableau de Bord`
     
-6.  **Créer le Menu :**
-    *   Allez dans `Apparence > Menus`.
-    *   Créez un nouveau menu, ajoutez vos pages, et assignez-le à l'emplacement "Menu Principal".
-
-7.  **Installer les Plugins pour les Formulaires (ESSENTIEL) :**
-    *   Pour que les formulaires de contact et de demande de prêt fonctionnent, installez un plugin comme **WPForms** ou **Contact Form 7**.
-    *   Allez dans `Extensions > Ajouter` et recherchez `WPForms`. Installez et activez-le.
-    *   Utilisez le constructeur de WPForms pour créer vos formulaires (un pour le contact, un pour la demande de prêt).
-    *   Une fois un formulaire créé, WPForms vous donnera un **shortcode** (ex: `[wpforms id="123"]`).
-    *   Modifiez les fichiers `template-contact.php` et `template-demande-de-pret.php` dans votre thème : remplacez les formulaires HTML statiques par le shortcode du plugin. Les instructions exactes sont dans les fichiers.
-    *   Pour la demande de prêt, vous aurez peut-être besoin de la version Pro de WPForms pour gérer les téléversements de fichiers.
+5.  **Créer le Menu :**
+    *   Allez dans `Apparence > Menus`, créez un nouveau menu, ajoutez vos pages, et assignez-le à l'emplacement "Menu Principal".
 
 ---
 
-### Si l'erreur 403 persiste...
+## Étape 8 : Rendre les formulaires fonctionnels (gratuitement)
 
-Si après avoir suivi scrupuleusement ces étapes (surtout l'étape des Permaliens) l'erreur 403 est toujours présente sur certaines pages, le problème vient de votre **hébergement**.
+Pour que les formulaires de contact et de demande de prêt envoient des e-mails.
 
-*   **Contactez votre hébergeur :** C'est la solution la plus rapide. Expliquez-leur la situation : "Bonjour, j'ai installé un nouveau thème WordPress et les pages qui utilisent des modèles de page personnalisés (template-....php) me renvoient une erreur 403. J'ai déjà essayé de réinitialiser les permaliens. Pouvez-vous vérifier les **permissions des fichiers/dossiers** de mon thème et les **logs d'erreurs du serveur (Apache/Nginx)** ?"
-*   **Vérifiez les permissions vous-même :** Si vous avez un accès FTP ou via un gestionnaire de fichiers (cPanel, Plesk), assurez-vous que les **dossiers** de votre thème sont en `755` et les **fichiers** (tous les fichiers .php) sont en `644`. Des permissions incorrectes sont la cause principale des erreurs 403 que les permaliens ne règlent pas.
+1.  **Installez le plugin de formulaire (WPForms) :**
+    *   Dans votre admin WordPress, allez dans `Extensions > Ajouter`.
+    *   Recherchez `WPForms`, puis installez et activez "Contact Forms by WPForms".
+
+2.  **Installez le plugin d'e-mail (WP Mail SMTP) - TRÈS IMPORTANT :**
+    *   De la même manière, recherchez, installez et activez `WP Mail SMTP`.
+    *   Suivez l'assistant de configuration de WP Mail SMTP pour le connecter à votre service d'e-mail (ex: Gmail, Outlook). **Cette étape est cruciale, car sans elle, WordPress n'enverra probablement aucun e-mail.**
+
+3.  **Créez vos formulaires dans WPForms :**
+    *   Allez dans le menu `WPForms` et créez un formulaire pour le "Contact" et un autre pour la "Demande de Prêt".
+    *   Recréez les champs en vous basant sur la maquette.
+    *   Dans les `Réglages` de chaque formulaire, configurez les `Notifications` pour que les soumissions soient envoyées à votre adresse e-mail. Pour la page de contact, configurez la `Confirmation` pour rediriger vers votre page "Merci pour le contact". Faites de même pour la demande de prêt.
+
+4.  **Intégrez les formulaires dans votre thème :**
+    *   Après avoir créé un formulaire, WPForms vous donne un **shortcode** (ex: `[wpforms id="123"]`).
+    *   Modifiez les fichiers `template-contact.php` et `template-demande-de-pret.php` dans votre thème : remplacez tout le contenu de la balise `<form>...</form>` par le shortcode du plugin, comme ceci : `<?php echo do_shortcode('[wpforms id="123"]'); ?>`. Des instructions détaillées sont présentes dans les fichiers.
+
+    
