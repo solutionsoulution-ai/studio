@@ -68,7 +68,7 @@ C'est l'étape qui cause l'erreur "feuille de style manquante". Suivez-la attent
 
 ## Étape 7 : Configuration du contenu dans WordPress (Étape Finale)
 
-Une fois le thème activé, votre site peut afficher des erreurs "Page non trouvée". C'est normal. Vous devez maintenant créer les pages dans WordPress.
+Une fois le thème activé, votre site peut afficher des erreurs "Page non trouvée" ou "403 Forbidden". C'est normal. Vous devez maintenant créer et configurer les pages dans WordPress.
 
 1.  **Activer le Thème :**
     *   Allez dans `Apparence > Thèmes > Ajouter > Téléverser un thème` et téléversez votre `vylsfond-theme.zip`.
@@ -84,8 +84,9 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
 
 3.  **Permaliens (TRÈS IMPORTANT POUR ÉVITER L'ERREUR 403) :**
     *   Allez dans `Réglages > Permaliens`.
-    *   Choisissez la structure `Titre de la publication`.
-    *   Cliquez sur `Enregistrer les modifications`. **Même si l'option est déjà cochée, cliquez sur le bouton pour forcer WordPress à réécrire les règles de liens.** Cela résout la majorité des erreurs 403 et 404.
+    *   Assurez-vous que l'option `Titre de la publication` est cochée.
+    *   Cliquez sur le bouton **`Enregistrer les modifications`** en bas de la page.
+    *   **Même si l'option était déjà cochée, cliquez quand même sur le bouton.** Cette action force WordPress à rafraîchir ses règles de liens et résout la majorité des erreurs 403 et 404 après un changement de thème.
 
 4.  **Créer les Pages :**
     Pour chaque page de votre site, vous devez créer une page dans WordPress et lui assigner le bon "Modèle".
