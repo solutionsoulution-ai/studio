@@ -50,7 +50,7 @@
     </div>
     
     <!-- Mobile Menu Panel -->
-    <div data-mobile-menu aria-expanded="false" class="lg:hidden fixed inset-0 z-50 transform -translate-x-full transition-transform duration-300 ease-in-out bg-background data-[expanded=true]:translate-x-0">
+    <div data-mobile-menu aria-expanded="false" class="lg:hidden fixed inset-0 z-[100] transform -translate-x-full transition-transform duration-300 ease-in-out bg-background data-[expanded=true]:translate-x-0">
         <div class="flex h-full flex-col">
             <div class="flex items-center justify-between border-b p-4">
                 <a href="<?php echo esc_url(home_url('/')); ?>" data-mobile-menu-close class="flex items-center space-x-2">
