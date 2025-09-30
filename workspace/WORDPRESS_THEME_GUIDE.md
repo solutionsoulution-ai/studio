@@ -107,7 +107,7 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
 
 ---
 
-## Étape 8 : Rendre les formulaires fonctionnels avec Contact Form 7
+## Étape 8 : Rendre les formulaires fonctionnels avec Contact Form 7 (100% gratuit)
 
 Pour que les formulaires de contact et de demande de prêt envoient des e-mails avec pièces jointes, suivez ces étapes.
 
@@ -122,7 +122,7 @@ Pour que les formulaires de contact et de demande de prêt envoient des e-mails 
     *   Dans l'onglet **"E-mail"**, vérifiez que l'adresse dans le champ "Pour" est bien la vôtre.
     *   Enregistrez et copiez le **shortcode** qui apparaît (ex: `[contact-form-7 id="..."]`).
 
-3.  **Créez votre Formulaire de Demande de Prêt :**
+3.  **Créez votre Formulaire de Demande de Prêt (avec téléversement) :**
     *   Créez un autre formulaire et nommez-le "Formulaire de Demande de Prêt".
     *   Recréez tous les champs dont vous avez besoin (type de prêt, montant, informations personnelles, etc.).
     *   Pour le téléversement de fichiers, utilisez le bouton **`fichier`** dans l'éditeur. Cela ajoutera une balise comme `[file votre-fichier]`. Vous pouvez ajouter des options pour la taille et le type de fichier, par exemple : `[file file-id limit:5mb filetypes:pdf|jpg|png]`.
