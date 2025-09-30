@@ -67,11 +67,25 @@ get_header();
                     <div class="p-0 flex-grow flex items-end"><a href="/pret-personnel" class="text-primary underline-offset-4 hover:underline inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium">En savoir plus <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a></div>
                 </div>
             </div>
+             <div class="flex flex-col group hover:border-primary transition-all overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm fade-in-item">
+                <a href="/pret-auto" class="block"><div class="relative h-48 w-full"><img src="https://i.postimg.cc/QMyhG9GF/pexels-pixabay-210019.jpg" alt="Image pour Prêt Auto" class="object-cover w-full h-full"></div></a>
+                <div class="flex flex-col flex-grow p-6">
+                    <div class="p-0 mb-4"><h3 class="text-2xl font-semibold leading-none tracking-tight">Prêt Auto</h3><p class="text-sm text-muted-foreground">Financez votre véhicule neuf ou d'occasion avec nos solutions de crédit adaptées.</p></div>
+                    <div class="p-0 flex-grow flex items-end"><a href="/pret-auto" class="text-primary underline-offset-4 hover:underline inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium">En savoir plus <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a></div>
+                </div>
+            </div>
+             <div class="flex flex-col group hover:border-primary transition-all overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm fade-in-item">
+                <a href="/rachat-de-credit" class="block"><div class="relative h-48 w-full"><img src="https://i.postimg.cc/SxVmd1g7/pexels-vlada-karpovich-7434025.jpg" alt="Image pour Rachat de Crédit" class="object-cover w-full h-full"></div></a>
+                <div class="flex flex-col flex-grow p-6">
+                    <div class="p-0 mb-4"><h3 class="text-2xl font-semibold leading-none tracking-tight">Rachat de Crédit</h3><p class="text-sm text-muted-foreground">Regroupez tous vos crédits en un seul pour réduire vos mensualités et simplifier votre budget.</p></div>
+                    <div class="p-0 flex-grow flex items-end"><a href="/rachat-de-credit" class="text-primary underline-offset-4 hover:underline inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium">En savoir plus <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a></div>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Section: Calculateur -->
-    <section id="calculateur" class="w-full py-16 md:py-24">
+    <section id="calculateur" class="w-full py-16 md:py-24 bg-muted/30">
         <?php 
         $calculator_args = [
             'title' => 'Calculateur de Prêt',
@@ -144,8 +158,8 @@ get_header();
     </section>
 
     <!-- Section: Derniers Articles -->
-    <section class="py-16 md:py-24">
-         <div class="container mx-auto">
+    <section class="bg-background py-16 md:py-24">
+        <div class="container mx-auto">
             <div class="text-center mb-10">
                 <div class="flex items-center gap-3 justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-primary"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
@@ -153,12 +167,56 @@ get_header();
                 </div>
                 <p class="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">Suivez nos conseils d'experts pour prendre les meilleures décisions financières.</p>
             </div>
-            <!-- NOTE: Ce contenu est dynamique. Il faudra le remplacer par une boucle WordPress (WP_Query) pour afficher les vrais articles du blog. -->
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Statique pour l'export, sera remplacé par la boucle WP -->
+                 <?php
+                $args = array(
+                    'posts_per_page' => 3,
+                    'post_status'    => 'publish',
+                );
+                $latest_posts_query = new WP_Query($args);
+                if ($latest_posts_query->have_posts()) :
+                    while ($latest_posts_query->have_posts()) : $latest_posts_query->the_post();
+                ?>
+                    <div class="flex flex-col group hover:border-primary transition-all overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm">
+                        <a href="<?php the_permalink(); ?>" class="block">
+                            <div class="relative h-48 w-full">
+                                <?php if (has_post_thumbnail()) : ?>
+                                    <?php the_post_thumbnail('medium_large', ['class' => 'object-cover w-full h-full']); ?>
+                                <?php else: ?>
+                                    <div class="w-full h-full bg-muted"></div>
+                                <?php endif; ?>
+                            </div>
+                        </a>
+                        <div class="flex flex-col flex-grow p-6">
+                            <div class="p-0 mb-4">
+                                <h3 class="text-xl leading-tight group-hover:text-primary transition-colors font-semibold"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+                                <p class="pt-2 text-xs text-muted-foreground"><?php echo get_the_date(); ?> &bull; <?php the_author(); ?></p>
+                            </div>
+                            <div class="p-0 flex-grow">
+                                <p class="text-sm text-muted-foreground"><?php echo wp_trim_words( get_the_excerpt(), 20, '...' ); ?></p>
+                            </div>
+                            <div class="p-0 pt-4">
+                                <a href="<?php the_permalink(); ?>" class="p-0 text-sm font-medium text-primary underline-offset-4 hover:underline inline-flex items-center">
+                                    Lire la suite
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                <?php
+                    endwhile;
+                    wp_reset_postdata();
+                else :
+                ?>
+                    <p class="col-span-3 text-center text-muted-foreground">Aucun article de blog à afficher pour le moment.</p>
+                <?php
+                endif;
+                ?>
             </div>
-            <div class="mt-12 text-center"><a class="border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-10 px-4 py-2" href="/blog">Voir tous les articles</a></div>
-         </div>
+            <div class="mt-12 text-center">
+                <a href="/blog" class="border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-10 px-4 py-2">Voir tous les articles</a>
+            </div>
+        </div>
     </section>
 
     <!-- Section: Partenaires -->
@@ -200,13 +258,20 @@ get_header();
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 fade-in-item">
                 <?php
                 $testimonials = [
-                    ["name" => "Marie Dubois", "location" => "Paris, France", "quote" => "Le processus de prêt a été incroyablement simple et rapide. VylsFond a vraiment compris mes besoins d'entrepreneur."],
-                    ["name" => "Lukas Schmidt", "location" => "Berlin, Allemagne", "quote" => "J'ai pu financer mon nouvel équipement sans tracas. Leur équipe est professionnelle et très réactive. Je recommande vivement."],
-                    ["name" => "Sofia Rossi", "location" => "Rome, Italie", "quote" => "Grâce à VylsFond, j'ai consolidé mes dettes avec un rachat de crédit avantageux. Ma situation financière est bien meilleure maintenant."],
+                    ["name" => "Marie Dubois", "location" => "Paris, France", "quote" => "Le processus de prêt a été incroyablement simple et rapide. VylsFond a vraiment compris mes besoins d'entrepreneur.", "rating" => 5],
+                    ["name" => "Lukas Schmidt", "location" => "Berlin, Allemagne", "quote" => "J'ai pu financer mon nouvel équipement sans tracas. Leur équipe est professionnelle et très réactive. Je recommande vivement.", "rating" => 5],
+                    ["name" => "Sofia Rossi", "location" => "Rome, Italie", "quote" => "Grâce à VylsFond, j'ai consolidé mes dettes avec un rachat de crédit avantageux. Ma situation financière est bien meilleure maintenant.", "rating" => 4],
                 ];
                 foreach ($testimonials as $testimonial) : ?>
                     <div class="flex flex-col rounded-lg border bg-card text-card-foreground shadow-sm">
                         <div class="flex flex-col items-start gap-4 p-6 flex-grow">
+                             <div class="flex items-center gap-0.5">
+                                <?php for ($i = 0; $i < 5; $i++) : ?>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 <?php echo $i < $testimonial['rating'] ? 'text-yellow-400' : 'text-muted-foreground/30'; ?>">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                    </svg>
+                                <?php endfor; ?>
+                            </div>
                             <p class="text-muted-foreground italic flex-grow">"<?php echo esc_html($testimonial['quote']); ?>"</p>
                             <div class="pt-4 border-t w-full">
                                 <p class="font-semibold"><?php echo esc_html($testimonial['name']); ?></p>
