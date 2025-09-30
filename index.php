@@ -1,11 +1,6 @@
 <?php
 /**
- * The main template file
- *
- * This is the most generic template file in a WordPress theme
- * and one of the two required files for a theme (the other being style.css).
- * It is used to display a page when nothing more specific matches a query.
- * E.g., it puts together the home page when no home.php file exists.
+ * The template for displaying the front page
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
  *
@@ -158,52 +153,10 @@ get_header();
                 </div>
                 <p class="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">Suivez nos conseils d'experts pour prendre les meilleures décisions financières.</p>
             </div>
-            
+            <!-- NOTE: Ce contenu est dynamique. Il faudra le remplacer par une boucle WordPress (WP_Query) pour afficher les vrais articles du blog. -->
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <?php
-                $args = array(
-                    'posts_per_page' => 3,
-                    'post_status'    => 'publish',
-                );
-                $latest_posts_query = new WP_Query($args);
-                if ($latest_posts_query->have_posts()) :
-                    while ($latest_posts_query->have_posts()) : $latest_posts_query->the_post();
-                ?>
-                    <div class="flex flex-col group hover:border-primary transition-all overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm">
-                        <a href="<?php the_permalink(); ?>" class="block">
-                            <div class="relative h-48 w-full">
-                                <?php if (has_post_thumbnail()) : ?>
-                                    <?php the_post_thumbnail('medium_large', ['class' => 'object-cover w-full h-full']); ?>
-                                <?php else: ?>
-                                    <div class="w-full h-full bg-muted"></div>
-                                <?php endif; ?>
-                            </div>
-                        </a>
-                        <div class="flex flex-col flex-grow p-6">
-                            <div class="p-0 mb-4">
-                                <h3 class="text-xl leading-tight group-hover:text-primary transition-colors font-semibold"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-                                <p class="pt-2 text-xs text-muted-foreground"><?php echo get_the_date(); ?> &bull; <?php the_author(); ?></p>
-                            </div>
-                            <div class="p-0 flex-grow">
-                                <p class="text-sm text-muted-foreground"><?php echo wp_trim_words( get_the_excerpt(), 20, '...' ); ?></p>
-                            </div>
-                            <div class="p-0 pt-4">
-                                <a href="<?php the_permalink(); ?>" class="p-0 text-sm font-medium text-primary underline-offset-4 hover:underline inline-flex items-center">
-                                    Lire la suite
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                <?php
-                    endwhile;
-                    wp_reset_postdata();
-                else :
-                    // Vous pouvez mettre un message ici si aucun article n'est trouvé.
-                endif;
-                ?>
+                <!-- Statique pour l'export, sera remplacé par la boucle WP -->
             </div>
-            
             <div class="mt-12 text-center"><a class="border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-10 px-4 py-2" href="/blog">Voir tous les articles</a></div>
          </div>
     </section>
@@ -247,20 +200,13 @@ get_header();
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 fade-in-item">
                 <?php
                 $testimonials = [
-                    ["name" => "Marie Dubois", "location" => "Paris, France", "quote" => "Le processus de prêt a été incroyablement simple et rapide. VylsFond a vraiment compris mes besoins d'entrepreneur.", "rating" => 5],
-                    ["name" => "Lukas Schmidt", "location" => "Berlin, Allemagne", "quote" => "J'ai pu financer mon nouvel équipement sans tracas. Leur équipe est professionnelle et très réactive. Je recommande vivement.", "rating" => 5],
-                    ["name" => "Sofia Rossi", "location" => "Rome, Italie", "quote" => "Grâce à VylsFond, j'ai consolidé mes dettes avec un rachat de crédit avantageux. Ma situation financière est bien meilleure maintenant.", "rating" => 4],
+                    ["name" => "Marie Dubois", "location" => "Paris, France", "quote" => "Le processus de prêt a été incroyablement simple et rapide. VylsFond a vraiment compris mes besoins d'entrepreneur."],
+                    ["name" => "Lukas Schmidt", "location" => "Berlin, Allemagne", "quote" => "J'ai pu financer mon nouvel équipement sans tracas. Leur équipe est professionnelle et très réactive. Je recommande vivement."],
+                    ["name" => "Sofia Rossi", "location" => "Rome, Italie", "quote" => "Grâce à VylsFond, j'ai consolidé mes dettes avec un rachat de crédit avantageux. Ma situation financière est bien meilleure maintenant."],
                 ];
                 foreach ($testimonials as $testimonial) : ?>
                     <div class="flex flex-col rounded-lg border bg-card text-card-foreground shadow-sm">
                         <div class="flex flex-col items-start gap-4 p-6 flex-grow">
-                             <div class="flex items-center gap-0.5">
-                                <?php for ($i = 0; $i < 5; $i++) : ?>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 <?php echo $i < $testimonial['rating'] ? 'text-yellow-400' : 'text-muted-foreground/30'; ?>">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                                    </svg>
-                                <?php endfor; ?>
-                            </div>
                             <p class="text-muted-foreground italic flex-grow">"<?php echo esc_html($testimonial['quote']); ?>"</p>
                             <div class="pt-4 border-t w-full">
                                 <p class="font-semibold"><?php echo esc_html($testimonial['name']); ?></p>
@@ -283,22 +229,22 @@ get_header();
                 </div>
                 <p class="mt-4 text-lg text-muted-foreground">Vous avez des questions ? Nous avons des réponses. Trouvez des informations sur nos services et processus ci-dessous.</p>
             </div>
-             <div class="space-y-6">
-                <div class="border-b pb-4">
-                    <h3 class="font-medium text-lg">Quelles sont les exigences minimales pour un prêt ?</h3>
-                    <p class="text-muted-foreground mt-2">Généralement, nous recherchons une situation financière stable et une capacité de remboursement démontrable. Chaque dossier est unique, et notre vérificateur d'éligibilité peut fournir une évaluation personnalisée.</p>
+             <div class="w-full">
+                <div data-state="closed" class="border-b">
+                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Quelles sont les exigences minimales pour un prêt ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="display: none;"><div class="pb-4 pt-0 text-base text-muted-foreground">Généralement, nous recherchons une situation financière stable et une capacité de remboursement démontrable. Chaque dossier est unique, et notre vérificateur d'éligibilité peut fournir une évaluation personnalisée.</div></div>
                 </div>
-                <div class="border-b pb-4">
-                    <h3 class="font-medium text-lg">Combien de temps dure le processus de demande ?</h3>
-                    <p class="text-muted-foreground mt-2">Notre vérification d'éligibilité initiale est instantanée. Un examen complet de la demande prend généralement entre 24 et 72 heures. Une fois approuvés, les fonds peuvent être débloqués rapidement.</p>
+                <div data-state="closed" class="border-b">
+                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Combien de temps dure le processus de demande ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="display: none;"><div class="pb-4 pt-0 text-base text-muted-foreground">Notre vérification d'éligibilité initiale est instantanée. Un examen complet de la demande prend généralement entre 24 et 72 heures. Une fois approuvés, les fonds peuvent être débloqués rapidement.</div></div>
                 </div>
-                <div class="border-b pb-4">
-                    <h3 class="font-medium text-lg">Quels types de prêts offrez-vous ?</h3>
-                    <p class="text-muted-foreground mt-2">VylsFond se spécialise dans une variété d'options de financement, y compris les prêts immobiliers, les prêts à la consommation, les prêts auto, le rachat de crédit et les financements pour entreprises.</p>
+                <div data-state="closed" class="border-b">
+                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Quels types de prêts offrez-vous ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="display: none;"><div class="pb-4 pt-0 text-base text-muted-foreground">VylsFond se spécialise dans une variété d'options de financement, y compris les prêts immobiliers, les prêts à la consommation, les prêts auto, le rachat de crédit et les financements pour entreprises.</div></div>
                 </div>
-                <div class="border-b pb-4">
-                    <h3 class="font-medium text-lg">Puis-je rembourser mon prêt par anticipation ?</h3>
-                    <p class="text-muted-foreground mt-2">Oui, la plupart de nos produits de prêt permettent un remboursement anticipé sans pénalité. Nous croyons en la fourniture d'options flexibles qui soutiennent votre santé financière.</p>
+                <div data-state="closed" class="border-b">
+                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Puis-je rembourser mon prêt par anticipation ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="display: none;"><div class="pb-4 pt-0 text-base text-muted-foreground">Oui, la plupart de nos produits de prêt permettent un remboursement anticipé sans pénalité. Nous croyons en la fourniture d'options flexibles qui soutiennent votre santé financière.</div></div>
                 </div>
             </div>
         </div>
@@ -309,5 +255,3 @@ get_header();
 <?php
 get_footer();
 ?>
-
-    
