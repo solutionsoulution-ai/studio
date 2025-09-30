@@ -78,19 +78,19 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
     *   À côté de "La page d'accueil affiche", cochez **"Une page statique"**.
     *   Dans le menu déroulant "Page d'accueil", sélectionnez la page **"Accueil"** que vous venez de créer.
     *   Dans le menu déroulant "Page des articles", sélectionnez la page **"Blog"** que vous venez de créer.
-    *   Cliquez sur **"Enregistrer les modifications"**. WordPress saura maintenant utiliser `front-page.php` pour l'accueil et `home.php` pour le blog.
+    *   Cliquez sur **"Enregistrer les modifications"**. WordPress saura maintenant utiliser `index.php` (qui contient votre accueil) et `home.php` pour le blog.
 
-4.  **Permaliens (Étape anti-erreur 403) :**
+4.  **Permaliens (L'ÉTAPE LA PLUS IMPORTANTE POUR CORRIGER LES ERREURS 403) :**
     *   Allez dans `Réglages > Permaliens`.
     *   Assurez-vous que l'option `Titre de la publication` est cochée.
     *   Cliquez sur le bouton **`Enregistrer les modifications`** en bas de la page.
-    *   **Même si l'option était déjà cochée, cliquez quand même sur le bouton.** Cette action force WordPress à rafraîchir ses règles de liens et résout la majorité des erreurs 403 et 404.
+    *   **Même si l'option était déjà cochée, cliquez quand même sur le bouton.** Cette action force WordPress à rafraîchir ses règles de liens (le fichier `.htaccess`) et résout la majorité des erreurs 403 et 404. Si vous créez une nouvelle page et qu'elle affiche une erreur 403, revenez ici et cliquez à nouveau sur ce bouton.
 
 5.  **Créer le reste des pages avec les modèles :**
     Pour chaque autre page, vous devez créer une page et lui assigner le bon "Modèle".
     *   Allez dans `Pages > Ajouter`.
-    *   Donnez un titre à la page (ex: "Contact").
-    *   Dans la colonne de droite, sous `Résumé > Modèle`, sélectionnez le modèle correspondant (ex: "Page - Contact").
+    *   Donnez un titre à la page (ex: "Rachat de Crédit").
+    *   Dans la colonne de droite, sous `Résumé > Modèle`, sélectionnez le modèle correspondant (ex: "Service - Rachat de Crédit").
     *   Cliquez sur `Publier`.
 
     **Répétez cette opération pour les pages suivantes :**
@@ -101,7 +101,6 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
     *   **Titre :** `Prêt Immobilier` -> **Modèle :** `Service - Prêt Immobilier`
     *   **Titre :** `Prêt Personnel` -> **Modèle :** `Service - Prêt Personnel`
     *   **Titre :** `Prêt Auto` -> **Modèle :** `Service - Prêt Auto`
-    *   **Titre :** `Rachat de Crédit` -> **Modèle :** `Service - Rachat de Crédit`
     *   **Titre :** `Politique de Confidentialité` -> **Modèle :** `Page - Politique de Confidentialité`
     *   **Titre :** `Conditions Générales` -> **Modèle :** `Page - Conditions Générales`
     *   **Titre :** `Tableau de Bord` -> **Modèle :** `Banque - Tableau de Bord`
@@ -119,7 +118,7 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
 
 ### Si l'erreur 403 persiste...
 
-Si après avoir suivi scrupuleusement ces étapes l'erreur 403 est toujours présente, le problème vient de votre **hébergement**.
-*   **Contactez votre hébergeur :** Expliquez la situation. Mentionnez que vous installez un thème WordPress standard et que vous rencontrez une erreur 403. Demandez-leur de vérifier les **permissions des fichiers/dossiers** de votre installation WordPress et les **logs d'erreurs du serveur (Apache/Nginx)**. C'est la solution la plus rapide.
-*   **Vérifiez les permissions vous-même :** Si vous avez un accès FTP ou via un gestionnaire de fichiers (cPanel, Plesk), assurez-vous que les dossiers sont en `755` et les fichiers en `644`.
+Si après avoir suivi scrupuleusement ces étapes (surtout l'étape des Permaliens) l'erreur 403 est toujours présente sur certaines pages, le problème vient de votre **hébergement**.
 
+*   **Contactez votre hébergeur :** C'est la solution la plus rapide. Expliquez-leur la situation : "Bonjour, j'ai installé un nouveau thème WordPress et les pages qui utilisent des modèles de page personnalisés (template-....php) me renvoient une erreur 403. J'ai déjà essayé de réinitialiser les permaliens. Pouvez-vous vérifier les **permissions des fichiers/dossiers** de mon thème et les **logs d'erreurs du serveur (Apache/Nginx)** ?"
+*   **Vérifiez les permissions vous-même :** Si vous avez un accès FTP ou via un gestionnaire de fichiers (cPanel, Plesk), assurez-vous que les **dossiers** de votre thème sont en `755` et les **fichiers** (tous les fichiers .php) sont en `644`. Des permissions incorrectes sont la cause principale des erreurs 403 que les permaliens ne règlent pas.
