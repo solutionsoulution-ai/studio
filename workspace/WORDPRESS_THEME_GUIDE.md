@@ -34,12 +34,7 @@ Cette commande va créer un dossier `build/` qui contient les fichiers `main.css
 
 ## Étape 4 : Gérer le JavaScript
 
-1.  **JavaScript pour le Calculateur (React) :**
-    *   Allez dans `build/static/js/`.
-    *   Créez les dossiers `build/static/js/` à l'intérieur de votre thème `vylsfond-theme/`.
-    *   Copiez le fichier `calculator.js` depuis `build/static/js/calculator.js` vers `vylsfond-theme/build/static/js/calculator.js`.
-
-Le fichier `functions.php` est déjà configuré pour charger `main.js` (déjà présent dans `assets/js`) et `calculator.js`. Il n'y a rien d'autre à faire.
+Le fichier `functions.php` est déjà configuré pour charger `main.js` (déjà présent dans `assets/js`). Il n'y a rien d'autre à faire.
 
 ---
 
@@ -56,7 +51,7 @@ C'est l'étape qui cause l'erreur "feuille de style manquante". Suivez-la attent
 
 1.  **N'archivez PAS le dossier `vylsfond-theme` lui-même.**
 2.  **Ouvrez** le dossier `vylsfond-theme`.
-3.  À l'intérieur, sélectionnez **tous les fichiers et dossiers** (`style.css`, `index.php`, `assets/`, `build/`, etc.).
+3.  À l'intérieur, sélectionnez **tous les fichiers et dossiers** (`style.css`, `index.php`, `assets/`, etc.).
 4.  Faites un clic droit sur votre sélection et choisissez :
     *   Sur **Windows** : `Envoyer vers` > `Dossier compressé (.zip)`.
     *   Sur **macOS** : `Compresser X éléments`.
@@ -74,22 +69,25 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
     *   Allez dans `Apparence > Thèmes > Ajouter > Téléverser un thème` et téléversez votre `vylsfond-theme.zip`.
     *   Activez le thème.
 
-2.  **Configurer la Page d'Accueil (Très Important) :**
-    *   Allez dans `Pages > Ajouter`. Créez une page simple que vous nommerez `Accueil`. Laissez le contenu vide, **n'assignez pas de modèle**, puis publiez-la.
+2.  **Créer les pages de base :**
+    *   Allez dans `Pages > Ajouter`. Créez une page nommée `Accueil`. Laissez le contenu vide. Publiez.
+    *   Allez dans `Pages > Ajouter`. Créez une page nommée `Blog`. Laissez le contenu vide. Publiez.
+
+3.  **Configurer la lecture (TRÈS IMPORTANT) :**
     *   Allez dans `Réglages > Lecture`.
     *   À côté de "La page d'accueil affiche", cochez **"Une page statique"**.
     *   Dans le menu déroulant "Page d'accueil", sélectionnez la page **"Accueil"** que vous venez de créer.
-    *   **IMPORTANT : Laissez le menu déroulant "Page des articles" sur "— Sélectionner —". Ne choisissez rien.**
-    *   Cliquez sur **"Enregistrer les modifications"**.
+    *   Dans le menu déroulant "Page des articles", sélectionnez la page **"Blog"** que vous venez de créer.
+    *   Cliquez sur **"Enregistrer les modifications"**. WordPress saura maintenant utiliser `front-page.php` pour l'accueil et `home.php` pour le blog.
 
-3.  **Permaliens (TRÈS IMPORTANT POUR ÉVITER L'ERREUR 403) :**
+4.  **Permaliens (Étape anti-erreur 403) :**
     *   Allez dans `Réglages > Permaliens`.
     *   Assurez-vous que l'option `Titre de la publication` est cochée.
     *   Cliquez sur le bouton **`Enregistrer les modifications`** en bas de la page.
-    *   **Même si l'option était déjà cochée, cliquez quand même sur le bouton.** Cette action force WordPress à rafraîchir ses règles de liens et résout la majorité des erreurs 403 et 404 après un changement de thème.
+    *   **Même si l'option était déjà cochée, cliquez quand même sur le bouton.** Cette action force WordPress à rafraîchir ses règles de liens et résout la majorité des erreurs 403 et 404.
 
-4.  **Créer les Pages :**
-    Pour chaque page de votre site, vous devez créer une page dans WordPress et lui assigner le bon "Modèle".
+5.  **Créer le reste des pages avec les modèles :**
+    Pour chaque autre page, vous devez créer une page et lui assigner le bon "Modèle".
     *   Allez dans `Pages > Ajouter`.
     *   Donnez un titre à la page (ex: "Contact").
     *   Dans la colonne de droite, sous `Résumé > Modèle`, sélectionnez le modèle correspondant (ex: "Page - Contact").
@@ -108,26 +106,20 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
     *   **Titre :** `Conditions Générales` -> **Modèle :** `Page - Conditions Générales`
     *   **Titre :** `Tableau de Bord` -> **Modèle :** `Banque - Tableau de Bord`
     
-5.  **Créer le Menu :**
+6.  **Créer le Menu :**
     *   Allez dans `Apparence > Menus`.
-    *   Créez un nouveau menu.
-    *   Ajoutez les pages que vous venez de créer au menu.
-    *   En bas, dans "Emplacements du menu", cochez la case "Menu Principal".
-    *   Enregistrez le menu.
+    *   Créez un nouveau menu, ajoutez vos pages, et assignez-le à l'emplacement "Menu Principal".
 
-6.  **Installer les Plugins :**
-    *   Pour que les formulaires de contact et de demande de prêt fonctionnent, installez un plugin comme **WPForms** ou **Contact Form 7**.
+7.  **Plugins pour les Formulaires :**
+    *   Pour que les formulaires de contact et de demande de prêt fonctionnent, installez un plugin comme **WPForms**.
     *   Créez vos formulaires dans le plugin.
-    *   Modifiez les fichiers `template-contact.php` et `template-demande-de-pret.php` en remplaçant les formulaires HTML statiques par le shortcode du plugin (ex: `<?php echo do_shortcode('[wpforms id="123"]'); ?>`). Les instructions sont dans les fichiers.
-    *   Pour les carrousels (page d'accueil, témoignages), installez un plugin de slider comme **Smart Slider 3** ou **Slider Revolution** et recréez les carrousels, puis insérez leur shortcode dans les fichiers PHP correspondants.
+    *   Modifiez les fichiers `template-contact.php` et `template-demande-de-pret.php` en remplaçant les formulaires HTML statiques par le shortcode du plugin (ex: `<?php echo do_shortcode('[wpforms id="123"]'); ?>`).
 
 ---
 
-### Nettoyage du Thème (Optionnel mais recommandé)
+### Si l'erreur 403 persiste...
 
-Votre thème contient des fichiers de base dont nous n'avons plus besoin. Vous pouvez les supprimer pour garder votre thème propre :
-*   `404.php` (gardez-le, il est utile)
-*   `archive.php` (gardez-le)
-*   `comments.php` (gardez-le)
-*   `search.php` (gardez-le)
-*   `screenshot.png` (à garder ou à remplacer par votre propre capture d'écran)
+Si après avoir suivi scrupuleusement ces étapes l'erreur 403 est toujours présente, le problème vient de votre **hébergement**.
+*   **Contactez votre hébergeur :** Expliquez la situation. Mentionnez que vous installez un thème WordPress standard et que vous rencontrez une erreur 403. Demandez-leur de vérifier les **permissions des fichiers/dossiers** de votre installation WordPress et les **logs d'erreurs du serveur (Apache/Nginx)**. C'est la solution la plus rapide.
+*   **Vérifiez les permissions vous-même :** Si vous avez un accès FTP ou via un gestionnaire de fichiers (cPanel, Plesk), assurez-vous que les dossiers sont en `755` et les fichiers en `644`.
+
