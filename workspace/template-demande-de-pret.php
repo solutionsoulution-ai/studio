@@ -17,6 +17,17 @@ get_header();
                     Remplissez le formulaire pour soumettre votre demande. C'est simple, rapide et sécurisé.
                 </p>
             </div>
+
+            <div class="mb-12">
+                <?php 
+                $calculator_args = [
+                    'title' => 'Estimez vos mensualités',
+                    'description' => "Ceci est une simulation. Ajustez les curseurs ou entrez les valeurs pour voir l'impact sur vos paiements.",
+                ];
+                set_query_var('calculator_args', $calculator_args);
+                get_template_part('template-parts/calculator'); 
+                ?>
+            </div>
             
             <div class="mt-12">
                 <!--
@@ -50,7 +61,21 @@ get_header();
                 <!-- ▼▼▼ DÉBUT DU FORMULAIRE À REMPLACER PAR VOTRE SHORTCODE ▼▼▼ -->
                 <form class="space-y-8" action="/merci-demande" method="post">
                     <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
-                        <div class="p-6"><h3 class="flex items-center gap-2 text-2xl font-semibold">1. Informations Personnelles</h3><p class="text-sm text-muted-foreground">Aidez-nous à mieux vous connaître.</p></div>
+                        <div class="p-6"><h3 class="flex items-center gap-2 text-2xl font-semibold">1. Informations sur le Prêt</h3><p class="text-sm text-muted-foreground">Décrivez le financement dont vous avez besoin.</p></div>
+                        <div class="p-6 pt-0 space-y-4">
+                             <div>
+                                <label class="text-sm font-medium leading-none mb-2 block">Type de Prêt</label>
+                                <select required class="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm"><option value="">Sélectionnez le type de projet</option><option value="immobilier">Prêt Immobilier</option><option value="personnel">Prêt Personnel</option><option value="auto">Prêt Auto</option><option value="entreprise">Prêt Entreprise</option><option value="rachat">Rachat de Crédit</option></select>
+                            </div>
+                            <div class="grid sm:grid-cols-2 gap-4">
+                                <div><label class="text-sm font-medium leading-none mb-2 block">Montant souhaité (€)</label><input type="number" placeholder="ex: 50000" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                                <div><label class="text-sm font-medium leading-none mb-2 block">Durée de remboursement (mois)</label><input type="number" placeholder="ex: 120" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+                        <div class="p-6"><h3 class="flex items-center gap-2 text-2xl font-semibold">2. Informations Personnelles</h3><p class="text-sm text-muted-foreground">Aidez-nous à mieux vous connaître.</p></div>
                         <div class="p-6 pt-0 space-y-4">
                             <div class="grid sm:grid-cols-2 gap-4">
                                 <div><label class="text-sm font-medium leading-none mb-2 block">Prénom</label><input placeholder="Jean" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
@@ -85,7 +110,7 @@ get_header();
                     </div>
 
                     <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
-                        <div class="p-6"><h3 class="flex items-center gap-2 text-2xl font-semibold">2. Situation Financière</h3><p class="text-sm text-muted-foreground">Informations sur vos revenus et charges.</p></div>
+                        <div class="p-6"><h3 class="flex items-center gap-2 text-2xl font-semibold">3. Situation Financière</h3><p class="text-sm text-muted-foreground">Informations sur vos revenus et charges.</p></div>
                         <div class="p-6 pt-0 space-y-4">
                             <div><label class="text-sm font-medium leading-none mb-2 block">Profession</label><input placeholder="Développeur, médecin, etc." required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
                             <div class="grid sm:grid-cols-2 gap-4">
@@ -96,7 +121,7 @@ get_header();
                     </div>
 
                     <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
-                        <div class="p-6"><h3 class="flex items-center gap-2 text-2xl font-semibold">3. Documents</h3><p class="text-sm text-muted-foreground">Téléchargez les documents requis (max 5Mo par fichier).</p></div>
+                        <div class="p-6"><h3 class="flex items-center gap-2 text-2xl font-semibold">4. Documents</h3><p class="text-sm text-muted-foreground">Téléchargez les documents requis (max 5Mo par fichier).</p></div>
                         <div class="p-6 pt-0 space-y-4">
                             <div>
                                 <label class="text-sm font-medium leading-none mb-2 block">Pièce d'identité (PDF, JPG, PNG)</label>
