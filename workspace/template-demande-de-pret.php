@@ -21,33 +21,30 @@ get_header();
             <div class="mt-12">
                 <!--
                 ====================================================================================================
-                INSTRUCTIONS POUR LE FORMULAIRE DE DEMANDE (Version Gratuite)
+                INSTRUCTIONS POUR LE FORMULAIRE DE DEMANDE (AVEC TÉLÉVERSEMENT GRATUIT)
                 ====================================================================================================
                 
-                Ce formulaire est une maquette. Pour le rendre fonctionnel GRATUITEMENT, suivez ces étapes :
+                Pour que ce formulaire fonctionne avec le téléversement de fichiers sans payer, la meilleure
+                solution gratuite est d'utiliser le plugin "Contact Form 7".
 
-                1. INSTALLEZ WPFORMS :
-                   - Allez dans "Extensions" > "Ajouter" et installez "Contact Forms by WPForms".
+                1. INSTALLEZ CONTACT FORM 7 :
+                   - Allez dans "Extensions" > "Ajouter" et installez "Contact Form 7".
 
-                2. CRÉEZ LE FORMULAIRE DE DEMANDE :
-                   - Dans WPForms, créez un nouveau formulaire.
-                   - Ajoutez tous les champs de texte (Nom, Email, Revenus, etc.).
-                   - NOTE : La version gratuite de WPForms ne permet pas le téléversement de fichiers. 
-                     La section "Documents" ci-dessous est déjà modifiée pour demander un envoi par email.
+                2. INSTALLEZ WP MAIL SMTP (RECOMMANDÉ) :
+                   - Installez aussi "WP Mail SMTP" pour garantir que les e-mails sont bien envoyés.
 
-                3. CONFIGUREZ LES NOTIFICATIONS :
-                   - Dans les réglages du formulaire, assurez-vous que les notifications sont envoyées à votre adresse e-mail.
-                   - Configurez la page de confirmation pour rediriger vers votre page "Merci pour la demande".
+                3. CRÉEZ LE FORMULAIRE DANS CONTACT FORM 7 :
+                   - Allez dans le nouveau menu "Contact" et créez un formulaire.
+                   - Ajoutez les champs (texte, email, etc.) et pour les documents, ajoutez des champs "file".
+                     Exemple pour la pièce d'identité : [file file-id class:your-css-class]
+                   - Dans l'onglet "E-mail" de Contact Form 7, assurez-vous d'ajouter les balises de vos fichiers
+                     (ex: [file-id]) dans la section "Pièces jointes".
+                   - Enregistrez et copiez le shortcode.
 
                 4. REMPLACEZ LE CODE CI-DESSOUS PAR LE SHORTCODE :
-                   - Copiez le shortcode de votre formulaire (ex: [wpforms id="456"]).
                    - Supprimez toute la balise <form> ci-dessous (entre les commentaires DEBUT et FIN).
                    - Collez le shortcode à la place :
-                     <?php echo do_shortcode('[wpforms id="456"]'); ?>
-
-                5. INSTALLEZ UN PLUGIN SMTP (TRÈS RECOMMANDÉ) :
-                   - Pour garantir que vous recevez les emails, installez "WP Mail SMTP" et configurez-le
-                     avec votre compte de messagerie (Gmail, Outlook, etc.).
+                     <?php echo do_shortcode('[contact-form-7 id="123" title="Formulaire de demande"]'); ?>
                 
                 ====================================================================================================
                 -->
@@ -115,21 +112,19 @@ get_header();
                     </div>
 
                     <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
-                        <div class="p-6"><h3 class="flex items-center gap-2 text-2xl font-semibold">4. Documents</h3><p class="text-sm text-muted-foreground">La liste des documents vous sera demandée par email.</p></div>
+                        <div class="p-6"><h3 class="flex items-center gap-2 text-2xl font-semibold">4. Documents</h3><p class="text-sm text-muted-foreground">Téléchargez les documents requis (max 5Mo par fichier).</p></div>
                         <div class="p-6 pt-0 space-y-4">
-                           <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg">
-                                <div class="flex">
-                                    <div class="flex-shrink-0">
-                                        <svg class="h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-                                        </svg>
-                                    </div>
-                                    <div class="ml-3">
-                                        <p class="text-sm text-blue-700">
-                                        Après avoir soumis ce formulaire, un de nos conseillers vous contactera par e-mail pour vous indiquer comment nous transmettre vos documents de manière sécurisée.
-                                        </p>
-                                    </div>
-                                </div>
+                            <div>
+                                <label class="text-sm font-medium leading-none mb-2 block">Pièce d'identité (PDF, JPG, PNG)</label>
+                                <input type="file" required accept=".pdf,.jpg,.jpeg,.png" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium leading-none mb-2 block">Justificatif de domicile de moins de 3 mois</label>
+                                <input type="file" required accept=".pdf,.jpg,.jpeg,.png" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium leading-none mb-2 block">Justificatif de revenus (3 derniers bulletins)</label>
+                                <input type="file" required accept=".pdf,.jpg,.jpeg,.png" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
                             </div>
                         </div>
                     </div>

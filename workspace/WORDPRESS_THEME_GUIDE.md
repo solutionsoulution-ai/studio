@@ -107,25 +107,43 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
 
 ---
 
-## Étape 8 : Rendre les formulaires fonctionnels (gratuitement)
+## Étape 8 : Rendre les formulaires fonctionnels (100% Gratuit)
 
-Pour que les formulaires de contact et de demande de prêt envoient des e-mails.
+Pour que les formulaires de contact et de demande de prêt envoient des e-mails avec pièces jointes.
 
-1.  **Installez le plugin de formulaire (WPForms) :**
+### Principe :
+Nous allons utiliser deux plugins gratuits :
+1.  **Contact Form 7** : Pour créer les formulaires (il gère les pièces jointes gratuitement).
+2.  **WP Mail SMTP** : Pour s'assurer que les e-mails envoyés par votre site arrivent bien dans votre boîte de réception.
+
+### Instructions :
+
+1.  **Installez les plugins gratuits :**
     *   Dans votre admin WordPress, allez dans `Extensions > Ajouter`.
-    *   Recherchez `WPForms`, puis installez et activez "Contact Forms by WPForms".
+    *   Recherchez `Contact Form 7`, puis installez et activez-le.
+    *   Recherchez `WP Mail SMTP`, puis installez et activez-le.
 
-2.  **Installez le plugin d'e-mail (WP Mail SMTP) - TRÈS IMPORTANT :**
-    *   De la même manière, recherchez, installez et activez `WP Mail SMTP`.
-    *   Suivez l'assistant de configuration de WP Mail SMTP pour le connecter à votre service d'e-mail (ex: Gmail, Outlook). **Cette étape est cruciale, car sans elle, WordPress n'enverra probablement aucun e-mail.**
+2.  **Configurez WP Mail SMTP (Crucial) :**
+    *   Allez dans le nouveau menu `WP Mail SMTP`.
+    *   Suivez l'assistant de configuration pour le connecter à votre service d'e-mail (ex: Gmail, Outlook). **Cette étape est indispensable, sinon vos e-mails de formulaires n'arriveront jamais.**
 
-3.  **Créez vos formulaires dans WPForms :**
-    *   Allez dans le menu `WPForms` et créez un formulaire pour le "Contact" et un autre pour la "Demande de Prêt".
-    *   Recréez les champs en vous basant sur la maquette.
-    *   Dans les `Réglages` de chaque formulaire, configurez les `Notifications` pour que les soumissions soient envoyées à votre adresse e-mail. Pour la page de contact, configurez la `Confirmation` pour rediriger vers votre page "Merci pour le contact". Faites de même pour la demande de prêt.
+3.  **Créez vos formulaires dans Contact Form 7 :**
+    *   Allez dans le nouveau menu `Contact` sur la gauche.
+    *   Créez un nouveau formulaire pour la **page Contact** et un autre pour la **Demande de Prêt**.
+    *   **Pour le formulaire de Demande de Prêt**, ajoutez les champs `file` pour les documents. La syntaxe ressemble à ceci :
+        ```
+        <label> Pièce d'identité
+        [file your-id limit:5mb filetypes:pdf|jpg|png] </label>
+        ```
+    *   Dans l'onglet **"E-mail"** de la configuration du formulaire, assurez-vous d'ajouter les balises de vos fichiers (ex: `[your-id]`) dans la section **"Pièces jointes"** en bas.
+    *   Enregistrez les deux formulaires et copiez leurs **shortcodes**.
 
 4.  **Intégrez les formulaires dans votre thème :**
-    *   Après avoir créé un formulaire, WPForms vous donne un **shortcode** (ex: `[wpforms id="123"]`).
-    *   Modifiez les fichiers `template-contact.php` et `template-demande-de-pret.php` dans votre thème : remplacez tout le contenu de la balise `<form>...</form>` par le shortcode du plugin, comme ceci : `<?php echo do_shortcode('[wpforms id="123"]'); ?>`. Des instructions détaillées sont présentes dans les fichiers.
+    *   **Pour le formulaire de Contact :** Modifiez le fichier `template-contact.php` et remplacez la maquette HTML (la balise `<form>...</form>`) par le shortcode du formulaire de contact :
+        `<?php echo do_shortcode('[contact-form-7 id="VOTRE_ID_CONTACT"]'); ?>`
+    *   **Pour la Demande de Prêt :** Modifiez le fichier `template-demande-de-pret.php` et remplacez la maquette HTML par le shortcode du formulaire de demande :
+        `<?php echo do_shortcode('[contact-form-7 id="VOTRE_ID_DEMANDE"]'); ?>`
+
+Votre site est maintenant entièrement fonctionnel !
 
     
