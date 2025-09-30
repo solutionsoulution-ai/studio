@@ -78,7 +78,7 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
     *   À côté de "La page d'accueil affiche", cochez **"Une page statique"**.
     *   Dans le menu déroulant "Page d'accueil", sélectionnez la page **"Accueil"** que vous venez de créer.
     *   Dans le menu déroulant "Page des articles", sélectionnez la page **"Blog"** que vous venez de créer.
-    *   Cliquez sur **"Enregistrer les modifications"**. WordPress saura maintenant utiliser `index.php` (qui contient votre accueil) et `home.php` pour le blog.
+    *   Cliquez sur **"Enregistrer les modifications"**. WordPress saura maintenant utiliser `front-page.php` (ou `index.php`) pour l'accueil et `home.php` pour le blog.
 
 4.  **Permaliens (L'ÉTAPE LA PLUS IMPORTANTE POUR CORRIGER LES ERREURS 403) :**
     *   Allez dans `Réglages > Permaliens`.
@@ -101,6 +101,7 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
     *   **Titre :** `Prêt Immobilier` -> **Modèle :** `Service - Prêt Immobilier`
     *   **Titre :** `Prêt Personnel` -> **Modèle :** `Service - Prêt Personnel`
     *   **Titre :** `Prêt Auto` -> **Modèle :** `Service - Prêt Auto`
+    *   **Titre :** `Rachat de Crédit` -> **Modèle :** `Service - Rachat de Crédit`
     *   **Titre :** `Politique de Confidentialité` -> **Modèle :** `Page - Politique de Confidentialité`
     *   **Titre :** `Conditions Générales` -> **Modèle :** `Page - Conditions Générales`
     *   **Titre :** `Tableau de Bord` -> **Modèle :** `Banque - Tableau de Bord`
@@ -109,10 +110,13 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
     *   Allez dans `Apparence > Menus`.
     *   Créez un nouveau menu, ajoutez vos pages, et assignez-le à l'emplacement "Menu Principal".
 
-7.  **Plugins pour les Formulaires :**
-    *   Pour que les formulaires de contact et de demande de prêt fonctionnent, installez un plugin comme **WPForms**.
-    *   Créez vos formulaires dans le plugin.
-    *   Modifiez les fichiers `template-contact.php` et `template-demande-de-pret.php` en remplaçant les formulaires HTML statiques par le shortcode du plugin (ex: `<?php echo do_shortcode('[wpforms id="123"]'); ?>`).
+7.  **Installer les Plugins pour les Formulaires (ESSENTIEL) :**
+    *   Pour que les formulaires de contact et de demande de prêt fonctionnent, installez un plugin comme **WPForms** ou **Contact Form 7**.
+    *   Allez dans `Extensions > Ajouter` et recherchez `WPForms`. Installez et activez-le.
+    *   Utilisez le constructeur de WPForms pour créer vos formulaires (un pour le contact, un pour la demande de prêt).
+    *   Une fois un formulaire créé, WPForms vous donnera un **shortcode** (ex: `[wpforms id="123"]`).
+    *   Modifiez les fichiers `template-contact.php` et `template-demande-de-pret.php` dans votre thème : remplacez les formulaires HTML statiques par le shortcode du plugin. Les instructions exactes sont dans les fichiers.
+    *   Pour la demande de prêt, vous aurez peut-être besoin de la version Pro de WPForms pour gérer les téléversements de fichiers.
 
 ---
 
