@@ -83,18 +83,18 @@ get_header();
                     <h2 class="text-3xl font-bold tracking-tight font-headline">Questions Fréquentes - Prêt Personnel</h2>
                 </div>
             </div>
-            <div class="w-full">
-                <div data-state="closed" class="border-b">
-                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Dois-je justifier l'utilisation des fonds pour un prêt personnel ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
-                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="display: none;"><div class="pb-4 pt-0 text-base text-muted-foreground">Non, l'un des principaux avantages du prêt personnel est que vous n'avez pas besoin de justifier vos dépenses. Vous pouvez utiliser les fonds librement pour tout type de projet.</div></div>
+            <div class="space-y-6">
+                <div class="border-b pb-4">
+                    <h3 class="font-medium text-lg">Dois-je justifier l'utilisation des fonds pour un prêt personnel ?</h3>
+                    <p class="text-muted-foreground mt-2">Non, l'un des principaux avantages du prêt personnel est que vous n'avez pas besoin de justifier vos dépenses. Vous pouvez utiliser les fonds librement pour tout type de projet.</p>
                 </div>
-                <div data-state="closed" class="border-b">
-                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Quel est le montant maximum que je peux emprunter ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
-                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="display: none;"><div class="pb-4 pt-0 text-base text-muted-foreground">Le montant maximum pour un prêt personnel est généralement de 75 000 €. Le montant qui vous sera accordé dépendra de votre capacité de remboursement et de votre situation financière.</div></div>
+                <div class="border-b pb-4">
+                    <h3 class="font-medium text-lg">Quel est le montant maximum que je peux emprunter ?</h3>
+                    <p class="text-muted-foreground mt-2">Le montant maximum pour un prêt personnel est généralement de 75 000 €. Le montant qui vous sera accordé dépendra de votre capacité de remboursement et de votre situation financière.</p>
                 </div>
-                <div data-state="closed" class="border-b">
-                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Le taux du prêt personnel est-il fixe ou variable ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
-                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="display: none;"><div class="pb-4 pt-0 text-base text-muted-foreground">Nous proposons principalement des prêts personnels à taux fixe. Cela signifie que votre taux d'intérêt et vos mensualités restent les mêmes pendant toute la durée du prêt, pour une meilleure maîtrise de votre budget.</div></div>
+                <div class="border-b pb-4">
+                    <h3 class="font-medium text-lg">Le taux du prêt personnel est-il fixe ou variable ?</h3>
+                    <p class="text-muted-foreground mt-2">Nous proposons principalement des prêts personnels à taux fixe. Cela signifie que votre taux d'intérêt et vos mensualités restent les mêmes pendant toute la durée du prêt, pour une meilleure maîtrise de votre budget.</p>
                 </div>
             </div>
         </div>

@@ -229,7 +229,7 @@ get_header();
                 </div>
                 <p class="mt-4 text-lg text-muted-foreground">Vous avez des questions ? Nous avons des réponses. Trouvez des informations sur nos services et processus ci-dessous.</p>
             </div>
-             <div class="space-y-6">
+            <div class="space-y-6">
                 <div class="border-b pb-4">
                     <h3 class="font-medium text-lg">Quelles sont les exigences minimales pour un prêt ?</h3>
                     <p class="text-muted-foreground mt-2">Généralement, nous recherchons une situation financière stable et une capacité de remboursement démontrable. Chaque dossier est unique, et notre vérificateur d'éligibilité peut fournir une évaluation personnalisée.</p>

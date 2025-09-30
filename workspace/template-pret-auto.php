@@ -41,7 +41,7 @@ get_header();
         </div>
     </section>
 
-    <section class="w-full py-16 md:py-24 bg-muted/30">
+    <section class="w-full py-16 md:py-24">
         <div class="container mx-auto">
             <div class="text-center mb-10">
                 <div class="flex items-center gap-3 justify-center">
@@ -87,7 +87,7 @@ get_header();
                     <h2 class="text-3xl font-bold tracking-tight font-headline">Questions Fréquentes - Prêt Auto</h2>
                 </div>
             </div>
-            <div class="w-full space-y-4">
+             <div class="space-y-6">
                 <div class="border-b pb-4">
                     <h3 class="font-medium text-lg">Le prêt auto peut-il financer un véhicule d'occasion ?</h3>
                     <p class="text-muted-foreground mt-2">Oui, nos solutions de financement couvrent aussi bien les véhicules neufs que les véhicules d'occasion achetés auprès d'un professionnel ou d'un particulier.</p>
