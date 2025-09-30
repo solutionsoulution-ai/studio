@@ -107,43 +107,32 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
 
 ---
 
-## Étape 8 : Rendre les formulaires fonctionnels (100% Gratuit)
+## Étape 8 : Rendre les formulaires fonctionnels avec Contact Form 7
 
-Pour que les formulaires de contact et de demande de prêt envoient des e-mails avec pièces jointes.
+Pour que les formulaires de contact et de demande de prêt envoient des e-mails avec pièces jointes, suivez ces étapes.
 
-### Principe :
-Nous allons utiliser deux plugins gratuits :
-1.  **Contact Form 7** : Pour créer les formulaires (il gère les pièces jointes gratuitement).
-2.  **WP Mail SMTP** : Pour s'assurer que les e-mails envoyés par votre site arrivent bien dans votre boîte de réception.
-
-### Instructions :
-
-1.  **Installez les plugins gratuits :**
+1.  **Installez le plugin "Contact Form 7" :**
     *   Dans votre admin WordPress, allez dans `Extensions > Ajouter`.
     *   Recherchez `Contact Form 7`, puis installez et activez-le.
-    *   Recherchez `WP Mail SMTP`, puis installez et activez-le.
 
-2.  **Configurez WP Mail SMTP (Crucial) :**
-    *   Allez dans le nouveau menu `WP Mail SMTP`.
-    *   Suivez l'assistant de configuration pour le connecter à votre service d'e-mail (ex: Gmail, Outlook). **Cette étape est indispensable, sinon vos e-mails de formulaires n'arriveront jamais.**
+2.  **Créez votre Formulaire de Contact :**
+    *   Allez dans le nouveau menu `Contact` sur la gauche et cliquez sur `Ajouter`.
+    *   Donnez un nom à votre formulaire (ex: "Formulaire de Contact Simple").
+    *   Dans l'onglet "Formulaire", vous pouvez laisser les champs de base (nom, email, sujet, message, bouton envoyer).
+    *   Dans l'onglet **"E-mail"**, vérifiez que l'adresse dans le champ "Pour" est bien la vôtre.
+    *   Enregistrez et copiez le **shortcode** qui apparaît (ex: `[contact-form-7 id="..."]`).
 
-3.  **Créez vos formulaires dans Contact Form 7 :**
-    *   Allez dans le nouveau menu `Contact` sur la gauche.
-    *   Créez un nouveau formulaire pour la **page Contact** et un autre pour la **Demande de Prêt**.
-    *   **Pour le formulaire de Demande de Prêt**, ajoutez les champs `file` pour les documents. La syntaxe ressemble à ceci :
-        ```
-        <label> Pièce d'identité
-        [file your-id limit:5mb filetypes:pdf|jpg|png] </label>
-        ```
-    *   Dans l'onglet **"E-mail"** de la configuration du formulaire, assurez-vous d'ajouter les balises de vos fichiers (ex: `[your-id]`) dans la section **"Pièces jointes"** en bas.
-    *   Enregistrez les deux formulaires et copiez leurs **shortcodes**.
+3.  **Créez votre Formulaire de Demande de Prêt :**
+    *   Créez un autre formulaire et nommez-le "Formulaire de Demande de Prêt".
+    *   Recréez tous les champs dont vous avez besoin (type de prêt, montant, informations personnelles, etc.).
+    *   Pour le téléversement de fichiers, utilisez le bouton **`fichier`** dans l'éditeur. Cela ajoutera une balise comme `[file votre-fichier]`. Vous pouvez ajouter des options pour la taille et le type de fichier, par exemple : `[file file-id limit:5mb filetypes:pdf|jpg|png]`.
+    *   **TRÈS IMPORTANT :** Allez dans l'onglet **"E-mail"** de ce formulaire. Tout en bas, vous trouverez une section **"Pièces jointes"**. Collez-y les balises de vos champs de fichier (ex: `[file-id]`). C'est ce qui attachera les fichiers téléversés à l'e-mail que vous recevrez.
+    *   Enregistrez et copiez le shortcode.
 
 4.  **Intégrez les formulaires dans votre thème :**
-    *   **Pour le formulaire de Contact :** Modifiez le fichier `template-contact.php` et remplacez la maquette HTML (la balise `<form>...</form>`) par le shortcode du formulaire de contact :
+    *   Modifiez le fichier `template-contact.php` et remplacez la maquette HTML (la balise `<form>...</form>`) par le shortcode de votre formulaire de contact :
         `<?php echo do_shortcode('[contact-form-7 id="VOTRE_ID_CONTACT"]'); ?>`
-    *   **Pour la Demande de Prêt :** Modifiez le fichier `template-demande-de-pret.php` et remplacez la maquette HTML par le shortcode du formulaire de demande :
+    *   Modifiez le fichier `template-demande-de-pret.php` et remplacez la maquette HTML par le shortcode de votre formulaire de demande de prêt :
         `<?php echo do_shortcode('[contact-form-7 id="VOTRE_ID_DEMANDE"]'); ?>`
 
-Votre site est maintenant entièrement fonctionnel !
-
-    
+Votre site est maintenant entièrement fonctionnel ! Si vous constatez que vous ne recevez pas les e-mails, installez le plugin `WP Mail SMTP` pour améliorer leur fiabilité.
