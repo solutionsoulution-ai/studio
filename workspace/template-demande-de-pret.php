@@ -17,17 +17,6 @@ get_header();
                     Remplissez le formulaire pour soumettre votre demande. C'est simple, rapide et sécurisé.
                 </p>
             </div>
-
-            <div class="mb-12">
-                <?php 
-                $calculator_args = [
-                    'title' => 'Estimez vos mensualités',
-                    'description' => "Ceci est une simulation. Ajustez les curseurs ou entrez les valeurs pour voir l'impact sur vos paiements.",
-                ];
-                set_query_var('calculator_args', $calculator_args);
-                get_template_part('template-parts/calculator'); 
-                ?>
-            </div>
             
             <div class="mt-12">
                 <!--
