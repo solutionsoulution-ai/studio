@@ -17,34 +17,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // FAQ Accordion
-  const accordionTriggers = document.querySelectorAll('[data-accordion-trigger]');
-  accordionTriggers.forEach(trigger => {
-    trigger.addEventListener('click', function () {
-      const content = this.nextElementSibling;
-      const parentItem = this.parentElement;
-      const isOpen = parentItem.getAttribute('data-state') === 'open';
-
-      // Close all other open items
-      parentItem.parentElement.querySelectorAll('[data-state="open"]').forEach(openItem => {
-        if (openItem !== parentItem) {
-          openItem.setAttribute('data-state', 'closed');
-          const openContent = openItem.querySelector('[data-accordion-content]');
-          if (openContent) openContent.style.display = 'none';
-        }
-      });
-      
-      // Toggle current item
-      if (isOpen) {
-        parentItem.setAttribute('data-state', 'closed');
-        content.style.display = 'none';
-      } else {
-        parentItem.setAttribute('data-state', 'open');
-        content.style.display = 'block';
-      }
-    });
-  });
-
   // Scroll Animations
   const animatedElements = document.querySelectorAll('section, .fade-in-item');
   animatedElements.forEach(el => el.classList.add('fade-in-on-scroll'));
