@@ -22,7 +22,7 @@
 <header class="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
     <div class="container flex h-16 max-w-screen-2xl items-center">
         <a href="<?php echo esc_url(home_url('/')); ?>" class="mr-6 flex items-center space-x-2">
-            <span class="font-bold text-lg sm:inline-block">VylsFond</span>
+            <span class="font-bold sm:inline-block">VylsFond</span>
         </a>
         <nav class="hidden lg:flex flex-1 items-center space-x-4 text-sm font-medium">
              <?php
@@ -37,7 +37,7 @@
             ?>
         </nav>
         <div class="flex flex-1 items-center justify-end space-x-2 md:flex-none lg:flex-1 lg:justify-end">
-            <a href="/tableau-de-bord" class="border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-10 px-4 py-2">Banque en ligne</a>
+            <a href="https://google.com" target="_blank" rel="noopener noreferrer" class="border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-10 px-4 py-2">Espace Client</a>
             <a href="/demande-de-pret" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">Faire une demande</a>
             
             <!-- Mobile Menu Button -->
@@ -54,7 +54,7 @@
         <div class="flex h-full flex-col">
             <div class="flex items-center justify-between border-b p-4">
                 <a href="<?php echo esc_url(home_url('/')); ?>" data-mobile-menu-close class="flex items-center space-x-2">
-                    <span class="font-bold text-lg">VylsFond</span>
+                    <span class="font-bold">VylsFond</span>
                 </a>
                 <button data-mobile-menu-close aria-label="Fermer le menu" class="p-2">
                     <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -62,7 +62,7 @@
             </div>
             <nav class="flex flex-col space-y-4 p-4">
                  <a href="/demande-de-pret" data-mobile-menu-close class="text-lg font-medium transition-colors hover:text-primary">Faire une demande</a>
-                 <a href="/tableau-de-bord" data-mobile-menu-close class="text-lg font-medium transition-colors hover:text-primary">Banque en ligne</a>
+                 <a href="https://google.com" target="_blank" rel="noopener noreferrer" data-mobile-menu-close class="text-lg font-medium transition-colors hover:text-primary">Espace Client</a>
                  <p class="text-sm font-semibold text-muted-foreground pt-4">Menu</p>
                  <div class="flex flex-col space-y-4">
                     <?php
@@ -80,3 +80,5 @@
         </div>
     </div>
 </header>
+
+    

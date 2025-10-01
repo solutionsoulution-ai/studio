@@ -67,6 +67,20 @@ get_header();
                     <div class="p-0 flex-grow flex items-end"><a href="/pret-personnel" class="text-primary underline-offset-4 hover:underline inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium">En savoir plus <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a></div>
                 </div>
             </div>
+             <div class="flex flex-col group hover:border-primary transition-all overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm fade-in-item">
+                <a href="/pret-auto" class="block"><div class="relative h-48 w-full"><img src="https://i.postimg.cc/QMyhG9GF/pexels-pixabay-210019.jpg" alt="Image pour Prêt Auto" class="object-cover w-full h-full"></div></a>
+                <div class="flex flex-col flex-grow p-6">
+                    <div class="p-0 mb-4"><h3 class="text-2xl font-semibold leading-none tracking-tight">Prêt Auto</h3><p class="text-sm text-muted-foreground">Financez votre véhicule neuf ou d'occasion avec nos solutions de crédit adaptées.</p></div>
+                    <div class="p-0 flex-grow flex items-end"><a href="/pret-auto" class="text-primary underline-offset-4 hover:underline inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium">En savoir plus <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a></div>
+                </div>
+            </div>
+            <div class="flex flex-col group hover:border-primary transition-all overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm fade-in-item">
+                <a href="/rachat-de-credit" class="block"><div class="relative h-48 w-full"><img src="https://i.postimg.cc/SxVmd1g7/pexels-vlada-karpovich-7434025.jpg" alt="Image pour Rachat de Crédit" class="object-cover w-full h-full"></div></a>
+                <div class="flex flex-col flex-grow p-6">
+                    <div class="p-0 mb-4"><h3 class="text-2xl font-semibold leading-none tracking-tight">Rachat de Crédit</h3><p class="text-sm text-muted-foreground">Regroupez tous vos crédits en un seul pour réduire vos mensualités et simplifier votre budget.</p></div>
+                    <div class="p-0 flex-grow flex items-end"><a href="/rachat-de-credit" class="text-primary underline-offset-4 hover:underline inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium">En savoir plus <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a></div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -229,22 +243,22 @@ get_header();
                 </div>
                 <p class="mt-4 text-lg text-muted-foreground">Vous avez des questions ? Nous avons des réponses. Trouvez des informations sur nos services et processus ci-dessous.</p>
             </div>
-            <div class="space-y-6">
-                <div class="border-b pb-4">
-                    <h3 class="font-medium text-lg">Quelles sont les exigences minimales pour un prêt ?</h3>
-                    <p class="text-muted-foreground mt-2">Généralement, nous recherchons une situation financière stable et une capacité de remboursement démontrable. Chaque dossier est unique, et notre vérificateur d'éligibilité peut fournir une évaluation personnalisée.</p>
+             <div class="w-full">
+                <div data-state="closed" class="border-b">
+                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Quelles sont les exigences minimales pour un prêt ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="display: none;"><div class="pb-4 pt-0 text-base text-muted-foreground">Généralement, nous recherchons une situation financière stable et une capacité de remboursement démontrable. Chaque dossier est unique, et notre vérificateur d'éligibilité peut fournir une évaluation personnalisée.</div></div>
                 </div>
-                <div class="border-b pb-4">
-                    <h3 class="font-medium text-lg">Combien de temps dure le processus de demande ?</h3>
-                    <p class="text-muted-foreground mt-2">Notre vérification d'éligibilité initiale est instantanée. Un examen complet de la demande prend généralement entre 24 et 72 heures. Une fois approuvés, les fonds peuvent être débloqués rapidement.</p>
+                <div data-state="closed" class="border-b">
+                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Combien de temps dure le processus de demande ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="display: none;"><div class="pb-4 pt-0 text-base text-muted-foreground">Notre vérification d'éligibilité initiale est instantanée. Un examen complet de la demande prend généralement entre 24 et 72 heures. Une fois approuvés, les fonds peuvent être débloqués rapidement.</div></div>
                 </div>
-                <div class="border-b pb-4">
-                    <h3 class="font-medium text-lg">Quels types de prêts offrez-vous ?</h3>
-                    <p class="text-muted-foreground mt-2">VylsFond se spécialise dans une variété d'options de financement, y compris les prêts immobiliers, les prêts à la consommation, les prêts auto, le rachat de crédit et les financements pour entreprises.</p>
+                <div data-state="closed" class="border-b">
+                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Quels types de prêts offrez-vous ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="display: none;"><div class="pb-4 pt-0 text-base text-muted-foreground">VylsFond se spécialise dans une variété d'options de financement, y compris les prêts immobiliers, les prêts à la consommation, les prêts auto, le rachat de crédit et les financements pour entreprises.</div></div>
                 </div>
-                <div class="border-b pb-4">
-                    <h3 class="font-medium text-lg">Puis-je rembourser mon prêt par anticipation ?</h3>
-                    <p class="text-muted-foreground mt-2">Oui, la plupart de nos produits de prêt permettent un remboursement anticipé sans pénalité. Nous croyons en la fourniture d'options flexibles qui soutiennent votre santé financière.</p>
+                <div data-state="closed" class="border-b">
+                    <h3 data-accordion-trigger class="flex flex-1 items-center justify-between py-4 font-medium text-lg cursor-pointer">Puis-je rembourser mon prêt par anticipation ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg></h3>
+                    <div data-accordion-content class="overflow-hidden text-sm transition-all" style="display: none;"><div class="pb-4 pt-0 text-base text-muted-foreground">Oui, la plupart de nos produits de prêt permettent un remboursement anticipé sans pénalité. Nous croyons en la fourniture d'options flexibles qui soutiennent votre santé financière.</div></div>
                 </div>
             </div>
         </div>
@@ -255,3 +269,5 @@ get_header();
 <?php
 get_footer();
 ?>
+
+    
