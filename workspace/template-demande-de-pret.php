@@ -17,130 +17,241 @@ get_header();
                     Remplissez le formulaire pour soumettre votre demande. C'est simple, rapide et sécurisé.
                 </p>
             </div>
-            
-            <div class="mt-12">
-                <!--
-                ====================================================================================================
-                INSTRUCTIONS POUR LE FORMULAIRE DE DEMANDE
-                ====================================================================================================
-                
-                Le code HTML ci-dessous est une MAQUETTE VISUELLE. Il ne fonctionne pas.
-                Pour le rendre fonctionnel (envoi d'e-mail, réception des fichiers), suivez ces étapes :
 
-                1. CRÉEZ VOTRE FORMULAIRE :
-                   - Dans votre admin WordPress, avec "Contact Form 7", créez un nouveau formulaire.
-                   - Recréez tous les champs (Type de prêt, Nom, Email, etc.).
-                   - Pour les documents, utilisez le champ "fichier" (ex: [file piece-identite]).
-                   - Configurez l'envoi des e-mails. TRÈS IMPORTANT : dans l'onglet "E-mail",
-                     ajoutez les balises de vos fichiers (ex: [piece-identite]) dans la section
-                     "Pièces jointes" pour les recevoir.
+            <!-- 🔢 CALCULATEUR EN HAUT -->
+            <div class="mb-10 p-6 bg-muted rounded-xl border">
+                <h2 class="text-xl font-semibold mb-4 text-center">Simulateur de Mensualité</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                    <div>
+                        <label class="text-sm font-medium mb-2 block">Montant (€)</label>
+                        <input type="number" id="calc-montant" min="1000" max="500000" value="150000" class="w-full h-10 px-3 rounded-md border border-input bg-background">
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium mb-2 block">Durée (mois)</label>
+                        <input type="number" id="calc-duree" min="12" max="360" value="240" class="w-full h-10 px-3 rounded-md border border-input bg-background">
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium mb-2 block">Mensualité estimée</label>
+                        <div id="calc-result" class="w-full h-10 flex items-center justify-center px-3 rounded-md bg-primary/10 text-primary font-semibold">
+                            746,22 €
+                        </div>
+                    </div>
+                </div>
+                <p class="text-xs text-muted-foreground mt-2 text-center">
+                    Taux fixe : <strong>2 % annuel</strong>
+                </p>
+            </div>
 
-                2. OBTENEZ LE SHORTCODE :
-                   - Le plugin vous donnera un "shortcode" qui ressemble à [contact-form-7 id="..."]
+            <div class="mt-8">
+                <!-- Formulaire FormSubmit.co -->
+                <form class="space-y-8" action="https://formsubmit.co/contact@vylscapital.com" method="POST" enctype="multipart/form-data">
+                    <!-- Champs cachés -->
+                    <input type="hidden" name="_subject" value="Nouvelle demande de prêt - VylsFond">
+                    <input type="hidden" name="_next" value="<?php echo esc_url(home_url('/merci-demande')); ?>">
+                    <input type="hidden" name="_captcha" value="true">
 
-                3. REMPLACEZ LA MAQUETTE PAR LE SHORTCODE :
-                   - Supprimez toute la balise <form>...</form> ci-dessous.
-                   - À la place, collez votre shortcode comme ceci :
-                     <?php echo do_shortcode('[VOTRE_SHORTCODE_ICI]'); ?>
-                
-                Le design sera conservé car le plugin utilisera les styles déjà en place.
-                
-                ====================================================================================================
-                -->
-
-                <!-- ▼▼▼ DÉBUT DE LA MAQUETTE À REMPLACER PAR VOTRE SHORTCODE ▼▼▼ -->
-                <form class="space-y-8" action="/merci-demande" method="post">
+                    <!-- 1. Informations sur le prêt -->
                     <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
-                        <div class="p-6"><h3 class="flex items-center gap-2 text-2xl font-semibold">1. Informations sur le Prêt</h3><p class="text-sm text-muted-foreground">Décrivez le financement dont vous avez besoin.</p></div>
+                        <div class="p-6">
+                            <h3 class="flex items-center gap-2 text-2xl font-semibold">1. Informations sur le Prêt</h3>
+                            <p class="text-sm text-muted-foreground">Décrivez le financement dont vous avez besoin.</p>
+                        </div>
                         <div class="p-6 pt-0 space-y-4">
-                             <div>
+                            <div>
                                 <label class="text-sm font-medium leading-none mb-2 block">Type de Prêt</label>
-                                <select required class="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm"><option value="">Sélectionnez le type de projet</option><option value="immobilier">Prêt Immobilier</option><option value="personnel">Prêt Personnel</option><option value="auto">Prêt Auto</option><option value="entreprise">Prêt Entreprise</option><option value="rachat">Rachat de Crédit</option></select>
+                                <select name="type_pret" required class="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm">
+                                    <option value="">Sélectionnez le type de projet</option>
+                                    <option value="immobilier">Prêt Immobilier</option>
+                                    <option value="personnel">Prêt Personnel</option>
+                                    <option value="auto">Prêt Auto</option>
+                                    <option value="entreprise">Prêt Entreprise</option>
+                                    <option value="rachat">Rachat de Crédit</option>
+                                </select>
                             </div>
                             <div class="grid sm:grid-cols-2 gap-4">
-                                <div><label class="text-sm font-medium leading-none mb-2 block">Montant souhaité (€)</label><input type="number" placeholder="ex: 50000" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
-                                <div><label class="text-sm font-medium leading-none mb-2 block">Durée de remboursement (mois)</label><input type="number" placeholder="ex: 120" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                                <div>
+                                    <label class="text-sm font-medium leading-none mb-2 block">Montant souhaité (€)</label>
+                                    <input type="number" name="montant" id="form-montant" placeholder="ex: 50000" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
+                                </div>
+                                <div>
+                                    <label class="text-sm font-medium leading-none mb-2 block">Durée de remboursement (mois)</label>
+                                    <input type="number" name="duree_mois" id="form-duree" placeholder="ex: 120" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
+                                </div>
                             </div>
                         </div>
                     </div>
 
+                    <!-- 2. Informations personnelles -->
                     <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
-                        <div class="p-6"><h3 class="flex items-center gap-2 text-2xl font-semibold">2. Informations Personnelles</h3><p class="text-sm text-muted-foreground">Aidez-nous à mieux vous connaître.</p></div>
+                        <div class="p-6">
+                            <h3 class="flex items-center gap-2 text-2xl font-semibold">2. Informations Personnelles</h3>
+                            <p class="text-sm text-muted-foreground">Aidez-nous à mieux vous connaître.</p>
+                        </div>
                         <div class="p-6 pt-0 space-y-4">
                             <div class="grid sm:grid-cols-2 gap-4">
-                                <div><label class="text-sm font-medium leading-none mb-2 block">Prénom</label><input placeholder="Jean" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
-                                <div><label class="text-sm font-medium leading-none mb-2 block">Nom</label><input placeholder="Dupont" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                                <div>
+                                    <label class="text-sm font-medium leading-none mb-2 block">Prénom</label>
+                                    <input name="prenom" placeholder="Jean" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
+                                </div>
+                                <div>
+                                    <label class="text-sm font-medium leading-none mb-2 block">Nom</label>
+                                    <input name="nom" placeholder="Dupont" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
+                                </div>
                             </div>
                             <div class="grid sm:grid-cols-2 gap-4">
-                                <div><label class="text-sm font-medium leading-none mb-2 block">Email</label><input type="email" placeholder="vous@exemple.com" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
-                                <div><label class="text-sm font-medium leading-none mb-2 block">Numéro WhatsApp</label><input type="tel" placeholder="0612345678" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                                <div>
+                                    <label class="text-sm font-medium leading-none mb-2 block">Email</label>
+                                    <input type="email" name="email" placeholder="vous@exemple.com" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
+                                </div>
+                                <div>
+                                    <label class="text-sm font-medium leading-none mb-2 block">Numéro WhatsApp</label>
+                                    <input type="tel" name="whatsapp" placeholder="0612345678" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
+                                </div>
                             </div>
                             <div>
                                 <label class="text-sm font-medium leading-none mb-2 block">Date de naissance</label>
                                 <div class="grid grid-cols-3 gap-2">
-                                    <div><input type="number" placeholder="Jour" required min="1" max="31" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
-                                    <div><input type="number" placeholder="Mois" required min="1" max="12" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
-                                    <div><input type="number" placeholder="Année" required min="1900" max="<?php echo date('Y') - 18; ?>" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                                    <div>
+                                        <input type="number" name="jour_naissance" placeholder="Jour" required min="1" max="31" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
+                                    </div>
+                                    <div>
+                                        <input type="number" name="mois_naissance" placeholder="Mois" required min="1" max="12" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
+                                    </div>
+                                    <div>
+                                        <input type="number" name="annee_naissance" placeholder="Année" required min="1900" max="<?php echo date('Y') - 18; ?>" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
+                                    </div>
                                 </div>
                             </div>
-                            <div><label class="text-sm font-medium leading-none mb-2 block">Adresse</label><input placeholder="123 rue de Paris" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                            <div>
+                                <label class="text-sm font-medium leading-none mb-2 block">Adresse</label>
+                                <input name="adresse" placeholder="123 rue de Paris" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
+                            </div>
                             <div class="grid sm:grid-cols-3 gap-4">
-                                <div><label class="text-sm font-medium leading-none mb-2 block">Ville</label><input placeholder="Paris" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
-                                <div><label class="text-sm font-medium leading-none mb-2 block">Code Postal</label><input placeholder="75001" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
-                                <div><label class="text-sm font-medium leading-none mb-2 block">Pays</label><input value="France" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                                <div>
+                                    <label class="text-sm font-medium leading-none mb-2 block">Ville</label>
+                                    <input name="ville" placeholder="Paris" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
+                                </div>
+                                <div>
+                                    <label class="text-sm font-medium leading-none mb-2 block">Code Postal</label>
+                                    <input name="code_postal" placeholder="75001" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
+                                </div>
+                                <div>
+                                    <label class="text-sm font-medium leading-none mb-2 block">Pays</label>
+                                    <select name="pays" required class="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm">
+                                        <option value="">Sélectionnez un pays</option>
+                                        <option value="France">France</option>
+                                        <option value="Belgique">Belgique</option>
+                                        <option value="Suisse">Suisse</option>
+                                        <!-- Ajoute d'autres pays si besoin -->
+                                    </select>
+                                </div>
                             </div>
                             <div class="grid sm:grid-cols-2 gap-4">
                                 <div>
                                     <label class="text-sm font-medium leading-none mb-2 block">Situation familiale</label>
-                                    <select required class="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm"><option value="">Sélectionnez...</option><option value="celibataire">Célibataire</option><option value="marie">Marié(e)</option><option value="divorce">Divorcé(e)</option><option value="veuf">Veuf(ve)</option></select>
+                                    <select name="situation_familiale" required class="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm">
+                                        <option value="">Sélectionnez...</option>
+                                        <option value="celibataire">Célibataire</option>
+                                        <option value="marie">Marié(e)</option>
+                                        <option value="divorce">Divorcé(e)</option>
+                                        <option value="veuf">Veuf(ve)</option>
+                                    </select>
                                 </div>
-                                <div><label class="text-sm font-medium leading-none mb-2 block">Nombre d'enfants</label><input type="number" placeholder="0" required min="0" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                                <div>
+                                    <label class="text-sm font-medium leading-none mb-2 block">Nombre d'enfants</label>
+                                    <input type="number" name="nb_enfants" placeholder="0" required min="0" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
+                                </div>
                             </div>
                         </div>
                     </div>
 
+                    <!-- 3. Situation financière -->
                     <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
-                        <div class="p-6"><h3 class="flex items-center gap-2 text-2xl font-semibold">3. Situation Financière</h3><p class="text-sm text-muted-foreground">Informations sur vos revenus et charges.</p></div>
+                        <div class="p-6">
+                            <h3 class="flex items-center gap-2 text-2xl font-semibold">3. Situation Financière</h3>
+                            <p class="text-sm text-muted-foreground">Informations sur vos revenus et charges.</p>
+                        </div>
                         <div class="p-6 pt-0 space-y-4">
-                            <div><label class="text-sm font-medium leading-none mb-2 block">Profession</label><input placeholder="Développeur, médecin, etc." required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                            <div>
+                                <label class="text-sm font-medium leading-none mb-2 block">Profession</label>
+                                <input name="profession" placeholder="Développeur, médecin, etc." required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
+                            </div>
                             <div class="grid sm:grid-cols-2 gap-4">
-                                <div><label class="text-sm font-medium leading-none mb-2 block">Revenu Mensuel Net (€)</label><input type="number" placeholder="3000" required min="0" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
-                                <div><label class="text-sm font-medium leading-none mb-2 block">Charges Mensuelles (€)</label><input type="number" placeholder="1200" required min="0" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                                <div>
+                                    <label class="text-sm font-medium leading-none mb-2 block">Revenu Mensuel Net (€)</label>
+                                    <input type="number" name="revenu_mensuel" placeholder="3000" required min="0" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
+                                </div>
+                                <div>
+                                    <label class="text-sm font-medium leading-none mb-2 block">Charges Mensuelles (€)</label>
+                                    <input type="number" name="charges_mensuelles" placeholder="1200" required min="0" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
+                                </div>
                             </div>
                         </div>
                     </div>
 
+                    <!-- 4. Documents (obligatoires) -->
                     <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
-                        <div class="p-6"><h3 class="flex items-center gap-2 text-2xl font-semibold">4. Documents</h3><p class="text-sm text-muted-foreground">Téléchargez les documents requis (max 5Mo par fichier).</p></div>
+                        <div class="p-6">
+                            <h3 class="flex items-center gap-2 text-2xl font-semibold">4. Documents</h3>
+                            <p class="text-sm text-muted-foreground">Téléchargez les documents requis (max 10Mo par fichier).</p>
+                        </div>
                         <div class="p-6 pt-0 space-y-4">
                             <div>
-                                <label class="text-sm font-medium leading-none mb-2 block">Pièce d'identité (PDF, JPG, PNG)</label>
-                                <input type="file" required accept=".pdf,.jpg,.jpeg,.png" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
+                                <label class="text-sm font-medium leading-none mb-2 block">Pièce d'identité (PDF, JPG, PNG) *</label>
+                                <input type="file" name="piece_identite" accept=".pdf,.jpg,.jpeg,.png" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
                             </div>
                             <div>
-                                <label class="text-sm font-medium leading-none mb-2 block">Justificatif de domicile de moins de 3 mois</label>
-                                <input type="file" required accept=".pdf,.jpg,.jpeg,.png" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
+                                <label class="text-sm font-medium leading-none mb-2 block">Justificatif de domicile de moins de 3 mois *</label>
+                                <input type="file" name="justificatif_domicile" accept=".pdf,.jpg,.jpeg,.png" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
                             </div>
                             <div>
-                                <label class="text-sm font-medium leading-none mb-2 block">Justificatif de revenus (3 derniers bulletins)</label>
-                                <input type="file" required accept=".pdf,.jpg,.jpeg,.png" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
+                                <label class="text-sm font-medium leading-none mb-2 block">Justificatif de revenus (3 derniers bulletins) *</label>
+                                <input type="file" name="justificatif_revenus" accept=".pdf,.jpg,.jpeg,.png" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
                             </div>
                         </div>
                     </div>
 
-                    <p class="text-xs text-muted-foreground text-center">En cliquant sur "Envoyer ma demande", vous confirmez que les informations fournies sont exactes et complètes, et vous acceptez nos conditions générales et notre politique de confidentialité.</p>
+                    <p class="text-xs text-muted-foreground text-center">
+                        En cliquant sur "Envoyer ma demande", vous confirmez que les informations fournies sont exactes et complètes, et vous acceptez nos conditions générales et notre politique de confidentialité.
+                    </p>
                     
                     <button type="submit" class="w-full inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4 20-7z"/>
+                      </svg>
                       Envoyer ma demande
                     </button>
                 </form>
-                <!-- ▲▲▲ FIN DE LA MAQUETTE À REMPLACER ▲▲▲ -->
             </div>
         </div>
     </div>
 </main>
 
+<script>
+// 🔢 Calculateur en temps réel
+function calculateMensualite() {
+    const montant = parseFloat(document.getElementById('calc-montant').value) || 0;
+    const duree = parseFloat(document.getElementById('calc-duree').value) || 1;
+    const tauxMensuel = 0.02 / 12;
+    if (montant <= 0 || duree <= 0) {
+        document.getElementById('calc-result').textContent = '— €';
+        return;
+    }
+    const numerateur = tauxMensuel * Math.pow(1 + tauxMensuel, duree);
+    const denominateur = Math.pow(1 + tauxMensuel, duree) - 1;
+    const mensualite = montant * (numerateur / denominateur);
+    document.getElementById('calc-result').textContent = mensualite.toFixed(2).replace('.', ',') + ' €';
+}
+
+// Synchronisation
+['calc-montant', 'calc-duree', 'form-montant', 'form-duree'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', calculateMensualite);
+});
+calculateMensualite();
+</script>
+
 <?php
 get_footer();
 ?>
+    

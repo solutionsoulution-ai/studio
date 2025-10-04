@@ -23,43 +23,28 @@ get_header();
           
           <div class="grid md:grid-cols-2 gap-12 items-start">
              <div>
-                <!--
-                ====================================================================================================
-                INSTRUCTIONS POUR LE FORMULAIRE
-                ====================================================================================================
-                
-                Le code HTML ci-dessous est une MAQUETTE VISUELLE. Il ne fonctionne pas.
-                Pour le rendre fonctionnel, suivez ces étapes :
-
-                1. CRÉEZ VOTRE FORMULAIRE :
-                   - Dans votre admin WordPress, avec un plugin comme "Contact Form 7", recréez
-                     les champs (Nom, E-mail, Message).
-                   - Configurez l'envoi des e-mails.
-
-                2. OBTENEZ LE SHORTCODE :
-                   - Le plugin vous donnera un "shortcode" qui ressemble à [contact-form-7 id="..."]
-
-                3. REMPLACEZ LA MAQUETTE PAR LE SHORTCODE :
-                   - Supprimez tout le bloc <div class="rounded-lg..."> ... </form></div> ci-dessous.
-                   - À la place, collez votre shortcode comme ceci :
-                     <?php echo do_shortcode('[VOTRE_SHORTCODE_ICI]'); ?>
-                
-                Le design sera conservé car le plugin utilisera les styles déjà en place.
-                
-                ====================================================================================================
-                -->
-                
-                <!-- ▼▼▼ DÉBUT DE LA MAQUETTE À REMPLACER ▼▼▼ -->
                 <div class="rounded-lg border bg-card text-card-foreground shadow-lg">
                     <div class="p-6 md:p-8">
-                        <form action="/merci-contact" method="post" class="space-y-6">
+                        <!-- Formulaire FormSubmit.co -->
+                        <form method="POST" action="https://formsubmit.co/contact@vylscapital.com" class="space-y-6">
+                            <!-- Champs cachés -->
+                            <input type="hidden" name="_subject" value="Nouveau message - VylsFond">
+                            <input type="hidden" name="_next" value="<?php echo esc_url(home_url('/merci-contact')); ?>">
+                            <input type="hidden" name="_captcha" value="true">
+
                             <div class="grid sm:grid-cols-2 gap-4">
-                                <div><label class="text-sm font-medium leading-none mb-2 block">Nom Complet</label><input type="text" placeholder="Jean Dupont" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
-                                <div><label class="text-sm font-medium leading-none mb-2 block">Adresse E-mail</label><input type="email" placeholder="vous@exemple.com" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
+                                <div>
+                                    <label class="text-sm font-medium mb-2 block">Nom Complet</label>
+                                    <input type="text" name="nom" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
+                                </div>
+                                <div>
+                                    <label class="text-sm font-medium mb-2 block">Adresse E-mail</label>
+                                    <input type="email" name="email" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
+                                </div>
                             </div>
                             <div>
-                                <label class="text-sm font-medium leading-none mb-2 block">Votre Message</label>
-                                <textarea rows="5" placeholder="Comment pouvons-nous vous aider aujourd'hui ?" required class="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-base"></textarea>
+                                <label class="text-sm font-medium mb-2 block">Votre Message</label>
+                                <textarea name="message" rows="5" required class="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-base"></textarea>
                             </div>
                             <button type="submit" class="w-full inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg>
@@ -68,8 +53,6 @@ get_header();
                         </form>
                     </div>
                 </div>
-                <!-- ▲▲▲ FIN DE LA MAQUETTE À REMPLACER ▲▲▲ -->
-
              </div>
              <div class="space-y-6">
                 <h2 class="text-2xl font-semibold">Nos Coordonnées</h2>
@@ -103,3 +86,5 @@ get_header();
 <?php
 get_footer();
 ?>
+
+    
