@@ -12,6 +12,17 @@ import { Slider } from "../ui/slider";
 
 const FIXED_INTEREST_RATE = 2;
 
+const europeanCountries = [
+    "Albanie", "Allemagne", "Andorre", "Autriche", "Belgique", "Biélorussie", 
+    "Bosnie-Herzégovine", "Bulgarie", "Chypre", "Croatie", "Danemark", "Espagne", 
+    "Estonie", "Finlande", "France", "Grèce", "Hongrie", "Irlande", "Islande", 
+    "Italie", "Kosovo", "Lettonie", "Liechtenstein", "Lituanie", "Luxembourg", 
+    "Macédoine du Nord", "Malte", "Moldavie", "Monaco", "Monténégro", "Norvège", 
+    "Pays-Bas", "Pologne", "Portugal", "République tchèque", "Roumanie", 
+    "Royaume-Uni", "Russie", "Saint-Marin", "Serbie", "Slovaquie", "Slovénie", 
+    "Suède", "Suisse", "Ukraine", "Vatican"
+];
+
 export default function LoanApplicationForm() {
   const [loanAmount, setLoanAmount] = useState(50000);
   const [loanTerm, setLoanTerm] = useState(120);
@@ -194,7 +205,19 @@ export default function LoanApplicationForm() {
             <div className="grid sm:grid-cols-3 gap-4">
               <div><Label>Ville</Label><Input placeholder="Paris" required /></div>
               <div><Label>Code Postal</Label><Input placeholder="75001" required /></div>
-              <div><Label>Pays</Label><Input defaultValue="France" required /></div>
+              <div>
+                <Label>Pays</Label>
+                <Select required name="pays">
+                    <SelectTrigger>
+                        <SelectValue placeholder="Sélectionnez un pays" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {europeanCountries.map(country => (
+                            <SelectItem key={country} value={country}>{country}</SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+              </div>
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
