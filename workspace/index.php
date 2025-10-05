@@ -67,20 +67,6 @@ get_header();
                     <div class="p-0 flex-grow flex items-end"><a href="/pret-personnel" class="text-primary underline-offset-4 hover:underline inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium">En savoir plus <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a></div>
                 </div>
             </div>
-            <div class="flex flex-col group hover:border-primary transition-all overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm fade-in-item">
-                <a href="/pret-auto" class="block"><div class="relative h-48 w-full"><img src="https://i.postimg.cc/QMyhG9GF/pexels-pixabay-210019.jpg" alt="Image pour Prêt Auto" class="object-cover w-full h-full"></div></a>
-                <div class="flex flex-col flex-grow p-6">
-                    <div class="p-0 mb-4"><h3 class="text-2xl font-semibold leading-none tracking-tight">Prêt Auto</h3><p class="text-sm text-muted-foreground">Financez votre véhicule neuf ou d'occasion avec nos solutions de crédit adaptées.</p></div>
-                    <div class="p-0 flex-grow flex items-end"><a href="/pret-auto" class="text-primary underline-offset-4 hover:underline inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium">En savoir plus <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a></div>
-                </div>
-            </div>
-            <div class="flex flex-col group hover:border-primary transition-all overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm fade-in-item">
-                <a href="/rachat-de-credit" class="block"><div class="relative h-48 w-full"><img src="https://i.postimg.cc/SxVmd1g7/pexels-vlada-karpovich-7434025.jpg" alt="Image pour Rachat de Crédit" class="object-cover w-full h-full"></div></a>
-                <div class="flex flex-col flex-grow p-6">
-                    <div class="p-0 mb-4"><h3 class="text-2xl font-semibold leading-none tracking-tight">Rachat de Crédit</h3><p class="text-sm text-muted-foreground">Regroupez tous vos crédits en un seul pour réduire vos mensualités et simplifier votre budget.</p></div>
-                    <div class="p-0 flex-grow flex items-end"><a href="/rachat-de-credit" class="text-primary underline-offset-4 hover:underline inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium">En savoir plus <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a></div>
-                </div>
-            </div>
         </div>
     </section>
 
@@ -158,8 +144,8 @@ get_header();
     </section>
 
     <!-- Section: Derniers Articles -->
-    <section class="py-16 md:py-24 bg-muted/30">
-        <div class="container mx-auto">
+    <section class="py-16 md:py-24">
+         <div class="container mx-auto">
             <div class="text-center mb-10">
                 <div class="flex items-center gap-3 justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-primary"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
@@ -167,54 +153,12 @@ get_header();
                 </div>
                 <p class="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">Suivez nos conseils d'experts pour prendre les meilleures décisions financières.</p>
             </div>
-            
+            <!-- NOTE: Ce contenu est dynamique. Il faudra le remplacer par une boucle WordPress (WP_Query) pour afficher les vrais articles du blog. -->
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <?php
-                $recent_posts = new WP_Query(array('posts_per_page' => 3));
-                if ($recent_posts->have_posts()) :
-                    while ($recent_posts->have_posts()) : $recent_posts->the_post();
-                ?>
-                    <div class="flex flex-col group hover:border-primary transition-all overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm">
-                        <a href="<?php the_permalink(); ?>" class="block">
-                            <div class="relative h-48 w-full">
-                                <?php if (has_post_thumbnail()) : ?>
-                                    <?php the_post_thumbnail('medium_large', ['class' => 'object-cover w-full h-full']); ?>
-                                <?php else: ?>
-                                    <div class="w-full h-full bg-muted flex items-center justify-center text-muted-foreground">Image non disponible</div>
-                                <?php endif; ?>
-                            </div>
-                        </a>
-                        <div class="flex flex-col flex-grow p-6">
-                            <div class="p-0">
-                                <h3 class="text-xl leading-tight group-hover:text-primary transition-colors font-semibold"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-                                <p class="pt-2 text-xs text-muted-foreground"><?php echo get_the_date(); ?> &bull; <?php the_author(); ?></p>
-                            </div>
-                            <div class="p-0 pt-3 flex-grow">
-                                <p class="text-sm text-muted-foreground"><?php echo wp_trim_words(get_the_excerpt(), 20, '...'); ?></p>
-                            </div>
-                            <div class="p-0 pt-4">
-                                <a href="<?php the_permalink(); ?>" class="text-sm font-medium text-primary underline-offset-4 hover:underline inline-flex items-center">
-                                    Lire la suite
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                <?php
-                    endwhile;
-                    wp_reset_postdata();
-                else :
-                ?>
-                    <p class="col-span-3 text-center text-muted-foreground">Aucun article récent à afficher.</p>
-                <?php endif; ?>
+                <!-- Statique pour l'export, sera remplacé par la boucle WP -->
             </div>
-            
-            <div class="mt-12 text-center">
-                <a href="<?php echo get_permalink( get_option( 'page_for_posts' ) ); ?>" class="border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-10 px-4 py-2">
-                    Voir tous les articles
-                </a>
-            </div>
-        </div>
+            <div class="mt-12 text-center"><a class="border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-10 px-4 py-2" href="/blog">Voir tous les articles</a></div>
+         </div>
     </section>
 
     <!-- Section: Partenaires -->

@@ -34,7 +34,12 @@ Cette commande va créer un dossier `build/` qui contient les fichiers `main.css
 
 ## Étape 4 : Gérer le JavaScript
 
-Le fichier `functions.php` est déjà configuré pour charger `main.js` (déjà présent dans `assets/js`). Il n'y a rien d'autre à faire.
+1.  **JavaScript pour le Calculateur (React) :**
+    *   Allez dans `build/static/js/`.
+    *   Créez les dossiers `build/static/js/` à l'intérieur de votre thème `vylsfond-theme/`.
+    *   Copiez le fichier `calculator.js` depuis `build/static/js/calculator.js` vers `vylsfond-theme/build/static/js/calculator.js`.
+
+Le fichier `functions.php` est déjà configuré pour charger `main.js` (déjà présent dans `assets/js`) et `calculator.js`. Il n'y a rien d'autre à faire.
 
 ---
 
@@ -51,7 +56,7 @@ C'est l'étape qui cause l'erreur "feuille de style manquante". Suivez-la attent
 
 1.  **N'archivez PAS le dossier `vylsfond-theme` lui-même.**
 2.  **Ouvrez** le dossier `vylsfond-theme`.
-3.  À l'intérieur, sélectionnez **tous les fichiers et dossiers** (`style.css`, `index.php`, `assets/`, etc.).
+3.  À l'intérieur, sélectionnez **tous les fichiers et dossiers** (`style.css`, `index.php`, `assets/`, `build/`, etc.).
 4.  Faites un clic droit sur votre sélection et choisissez :
     *   Sur **Windows** : `Envoyer vers` > `Dossier compressé (.zip)`.
     *   Sur **macOS** : `Compresser X éléments`.
@@ -63,61 +68,77 @@ C'est l'étape qui cause l'erreur "feuille de style manquante". Suivez-la attent
 
 ## Étape 7 : Configuration du contenu dans WordPress (Étape Finale)
 
-Une fois le thème activé, votre site peut afficher des erreurs "Page non trouvée" ou "403 Forbidden". C'est normal. Vous devez maintenant créer et configurer les pages dans WordPress.
+Une fois le thème activé, votre site peut afficher des erreurs "Page non trouvée". C'est normal. Vous devez maintenant créer les pages dans WordPress.
 
 1.  **Activer le Thème :**
     *   Allez dans `Apparence > Thèmes > Ajouter > Téléverser un thème` et téléversez votre `vylsfond-theme.zip`.
     *   Activez le thème.
 
 2.  **Configurer la Page d'Accueil (Très Important) :**
-    *   Allez dans `Pages > Ajouter`. Créez une page simple que vous nommerez `Accueil`. Laissez le contenu vide, puis publiez-la.
+    *   Allez dans `Pages > Ajouter`. Créez une page simple que vous nommerez `Accueil`. Laissez le contenu vide et le modèle sur "Défaut", puis publiez-la.
     *   Allez dans `Réglages > Lecture`.
     *   À côté de "La page d'accueil affiche", cochez **"Une page statique"**.
     *   Dans le menu déroulant "Page d'accueil", sélectionnez la page **"Accueil"** que vous venez de créer.
-    *   Cliquez sur **"Enregistrer les modifications"**. WordPress saura maintenant utiliser `index.php` pour l'accueil.
+    *   Cliquez sur **"Enregistrer les modifications"**.
 
-3.  **Configurer la Page des Articles (Blog) :**
-    *   Allez dans `Pages > Ajouter`. Créez une page que vous nommerez `Blog`.
-    *   **IMPORTANT :** Dans la colonne de droite, sous `Résumé > Modèle`, sélectionnez le modèle **"Page - Blog"**.
-    *   Publiez la page.
-    *   Retournez dans `Réglages > Lecture`.
-    *   Dans le menu déroulant "Page des articles", sélectionnez la page **"Blog"** que vous venez de créer.
-    *   Enregistrez les modifications.
+3.  **Créer les Pages :**
+    Pour chaque page de votre site, vous devez créer une page dans WordPress et lui assigner le bon "Modèle".
+    *   Allez dans `Pages > Ajouter`.
+    *   Donnez un titre à la page (ex: "Contact").
+    *   Dans la colonne de droite, sous `Résumé > Modèle`, sélectionnez le modèle correspondant (ex: "Page - Contact").
+    *   Cliquez sur `Publier`.
 
-4.  **Permaliens (L'ÉTAPE LA PLUS IMPORTANTE POUR CORRIGER LES ERREURS 403/404) :**
-    *   Allez dans `Réglages > Permaliens`.
-    *   Assurez-vous que l'option `Titre de la publication` est cochée.
-    *   Cliquez sur le bouton **`Enregistrer les modifications`** en bas de la page.
-    *   **Même si l'option était déjà cochée, cliquez quand même sur le bouton.** Cette action force WordPress à rafraîchir ses règles de liens (le fichier `.htaccess`) et résout la majorité des problèmes.
-
-5.  **Créer les Autres Pages avec les Modèles :**
-    *   `À Propos` -> `Page - À Propos`
-    *   `Contact` -> `Page - Contact`
-    *   `Demande de Financement` -> `Page - Demande de Prêt`
-    *   `Prêt Entreprise` -> `Service - Prêt Entreprise`
-    *   `Prêt Immobilier` -> `Service - Prêt Immobilier`
-    *   `Prêt Personnel` -> `Service - Prêt Personnel`
-    *   `Prêt Auto` -> `Service - Prêt Auto`
-    *   `Rachat de Crédit` -> `Service - Rachat de Crédit`
-    *   `Politique de Confidentialité` -> `Page - Politique de Confidentialité`
-    *   `Conditions Générales` -> `Page - Conditions Générales`
-    *   `Tableau de Bord` -> `Banque - Tableau de Bord`
+    **Répétez cette opération pour les pages suivantes :**
+    *   **Titre :** `Blog` -> **Modèle :** `Page - Blog`
+    *   **Titre :** `Stratégies Prêt Entreprise` -> **Modèle :** `Blog - Stratégies Prêt Entreprise`
+    *   **Titre :** `Rachat de Crédit` -> **Modèle :** `Blog - Rachat de Crédit`
+    *   **Titre :** `Erreurs Prêt Immobilier` -> **Modèle :** `Blog - Prêt Immobilier Erreurs`
+    *   **Titre :** `Prêt Personnel Flexible` -> **Modèle :** `Blog - Prêt Personnel Flexible`
+    *   **Titre :** `À Propos` -> **Modèle :** `Page - À Propos`
+    *   **Titre :** `Contact` -> **Modèle :** `Page - Contact`
+    *   **Titre :** `Demande de Financement` -> **Modèle :** `Page - Demande de Prêt`
+    *   **Titre :** `Prêt Entreprise` -> **Modèle :** `Service - Prêt Entreprise`
+    *   **Titre :** `Prêt Immobilier` -> **Modèle :** `Service - Prêt Immobilier`
+    *   **Titre :** `Prêt Personnel` -> **Modèle :** `Service - Prêt Personnel`
+    *   **Titre :** `Prêt Auto` -> **Modèle :** `Service - Prêt Auto`
+    *   **Titre :** `Rachat de Crédit` -> **Modèle :** `Service - Rachat de Crédit`
+    *   **Titre :** `Politique de Confidentialité` -> **Modèle :** `Page - Politique de Confidentialité`
+    *   **Titre :** `Conditions Générales` -> **Modèle :** `Page - Conditions Générales`
+    *   **Titre :** `Tableau de Bord` -> **Modèle :** `Banque - Tableau de Bord`
+    *   **Titre :** `Transactions` -> **Modèle :** `Banque - Transactions`
+    *   **Titre :** `Virements` -> **Modèle :** `Banque - Virements`
     
-6.  **Créer le Menu :**
-    *   Allez dans `Apparence > Menus`, créez un nouveau menu, ajoutez vos pages (y compris la page "Blog"), et assignez-le à l'emplacement "Menu Principal".
+4.  **Créer le Menu :**
+    *   Allez dans `Apparence > Menus`.
+    *   Créez un nouveau menu.
+    *   Ajoutez les pages que vous venez de créer au menu.
+    *   En bas, dans "Emplacements du menu", cochez la case "Menu Principal".
+    *   Enregistrez le menu.
+
+5.  **Permaliens (Très Important) :**
+    *   Allez dans `Réglages > Permaliens`.
+    *   Choisissez la structure `Titre de la publication`.
+    *   Cliquez sur `Enregistrer les modifications`. Cela rafraîchit les règles de liens de WordPress et résout beaucoup de problèmes de "page non trouvée".
+
+6.  **Gérer les Utilisateurs (Pour la Banque Fictive) :**
+    *   Pour créer un compte pour un client, allez dans `Utilisateurs > Ajouter`.
+    *   Remplissez son nom d'utilisateur, son e-mail, et créez un mot de passe.
+    *   Le rôle "Abonné" est suffisant.
+    *   Envoyez-lui ses identifiants. Il pourra se connecter via la page de connexion standard de WordPress (`/wp-login.php`) et accéder aux pages de la banque en ligne.
+
+7.  **Installer les Plugins :**
+    *   Pour que les formulaires de contact et de demande de prêt fonctionnent, installez un plugin comme **WPForms** ou **Contact Form 7**.
+    *   Créez vos formulaires dans le plugin.
+    *   Modifiez les fichiers `template-contact.php` et `template-demande-de-pret.php` en remplaçant les formulaires HTML statiques par le shortcode du plugin (ex: `<?php echo do_shortcode('[wpforms id="123"]'); ?>`). Les instructions sont dans les fichiers.
+    *   Pour les carrousels (page d'accueil, témoignages), installez un plugin de slider comme **Smart Slider 3** ou **Slider Revolution** et recréez les carrousels, puis insérez leur shortcode dans les fichiers PHP correspondants.
 
 ---
 
-## Étape 8 : Rendre les formulaires fonctionnels
+### Nettoyage du Thème (Optionnel mais recommandé)
 
-Pour que les formulaires de contact et de demande de prêt envoient des e-mails avec pièces jointes, suivez ces étapes.
-
-1.  **Installez le plugin "WP Mail SMTP" (gratuit) :**
-    *   Dans `Extensions > Ajouter`, recherchez, installez et activez `WP Mail SMTP`.
-    *   Suivez l'assistant de configuration. Choisissez `Autre SMTP` et entrez les informations de votre compte e-mail (`mail.spacemail.com`, `contact@vylscapital.com`, etc.). C'est **crucial** pour la fiabilité de l'envoi.
-
-2.  **Vérifiez que les formulaires fonctionnent :**
-    *   Le code PHP pour l'envoi des e-mails est déjà intégré dans `template-contact.php` et `template-demande-de-pret.php`.
-    *   Faites un test en envoyant un message depuis chaque formulaire pour confirmer que vous recevez bien les e-mails.
-
-Votre site est maintenant entièrement fonctionnel !
+Votre thème contient des fichiers de base dont nous n'avons plus besoin. Vous pouvez les supprimer pour garder votre thème propre :
+*   `404.php` (gardez-le, il est utile)
+*   `archive.php` (gardez-le)
+*   `comments.php` (gardez-le)
+*   `search.php` (gardez-le)
+*   `screenshot.png` (à garder ou à remplacer par votre propre capture d'écran)

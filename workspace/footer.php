@@ -10,12 +10,12 @@
  */
 
 ?>
-<footer class="bg-muted/30 border-t">
+<footer class="border-t">
     <div class="container mx-auto py-12 px-6">
         <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
             <div class="col-span-2 md:col-span-2">
                 <a href="<?php echo esc_url(home_url('/')); ?>" class="flex items-center space-x-2 mb-4">
-                    <span class="text-xl font-bold">VylsFond</span>
+                     <span class="text-xl font-bold">VylsFond</span>
                 </a>
                 <p class="text-sm text-muted-foreground max-w-sm">Solutions de financement rapides et flexibles pour aider votre entreprise à prospérer.</p>
                 <div class="mt-6 space-y-2 text-sm text-muted-foreground">
@@ -28,7 +28,7 @@
                 <h3 class="font-semibold mb-4">Navigation</h3>
                 <ul class="space-y-2">
                     <li><a href="/a-propos" class="text-sm text-muted-foreground hover:text-primary">À Propos</a></li>
-                    <li><a href="<?php echo get_permalink( get_option( 'page_for_posts' ) ); ?>" class="text-sm text-muted-foreground hover:text-primary">Blog</a></li>
+                    <li><a href="/blog" class="text-sm text-muted-foreground hover:text-primary">Blog</a></li>
                     <li><a href="/#calculateur" class="text-sm text-muted-foreground hover:text-primary">Calculateur</a></li>
                     <li><a href="/#faq" class="text-sm text-muted-foreground hover:text-primary">FAQ</a></li>
                     <li><a href="/contact" class="text-sm text-muted-foreground hover:text-primary">Contact</a></li>
@@ -37,11 +37,11 @@
             <div>
                 <h3 class="font-semibold mb-4">Nos Services</h3>
                 <ul class="space-y-2">
-                    <li><a href="/pret-entreprise" class="text-sm text-muted-foreground hover:text-primary">Prêt Entreprise</a></li>
-                    <li><a href="/pret-personnel" class="text-sm text-muted-foreground hover:text-primary">Prêt Personnel</a></li>
-                    <li><a href="/pret-immobilier" class="text-sm text-muted-foreground hover:text-primary">Prêt Immobilier</a></li>
-                    <li><a href="/pret-auto" class="text-sm text-muted-foreground hover:text-primary">Prêt Auto</a></li>
-                    <li><a href="/rachat-de-credit" class="text-sm text-muted-foreground hover:text-primary">Rachat de Crédit</a></li>
+                    <li><a href="/services/pret-entreprise" class="text-sm text-muted-foreground hover:text-primary">Prêt Entreprise</a></li>
+                    <li><a href="/services/pret-personnel" class="text-sm text-muted-foreground hover:text-primary">Prêt Personnel</a></li>
+                    <li><a href="/services/pret-immo" class="text-sm text-muted-foreground hover:text-primary">Prêt Immobilier</a></li>
+                    <li><a href="/services/pret-auto" class="text-sm text-muted-foreground hover:text-primary">Prêt Auto</a></li>
+                    <li><a href="/services/rachat-de-credit" class="text-sm text-muted-foreground hover:text-primary">Rachat de Crédit</a></li>
                 </ul>
             </div>
             <div>
@@ -57,11 +57,6 @@
         </div>
     </div>
 </footer>
-
-<div class="gtranslate_wrapper"></div>
-<script>window.gtranslateSettings = {"default_language":"fr","native_language_names":true,"languages":["fr","it","es","de","pt","en"],"wrapper_selector":".gtranslate_wrapper","switcher_horizontal_position":"right"}</script>
-<script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
-
 <?php wp_footer(); ?>
 </body>
 </html>
