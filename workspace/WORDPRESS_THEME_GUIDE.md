@@ -76,20 +76,21 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
     *   Dans le menu déroulant "Page d'accueil", sélectionnez la page **"Accueil"** que vous venez de créer.
     *   Cliquez sur **"Enregistrer les modifications"**. WordPress saura maintenant utiliser `index.php` pour l'accueil.
 
-3.  **Permaliens (L'ÉTAPE LA PLUS IMPORTANTE POUR CORRIGER LES ERREURS 403) :**
+3.  **Configurer la Page des Articles (Blog) :**
+    *   Allez dans `Pages > Ajouter`. Créez une page que vous nommerez `Blog`.
+    *   **IMPORTANT :** Dans la colonne de droite, sous `Résumé > Modèle`, sélectionnez le modèle **"Page - Blog"**.
+    *   Publiez la page.
+    *   Retournez dans `Réglages > Lecture`.
+    *   Dans le menu déroulant "Page des articles", sélectionnez la page **"Blog"** que vous venez de créer.
+    *   Enregistrez les modifications.
+
+4.  **Permaliens (L'ÉTAPE LA PLUS IMPORTANTE POUR CORRIGER LES ERREURS 403/404) :**
     *   Allez dans `Réglages > Permaliens`.
     *   Assurez-vous que l'option `Titre de la publication` est cochée.
     *   Cliquez sur le bouton **`Enregistrer les modifications`** en bas de la page.
-    *   **Même si l'option était déjà cochée, cliquez quand même sur le bouton.** Cette action force WordPress à rafraîchir ses règles de liens (le fichier `.htaccess`) et résout la majorité des erreurs 403 et 404.
+    *   **Même si l'option était déjà cochée, cliquez quand même sur le bouton.** Cette action force WordPress à rafraîchir ses règles de liens (le fichier `.htaccess`) et résout la majorité des problèmes.
 
-4.  **Créer les Pages avec les Modèles :**
-    Pour chaque autre page, vous devez créer une page et lui assigner le bon "Modèle".
-    *   Allez dans `Pages > Ajouter`.
-    *   Donnez un titre à la page (ex: "Rachat de Crédit").
-    *   Dans la colonne de droite, sous `Résumé > Modèle`, sélectionnez le modèle correspondant (ex: "Service - Rachat de Crédit").
-    *   Cliquez sur `Publier`.
-
-    **Répétez cette opération pour les pages suivantes :**
+5.  **Créer les Autres Pages avec les Modèles :**
     *   `À Propos` -> `Page - À Propos`
     *   `Contact` -> `Page - Contact`
     *   `Demande de Financement` -> `Page - Demande de Prêt`
@@ -102,37 +103,21 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
     *   `Conditions Générales` -> `Page - Conditions Générales`
     *   `Tableau de Bord` -> `Banque - Tableau de Bord`
     
-5.  **Créer le Menu :**
-    *   Allez dans `Apparence > Menus`, créez un nouveau menu, ajoutez vos pages, et assignez-le à l'emplacement "Menu Principal".
+6.  **Créer le Menu :**
+    *   Allez dans `Apparence > Menus`, créez un nouveau menu, ajoutez vos pages (y compris la page "Blog"), et assignez-le à l'emplacement "Menu Principal".
 
 ---
 
-## Étape 8 : Rendre les formulaires fonctionnels avec Contact Form 7 (100% gratuit)
+## Étape 8 : Rendre les formulaires fonctionnels
 
 Pour que les formulaires de contact et de demande de prêt envoient des e-mails avec pièces jointes, suivez ces étapes.
 
-1.  **Installez le plugin "Contact Form 7" :**
-    *   Dans votre admin WordPress, allez dans `Extensions > Ajouter`.
-    *   Recherchez `Contact Form 7`, puis installez et activez-le.
+1.  **Installez le plugin "WP Mail SMTP" (gratuit) :**
+    *   Dans `Extensions > Ajouter`, recherchez, installez et activez `WP Mail SMTP`.
+    *   Suivez l'assistant de configuration. Choisissez `Autre SMTP` et entrez les informations de votre compte e-mail (`mail.spacemail.com`, `contact@vylscapital.com`, etc.). C'est **crucial** pour la fiabilité de l'envoi.
 
-2.  **Créez votre Formulaire de Contact :**
-    *   Allez dans le nouveau menu `Contact` sur la gauche et cliquez sur `Ajouter`.
-    *   Donnez un nom à votre formulaire (ex: "Formulaire de Contact Simple").
-    *   Dans l'onglet "Formulaire", vous pouvez laisser les champs de base (nom, email, sujet, message, bouton envoyer).
-    *   Dans l'onglet **"E-mail"**, vérifiez que l'adresse dans le champ "Pour" est bien la vôtre.
-    *   Enregistrez et copiez le **shortcode** qui apparaît (ex: `[contact-form-7 id="..."]`).
+2.  **Vérifiez que les formulaires fonctionnent :**
+    *   Le code PHP pour l'envoi des e-mails est déjà intégré dans `template-contact.php` et `template-demande-de-pret.php`.
+    *   Faites un test en envoyant un message depuis chaque formulaire pour confirmer que vous recevez bien les e-mails.
 
-3.  **Créez votre Formulaire de Demande de Prêt (avec téléversement) :**
-    *   Créez un autre formulaire et nommez-le "Formulaire de Demande de Prêt".
-    *   Recréez tous les champs dont vous avez besoin (type de prêt, montant, informations personnelles, etc.).
-    *   Pour le téléversement de fichiers, utilisez le bouton **`fichier`** dans l'éditeur. Cela ajoutera une balise comme `[file votre-fichier]`. Vous pouvez ajouter des options pour la taille et le type de fichier, par exemple : `[file file-id limit:5mb filetypes:pdf|jpg|png]`.
-    *   **TRÈS IMPORTANT :** Allez dans l'onglet **"E-mail"** de ce formulaire. Tout en bas, vous trouverez une section **"Pièces jointes"**. Collez-y les balises de vos champs de fichier (ex: `[file-id]`). C'est ce qui attachera les fichiers téléversés à l'e-mail que vous recevrez.
-    *   Enregistrez et copiez le shortcode.
-
-4.  **Intégrez les formulaires dans votre thème :**
-    *   Modifiez le fichier `template-contact.php` et remplacez la maquette HTML (la balise `<form>...</form>`) par le shortcode de votre formulaire de contact :
-        `<?php echo do_shortcode('[contact-form-7 id="VOTRE_ID_CONTACT"]'); ?>`
-    *   Modifiez le fichier `template-demande-de-pret.php` et remplacez la maquette HTML par le shortcode de votre formulaire de demande de prêt :
-        `<?php echo do_shortcode('[contact-form-7 id="VOTRE_ID_DEMANDE"]'); ?>`
-
-Votre site est maintenant entièrement fonctionnel ! Si vous constatez que vous ne recevez pas les e-mails, installez le plugin `WP Mail SMTP` pour améliorer leur fiabilité.
+Votre site est maintenant entièrement fonctionnel !

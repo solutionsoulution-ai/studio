@@ -19,6 +19,8 @@ get_header();
                 <div class="absolute inset-0">
                     <?php the_post_thumbnail('full', ['class' => 'object-cover w-full h-full']); ?>
                 </div>
+            <?php else: ?>
+                <div class="absolute inset-0 bg-muted"></div>
             <?php endif; ?>
             <div class="absolute inset-0 bg-black/60"></div>
             <div class="relative container mx-auto h-full flex flex-col justify-center items-center text-center text-white px-4">
@@ -74,10 +76,26 @@ get_header();
                 </aside>
             </div>
         </section>
+        
+        <!-- CTA Section -->
+        <section class="bg-primary text-primary-foreground">
+            <div class="container mx-auto text-center py-16 px-4">
+                <h2 class="text-3xl font-bold">Prêt à démarrer votre projet ?</h2>
+                <p class="mt-2 text-lg max-w-xl mx-auto opacity-90">
+                    Notre équipe est là pour vous aider à trouver la meilleure solution de financement.
+                </p>
+                <div class="mt-8">
+                    <a href="/demande-de-pret" class="bg-secondary text-secondary-foreground hover:bg-secondary/80 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-11 rounded-md px-8">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg>
+                        Faire une demande
+                    </a>
+                </div>
+            </div>
+        </section>
 
         <!-- Comments Section -->
         <?php if (comments_open() || get_comments_number()) : ?>
-            <section class="bg-muted/30 py-16 md:py-24">
+            <section class="py-16 md:py-24">
                 <div class="container mx-auto max-w-3xl px-4">
                     <?php comments_template(); ?>
                 </div>

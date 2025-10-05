@@ -28,9 +28,9 @@
                 <h3 class="font-semibold mb-4">Navigation</h3>
                 <ul class="space-y-2">
                     <li><a href="/a-propos" class="text-sm text-muted-foreground hover:text-primary">À Propos</a></li>
-                    <li><a href="/blog" class="text-sm text-muted-foreground hover:text-primary">Blog</a></li>
-                    <li><a href="#calculateur" class="text-sm text-muted-foreground hover:text-primary">Calculateur</a></li>
-                    <li><a href="#faq" class="text-sm text-muted-foreground hover:text-primary">FAQ</a></li>
+                    <li><a href="<?php echo get_permalink( get_option( 'page_for_posts' ) ); ?>" class="text-sm text-muted-foreground hover:text-primary">Blog</a></li>
+                    <li><a href="/#calculateur" class="text-sm text-muted-foreground hover:text-primary">Calculateur</a></li>
+                    <li><a href="/#faq" class="text-sm text-muted-foreground hover:text-primary">FAQ</a></li>
                     <li><a href="/contact" class="text-sm text-muted-foreground hover:text-primary">Contact</a></li>
                 </ul>
             </div>
