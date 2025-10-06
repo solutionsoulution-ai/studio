@@ -67,6 +67,20 @@ get_header();
                     <div class="p-0 flex-grow flex items-end"><a href="/pret-personnel" class="text-primary underline-offset-4 hover:underline inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium">En savoir plus <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a></div>
                 </div>
             </div>
+            <div class="flex flex-col group hover:border-primary transition-all overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm fade-in-item">
+                <a href="/pret-auto" class="block"><div class="relative h-48 w-full"><img src="https://i.postimg.cc/QMyhG9GF/pexels-pixabay-210019.jpg" alt="Image pour Prêt Auto" class="object-cover w-full h-full"></div></a>
+                <div class="flex flex-col flex-grow p-6">
+                    <div class="p-0 mb-4"><h3 class="text-2xl font-semibold leading-none tracking-tight">Prêt Auto</h3><p class="text-sm text-muted-foreground">Financez votre véhicule neuf ou d'occasion avec nos solutions de crédit adaptées.</p></div>
+                    <div class="p-0 flex-grow flex items-end"><a href="/pret-auto" class="text-primary underline-offset-4 hover:underline inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium">En savoir plus <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a></div>
+                </div>
+            </div>
+            <div class="flex flex-col group hover:border-primary transition-all overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm fade-in-item">
+                <a href="/rachat-de-credit" class="block"><div class="relative h-48 w-full"><img src="https://i.postimg.cc/SxVmd1g7/pexels-vlada-karpovich-7434025.jpg" alt="Image pour Rachat de Crédit" class="object-cover w-full h-full"></div></a>
+                <div class="flex flex-col flex-grow p-6">
+                    <div class="p-0 mb-4"><h3 class="text-2xl font-semibold leading-none tracking-tight">Rachat de Crédit</h3><p class="text-sm text-muted-foreground">Regroupez tous vos crédits en un seul pour réduire vos mensualités et simplifier votre budget.</p></div>
+                    <div class="p-0 flex-grow flex items-end"><a href="/rachat-de-credit" class="text-primary underline-offset-4 hover:underline inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium">En savoir plus <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a></div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -255,3 +269,5 @@ get_header();
 <?php
 get_footer();
 ?>
+
+    
