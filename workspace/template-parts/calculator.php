@@ -4,18 +4,14 @@
  * This version uses inline CSS and JS for portability.
  * It accepts arguments via `set_query_var`.
  *
- * @package vyls
+ * @package capfinfy
  */
 
 $args = get_query_var('calculator_args', [
     'title' => 'Calculateur de Prêt',
     'description' => 'Estimez vos mensualités.',
-    'default_amount' => 50000,
-    'max_amount' => 500000,
-    'default_term' => 120,
-    'max_term' => 360,
 ]);
-$unique_id = spl_object_hash((object)$args);
+$unique_id = spl_object_hash((object)$args) . rand();
 ?>
 <style>
   .calc-container-outer {
@@ -44,13 +40,13 @@ $unique_id = spl_object_hash((object)$args);
   }
 
   .calc-result-panel {
-    flex-basis: 40%;
     background: hsl(220, 14.3%, 95.9%);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
+    flex-basis: 40%;
   }
   
   .calc-logo {
@@ -58,10 +54,6 @@ $unique_id = spl_object_hash((object)$args);
     font-weight: 700;
     color: hsl(231, 48%, 48%);
     margin-bottom: 8px;
-  }
-
-  .calc-logo span {
-    color: hsl(224, 71.4%, 4.1%);
   }
 
   .calc-h2 {
@@ -194,21 +186,21 @@ $unique_id = spl_object_hash((object)$args);
 <div class="calc-container-outer">
     <div class="calc-container">
         <div class="calc-panel calc-input-panel">
-            <div class="calc-logo">VylsFond</div>
+            <div class="calc-logo">Capfinfy</div>
             <h2 class="calc-h2"><?php echo esc_html($args['title']); ?></h2>
             <p class="calc-subtitle"><?php echo esc_html($args['description']); ?> Taux fixe annuel : <strong style="color: hsl(231, 48%, 48%);">2 %</strong></p>
 
             <label for="montant-<?php echo esc_attr($unique_id); ?>" class="calc-label">Montant du prêt (€)</label>
             <div class="calc-input-group">
-                <input type="number" id="montant-<?php echo esc_attr($unique_id); ?>" min="1000" max="<?php echo esc_attr($args['max_amount']); ?>" value="<?php echo esc_attr($args['default_amount']); ?>" oninput="updateMontantSlider_<?php echo esc_attr($unique_id); ?>(); calculate_<?php echo esc_attr($unique_id); ?>()" />
-                <input type="range" id="montantSlider-<?php echo esc_attr($unique_id); ?>" min="1000" max="<?php echo esc_attr($args['max_amount']); ?>" value="<?php echo esc_attr($args['default_amount']); ?>" step="1000" oninput="updateMontantInput_<?php echo esc_attr($unique_id); ?>(); calculate_<?php echo esc_attr($unique_id); ?>()" />
+                <input type="number" id="montant-<?php echo esc_attr($unique_id); ?>" min="1000" max="500000" value="50000" oninput="updateMontantSlider_<?php echo esc_attr($unique_id); ?>(); calculate_<?php echo esc_attr($unique_id); ?>()" />
+                <input type="range" id="montantSlider-<?php echo esc_attr($unique_id); ?>" min="1000" max="500000" value="50000" step="1000" oninput="updateMontantInput_<?php echo esc_attr($unique_id); ?>(); calculate_<?php echo esc_attr($unique_id); ?>()" />
                 <div class="calc-value-display"><span id="montantDisplay-<?php echo esc_attr($unique_id); ?>">... €</span></div>
             </div>
 
             <label for="duree-<?php echo esc_attr($unique_id); ?>" class="calc-label">Durée du prêt (mois)</label>
             <div class="calc-input-group">
-                <input type="number" id="duree-<?php echo esc_attr($unique_id); ?>" min="12" max="<?php echo esc_attr($args['max_term']); ?>" value="<?php echo esc_attr($args['default_term']); ?>" oninput="updateDureeSlider_<?php echo esc_attr($unique_id); ?>(); calculate_<?php echo esc_attr($unique_id); ?>()" />
-                <input type="range" id="dureeSlider-<?php echo esc_attr($unique_id); ?>" min="12" max="<?php echo esc_attr($args['max_term']); ?>" value="<?php echo esc_attr($args['default_term']); ?>" step="1" oninput="updateDureeInput_<?php echo esc_attr($unique_id); ?>(); calculate_<?php echo esc_attr($unique_id); ?>()" />
+                <input type="number" id="duree-<?php echo esc_attr($unique_id); ?>" min="12" max="320" value="120" oninput="updateDureeSlider_<?php echo esc_attr($unique_id); ?>(); calculate_<?php echo esc_attr($unique_id); ?>()" />
+                <input type="range" id="dureeSlider-<?php echo esc_attr($unique_id); ?>" min="12" max="320" value="120" step="1" oninput="updateDureeInput_<?php echo esc_attr($unique_id); ?>(); calculate_<?php echo esc_attr($unique_id); ?>()" />
                 <div class="calc-value-display"><span id="dureeDisplay-<?php echo esc_attr($unique_id); ?>">... mois</span></div>
             </div>
         </div>
@@ -224,76 +216,82 @@ $unique_id = spl_object_hash((object)$args);
 </div>
 
 <script>
-    function formatNumber(num) {
-      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-    }
+    function setupCalculator_<?php echo esc_attr($unique_id); ?>() {
+        const montantInput = document.getElementById("montant-<?php echo esc_attr($unique_id); ?>");
+        const montantSlider = document.getElementById("montantSlider-<?php echo esc_attr($unique_id); ?>");
+        const montantDisplay = document.getElementById("montantDisplay-<?php echo esc_attr($unique_id); ?>");
 
-    function updateMontantSlider_<?php echo esc_attr($unique_id); ?>() {
-      const input = document.getElementById("montant-<?php echo esc_attr($unique_id); ?>");
-      const slider = document.getElementById("montantSlider-<?php echo esc_attr($unique_id); ?>");
-      let value = parseFloat(input.value) || 1000;
-      value = Math.min(<?php echo esc_attr($args['max_amount']); ?>, Math.max(1000, value));
-      input.value = Math.round(value);
-      slider.value = input.value;
-      document.getElementById("montantDisplay-<?php echo esc_attr($unique_id); ?>").textContent = formatNumber(input.value) + " €";
-    }
+        const dureeInput = document.getElementById("duree-<?php echo esc_attr($unique_id); ?>");
+        const dureeSlider = document.getElementById("dureeSlider-<?php echo esc_attr($unique_id); ?>");
+        const dureeDisplay = document.getElementById("dureeDisplay-<?php echo esc_attr($unique_id); ?>");
 
-    function updateMontantInput_<?php echo esc_attr($unique_id); ?>() {
-      const slider = document.getElementById("montantSlider-<?php echo esc_attr($unique_id); ?>");
-      const input = document.getElementById("montant-<?php echo esc_attr($unique_id); ?>");
-      input.value = slider.value;
-      document.getElementById("montantDisplay-<?php echo esc_attr($unique_id); ?>").textContent = formatNumber(slider.value) + " €";
-    }
+        const mensualiteDisplay = document.getElementById("mensualite-<?php echo esc_attr($unique_id); ?>");
+        const dureeMoisDisplay = document.getElementById("dureeMois-<?php echo esc_attr($unique_id); ?>");
+        
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+        }
 
-    function updateDureeSlider_<?php echo esc_attr($unique_id); ?>() {
-      const input = document.getElementById("duree-<?php echo esc_attr($unique_id); ?>");
-      const slider = document.getElementById("dureeSlider-<?php echo esc_attr($unique_id); ?>");
-      let value = parseFloat(input.value) || 12;
-      value = Math.min(<?php echo esc_attr($args['max_term']); ?>, Math.max(12, value));
-      input.value = Math.round(value);
-      slider.value = input.value;
-      document.getElementById("dureeDisplay-<?php echo esc_attr($unique_id); ?>").textContent = input.value + " mois";
-    }
+        window.updateMontantSlider_<?php echo esc_attr($unique_id); ?> = function() {
+            let value = parseFloat(montantInput.value) || 1000;
+            value = Math.min(500000, Math.max(1000, value));
+            montantInput.value = Math.round(value);
+            montantSlider.value = montantInput.value;
+            montantDisplay.textContent = formatNumber(montantInput.value) + " €";
+        }
 
-    function updateDureeInput_<?php echo esc_attr($unique_id); ?>() {
-      const slider = document.getElementById("dureeSlider-<?php echo esc_attr($unique_id); ?>");
-      const input = document.getElementById("duree-<?php echo esc_attr($unique_id); ?>");
-      input.value = slider.value;
-      document.getElementById("dureeDisplay-<?php echo esc_attr($unique_id); ?>").textContent = slider.value + " mois";
-    }
+        window.updateMontantInput_<?php echo esc_attr($unique_id); ?> = function() {
+            montantInput.value = montantSlider.value;
+            montantDisplay.textContent = formatNumber(montantSlider.value) + " €";
+        }
 
-    function calculate_<?php echo esc_attr($unique_id); ?>() {
-      const montant = parseFloat(document.getElementById("montant-<?php echo esc_attr($unique_id); ?>").value);
-      const dureeMois = parseFloat(document.getElementById("duree-<?php echo esc_attr($unique_id); ?>").value);
+        window.updateDureeSlider_<?php echo esc_attr($unique_id); ?> = function() {
+            let value = parseFloat(dureeInput.value) || 12;
+            value = Math.min(320, Math.max(12, value));
+            dureeInput.value = Math.round(value);
+            dureeSlider.value = dureeInput.value;
+            dureeDisplay.textContent = dureeInput.value + " mois";
+        }
 
-      const mensualiteDisplay = document.getElementById("mensualite-<?php echo esc_attr($unique_id); ?>");
-      const dureeMoisDisplay = document.getElementById("dureeMois-<?php echo esc_attr($unique_id); ?>");
+        window.updateDureeInput_<?php echo esc_attr($unique_id); ?> = function() {
+            dureeInput.value = dureeSlider.value;
+            dureeDisplay.textContent = dureeSlider.value + " mois";
+        }
 
-      if (isNaN(montant) || isNaN(dureeMois) || montant < 1000 || dureeMois < 12) {
-        mensualiteDisplay.textContent = "— €";
-        dureeMoisDisplay.textContent = "— mois";
-        return;
-      }
+        window.calculate_<?php echo esc_attr($unique_id); ?> = function() {
+            const montant = parseFloat(montantInput.value);
+            const dureeMois = parseFloat(dureeInput.value);
 
-      const tauxAnnuel = 0.02;
-      const tauxMensuel = tauxAnnuel / 12;
+            if (isNaN(montant) || isNaN(dureeMois) || dureeMois === 0) {
+                mensualiteDisplay.textContent = "— €";
+                dureeMoisDisplay.textContent = "— mois";
+                return;
+            }
 
-      let mensualite;
-      if (tauxMensuel <= 0) {
-        mensualite = montant / dureeMois;
-      } else {
-        const numerateur = tauxMensuel * Math.pow(1 + tauxMensuel, dureeMois);
-        const denominateur = Math.pow(1 + tauxMensuel, dureeMois) - 1;
-        mensualite = montant * (numerateur / denominateur);
-      }
+            const tauxAnnuel = 0.02;
+            const tauxMensuel = tauxAnnuel / 12;
 
-      mensualiteDisplay.textContent = mensualite.toFixed(2).replace('.', ',') + " €";
-      dureeMoisDisplay.textContent = Math.round(dureeMois) + " mois";
-    }
+            let mensualite;
+            if (tauxMensuel <= 0) {
+                mensualite = montant / dureeMois;
+            } else {
+                const numerateur = tauxMensuel * Math.pow(1 + tauxMensuel, dureeMois);
+                const denominateur = Math.pow(1 + tauxMensuel, dureeMois) - 1;
+                mensualite = montant * (numerateur / denominateur);
+            }
 
-    document.addEventListener('DOMContentLoaded', function() {
+            mensualiteDisplay.textContent = mensualite.toFixed(2).replace('.', ',') + " €";
+            dureeMoisDisplay.textContent = Math.round(dureeMois) + " mois";
+        }
+
         updateMontantSlider_<?php echo esc_attr($unique_id); ?>();
         updateDureeSlider_<?php echo esc_attr($unique_id); ?>();
         calculate_<?php echo esc_attr($unique_id); ?>();
-    });
+    }
+    
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setupCalculator_<?php echo esc_attr($unique_id); ?>);
+    } else {
+      setupCalculator_<?php echo esc_attr($unique_id); ?>();
+    }
 </script>

@@ -2,7 +2,7 @@
 /**
  * Template Name: Page - Politique de Confidentialité
  *
- * @package vyls
+ * @package capfinfy
  */
 
 get_header();
@@ -17,7 +17,7 @@ get_header();
           <div>
             <h2>1. Introduction</h2>
             <p>
-              VylsFond s'engage à protéger la vie privée de ses utilisateurs. Cette politique de confidentialité explique quelles informations nous collectons, comment nous les utilisons, et quels sont vos droits concernant vos données personnelles.
+              Capfinfy s'engage à protéger la vie privée de ses utilisateurs. Cette politique de confidentialité explique quelles informations nous collectons, comment nous les utilisons, et quels sont vos droits concernant vos données personnelles.
             </p>
           </div>
 

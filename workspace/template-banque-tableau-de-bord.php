@@ -4,7 +4,7 @@
  *
  * Ce modèle de page est conçu pour être un espace client protégé.
  *
- * @package vyls
+ * @package capfinfy
  */
 
 // Redirige les utilisateurs non connectés vers la page de connexion.
