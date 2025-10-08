@@ -34,11 +34,6 @@ Cette commande va créer un dossier `build/` qui contient les fichiers `main.css
 
 ## Étape 4 : Gérer le JavaScript
 
-1.  **JavaScript pour le Calculateur (React) :**
-    *   Allez dans `build/static/js/`.
-    *   Créez les dossiers `build/static/js/` à l'intérieur de votre thème `capfinfy-theme/`.
-    *   Copiez le fichier `calculator.js` depuis `build/static/js/calculator.js` vers `capfinfy-theme/build/static/js/calculator.js`.
-
 Le fichier `functions.php` est déjà configuré pour charger `main.js` (déjà présent dans `assets/js`) et `calculator.js`. Il n'y a rien d'autre à faire.
 
 ---

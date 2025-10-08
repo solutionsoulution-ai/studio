@@ -2,7 +2,7 @@
 /**
  * Template Name: Service - Rachat de Crédit
  *
- * @package vyls
+ * @package capfinfy
  */
 
 get_header();

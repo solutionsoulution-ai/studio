@@ -2,7 +2,7 @@
 /**
  * Template Name: Service - Prêt Entreprise
  *
- * @package vyls
+ * @package capfinfy
  */
 
 get_header();

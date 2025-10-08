@@ -10,7 +10,6 @@ get_header();
 
 <main class="flex-1">
     <div>
-        <!-- Hero Section -->
         <section class="container mx-auto py-16 md:py-24">
             <div class="grid md:grid-cols-2 gap-8 lg:gap-16 items-center">
                 <div class="order-2 md:order-1">

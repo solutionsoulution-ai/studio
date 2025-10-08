@@ -2,7 +2,7 @@
 /**
  * Template Name: Service - Prêt Immobilier
  *
- * @package vyls
+ * @package capfinfy
  */
 
 get_header();

@@ -7,9 +7,11 @@
 
 get_header();
 
+// NOTE: This is a static representation for the WordPress theme export.
+// For a dynamic site, you would use a WP_Query loop here.
 $blog_posts = [
     [
-        'slug' => 'blog/5-strategies-pour-ameliorer-votre-dossier-de-pret-entreprise',
+        'slug' => '/strategies-pret-entreprise', // Should match the page slug in WordPress
         'title' => '5 stratégies pour améliorer votre dossier de prêt entreprise',
         'description' => 'Mettez toutes les chances de votre côté. Découvrez nos conseils pour présenter un dossier de financement solide et convaincant.',
         'date' => '18 Juil 2024',
@@ -18,7 +20,7 @@ $blog_posts = [
         'imageAlt' => "Un entrepreneur examinant des graphiques de croissance."
     ],
     [
-        'slug' => 'blog/rachat-de-credit-quand-et-pourquoi-regrouper-ses-dettes',
+        'slug' => '/rachat-de-credit-blog',
         'title' => 'Rachat de crédit : quand et pourquoi regrouper ses dettes ?',
         'description' => 'Le rachat de crédit peut être une solution puissante pour simplifier vos finances. Est-ce le bon moment pour vous ?',
         'date' => '15 Juil 2024',
@@ -27,7 +29,7 @@ $blog_posts = [
         'imageAlt' => "Des factures et des cartes de crédit sont organisées en une seule pile ordonnée."
     ],
     [
-        'slug' => 'blog/pret-immobilier-les-7-erreurs-a-eviter',
+        'slug' => '/erreurs-pret-immobilier',
         'title' => 'Prêt immobilier : les 7 erreurs à éviter pour un primo-accédant',
         'description' => "L'achat de votre première maison est une étape majeure. Évitez ces pièges courants pour une expérience sereine.",
         'date' => '12 Juil 2024',
@@ -36,7 +38,7 @@ $blog_posts = [
         'imageAlt' => "Un jeune couple regarde avec optimisme les plans de leur future maison."
     ],
     [
-        'slug' => 'blog/le-pret-personnel-un-outil-flexible',
+        'slug' => '/pret-personnel-flexible',
         'title' => 'Le prêt personnel : un outil flexible pour concrétiser vos projets',
         'description' => "Un voyage, des travaux, un événement ? Découvrez comment le prêt personnel peut vous aider à réaliser vos envies sans contraintes.",
         'date' => '10 Juil 2024',
@@ -62,7 +64,7 @@ $blog_posts = [
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         <?php foreach ($blog_posts as $post) : ?>
           <div class="flex flex-col group hover:border-primary transition-all overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm">
-            <a href="/<?php echo esc_attr($post['slug']); ?>" class="block">
+            <a href="<?php echo esc_url(home_url($post['slug'])); ?>" class="block">
               <div class="relative h-56 w-full">
                 <img
                   src="<?php echo esc_url($post['imageUrl']); ?>"
@@ -74,7 +76,7 @@ $blog_posts = [
              <div class="flex flex-col flex-grow p-6">
                 <div class="p-0">
                   <h3 class="text-xl font-semibold leading-tight group-hover:text-primary transition-colors">
-                    <a href="/<?php echo esc_attr($post['slug']); ?>"><?php echo esc_html($post['title']); ?></a>
+                    <a href="<?php echo esc_url(home_url($post['slug'])); ?>"><?php echo esc_html($post['title']); ?></a>
                   </h3>
                   <p class="pt-2 text-xs text-muted-foreground"><?php echo esc_html($post['date']); ?> &bull; <?php echo esc_html($post['author']); ?></p>
                 </div>
@@ -82,7 +84,7 @@ $blog_posts = [
                   <p class="text-sm text-muted-foreground"><?php echo esc_html($post['description']); ?></p>
                 </div>
                 <div class="p-0 pt-6">
-                    <a href="/<?php echo esc_attr($post['slug']); ?>" class="text-sm font-medium text-primary underline-offset-4 hover:underline inline-flex items-center">
+                    <a href="<?php echo esc_url(home_url($post['slug'])); ?>" class="text-sm font-medium text-primary underline-offset-4 hover:underline inline-flex items-center">
                         Lire la suite
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                     </a>

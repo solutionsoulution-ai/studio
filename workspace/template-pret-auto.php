@@ -2,7 +2,7 @@
 /**
  * Template Name: Service - Prêt Auto
  *
- * @package vyls
+ * @package capfinfy
  */
 
 get_header();
@@ -51,7 +51,7 @@ get_header();
             </div>
             <div class="grid md:grid-cols-3 gap-6">
                 <div class="text-center border-transparent shadow-md hover:shadow-xl hover:border-primary transition-all rounded-lg border bg-card text-card-foreground"><div class="p-6"><div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8 text-primary"><path d="M14 16.5 17.5 13H22v-2h-4.5l-3.5-3.5L14 3V1H6v2l2.5 4.5-5 2.5-1.5-1.5L1 10l4 4-4 4 1 1 1.5-1.5 5-2.5L10 23h4v-2l.5-1.5-3-3.5 6.5 3z"/></svg></div><h3 class="text-2xl font-semibold leading-none tracking-tight">Pour tout type de véhicule</h3></div><div class="p-6 pt-0"><p class="text-sm text-muted-foreground">Financez une voiture neuve, d'occasion, une moto ou même un camping-car. Notre prêt s'adapte à votre projet de mobilité.</p></div></div>
-                <div class="text-center border-transparent shadow-md hover:shadow-xl hover:border-primary transition-all rounded-lg border bg-card text-card-foreground"><div class="p-6"><div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8 text-primary"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2Z"/><path d="m9 12-2 2 4 4 6-6-2-2"/></svg></div><h3 class="text-2xl font-semibold leading-none tracking-tight">Taux compétitifs</h3></div><div class="p-6 pt-0"><p class="text-sm text-muted-foreground">Bénéficiez de conditions de taux avantageuses négociées auprès de nos partenaires pour maîtriser le coût total de votre achat.</p></div></div>
+                <div class="text-center border-transparent shadow-md hover:shadow-xl hover:border-primary transition-all rounded-lg border bg-card text-card-foreground"><div class="p-6"><div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8 text-primary"><line x1="19" x2="5" y1="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg></div><h3 class="text-2xl font-semibold leading-none tracking-tight">Taux compétitifs</h3></div><div class="p-6 pt-0"><p class="text-sm text-muted-foreground">Bénéficiez de conditions de taux avantageuses négociées auprès de nos partenaires pour maîtriser le coût total de votre achat.</p></div></div>
                 <div class="text-center border-transparent shadow-md hover:shadow-xl hover:border-primary transition-all rounded-lg border bg-card text-card-foreground"><div class="p-6"><div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8 text-primary"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m9 15 2 2 4-4"/></svg></div><h3 class="text-2xl font-semibold leading-none tracking-tight">Simplicité administrative</h3></div><div class="p-6 pt-0"><p class="text-sm text-muted-foreground">Nous vous accompagnons pour un montage de dossier rapide et efficace, afin que vous puissiez prendre le volant au plus vite.</p></div></div>
             </div>
         </div>
@@ -64,15 +64,11 @@ get_header();
         </div>
     </section>
 
-    <section class="w-full py-16 md:py-24 bg-muted/30">
+    <section class="w-full py-16 md:py-24">
         <?php 
         $calculator_args = [
             'title' => 'Estimez vos mensualités auto',
             'description' => "Ajustez le montant et la durée pour simuler le remboursement de votre prêt auto.",
-            'default_amount' => 20000,
-            'max_amount' => 75000,
-            'default_term' => 60,
-            'max_term' => 84,
         ];
         set_query_var('calculator_args', $calculator_args);
         get_template_part('template-parts/calculator'); 
