@@ -12,7 +12,7 @@ import type { Metadata } from 'next';
 import CtaSection from "@/components/site/cta-section";
 
 export const metadata: Metadata = {
-  title: 'Blog | VylsFond',
+  title: 'Blog | Capfinfy',
   description: 'Conseils et actualités sur le financement, les prêts et la gestion financière pour les particuliers et les entreprises.',
 };
 

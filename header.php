@@ -6,7 +6,7 @@
  *
  * @link https://developer.wordpress.org/themes/basics/template-files/#template-partials
  *
- * @package vyls
+ * @package capfinfy
  */
 
 ?>
@@ -22,7 +22,7 @@
 <header class="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
     <div class="container flex h-16 max-w-screen-2xl items-center">
         <a href="<?php echo esc_url(home_url('/')); ?>" class="mr-6 flex items-center space-x-2">
-            <span class="font-bold sm:inline-block">VylsFond</span>
+            <span class="font-bold sm:inline-block">Capfinfy</span>
         </a>
         <nav class="hidden lg:flex flex-1 items-center space-x-4 text-sm font-medium">
              <?php
@@ -31,7 +31,7 @@
                         'theme_location' => 'main-menu',
                         'container' => false,
                         'items_wrap' => '%3$s', // Display links without ul
-                        'walker' => new VylsFond_Walker_Nav_Menu_Desktop()
+                        'walker' => new Capfinfy_Walker_Nav_Menu_Desktop()
                     ));
                 }
             ?>
@@ -54,7 +54,7 @@
         <div class="flex h-full flex-col">
             <div class="flex items-center justify-between border-b p-4">
                 <a href="<?php echo esc_url(home_url('/')); ?>" data-mobile-menu-close class="flex items-center space-x-2">
-                    <span class="font-bold">VylsFond</span>
+                    <span class="font-bold">Capfinfy</span>
                 </a>
                 <button data-mobile-menu-close aria-label="Fermer le menu" class="p-2">
                     <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -71,7 +71,7 @@
                                 'theme_location' => 'main-menu',
                                 'container' => false,
                                 'items_wrap' => '%3$s', // No ul
-                                'walker' => new VylsFond_Walker_Nav_Menu_Mobile() 
+                                'walker' => new Capfinfy_Walker_Nav_Menu_Mobile() 
                             ));
                         }
                     ?>

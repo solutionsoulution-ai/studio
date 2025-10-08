@@ -38,15 +38,15 @@ export default function SiteFooter() {
           <div className="col-span-2 md:col-span-2">
             <Link href="/" className="flex items-center space-x-2 mb-4">
               <Landmark className="h-7 w-7 text-primary" />
-              <span className="text-xl font-bold">VylsFond</span>
+              <span className="text-xl font-bold">Capfinfy</span>
             </Link>
             <p className="text-sm text-muted-foreground max-w-sm">
               Solutions de financement rapides et flexibles pour aider votre entreprise à prospérer.
             </p>
              <div className="mt-6 space-y-2 text-sm text-muted-foreground">
-                <a href="mailto:contact@vylsfond.com" className="flex items-center gap-2 hover:text-primary">
+                <a href="mailto:contact@capfinfy.com" className="flex items-center gap-2 hover:text-primary">
                     <Mail className="w-4 h-4" />
-                    contact@vylsfond.com
+                    contact@capfinfy.com
                 </a>
                 <a href="tel:+33756986769" className="flex items-center gap-2 hover:text-primary">
                     <Phone className="w-4 h-4" />
@@ -116,7 +116,7 @@ export default function SiteFooter() {
 
         <div className="mt-12 border-t pt-6 text-center">
           <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} VylsFond. Tous droits réservés.
+            &copy; {new Date().getFullYear()} Capfinfy. Tous droits réservés.
           </p>
         </div>
       </div>

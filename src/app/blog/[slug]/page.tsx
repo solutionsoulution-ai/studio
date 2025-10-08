@@ -25,13 +25,13 @@ export async function generateMetadata(
 
   if (!post) {
     return {
-      title: 'Article non trouvé | VylsFond',
+      title: 'Article non trouvé | Capfinfy',
       description: "L'article que vous cherchez n'existe pas ou a été déplacé.",
     }
   }
 
   return {
-    title: `${post.title} | VylsFond`,
+    title: `${post.title} | Capfinfy`,
     description: post.description,
   }
 }

@@ -15,7 +15,7 @@ export default function ConditionsGeneralesPage() {
               <div>
                 <h2>1. Objet</h2>
                 <p>
-                  Les présentes Conditions Générales d'Utilisation (CGU) ont pour objet de définir les modalités de mise à disposition des services du site VylsFond et les conditions d'utilisation par l'Utilisateur.
+                  Les présentes Conditions Générales d'Utilisation (CGU) ont pour objet de définir les modalités de mise à disposition des services du site Capfinfy et les conditions d'utilisation par l'Utilisateur.
                 </p>
                 <p>
                   Tout accès et/ou utilisation du site suppose l'acceptation et le respect de l'ensemble des termes des présentes Conditions.
@@ -42,17 +42,17 @@ export default function ConditionsGeneralesPage() {
               <div>
                 <h2>4. Responsabilité</h2>
                 <p>
-                  Les informations fournies sur le site VylsFond le sont à titre indicatif. Les résultats des simulateurs et des outils d'éligibilité ne constituent en aucun cas une offre de prêt et n'engagent pas VylsFond. Seule une étude approfondie de votre dossier permettra de définir les conditions de financement exactes.
+                  Les informations fournies sur le site Capfinfy le sont à titre indicatif. Les résultats des simulateurs et des outils d'éligibilité ne constituent en aucun cas une offre de prêt et n'engagent pas Capfinfy. Seule une étude approfondie de votre dossier permettra de définir les conditions de financement exactes.
                 </p>
                 <p>
-                  VylsFond ne saurait être tenu pour responsable des dommages directs ou indirects qui pourraient résulter de l'accès ou de l'utilisation du site, y compris l'inaccessibilité, les pertes de données, et/ou la présence de virus sur le site.
+                  Capfinfy ne saurait être tenu pour responsable des dommages directs ou indirects qui pourraient résulter de l'accès ou de l'utilisation du site, y compris l'inaccessibilité, les pertes de données, et/ou la présence de virus sur le site.
                 </p>
               </div>
 
               <div>
                 <h2>5. Liens hypertextes</h2>
                 <p>
-                  Le site peut contenir des liens hypertextes vers d'autres sites présents sur le réseau Internet. Les liens vers ces autres ressources vous font quitter le site VylsFond.
+                  Le site peut contenir des liens hypertextes vers d'autres sites présents sur le réseau Internet. Les liens vers ces autres ressources vous font quitter le site Capfinfy.
                 </p>
                 <p>
                   Il est possible de créer un lien vers la page de présentation de ce site sans autorisation expresse de l'ÉDITEUR. Aucune autorisation ou demande d’information préalable ne peut être exigée par l’éditeur à l’égard d’un site qui souhaite établir un lien vers le site de l’éditeur.

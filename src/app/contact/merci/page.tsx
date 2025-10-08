@@ -9,7 +9,7 @@ import type { Metadata } from 'next';
 import CtaSection from "@/components/site/cta-section";
 
 export const metadata: Metadata = {
-  title: 'Message Envoyé | VylsFond',
+  title: 'Message Envoyé | Capfinfy',
   description: 'Page de remerciement suite à l\'envoi d\'un message de contact.',
 };
 

@@ -35,7 +35,7 @@ const timelineEvents = [
     {
         year: "2012",
         title: "Fondation et Lancement",
-        description: "VylsFond est créé avec la mission de rendre le prêt plus simple, rapide et accessible pour tous en Europe.",
+        description: "Capfinfy est créé avec la mission de rendre le prêt plus simple, rapide et accessible pour tous en Europe.",
         icon: Rocket
     },
      {
@@ -82,7 +82,7 @@ export default function AboutUsSection() {
                 <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-center">
                     <div className="order-2 md:order-1">
                     <h1 className="text-4xl md:text-5xl font-bold font-headline mb-4">
-                        À Propos de VylsFond
+                        À Propos de Capfinfy
                     </h1>
                     <p className="text-lg text-muted-foreground mb-6">
                         Notre mission : rendre le financement plus accessible, plus rapide et plus humain en combinant le meilleur de la technologie et une expertise humaine.
@@ -123,7 +123,7 @@ export default function AboutUsSection() {
                     <div>
                         <h2 className="text-3xl font-bold font-headline mb-4">Notre Histoire</h2>
                         <p className="text-muted-foreground text-base leading-relaxed">
-                            Fondée en 2012, VylsFond est née d'une ambition simple : révolutionner l'accès au financement pour les particuliers et les entreprises en Europe. Frustrés par la lenteur et la complexité des systèmes bancaires traditionnels, nous avons décidé de créer une plateforme qui allie le meilleur de la technologie et une expertise humaine pour offrir des solutions de prêt rapides, transparentes et adaptées aux besoins réels de nos clients.
+                            Fondée en 2012, Capfinfy est née d'une ambition simple : révolutionner l'accès au financement pour les particuliers et les entreprises en Europe. Frustrés par la lenteur et la complexité des systèmes bancaires traditionnels, nous avons décidé de créer une plateforme qui allie le meilleur de la technologie et une expertise humaine pour offrir des solutions de prêt rapides, transparentes et adaptées aux besoins réels de nos clients.
                         </p>
                     </div>
                      <div>
@@ -142,7 +142,7 @@ export default function AboutUsSection() {
                     <div className="text-center mb-16">
                         <h2 className="text-3xl font-bold font-headline">Notre Parcours</h2>
                         <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-                            Les grandes étapes qui ont façonné VylsFond.
+                            Les grandes étapes qui ont façonné Capfinfy.
                         </p>
                     </div>
                     <Carousel

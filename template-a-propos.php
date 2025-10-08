@@ -2,7 +2,7 @@
 /**
  * Template Name: Page - À Propos
  *
- * @package vyls
+ * @package capfinfy
  */
 
 get_header();
@@ -15,7 +15,7 @@ get_header();
             <img src="<?php echo get_template_directory_uri(); ?>/assets/images/about-us-hero.jpg" alt="Une équipe diversifiée collaborant dans un espace de travail lumineux." class="object-cover w-full h-full">
             <div class="absolute inset-0 bg-black/50"></div>
             <div class="relative container mx-auto h-full flex flex-col justify-center items-center text-center text-white">
-                <h1 class="text-4xl md:text-5xl font-bold font-headline">À Propos de VylsFond</h1>
+                <h1 class="text-4xl md:text-5xl font-bold font-headline">À Propos de Capfinfy</h1>
                 <p class="mt-4 max-w-2xl text-lg text-neutral-200">
                     Notre mission : rendre le financement plus accessible, plus rapide et plus humain.
                 </p>
@@ -28,7 +28,7 @@ get_header();
                 <div>
                     <h2 class="text-3xl font-bold font-headline mb-4">Notre Histoire</h2>
                     <p class="text-muted-foreground text-base leading-relaxed">
-                        Fondée en 2012, VylsFond est née d'une ambition simple : révolutionner l'accès au financement pour les particuliers et les entreprises en Europe. Frustrés par la lenteur et la complexité des systèmes bancaires traditionnels, nous avons décidé de créer une plateforme qui allie le meilleur de la technologie et une expertise humaine pour offrir des solutions de prêt rapides, transparentes et adaptées aux besoins réels de nos clients.
+                        Fondée en 2012, Capfinfy est née d'une ambition simple : révolutionner l'accès au financement pour les particuliers et les entreprises en Europe. Frustrés par la lenteur et la complexité des systèmes bancaires traditionnels, nous avons décidé de créer une plateforme qui allie le meilleur de la technologie et une expertise humaine pour offrir des solutions de prêt rapides, transparentes et adaptées aux besoins réels de nos clients.
                     </p>
                 </div>
                  <div>
@@ -47,12 +47,12 @@ get_header();
                 <div class="text-center mb-16">
                     <h2 class="text-3xl font-bold font-headline">Notre Parcours</h2>
                     <p class="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-                        Les grandes étapes qui ont façonné VylsFond.
+                        Les grandes étapes qui ont façonné Capfinfy.
                     </p>
                 </div>
                 <!-- NOTE: This is a static version of a carousel. Use a slider plugin for interactivity. -->
                 <div class="grid md:grid-cols-3 lg:grid-cols-5 gap-4">
-                    <div class="p-1 h-full"><div class="h-full text-center rounded-lg border bg-card text-card-foreground shadow-sm"><div class="p-6"><div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8 text-primary"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.3.1-3.2-.6-1-1.6-1-2.1-1.5-1-1-1.5-2.5-1-3.5.6-1 2.1-1.1 3.2-.1 1 .9 2.4.9 3.2.1 1.2-1.5 5-2 5-2s-.5 3.74-2 5c-.84.71-2.3.7-3.2.1-1-.6-1-1.6-1.5-2.1-1-1-2.5-1.5-3.5-1-.9.6-1 2-1 3.2.1 1.1 1.2 2.1 2.1 3.2.9.6 2.1.6 3.2.1z"/></svg></div><p class="font-bold text-primary text-lg">2012</p><h3 class="text-2xl font-semibold leading-none tracking-tight">Fondation et Lancement</h3></div><div class="p-6 pt-0"><p class="text-muted-foreground">VylsFond est créé avec la mission de rendre le prêt plus simple, rapide et accessible pour tous en Europe.</p></div></div></div>
+                    <div class="p-1 h-full"><div class="h-full text-center rounded-lg border bg-card text-card-foreground shadow-sm"><div class="p-6"><div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8 text-primary"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.3.1-3.2-.6-1-1.6-1-2.1-1.5-1-1-1.5-2.5-1-3.5.6-1 2.1-1.1 3.2-.1 1 .9 2.4.9 3.2.1 1.2-1.5 5-2 5-2s-.5 3.74-2 5c-.84.71-2.3.7-3.2.1-1-.6-1-1.6-1.5-2.1-1-1-2.5-1.5-3.5-1-.9.6-1 2-1 3.2.1 1.1 1.2 2.1 2.1 3.2.9.6 2.1.6 3.2.1z"/></svg></div><p class="font-bold text-primary text-lg">2012</p><h3 class="text-2xl font-semibold leading-none tracking-tight">Fondation et Lancement</h3></div><div class="p-6 pt-0"><p class="text-muted-foreground">Capfinfy est créé avec la mission de rendre le prêt plus simple, rapide et accessible pour tous en Europe.</p></div></div></div>
                     <!-- ... Répéter pour les autres éléments de la timeline ... -->
                 </div>
              </div>

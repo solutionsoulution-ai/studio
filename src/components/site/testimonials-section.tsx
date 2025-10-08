@@ -68,7 +68,7 @@ export default function TestimonialsSection() {
                             <Card className="h-full flex flex-col">
                                 <CardContent className="flex flex-col items-start gap-4 p-6 flex-grow">
                                     <StarRating rating={testimonial.rating} />
-                                    <p className="text-muted-foreground italic flex-grow">"{testimonial.quote}"</p>
+                                    <p className="text-muted-foreground italic flex-grow">"{testimonial.quote.replace(/VylsFond/g, 'Capfinfy')}"</p>
                                     <div className="pt-4 border-t w-full">
                                         <p className="font-semibold">{testimonial.name}</p>
                                         <p className="text-sm text-muted-foreground">{testimonial.location}</p>

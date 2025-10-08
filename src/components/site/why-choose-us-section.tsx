@@ -31,7 +31,7 @@ export default function WhyChooseUsSection() {
               <h2 className="text-3xl font-bold tracking-tight font-headline">Pourquoi nous choisir ?</h2>
           </div>
           <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-            Chez VylsFond, nous combinons technologie et expertise humaine pour vous offrir une expérience de prêt inégalée.
+            Chez Capfinfy, nous combinons technologie et expertise humaine pour vous offrir une expérience de prêt inégalée.
           </p>
         </div>
         <div className="grid md:grid-cols-3 gap-6">

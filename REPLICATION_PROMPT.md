@@ -1,7 +1,7 @@
 
-# Prompt pour la Création du Site Web VylsFond
+# Prompt pour la Création du Site Web Capfinfy
 
-**Objectif :** Créer un site web vitrine bien designé, animé avec des effets "wouah" subtils, pour mon entreprise qui siège à Lyon, en France, nommée "VylsFond". Le site est destiné à présenter nos solutions de financement (prêts) pour les particuliers et les professionnels. Le ton doit être professionnel, rassurant et moderne.
+**Objectif :** Créer un site web vitrine bien designé, animé avec des effets "wouah" subtils, pour mon entreprise qui siège à Lyon, en France, nommée "Capfinfy". Le site est destiné à présenter nos solutions de financement (prêts) pour les particuliers et les professionnels. Le ton doit être professionnel, rassurant et moderne.
 
 ---
 
@@ -72,7 +72,7 @@
 
 ## 3. Informations Clés de l'Entreprise
 
--   **Nom** : VylsFond
--   **Email** : contact@vylsfond.com
+-   **Nom** : Capfinfy
+-   **Email** : contact@capfinfy.com
 -   **Téléphone** : +33 7 56 98 67 69
 -   **Adresse** : Lyon, France

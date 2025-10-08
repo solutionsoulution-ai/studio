@@ -4,7 +4,7 @@
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
  *
- * @package vyls
+ * @package capfinfy
  */
 
 get_header();
@@ -104,7 +104,7 @@ get_header();
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-primary"><path d="M12 17.5 7.5 20l1-5.2-4-3.6 5.3-.6L12 6l2.2 5.2 5.3.6-4 3.6 1 5.2z"/></svg>
                     <h2 class="text-3xl font-bold tracking-tight font-headline">Pourquoi nous choisir ?</h2>
                 </div>
-                <p class="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">Chez VylsFond, nous combinons technologie et expertise humaine pour vous offrir une expérience de prêt inégalée.</p>
+                <p class="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">Chez Capfinfy, nous combinons technologie et expertise humaine pour vous offrir une expérience de prêt inégalée.</p>
             </div>
             <div class="grid md:grid-cols-3 gap-6">
                 <div class="text-center border-transparent shadow-md hover:shadow-xl hover:border-primary transition-all rounded-lg border bg-card text-card-foreground fade-in-item">
@@ -127,7 +127,7 @@ get_header();
     <section class="container mx-auto py-16 md:py-24">
         <div class="text-center mb-16">
             <h2 class="text-3xl font-bold tracking-tight font-headline">Notre parcours en bref</h2>
-            <p class="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">De l'idée à la réalité, les étapes qui ont fait de VylsFond ce que nous sommes aujourd'hui.</p>
+            <p class="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">De l'idée à la réalité, les étapes qui ont fait de Capfinfy ce que nous sommes aujourd'hui.</p>
         </div>
         <div class="relative">
             <div class="absolute top-1/2 left-0 w-full h-0.5 bg-border -translate-y-1/2" aria-hidden="true"></div>
@@ -214,9 +214,9 @@ get_header();
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 fade-in-item">
                 <?php
                 $testimonials = [
-                    ["name" => "Marie Dubois", "location" => "Paris, France", "quote" => "Le processus de prêt a été incroyablement simple et rapide. VylsFond a vraiment compris mes besoins d'entrepreneur."],
+                    ["name" => "Marie Dubois", "location" => "Paris, France", "quote" => "Le processus de prêt a été incroyablement simple et rapide. Capfinfy a vraiment compris mes besoins d'entrepreneur."],
                     ["name" => "Lukas Schmidt", "location" => "Berlin, Allemagne", "quote" => "J'ai pu financer mon nouvel équipement sans tracas. Leur équipe est professionnelle et très réactive. Je recommande vivement."],
-                    ["name" => "Sofia Rossi", "location" => "Rome, Italie", "quote" => "Grâce à VylsFond, j'ai consolidé mes dettes avec un rachat de crédit avantageux. Ma situation financière est bien meilleure maintenant."],
+                    ["name" => "Sofia Rossi", "location" => "Rome, Italie", "quote" => "Grâce à Capfinfy, j'ai consolidé mes dettes avec un rachat de crédit avantageux. Ma situation financière est bien meilleure maintenant."],
                 ];
                 foreach ($testimonials as $testimonial) : ?>
                     <div class="flex flex-col rounded-lg border bg-card text-card-foreground shadow-sm">
@@ -254,7 +254,7 @@ get_header();
                 </div>
                 <div class="border-b pb-4">
                     <h3 class="font-medium text-lg">Quels types de prêts offrez-vous ?</h3>
-                    <p class="text-muted-foreground mt-2">VylsFond se spécialise dans une variété d'options de financement, y compris les prêts immobiliers, les prêts à la consommation, les prêts auto, le rachat de crédit et les financements pour entreprises.</p>
+                    <p class="text-muted-foreground mt-2">Capfinfy se spécialise dans une variété d'options de financement, y compris les prêts immobiliers, les prêts à la consommation, les prêts auto, le rachat de crédit et les financements pour entreprises.</p>
                 </div>
                 <div class="border-b pb-4">
                     <h3 class="font-medium text-lg">Puis-je rembourser mon prêt par anticipation ?</h3>

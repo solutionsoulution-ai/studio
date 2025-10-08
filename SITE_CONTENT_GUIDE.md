@@ -1,5 +1,5 @@
 
-# Guide du Contenu et du Design du Site VylsFond
+# Guide du Contenu et du Design du Site Capfinfy
 
 Ce document détaille les textes, les images et les palettes de couleurs utilisés on the main public pages of the site, à l'exception des pages "À Propos", "Demande de Prêt" et de la section "Banque en Ligne".
 
@@ -73,7 +73,7 @@ La charte graphique est définie dans le CSS global du projet et utilise des var
 
 #### Section 3: Pourquoi Nous Choisir
 -   **Titre**: "Pourquoi nous choisir ?"
--   **Description**: "Chez VylsFond, nous combinons technologie et expertise humaine pour vous offrir une expérience de prêt inégalée."
+-   **Description**: "Chez Capfinfy, nous combinons technologie et expertise humaine pour vous offrir une expérience de prêt inégalée."
 -   **Arguments**:
     -   "Processus 100% en ligne"
     -   "Conseils d'experts"
@@ -81,7 +81,7 @@ La charte graphique est définie dans le CSS global du projet et utilise des var
 
 #### Section 4: Parcours en bref
 -   **Titre**: "Notre parcours en bref"
--   **Description**: "De l'idée à la réalité, les étapes qui ont fait de VylsFond ce que nous sommes aujourd'hui."
+-   **Description**: "De l'idée à la réalité, les étapes qui ont fait de Capfinfy ce que nous sommes aujourd'hui."
 -   **Jalons**: "2012: Fondation", "2015: 100M€ Prêtés", "2018: Expansion", "2021: Innovation IA", "2024+: Avenir"
 
 #### Section 5: Derniers Articles & Partenaires

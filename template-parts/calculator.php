@@ -4,7 +4,7 @@
  * This version uses inline CSS and JS for portability.
  * It accepts arguments via `set_query_var`.
  *
- * @package vyls
+ * @package capfinfy
  */
 
 $args = get_query_var('calculator_args', [
@@ -186,7 +186,7 @@ $unique_id = spl_object_hash((object)$args) . rand();
 <div class="calc-container-outer">
     <div class="calc-container">
         <div class="calc-panel calc-input-panel">
-            <div class="calc-logo">VylsFond</div>
+            <div class="calc-logo">Capfinfy</div>
             <h2 class="calc-h2"><?php echo esc_html($args['title']); ?></h2>
             <p class="calc-subtitle"><?php echo esc_html($args['description']); ?> Taux fixe annuel : <strong style="color: hsl(231, 48%, 48%);">2 %</strong></p>
 

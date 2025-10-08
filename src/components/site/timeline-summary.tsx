@@ -38,7 +38,7 @@ export default function TimelineSummary() {
             <div className="text-center mb-16">
                 <h2 className="text-3xl font-bold tracking-tight font-headline">Notre parcours en bref</h2>
                 <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-                    De l'idée à la réalité, les étapes qui ont fait de VylsFond ce que nous sommes aujourd'hui.
+                    De l'idée à la réalité, les étapes qui ont fait de Capfinfy ce que nous sommes aujourd'hui.
                 </p>
             </div>
             

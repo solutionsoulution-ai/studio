@@ -6,8 +6,8 @@ Ce guide contient les blocs de code exacts et les étapes à suivre pour créer 
 
 ## Étape 1 : Préparation de la structure du thème
 
-1.  Quelque part sur votre ordinateur, créez un nouveau dossier que vous nommerez `vylsfond-theme`. C'est ce dossier qui contiendra votre thème final.
-2.  Copiez **TOUT** le contenu du dossier `workspace/` (qui se trouve dans ce projet) et collez-le à l'intérieur de votre dossier `vylsfond-theme`.
+1.  Quelque part sur votre ordinateur, créez un nouveau dossier que vous nommerez `capfinfy-theme`. C'est ce dossier qui contiendra votre thème final.
+2.  Copiez **TOUT** le contenu du dossier `workspace/` (qui se trouve dans ce projet) et collez-le à l'intérieur de votre dossier `capfinfy-theme`.
 
 ---
 
@@ -27,7 +27,7 @@ Cette commande va créer un dossier `build/` qui contient les fichiers `main.css
 
 1.  Ouvrez le fichier `build/static/css/main.css` qui vient d'être créé.
 2.  Sélectionnez et copiez **TOUT** le contenu de ce fichier.
-3.  Maintenant, allez dans votre dossier de thème `vylsfond-theme` et ouvrez le fichier `style.css`.
+3.  Maintenant, allez dans votre dossier de thème `capfinfy-theme` et ouvrez le fichier `style.css`.
 4.  À l'intérieur de `style.css`, collez tout le contenu que vous venez de copier, juste **en dessous** du bloc de commentaire d'en-tête. **Ne supprimez pas l'en-tête existant.**
 
 ---
@@ -36,8 +36,8 @@ Cette commande va créer un dossier `build/` qui contient les fichiers `main.css
 
 1.  **JavaScript pour le Calculateur (React) :**
     *   Allez dans `build/static/js/`.
-    *   Créez les dossiers `build/static/js/` à l'intérieur de votre thème `vylsfond-theme/`.
-    *   Copiez le fichier `calculator.js` depuis `build/static/js/calculator.js` vers `vylsfond-theme/build/static/js/calculator.js`.
+    *   Créez les dossiers `build/static/js/` à l'intérieur de votre thème `capfinfy-theme/`.
+    *   Copiez le fichier `calculator.js` depuis `build/static/js/calculator.js` vers `capfinfy-theme/build/static/js/calculator.js`.
 
 Le fichier `functions.php` est déjà configuré pour charger `main.js` (déjà présent dans `assets/js`) et `calculator.js`. Il n'y a rien d'autre à faire.
 
@@ -45,8 +45,8 @@ Le fichier `functions.php` est déjà configuré pour charger `main.js` (déjà 
 
 ## Étape 5 : Gérer les Images
 
-1.  Créez un dossier `assets/images/` dans votre thème `vylsfond-theme/`.
-2.  Vous devez trouver les images utilisées dans le projet Next.js (principalement dans `src/components/site/` et `public/`) et les copier dans `vylsfond-theme/assets/images/`. Les fichiers PHP font référence à des noms comme `pret-auto.jpg`, `home-carousel-1.png`, etc.
+1.  Créez un dossier `assets/images/` dans votre thème `capfinfy-theme/`.
+2.  Vous devez trouver les images utilisées dans le projet Next.js (principalement dans `src/components/site/` et `public/`) et les copier dans `capfinfy-theme/assets/images/`. Les fichiers PHP font référence à des noms comme `pret-auto.jpg`, `home-carousel-1.png`, etc.
 
 ---
 
@@ -54,13 +54,13 @@ Le fichier `functions.php` est déjà configuré pour charger `main.js` (déjà 
 
 C'est l'étape qui cause l'erreur "feuille de style manquante". Suivez-la attentivement.
 
-1.  **N'archivez PAS le dossier `vylsfond-theme` lui-même.**
-2.  **Ouvrez** le dossier `vylsfond-theme`.
+1.  **N'archivez PAS le dossier `capfinfy-theme` lui-même.**
+2.  **Ouvrez** le dossier `capfinfy-theme`.
 3.  À l'intérieur, sélectionnez **tous les fichiers et dossiers** (`style.css`, `index.php`, `assets/`, `build/`, etc.).
 4.  Faites un clic droit sur votre sélection et choisissez :
     *   Sur **Windows** : `Envoyer vers` > `Dossier compressé (.zip)`.
     *   Sur **macOS** : `Compresser X éléments`.
-5.  Renommez le fichier `.zip` nouvellement créé en `vylsfond-theme.zip`.
+5.  Renommez le fichier `.zip` nouvellement créé en `capfinfy-theme.zip`.
 
 **Ce nouveau fichier .zip est celui que vous devez téléverser sur WordPress.** Il a maintenant la bonne structure, avec `style.css` directement à la racine.
 
@@ -71,7 +71,7 @@ C'est l'étape qui cause l'erreur "feuille de style manquante". Suivez-la attent
 Une fois le thème activé, votre site peut afficher des erreurs "Page non trouvée". C'est normal. Vous devez maintenant créer les pages dans WordPress.
 
 1.  **Activer le Thème :**
-    *   Allez dans `Apparence > Thèmes > Ajouter > Téléverser un thème` et téléversez votre `vylsfond-theme.zip`.
+    *   Allez dans `Apparence > Thèmes > Ajouter > Téléverser un thème` et téléversez votre `capfinfy-theme.zip`.
     *   Activez le thème.
 
 2.  **Configurer la Page d'Accueil (Très Important) :**

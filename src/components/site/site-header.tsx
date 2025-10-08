@@ -41,7 +41,7 @@ export default function SiteHeader() {
       <div className="container flex h-16 max-w-screen-2xl items-center">
         <Link href="/" className="mr-6 flex items-center space-x-2">
           <Landmark className="h-6 w-6 text-primary" />
-          <span className="font-bold sm:inline-block">VylsFond</span>
+          <span className="font-bold sm:inline-block">Capfinfy</span>
         </Link>
         <nav className="hidden lg:flex flex-1 items-center space-x-4 text-sm font-medium">
           <DropdownMenu>
@@ -93,7 +93,7 @@ export default function SiteHeader() {
                 <div className="flex items-center justify-between border-b p-4">
                   <Link href="/" className="flex items-center space-x-2" onClick={closeMobileMenu}>
                     <Landmark className="h-6 w-6 text-primary" />
-                    <span className="font-bold">VylsFond</span>
+                    <span className="font-bold">Capfinfy</span>
                   </Link>
                   <SheetTrigger asChild>
                      <Button variant="ghost" size="icon">
