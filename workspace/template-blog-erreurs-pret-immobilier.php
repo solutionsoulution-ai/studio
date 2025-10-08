@@ -2,7 +2,7 @@
 /**
  * Template Name: Blog - Prêt Immobilier Erreurs
  *
- * @package vyls
+ * @package capfinfy
  */
 
 get_header();

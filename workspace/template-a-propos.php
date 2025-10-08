@@ -2,7 +2,7 @@
 /**
  * Template Name: Page - À Propos
  *
- * @package vyls
+ * @package capfinfy
  */
 
 get_header();
@@ -15,7 +15,7 @@ get_header();
             <div class="grid md:grid-cols-2 gap-8 lg:gap-16 items-center">
                 <div class="order-2 md:order-1">
                   <h1 class="text-4xl md:text-5xl font-bold font-headline mb-4">
-                    À Propos de VylsFond
+                    À Propos de Capfinfy
                   </h1>
                   <p class="text-lg text-muted-foreground mb-6">
                     Notre mission : rendre le financement plus accessible, plus rapide et plus humain en combinant le meilleur de la technologie et une expertise humaine.
@@ -48,7 +48,7 @@ get_header();
                 <div>
                     <h2 class="text-3xl font-bold font-headline mb-4">Notre Histoire</h2>
                     <p class="text-muted-foreground text-base leading-relaxed">
-                        Fondée en 2012, VylsFond est née d'une ambition simple : révolutionner l'accès au financement pour les particuliers et les entreprises en Europe. Frustrés par la lenteur et la complexité des systèmes bancaires traditionnels, nous avons décidé de créer une plateforme qui allie le meilleur de la technologie et une expertise humaine pour offrir des solutions de prêt rapides, transparentes et adaptées aux besoins réels de nos clients.
+                        Fondée en 2012, Capfinfy est née d'une ambition simple : révolutionner l'accès au financement pour les particuliers et les entreprises en Europe. Frustrés par la lenteur et la complexité des systèmes bancaires traditionnels, nous avons décidé de créer une plateforme qui allie le meilleur de la technologie et une expertise humaine pour offrir des solutions de prêt rapides, transparentes et adaptées aux besoins réels de nos clients.
                     </p>
                 </div>
                  <div>
@@ -67,11 +67,11 @@ get_header();
                 <div class="text-center mb-16">
                     <h2 class="text-3xl font-bold font-headline">Notre Parcours</h2>
                     <p class="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-                        Les grandes étapes qui ont façonné VylsFond.
+                        Les grandes étapes qui ont façonné Capfinfy.
                     </p>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-                    <div class="h-full text-center p-4 rounded-lg border bg-card text-card-foreground shadow-sm"><div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8 text-primary"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.3.1-3.2-.6-1-1.6-1-2.1-1.5-1-1-1.5-2.5-1-3.5.6-1 2.1-1.1 3.2-.1 1 .9 2.4.9 3.2.1 1.2-1.5 5-2 5-2s-.5 3.74-2 5c-.84.71-2.3.7-3.2.1-1-.6-1-1.6-1.5-2.1-1-1-2.5-1.5-3.5-1-.9.6-1 2-1 3.2.1 1.1 1.2 2.1 2.1 3.2.9.6 2.1.6 3.2.1z"/></svg></div><p class="font-bold text-primary text-lg">2012</p><h3 class="text-xl font-semibold">Fondation</h3><p class="text-sm text-muted-foreground mt-2">VylsFond est créé avec la mission de rendre le prêt plus simple.</p></div>
+                    <div class="h-full text-center p-4 rounded-lg border bg-card text-card-foreground shadow-sm"><div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8 text-primary"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.3.1-3.2-.6-1-1.6-1-2.1-1.5-1-1-1.5-2.5-1-3.5.6-1 2.1-1.1 3.2-.1 1 .9 2.4.9 3.2.1 1.2-1.5 5-2 5-2s-.5 3.74-2 5c-.84.71-2.3.7-3.2.1-1-.6-1-1.6-1.5-2.1-1-1-2.5-1.5-3.5-1-.9.6-1 2-1 3.2.1 1.1 1.2 2.1 2.1 3.2.9.6 2.1.6 3.2.1z"/></svg></div><p class="font-bold text-primary text-lg">2012</p><h3 class="text-xl font-semibold">Fondation</h3><p class="text-sm text-muted-foreground mt-2">Capfinfy est créé avec la mission de rendre le prêt plus simple.</p></div>
                     <div class="h-full text-center p-4 rounded-lg border bg-card text-card-foreground shadow-sm"><div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8 text-primary"><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><p class="font-bold text-primary text-lg">2015</p><h3 class="text-xl font-semibold">100M€ Prêtés</h3><p class="text-sm text-muted-foreground mt-2">Nous atteignons notre premier jalon majeur, démontrant la confiance de nos clients.</p></div>
                     <div class="h-full text-center p-4 rounded-lg border bg-card text-card-foreground shadow-sm"><div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8 text-primary"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg></div><p class="font-bold text-primary text-lg">2018</p><h3 class="text-xl font-semibold">Expansion</h3><p class="text-sm text-muted-foreground mt-2">Nos services s'étendent à 5 nouveaux pays, affirmant notre ambition européenne.</p></div>
                     <div class="h-full text-center p-4 rounded-lg border bg-card text-card-foreground shadow-sm"><div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8 text-primary"><path d="M12 17.5 7.5 20l1-5.2-4-3.6 5.3-.6L12 6l2.2 5.2 5.3.6-4 3.6 1 5.2z"/></svg></div><p class="font-bold text-primary text-lg">2021</p><h3 class="text-xl font-semibold">Innovation IA</h3><p class="text-sm text-muted-foreground mt-2">Déploiement de notre IA pour une analyse de risque plus juste et des réponses rapides.</p></div>

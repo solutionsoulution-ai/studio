@@ -2,7 +2,7 @@
 /**
  * Template Name: Page - Blog
  *
- * @package vyls
+ * @package capfinfy
  */
 
 get_header();

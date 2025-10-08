@@ -2,7 +2,7 @@
 /**
  * Template Name: Blog - Stratégies Prêt Entreprise
  *
- * @package vyls
+ * @package capfinfy
  */
 
 get_header();

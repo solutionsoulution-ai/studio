@@ -48,7 +48,7 @@ get_header();
                         <label class="text-sm font-medium leading-none mb-2 block">Votre Pays</label>
                          <select name="pays" required class="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm">
                             <option value="">Sélectionnez un pays</option>
-                            <option value="Albanie">Albanie</option>
+                             <option value="Albanie">Albanie</option>
                             <option value="Allemagne">Allemagne</option>
                             <option value="Andorre">Andorre</option>
                             <option value="Autriche">Autriche</option>

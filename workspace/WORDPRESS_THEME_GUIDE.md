@@ -90,8 +90,15 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
 
     **Répétez cette opération pour les pages suivantes :**
     *   **Titre :** `À Propos` -> **Modèle :** `Page - À Propos`
+    *   **Titre :** `Blog` -> **Modèle :** `Page - Blog`
     *   **Titre :** `Contact` -> **Modèle :** `Page - Contact`
     *   **Titre :** `Demande de Financement` -> **Modèle :** `Page - Demande de Prêt`
+    *   **Titre :** `Merci Contact` -> **Modèle :** `Page - Merci Contact`
+    *   **Titre :** `Merci Demande` -> **Modèle :** `Page - Merci Demande`
+    *   **Titre :** `Stratégies Prêt Entreprise` -> **Modèle :** `Blog - Stratégies Prêt Entreprise`
+    *   **Titre :** `Rachat de Crédit Blog` -> **Modèle :** `Blog - Rachat de Crédit`
+    *   **Titre :** `Erreurs Prêt Immobilier` -> **Modèle :** `Blog - Prêt Immobilier Erreurs`
+    *   **Titre :** `Prêt Personnel Flexible` -> **Modèle :** `Blog - Prêt Personnel Flexible`
     *   **Titre :** `Prêt Entreprise` -> **Modèle :** `Service - Prêt Entreprise`
     *   **Titre :** `Prêt Immobilier` -> **Modèle :** `Service - Prêt Immobilier`
     *   **Titre :** `Prêt Personnel` -> **Modèle :** `Service - Prêt Personnel`
@@ -100,8 +107,6 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
     *   **Titre :** `Politique de Confidentialité` -> **Modèle :** `Page - Politique de Confidentialité`
     *   **Titre :** `Conditions Générales` -> **Modèle :** `Page - Conditions Générales`
     *   **Titre :** `Tableau de Bord` -> **Modèle :** `Banque - Tableau de Bord`
-    *   **Titre :** `Transactions` -> **Modèle :** `Banque - Transactions`
-    *   **Titre :** `Virements` -> **Modèle :** `Banque - Virements`
     
 4.  **Créer le Menu :**
     *   Allez dans `Apparence > Menus`.

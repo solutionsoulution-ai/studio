@@ -2,7 +2,7 @@
 /**
  * Template Name: Page - Merci Demande
  *
- * @package vyls
+ * @package capfinfy
  */
 
 get_header();

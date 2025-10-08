@@ -2,7 +2,7 @@
 /**
  * Template Name: Blog - Prêt Personnel Flexible
  *
- * @package vyls
+ * @package capfinfy
  */
 
 get_header();
