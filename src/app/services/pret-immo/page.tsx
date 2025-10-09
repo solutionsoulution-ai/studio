@@ -22,7 +22,7 @@ const immoFaqs = [
   },
   {
     question: "Quelle est la durée maximale pour un prêt immobilier ?",
-    answer: "La durée de remboursement peut aller jusqu'à 25 ans (300 mois), voire 30 ans (360 mois) dans de très rares cas. Une durée plus courte signifie des mensualités plus élevées mais un coût total du crédit plus faible.",
+    answer: "La durée de remboursement peut aller jusqu'à 25 ans (300 mois). Une durée plus courte signifie des mensualités plus élevées mais un coût total du crédit plus faible.",
   },
 ];
 
@@ -73,7 +73,7 @@ export default function PretImmobilierPage() {
           <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-center">
             <div className="order-2 md:order-1">
               <h1 className="text-4xl md:text-5xl font-bold font-headline mb-4 flex items-center gap-3">
-                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fe1c04" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <Home className="w-10 h-10 text-primary" />
                 Prêt Immobilier
               </h1>
               <p className="text-lg text-muted-foreground mb-6">
@@ -113,12 +113,8 @@ export default function PretImmobilierPage() {
 
         <HowItWorksSection steps={howItWorksSteps} />
 
-        <section className="w-full py-16 md:py-24 bg-muted/30">
-          {/* Calculateur retiré pour la compilation Next.js */}
-        </section>
-
         <section className="container mx-auto py-16 md:py-24">
-          <FaqSection faqs={immoFaqs} />
+          <FaqSection faqs={immoFaqs} title="Questions Fréquentes - Prêt Immobilier" />
         </section>
 
       </main>

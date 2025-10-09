@@ -1,3 +1,4 @@
+
 import SiteHeader from "@/components/site/site-header";
 import SiteFooter from "@/components/site/site-footer";
 import CtaSection from "@/components/site/cta-section";
@@ -34,13 +35,13 @@ export default function PolitiqueDeConfidentialitePage() {
               <div>
                 <h2>3. Utilisation et Finalité du Traitement des Données</h2>
                 <p>
-                  Les informations que nous collectons sont utilisées pour les finalités suivantes, basées sur le consentement et l'exécution de mesures pré-contractuelles :
+                  Les informations que nous collectons sont utilisées pour les finalités suivantes, basées sur votre consentement (matérialisé par l'envoi du formulaire) et l'exécution de mesures pré-contractuelles :
                 </p>
                 <ul>
-                  <li><strong>Fournir et améliorer nos services :</strong> Traiter et évaluer votre demande de financement pour vous proposer des offres adaptées.</li>
+                  <li><strong>Fournir nos services :</strong> Traiter et évaluer votre demande de financement pour vous proposer des offres adaptées.</li>
                   <li><strong>Communication :</strong> Vous contacter en réponse à vos demandes et vous tenir informé de l'avancement de votre dossier.</li>
                   <li><strong>Sécurité :</strong> Assurer la sécurité de notre site et prévenir la fraude.</li>
-                  <li><strong>Marketing :</strong> Avec votre consentement explicite, vous envoyer des communications sur nos produits et services.</li>
+                  <li><strong>Amélioration du service :</strong> Analyser l'utilisation de notre site pour en améliorer la performance et l'ergonomie.</li>
                 </ul>
               </div>
 
@@ -54,7 +55,7 @@ export default function PolitiqueDeConfidentialitePage() {
                   <li>À des prestataires de services techniques (hébergement, maintenance) qui nous aident à exploiter notre site, sous contrat de confidentialité.</li>
                   <li>Pour nous conformer à une obligation légale, appliquer les politiques de notre site, ou protéger nos droits, notre propriété ou notre sécurité.</li>
                 </ul>
-                <p>Vos données sont hébergées au sein de l'Union Européenne et ne sont pas transférées en dehors, sauf si des garanties adéquates sont mises en place.</p>
+                <p>Vos données sont hébergées sur des serveurs sécurisés au sein de l'Union Européenne et ne sont pas transférées en dehors, sauf si des garanties adéquates sont mises en place.</p>
               </div>
               
               <div>

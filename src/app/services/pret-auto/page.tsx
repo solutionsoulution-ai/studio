@@ -31,7 +31,7 @@ const howItWorksSteps: HowItWorksStep[] = [
     {
       icon: "FilePen",
       title: "1. Demande Rapide",
-      description: "Faites votre demande en quelques minutes et recevez une réponse de principe immédiate.",
+      description: "Faites votre demande en quelques minutes et recevez une réponse de principe rapide.",
     },
     {
       icon: "Search",
@@ -74,7 +74,7 @@ export default function PretAutoPage() {
           <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-center">
             <div className="order-2 md:order-1">
               <h1 className="text-4xl md:text-5xl font-bold font-headline mb-4 flex items-center gap-3">
-                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fe1c04" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 16.5 17.5 13H22v-2h-4.5l-3.5-3.5L14 3V1H6v2l2.5 4.5-5 2.5-1.5-1.5L1 10l4 4-4 4 1 1 1.5-1.5 5-2.5L10 23h4v-2l.5-1.5-3-3.5 6.5 3z"/></svg>
+                <Car className="w-10 h-10 text-primary" />
                 Prêt Auto
               </h1>
               <p className="text-lg text-muted-foreground mb-6">
@@ -83,7 +83,7 @@ export default function PretAutoPage() {
               <ul className="space-y-3 mb-8">
                 <li className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-accent" />
-                  <span>Réponse de principe immédiate en ligne.</span>
+                  <span>Réponse de principe rapide en ligne.</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-accent" />
@@ -114,12 +114,8 @@ export default function PretAutoPage() {
 
         <HowItWorksSection steps={howItWorksSteps} />
 
-        <section className="w-full py-16 md:py-24 bg-muted/30">
-          {/* Calculateur retiré pour la compilation Next.js */}
-        </section>
-
         <section className="container mx-auto py-16 md:py-24">
-            <FaqSection faqs={autoFaqs} />
+            <FaqSection faqs={autoFaqs} title="Questions Fréquentes - Prêt Auto" />
         </section>
 
       </main>

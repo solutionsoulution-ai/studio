@@ -22,7 +22,7 @@ get_header();
               <ul class="space-y-3 mb-8">
                 <li class="flex items-center gap-3">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-accent"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
-                  <span>Réponse de principe immédiate en ligne.</span>
+                  <span>Réponse de principe rapide en ligne.</span>
                 </li>
                 <li class="flex items-center gap-3">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-accent"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
@@ -33,7 +33,9 @@ get_header();
                   <span>Pas de frais de dossier cachés.</span>
                 </li>
               </ul>
-              <a href="/demande-de-pret" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 rounded-md px-8">Commencer ma demande</a>
+              <div class="space-y-4">
+                  <a href="/demande-de-pret" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 rounded-md px-8">Commencer ma demande</a>
+              </div>
             </div>
             <div class="order-1 md:order-2">
               <img src="https://i.postimg.cc/QMyhG9GF/pexels-pixabay-210019.jpg" alt="Gros plan sur le phare d'une voiture neuve et brillante." width="600" height="400" class="rounded-lg shadow-lg object-cover w-full">
@@ -41,7 +43,7 @@ get_header();
         </div>
     </section>
 
-    <section class="w-full py-16 md:py-24">
+    <section class="w-full py-16 md:py-24 bg-muted/30">
         <div class="container mx-auto">
             <div class="text-center mb-10">
                 <div class="flex items-center gap-3 justify-center">
@@ -62,17 +64,6 @@ get_header();
             <div class="text-center mb-10"><h2 class="text-3xl font-bold tracking-tight font-headline">Comment ça marche ?</h2><p class="mt-4 text-lg text-muted-foreground">Suivez ces étapes simples pour obtenir votre financement.</p></div>
             <div class="relative"><div class="absolute top-1/2 left-0 w-full h-0.5 border-t-2 border-dashed border-border -translate-y-1/2 hidden md:block" aria-hidden="true"></div><div class="relative grid md:grid-cols-3 gap-12"><div class="flex flex-col items-center text-center"><div class="relative z-10 flex items-center justify-center w-20 h-20 rounded-full bg-primary text-primary-foreground mb-4 ring-8 ring-background"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></div><h3 class="text-xl font-bold mb-2">1. Demande Rapide</h3><p class="text-muted-foreground">Faites votre demande en quelques minutes et recevez une réponse de principe immédiate.</p></div><div class="flex flex-col items-center text-center"><div class="relative z-10 flex items-center justify-center w-20 h-20 rounded-full bg-primary text-primary-foreground mb-4 ring-8 ring-background"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div><h3 class="text-xl font-bold mb-2">2. Approbation Intelligente</h3><p class="text-muted-foreground">Notre IA analyse votre profil pour vous fournir une offre ferme rapidement, souvent en quelques heures.</p></div><div class="flex flex-col items-center text-center"><div class="relative z-10 flex items-center justify-center w-20 h-20 rounded-full bg-primary text-primary-foreground mb-4 ring-8 ring-background"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10"><path d="M2 12v3c0 1.1.9 2 2 2h16a2 2 0 0 0 2-2v-3"/><path d="M12 16v-1"/><path d="m15 12-3-3-3 3"/><path d="M12 3v1"/></svg></div><h3 class="text-xl font-bold mb-2">3. Prenez la Route</h3><p class="text-muted-foreground">Après signature électronique, les fonds sont virés au vendeur et vous pouvez récupérer votre voiture.</p></div></div></div>
         </div>
-    </section>
-
-    <section class="w-full py-16 md:py-24">
-        <?php 
-        $calculator_args = [
-            'title' => 'Estimez vos mensualités auto',
-            'description' => "Ajustez le montant et la durée pour simuler le remboursement de votre prêt auto.",
-        ];
-        set_query_var('calculator_args', $calculator_args);
-        get_template_part('template-parts/calculator'); 
-        ?>
     </section>
 
     <section id="faq" class="container mx-auto py-16 md:py-24">

@@ -74,7 +74,7 @@ export default function PretEntreprisePage() {
           <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-center">
             <div className="order-2 md:order-1">
               <h1 className="text-4xl md:text-5xl font-bold font-headline mb-4 flex items-center gap-3">
-                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fe1c04" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg>
+                <Landmark className="w-10 h-10 text-primary" />
                 Prêt Entreprise
               </h1>
               <p className="text-lg text-muted-foreground mb-6">
@@ -114,12 +114,8 @@ export default function PretEntreprisePage() {
 
         <HowItWorksSection steps={howItWorksSteps} />
 
-        <section className="w-full py-16 md:py-24 bg-muted/30">
-          {/* Calculateur retiré pour la compilation Next.js */}
-        </section>
-
         <section className="container mx-auto py-16 md:py-24">
-          <FaqSection faqs={businessFaqs} />
+          <FaqSection faqs={businessFaqs} title="Questions Fréquentes - Prêt Entreprise" />
         </section>
       </main>
       <SiteFooter />

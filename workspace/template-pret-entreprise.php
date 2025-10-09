@@ -42,7 +42,7 @@ get_header();
     </section>
 
     <!-- Section: Pourquoi souscrire -->
-    <section class="w-full py-16 md:py-24">
+    <section class="w-full py-16 md:py-24 bg-muted/30">
         <div class="container mx-auto">
             <div class="text-center mb-10">
                 <div class="flex items-center gap-3 justify-center">
@@ -64,18 +64,6 @@ get_header();
             <div class="text-center mb-10"><h2 class="text-3xl font-bold tracking-tight font-headline">Comment ça marche ?</h2><p class="mt-4 text-lg text-muted-foreground">Suivez ces étapes simples pour obtenir votre financement.</p></div>
             <div class="relative"><div class="absolute top-1/2 left-0 w-full h-0.5 border-t-2 border-dashed border-border -translate-y-1/2 hidden md:block" aria-hidden="true"></div><div class="relative grid md:grid-cols-3 gap-12"><div class="flex flex-col items-center text-center"><div class="relative z-10 flex items-center justify-center w-20 h-20 rounded-full bg-primary text-primary-foreground mb-4 ring-8 ring-background"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></div><h3 class="text-xl font-bold mb-2">1. Demande en Ligne</h3><p class="text-muted-foreground">Remplissez notre formulaire sécurisé avec les informations de votre entreprise et vos besoins de financement.</p></div><div class="flex flex-col items-center text-center"><div class="relative z-10 flex items-center justify-center w-20 h-20 rounded-full bg-primary text-primary-foreground mb-4 ring-8 ring-background"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div><h3 class="text-xl font-bold mb-2">2. Analyse du Dossier</h3><p class="text-muted-foreground">Nos experts analysent votre dossier et la viabilité de votre projet pour vous proposer la meilleure solution.</p></div><div class="flex flex-col items-center text-center"><div class="relative z-10 flex items-center justify-center w-20 h-20 rounded-full bg-primary text-primary-foreground mb-4 ring-8 ring-background"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10"><path d="M2 12v3c0 1.1.9 2 2 2h16a2 2 0 0 0 2-2v-3"/><path d="M12 16v-1"/><path d="m15 12-3-3-3 3"/><path d="M12 3v1"/></svg></div><h3 class="text-xl font-bold mb-2">3. Déblocage des Fonds</h3><p class="text-muted-foreground">Après approbation, les fonds sont rapidement transférés sur votre compte professionnel pour lancer vos projets.</p></div></div></div>
         </div>
-    </section>
-
-    <!-- Section: Calculateur -->
-    <section class="w-full py-16 md:py-24">
-        <?php 
-        $calculator_args = [
-            'title' => 'Simulez votre financement professionnel',
-            'description' => "Estimez les remboursements pour vos projets d'investissement, de développement ou de trésorerie.",
-        ];
-        set_query_var('calculator_args', $calculator_args);
-        get_template_part('template-parts/calculator'); 
-        ?>
     </section>
 
     <!-- Section: FAQ -->

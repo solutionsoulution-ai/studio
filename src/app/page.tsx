@@ -18,9 +18,6 @@ export default function Home() {
       <main className="flex-1">
         <HomeCarousel />
         <ServicesSection />
-        <section id="calculateur" className="w-full py-16 md:py-24 bg-muted/30">
-            {/* Le calculateur est maintenant injecté via PHP */}
-        </section>
         <WhyChooseUsSection />
         <TimelineSummary />
         <BlogSummarySection />

@@ -41,7 +41,7 @@ get_header();
         </div>
     </section>
 
-     <section class="w-full py-16 md:py-24">
+     <section class="w-full py-16 md:py-24 bg-muted/30">
         <div class="container mx-auto">
             <div class="text-center mb-10">
                 <div class="flex items-center gap-3 justify-center">
@@ -64,17 +64,6 @@ get_header();
         </div>
     </section>
 
-    <section class="w-full py-16 md:py-24">
-        <?php 
-        $calculator_args = [
-            'title' => 'Calculez votre prêt immobilier',
-            'description' => "Simulez les mensualités de votre futur achat immobilier en ajustant le montant et la durée.",
-        ];
-        set_query_var('calculator_args', $calculator_args);
-        get_template_part('template-parts/calculator'); 
-        ?>
-    </section>
-
     <section id="faq" class="container mx-auto py-16 md:py-24">
         <div class="max-w-3xl mx-auto">
             <div class="text-center mb-10">
@@ -94,7 +83,7 @@ get_header();
                 </div>
                 <div class="border-b pb-4">
                     <h3 class="font-medium text-lg">Quelle est la durée maximale pour un prêt immobilier ?</h3>
-                    <p class="text-muted-foreground mt-2">La durée de remboursement peut aller jusqu'à 25 ans (300 mois), voire 30 ans (360 mois) dans de très rares cas. Une durée plus courte signifie des mensualités plus élevées mais un coût total du crédit plus faible.</p>
+                    <p class="text-muted-foreground mt-2">La durée de remboursement peut aller jusqu'à 25 ans (300 mois). Une durée plus courte signifie des mensualités plus élevées mais un coût total du crédit plus faible.</p>
                 </div>
             </div>
         </div>

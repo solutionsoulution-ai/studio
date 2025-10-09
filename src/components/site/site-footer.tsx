@@ -1,6 +1,6 @@
 
 import Link from "next/link";
-import { Landmark, Linkedin, Twitter, Facebook, Mail, Phone, MapPin, FilePen } from "lucide-react";
+import { Landmark, Mail, Phone, MapPin } from "lucide-react";
 
 const mainNavLinks = [
   { href: "/a-propos", label: "À Propos" },
@@ -21,12 +21,6 @@ const serviceLinks = [
 const legalLinks = [
     { href: "/politique-de-confidentialite", label: "Politique de confidentialité" },
     { href: "/conditions-generales", label: "Conditions d'utilisation" },
-];
-
-const socialLinks = [
-    { href: "#", icon: Twitter, label: "Twitter / X" },
-    { href: "#", icon: Linkedin, label: "LinkedIn" },
-    { href: "#", icon: Facebook, label: "Facebook" },
 ];
 
 export default function SiteFooter() {
@@ -54,7 +48,7 @@ export default function SiteFooter() {
                 </a>
                 <p className="flex items-center gap-2">
                     <MapPin className="w-4 h-4" />
-                    Lyon, France
+                    1 Place de la Bourse, 69002 Lyon, France
                 </p>
              </div>
           </div>
@@ -106,7 +100,7 @@ export default function SiteFooter() {
         <div className="mt-12 border-t pt-6 text-center">
             <div className="text-xs text-muted-foreground space-y-2">
                 <p>Capfinfy SAS au capital de 10 000€ - Siège social : 1 Place de la Bourse, 69002 Lyon, France</p>
-                <p>RCCM : XX-XXXX-X-XXXXX | N° SIRET : XXXXXXXXXXXXXX | N° ORIAS : XXXXXXXX</p>
+                <p>RCCM : XX-XXXX-X-XXXXX | N° SIRET : XXXXXXXXXXXXXX | N° ORIAS : XXXXXXXX (À compléter)</p>
                 <p className="font-bold pt-2">Un crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.</p>
             </div>
             <p className="text-sm text-muted-foreground mt-4">

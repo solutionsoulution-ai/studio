@@ -10,6 +10,8 @@ import { Send, ShieldCheck } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "../ui/checkbox";
 import Link from "next/link";
+import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 const europeanCountries = [
     "Albanie", "Allemagne", "Andorre", "Autriche", "Belgique", "Biélorussie", 
@@ -24,42 +26,65 @@ const europeanCountries = [
 
 export default function LoanApplicationForm() {
   const [agreed, setAgreed] = useState(false);
+  const { toast } = useToast();
+  const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!agreed) {
-      alert("Veuillez accepter les conditions de confidentialité pour soumettre votre demande.");
+        toast({
+            variant: "destructive",
+            title: "Consentement requis",
+            description: "Veuillez accepter la politique de confidentialité pour continuer.",
+        });
       return;
     }
-    alert("Dans un site fonctionnel, le formulaire serait envoyé. Pour cette maquette statique, l'envoi est désactivé.");
+    
+    // In a real app, you would handle form submission here.
+    // For this static export, we'll just redirect to the thank you page.
+    router.push('/demande-de-pret/merci');
   };
 
   return (
     <Card>
       <CardContent className="p-6">
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <Label htmlFor="name">Votre nom complet</Label>
-            <Input id="name" placeholder="Jean Dupont" required />
+          
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="firstName">Prénom</Label>
+              <Input id="firstName" placeholder="Jean" required />
+            </div>
+            <div>
+              <Label htmlFor="lastName">Nom</Label>
+              <Input id="lastName" placeholder="Dupont" required />
+            </div>
           </div>
-          <div>
-            <Label htmlFor="loanAmount">Montant du Prêt (€)</Label>
-            <Input id="loanAmount" type="number" placeholder="50000" required />
+          
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="loanAmount">Montant du Prêt (€)</Label>
+              <Input id="loanAmount" type="number" placeholder="50000" required />
+            </div>
+            <div>
+              <Label htmlFor="loanTerm">Durée (mois)</Label>
+              <Input id="loanTerm" type="number" placeholder="120" required />
+            </div>
           </div>
-          <div>
-            <Label htmlFor="loanTerm">Durée de remboursement (mois)</Label>
-            <Input id="loanTerm" type="number" placeholder="120" required />
+
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="email">Adresse Email</Label>
+              <Input id="email" type="email" placeholder="vous@exemple.com" required />
+            </div>
+            <div>
+              <Label htmlFor="phone">Numéro de Téléphone</Label>
+              <Input id="phone" type="tel" placeholder="+33 6 12 34 56 78" required />
+            </div>
           </div>
+          
           <div>
-            <Label htmlFor="email">Votre Adresse Email</Label>
-            <Input id="email" type="email" placeholder="vous@exemple.com" required />
-          </div>
-          <div>
-            <Label htmlFor="phone">Votre Numéro de Téléphone</Label>
-            <Input id="phone" type="tel" placeholder="+33 6 12 34 56 78" required />
-          </div>
-          <div>
-            <Label htmlFor="country">Votre Pays</Label>
+            <Label htmlFor="country">Pays de résidence</Label>
              <Select required name="pays">
                 <SelectTrigger id="country">
                     <SelectValue placeholder="Sélectionnez un pays" />
@@ -71,17 +96,21 @@ export default function LoanApplicationForm() {
                 </SelectContent>
             </Select>
           </div>
-          <div>
-            <Label htmlFor="profession">Votre Profession</Label>
-            <Input id="profession" placeholder="Développeur" required />
+
+          <div className="grid sm:grid-cols-2 gap-4">
+             <div>
+                <Label htmlFor="profession">Profession</Label>
+                <Input id="profession" placeholder="Développeur" required />
+            </div>
+             <div>
+                <Label htmlFor="income">Revenu mensuel net</Label>
+                <Input id="income" type="number" placeholder="3000" required />
+            </div>
           </div>
-          <div>
-            <Label htmlFor="income">Votre Revenu mensuel</Label>
-            <Input id="income" type="number" placeholder="3000" required />
-          </div>
+          
           <div>
             <Label htmlFor="reason">Motif de la demande</Label>
-            <Textarea id="reason" placeholder="Achat d'un véhicule, rénovation, etc." required />
+            <Textarea id="reason" placeholder="Décrivez brièvement votre projet (ex: Achat d'un véhicule, rénovation, etc.)" required />
           </div>
           
           <div className="pt-4 space-y-4">
@@ -92,7 +121,7 @@ export default function LoanApplicationForm() {
                   J'accepte les termes et la politique de confidentialité.
                 </label>
                 <p className="text-xs text-muted-foreground">
-                  En soumettant ce formulaire, je consens à ce que Capfinfy collecte et traite mes données personnelles pour l'étude de ma demande de financement, conformément à la <Link href="/politique-de-confidentialite" className="underline">Politique de Confidentialité</Link>.
+                  En soumettant ce formulaire, je consens à ce que Capfinfy collecte et traite mes données personnelles pour l'étude de ma demande de financement, conformément à la <Link href="/politique-de-confidentialite" className="underline" target="_blank">Politique de Confidentialité</Link>.
                 </p>
               </div>
             </div>
@@ -100,7 +129,7 @@ export default function LoanApplicationForm() {
           
           <div className="text-xs text-muted-foreground flex items-center justify-center gap-2 pt-2">
             <ShieldCheck className="w-4 h-4 text-green-600" />
-            <span>Vos informations sont chiffrées et sécurisées.</span>
+            <span>Vos informations sont chiffrées et sécurisées via SSL.</span>
           </div>
 
           <Button type="submit" size="lg" className="w-full" disabled={!agreed}>

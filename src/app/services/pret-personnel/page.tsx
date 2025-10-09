@@ -6,7 +6,7 @@ import SiteFooter from "@/components/site/site-footer";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { CheckCircle, FilePen, Search, HandCoins, Plane, Wrench, GraduationCap } from "lucide-react";
+import { CheckCircle, FilePen, Search, HandCoins, Plane, Wrench, GraduationCap, User } from "lucide-react";
 import FaqSection from "@/components/site/faq-section";
 import HowItWorksSection, { HowItWorksStep } from "@/components/site/how-it-works-section";
 import WhySubscribeSection, { type Feature } from "@/components/site/why-subscribe-section";
@@ -41,7 +41,7 @@ const howItWorksSteps: HowItWorksStep[] = [
     {
       icon: "HandCoins",
       title: "3. Recevez les fonds",
-      description: "Après accord définitif, les fonds sont versés sur votre compte bancaire sous 48h pour réaliser vos projets.",
+      description: "Après accord définitif, les fonds sont versés sur votre compte bancaire en quelques jours pour réaliser vos projets.",
     },
 ];
 
@@ -75,7 +75,7 @@ export default function PretPersonnelPage() {
           <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-center">
             <div className="order-2 md:order-1">
               <h1 className="text-4xl md:text-5xl font-bold font-headline mb-4 flex items-center gap-3">
-                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fe1c04" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <User className="w-10 h-10 text-primary" />
                 Prêt Personnel
               </h1>
               <p className="text-lg text-muted-foreground mb-6">
@@ -115,12 +115,8 @@ export default function PretPersonnelPage() {
 
         <HowItWorksSection steps={howItWorksSteps} />
 
-        <section className="w-full py-16 md:py-24 bg-muted/30">
-          {/* Calculateur retiré pour la compilation Next.js */}
-        </section>
-
         <section className="container mx-auto py-16 md:py-24">
-          <FaqSection faqs={personalFaqs} />
+          <FaqSection faqs={personalFaqs} title="Questions Fréquentes - Prêt Personnel" />
         </section>
 
       </main>

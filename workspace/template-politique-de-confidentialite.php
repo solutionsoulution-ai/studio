@@ -15,73 +15,80 @@ get_header();
           <p>Dernière mise à jour : <?php echo date_i18n('j F Y'); ?></p>
 
           <div>
-            <h2>1. Introduction</h2>
+            <h2>1. Introduction et Responsable du Traitement</h2>
             <p>
-              Capfinfy s'engage à protéger la vie privée de ses utilisateurs. Cette politique de confidentialité explique quelles informations nous collectons, comment nous les utilisons, et quels sont vos droits concernant vos données personnelles.
+              Capfinfy, société par actions simplifiée (SAS) située au 1 Place de la Bourse, 69002 Lyon, France ("nous", "notre", "nos"), s'engage à protéger la vie privée de ses utilisateurs ("vous", "votre"). Cette politique de confidentialité explique quelles informations nous collectons, comment nous les utilisons, et quels sont vos droits concernant vos données personnelles, conformément au Règlement Général sur la Protection des Données (RGPD).
             </p>
           </div>
 
           <div>
             <h2>2. Collecte des informations</h2>
             <p>
-              Nous collectons des informations lorsque vous utilisez notre site, notamment lorsque vous remplissez notre formulaire de vérification d'éligibilité ou notre formulaire de contact. Les informations collectées peuvent inclure :
+              Nous collectons des informations personnelles lorsque vous utilisez notre site, notamment lorsque vous remplissez notre formulaire de demande de financement ou notre formulaire de contact. Les informations collectées incluent :
             </p>
             <ul>
-              <li>Votre nom et votre adresse e-mail.</li>
-              <li>Les informations financières que vous fournissez (revenu annuel, score de crédit, etc.).</li>
-              <li>Des informations techniques comme votre adresse IP, votre type de navigateur, etc.</li>
+              <li><strong>Données d'identification :</strong> Nom, prénom, adresse e-mail, numéro de téléphone, adresse postale.</li>
+              <li><strong>Données professionnelles et financières :</strong> Profession, revenus mensuels, montant et durée du prêt souhaité, motif de la demande.</li>
+              <li><strong>Données techniques :</strong> Adresse IP, type de navigateur, données de connexion, qui sont collectées automatiquement.</li>
             </ul>
           </div>
 
           <div>
-            <h2>3. Utilisation des informations</h2>
+            <h2>3. Utilisation et Finalité du Traitement des Données</h2>
             <p>
-              Les informations que nous collectons sont utilisées pour :
+              Les informations que nous collectons sont utilisées pour les finalités suivantes, basées sur votre consentement (matérialisé par l'envoi du formulaire) et l'exécution de mesures pré-contractuelles :
             </p>
             <ul>
-              <li>Fournir et améliorer nos services.</li>
-              <li>Évaluer votre éligibilité à un prêt.</li>
-              <li>Vous contacter en réponse à vos demandes.</li>
-              <li>Communiquer avec vous sur nos produits et services.</li>
+              <li><strong>Fournir nos services :</strong> Traiter et évaluer votre demande de financement pour vous proposer des offres adaptées.</li>
+              <li><strong>Communication :</strong> Vous contacter en réponse à vos demandes et vous tenir informé de l'avancement de votre dossier.</li>
+              <li><strong>Sécurité :</strong> Assurer la sécurité de notre site et prévenir la fraude.</li>
+              <li><strong>Amélioration du service :</strong> Analyser l'utilisation de notre site pour en améliorer la performance et l'ergonomie.</li>
             </ul>
           </div>
 
           <div>
-            <h2>4. Partage des informations</h2>
+            <h2>4. Partage et Transfert des Informations</h2>
             <p>
               Nous ne vendons, n'échangeons ni ne transférons vos informations personnelles identifiables à des tiers sans votre consentement, sauf dans les cas suivants :
             </p>
             <ul>
-              <li>À des partenaires de confiance qui nous aident à exploiter notre site ou à mener nos affaires, tant qu'ils acceptent de garder ces informations confidentielles.</li>
-              <li>Pour se conformer à la loi, appliquer les politiques de notre site, ou protéger nos droits, notre propriété ou notre sécurité.</li>
+              <li>À des partenaires financiers (banques, assureurs) dans le strict cadre de l'étude de votre dossier de financement, sous réserve de confidentialité.</li>
+              <li>À des prestataires de services techniques (hébergement, maintenance) qui nous aident à exploiter notre site, sous contrat de confidentialité.</li>
+              <li>Pour nous conformer à une obligation légale, appliquer les politiques de notre site, ou protéger nos droits, notre propriété ou notre sécurité.</li>
             </ul>
+            <p>Vos données sont hébergées sur des serveurs sécurisés au sein de l'Union Européenne et ne sont pas transférées en dehors, sauf si des garanties adéquates sont mises en place.</p>
           </div>
           
           <div>
-            <h2>5. Sécurité de vos données</h2>
+            <h2>5. Sécurité et Durée de Conservation de vos Données</h2>
             <p>
-              Nous mettons en œuvre une variété de mesures de sécurité pour préserver la sécurité de vos informations personnelles. Nous utilisons des technologies de cryptage pour protéger les informations sensibles transmises en ligne.
+              Nous mettons en œuvre des mesures de sécurité techniques et organisationnelles robustes (cryptage SSL, serveurs sécurisés, accès restreint) pour préserver la sécurité de vos informations personnelles.
+            </p>
+            <p>
+              Vos données sont conservées pour la durée strictement nécessaire à l'étude de votre demande. En cas de refus ou d'abandon, elles sont supprimées après 6 mois. Si votre demande est acceptée, elles sont conservées pendant toute la durée de la relation contractuelle, puis archivées selon les délais légaux de prescription.
             </p>
           </div>
 
           <div>
-            <h2>6. Vos droits</h2>
+            <h2>6. Vos Droits (Conformément au RGPD)</h2>
             <p>
-              Conformément à la réglementation, vous disposez d'un droit d'accès, de rectification, de suppression et d'opposition au traitement de vos données personnelles. Vous pouvez exercer ces droits en nous contactant via notre formulaire de contact.
+              Conformément à la réglementation, vous disposez des droits suivants :
             </p>
+            <ul>
+              <li><strong>Droit d'accès :</strong> Obtenir une copie de vos données.</li>
+              <li><strong>Droit de rectification :</strong> Corriger les données inexactes.</li>
+              <li><strong>Droit à l'effacement ("droit à l'oubli") :</strong> Demander la suppression de vos données.</li>
+              <li><strong>Droit à la limitation du traitement :</strong> Geler temporairement l'utilisation de vos données.</li>
+              <li><strong>Droit à la portabilité :</strong> Recevoir vos données dans un format structuré et lisible.</li>
+              <li><strong>Droit d'opposition :</strong> Vous opposer au traitement de vos données, notamment à des fins de prospection.</li>
+            </ul>
+            <p>Vous pouvez exercer ces droits en nous contactant via notre <a href="/contact">formulaire de contact</a> ou par courrier à l'adresse mentionnée à l'article 1. Vous avez également le droit d'introduire une réclamation auprès de la CNIL.</p>
           </div>
           
           <div>
             <h2>7. Modifications de notre politique de confidentialité</h2>
             <p>
-              Si nous décidons de changer notre politique de confidentialité, nous publierons ces changements sur cette page. Nous vous encourageons à consulter cette page régulièrement pour rester informé.
-            </p>
-          </div>
-
-          <div>
-            <h2>8. Nous contacter</h2>
-            <p>
-              Si vous avez des questions concernant cette politique de confidentialité, vous pouvez nous contacter via la section "Contact" de notre site.
+              Nous nous réservons le droit de modifier cette politique de confidentialité à tout moment. Si nous décidons de changer notre politique, nous publierons ces changements sur cette page avec la date de mise à jour.
             </p>
           </div>
         </div>

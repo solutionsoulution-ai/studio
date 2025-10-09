@@ -25,7 +25,7 @@ get_header();
             <!-- NOTE: Remplacez ce bloc par le shortcode de votre plugin de formulaire (ex: [contact-form-7 id="123" title="Formulaire de contact"]) -->
             <div class="rounded-lg border bg-card text-card-foreground shadow-lg">
                 <div class="p-6 md:p-8">
-                    <form class="space-y-6" action="/merci-contact" method="post">
+                    <form class="space-y-6" action="/contact/merci/" method="post">
                         <div class="grid sm:grid-cols-2 gap-4">
                             <div><label class="text-sm font-medium leading-none mb-2 block">Nom Complet</label><input type="text" placeholder="Jean Dupont" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
                             <div><label class="text-sm font-medium leading-none mb-2 block">Adresse E-mail</label><input type="email" placeholder="vous@exemple.com" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
@@ -56,7 +56,7 @@ get_header();
                     </a>
                     <div class="flex items-center gap-3">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-primary"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                        <span>Lyon, France</span>
+                        <span>1 Place de la Bourse, 69002 Lyon, France</span>
                     </div>
                 </div>
             </div>
