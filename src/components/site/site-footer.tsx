@@ -101,23 +101,17 @@ export default function SiteFooter() {
             </ul>
           </div>
 
-          {/* Section Social */}
-          <div>
-            <h3 className="font-semibold mb-4">Suivez-nous</h3>
-            <div className="flex space-x-4">
-              {socialLinks.map(({ href, icon: Icon, label }) => (
-                <Link key={label} href={href} aria-label={label} className="text-muted-foreground hover:text-primary transition-colors">
-                  <Icon className="h-5 w-5" />
-                </Link>
-              ))}
-            </div>
-          </div>
         </div>
 
         <div className="mt-12 border-t pt-6 text-center">
-          <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} Capfinfy. Tous droits réservés.
-          </p>
+            <div className="text-xs text-muted-foreground space-y-2">
+                <p>Capfinfy SAS au capital de 10 000€ - Siège social : 1 Place de la Bourse, 69002 Lyon, France</p>
+                <p>RCCM : XX-XXXX-X-XXXXX | N° SIRET : XXXXXXXXXXXXXX | N° ORIAS : XXXXXXXX</p>
+                <p className="font-bold pt-2">Un crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.</p>
+            </div>
+            <p className="text-sm text-muted-foreground mt-4">
+                &copy; {new Date().getFullYear()} Capfinfy. Tous droits réservés.
+            </p>
         </div>
       </div>
     </footer>

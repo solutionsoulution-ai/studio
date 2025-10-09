@@ -2,7 +2,7 @@
 /**
  * Template Name: Service - Prêt Auto
  *
- * @package vyls
+ * @package capfinfy
  */
 
 get_header();
@@ -22,7 +22,7 @@ get_header();
               <ul class="space-y-3 mb-8">
                 <li class="flex items-center gap-3">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-accent"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
-                  <span>Réponse de principe immédiate en ligne.</span>
+                  <span>Réponse de principe rapide en ligne.</span>
                 </li>
                 <li class="flex items-center gap-3">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-accent"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
@@ -33,7 +33,10 @@ get_header();
                   <span>Pas de frais de dossier cachés.</span>
                 </li>
               </ul>
-              <a href="/demande-de-pret" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 rounded-md px-8">Commencer ma demande</a>
+              <div class="space-y-4">
+                  <a href="/demande-de-pret" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 rounded-md px-8">Commencer ma demande</a>
+                  <p class="text-xs text-muted-foreground">Un crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement.</p>
+              </div>
             </div>
             <div class="order-1 md:order-2">
               <img src="https://i.postimg.cc/QMyhG9GF/pexels-pixabay-210019.jpg" alt="Gros plan sur le phare d'une voiture neuve et brillante." width="600" height="400" class="rounded-lg shadow-lg object-cover w-full">
@@ -41,7 +44,7 @@ get_header();
         </div>
     </section>
 
-    <section class="w-full py-16 md:py-24">
+    <section class="w-full py-16 md:py-24 bg-muted/30">
         <div class="container mx-auto">
             <div class="text-center mb-10">
                 <div class="flex items-center gap-3 justify-center">
@@ -64,7 +67,7 @@ get_header();
         </div>
     </section>
 
-    <section class="w-full py-16 md:py-24">
+    <section class="w-full py-16 md:py-24 bg-muted/30">
         <?php 
         $calculator_args = [
             'title' => 'Estimez vos mensualités auto',

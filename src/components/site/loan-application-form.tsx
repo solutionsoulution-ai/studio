@@ -6,8 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
-import { Send } from "lucide-react";
+import { Send, ShieldCheck } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "../ui/checkbox";
+import Link from "next/link";
 
 const europeanCountries = [
     "Albanie", "Allemagne", "Andorre", "Autriche", "Belgique", "Biélorussie", 
@@ -21,11 +23,14 @@ const europeanCountries = [
 ];
 
 export default function LoanApplicationForm() {
-  const [loanAmount, setLoanAmount] = useState(50000);
-  const [loanTerm, setLoanTerm] = useState(120);
+  const [agreed, setAgreed] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!agreed) {
+      alert("Veuillez accepter les conditions de confidentialité pour soumettre votre demande.");
+      return;
+    }
     alert("Dans un site fonctionnel, le formulaire serait envoyé. Pour cette maquette statique, l'envoi est désactivé.");
   };
 
@@ -39,11 +44,11 @@ export default function LoanApplicationForm() {
           </div>
           <div>
             <Label htmlFor="loanAmount">Montant du Prêt (€)</Label>
-            <Input id="loanAmount" type="number" placeholder="50000" value={loanAmount} onChange={(e) => setLoanAmount(Number(e.target.value))} required />
+            <Input id="loanAmount" type="number" placeholder="50000" required />
           </div>
           <div>
             <Label htmlFor="loanTerm">Durée de remboursement (mois)</Label>
-            <Input id="loanTerm" type="number" placeholder="120" value={loanTerm} onChange={(e) => setLoanTerm(Number(e.target.value))} required />
+            <Input id="loanTerm" type="number" placeholder="120" required />
           </div>
           <div>
             <Label htmlFor="email">Votre Adresse Email</Label>
@@ -79,12 +84,30 @@ export default function LoanApplicationForm() {
             <Textarea id="reason" placeholder="Achat d'un véhicule, rénovation, etc." required />
           </div>
           
-          <p className="text-xs text-muted-foreground text-center pt-4">En cliquant sur "Envoyer ma demande", vous confirmez que les informations fournies sont exactes et complètes, et vous acceptez nos conditions générales et notre politique de confidentialité.</p>
+          <div className="pt-4 space-y-4">
+            <div className="flex items-start space-x-3">
+              <Checkbox id="terms" checked={agreed} onCheckedChange={(checked) => setAgreed(!!checked)} />
+              <div className="grid gap-1.5 leading-none">
+                <label htmlFor="terms" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                  J'accepte les termes et la politique de confidentialité.
+                </label>
+                <p className="text-xs text-muted-foreground">
+                  En soumettant ce formulaire, je consens à ce que Capfinfy collecte et traite mes données personnelles pour l'étude de ma demande de financement, conformément à la <Link href="/politique-de-confidentialite" className="underline">Politique de Confidentialité</Link>.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="text-xs text-muted-foreground flex items-center justify-center gap-2 pt-2">
+            <ShieldCheck className="w-4 h-4 text-green-600" />
+            <span>Vos informations sont chiffrées et sécurisées.</span>
+          </div>
 
-          <Button type="submit" size="lg" className="w-full">
+          <Button type="submit" size="lg" className="w-full" disabled={!agreed}>
             <Send />
             Envoyer ma demande
           </Button>
+          <p className="text-xs text-muted-foreground text-center">Un crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.</p>
         </form>
       </CardContent>
     </Card>
