@@ -77,7 +77,7 @@ get_header();
 
         <!-- Comments Section -->
         <?php if (comments_open() || get_comments_number()) : ?>
-            <section class="py-16 md:py-24">
+            <section class="py-16 md:py-24 bg-muted/30">
                 <div class="container mx-auto max-w-3xl px-4">
                     <?php comments_template(); ?>
                 </div>
