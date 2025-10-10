@@ -5,6 +5,32 @@
  * @package capfinfy
  */
 
+// Traitement du formulaire
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['contact_form_nonce'])) {
+    if (wp_verify_nonce($_POST['contact_form_nonce'], 'capfinfy_contact_action')) {
+        
+        $name = sanitize_text_field($_POST['name']);
+        $email = sanitize_email($_POST['email']);
+        $message = sanitize_textarea_field($_POST['message']);
+        
+        $to = get_option('admin_email');
+        $subject = 'Nouveau message de contact de ' . $name;
+        $headers = array('Content-Type: text/html; charset=UTF-8', 'From: ' . $name . ' <' . $email . '>');
+        
+        $body = "<h2>Nouveau message depuis le formulaire de contact</h2>";
+        $body .= "<p><strong>Nom :</strong> " . esc_html($name) . "</p>";
+        $body .= "<p><strong>Email :</strong> " . esc_html($email) . "</p>";
+        $body .= "<p><strong>Message :</strong><br>" . nl2br(esc_html($message)) . "</p>";
+
+        // WP Mail SMTP prendra le relais ici
+        wp_mail($to, $subject, $body, $headers);
+        
+        // Redirection vers la page de remerciement
+        wp_redirect(home_url('/merci-contact'));
+        exit;
+    }
+}
+
 get_header();
 ?>
 
@@ -25,8 +51,7 @@ get_header();
             <div class="rounded-lg border bg-card text-card-foreground shadow-lg">
                 <div class="p-6 md:p-8">
                     <form class="space-y-6" action="" method="post">
-                        <?php wp_nonce_field( 'capfinfy_contact_form' ); ?>
-                        <input type="hidden" name="capfinfy_form_submission" value="contact">
+                        <?php wp_nonce_field('capfinfy_contact_action', 'contact_form_nonce'); ?>
                         <div class="grid sm:grid-cols-2 gap-4">
                             <div><label for="name" class="text-sm font-medium leading-none mb-2 block">Nom Complet</label><input type="text" name="name" id="name" placeholder="Jean Dupont" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
                             <div><label for="email" class="text-sm font-medium leading-none mb-2 block">Adresse E-mail</label><input type="email" id="email" name="email" placeholder="vous@exemple.com" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>

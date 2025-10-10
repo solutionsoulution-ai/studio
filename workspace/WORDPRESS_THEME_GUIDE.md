@@ -19,7 +19,7 @@ Ouvrez votre terminal à la racine de **ce projet Next.js** (pas votre dossier d
 npm run build
 ```
 
-Cette commande va créer un dossier `build/` qui contient les fichiers `main.css` et `calculator.js` dont nous avons besoin.
+Cette commande va créer un dossier `build/` qui contient les fichiers `main.css` et `main.js`.
 
 ---
 
@@ -34,7 +34,7 @@ Cette commande va créer un dossier `build/` qui contient les fichiers `main.css
 
 ## Étape 4 : Gérer le JavaScript
 
-Le fichier `functions.php` est déjà configuré pour charger `main.js` (déjà présent dans `assets/js`). Il n'y a rien d'autre à faire.
+Le fichier `functions.php` est déjà configuré pour charger `main.js`. Il n'y a rien d'autre à faire.
 
 ---
 
@@ -70,7 +70,7 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
     *   Activez le thème.
 
 2.  **Configurer la Page d'Accueil (Très Important) :**
-    *   Allez dans `Pages > Ajouter`. Créez une page simple que vous nommerez `Accueil`. Laissez le contenu vide et le modèle sur "Défaut", puis publiez-la.
+    *   Allez dans `Pages > Ajouter`. Créez une page simple que vous nommerez `Accueil`. Laissez le contenu vide, puis publiez-la.
     *   Allez dans `Réglages > Lecture`.
     *   À côté de "La page d'accueil affiche", cochez **"Une page statique"**.
     *   Dans le menu déroulant "Page d'accueil", sélectionnez la page **"Accueil"** que vous venez de créer.
@@ -94,23 +94,15 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
     *   **Titre :** `Rachat de Crédit` -> **Modèle :** `Service - Rachat de Crédit`
     *   **Titre :** `Politique de Confidentialité` -> **Modèle :** `Page - Politique de Confidentialité`
     *   **Titre :** `Conditions Générales` -> **Modèle :** `Page - Conditions Générales`
-    *   **Titre :** `Tableau de Bord` -> **Modèle :** `Banque - Tableau de Bord`
     *   **Titre :** `Merci Contact` -> **Modèle :** `Page - Merci Contact`
     *   **Titre :** `Merci Demande` -> **Modèle :** `Page - Merci Demande`
     
-4.  **Créer le Menu :**
-    *   Allez dans `Apparence > Menus`.
-    *   Créez un nouveau menu.
-    *   Ajoutez les pages que vous venez de créer au menu.
-    *   En bas, dans "Emplacements du menu", cochez la case "Menu Principal".
-    *   Enregistrez le menu.
-
-5.  **Permaliens (Très Important) :**
+4.  **Permaliens (Très Important) :**
     *   Allez dans `Réglages > Permaliens`.
     *   Choisissez la structure `Titre de la publication`.
     *   Cliquez sur `Enregistrer les modifications`. Cela rafraîchit les règles de liens de WordPress et résout beaucoup de problèmes de "page non trouvée".
 
-6.  **Installer et Configurer `WP Mail SMTP` (Crucial pour les formulaires) :**
+5.  **Installer et Configurer `WP Mail SMTP` (Crucial pour les formulaires) :**
     *   Les formulaires de ce thème sont conçus pour fonctionner sans plugin de formulaire supplémentaire, mais ils dépendent entièrement de `WP Mail SMTP` pour l'envoi des e-mails.
     *   **Installez le plugin `WP Mail SMTP`**.
     *   Allez dans `WP Mail SMTP > Réglages`.
@@ -127,16 +119,3 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
         *   **E-mail de l’expéditeur :** `contact@vylscapital.com`
         *   **Forcer l’e-mail de l’expéditeur :** Cochez cette case.
     *   Enregistrez les réglages et effectuez un test d'envoi pour confirmer que tout fonctionne.
-
----
-
-### Nettoyage du Thème (Optionnel mais recommandé)
-
-Votre thème contient des fichiers de base dont nous n'avons plus besoin. Vous pouvez les supprimer pour garder votre thème propre :
-*   `404.php` (gardez-le, il est utile)
-*   `archive.php` (gardez-le)
-*   `comments.php` (gardez-le)
-*   `search.php` (gardez-le)
-*   `screenshot.png` (à garder ou à remplacer par votre propre capture d'écran)
-*   Tous les fichiers `template-blog-*.php` si vous utilisez le système de blog natif de WordPress.
-```

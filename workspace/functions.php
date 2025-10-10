@@ -89,7 +89,7 @@ add_action( 'widgets_init', 'capfinfy_widgets_init' );
  * Enqueue scripts and styles.
  */
 function capfinfy_enqueue_assets() {
-    // Main theme stylesheet from style.css (which will contain the built CSS from main.css)
+    // Main theme stylesheet from style.css
     wp_enqueue_style(
         'capfinfy-theme-style',
         get_stylesheet_uri(),
@@ -105,7 +105,7 @@ function capfinfy_enqueue_assets() {
         null
     );
 
-    // Main JavaScript file (for simple interactions like menu/FAQ)
+    // Main JavaScript file (for animations, etc.)
     wp_enqueue_script(
         'capfinfy-main-js',
         get_template_directory_uri() . '/assets/js/main.js',
@@ -121,120 +121,5 @@ function capfinfy_enqueue_assets() {
 add_action( 'wp_enqueue_scripts', 'capfinfy_enqueue_assets' );
 
 /**
- * Custom Walker to remove <li> tags from nav menu items for desktop
+ * Custom Walker classes have been removed as the menu is no longer displayed.
  */
-class Capfinfy_Walker_Nav_Menu_Desktop extends Walker_Nav_Menu {
-    function start_el(&$output, $item, $depth = 0, $args = null, $id = 0) {
-        $classes = empty( $item->classes ) ? array() : (array) $item->classes;
-        $class_names = join(' ', apply_filters('nav_menu_css_class', array_filter($classes), $item, $args));
-        
-        $output .= '<a href="' . esc_url($item->url) . '" class="transition-colors hover:text-primary ' . esc_attr($class_names) . '">' . esc_html($item->title) . '</a>';
-    }
-    function end_el(&$output, $item, $depth = 0, $args = null) {
-        $output .= "";
-    }
-}
-
-/**
- * Custom Walker for the mobile menu to keep a simpler structure
- */
-class Capfinfy_Walker_Nav_Menu_Mobile extends Walker_Nav_Menu {
-    function start_el(&$output, $item, $depth = 0, $args = null, $id = 0) {
-        $classes = empty( $item->classes ) ? array() : (array) $item->classes;
-        $class_names = join(' ', apply_filters('nav_menu_css_class', array_filter($classes), $item, $args));
-        
-        $output .= '<a data-mobile-menu-close href="' . esc_url($item->url) . '" class="text-lg font-medium transition-colors hover:text-primary pl-2 ' . esc_attr($class_names) . '">' . esc_html($item->title) . '</a>';
-    }
-    function end_el(&$output, $item, $depth = 0, $args = null) {
-        $output .= "";
-    }
-}
-
-
-/**
- * Handles form submissions for contact and loan application forms.
- */
-function capfinfy_handle_form_submissions() {
-    if ( 'POST' !== $_SERVER['REQUEST_METHOD'] || ! isset( $_POST['capfinfy_form_submission'] ) ) {
-        return;
-    }
-
-    $form_type = sanitize_text_field( $_POST['capfinfy_form_submission'] );
-    $admin_email = get_option('admin_email');
-    $headers = array('Content-Type: text/html; charset=UTF-8');
-    
-    // --- Contact Form Submission ---
-    if ( 'contact' === $form_type ) {
-        // Nonce check for security
-        if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( $_POST['_wpnonce'], 'capfinfy_contact_form' ) ) {
-            wp_die( 'La vérification de sécurité a échoué. Veuillez réessayer.' );
-        }
-
-        $name = sanitize_text_field( $_POST['name'] );
-        $email = sanitize_email( $_POST['email'] );
-        $message = sanitize_textarea_field( $_POST['message'] );
-
-        if ( ! is_email( $email ) ) {
-            wp_die( 'Adresse e-mail invalide.' );
-        }
-        
-        $subject = "Nouveau message de contact de " . $name;
-        $body    = "<html><body>";
-        $body   .= "<h2>Nouveau message depuis le formulaire de contact</h2>";
-        $body   .= "<p><strong>Nom :</strong> " . esc_html($name) . "</p>";
-        $body   .= "<p><strong>Email :</strong> " . esc_html($email) . "</p>";
-        $body   .= "<p><strong>Message :</strong><br>" . nl2br( esc_html($message) ) . "</p>";
-        $body   .= "</body></html>";
-        
-        wp_mail( $admin_email, $subject, $body, $headers );
-        
-        wp_redirect( home_url('/merci-contact') );
-        exit;
-    }
-
-    // --- Loan Application Form Submission ---
-    if ( 'loan_application' === $form_type ) {
-         // Nonce check for security
-        if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( $_POST['_wpnonce'], 'capfinfy_loan_form' ) ) {
-            wp_die( 'La vérification de sécurité a échoué. Veuillez réessayer.' );
-        }
-
-        $firstName = sanitize_text_field($_POST['firstName']);
-        $lastName = sanitize_text_field($_POST['lastName']);
-        $loanAmount = sanitize_text_field($_POST['loanAmount']);
-        $loanTerm = sanitize_text_field($_POST['loanTerm']);
-        $email = sanitize_email($_POST['email']);
-        $phone = sanitize_text_field($_POST['phone']);
-        $country = sanitize_text_field($_POST['country']);
-        $profession = sanitize_text_field($_POST['profession']);
-        $income = sanitize_text_field($_POST['income']);
-        $reason = sanitize_textarea_field($_POST['reason']);
-
-        if ( ! is_email( $email ) ) {
-            wp_die( 'Adresse e-mail invalide.' );
-        }
-
-        $subject = "Nouvelle demande de financement de " . $firstName . " " . $lastName;
-        $body    = "<html><body>";
-        $body   .= "<h2>Nouvelle demande de financement</h2>";
-        $body   .= "<p><strong>Prénom :</strong> " . esc_html($firstName) . "</p>";
-        $body   .= "<p><strong>Nom :</strong> " . esc_html($lastName) . "</p>";
-        $body   .= "<p><strong>Email :</strong> " . esc_html($email) . "</p>";
-        $body   .= "<p><strong>Téléphone :</strong> " . esc_html($phone) . "</p>";
-        $body   .= "<p><strong>Pays :</strong> " . esc_html($country) . "</p>";
-        $body   .= "<hr>";
-        $body   .= "<p><strong>Montant demandé :</strong> " . esc_html($loanAmount) . " €</p>";
-        $body   .= "<p><strong>Durée souhaitée :</strong> " . esc_html($loanTerm) . " mois</p>";
-        $body   .= "<hr>";
-        $body   .= "<p><strong>Profession :</strong> " . esc_html($profession) . "</p>";
-        $body   .= "<p><strong>Revenu mensuel net :</strong> " . esc_html($income) . " €</p>";
-        $body   .= "<p><strong>Motif de la demande :</strong><br>" . nl2br(esc_html($reason)) . "</p>";
-        $body   .= "</body></html>";
-        
-        wp_mail( $admin_email, $subject, $body, $headers );
-
-        wp_redirect( home_url('/merci-demande') );
-        exit;
-    }
-}
-add_action( 'template_redirect', 'capfinfy_handle_form_submissions' );
