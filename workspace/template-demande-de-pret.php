@@ -19,8 +19,9 @@ get_header();
             </div>
             
             <div class="mt-12 rounded-lg border bg-card text-card-foreground shadow-sm p-6 md:p-8">
-                <!-- Ce formulaire redirige vers la page de remerciement mais n'envoie pas d'e-mail sans traitement côté serveur (plugin). -->
-                <form class="space-y-6" action="<?php echo esc_url(home_url('/merci-demande')); ?>" method="post">
+                <form class="space-y-6" action="" method="post">
+                    <?php wp_nonce_field( 'capfinfy_loan_form' ); ?>
+                    <input type="hidden" name="capfinfy_form_submission" value="loan_application">
                     <div class="grid sm:grid-cols-2 gap-4">
                         <div>
                             <label class="text-sm font-medium leading-none mb-2 block" for="firstName">Prénom</label>

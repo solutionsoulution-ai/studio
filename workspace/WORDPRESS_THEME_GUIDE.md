@@ -34,7 +34,7 @@ Cette commande va créer un dossier `build/` qui contient les fichiers `main.css
 
 ## Étape 4 : Gérer le JavaScript
 
-Le fichier `functions.php` est déjà configuré pour charger `main.js` (déjà présent dans `assets/js`) et `calculator.js`. Il n'y a rien d'autre à faire.
+Le fichier `functions.php` est déjà configuré pour charger `main.js` (déjà présent dans `assets/js`). Il n'y a rien d'autre à faire.
 
 ---
 
@@ -110,20 +110,23 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
     *   Choisissez la structure `Titre de la publication`.
     *   Cliquez sur `Enregistrer les modifications`. Cela rafraîchit les règles de liens de WordPress et résout beaucoup de problèmes de "page non trouvée".
 
-6.  **Installer les Plugins (Crucial pour les formulaires) :**
-    Pour que les formulaires de contact et de demande de prêt fonctionnent **réellement**, vous avez besoin de deux types de plugins :
-
-    *   **1. Pour l'envoi fiable des e-mails : `WP Mail SMTP`**
-        *   Installez le plugin **WP Mail SMTP**.
-        *   Configurez-le en suivant ses instructions pour utiliser votre service SMTP avec l'e-mail `contact@vylscapital.com`. Ce plugin agit comme un "facteur" fiable pour tous les e-mails sortants de votre site.
-    
-    *   **2. Pour créer et traiter les formulaires : `Contact Form 7` (ou un autre)**
-        *   Installez un plugin de formulaires comme **Contact Form 7**. Ce plugin va "écrire la lettre" que le facteur (`WP Mail SMTP`) enverra.
-        *   Dans `Contact Form 7`, créez vos formulaires de contact et de demande de prêt.
-        *   Le plugin vous donnera un **shortcode** (ex: `[contact-form-7 id="123"]`).
-        *   Modifiez les fichiers `template-contact.php` et `template-demande-de-pret.php` de votre thème et remplacez le formulaire HTML statique par le shortcode fourni. Les instructions précises sont dans les fichiers.
-
-    *   Pour les carrousels (page d'accueil, témoignages), installez un plugin de slider comme **Smart Slider 3** ou **Slider Revolution** et recréez les carrousels, puis insérez leur shortcode dans les fichiers PHP correspondants.
+6.  **Installer et Configurer `WP Mail SMTP` (Crucial pour les formulaires) :**
+    *   Les formulaires de ce thème sont conçus pour fonctionner sans plugin de formulaire supplémentaire, mais ils dépendent entièrement de `WP Mail SMTP` pour l'envoi des e-mails.
+    *   **Installez le plugin `WP Mail SMTP`**.
+    *   Allez dans `WP Mail SMTP > Réglages`.
+    *   **Service d'envoi :** Choisissez `Autre SMTP`.
+    *   Remplissez les informations suivantes :
+        *   **Hébergeur SMTP :** `mail.spacemail.com`
+        *   **Cryptage :** `SSL`
+        *   **Port SMTP :** `465`
+        *   **Authentification :** `Activée`
+        *   **Identifiant SMTP :** `contact@vylscapital.com`
+        *   **Mot de passe SMTP :** `Made2020@` (ou le mot de passe actuel de votre e-mail)
+        *   **Nom de l'expéditeur :** `Capfinfy`
+        *   **Forcer le nom d’expéditeur :** Cochez cette case.
+        *   **E-mail de l’expéditeur :** `contact@vylscapital.com`
+        *   **Forcer l’e-mail de l’expéditeur :** Cochez cette case.
+    *   Enregistrez les réglages et effectuez un test d'envoi pour confirmer que tout fonctionne.
 
 ---
 
@@ -136,3 +139,4 @@ Votre thème contient des fichiers de base dont nous n'avons plus besoin. Vous p
 *   `search.php` (gardez-le)
 *   `screenshot.png` (à garder ou à remplacer par votre propre capture d'écran)
 *   Tous les fichiers `template-blog-*.php` si vous utilisez le système de blog natif de WordPress.
+```
