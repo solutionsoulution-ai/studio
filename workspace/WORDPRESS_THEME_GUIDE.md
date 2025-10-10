@@ -85,15 +85,8 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
 
     **Répétez cette opération pour les pages suivantes :**
     *   **Titre :** `À Propos` -> **Modèle :** `Page - À Propos`
-    *   **Titre :** `Blog` -> **Modèle :** `Page - Blog`
     *   **Titre :** `Contact` -> **Modèle :** `Page - Contact`
     *   **Titre :** `Demande de Financement` -> **Modèle :** `Page - Demande de Prêt`
-    *   **Titre :** `Merci Contact` -> **Modèle :** `Page - Merci Contact`
-    *   **Titre :** `Merci Demande` -> **Modèle :** `Page - Merci Demande`
-    *   **Titre :** `Stratégies Prêt Entreprise` -> **Modèle :** `Blog - Stratégies Prêt Entreprise`
-    *   **Titre :** `Rachat de Crédit Blog` -> **Modèle :** `Blog - Rachat de Crédit`
-    *   **Titre :** `Erreurs Prêt Immobilier` -> **Modèle :** `Blog - Prêt Immobilier Erreurs`
-    *   **Titre :** `Prêt Personnel Flexible` -> **Modèle :** `Blog - Prêt Personnel Flexible`
     *   **Titre :** `Prêt Entreprise` -> **Modèle :** `Service - Prêt Entreprise`
     *   **Titre :** `Prêt Immobilier` -> **Modèle :** `Service - Prêt Immobilier`
     *   **Titre :** `Prêt Personnel` -> **Modèle :** `Service - Prêt Personnel`
@@ -115,17 +108,12 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
     *   Choisissez la structure `Titre de la publication`.
     *   Cliquez sur `Enregistrer les modifications`. Cela rafraîchit les règles de liens de WordPress et résout beaucoup de problèmes de "page non trouvée".
 
-6.  **Gérer les Utilisateurs (Pour la Banque Fictive) :**
-    *   Pour créer un compte pour un client, allez dans `Utilisateurs > Ajouter`.
-    *   Remplissez son nom d'utilisateur, son e-mail, et créez un mot de passe.
-    *   Le rôle "Abonné" est suffisant.
-    *   Envoyez-lui ses identifiants. Il pourra se connecter via la page de connexion standard de WordPress (`/wp-login.php`) et accéder aux pages de la banque en ligne.
-
-7.  **Installer les Plugins :**
-    *   Pour que les formulaires de contact et de demande de prêt fonctionnent, installez un plugin comme **WPForms** ou **Contact Form 7**.
-    *   Créez vos formulaires dans le plugin.
-    *   Modifiez les fichiers `template-contact.php` et `template-demande-de-pret.php` en remplaçant les formulaires HTML statiques par le shortcode du plugin (ex: `<?php echo do_shortcode('[wpforms id="123"]'); ?>`). Les instructions sont dans les fichiers.
-    *   Pour les carrousels (page d'accueil, témoignages), installez un plugin de slider comme **Smart Slider 3** ou **Slider Revolution** et recréez les carrousels, puis insérez leur shortcode dans les fichiers PHP correspondants.
+6.  **Installer les Plugins (Crucial pour les formulaires) :**
+    *   Pour que les formulaires de contact et de demande de prêt fonctionnent de manière fiable, installez le plugin **WP Mail SMTP** pour configurer l'envoi d'e-mails via un service externe (Gmail, Outlook, etc.).
+    *   Installez un plugin de formulaires comme **WPForms** ou **Contact Form 7**.
+    *   Créez vos formulaires dans le plugin choisi.
+    *   Modifiez les fichiers `template-contact.php` et `template-demande-de-pret.php` en remplaçant les commentaires d'instructions par le shortcode du plugin (ex: `<?php echo do_shortcode('[wpforms id="123"]'); ?>`).
+    *   Pour les carrousels, vous pouvez installer un plugin de slider comme **Smart Slider 3** et remplacer le code HTML statique par le shortcode du slider.
 
 ---
 

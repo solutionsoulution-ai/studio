@@ -22,24 +22,18 @@ get_header();
       
       <div class="grid md:grid-cols-2 gap-12 items-start">
          <div>
-            <!-- NOTE: Remplacez ce bloc par le shortcode de votre plugin de formulaire (ex: [contact-form-7 id="123" title="Formulaire de contact"]) -->
-            <div class="rounded-lg border bg-card text-card-foreground shadow-lg">
-                <div class="p-6 md:p-8">
-                    <form class="space-y-6" action="/contact/merci/" method="post">
-                        <div class="grid sm:grid-cols-2 gap-4">
-                            <div><label class="text-sm font-medium leading-none mb-2 block">Nom Complet</label><input type="text" placeholder="Jean Dupont" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
-                            <div><label class="text-sm font-medium leading-none mb-2 block">Adresse E-mail</label><input type="email" placeholder="vous@exemple.com" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"></div>
-                        </div>
-                        <div>
-                            <label class="text-sm font-medium leading-none mb-2 block">Votre Message</label>
-                            <textarea rows="5" placeholder="Comment pouvons-nous vous aider aujourd'hui ?" required class="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-base"></textarea>
-                        </div>
-                        <button type="submit" class="w-full inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg>
-                            Envoyer le Message
-                        </button>
-                    </form>
-                </div>
+            <div class="rounded-lg border bg-card text-card-foreground shadow-lg p-6 md:p-8">
+                <?php
+                /**
+                 * INSTRUCTION POUR LE FORMULAIRE DE CONTACT :
+                 * 1. Installez un plugin de formulaire (ex: WPForms).
+                 * 2. Créez votre formulaire de contact dans le plugin.
+                 * 3. Copiez le shortcode du formulaire (ex: [wpforms id="123"]).
+                 * 4. Remplacez ce bloc de commentaire PHP par la ligne suivante, en adaptant le shortcode :
+                 *    echo do_shortcode('[VOTRE_SHORTCODE_ICI]');
+                 */
+                echo '<p class="text-center text-red-500 font-bold">NOTE : Un plugin de formulaire (ex: WPForms) est requis. Veuillez remplacer le code dans ce template par le shortcode de votre formulaire.</p>';
+                ?>
             </div>
          </div>
          <div class="space-y-6">
@@ -54,8 +48,8 @@ get_header();
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-primary"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                         <span class="group-hover:text-primary transition-colors">+33 7 56 98 67 69</span>
                     </a>
-                    <div class="flex items-center gap-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-primary"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    <div class="flex items-start gap-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-primary mt-1"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                         <span>1 Place de la Bourse, 69002 Lyon, France</span>
                     </div>
                 </div>
