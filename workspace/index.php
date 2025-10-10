@@ -26,10 +26,11 @@ get_header();
                         Le financement que vous méritez, simplifié
                     </h1>
                     <p class="mt-4 max-w-2xl text-lg text-muted-foreground mx-auto md:mx-0">
-                        Crédits, prêts et solutions financières pour particuliers et professionnels. Réponse de principe rapide, transparente et humaine.
+                        Crédits, prêts et solutions financières pour particuliers et professionnels. Obtenez une réponse de principe après étude de votre demande.
                     </p>
                     <div class="mt-8 mx-auto md:mx-0">
                         <a href="/demande-de-pret" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 rounded-md px-8">Commencer ma demande</a>
+                        <p class="text-xs text-muted-foreground mt-2">Un crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement.</p>
                     </div>
                 </div>
                 <div class="relative h-64 md:h-96 w-full rounded-lg overflow-hidden order-first md:order-last">
@@ -251,11 +252,11 @@ get_header();
              <div class="space-y-6">
                 <div class="border-b pb-4">
                     <h3 class="font-medium text-lg">Quelles sont les exigences minimales pour un prêt ?</h3>
-                    <p class="text-muted-foreground mt-2">Généralement, nous recherchons une situation financière stable et une capacité de remboursement démontrable. Chaque dossier est unique, et notre vérificateur d'éligibilité peut fournir une évaluation personnalisée.</p>
+                    <p class="text-muted-foreground mt-2">Généralement, nous recherchons une situation financière stable et une capacité de remboursement démontrable. Chaque dossier est unique, et une demande formelle permet une évaluation personnalisée.</p>
                 </div>
                 <div class="border-b pb-4">
                     <h3 class="font-medium text-lg">Combien de temps dure le processus de demande ?</h3>
-                    <p class="text-muted-foreground mt-2">Notre réponse de principe est généralement rapide. Un examen complet de la demande prend généralement entre 24 et 72 heures. Une fois approuvés, les fonds peuvent être débloqués rapidement.</p>
+                    <p class="text-muted-foreground mt-2">Une réponse de principe est généralement communiquée rapidement. Un examen complet de la demande prend ensuite entre 24 et 72 heures, sous réserve de la complétude du dossier. Une fois approuvés, les fonds peuvent être débloqués.</p>
                 </div>
                 <div class="border-b pb-4">
                     <h3 class="font-medium text-lg">Quels types de prêts offrez-vous ?</h3>

@@ -118,10 +118,10 @@ export default function LoanApplicationForm() {
               <Checkbox id="terms" checked={agreed} onCheckedChange={(checked) => setAgreed(!!checked)} />
               <div className="grid gap-1.5 leading-none">
                 <label htmlFor="terms" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                  J'accepte les termes et la politique de confidentialité.
+                  Je reconnais avoir lu et j'accepte la politique de confidentialité.
                 </label>
                 <p className="text-xs text-muted-foreground">
-                  En soumettant ce formulaire, je consens à ce que Capfinfy collecte et traite mes données personnelles pour l'étude de ma demande de financement, conformément à la <Link href="/politique-de-confidentialite" className="underline" target="_blank">Politique de Confidentialité</Link>.
+                  En soumettant ce formulaire, je consens à ce que Capfinfy collecte et traite mes données personnelles pour l'étude de ma demande de financement, conformément à notre <Link href="/politique-de-confidentialite" className="underline" target="_blank">Politique de Confidentialité</Link>.
                 </p>
               </div>
             </div>

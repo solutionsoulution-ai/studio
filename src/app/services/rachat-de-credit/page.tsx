@@ -36,12 +36,12 @@ const howItWorksSteps: HowItWorksStep[] = [
     {
       icon: "Search",
       title: "2. Étude de votre Dossier",
-      description: "Un expert analyse votre situation financière pour construire la meilleure offre de regroupement.",
+      description: "Un expert analyse votre situation financière pour construire la meilleure offre de regroupement possible.",
     },
     {
       icon: "HandCoins",
       title: "3. Simplifiez vos Finances",
-      description: "Nous remboursons vos anciens créanciers. Vous n'avez plus qu'une seule mensualité, plus facile à gérer.",
+      description: "Après accord, nous remboursons vos anciens créanciers. Vous n'avez plus qu'une seule mensualité, plus facile à gérer.",
     },
 ];
 
@@ -59,7 +59,7 @@ const whySubscribeFeatures: Feature[] = [
     {
         icon: Lightbulb,
         title: "Financer un nouveau projet",
-        description: "Profitez du regroupement pour inclure le financement d'un nouveau projet (voiture, travaux...) sans alourdir votre endettement.",
+        description: "Profitez du regroupement pour inclure le financement d'un nouveau projet (voiture, travaux...) sans forcément alourdir votre endettement.",
     },
 ];
 
@@ -78,12 +78,12 @@ export default function RachatCreditPage() {
                 Rachat de Crédit
               </h1>
               <p className="text-lg text-muted-foreground mb-6">
-                Regroupez tous vos crédits en un seul pour réduire vos mensualités et simplifier la gestion de votre budget. Respirez et reprenez le contrôle de vos finances.
+                Regroupez tous vos crédits en un seul pour réduire vos mensualités et simplifier la gestion de votre budget. Reprenez le contrôle de vos finances.
               </p>
               <ul className="space-y-3 mb-8">
                 <li className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-accent" />
-                  <span>Une seule mensualité, un seul interlocuteur.</span>
+                  <span>Une seule mensualité pour plus de clarté.</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-accent" />
@@ -94,9 +94,12 @@ export default function RachatCreditPage() {
                   <span>Possibilité de financer un nouveau projet en même temps.</span>
                 </li>
               </ul>
-              <Button size="lg" asChild>
-                <Link href="/demande-de-pret">Commencer ma demande</Link>
-              </Button>
+              <div class="space-y-4">
+                  <Button size="lg" asChild>
+                    <Link href="/demande-de-pret">Commencer ma demande</Link>
+                  </Button>
+                  <p class="text-xs text-muted-foreground">Un crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement.</p>
+              </div>
             </div>
             <div className="order-1 md:order-2">
               <Image

@@ -35,13 +35,13 @@ const howItWorksSteps: HowItWorksStep[] = [
     },
     {
       icon: "Search",
-      title: "2. Obtenez une réponse",
-      description: "Soumettez votre demande en ligne et notre technologie nous permet de vous donner une réponse de principe immédiate.",
+      title: "2. Obtenez une réponse de principe",
+      description: "Soumettez votre demande en ligne. Notre technologie nous permet de vous donner une réponse de principe après première analyse.",
     },
     {
       icon: "HandCoins",
       title: "3. Recevez les fonds",
-      description: "Après accord définitif, les fonds sont versés sur votre compte bancaire en quelques jours pour réaliser vos projets.",
+      description: "Après accord définitif et signature, les fonds sont versés sur votre compte bancaire pour réaliser vos projets.",
     },
 ];
 
@@ -79,7 +79,7 @@ export default function PretPersonnelPage() {
                 Prêt Personnel
               </h1>
               <p className="text-lg text-muted-foreground mb-6">
-                Un projet à financer ? Un voyage, des travaux, ou simplement besoin de trésorerie ? Le prêt personnel est une solution flexible pour réaliser vos envies sans avoir à justifier vos dépenses.
+                Un projet à financer ? Un voyage, des travaux, ou simplement besoin de trésorerie ? Le prêt personnel est une solution pour réaliser vos envies sans avoir à justifier vos dépenses.
               </p>
               <ul className="space-y-3 mb-8">
                 <li className="flex items-center gap-3">
@@ -92,12 +92,15 @@ export default function PretPersonnelPage() {
                 </li>
                 <li className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-accent" />
-                  <span>Processus de demande simple et rapide.</span>
+                  <span>Processus de demande simplifié.</span>
                 </li>
               </ul>
-              <Button size="lg" asChild>
-                <Link href="/demande-de-pret">Commencer ma demande</Link>
-              </Button>
+              <div class="space-y-4">
+                  <Button size="lg" asChild>
+                    <Link href="/demande-de-pret">Commencer ma demande</Link>
+                  </Button>
+                  <p class="text-xs text-muted-foreground">Un crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement.</p>
+              </div>
             </div>
             <div className="order-1 md:order-2">
               <Image

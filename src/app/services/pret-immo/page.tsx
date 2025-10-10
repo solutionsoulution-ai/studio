@@ -35,12 +35,12 @@ const howItWorksSteps: HowItWorksStep[] = [
     {
       icon: "Search",
       title: "2. Étude Personnalisée",
-      description: "Un conseiller dédié étudie votre projet et négocie pour vous les meilleures conditions auprès de nos partenaires.",
+      description: "Un conseiller dédié étudie votre projet et négocie pour vous les meilleures conditions possibles auprès de nos partenaires.",
     },
     {
       icon: "HandCoins",
       title: "3. Signature & Acquisition",
-      description: "Après acceptation de l'offre, signez chez le notaire et recevez les clés de votre nouvelle propriété.",
+      description: "Après acceptation de l'offre de prêt et signature chez le notaire, vous recevez les clés de votre nouvelle propriété.",
     },
 ];
 
@@ -86,16 +86,19 @@ export default function PretImmobilierPage() {
                 </li>
                 <li className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-accent" />
-                  <span>Des conditions de taux parmi les plus compétitives du marché.</span>
+                  <span>Recherche de conditions de taux compétitives sur le marché.</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-accent" />
-                  <span>Flexibilité des modalités de remboursement.</span>
+                  <span>Analyse des modalités de remboursement possibles.</span>
                 </li>
               </ul>
-              <Button size="lg" asChild>
-                <Link href="/demande-de-pret">Commencer ma demande</Link>
-              </Button>
+              <div class="space-y-4">
+                  <Button size="lg" asChild>
+                    <Link href="/demande-de-pret">Commencer ma demande</Link>
+                  </Button>
+                  <p class="text-xs text-muted-foreground">Un crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement.</p>
+              </div>
             </div>
             <div className="order-1 md:order-2">
               <Image

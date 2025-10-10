@@ -20,7 +20,7 @@ const carouselItems = [
     src: "https://i.postimg.cc/JnYy9vXy/arturo-portillo-NRy3-WM22-Sw-Q-unsplash-removebg-preview.png",
     alt: "Personne travaillant sur un ordinateur portable dans un bureau moderne",
     title: "Le financement que vous méritez, simplifié",
-    description: "Crédits, prêts et solutions financières pour particuliers et professionnels. Rapide, transparent et humain.",
+    description: "Crédits, prêts et solutions financières pour particuliers et professionnels. Obtenez une réponse de principe après étude de votre demande.",
   },
   {
     src: "https://i.postimg.cc/7YCNSKbG/jonne-makikyro-n-Gp-I-Tvpc-Co-unsplash.jpg",
@@ -44,7 +44,7 @@ const carouselItems = [
     src: "https://i.postimg.cc/PxRwxkW6/austin-distel-mp-N7xj-KQ-Ns-unsplash.jpg",
     alt: "Homme d'affaires souriant regardant des documents financiers",
     title: "Une gestion financière simplifiée",
-    description: "Profitez d'un processus 100% en ligne et d'un suivi transparent pour vous concentrer sur ce qui compte vraiment.",
+    description: "Profitez d'un processus en ligne et d'un suivi transparent pour vous concentrer sur ce qui compte vraiment.",
   },
 ];
 
@@ -78,6 +78,7 @@ export default function HomeCarousel() {
                       <Button size="lg" asChild>
                         <Link href="/demande-de-pret">Commencer ma demande</Link>
                       </Button>
+                      <p className="text-xs text-muted-foreground mt-2">Un crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement.</p>
                     </div>
                   </div>
                   <div className="relative h-64 md:h-96 w-full rounded-lg overflow-hidden order-first md:order-last">

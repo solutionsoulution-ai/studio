@@ -17,7 +17,7 @@ get_header();
                 Prêt Personnel
               </h1>
               <p class="text-lg text-muted-foreground mb-6">
-                Un projet à financer ? Un voyage, des travaux, ou simplement besoin de trésorerie ? Le prêt personnel est une solution flexible pour réaliser vos envies sans avoir à justifier vos dépenses.
+                Un projet à financer ? Un voyage, des travaux, ou simplement besoin de trésorerie ? Le prêt personnel est une solution pour réaliser vos envies sans avoir à justifier vos dépenses.
               </p>
               <ul class="space-y-3 mb-8">
                 <li class="flex items-center gap-3">
@@ -30,10 +30,13 @@ get_header();
                 </li>
                 <li class="flex items-center gap-3">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-accent"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
-                  <span>Processus de demande simple et rapide.</span>
+                  <span>Processus de demande simplifié.</span>
                 </li>
               </ul>
-              <a href="/demande-de-pret" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 rounded-md px-8">Commencer ma demande</a>
+              <div class="space-y-4">
+                  <a href="/demande-de-pret" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 rounded-md px-8">Commencer ma demande</a>
+                  <p class="text-xs text-muted-foreground">Un crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement.</p>
+              </div>
             </div>
             <div class="order-1 md:order-2">
               <img src="https://i.postimg.cc/bvVGdwbn/service-personal-loan.jpg" alt="Personne planifiant son budget pour un projet personnel." width="600" height="400" class="rounded-lg shadow-lg object-cover w-full">
@@ -60,8 +63,19 @@ get_header();
     <section class="w-full py-16 md:py-24">
         <div class="container mx-auto">
             <div class="text-center mb-10"><h2 class="text-3xl font-bold tracking-tight font-headline">Comment ça marche ?</h2><p class="mt-4 text-lg text-muted-foreground">Suivez ces étapes simples pour obtenir votre financement.</p></div>
-            <div class="relative"><div class="absolute top-1/2 left-0 w-full h-0.5 border-t-2 border-dashed border-border -translate-y-1/2 hidden md:block" aria-hidden="true"></div><div class="relative grid md:grid-cols-3 gap-12"><div class="flex flex-col items-center text-center"><div class="relative z-10 flex items-center justify-center w-20 h-20 rounded-full bg-primary text-primary-foreground mb-4 ring-8 ring-background"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></div><h3 class="text-xl font-bold mb-2">1. Définissez votre projet</h3><p class="text-muted-foreground">Simulez votre prêt en ligne pour déterminer le montant et la durée qui vous conviennent.</p></div><div class="flex flex-col items-center text-center"><div class="relative z-10 flex items-center justify-center w-20 h-20 rounded-full bg-primary text-primary-foreground mb-4 ring-8 ring-background"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div><h3 class="text-xl font-bold mb-2">2. Obtenez une réponse</h3><p class="text-muted-foreground">Soumettez votre demande en ligne et notre technologie nous permet de vous donner une réponse de principe immédiate.</p></div><div class="flex flex-col items-center text-center"><div class="relative z-10 flex items-center justify-center w-20 h-20 rounded-full bg-primary text-primary-foreground mb-4 ring-8 ring-background"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10"><path d="M2 12v3c0 1.1.9 2 2 2h16a2 2 0 0 0 2-2v-3"/><path d="M12 16v-1"/><path d="m15 12-3-3-3 3"/><path d="M12 3v1"/></svg></div><h3 class="text-xl font-bold mb-2">3. Recevez les fonds</h3><p class="text-muted-foreground">Après accord définitif, les fonds sont versés sur votre compte bancaire en quelques jours pour réaliser vos projets.</p></div></div></div>
+            <div class="relative"><div class="absolute top-1/2 left-0 w-full h-0.5 border-t-2 border-dashed border-border -translate-y-1/2 hidden md:block" aria-hidden="true"></div><div class="relative grid md:grid-cols-3 gap-12"><div class="flex flex-col items-center text-center"><div class="relative z-10 flex items-center justify-center w-20 h-20 rounded-full bg-primary text-primary-foreground mb-4 ring-8 ring-background"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></div><h3 class="text-xl font-bold mb-2">1. Définissez votre projet</h3><p class="text-muted-foreground">Simulez votre prêt en ligne pour déterminer le montant et la durée qui vous conviennent.</p></div><div class="flex flex-col items-center text-center"><div class="relative z-10 flex items-center justify-center w-20 h-20 rounded-full bg-primary text-primary-foreground mb-4 ring-8 ring-background"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div><h3 class="text-xl font-bold mb-2">2. Obtenez une réponse de principe</h3><p class="text-muted-foreground">Soumettez votre demande en ligne. Notre technologie nous permet de vous donner une réponse de principe après première analyse.</p></div><div class="flex flex-col items-center text-center"><div class="relative z-10 flex items-center justify-center w-20 h-20 rounded-full bg-primary text-primary-foreground mb-4 ring-8 ring-background"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10"><path d="M2 12v3c0 1.1.9 2 2 2h16a2 2 0 0 0 2-2v-3"/><path d="M12 16v-1"/><path d="m15 12-3-3-3 3"/><path d="M12 3v1"/></svg></div><h3 class="text-xl font-bold mb-2">3. Recevez les fonds</h3><p class="text-muted-foreground">Après accord définitif et signature, les fonds sont versés sur votre compte bancaire pour réaliser vos projets.</p></div></div></div>
         </div>
+    </section>
+    
+    <section class="w-full py-16 md:py-24 bg-muted/30">
+        <?php 
+        $calculator_args = [
+            'title' => 'Simulez votre prêt personnel',
+            'description' => "Estimez vos remboursements mensuels pour vos projets personnels.",
+        ];
+        set_query_var('calculator_args', $calculator_args);
+        get_template_part('template-parts/calculator'); 
+        ?>
     </section>
 
     <section id="faq" class="container mx-auto py-16 md:py-24">

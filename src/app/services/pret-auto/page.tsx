@@ -30,18 +30,18 @@ const autoFaqs = [
 const howItWorksSteps: HowItWorksStep[] = [
     {
       icon: "FilePen",
-      title: "1. Demande Rapide",
-      description: "Faites votre demande en quelques minutes et recevez une réponse de principe rapide.",
+      title: "1. Demande Simplifiée",
+      description: "Faites votre demande en quelques minutes. Une réponse de principe vous sera communiquée après une première étude.",
     },
     {
       icon: "Search",
-      title: "2. Approbation Intelligente",
-      description: "Notre IA analyse votre profil pour vous fournir une offre ferme rapidement, souvent en quelques heures.",
+      title: "2. Approbation et Offre",
+      description: "Notre technologie analyse votre profil pour vous fournir une offre ferme rapidement, sous réserve de validation des pièces justificatives.",
     },
     {
       icon: "HandCoins",
       title: "3. Prenez la Route",
-      description: "Après signature électronique, les fonds sont virés au vendeur et vous pouvez récupérer votre voiture.",
+      description: "Après signature électronique du contrat, les fonds sont virés au vendeur et vous pouvez récupérer votre voiture.",
     },
 ];
 
@@ -58,8 +58,8 @@ const whySubscribeFeatures: Feature[] = [
     },
     {
         icon: FileCheck2,
-        title: "Simplicité administrative",
-        description: "Nous vous accompagnons pour un montage de dossier rapide et efficace, afin que vous puissiez prendre le volant au plus vite.",
+        title: "Processus administratif simplifié",
+        description: "Nous vous accompagnons pour un montage de dossier efficace, afin que vous puissiez prendre le volant dans les meilleures conditions.",
     },
 ]
 
@@ -78,25 +78,28 @@ export default function PretAutoPage() {
                 Prêt Auto
               </h1>
               <p className="text-lg text-muted-foreground mb-6">
-                Financez l'achat de votre véhicule neuf ou d'occasion avec nos solutions de crédit auto. Profitez d'une procédure rapide pour prendre la route en toute sérénité.
+                Financez l'achat de votre véhicule neuf ou d'occasion avec nos solutions de crédit auto. Profitez d'un processus encadré pour prendre la route en toute sérénité.
               </p>
               <ul className="space-y-3 mb-8">
                 <li className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-accent" />
-                  <span>Réponse de principe rapide en ligne.</span>
+                  <span>Réponse de principe après étude de votre demande.</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-accent" />
-                  <span>Financez jusqu'à 100% du prix d'achat.</span>
+                  <span>Possibilité de financer jusqu'à 100% du prix d'achat, sous conditions.</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-accent" />
-                  <span>Pas de frais de dossier cachés.</span>
+                  <span>Des conditions de contrat claires et transparentes.</span>
                 </li>
               </ul>
-              <Button size="lg" asChild>
-                <Link href="/demande-de-pret">Commencer ma demande</Link>
-              </Button>
+              <div class="space-y-4">
+                  <Button size="lg" asChild>
+                    <Link href="/demande-de-pret">Commencer ma demande</Link>
+                  </Button>
+                  <p class="text-xs text-muted-foreground">Un crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement.</p>
+              </div>
             </div>
             <div className="order-1 md:order-2">
               <Image

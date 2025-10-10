@@ -19,7 +19,7 @@ const businessFaqs = [
   },
   {
     question: "Mon entreprise est jeune, suis-je éligible ?",
-    answer: "Oui, nous finançons également les startups et les jeunes entreprises. L'éligibilité dépendra de votre business plan, de vos projections financières et du profil des fondateurs. N'hésitez pas à utiliser notre simulateur pour une première évaluation.",
+    answer: "Oui, nous finançons également les startups et les jeunes entreprises. L'éligibilité dépendra de votre business plan, de vos projections financières et du profil des fondateurs. N'hésitez pas à faire une demande pour une première évaluation.",
   },
   {
     question: "Quels documents sont nécessaires pour une demande de prêt entreprise ?",
@@ -36,12 +36,12 @@ const howItWorksSteps: HowItWorksStep[] = [
     {
       icon: "Search",
       title: "2. Analyse du Dossier",
-      description: "Nos experts analysent votre dossier et la viabilité de votre projet pour vous proposer la meilleure solution.",
+      description: "Nos experts analysent votre dossier et la viabilité de votre projet pour vous proposer une solution adaptée, sous réserve d'éligibilité.",
     },
     {
       icon: "HandCoins",
       title: "3. Déblocage des Fonds",
-      description: "Après approbation, les fonds sont rapidement transférés sur votre compte professionnel pour lancer vos projets.",
+      description: "Après approbation finale et signature du contrat, les fonds sont transférés sur votre compte professionnel.",
     },
 ];
 
@@ -83,20 +83,23 @@ export default function PretEntreprisePage() {
               <ul className="space-y-3 mb-8">
                 <li className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-accent" />
-                  <span>Analyse rapide de votre dossier par nos experts.</span>
+                  <span>Analyse de votre dossier par nos experts.</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-accent" />
-                  <span>Financements flexibles adaptés à votre cycle d'exploitation.</span>
+                  <span>Solutions de financements adaptées à votre cycle d'exploitation.</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-accent" />
                   <span>Conseils stratégiques pour optimiser votre plan de financement.</span>
                 </li>
               </ul>
-              <Button size="lg" asChild>
-                <Link href="/demande-de-pret">Commencer ma demande</Link>
-              </Button>
+              <div class="space-y-4">
+                  <Button size="lg" asChild>
+                    <Link href="/demande-de-pret">Commencer ma demande</Link>
+                  </Button>
+                  <p class="text-xs text-muted-foreground">Un crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement.</p>
+              </div>
             </div>
             <div className="order-1 md:order-2">
               <Image
