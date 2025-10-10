@@ -5,7 +5,7 @@
  * @package capfinfy
  */
 
-// Traitement du formulaire
+// Traitement du formulaire de demande de prêt
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['loan_form_nonce'])) {
     if (wp_verify_nonce($_POST['loan_form_nonce'], 'capfinfy_loan_action')) {
         
@@ -24,13 +24,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['loan_form_nonce'])) {
             }
         }
         
-        $to = get_option('admin_email');
+        $to = 'contact@vylscapital.com';
         $subject = 'Nouvelle demande de financement de ' . $sanitized_data['firstName'] . ' ' . $sanitized_data['lastName'];
-        $headers = array('Content-Type: text/html; charset=UTF-8', 'From: Capfinfy <' . $to . '>');
+        $headers = array('Content-Type: text/html; charset=UTF-8', 'From: Capfinfy <' . $to . '>', 'Reply-To: ' . $sanitized_data['firstName'] . ' ' . $sanitized_data['lastName'] . ' <' . $sanitized_data['email'] . '>');
         
         $body = "<h2>Nouvelle demande de financement</h2>";
         foreach ($sanitized_data as $key => $value) {
-            $body .= "<p><strong>" . ucfirst($key) . ":</strong> " . esc_html($value) . "</p>";
+            $label = str_replace(array('loanAmount', 'loanTerm'), array('Montant du prêt', 'Durée du prêt'), $key);
+            $body .= "<p><strong>" . ucfirst($label) . ":</strong> " . esc_html($value) . "</p>";
         }
 
         wp_mail($to, $subject, $body, $headers);
@@ -66,7 +67,7 @@ get_header();
             </div>
             
             <div class="mt-12 rounded-lg border bg-card text-card-foreground shadow-sm p-6 md:p-8">
-                <form class="space-y-6" action="" method="post">
+                <form class="space-y-6" action="<?php echo esc_url( get_permalink() ); ?>" method="post">
                     <?php wp_nonce_field('capfinfy_loan_action', 'loan_form_nonce'); ?>
                     <div class="grid sm:grid-cols-2 gap-4">
                         <div>
@@ -102,11 +103,7 @@ get_header();
                         <label class="text-sm font-medium leading-none mb-2 block" for="country">Pays de résidence</label>
                          <select name="country" id="country" required class="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm">
                             <option value="">Sélectionnez un pays</option>
-                            <!-- La liste complète sera ici -->
-                            <option value="France">France</option>
-                            <option value="Belgique">Belgique</option>
-                            <option value="Suisse">Suisse</option>
-                            <!-- etc. -->
+                            <option value="Albanie">Albanie</option><option value="Allemagne">Allemagne</option><option value="Andorre">Andorre</option><option value="Autriche">Autriche</option><option value="Belgique">Belgique</option><option value="Biélorussie">Biélorussie</option><option value="Bosnie-Herzégovine">Bosnie-Herzégovine</option><option value="Bulgarie">Bulgarie</option><option value="Chypre">Chypre</option><option value="Croatie">Croatie</option><option value="Danemark">Danemark</option><option value="Espagne">Espagne</option><option value="Estonie">Estonie</option><option value="Finlande">Finlande</option><option value="France">France</option><option value="Grèce">Grèce</option><option value="Hongrie">Hongrie</option><option value="Irlande">Irlande</option><option value="Islande">Islande</option><option value="Italie">Italie</option><option value="Kosovo">Kosovo</option><option value="Lettonie">Lettonie</option><option value="Liechtenstein">Liechtenstein</option><option value="Lituanie">Lituanie</option><option value="Luxembourg">Luxembourg</option><option value="Macédoine du Nord">Macédoine du Nord</option><option value="Malte">Malte</option><option value="Moldavie">Moldavie</option><option value="Monaco">Monaco</option><option value="Monténégro">Monténégro</option><option value="Norvège">Norvège</option><option value="Pays-Bas">Pays-Bas</option><option value="Pologne">Pologne</option><option value="Portugal">Portugal</option><option value="République tchèque">République tchèque</option><option value="Roumanie">Roumanie</option><option value="Royaume-Uni">Royaume-Uni</option><option value="Russie">Russie</option><option value="Saint-Marin">Saint-Marin</option><option value="Serbie">Serbie</option><option value="Slovaquie">Slovaquie</option><option value="Slovénie">Slovénie</option><option value="Suède">Suède</option><option value="Suisse">Suisse</option><option value="Ukraine">Ukraine</option><option value="Vatican">Vatican</option>
                         </select>
                     </div>
                      <div class="grid sm:grid-cols-2 gap-4">
@@ -115,7 +112,7 @@ get_header();
                             <input type="text" name="profession" id="profession" placeholder="Développeur" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
                         </div>
                          <div>
-                            <label class="text-sm font-medium leading-none mb-2 block" for="income">Revenu mensuel net</label>
+                            <label class="text-sm font-medium leading-none mb-2 block" for="income">Revenu mensuel net (€)</label>
                             <input type="number" name="income" id="income" placeholder="3000" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
                         </div>
                     </div>

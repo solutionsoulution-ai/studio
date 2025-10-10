@@ -119,7 +119,3 @@ function capfinfy_enqueue_assets() {
 	}
 }
 add_action( 'wp_enqueue_scripts', 'capfinfy_enqueue_assets' );
-
-/**
- * Custom Walker classes have been removed as the menu is no longer displayed.
- */
