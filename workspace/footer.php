@@ -55,7 +55,7 @@
         <div class="mt-12 border-t pt-6 text-center">
             <div class="text-xs text-muted-foreground space-y-2">
                 <p>Capfinfy SAS au capital de 10 000€ - Siège social : 1 Place de la Bourse, 69002 Lyon, France</p>
-                <p>RCS Lyon 880 123 456 | N° SIRET : 880 123 456 00019 | N° ORIAS : 12345678</p>
+                <p>RCS Lyon 891 785 359 | N° SIRET : 891 785 359 00027 | N° ORIAS : 21008679</p>
                 <p class="font-bold pt-2">Un crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.</p>
             </div>
             <p class="text-sm text-muted-foreground mt-4">&copy; <?php echo date('Y'); ?> Capfinfy. Tous droits réservés.</p>
