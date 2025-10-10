@@ -95,6 +95,8 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
     *   **Titre :** `Politique de Confidentialité` -> **Modèle :** `Page - Politique de Confidentialité`
     *   **Titre :** `Conditions Générales` -> **Modèle :** `Page - Conditions Générales`
     *   **Titre :** `Tableau de Bord` -> **Modèle :** `Banque - Tableau de Bord`
+    *   **Titre :** `Merci Contact` -> **Modèle :** `Page - Merci Contact`
+    *   **Titre :** `Merci Demande` -> **Modèle :** `Page - Merci Demande`
     
 4.  **Créer le Menu :**
     *   Allez dans `Apparence > Menus`.
@@ -108,11 +110,19 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
     *   Choisissez la structure `Titre de la publication`.
     *   Cliquez sur `Enregistrer les modifications`. Cela rafraîchit les règles de liens de WordPress et résout beaucoup de problèmes de "page non trouvée".
 
-6.  **Installer les Plugins :**
-    *   Pour que les formulaires de contact et de demande de prêt fonctionnent, installez le plugin **WP Mail SMTP** et configurez-le pour envoyer les e-mails via votre service SMTP (en utilisant `contact@vylscapital.com` comme e-mail d'envoi).
-    *   Installez un plugin de formulaires comme **Contact Form 7**.
-    *   Créez vos formulaires dans le plugin de votre choix.
-    *   Modifiez les fichiers `template-contact.php` et `template-demande-de-pret.php` en remplaçant les formulaires HTML statiques par le shortcode du plugin (ex: `<?php echo do_shortcode('[contact-form-7 id="123"]'); ?>`). Les instructions sont dans les fichiers.
+6.  **Installer les Plugins (Crucial pour les formulaires) :**
+    Pour que les formulaires de contact et de demande de prêt fonctionnent **réellement**, vous avez besoin de deux types de plugins :
+
+    *   **1. Pour l'envoi fiable des e-mails : `WP Mail SMTP`**
+        *   Installez le plugin **WP Mail SMTP**.
+        *   Configurez-le en suivant ses instructions pour utiliser votre service SMTP avec l'e-mail `contact@vylscapital.com`. Ce plugin agit comme un "facteur" fiable pour tous les e-mails sortants de votre site.
+    
+    *   **2. Pour créer et traiter les formulaires : `Contact Form 7` (ou un autre)**
+        *   Installez un plugin de formulaires comme **Contact Form 7**. Ce plugin va "écrire la lettre" que le facteur (`WP Mail SMTP`) enverra.
+        *   Dans `Contact Form 7`, créez vos formulaires de contact et de demande de prêt.
+        *   Le plugin vous donnera un **shortcode** (ex: `[contact-form-7 id="123"]`).
+        *   Modifiez les fichiers `template-contact.php` et `template-demande-de-pret.php` de votre thème et remplacez le formulaire HTML statique par le shortcode fourni. Les instructions précises sont dans les fichiers.
+
     *   Pour les carrousels (page d'accueil, témoignages), installez un plugin de slider comme **Smart Slider 3** ou **Slider Revolution** et recréez les carrousels, puis insérez leur shortcode dans les fichiers PHP correspondants.
 
 ---
@@ -125,3 +135,4 @@ Votre thème contient des fichiers de base dont nous n'avons plus besoin. Vous p
 *   `comments.php` (gardez-le)
 *   `search.php` (gardez-le)
 *   `screenshot.png` (à garder ou à remplacer par votre propre capture d'écran)
+*   Tous les fichiers `template-blog-*.php` si vous utilisez le système de blog natif de WordPress.
