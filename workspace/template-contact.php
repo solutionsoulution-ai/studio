@@ -26,13 +26,15 @@ get_header();
                 <?php
                 /**
                  * INSTRUCTION POUR LE FORMULAIRE DE CONTACT :
-                 * 1. Installez les plugins "Contact Form 7" et "WP Mail SMTP".
-                 * 2. Créez votre formulaire dans "Contact Form 7".
-                 * 3. Copiez le shortcode du formulaire (ex: [contact-form-7 id="123" title="Formulaire de contact"]).
+                 * 1. Installez un plugin de formulaires (ex: Contact Form 7).
+                 * 2. Créez votre formulaire.
+                 * 3. Copiez le shortcode du formulaire.
                  * 4. Remplacez ce bloc de commentaire PHP par la ligne suivante, en adaptant le shortcode :
                  *    echo do_shortcode('[VOTRE_SHORTCODE_ICI]');
+                 *
+                 * IMPORTANT: Pour que l'envoi d'e-mails fonctionne, installez et configurez le plugin WP Mail SMTP.
                  */
-                echo '<p class="text-center text-red-500 font-bold">NOTE : Le plugin "Contact Form 7" est requis. Veuillez remplacer ce code par le shortcode de votre formulaire.</p>';
+                echo '<p class="text-center text-red-500 font-bold">NOTE : Un plugin de formulaire et WP Mail SMTP sont requis. Remplacez ce code par le shortcode de votre formulaire.</p>';
                 ?>
             </div>
          </div>

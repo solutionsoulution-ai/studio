@@ -108,12 +108,12 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
     *   Choisissez la structure `Titre de la publication`.
     *   Cliquez sur `Enregistrer les modifications`. Cela rafraîchit les règles de liens de WordPress et résout beaucoup de problèmes de "page non trouvée".
 
-6.  **Installer les Plugins (Crucial pour les formulaires) :**
-    *   Pour que les formulaires de contact et de demande de prêt fonctionnent de manière fiable, installez le plugin **WP Mail SMTP** pour configurer l'envoi d'e-mails via un service externe (utilisez `contact@vylscapital.com` comme email d'envoi).
-    *   Installez le plugin **Contact Form 7**.
-    *   Créez vos formulaires dans `Contact Form 7`.
-    *   Modifiez les fichiers `template-contact.php` et `template-demande-de-pret.php` en remplaçant les commentaires d'instructions par le shortcode du plugin (ex: `<?php echo do_shortcode('[contact-form-7 id="123"]'); ?>`).
-    *   Pour les carrousels, vous pouvez installer un plugin de slider comme **Smart Slider 3** et remplacer le code HTML statique par le shortcode du slider.
+6.  **Installer les Plugins :**
+    *   Pour que les formulaires de contact et de demande de prêt fonctionnent, installez le plugin **WP Mail SMTP** et configurez-le pour envoyer les e-mails via votre service SMTP (en utilisant `contact@vylscapital.com` comme e-mail d'envoi).
+    *   Installez un plugin de formulaires comme **Contact Form 7**.
+    *   Créez vos formulaires dans le plugin de votre choix.
+    *   Modifiez les fichiers `template-contact.php` et `template-demande-de-pret.php` en remplaçant les formulaires HTML statiques par le shortcode du plugin (ex: `<?php echo do_shortcode('[contact-form-7 id="123"]'); ?>`). Les instructions sont dans les fichiers.
+    *   Pour les carrousels (page d'accueil, témoignages), installez un plugin de slider comme **Smart Slider 3** ou **Slider Revolution** et recréez les carrousels, puis insérez leur shortcode dans les fichiers PHP correspondants.
 
 ---
 
