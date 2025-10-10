@@ -13,19 +13,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['contact_form_nonce']))
         $email = sanitize_email($_POST['email']);
         $message = sanitize_textarea_field($_POST['message']);
         
-        $to = 'contact@vylscapital.com';
-        $subject = 'Nouveau message de contact de ' . $name;
-        $headers = array('Content-Type: text/html; charset=UTF-8', 'From: ' . $name . ' <' . $email . '>', 'Reply-To: ' . $name . ' <' . $email . '>');
+        // IMPORTANT: C'est ici que vous devez mettre votre adresse e-mail de réception.
+        $to = 'contact@vylscapital.com'; 
+        $subject = 'Nouveau message de contact depuis Capfinfy : ' . $name;
+        $headers = array(
+            'Content-Type: text/html; charset=UTF-8',
+            'From: Capfinfy <' . $to . '>', // Utiliser l'email du site pour une meilleure délivrabilité
+            'Reply-To: ' . $name . ' <' . $email . '>'
+        );
         
         $body = "<h2>Nouveau message depuis le formulaire de contact Capfinfy</h2>";
         $body .= "<p><strong>Nom :</strong> " . esc_html($name) . "</p>";
         $body .= "<p><strong>Email :</strong> " . esc_html($email) . "</p>";
         $body .= "<p><strong>Message :</strong><br>" . nl2br(esc_html($message)) . "</p>";
 
-        // WP Mail SMTP prendra le relais ici pour envoyer l'e-mail via votre configuration SMTP
-        $sent = wp_mail($to, $subject, $body, $headers);
+        // WP Mail SMTP est utilisé par wp_mail() pour envoyer l'e-mail.
+        wp_mail($to, $subject, $body, $headers);
         
-        // Redirection vers la page de remerciement, même si l'email échoue pour le moment
+        // Redirection vers la page de remerciement
         wp_redirect(home_url('/merci-contact'));
         exit;
     }
@@ -99,3 +104,4 @@ get_header();
 <?php
 get_footer();
 ?>
+    
