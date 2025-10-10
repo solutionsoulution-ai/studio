@@ -109,9 +109,9 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
     *   Cliquez sur `Enregistrer les modifications`. Cela rafraîchit les règles de liens de WordPress et résout beaucoup de problèmes de "page non trouvée".
 
 6.  **Installer les Plugins (Crucial pour les formulaires) :**
-    *   Pour que les formulaires de contact et de demande de prêt fonctionnent de manière fiable, installez le plugin **WP Mail SMTP** pour configurer l'envoi d'e-mails via un service externe (utilisez `contact@capfinfy.com` comme email d'envoi).
-    *   Installez un plugin de formulaires comme **Contact Form 7**.
-    *   Créez vos formulaires dans le plugin choisi.
+    *   Pour que les formulaires de contact et de demande de prêt fonctionnent de manière fiable, installez le plugin **WP Mail SMTP** pour configurer l'envoi d'e-mails via un service externe (utilisez `contact@vylscapital.com` comme email d'envoi).
+    *   Installez le plugin **Contact Form 7**.
+    *   Créez vos formulaires dans `Contact Form 7`.
     *   Modifiez les fichiers `template-contact.php` et `template-demande-de-pret.php` en remplaçant les commentaires d'instructions par le shortcode du plugin (ex: `<?php echo do_shortcode('[contact-form-7 id="123"]'); ?>`).
     *   Pour les carrousels, vous pouvez installer un plugin de slider comme **Smart Slider 3** et remplacer le code HTML statique par le shortcode du slider.
 
