@@ -115,16 +115,11 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
     *   Choisissez la structure `Titre de la publication`.
     *   Cliquez sur `Enregistrer les modifications`. Cela rafraîchit les règles de liens de WordPress et résout beaucoup de problèmes de "page non trouvée".
 
-6.  **Gérer les Utilisateurs (Pour la Banque Fictive) :**
-    *   Pour créer un compte pour un client, allez dans `Utilisateurs > Ajouter`.
-    *   Remplissez son nom d'utilisateur, son e-mail, et créez un mot de passe.
-    *   Le rôle "Abonné" est suffisant.
-    *   Envoyez-lui ses identifiants. Il pourra se connecter via la page de connexion standard de WordPress (`/wp-login.php`) et accéder aux pages de la banque en ligne.
-
-7.  **Installer les Plugins :**
-    *   Pour que les formulaires de contact et de demande de prêt fonctionnent, installez un plugin comme **WPForms** ou **Contact Form 7**.
-    *   Créez vos formulaires dans le plugin.
-    *   Modifiez les fichiers `template-contact.php` et `template-demande-de-pret.php` en remplaçant les formulaires HTML statiques par le shortcode du plugin (ex: `<?php echo do_shortcode('[wpforms id="123"]'); ?>`). Les instructions sont dans les fichiers.
+6.  **Installer les Plugins :**
+    *   Pour que les formulaires de contact et de demande de prêt fonctionnent, installez le plugin **WP Mail SMTP** et configurez-le pour envoyer les e-mails via votre service SMTP (en utilisant `contact@vylscapital.com` comme e-mail d'envoi).
+    *   Installez un plugin de formulaires comme **Contact Form 7**.
+    *   Créez vos formulaires dans le plugin de votre choix.
+    *   Modifiez les fichiers `template-contact.php` et `template-demande-de-pret.php` en remplaçant les formulaires HTML statiques par le shortcode du plugin (ex: `<?php echo do_shortcode('[contact-form-7 id="123"]'); ?>`). Les instructions sont dans les fichiers.
     *   Pour les carrousels (page d'accueil, témoignages), installez un plugin de slider comme **Smart Slider 3** ou **Slider Revolution** et recréez les carrousels, puis insérez leur shortcode dans les fichiers PHP correspondants.
 
 ---
@@ -137,4 +132,3 @@ Votre thème contient des fichiers de base dont nous n'avons plus besoin. Vous p
 *   `comments.php` (gardez-le)
 *   `search.php` (gardez-le)
 *   `screenshot.png` (à garder ou à remplacer par votre propre capture d'écran)
-
