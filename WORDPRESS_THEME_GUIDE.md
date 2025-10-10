@@ -95,8 +95,6 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
     *   **Titre :** `Politique de Confidentialité` -> **Modèle :** `Page - Politique de Confidentialité`
     *   **Titre :** `Conditions Générales` -> **Modèle :** `Page - Conditions Générales`
     *   **Titre :** `Tableau de Bord` -> **Modèle :** `Banque - Tableau de Bord`
-    *   **Titre :** `Transactions` -> **Modèle :** `Banque - Transactions`
-    *   **Titre :** `Virements` -> **Modèle :** `Banque - Virements`
     
 4.  **Créer le Menu :**
     *   Allez dans `Apparence > Menus`.
@@ -112,18 +110,3 @@ Une fois le thème activé, votre site peut afficher des erreurs "Page non trouv
 
 6.  **Installer les Plugins :**
     *   Pour que les formulaires de contact et de demande de prêt fonctionnent, installez le plugin **WP Mail SMTP** et configurez-le pour envoyer les e-mails via votre service SMTP (en utilisant `contact@vylscapital.com` comme e-mail d'envoi).
-    *   Installez un plugin de formulaires comme **Contact Form 7**.
-    *   Créez vos formulaires dans le plugin de votre choix.
-    *   Modifiez les fichiers `template-contact.php` et `template-demande-de-pret.php` en remplaçant les formulaires HTML statiques par le shortcode du plugin (ex: `<?php echo do_shortcode('[contact-form-7 id="123"]'); ?>`). Les instructions sont dans les fichiers.
-    *   Pour les carrousels (page d'accueil, témoignages), installez un plugin de slider comme **Smart Slider 3** ou **Slider Revolution** et recréez les carrousels, puis insérez leur shortcode dans les fichiers PHP correspondants.
-
----
-
-### Nettoyage du Thème (Optionnel mais recommandé)
-
-Votre thème contient des fichiers de base dont nous n'avons plus besoin. Vous pouvez les supprimer pour garder votre thème propre :
-*   `404.php` (gardez-le, il est utile)
-*   `archive.php` (gardez-le)
-*   `comments.php` (gardez-le)
-*   `search.php` (gardez-le)
-*   `screenshot.png` (à garder ou à remplacer par votre propre capture d'écran)
