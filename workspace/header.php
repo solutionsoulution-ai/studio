@@ -37,7 +37,7 @@
             ?>
         </nav>
         <div class="flex flex-1 items-center justify-end space-x-2 md:flex-none lg:flex-1 lg:justify-end">
-            <a href="/tableau-de-bord" class="border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-10 px-4 py-2">Espace Client</a>
+            <a href="https://banque.capfinfy.com" target="_blank" rel="noopener noreferrer" class="border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-10 px-4 py-2">Espace Client</a>
             <a href="/demande-de-pret" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">Faire une demande</a>
             
             <!-- Mobile Menu Button -->
@@ -62,7 +62,7 @@
             </div>
             <nav class="flex flex-col space-y-4 p-4">
                  <a href="/demande-de-pret" data-mobile-menu-close class="text-lg font-medium transition-colors hover:text-primary">Faire une demande</a>
-                 <a href="/tableau-de-bord" data-mobile-menu-close class="text-lg font-medium transition-colors hover:text-primary">Espace Client</a>
+                 <a href="https://banque.capfinfy.com" target="_blank" rel="noopener noreferrer" data-mobile-menu-close class="text-lg font-medium transition-colors hover:text-primary">Espace Client</a>
                  <p class="text-sm font-semibold text-muted-foreground pt-4">Menu</p>
                  <div class="flex flex-col space-y-4">
                     <?php
