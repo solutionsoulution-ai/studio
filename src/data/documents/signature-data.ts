@@ -9,7 +9,8 @@ export const signatureData = {
             es: "Director General",
             pt: "Diretor Geral",
             it: "Amministratore Delegato",
-        }
+        },
+        signatureUrl: "https://i.postimg.cc/RVTGjX3p/signature-alexandre-dubois.png"
     },
     legal: {
         name: "David Rousseau",
@@ -20,7 +21,8 @@ export const signatureData = {
             es: "Director Legal",
             pt: "Diretor Jurídico",
             it: "Direttore Legale",
-        }
+        },
+        signatureUrl: "https://i.postimg.cc/T1Mdkb2Q/signature-david-rousseau.png"
     },
     finance: {
         name: "Julien Moreau",
@@ -31,7 +33,8 @@ export const signatureData = {
             es: "Director Financiero",
             pt: "Diretor Financeiro",
             it: "Direttore Finanziario",
-        }
+        },
+        signatureUrl: "https://i.postimg.cc/nLp5M65x/signature-julien-moreau.png"
     },
     analysis: {
         name: "Benoît Leroy",
@@ -42,7 +45,8 @@ export const signatureData = {
             es: "Director de Análisis Financiero",
             pt: "Diretor de Análise Financeira",
             it: "Direttore dell'Analisi Finanziaria",
-        }
+        },
+        signatureUrl: "https://i.postimg.cc/TydC5VfH/signature-benoit-leroy.png"
     },
     insurance: {
         name: "Isabelle Petit",
@@ -53,6 +57,7 @@ export const signatureData = {
             es: "Directora de Seguros",
             pt: "Diretora de Seguros",
             it: "Direttrice delle Assicurazioni",
-        }
+        },
+        signatureUrl: "https://i.postimg.cc/Y0G3BbrV/signature-isabelle-petit.png"
     }
 };

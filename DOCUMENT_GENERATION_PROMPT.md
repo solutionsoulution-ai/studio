@@ -1,4 +1,3 @@
-
 # Prompt pour la Création d'un Générateur de Documents Juridiques et Financiers pour Capfinfy
 
 **Objectif :** Créer un système de génération de documents financiers et juridiques intégré à une application React (Next.js). Ce système doit permettre aux utilisateurs de sélectionner un type de document, de remplir un formulaire avec les données nécessaires, et de visualiser/télécharger un document PDF stylisé et professionnel respectant l'identité de l'entreprise Capfinfy.
@@ -17,6 +16,12 @@
     - **Directeur Financier :** Julien Moreau
     - **Directeur d'Analyse Financière :** Benoît Leroy
     - **Directrice des Assurances :** Isabelle Petit
+- **URL des signatures (dans `signature-data.ts` également) :**
+    - `https://i.postimg.cc/RVTGjX3p/signature-alexandre-dubois.png`
+    - `https://i.postimg.cc/T1Mdkb2Q/signature-david-rousseau.png`
+    - `https://i.postimg.cc/nLp5M65x/signature-julien-moreau.png`
+    - `https://i.postimg.cc/TydC5VfH/signature-benoit-leroy.png`
+    - `https://i.postimg.cc/Y0G3BbrV/signature-isabelle-petit.png`
 
 ---
 
@@ -38,6 +43,7 @@ Le design des documents doit être sobre, professionnel et impérativement respe
 - **Logo :** Intégrer un logo textuel "Capfinfy" ou une icône simple (`Landmark` de `lucide-react`) en haut à gauche du document.
 - **En-têtes et Pieds de page :** Les documents doivent avoir des en-têtes clairs (logo, titre du document) et des pieds de page discrets (nom de l'entreprise, numéro de page, confidentialité).
 - **Structure :** Utiliser des marges généreuses, une hiérarchie de titres claire et une typographie soignée pour une lisibilité maximale. Les titres d'articles doivent être en majuscules.
+- **Signatures :** Les signatures doivent être affichées sous forme d'image (`next/image`) en utilisant les URL fournies dans `signature-data.ts`.
 
 ---
 
@@ -57,7 +63,7 @@ Le système doit être développé en **React avec TypeScript** et utiliser les 
     -   `templates/`: Dossier contenant les composants de template pour chaque type de document (ex: `LoanContractTemplate.tsx`).
 -   `src/data/documents/`:
     -   Fichiers de clauses pour chaque document (ex: `loan-contract-clauses.ts`).
-    -   `signature-data.ts`: Fichier centralisant les noms et titres des signataires.
+    -   `signature-data.ts`: Fichier centralisant les noms, titres **et URL de signature** des signataires.
 -   `src/hooks/use-pdf-generator.ts`: Un hook personnalisé qui utilise `html2canvas` et `jspdf` pour convertir le contenu HTML en PDF.
 
 ### Page Principale (`/documents`)
