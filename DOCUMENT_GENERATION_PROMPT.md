@@ -16,7 +16,7 @@
     - **Directeur Financier :** Julien Moreau
     - **Directeur d'Analyse Financière :** Benoît Leroy
     - **Directrice des Assurances :** Isabelle Petit
-- **URL des signatures (dans `signature-data.ts` également) :**
+- **URL des signatures (à intégrer dans `signature-data.ts`) :**
     - `https://i.postimg.cc/RVTGjX3p/signature-alexandre-dubois.png`
     - `https://i.postimg.cc/T1Mdkb2Q/signature-david-rousseau.png`
     - `https://i.postimg.cc/nLp5M65x/signature-julien-moreau.png`
