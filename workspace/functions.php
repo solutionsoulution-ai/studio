@@ -119,3 +119,75 @@ function capfinfy_enqueue_assets() {
 	}
 }
 add_action( 'wp_enqueue_scripts', 'capfinfy_enqueue_assets' );
+
+
+/**
+ * Handle Form Submissions
+ * Using the 'template_redirect' hook is the reliable way to process forms
+ * before any HTML is output to the browser, preventing redirection issues.
+ */
+function capfinfy_handle_form_submissions() {
+    // Contact Form Submission
+    if ( 'POST' === $_SERVER['REQUEST_METHOD'] && ! empty( $_POST['submit_contact_form'] ) ) {
+        if ( isset( $_POST['contact_form_nonce'] ) && wp_verify_nonce( $_POST['contact_form_nonce'], 'capfinfy_contact_action' ) ) {
+            
+            $to = 'contact@capfinfy.com';
+            $subject = 'Nouveau message de contact - Capfinfy';
+            
+            $name = sanitize_text_field( $_POST['nom'] );
+            $email = sanitize_email( $_POST['email'] );
+            $message = sanitize_textarea_field( $_POST['message'] );
+
+            $body = "Nouveau message depuis le formulaire de contact Capfinfy:\n\n";
+            $body .= "Nom : " . $name . "\n";
+            $body .= "Email : " . $email . "\n";
+            $body .= "Message :\n" . $message;
+
+            $headers = array('Content-Type: text/plain; charset=UTF-8', 'From: Capfinfy <' . $to . '>', 'Reply-To: ' . $name . ' <' . $email . '>');
+
+            wp_mail( $to, $subject, $body, $headers );
+
+            $redirect_url = home_url('/merci-contact');
+            wp_safe_redirect( $redirect_url );
+            exit;
+        }
+    }
+
+    // Loan Application Form Submission
+    if ( 'POST' === $_SERVER['REQUEST_METHOD'] && ! empty( $_POST['submit_loan_form'] ) ) {
+        if ( isset( $_POST['loan_form_nonce'] ) && wp_verify_nonce( $_POST['loan_form_nonce'], 'capfinfy_loan_action' ) ) {
+            
+            $fields = ['firstName', 'lastName', 'loanAmount', 'loanTerm', 'email', 'phone', 'country', 'profession', 'income', 'reason'];
+            $sanitized_data = [];
+            
+            foreach ($fields as $field) {
+                if (isset($_POST[$field])) {
+                    if ($field === 'email') {
+                        $sanitized_data[$field] = sanitize_email($_POST[$field]);
+                    } elseif ($field === 'reason') {
+                        $sanitized_data[$field] = sanitize_textarea_field($_POST[$field]);
+                    } else {
+                        $sanitized_data[$field] = sanitize_text_field($_POST[$field]);
+                    }
+                }
+            }
+            
+            $to = 'contact@capfinfy.com';
+            $subject = 'Nouvelle demande de financement de ' . $sanitized_data['firstName'] . ' ' . $sanitized_data['lastName'];
+            $headers = array('Content-Type: text/html; charset=UTF-8', 'From: Capfinfy <' . $to . '>', 'Reply-To: ' . $sanitized_data['firstName'] . ' ' . $sanitized_data['lastName'] . ' <' . $sanitized_data['email'] . '>');
+            
+            $body = "<h2>Nouvelle demande de financement</h2>";
+            foreach ($sanitized_data as $key => $value) {
+                $label = str_replace(['firstName', 'lastName', 'loanAmount', 'loanTerm', 'profession', 'income', 'reason', 'country'], ['Prénom', 'Nom', 'Montant du prêt', 'Durée (mois)', 'Profession', 'Revenu mensuel', 'Motif', 'Pays'], $key);
+                $body .= "<p><strong>" . ucfirst($label) . ":</strong> " . esc_html($value) . "</p>";
+            }
+
+            wp_mail( $to, $subject, $body, $headers );
+            
+            $redirect_url = home_url('/merci-demande');
+            wp_safe_redirect( $redirect_url );
+            exit;
+        }
+    }
+}
+add_action( 'template_redirect', 'capfinfy_handle_form_submissions' );

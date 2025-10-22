@@ -5,42 +5,6 @@
  * @package capfinfy
  */
 
-// Traitement du formulaire de demande de prêt
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['loan_form_nonce'])) {
-    if (wp_verify_nonce($_POST['loan_form_nonce'], 'capfinfy_loan_action')) {
-        
-        $fields = ['firstName', 'lastName', 'loanAmount', 'loanTerm', 'email', 'phone', 'country', 'profession', 'income', 'reason'];
-        $sanitized_data = [];
-        
-        foreach ($fields as $field) {
-            if (isset($_POST[$field])) {
-                if ($field === 'email') {
-                    $sanitized_data[$field] = sanitize_email($_POST[$field]);
-                } elseif ($field === 'reason') {
-                    $sanitized_data[$field] = sanitize_textarea_field($_POST[$field]);
-                } else {
-                    $sanitized_data[$field] = sanitize_text_field($_POST[$field]);
-                }
-            }
-        }
-        
-        $to = 'contact@vylscapital.com';
-        $subject = 'Nouvelle demande de financement de ' . $sanitized_data['firstName'] . ' ' . $sanitized_data['lastName'];
-        $headers = array('Content-Type: text/html; charset=UTF-8', 'From: Capfinfy <' . $to . '>', 'Reply-To: ' . $sanitized_data['firstName'] . ' ' . $sanitized_data['lastName'] . ' <' . $sanitized_data['email'] . '>');
-        
-        $body = "<h2>Nouvelle demande de financement</h2>";
-        foreach ($sanitized_data as $key => $value) {
-            $label = str_replace(array('loanAmount', 'loanTerm'), array('Montant du prêt', 'Durée du prêt'), $key);
-            $body .= "<p><strong>" . ucfirst($label) . ":</strong> " . esc_html($value) . "</p>";
-        }
-
-        wp_mail($to, $subject, $body, $headers);
-        
-        wp_redirect(home_url('/merci-demande'));
-        exit;
-    }
-}
-
 get_header();
 ?>
 
@@ -53,7 +17,7 @@ get_header();
                     Remplissez le formulaire pour soumettre votre demande. C'est simple et sécurisé.
                 </p>
             </div>
-
+            
             <div class="p-4 border rounded-lg bg-muted/50 mb-8">
                 <div class="flex items-start">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-3 text-primary flex-shrink-0 mt-1"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>
@@ -69,6 +33,7 @@ get_header();
             <div class="mt-12 rounded-lg border bg-card text-card-foreground shadow-sm p-6 md:p-8">
                 <form class="space-y-6" action="<?php echo esc_url( get_permalink() ); ?>" method="post">
                     <?php wp_nonce_field('capfinfy_loan_action', 'loan_form_nonce'); ?>
+                    <input type="hidden" name="submit_loan_form" value="1">
                     <div class="grid sm:grid-cols-2 gap-4">
                         <div>
                             <label class="text-sm font-medium leading-none mb-2 block" for="firstName">Prénom</label>

@@ -5,38 +5,6 @@
  * @package capfinfy
  */
 
-if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_contact_form']) ) {
-    // IMPORTANT: C'est l'adresse e-mail où les messages seront envoyés.
-    $to = 'contact@vylscapital.com';
-    $subject = 'Nouveau message de contact depuis Capfinfy';
-    
-    $name = sanitize_text_field($_POST['nom']);
-    $email = sanitize_email($_POST['email']);
-    $message = sanitize_textarea_field($_POST['message']);
-
-    $body = "Nouveau message depuis le formulaire de contact Capfinfy :\n\n";
-    $body .= "Nom : " . $name . "\n";
-    $body .= "Email : " . $email . "\n";
-    $body .= "Message :\n" . $message;
-
-    // Utilise l'e-mail du site pour une meilleure délivrabilité, tout en gardant l'e-mail de l'utilisateur pour la réponse.
-    $headers = array('Content-Type: text/plain; charset=UTF-8', 'From: Capfinfy <' . $to . '>', 'Reply-To: ' . $name . ' <' . $email . '>');
-
-    $sent = wp_mail($to, $subject, $body, $headers);
-
-    if ($sent) {
-        $redirect_url = home_url('/merci-contact');
-        wp_redirect($redirect_url);
-        exit;
-    } else {
-        // Redirection même en cas d'échec pour ne pas bloquer l'utilisateur.
-        // L'échec d'envoi doit être diagnostiqué via les logs de WP Mail SMTP.
-        $redirect_url = home_url('/merci-contact');
-        wp_redirect($redirect_url);
-        exit;
-    }
-}
-
 get_header();
 ?>
 
@@ -58,8 +26,8 @@ get_header();
                 <div class="rounded-lg border bg-card text-card-foreground shadow-lg">
                     <div class="p-6 md:p-8">
                         <form method="POST" action="<?php echo esc_url( get_permalink() ); ?>" class="space-y-6">
+                            <?php wp_nonce_field( 'capfinfy_contact_action', 'contact_form_nonce' ); ?>
                             <input type="hidden" name="submit_contact_form" value="1">
-
                             <div class="grid sm:grid-cols-2 gap-4">
                                 <div>
                                     <label class="text-sm font-medium mb-2 block">Nom Complet</label>
@@ -96,7 +64,7 @@ get_header();
                         </a>
                         <div class="flex items-center gap-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-primary"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                            <span>Lyon, France</span>
+                            <span>1 Place de la Bourse, 69002 Lyon, France</span>
                         </div>
                     </div>
                 </div>
@@ -114,5 +82,3 @@ get_header();
 <?php
 get_footer();
 ?>
-
-    
