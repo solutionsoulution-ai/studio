@@ -16,104 +16,32 @@ if ( ! defined( '_S_VERSION' ) ) {
  * Sets up theme defaults and registers support for various WordPress features.
  */
 function capfinfy_setup() {
-	/*
-		* Make theme available for translation.
-		* Translations can be filed in the /languages/ directory.
-		*/
 	load_theme_textdomain( 'capfinfy', get_template_directory() . '/languages' );
-
-	// Add default posts and comments RSS feed links to head.
 	add_theme_support( 'automatic-feed-links' );
-
-	/*
-		* Let WordPress manage the document title.
-		*/
 	add_theme_support( 'title-tag' );
-
-	/*
-		* Enable support for Post Thumbnails on posts and pages.
-		*/
 	add_theme_support( 'post-thumbnails' );
 
-	// This theme uses wp_nav_menu() in one location.
 	register_nav_menus(
 		array(
 			'main-menu' => esc_html__( 'Menu Principal', 'capfinfy' ),
 		)
 	);
 
-	/*
-		* Switch default core markup for search form, comment form, and comments
-		* to output valid HTML5.
-		*/
 	add_theme_support(
 		'html5',
-		array(
-			'search-form',
-			'comment-form',
-			'comment-list',
-			'gallery',
-			'caption',
-			'style',
-			'script',
-		)
+		array( 'search-form', 'comment-form', 'comment-list', 'gallery', 'caption', 'style', 'script' )
 	);
-
-	// Add theme support for selective refresh for widgets.
 	add_theme_support( 'customize-selective-refresh-widgets' );
 }
 add_action( 'after_setup_theme', 'capfinfy_setup' );
-
-
-/**
- * Register widget area.
- *
- * @link https://developer.wordpress.org/themes/functionality/sidebars/#registering-a-sidebar
- */
-function capfinfy_widgets_init() {
-	register_sidebar(
-		array(
-			'name'          => esc_html__( 'Sidebar', 'capfinfy' ),
-			'id'            => 'sidebar-1',
-			'description'   => esc_html__( 'Add widgets here.', 'capfinfy' ),
-			'before_widget' => '<section id="%1$s" class="widget %2$s">',
-			'after_widget'  => '</section>',
-			'before_title'  => '<h2 class="widget-title">',
-			'after_title'   => '</h2>',
-		)
-	);
-}
-add_action( 'widgets_init', 'capfinfy_widgets_init' );
 
 /**
  * Enqueue scripts and styles.
  */
 function capfinfy_enqueue_assets() {
-    // Main theme stylesheet from style.css (which will contain the built CSS from main.css)
-    wp_enqueue_style(
-        'capfinfy-theme-style',
-        get_stylesheet_uri(),
-        array(),
-        _S_VERSION
-    );
-
-    // Google Fonts (Inter)
-    wp_enqueue_style(
-        'capfinfy-google-fonts',
-        'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
-        array(),
-        null
-    );
-
-    // Main JavaScript file (for simple interactions like menu/FAQ)
-    wp_enqueue_script(
-        'capfinfy-main-js',
-        get_template_directory_uri() . '/assets/js/main.js',
-        array(),
-        _S_VERSION,
-        true
-    );
-
+    wp_enqueue_style( 'capfinfy-theme-style', get_stylesheet_uri(), array(), _S_VERSION );
+    wp_enqueue_style( 'capfinfy-google-fonts', 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap', array(), null );
+    wp_enqueue_script( 'capfinfy-main-js', get_template_directory_uri() . '/assets/js/main.js', array(), _S_VERSION, true );
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
 	}
@@ -121,31 +49,81 @@ function capfinfy_enqueue_assets() {
 add_action( 'wp_enqueue_scripts', 'capfinfy_enqueue_assets' );
 
 /**
- * Custom Walker to remove <li> tags from nav menu items for desktop
+ * Handle Form Submissions via Supabase.
  */
-class Capfinfy_Walker_Nav_Menu_Desktop extends Walker_Nav_Menu {
-    function start_el(&$output, $item, $depth = 0, $args = null, $id = 0) {
-        $classes = empty( $item->classes ) ? array() : (array) $item->classes;
-        $class_names = join(' ', apply_filters('nav_menu_css_class', array_filter($classes), $item, $args));
-        
-        $output .= '<a href="' . esc_url($item->url) . '" class="transition-colors hover:text-primary ' . esc_attr($class_names) . '">' . esc_html($item->title) . '</a>';
-    }
-    function end_el(&$output, $item, $depth = 0, $args = null) {
-        $output .= "";
-    }
-}
+function capfinfy_handle_form_submissions() {
+    $supabase_url = 'https://wgpqvepqyywlpgzbxdig.supabase.co';
+    $supabase_key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndncHF2ZXBxeXl3bHBnemJ4ZGlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkzNTU5MzUsImV4cCI6MjA3NDkzMTkzNX0.cMPErrOdSYyxtuznRU0XWNcj2AQN7UrI8UnI3TFBl5k';
 
-/**
- * Custom Walker for the mobile menu to keep a simpler structure
- */
-class Capfinfy_Walker_Nav_Menu_Mobile extends Walker_Nav_Menu {
-    function start_el(&$output, $item, $depth = 0, $args = null, $id = 0) {
-        $classes = empty( $item->classes ) ? array() : (array) $item->classes;
-        $class_names = join(' ', apply_filters('nav_menu_css_class', array_filter($classes), $item, $args));
-        
-        $output .= '<a data-mobile-menu-close href="' . esc_url($item->url) . '" class="text-lg font-medium transition-colors hover:text-primary pl-2 ' . esc_attr($class_names) . '">' . esc_html($item->title) . '</a>';
+    $headers = [
+        'apikey'        => $supabase_key,
+        'Authorization' => 'Bearer ' . $supabase_key,
+        'Content-Type'  => 'application/json',
+        'Prefer'        => 'return=minimal',
+    ];
+
+    // Contact Form Submission
+    if ( isset( $_POST['submit_contact_form'] ) && isset( $_POST['contact_form_nonce'] ) ) {
+        if ( wp_verify_nonce( $_POST['contact_form_nonce'], 'capfinfy_contact_action' ) ) {
+            
+            $name = sanitize_text_field( $_POST['nom'] );
+            $email = sanitize_email( $_POST['email'] );
+            $message = sanitize_textarea_field( $_POST['message'] );
+
+            $body = json_encode([
+                'name'    => $name,
+                'email'   => $email,
+                'message' => $message,
+            ]);
+
+            $args = [
+                'body'    => $body,
+                'headers' => $headers,
+                'method'  => 'POST',
+            ];
+            
+            wp_remote_post($supabase_url . '/rest/v1/contacts', $args);
+            
+            wp_safe_redirect( home_url('/merci-contact') );
+            exit;
+        }
     }
-    function end_el(&$output, $item, $depth = 0, $args = null) {
-        $output .= "";
+
+    // Loan Application Form Submission
+    if ( isset( $_POST['submit_loan_form'] ) && isset( $_POST['loan_form_nonce'] ) ) {
+        if ( wp_verify_nonce( $_POST['loan_form_nonce'], 'capfinfy_loan_action' ) ) {
+            
+            $fields = ['firstName', 'lastName', 'loanAmount', 'loanTerm', 'email', 'phone', 'country', 'profession', 'income', 'reason'];
+            $data_to_send = [];
+            
+            foreach ($fields as $field) {
+                 $data_to_send[$field] = isset($_POST[$field]) ? sanitize_text_field($_POST[$field]) : null;
+            }
+
+            $body = json_encode([
+                'first_name' => $data_to_send['firstName'],
+                'last_name' => $data_to_send['lastName'],
+                'email' => sanitize_email($data_to_send['email']),
+                'phone' => $data_to_send['phone'],
+                'country' => $data_to_send['country'],
+                'profession' => $data_to_send['profession'],
+                'monthly_income' => is_numeric($data_to_send['income']) ? (float)$data_to_send['income'] : null,
+                'loan_amount' => is_numeric($data_to_send['loanAmount']) ? (float)$data_to_send['loanAmount'] : null,
+                'loan_term' => is_numeric($data_to_send['loanTerm']) ? (int)$data_to_send['loanTerm'] : null,
+                'reason' => sanitize_textarea_field($data_to_send['reason']),
+            ]);
+
+             $args = [
+                'body'    => $body,
+                'headers' => $headers,
+                'method'  => 'POST',
+            ];
+
+            wp_remote_post($supabase_url . '/rest/v1/loan_applications', $args);
+
+            wp_safe_redirect( home_url('/merci-demande') );
+            exit;
+        }
     }
 }
+add_action( 'init', 'capfinfy_handle_form_submissions' );
