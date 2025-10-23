@@ -27,6 +27,7 @@ get_header();
                     <div class="p-6 md:p-8">
                         <form method="POST" action="<?php echo esc_url( get_permalink() ); ?>" class="space-y-6">
                             <?php wp_nonce_field( 'capfinfy_contact_action', 'contact_form_nonce' ); ?>
+                            <input type="hidden" name="submit_contact_form" value="1">
                             <div class="grid sm:grid-cols-2 gap-4">
                                 <div>
                                     <label class="text-sm font-medium mb-2 block" for="nom">Nom Complet</label>
@@ -41,7 +42,7 @@ get_header();
                                 <label class="text-sm font-medium mb-2 block" for="message">Votre Message</label>
                                 <textarea id="message" name="message" rows="5" required class="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-base"></textarea>
                             </div>
-                            <button type="submit" name="submit_contact_form" value="1" class="w-full inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8">
+                            <button type="submit" class="w-full inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg>
                                 Envoyer le Message
                             </button>
