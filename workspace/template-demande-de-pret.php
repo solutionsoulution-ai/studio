@@ -24,15 +24,14 @@ get_header();
                     <div>
                         <h3 class="font-semibold text-foreground">Transparence et Sécurité</h3>
                         <p class="text-sm text-muted-foreground mt-1">
-                            Les informations que vous nous confiez sont précieuses. Elles sont utilisées exclusivement pour l'étude de votre dossier de financement. Toutes vos données sont transmises de manière sécurisée (cryptage SSL) et stockées sur des serveurs en Europe, conformément au RGPD.
+                            Les informations que vous nous confiez sont précieuses. Elles sont utilisées exclusivement pour l'étude de votre dossier de financement. Toutes vos données sont transmises de manière sécurisée et stockées sur des serveurs en Europe, conformément au RGPD.
                         </p>
                     </div>
                 </div>
             </div>
             
             <div class="mt-12 rounded-lg border bg-card text-card-foreground shadow-sm p-6 md:p-8">
-                <form class="space-y-6" action="<?php echo esc_url( get_permalink() ); ?>" method="post">
-                    <?php wp_nonce_field('capfinfy_loan_action', 'loan_form_nonce'); ?>
+                <form class="space-y-6">
                     
                     <div class="grid sm:grid-cols-2 gap-4">
                         <div>
@@ -100,7 +99,7 @@ get_header();
 
                     <p class="text-xs text-muted-foreground text-center pt-2">Un crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.</p>
                     
-                    <button type="submit" name="submit_loan_form" value="1" class="w-full inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8">
+                    <button type="submit" class="w-full inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8">
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg>
                       Envoyer ma demande
                     </button>
