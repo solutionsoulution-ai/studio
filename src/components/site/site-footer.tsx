@@ -1,4 +1,6 @@
 
+"use client";
+
 import Link from "next/link";
 import { Landmark, Mail, Phone, MapPin } from "lucide-react";
 
@@ -41,6 +43,10 @@ export default function SiteFooter() {
                 <a href="mailto:contact@capfinfy.com" className="flex items-center gap-2 hover:text-primary">
                     <Mail className="w-4 h-4" />
                     contact@capfinfy.com
+                </a>
+                <a href="mailto:capfinfy@gmail.com" className="flex items-center gap-2 hover:text-primary">
+                    <Mail className="w-4 h-4" />
+                    capfinfy@gmail.com
                 </a>
                 <a href="tel:+33756986769" className="flex items-center gap-2 hover:text-primary">
                     <Phone className="w-4 h-4" />

@@ -1,4 +1,5 @@
 
+
 import SiteHeader from "@/components/site/site-header";
 import SiteFooter from "@/components/site/site-footer";
 import ContactForm from "@/components/site/contact-form";
@@ -32,6 +33,10 @@ export default function ContactPage() {
                             <a href="mailto:contact@capfinfy.com" className="flex items-center gap-3 group">
                                 <Mail className="w-5 h-5 text-primary"/>
                                 <span className="group-hover:text-primary transition-colors">contact@capfinfy.com</span>
+                            </a>
+                            <a href="mailto:capfinfy@gmail.com" className="flex items-center gap-3 group">
+                                <Mail className="w-5 h-5 text-primary"/>
+                                <span className="group-hover:text-primary transition-colors">capfinfy@gmail.com</span>
                             </a>
                             <a href="tel:+33756986769" className="flex items-center gap-3 group">
                                 <Phone className="w-5 h-5 text-primary"/>
