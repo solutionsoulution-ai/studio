@@ -25,7 +25,7 @@ export const signatureData = {
             en: "Finance Director",
             de: "Finanzdirektor",
         },
-        signatureUrl: "https://i.postimg.cc/nLp5M65x/signature-julien-moreau.png"
+        signatureUrl: "https://i.postimg.cc/fLt4Yb2Q/signature-3.png"
     },
     analysis: {
         name: "Benoît Leroy",
