@@ -2,6 +2,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { signatureData } from '@/data/documents/signature-data';
 
@@ -17,7 +18,6 @@ async function getBase64Image(url: string): Promise<string> {
         return imageCache[url];
     }
     try {
-        // Use our local image proxy to bypass CORS issues
         const response = await fetch(`/api/image-proxy?url=${encodeURIComponent(url)}`);
         if (!response.ok) {
             throw new Error(`Failed to fetch image via proxy: ${response.statusText}`);
@@ -46,6 +46,7 @@ export function usePDFGenerator() {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
+        // Pre-cache signature images on component mount
         Object.values(signatureData).forEach(signer => {
             if (signer.signatureUrl) {
                 getBase64Image(signer.signatureUrl);
@@ -66,75 +67,40 @@ export function usePDFGenerator() {
         setIsLoading(true);
 
         try {
+            // Use PNG for lossless quality and a high scale for sharpness
+            const canvas = await html2canvas(input, {
+                scale: 2,
+                useCORS: true,
+                allowTaint: true,
+                logging: false,
+                windowHeight: input.scrollHeight, // Capture the full scrollable height
+                scrollY: -window.scrollY,
+            });
+
+            const imgData = canvas.toDataURL('image/png');
+            
             const pdf = new jsPDF('p', 'mm', 'a4', true);
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = pdf.internal.pageSize.getHeight();
-            const margin = 15;
-            const contentWidth = pdfWidth - margin * 2;
 
-            const processNode = async (node: HTMLElement, currentX: number, currentY: number): Promise<number> => {
-                let y = currentY;
-                const styles = window.getComputedStyle(node);
-                const tagName = node.tagName.toLowerCase();
-                const text = node.innerText?.trim();
+            const canvasWidth = canvas.width;
+            const canvasHeight = canvas.height;
+            const ratio = canvasWidth / pdfWidth;
+            const imgHeight = canvasHeight / ratio;
 
-                const isVisible = styles.display !== 'none' && styles.visibility !== 'hidden' && parseFloat(styles.opacity) > 0;
-                if (!isVisible) {
-                    return y;
-                }
+            let heightLeft = imgHeight;
+            let position = 0;
 
-                if (y > pdfHeight - margin - 20) { // Add a buffer
-                    pdf.addPage();
-                    y = margin;
-                }
+            // Add the first page
+            pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
+            heightLeft -= pdfHeight;
 
-                if (text && tagName !== 'button' && tagName !== 'label' && tagName !== 'select') {
-                    const fontSize = parseFloat(styles.fontSize) * 0.75;
-                    const isBold = parseInt(styles.fontWeight) > 500;
-                    
-                    pdf.setFontSize(fontSize);
-                    pdf.setFont('Helvetica', isBold ? 'bold' : 'normal');
-
-                    if (styles.color) {
-                      const rgb = styles.color.match(/\d+/g);
-                      if (rgb) pdf.setTextColor(parseInt(rgb[0]), parseInt(rgb[1]), parseInt(rgb[2]));
-                    }
-
-                    const splitText = pdf.splitTextToSize(text, contentWidth);
-                    pdf.text(splitText, currentX, y);
-                    y += pdf.getTextDimensions(splitText).h + (parseFloat(styles.marginBottom) * 0.264);
-                }
-
-                if (tagName === 'img') {
-                    const img = node as HTMLImageElement;
-                    const base64Image = await getBase64Image(img.src);
-                    if (base64Image) {
-                         const imgWidth = img.width * 0.264 * 0.5; // Scale down image
-                         const imgHeight = img.height * 0.264 * 0.5;
-                         
-                         if (y + imgHeight > pdfHeight - margin) {
-                            pdf.addPage();
-                            y = margin;
-                         }
-                         pdf.addImage(base64Image, 'PNG', currentX, y, imgWidth, imgHeight);
-                         y += imgHeight + 5;
-                    }
-                }
-                
-                for (const child of Array.from(node.children)) {
-                    y = await processNode(child as HTMLElement, currentX, y);
-                     if (y > pdfHeight - margin - 20) {
-                        pdf.addPage();
-                        y = margin;
-                    }
-                }
-
-                return y;
-            };
-
-            let y = margin;
-            for (const child of Array.from(input.children)) {
-                 y = await processNode(child as HTMLElement, margin, y);
+            // Add new pages if content overflows
+            while (heightLeft > 0) {
+                position = heightLeft - imgHeight;
+                pdf.addPage();
+                pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
+                heightLeft -= pdfHeight;
             }
             
             pdf.save(fileName);
