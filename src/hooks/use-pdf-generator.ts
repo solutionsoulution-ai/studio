@@ -29,15 +29,15 @@ export function usePDFGenerator() {
 
         try {
             const canvas = await html2canvas(input, {
-                scale: 3, // Qualité maximale pour la netteté
+                scale: 2.5, // Échelle élevée pour une haute résolution
                 useCORS: true,
                 logging: false,
-                height: input.getBoundingClientRect().height,
-                windowHeight: input.getBoundingClientRect().height,
+                height: input.scrollHeight, // Capturer la hauteur totale du contenu
+                windowHeight: input.scrollHeight, // S'assurer que tout est rendu
             });
 
-            // Utiliser PNG pour une qualité sans perte
-            const imgData = canvas.toDataURL('image/png');
+            // Utiliser JPEG avec une très haute qualité pour un bon compromis taille/qualité
+            const imgData = canvas.toDataURL('image/jpeg', 0.98);
             
             const pdf = new jsPDF({
                 orientation,
@@ -52,19 +52,24 @@ export function usePDFGenerator() {
             const ratio = canvasWidth / canvasHeight;
 
             let imgHeight = pdfWidth / ratio;
-
+            
             if (imgHeight > pdfHeight) {
+                // Pour les documents longs, on ajoute des pages
                 let position = 0;
-                while(imgHeight > 0) {
-                    pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfWidth / ratio);
-                    imgHeight -= pdfHeight;
-                    position -= pdfHeight;
-                    if(imgHeight > 0) {
-                        pdf.addPage();
-                    }
+                let heightLeft = imgHeight;
+
+                pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, imgHeight);
+                heightLeft -= pdfHeight;
+
+                while (heightLeft > 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, imgHeight);
+                    heightLeft -= pdfHeight;
                 }
             } else {
-                 pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, imgHeight);
+                 // Pour les documents courts (comme le reçu), une seule page suffit
+                 pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, imgHeight);
             }
             
             pdf.save(fileName);
