@@ -29,15 +29,15 @@ export function usePDFGenerator() {
 
         try {
             const canvas = await html2canvas(input, {
-                scale: 3, // Augmentation de l'échelle pour une netteté maximale
+                scale: 2, // Échelle augmentée pour une meilleure netteté
                 useCORS: true,
                 logging: false,
-                windowHeight: input.scrollHeight,
+                windowHeight: input.scrollHeight, // Capture de tout le contenu scrollable
                 scrollY: -window.scrollY,
             });
 
-            // Utilisation du format PNG pour une qualité sans perte
-            const imgData = canvas.toDataURL('image/png');
+            // Utilisation du format JPEG avec une haute qualité pour un bon compromis taille/qualité
+            const imgData = canvas.toDataURL('image/jpeg', 0.98); 
             const pdf = new jsPDF(orientation, 'mm', 'a4');
             
             const pdfWidth = pdf.internal.pageSize.getWidth();
@@ -52,13 +52,13 @@ export function usePDFGenerator() {
             let heightLeft = imgHeight;
             let position = 0;
 
-            pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
+            pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, imgHeight);
             heightLeft -= pdfHeight;
 
             while (heightLeft > 0) {
-                position = heightLeft - imgHeight;
+                position = position - pdfHeight;
                 pdf.addPage();
-                pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
+                pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, imgHeight);
                 heightLeft -= pdfHeight;
             }
 
