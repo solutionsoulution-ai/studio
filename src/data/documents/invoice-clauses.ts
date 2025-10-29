@@ -20,7 +20,7 @@ export const invoiceClauses: Clauses = {
             "iban_label": "IBAN",
             "bic_label": "BIC / SWIFT",
             "payment_reason_label": "Motif de virement",
-            "payment_reason_value": "Paiement facture {ref}"
+            "payment_reason_value": "Paiement"
         },
         footer: {
             "thank_you": "Nous vous remercions de votre confiance.",
@@ -46,7 +46,7 @@ export const invoiceClauses: Clauses = {
             "iban_label": "IBAN",
             "bic_label": "BIC / SWIFT",
             "payment_reason_label": "Payment Reference",
-            "payment_reason_value": "Invoice payment {ref}"
+            "payment_reason_value": "Payment"
         },
         footer: {
             "thank_you": "Thank you for your business.",
@@ -72,7 +72,7 @@ export const invoiceClauses: Clauses = {
             "iban_label": "IBAN",
             "bic_label": "BIC / SWIFT",
             "payment_reason_label": "Verwendungszweck",
-            "payment_reason_value": "Rechnungszahlung {ref}"
+            "payment_reason_value": "Zahlung"
         },
         footer: {
             "thank_you": "Vielen Dank für Ihr Vertrauen.",
