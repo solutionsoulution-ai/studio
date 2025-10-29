@@ -29,17 +29,21 @@ export function usePDFGenerator() {
 
         try {
             const canvas = await html2canvas(input, {
-                scale: 2,
+                scale: 3, // Augmentation de l'échelle pour une meilleure netteté
                 useCORS: true,
                 logging: false,
-                height: input.getBoundingClientRect().height,
-                windowHeight: input.getBoundingClientRect().height,
-                scrollY: 0
+                height: input.scrollHeight, // Utiliser la hauteur totale du contenu
+                windowHeight: input.scrollHeight,
             });
 
-            const imgData = canvas.toDataURL('image/jpeg', 0.98);
+            const imgData = canvas.toDataURL('image/jpeg', 1.0); // Qualité JPEG maximale
             
-            const pdf = new jsPDF(orientation, 'mm', 'a4');
+            const pdf = new jsPDF({
+                orientation,
+                unit: 'mm',
+                format: 'a4',
+                compress: true,
+            });
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = pdf.internal.pageSize.getHeight();
 
@@ -51,15 +55,17 @@ export function usePDFGenerator() {
             let heightLeft = imgHeight;
             let position = 0;
 
-            pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, imgHeight);
+            // N'ajoute qu'une seule page, et laisse le lecteur PDF gérer le défilement si nécessaire
+            pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, imgHeight);
             heightLeft -= pdfHeight;
 
             while (heightLeft > 0) {
-                position = heightLeft - imgHeight;
-                pdf.addPage();
-                pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, imgHeight);
-                heightLeft -= pdfHeight;
+              position = -pdfHeight * (Math.ceil(imgHeight / pdfHeight) - Math.ceil(heightLeft / pdfHeight));
+              pdf.addPage();
+              pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, imgHeight);
+              heightLeft -= pdfHeight;
             }
+
 
             pdf.save(fileName);
         } catch (error) {
