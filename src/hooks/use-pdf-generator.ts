@@ -2,14 +2,8 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { signatureData } from '@/data/documents/signature-data';
-
-interface GeneratePDFParams {
-    elementId: string;
-    fileName?: string;
-}
 
 const imageCache: { [key: string]: string } = {};
 
@@ -18,10 +12,7 @@ async function getBase64Image(url: string): Promise<string> {
         return imageCache[url];
     }
     try {
-        const response = await fetch(`/api/image-proxy?url=${encodeURIComponent(url)}`);
-        if (!response.ok) {
-            throw new Error(`Failed to fetch image via proxy: ${response.statusText}`);
-        }
+        const response = await fetch(url);
         const blob = await response.blob();
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -30,17 +21,15 @@ async function getBase64Image(url: string): Promise<string> {
                 imageCache[url] = base64data;
                 resolve(base64data);
             };
-            reader.onerror = (error) => {
-                console.error('FileReader error:', error);
-                reject(error);
-            };
-            reader.readAsDataURL(blob);
+            reader.onerror = reject;
         });
     } catch (error) {
-        console.error('Error fetching or processing image for PDF:', error);
-        return ''; 
+        console.error(`Failed to fetch image directly: ${url}`, error);
+        // Fallback or error handling
+        return '';
     }
 }
+
 
 export function usePDFGenerator() {
     const [isLoading, setIsLoading] = useState(false);
@@ -57,7 +46,7 @@ export function usePDFGenerator() {
     const generatePDF = async ({
         elementId,
         fileName = 'document.pdf',
-    }: GeneratePDFParams) => {
+    }: { elementId: string, fileName?: string }) => {
         const input = document.getElementById(elementId);
         if (!input) {
             console.error(`Element with id '${elementId}' not found.`);
@@ -66,45 +55,46 @@ export function usePDFGenerator() {
 
         setIsLoading(true);
 
-        try {
-            // Use PNG for lossless quality and a high scale for sharpness
-            const canvas = await html2canvas(input, {
-                scale: 2,
-                useCORS: true,
-                allowTaint: true,
-                logging: false,
-                windowHeight: input.scrollHeight, // Capture the full scrollable height
-                scrollY: -window.scrollY,
-            });
+        const pdf = new jsPDF('p', 'pt', 'a4');
+        const margin = 40;
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const contentWidth = pdfWidth - margin * 2;
+        let y = margin;
 
-            const imgData = canvas.toDataURL('image/png');
-            
-            const pdf = new jsPDF('p', 'mm', 'a4', true);
-            const pdfWidth = pdf.internal.pageSize.getWidth();
-            const pdfHeight = pdf.internal.pageSize.getHeight();
-
-            const canvasWidth = canvas.width;
-            const canvasHeight = canvas.height;
-            const ratio = canvasWidth / pdfWidth;
-            const imgHeight = canvasHeight / ratio;
-
-            let heightLeft = imgHeight;
-            let position = 0;
-
-            // Add the first page
-            pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
-            heightLeft -= pdfHeight;
-
-            // Add new pages if content overflows
-            while (heightLeft > 0) {
-                position = heightLeft - imgHeight;
+        const processNode = async (node: Element) => {
+            if (y > pdf.internal.pageSize.getHeight() - margin) {
                 pdf.addPage();
-                pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
-                heightLeft -= pdfHeight;
+                y = margin;
+            }
+
+            const styles = window.getComputedStyle(node);
+            const fontSize = parseFloat(styles.fontSize);
+            pdf.setFontSize(fontSize);
+            
+            const isBold = parseInt(styles.fontWeight) >= 600;
+            pdf.setFont(isBold ? 'Helvetica-Bold' : 'Helvetica', isBold ? 'bold' : 'normal');
+
+            let nodeText = node.textContent?.trim() || '';
+            const tagName = node.tagName.toLowerCase();
+
+            if (tagName === 'h1' || tagName === 'h2' || tagName === 'h3' || tagName === 'h4' || tagName === 'h5') {
+                 y += fontSize / 2;
             }
             
-            pdf.save(fileName);
+            const splitText = pdf.splitTextToSize(nodeText, contentWidth);
+            pdf.text(splitText, margin, y);
+            y += (splitText.length * fontSize) * 1.2;
 
+            if(node.children.length > 0) {
+                 for (const child of Array.from(node.children)) {
+                    await processNode(child as Element);
+                 }
+            }
+        };
+
+        try {
+            await processNode(input);
+            pdf.save(fileName);
         } catch (error) {
             console.error("Error generating PDF:", error);
         } finally {
