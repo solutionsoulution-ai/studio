@@ -9,7 +9,6 @@ type BlankDocumentTemplateProps = {
 
 const BlankDocumentTemplate: React.FC<BlankDocumentTemplateProps> = ({ lang }) => {
   const clauses = blankDocumentClauses[lang] || blankDocumentClauses['fr'];
-  const currentYear = new Date().getFullYear();
 
   return (
     <div className="bg-white text-[#09090b] font-sans text-sm p-8 max-w-4xl mx-auto border border-[#f4f4f5] shadow-lg">
@@ -40,8 +39,8 @@ const BlankDocumentTemplate: React.FC<BlankDocumentTemplateProps> = ({ lang }) =
       </main>
 
       <footer className="mt-16 pt-6 border-t border-[#f4f4f5] text-center text-xs text-[#707079]">
-        <p>{clauses.footer.replace('{current_year}', currentYear.toString())}</p>
-        <p className="mt-2 font-semibold text-[#09090b]">Document confidentiel</p>
+        <p>© 2025 CAPFINFY. Tous droits réservés.</p>
+        <p className="font-semibold text-[#09090b]">Ce document est généré électroniquement et est confidentiel.</p>
       </footer>
     </div>
   );

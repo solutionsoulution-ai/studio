@@ -92,6 +92,10 @@ const InsuranceCertificateTemplate: React.FC<InsuranceCertificateTemplateProps> 
                     </div>
                 </div>
             </main>
+            <footer className="mt-16 pt-6 border-t border-[#f4f4f5] text-center text-xs text-[#707079]">
+                <p>© 2025 CAPFINFY. Tous droits réservés.</p>
+                <p className="font-semibold text-[#09090b]">Ce document est généré électroniquement et est confidentiel.</p>
+            </footer>
         </div>
     );
 };
