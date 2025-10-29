@@ -28,17 +28,16 @@ export function usePDFGenerator() {
         setIsLoading(true);
 
         try {
-            // Force html2canvas to capture the full scrollable height
             const canvas = await html2canvas(input, {
-                scale: 2,
+                scale: 3, // Augmentation de l'échelle pour une netteté maximale
                 useCORS: true,
                 logging: false,
-                // These are the key properties to capture full content
                 windowHeight: input.scrollHeight,
-                scrollY: -window.scrollY, 
+                scrollY: -window.scrollY,
             });
 
-            const imgData = canvas.toDataURL('image/jpeg', 0.98);
+            // Utilisation du format PNG pour une qualité sans perte
+            const imgData = canvas.toDataURL('image/png');
             const pdf = new jsPDF(orientation, 'mm', 'a4');
             
             const pdfWidth = pdf.internal.pageSize.getWidth();
@@ -53,15 +52,13 @@ export function usePDFGenerator() {
             let heightLeft = imgHeight;
             let position = 0;
 
-            // Add the first page
-            pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, imgHeight);
+            pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
             heightLeft -= pdfHeight;
 
-            // Add new pages if content is longer than one page
             while (heightLeft > 0) {
-                position = heightLeft - imgHeight; // Recalculate position for the new page
+                position = heightLeft - imgHeight;
                 pdf.addPage();
-                pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, imgHeight);
+                pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
                 heightLeft -= pdfHeight;
             }
 
