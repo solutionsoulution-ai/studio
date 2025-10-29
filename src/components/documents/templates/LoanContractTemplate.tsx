@@ -15,7 +15,7 @@ const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, l
 
     const replacePlaceholders = (text: string) => {
         return text
-            .replace(/{type_of_loan}/g, formData.type_of_loan || 'Prêt Personnel')
+            .replace(/{type_of_loan}/g, formData.type_of_loan || 'Prêt')
             .replace(/{contract_ref}/g, formData.contract_ref || '___________')
             .replace(/{contract_date}/g, formData.contract_date ? new Date(formData.contract_date).toLocaleDateString(lang) : '___________')
             .replace(/{borrower_name}/g, formData.borrower_name || '___________')
