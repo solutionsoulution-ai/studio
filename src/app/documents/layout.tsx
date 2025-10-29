@@ -8,7 +8,7 @@ export default function DocsLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col min-h-dvh bg-muted/20">
+    <div className="flex flex-col min-h-dvh">
       <SiteHeader />
       <main className="flex-1">{children}</main>
       <SiteFooter />

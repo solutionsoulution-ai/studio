@@ -26,39 +26,53 @@ const documentTemplates: { [key: string]: React.FC<any> } = {
   'document-vierge': BlankDocumentTemplate,
 };
 
-const DocumentGenerator = ({ documentType }: { documentType: string }) => {
-  const [formData, setFormData] = useState({});
-  const [lang, setLang] = useState<Language>('fr');
+const DocumentGeneratorContext = React.createContext<{
+    formData: any;
+    setFormData: React.Dispatch<React.SetStateAction<any>>;
+    lang: Language;
+    setLang: React.Dispatch<React.SetStateAction<Language>>;
+} | null>(null);
 
-  const handleFormChange = (data: any) => {
-    setFormData(data);
-  };
-  
-  const handleLanguageChange = (newLang: Language) => {
-      setLang(newLang);
-  }
-
-  const TemplateComponent = documentTemplates[documentType];
-
-  return (
-    <div className="container mx-auto py-8">
-      <div className="grid lg:grid-cols-2 gap-8 h-full">
-        <div className="lg:h-[calc(100vh-10rem)] lg:overflow-y-auto pr-4">
-          <DocumentForm 
-            documentType={documentType} 
-            onFormChange={handleFormChange}
-            onLanguageChange={handleLanguageChange}
-            initialLang={lang}
-          />
-        </div>
-        <div className="lg:h-[calc(100vh-10rem)]">
-          <DocumentPreview>
-            {TemplateComponent ? <TemplateComponent formData={formData} lang={lang} /> : <p>Modèle non trouvé</p>}
-          </DocumentPreview>
-        </div>
-      </div>
-    </div>
-  );
+const useDocumentGenerator = () => {
+    const context = React.useContext(DocumentGeneratorContext);
+    if (!context) {
+        throw new Error('useDocumentGenerator must be used within a DocumentGeneratorProvider');
+    }
+    return context;
 };
 
+const DocumentGeneratorProvider = ({ children }: { children: React.ReactNode }) => {
+    const [formData, setFormData] = useState({});
+    const [lang, setLang] = useState<Language>('fr');
+
+    return (
+        <DocumentGeneratorContext.Provider value={{ formData, setFormData, lang, setLang }}>
+            {children}
+        </DocumentGeneratorContext.Provider>
+    );
+};
+
+
+const DocumentGenerator = ({ documentType }: { documentType: string }) => {
+    return (
+        <DocumentGeneratorProvider>
+            <DocumentForm
+                documentType={documentType}
+            />
+        </DocumentGeneratorProvider>
+    );
+};
+
+DocumentGenerator.Preview = function DocumentGeneratorPreview({ documentType }: { documentType: string }) {
+    const { formData, lang } = useDocumentGenerator();
+    const TemplateComponent = documentTemplates[documentType];
+
+    return (
+        <DocumentPreview>
+            {TemplateComponent ? <TemplateComponent formData={formData} lang={lang} /> : <p>Modèle non trouvé</p>}
+        </DocumentPreview>
+    );
+}
+
+export { useDocumentGenerator };
 export default DocumentGenerator;

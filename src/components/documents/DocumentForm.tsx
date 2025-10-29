@@ -1,6 +1,6 @@
 
 "use client";
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm, FormProvider, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -14,16 +14,14 @@ import { usePDFGenerator } from '@/hooks/use-pdf-generator';
 import { Loader2 } from 'lucide-react';
 import { documentFields, DocumentField } from '@/lib/document-fields';
 import type { Language } from '@/data/documents/languages';
+import { useDocumentGenerator } from './DocumentGenerator';
 
 interface DocumentFormProps {
   documentType: string;
-  onFormChange: (data: any) => void;
-  onLanguageChange: (lang: Language) => void;
-  initialLang: Language;
 }
 
-const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, onFormChange, onLanguageChange, initialLang }) => {
-  const [lang, setLang] = useState<Language>(initialLang);
+const DocumentForm: React.FC<DocumentFormProps> = ({ documentType }) => {
+  const { setFormData, lang, setLang } = useDocumentGenerator();
   const { generatePDF, isLoading } = usePDFGenerator();
 
   const currentFields = documentFields[documentType as keyof typeof documentFields] || [];
@@ -64,19 +62,14 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, onFormChange,
 
   React.useEffect(() => {
     const subscription = watch((value) => {
-      onFormChange(value);
+      setFormData(value);
     });
     return () => subscription.unsubscribe();
-  }, [watch, onFormChange]);
+  }, [watch, setFormData]);
 
   const onSubmit = (data: any) => {
     generatePDF({ elementId: 'pdf-content', fileName: `${documentType}.pdf` });
   };
-  
-  const handleLangChange = (newLang: Language) => {
-      setLang(newLang);
-      onLanguageChange(newLang);
-  }
 
   const renderField = (field: DocumentField) => {
     return (
@@ -112,7 +105,7 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, onFormChange,
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="space-y-2">
               <Label>Langue du document</Label>
-               <Select onValueChange={handleLangChange} defaultValue={lang}>
+               <Select onValueChange={(v) => setLang(v as Language)} defaultValue={lang}>
                 <SelectTrigger>
                   <SelectValue placeholder="Sélectionner la langue" />
                 </SelectTrigger>
