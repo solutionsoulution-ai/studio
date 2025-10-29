@@ -1,4 +1,3 @@
-
 export const signatureData = {
     ceo: {
         name: "Alexandre Dubois",
@@ -7,7 +6,7 @@ export const signatureData = {
             en: "CEO",
             de: "Geschäftsführer",
         },
-        signatureUrl: "https://i.postimg.cc/RVTGjX3p/signature-alexandre-dubois.png"
+        signatureUrl: "https://i.postimg.cc/jq1H8SMP/signature-5.png"
     },
     legal: {
         name: "David Rousseau",
