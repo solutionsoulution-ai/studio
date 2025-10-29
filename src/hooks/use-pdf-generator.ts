@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import jsPDF from 'jspdf';
 import { signatureData } from '@/data/documents/signature-data';
 
@@ -18,6 +18,8 @@ async function getBase64Image(url: string): Promise<string> {
         return imageCache[url];
     }
     try {
+        // Use a CORS proxy if available, or ensure the image server allows cross-origin requests.
+        // For development, a simple proxy can be used. For production, the image host needs to be configured.
         const response = await fetch(url);
         const blob = await response.blob();
         return new Promise((resolve, reject) => {
@@ -32,29 +34,29 @@ async function getBase64Image(url: string): Promise<string> {
         });
     } catch (error) {
         console.error('Error fetching image for PDF:', error);
-        // Return a placeholder or handle the error as needed
         return '';
     }
 }
 
-// Pre-load signature images when the module is loaded
-Object.values(signatureData).forEach(signer => {
-    if (signer.signatureUrl) {
-        getBase64Image(signer.signatureUrl);
-    }
-});
-
-
 export function usePDFGenerator() {
     const [isLoading, setIsLoading] = useState(false);
+
+    // Pre-load signature images on component mount (client-side)
+    useEffect(() => {
+        Object.values(signatureData).forEach(signer => {
+            if (signer.signatureUrl) {
+                getBase64Image(signer.signatureUrl);
+            }
+        });
+    }, []);
 
     const generatePDF = async ({
         elementId,
         fileName = 'document.pdf',
     }: GeneratePDFParams) => {
-        const source = document.getElementById(elementId);
-        if (!source) {
-            console.error(`Element with id ${elementId} not found.`);
+        const input = document.getElementById(elementId);
+        if (!input) {
+            console.error(`Element with id '${elementId}' not found.`);
             return;
         }
 
@@ -67,96 +69,24 @@ export function usePDFGenerator() {
                 format: 'a4',
             });
 
-            const margin = { top: 15, right: 20, bottom: 20, left: 20 };
-            const pageHeight = pdf.internal.pageSize.getHeight();
-            const pageWidth = pdf.internal.pageSize.getWidth();
-            const usableWidth = pageWidth - margin.left - margin.right;
-            let y = margin.top;
-
-            const checkPageBreak = (elementHeight: number) => {
-                if (y + elementHeight > pageHeight - margin.bottom) {
-                    pdf.addPage();
-                    y = margin.top;
-                }
-            };
-            
-            const processNode = async (node: Element) => {
-                const styles = window.getComputedStyle(node);
-                const fontSize = parseFloat(styles.fontSize) * 0.264583; // px to mm
-                const color = styles.color;
-                const fontWeight = styles.fontWeight;
-
-                pdf.setFontSize(fontSize);
-                pdf.setTextColor(color);
-                
-                if (fontWeight === 'bold' || parseInt(fontWeight) >= 700) {
-                    pdf.setFont('helvetica', 'bold');
-                } else if (styles.fontStyle === 'italic') {
-                     pdf.setFont('helvetica', 'italic');
-                } else {
-                    pdf.setFont('helvetica', 'normal');
-                }
-
-                if (node.nodeName === 'IMG') {
-                    const img = node as HTMLImageElement;
-                    const base64Image = await getBase64Image(img.src);
-                    if (base64Image) {
-                        const imgWidth = img.width * 0.264583;
-                        const imgHeight = img.height * 0.264583;
-                        checkPageBreak(imgHeight);
-                        pdf.addImage(base64Image, 'PNG', margin.left, y, imgWidth, imgHeight);
-                        y += imgHeight + 4; // Add some margin
-                    }
-                    return;
-                }
-
-                const text = (node as HTMLElement).innerText || '';
-                const lines = pdf.splitTextToSize(text, usableWidth);
-                const textHeight = lines.length * fontSize * 0.5;
-
-                checkPageBreak(textHeight);
-
-                pdf.text(lines, margin.left, y, { align: styles.textAlign as any });
-                y += textHeight + (parseFloat(styles.marginBottom) * 0.264583);
-            };
-
-            const traverseNodes = async (element: Element) => {
-                for (const childNode of Array.from(element.children)) {
-                     // We skip the footer because we draw it manually at the end of each page
-                    if (childNode.tagName.toLowerCase() === 'footer') {
-                        continue;
-                    }
-                    await processNode(childNode);
-                    if (childNode.children.length > 0) {
-                       await traverseNodes(childNode);
-                    }
-                }
-            }
-            
-            // Find the main content area, excluding header/footer if possible
-            const contentArea = source.querySelector('main');
-            if (contentArea) {
-                 await traverseNodes(contentArea);
-            } else {
-                 await traverseNodes(source);
-            }
-
-            // Draw footer on all pages
-            const pageCount = pdf.internal.getNumberOfPages();
-            for (let i = 1; i <= pageCount; i++) {
-                pdf.setPage(i);
-                const footerText1 = "© 2025 CAPFINFY. Tous droits réservés.";
-                const footerText2 = "Ce document est généré électroniquement et est confidentiel.";
-                pdf.setFontSize(9);
-                pdf.setTextColor('#707079');
-                pdf.text(footerText1, pageWidth / 2, pageHeight - 12, { align: 'center' });
-                pdf.text(footerText2, pageWidth / 2, pageHeight - 8, { align: 'center' });
-            }
-
-            pdf.save(fileName);
+            // Use html-to-pdfmake or a similar library for better results if direct html render has issues.
+            // For now, let's use the built-in jspdf html method.
+             await pdf.html(input, {
+                callback: function (doc) {
+                    doc.save(fileName);
+                },
+                x: 0,
+                y: 0,
+                width: 210, // A4 width in mm
+                windowWidth: input.scrollWidth,
+                html2canvas: {
+                    scale: 2.5, 
+                    useCORS: true,
+                },
+            });
 
         } catch (error) {
-            console.error("Error generating vector PDF:", error);
+            console.error("Error generating PDF:", error);
         } finally {
             setIsLoading(false);
         }
