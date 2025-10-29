@@ -10,7 +10,6 @@ interface GeneratePDFParams {
     fileName?: string;
 }
 
-// Function to fetch and cache base64 image data
 const imageCache: { [key: string]: string } = {};
 
 async function getBase64Image(url: string): Promise<string> {
@@ -18,12 +17,11 @@ async function getBase64Image(url: string): Promise<string> {
         return imageCache[url];
     }
     try {
-        // Fetch the image with 'no-cors' mode to bypass browser security restrictions
-        const response = await fetch(url, { mode: 'no-cors' });
-        
-        // no-cors mode results in an opaque response, so we can't check response.ok
-        // We proceed assuming the fetch was successful, and handle blob conversion errors if any.
-
+        // Use our local image proxy to bypass CORS issues
+        const response = await fetch(`/api/image-proxy?url=${encodeURIComponent(url)}`);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch image via proxy: ${response.statusText}`);
+        }
         const blob = await response.blob();
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -40,16 +38,13 @@ async function getBase64Image(url: string): Promise<string> {
         });
     } catch (error) {
         console.error('Error fetching or processing image for PDF:', error);
-        // Return a placeholder or empty string to avoid breaking the PDF generation
         return ''; 
     }
 }
 
-
 export function usePDFGenerator() {
     const [isLoading, setIsLoading] = useState(false);
 
-    // Pre-load signature images on component mount (client-side)
     useEffect(() => {
         Object.values(signatureData).forEach(signer => {
             if (signer.signatureUrl) {
@@ -71,7 +66,7 @@ export function usePDFGenerator() {
         setIsLoading(true);
 
         try {
-            const pdf = new jsPDF('p', 'mm', 'a4');
+            const pdf = new jsPDF('p', 'mm', 'a4', true);
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = pdf.internal.pageSize.getHeight();
             const margin = 15;
@@ -83,17 +78,22 @@ export function usePDFGenerator() {
                 const tagName = node.tagName.toLowerCase();
                 const text = node.innerText?.trim();
 
-                if (y > pdfHeight - margin) { // Check for page break before adding content
+                const isVisible = styles.display !== 'none' && styles.visibility !== 'hidden' && parseFloat(styles.opacity) > 0;
+                if (!isVisible) {
+                    return y;
+                }
+
+                if (y > pdfHeight - margin - 20) { // Add a buffer
                     pdf.addPage();
                     y = margin;
                 }
 
-                if (text) {
-                    const fontSize = parseFloat(styles.fontSize) * 0.75; // Convert px to pt
+                if (text && tagName !== 'button' && tagName !== 'label' && tagName !== 'select') {
+                    const fontSize = parseFloat(styles.fontSize) * 0.75;
                     const isBold = parseInt(styles.fontWeight) > 500;
                     
                     pdf.setFontSize(fontSize);
-                    pdf.setFont(isBold ? 'Helvetica' : 'Helvetica', isBold ? 'bold' : 'normal');
+                    pdf.setFont('Helvetica', isBold ? 'bold' : 'normal');
 
                     if (styles.color) {
                       const rgb = styles.color.match(/\d+/g);
@@ -101,7 +101,7 @@ export function usePDFGenerator() {
                     }
 
                     const splitText = pdf.splitTextToSize(text, contentWidth);
-                    pdf.text(splitText, x, y);
+                    pdf.text(splitText, currentX, y);
                     y += pdf.getTextDimensions(splitText).h + (parseFloat(styles.marginBottom) * 0.264);
                 }
 
@@ -109,21 +109,21 @@ export function usePDFGenerator() {
                     const img = node as HTMLImageElement;
                     const base64Image = await getBase64Image(img.src);
                     if (base64Image) {
-                         const imgWidth = img.width * 0.264; // mm
-                         const imgHeight = img.height * 0.264; // mm
+                         const imgWidth = img.width * 0.264 * 0.5; // Scale down image
+                         const imgHeight = img.height * 0.264 * 0.5;
                          
                          if (y + imgHeight > pdfHeight - margin) {
                             pdf.addPage();
                             y = margin;
                          }
-                         pdf.addImage(base64Image, 'PNG', x, y, imgWidth, imgHeight);
+                         pdf.addImage(base64Image, 'PNG', currentX, y, imgWidth, imgHeight);
                          y += imgHeight + 5;
                     }
                 }
                 
                 for (const child of Array.from(node.children)) {
-                    y = await processNode(child as HTMLElement, x, y);
-                     if (y > pdfHeight - margin) {
+                    y = await processNode(child as HTMLElement, currentX, y);
+                     if (y > pdfHeight - margin - 20) {
                         pdf.addPage();
                         y = margin;
                     }
@@ -132,11 +132,9 @@ export function usePDFGenerator() {
                 return y;
             };
 
-            // Simplified approach - just iterate direct children for now
-            let x = margin;
             let y = margin;
             for (const child of Array.from(input.children)) {
-                 y = await processNode(child as HTMLElement, x, y);
+                 y = await processNode(child as HTMLElement, margin, y);
             }
             
             pdf.save(fileName);
