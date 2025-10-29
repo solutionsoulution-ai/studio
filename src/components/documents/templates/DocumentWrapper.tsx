@@ -1,5 +1,4 @@
 import React from 'react';
-import { Landmark } from 'lucide-react';
 
 interface DocumentWrapperProps {
   children: React.ReactNode;
@@ -35,7 +34,6 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
             }}
         >
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <Landmark style={{ color: 'hsl(215, 39%, 29%)', width: '28px', height: '28px' }} />
                 <span style={{ fontSize: '24pt', fontWeight: 'bold', color: 'hsl(215, 39%, 29%)' }}>Capfinfy</span>
             </div>
             <div style={{ textAlign: 'right', fontSize: '9pt', color: 'hsl(220, 8.9%, 46.1%)' }}>
