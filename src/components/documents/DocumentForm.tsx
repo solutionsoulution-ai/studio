@@ -81,7 +81,7 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, onFormChange,
   const renderField = (field: DocumentField) => {
     return (
       <div key={field.name} className="space-y-2">
-        <Label htmlFor={field.name}>{field.label[lang]}</Label>
+        <Label htmlFor={field.name}>{field.label['fr']}</Label>
         <Controller
           name={field.name}
           control={control}
@@ -89,9 +89,9 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, onFormChange,
           render={({ field: controllerField, fieldState }) => (
             <>
               {field.type === 'textarea' ? (
-                <Textarea {...controllerField} id={field.name} placeholder={field.placeholder?.[lang]} />
+                <Textarea {...controllerField} id={field.name} placeholder={field.placeholder?.['fr']} />
               ) : (
-                <Input {...controllerField} id={field.name} type={field.type} placeholder={field.placeholder?.[lang]} />
+                <Input {...controllerField} id={field.name} type={field.type} placeholder={field.placeholder?.['fr']} />
               )}
               {fieldState.error && <p className="text-sm text-red-500">{fieldState.error.message}</p>}
             </>
@@ -111,7 +111,7 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, onFormChange,
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="space-y-2">
-              <Label>Langue</Label>
+              <Label>Langue du document</Label>
                <Select onValueChange={handleLangChange} defaultValue={lang}>
                 <SelectTrigger>
                   <SelectValue placeholder="Sélectionner la langue" />
