@@ -18,9 +18,12 @@ async function getBase64Image(url: string): Promise<string> {
         return imageCache[url];
     }
     try {
-        // Use a CORS proxy if available, or ensure the image server allows cross-origin requests.
-        // For development, a simple proxy can be used. For production, the image host needs to be configured.
-        const response = await fetch(url);
+        // Use a CORS proxy to bypass browser security restrictions
+        const proxyUrl = `https://images.weserv.nl/?url=${encodeURIComponent(url)}`;
+        const response = await fetch(proxyUrl);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch image: ${response.statusText}`);
+        }
         const blob = await response.blob();
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -34,7 +37,8 @@ async function getBase64Image(url: string): Promise<string> {
         });
     } catch (error) {
         console.error('Error fetching image for PDF:', error);
-        return '';
+        // Return a placeholder or empty string to avoid breaking the PDF generation
+        return ''; 
     }
 }
 
@@ -67,23 +71,48 @@ export function usePDFGenerator() {
                 orientation: 'p',
                 unit: 'mm',
                 format: 'a4',
+                putOnlyUsedFonts: true,
+                floatPrecision: 16
             });
+            
+            const processNode = async (node: Element, currentX: number, currentY: number) => {
+                // Implement logic to parse different HTML nodes and add them to the PDF
+                // This is a simplified example
+                const styles = window.getComputedStyle(node);
+                const tagName = node.tagName.toLowerCase();
 
-            // Use html-to-pdfmake or a similar library for better results if direct html render has issues.
-            // For now, let's use the built-in jspdf html method.
-             await pdf.html(input, {
-                callback: function (doc) {
-                    doc.save(fileName);
-                },
-                x: 0,
-                y: 0,
-                width: 210, // A4 width in mm
-                windowWidth: input.scrollWidth,
-                html2canvas: {
-                    scale: 2.5, 
-                    useCORS: true,
-                },
-            });
+                if (tagName === 'h1' || tagName === 'h2' || tagName === 'h3' || tagName === 'p' || tagName === 'li') {
+                    const fontSize = parseFloat(styles.fontSize);
+                    pdf.setFontSize(fontSize * 0.75); // Convert px to pt
+                    const text = (node as HTMLElement).innerText;
+                    
+                    const splitText = pdf.splitTextToSize(text, 180);
+                    pdf.text(splitText, currentX, currentY);
+                    currentY += (splitText.length * fontSize * 0.35);
+                } else if (tagName === 'img') {
+                    const img = node as HTMLImageElement;
+                    const base64Image = await getBase64Image(img.src);
+                    if (base64Image) {
+                         pdf.addImage(base64Image, 'PNG', currentX, currentY, img.width * 0.26, img.height * 0.26);
+                         currentY += (img.height * 0.26) + 5;
+                    }
+                }
+
+                 // Recursively process children
+                 for (let i = 0; i < node.children.length; i++) {
+                    currentY = await processNode(node.children[i], currentX, currentY);
+                    if (currentY > 280) { // Check for page break
+                        pdf.addPage();
+                        currentY = 10;
+                    }
+                }
+
+                return currentY;
+            };
+
+            await processNode(input, 15, 15);
+
+            pdf.save(fileName);
 
         } catch (error) {
             console.error("Error generating PDF:", error);
