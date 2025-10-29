@@ -1,9 +1,8 @@
-
 import React from 'react';
 import Image from 'next/image';
-import { Landmark } from 'lucide-react';
 import { insuranceCertificateClauses } from '@/data/documents/insurance-certificate-clauses';
 import { signatureData } from '@/data/documents/signature-data';
+import DocumentWrapper from './DocumentWrapper';
 
 interface InsuranceCertificateTemplateProps {
     formData: any;
@@ -30,73 +29,77 @@ const InsuranceCertificateTemplate: React.FC<InsuranceCertificateTemplateProps> 
     };
 
     return (
-        <div className="bg-white text-[#09090b] font-serif p-8 max-w-4xl mx-auto border-t-8 border-[#3d5afe] shadow-lg">
-            <header className="text-center mb-10">
-                <p className="text-xs text-[#707079]">{clauses.header.line1}</p>
-                <p className="text-xs text-[#707079] font-semibold">{clauses.header.line2}</p>
-            </header>
-
-            <main className="text-sm">
-                <div className="text-center mb-8">
-                    <h2 className="text-2xl font-bold uppercase text-[#09090b]">{replacePlaceholders(clauses.title)}</h2>
-                    <p className="text-xs text-[#707079] mt-2">{replacePlaceholders(clauses.reference)} // {replacePlaceholders(clauses.issue_date)}</p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-x-8 gap-y-4 mb-8 text-xs">
-                    <div className="bg-[#f4f4f5] p-3 rounded">
-                        <h4 className="font-bold underline mb-2">{clauses.insured.title}</h4>
-                        <p>Nom et Prénom : {formData.insured_name || '___________'}</p>
-                        <p>Date de Naissance : {replacePlaceholders('{insured_dob}')}</p>
-                        <p>Adresse : {formData.insured_address || '___________'}</p>
-                        <p>N° Pièce d'identité : {formData.insured_id || '___________'}</p>
+        <DocumentWrapper
+            title={replacePlaceholders(clauses.title)}
+            department={clauses.header.line2}
+            docRef={replacePlaceholders(clauses.reference)}
+            docDate={replacePlaceholders(clauses.issue_date)}
+        >
+            <section className="mb-6">
+                <div className="grid grid-cols-2 gap-4 text-xs">
+                    <div className="bg-slate-100 p-3 rounded-md">
+                        <h3 className="font-bold underline mb-2">{clauses.insured.title}</h3>
+                        <p>Nom et Prénom: {formData.insured_name || '___________'}</p>
+                        <p>Date de Naissance: {replacePlaceholders('{insured_dob}')}</p>
+                        <p>Adresse: {formData.insured_address || '___________'}</p>
+                        <p>ID: {formData.insured_id || '___________'}</p>
                     </div>
-                    <div className="bg-[#f4f4f5] p-3 rounded">
-                        <h4 className="font-bold underline mb-2">{clauses.beneficiary.title}</h4>
+                     <div className="bg-slate-100 p-3 rounded-md">
+                        <h3 className="font-bold underline mb-2">{clauses.beneficiary.title}</h3>
                         <p>{replacePlaceholders(clauses.beneficiary.content)}</p>
                     </div>
                 </div>
+            </section>
+            
+            <section className="space-y-4 text-sm leading-relaxed">
+                <article>
+                    <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{replacePlaceholders(clauses.object_title)}</h3>
+                    <p>{replacePlaceholders(clauses.object_content)}</p>
+                </article>
 
-                <h4 className="font-bold uppercase text-[#3d5afe]">{clauses.object_title}</h4>
-                <p className="mb-6">{replacePlaceholders(clauses.object_content)}</p>
-
-                <h4 className="font-bold uppercase text-[#3d5afe]">{clauses.loan_details.title}</h4>
-                <div className="mb-6 text-xs grid grid-cols-2 gap-x-8 gap-y-2 bg-[#f4f4f5] p-3 rounded">
-                    <p>Nature du prêt : {formData.loan_type || '___________'}</p>
-                    <p>Numéro du prêt associé : {formData.loan_contract_ref || '___________'}</p>
-                    <p>Montant du capital assuré : {replacePlaceholders('{insured_capital}')}</p>
-                    <p>Durée de la couverture d'assurance : {formData.coverage_duration || '___________'} mois</p>
-                </div>
-
-                <h4 className="font-bold uppercase text-[#3d5afe]">{clauses.guarantees.title}</h4>
-                <p className="text-xs italic mb-2">{clauses.guarantees.intro}</p>
-                <ul className="list-disc pl-5 mb-6 space-y-1 text-xs">
-                    <li>{clauses.guarantees.death}</li>
-                    <li>{clauses.guarantees.ptia}</li>
-                    <li>{clauses.guarantees.itt}</li>
-                </ul>
+                <article>
+                    <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{clauses.loan_details.title}</h3>
+                    <div className="text-xs bg-slate-100 p-3 rounded-md grid grid-cols-2 gap-x-4 gap-y-1">
+                        <p>{replacePlaceholders(clauses.loan_details.nature)}</p>
+                        <p>{replacePlaceholders(clauses.loan_details.ref)}</p>
+                        <p>{replacePlaceholders(clauses.loan_details.amount)}</p>
+                        <p>{replacePlaceholders(clauses.loan_details.duration)}</p>
+                    </div>
+                </article>
+                 
+                <article>
+                    <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{clauses.guarantees.title}</h3>
+                    <p className="text-xs italic mb-2">{clauses.guarantees.intro}</p>
+                    <ul className="list-disc list-inside space-y-1 text-xs">
+                        <li>{clauses.guarantees.death}</li>
+                        <li>{clauses.guarantees.ptia}</li>
+                        <li>{clauses.guarantees.itt}</li>
+                    </ul>
+                </article>
                 
-                <h4 className="font-bold uppercase text-[#3d5afe]">{clauses.premium.title}</h4>
-                <p className="mb-6">{replacePlaceholders(clauses.premium.content)}</p>
+                <article>
+                    <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{clauses.premium.title}</h3>
+                    <p>{replacePlaceholders(clauses.premium.content)}</p>
+                </article>
+                
+                <article>
+                    <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{clauses.validity.title}</h3>
+                    <p>{replacePlaceholders(clauses.validity.content)}</p>
+                </article>
 
-                <h4 className="font-bold uppercase text-[#3d5afe]">{clauses.validity.title}</h4>
-                <p className="mb-6">{replacePlaceholders(clauses.validity.content)}</p>
+            </section>
 
-
-                <div className="text-right mt-16">
-                    <div className="inline-block text-center">
-                        {signer.signatureUrl && <Image src={signer.signatureUrl} alt={`Signature de ${signer.name}`} width={150} height={50} className="mx-auto" />}
-                        <div className="border-t-2 border-[#707079] pt-2 mt-2">
-                            <p className="font-semibold text-sm">{signer.name}</p>
-                            <p className="text-xs text-[#707079]">{signer.title[lang]}</p>
-                        </div>
+             <div className="mt-16 pt-8 text-right">
+                 <div className="inline-block text-center">
+                    {signer.signatureUrl && <Image src={signer.signatureUrl} alt={`Signature de ${signer.name}`} width={150} height={50} className="mx-auto" />}
+                    <div className="border-t border-slate-400 pt-2 mt-2 text-xs">
+                         <p className="font-bold">{signer.name}</p>
+                         <p className="text-[hsl(220,8.9%,46.1%)]">{signer.title[lang]}</p>
                     </div>
                 </div>
-            </main>
-            <footer className="mt-16 pt-6 border-t border-[#f4f4f5] text-center text-xs text-[#707079]">
-                <p>© 2025 CAPFINFY. Tous droits réservés.</p>
-                <p className="font-semibold text-[#09090b]">Ce document est généré électroniquement et est confidentiel.</p>
-            </footer>
-        </div>
+            </div>
+
+        </DocumentWrapper>
     );
 };
 

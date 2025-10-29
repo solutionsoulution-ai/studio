@@ -1,9 +1,8 @@
-
 import React from 'react';
 import Image from 'next/image';
-import { Landmark } from 'lucide-react';
 import { loanContractClauses } from '@/data/documents/loan-contract-clauses';
 import { signatureData } from '@/data/documents/signature-data';
+import DocumentWrapper from './DocumentWrapper';
 
 interface LoanContractTemplateProps {
     formData: any;
@@ -35,100 +34,79 @@ const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, l
     };
 
     return (
-        <div className="bg-white text-[#09090b] font-serif p-8 max-w-4xl mx-auto border-t-8 border-[#3d5afe] shadow-lg">
-            <header className="text-center mb-10">
-                <p className="text-xs text-[#707079]">{clauses.header.line1}</p>
-                <p className="text-xs text-[#707079] font-semibold">{clauses.header.line2}</p>
-            </header>
+        <DocumentWrapper
+            title={replacePlaceholders(clauses.title)}
+            department={clauses.header.line2}
+            docRef={replacePlaceholders(clauses.reference)}
+            docDate={replacePlaceholders(clauses.location_and_date)}
+        >
+             <section className="mb-6">
+                 <h2 className="text-sm font-bold uppercase text-[hsl(215,39%,29%)] mb-3">{clauses.parties.title}</h2>
+                 <div className="grid grid-cols-2 gap-6 text-xs">
+                     <div>
+                         <h3 className="font-semibold underline mb-1">{clauses.parties.lender_label}</h3>
+                         <p>Capfinfy</p>
+                         <p>1 Place de la Bourse, 69002 Lyon, France</p>
+                     </div>
+                     <div>
+                         <h3 className="font-semibold underline mb-1">{clauses.parties.borrower_label}</h3>
+                         <p>Nom: {formData.borrower_name || '___________'}</p>
+                         <p>Adresse: {formData.borrower_address || '___________'}</p>
+                         <p>ID: {formData.borrower_id || '___________'}</p>
+                     </div>
+                 </div>
+            </section>
 
-            <main className="text-sm">
-                <div className="text-center mb-8">
-                    <h2 className="text-2xl font-bold uppercase text-[#09090b]">{replacePlaceholders(clauses.title)}</h2>
-                    <p className="text-xs text-[#707079] mt-2">{replacePlaceholders(clauses.reference)} // {replacePlaceholders(clauses.location_and_date)}</p>
-                </div>
-                
-                <h3 className="font-bold uppercase mb-4 text-[#3d5afe]">{clauses.parties.title}</h3>
-                <div className="grid grid-cols-2 gap-8 mb-8 text-xs">
-                    <div>
-                        <h4 className="font-semibold underline mb-2">{clauses.parties.lender_label}</h4>
-                        <p>Capfinfy, société intermédiaire</p>
-                        <p>1 Place de la Bourse, 69002 Lyon, France</p>
+             <section className="space-y-4 text-sm leading-relaxed">
+                <article>
+                    <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{clauses.articles.object.title}</h3>
+                    <p>{replacePlaceholders(clauses.articles.object.content)}</p>
+                </article>
+                <article>
+                    <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{clauses.articles.characteristics.title}</h3>
+                    <ul className="text-xs bg-slate-100 p-3 rounded-md space-y-1">
+                        <li>{replacePlaceholders(clauses.articles.characteristics.amount)}</li>
+                        <li>{replacePlaceholders(clauses.articles.characteristics.taeg)}</li>
+                        <li>{replacePlaceholders(clauses.articles.characteristics.term)}</li>
+                        <li>{replacePlaceholders(clauses.articles.characteristics.availability)}</li>
+                    </ul>
+                </article>
+                <article>
+                    <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{clauses.articles.repayment.title}</h3>
+                    <p>{replacePlaceholders(clauses.articles.repayment.intro)}</p>
+                    <div className="text-xs bg-slate-100 p-3 rounded-md mt-2 space-y-1">
+                        <p>{replacePlaceholders(clauses.articles.repayment.monthly_payment)}</p>
+                        <p>{replacePlaceholders(clauses.articles.repayment.total_cost)}</p>
+                        <p className="font-semibold">{replacePlaceholders(clauses.articles.repayment.total_due)}</p>
                     </div>
-                    <div>
-                        <h4 className="font-semibold underline mb-2">{clauses.parties.borrower_label}</h4>
-                        <p>Nom : {formData.borrower_name || '___________'}</p>
-                        <p>Adresse : {formData.borrower_address || '___________'}</p>
-                        <p>N° Pièce d'identité : {formData.borrower_id || '___________'}</p>
-                    </div>
-                </div>
-
-                <div className="space-y-4 leading-relaxed">
-                    <div>
-                        <h4 className="font-bold uppercase text-[#3d5afe]">{clauses.articles.object.title}</h4>
-                        <p>{replacePlaceholders(clauses.articles.object.content)}</p>
-                    </div>
-                    <div>
-                        <h4 className="font-bold uppercase text-[#3d5afe]">{clauses.articles.characteristics.title}</h4>
-                        <ul className="list-disc pl-5 text-xs bg-[#f4f4f5] p-3 rounded">
-                            <li>{replacePlaceholders(clauses.articles.characteristics.amount)}</li>
-                            <li>{replacePlaceholders(clauses.articles.characteristics.taeg)}</li>
-                            <li>{replacePlaceholders(clauses.articles.characteristics.term)}</li>
-                            <li>{replacePlaceholders(clauses.articles.characteristics.availability)}</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 className="font-bold uppercase text-[#3d5afe]">{clauses.articles.repayment.title}</h4>
-                        <p>{replacePlaceholders(clauses.articles.repayment.intro)}</p>
-                        <ul className="list-disc pl-5 text-xs bg-[#f4f4f5] p-3 rounded mt-2">
-                             <li>{replacePlaceholders(clauses.articles.repayment.monthly_payment)}</li>
-                             <li>{replacePlaceholders(clauses.articles.repayment.total_cost)}</li>
-                             <li>{replacePlaceholders(clauses.articles.repayment.total_due)}</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 className="font-bold uppercase text-[#3d5afe]">{clauses.articles.withdrawal.title}</h4>
-                        <p>{replacePlaceholders(clauses.articles.withdrawal.content)}</p>
-                    </div>
-                    <div>
-                        <h4 className="font-bold uppercase text-[#3d5afe]">{clauses.articles.default.title}</h4>
-                        <p>{replacePlaceholders(clauses.articles.default.content)}</p>
-                    </div>
-                    <div>
-                        <h4 className="font-bold uppercase text-[#3d5afe]">{clauses.articles.insurance.title}</h4>
-                        <p>{replacePlaceholders(clauses.articles.insurance.content)}</p>
-                    </div>
-                    <div>
-                        <h4 className="font-bold uppercase text-[#3d5afe]">{clauses.articles.data.title}</h4>
-                        <p>{replacePlaceholders(clauses.articles.data.content)}</p>
-                    </div>
-                    <div>
-                        <h4 className="font-bold uppercase text-[#3d5afe]">{clauses.articles.law.title}</h4>
-                        <p>{replacePlaceholders(clauses.articles.law.content)}</p>
+                </article>
+                 {Object.entries(clauses.articles).slice(3).map(([key, article]: [string, any]) => (
+                    <article key={key}>
+                        <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{article.title}</h3>
+                        <p>{replacePlaceholders(article.content)}</p>
+                    </article>
+                ))}
+            </section>
+            
+            <p className="text-center mt-8 text-xs">{clauses.signature_preamble}</p>
+            <div className="mt-10 pt-8 grid grid-cols-2 gap-16 text-xs">
+                <div className="text-center">
+                    <div className="h-20"></div>
+                    <div className="border-t border-slate-400 pt-2">
+                        <p className="font-bold">{clauses.parties.borrower_label}</p>
+                        <p className="text-[hsl(220,8.9%,46.1%)]">Lu et approuvé</p>
                     </div>
                 </div>
-
-                <p className="text-center mt-12 text-xs">{clauses.signature_preamble}</p>
-
-                <div className="grid grid-cols-2 gap-16 mt-8 pt-8">
-                    <div className="text-center">
-                         <div className="border-t-2 border-[#707079] pt-2 mt-20">
-                             <p className="font-semibold">{clauses.parties.borrower_label}</p>
-                        </div>
-                    </div>
-                    <div className="text-center">
-                        {signer.signatureUrl && <Image src={signer.signatureUrl} alt={`Signature de ${signer.name}`} width={150} height={50} className="mx-auto" />}
-                        <div className="border-t-2 border-[#707079] pt-2 mt-2">
-                            <p className="font-semibold">{clauses.parties.lender_label}</p>
-                            <p className="text-xs text-[#707079] mt-2">{signer.name}, {signer.title[lang]}</p>
-                        </div>
+                <div className="text-center">
+                    {signer.signatureUrl && <Image src={signer.signatureUrl} alt={`Signature de ${signer.name}`} width={150} height={50} className="mx-auto" />}
+                    <div className="border-t border-slate-400 pt-2">
+                         <p className="font-bold">{clauses.parties.lender_label}</p>
+                         <p className="text-[hsl(220,8.9%,46.1%)]">{signer.name}, {signer.title[lang]}</p>
                     </div>
                 </div>
-            </main>
-            <footer className="mt-16 pt-6 border-t border-[#f4f4f5] text-center text-xs text-[#707079]">
-                <p>© 2025 CAPFINFY. Tous droits réservés.</p>
-                <p className="font-semibold text-[#09090b]">Ce document est généré électroniquement et est confidentiel.</p>
-            </footer>
-        </div>
+            </div>
+
+        </DocumentWrapper>
     );
 };
 

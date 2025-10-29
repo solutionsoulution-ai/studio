@@ -1,7 +1,6 @@
-
 import React from 'react';
-import { Landmark } from 'lucide-react';
 import { invoiceClauses } from '@/data/documents/invoice-clauses';
+import DocumentWrapper from './DocumentWrapper';
 
 interface InvoiceTemplateProps {
     formData: any;
@@ -19,87 +18,83 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ formData, lang }) => 
     const dueDate = formData.date ? new Date(new Date(formData.date).setDate(new Date(formData.date).getDate() + 30)).toLocaleDateString(lang) : '___________';
 
     return (
-        <div className="bg-white text-[#09090b] font-sans p-8 max-w-4xl mx-auto border border-[#f4f4f5] shadow-lg">
-            <header className="flex justify-between items-start mb-16 pb-8 border-b-2 border-[#3d5afe]">
+        <DocumentWrapper 
+            title={clauses.title}
+            hideDepartment
+        >
+            <header className="flex justify-between items-start mb-8 pb-4">
                 <div>
-                    <div className="flex items-center mb-4">
-                        <Landmark className="h-8 w-8 text-[#3d5afe] mr-3" />
-                        <h1 className="text-3xl font-bold text-[#09090b]">Capfinfy</h1>
-                    </div>
-                    <div className="text-xs text-[#707079]">
-                        <p>1 Place de la Bourse, 69002 Lyon, France</p>
-                        <p>RCS Lyon 891 785 359 | N° ORIAS : 21008679</p>
-                    </div>
+                     <h2 className="text-2xl font-bold uppercase text-[hsl(215,39%,29%)]">{clauses.title}</h2>
+                     <p className="text-xs text-slate-500">
+                         {clauses.invoice_number_label} {formData.ref || '___________'}
+                     </p>
                 </div>
-                <div className="text-right">
-                    <h2 className="text-4xl font-bold text-[#3d5afe] uppercase">{clauses.title}</h2>
-                    <div className="mt-2 text-sm text-[#707079]">
-                        <p>{clauses.invoice_number_label} {formData.ref || '___________'}</p>
-                        <p>{clauses.date_label} {formData.date ? new Date(formData.date).toLocaleDateString(lang) : '___________'}</p>
-                        <p className="font-bold text-[#09090b]">{clauses.due_date_label} {dueDate}</p>
-                    </div>
-                </div>
+                 <div className="text-right text-xs">
+                     <p><span className="font-bold">{clauses.date_label}</span> {formData.date ? new Date(formData.date).toLocaleDateString(lang) : '___________'}</p>
+                     <p><span className="font-bold">{clauses.due_date_label}</span> {dueDate}</p>
+                 </div>
             </header>
-
-            <main>
-                <div className="mb-12">
-                    <h3 className="text-sm font-semibold uppercase text-[#707079] mb-2">{clauses.bill_to_label}</h3>
-                    <p className="font-bold text-lg text-[#09090b]">{formData.client_name || '___________'}</p>
-                    <p className="text-[#707079]">{formData.client_address || '___________'}</p>
-                </div>
-                
-                <table className="w-full mb-12 text-sm">
-                    <thead className="bg-[#f4f4f5]">
+            
+            <section className="mb-8">
+                 <h3 className="text-xs font-bold uppercase text-slate-500 mb-1">{clauses.bill_to_label}</h3>
+                 <p className="font-bold">{formData.client_name || '___________'}</p>
+                 <p className="text-sm text-slate-600 whitespace-pre-line">{formData.client_address || '___________'}</p>
+            </section>
+            
+            <section>
+                 <table className="w-full text-sm">
+                    <thead className="bg-slate-100">
                         <tr>
-                            <th className="p-3 text-left font-semibold text-[#09090b] uppercase">{clauses.table_headers.description}</th>
-                            <th className="p-3 text-center font-semibold text-[#09090b] uppercase">{clauses.table_headers.quantity}</th>
-                            <th className="p-3 text-right font-semibold text-[#09090b] uppercase">{clauses.table_headers.unit_price}</th>
-                            <th className="p-3 text-right font-semibold text-[#09090b] uppercase">{clauses.table_headers.amount}</th>
+                            <th className="p-2 text-left font-bold text-xs uppercase">{clauses.table_headers.description}</th>
+                            <th className="p-2 w-20 text-center font-bold text-xs uppercase">{clauses.table_headers.quantity}</th>
+                            <th className="p-2 w-32 text-right font-bold text-xs uppercase">{clauses.table_headers.unit_price}</th>
+                            <th className="p-2 w-32 text-right font-bold text-xs uppercase">{clauses.table_headers.amount}</th>
                         </tr>
                     </thead>
                     <tbody>
                         {items.map((item: any, index: number) => (
-                            <tr key={index} className="border-b border-[#f4f4f5]">
-                                <td className="p-3">{item.description || '___________'}</td>
-                                <td className="p-3 text-center">{item.quantity || 1}</td>
-                                <td className="p-3 text-right">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(Number(item.unit_price) || 0)}</td>
-                                <td className="p-3 text-right">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format((Number(item.quantity) || 1) * (Number(item.unit_price) || 0))}</td>
+                            <tr key={index} className="border-b border-slate-200">
+                                <td className="p-2">{item.description || '___________'}</td>
+                                <td className="p-2 text-center">{item.quantity || 1}</td>
+                                <td className="p-2 text-right">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(Number(item.unit_price) || 0)}</td>
+                                <td className="p-2 text-right font-semibold">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format((Number(item.quantity) || 1) * (Number(item.unit_price) || 0))}</td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
-                
-                <div className="flex justify-end mb-12">
-                    <div className="w-full max-w-xs text-sm">
-                        <div className="flex justify-between py-2 border-b border-[#f4f4f5]">
-                            <span className="text-[#707079]">{clauses.subtotal_label}:</span>
-                            <span className="font-semibold">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(subtotal)}</span>
-                        </div>
-                        <div className="flex justify-between py-2 border-b border-[#f4f4f5]">
-                             <span className="text-[#707079]">{clauses.vat_label}:</span>
-                             <span className="font-semibold">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(vat)}</span>
-                        </div>
-                        <div className="flex justify-between py-3 mt-2 font-bold text-lg bg-[#f4f4f5] px-2 rounded-md">
-                            <span className="text-[#3d5afe]">{clauses.total_label} :</span>
-                            <span className="text-[#3d5afe]">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(total)}</span>
-                        </div>
+            </section>
+
+             <section className="mt-8 flex justify-end">
+                <div className="w-full max-w-sm text-sm">
+                    <div className="flex justify-between py-1.5 border-b border-slate-200">
+                        <span className="text-slate-500">{clauses.subtotal_label}</span>
+                        <span>{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(subtotal)}</span>
+                    </div>
+                    <div className="flex justify-between py-1.5 border-b border-slate-200">
+                         <span className="text-slate-500">{clauses.vat_label}</span>
+                         <span>{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(vat)}</span>
+                    </div>
+                    <div className="flex justify-between py-2 mt-2 font-bold text-base bg-slate-100 px-2 rounded-md text-[hsl(215,39%,29%)]">
+                        <span>{clauses.total_label}</span>
+                        <span>{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(total)}</span>
                     </div>
                 </div>
+            </section>
+            
+            <section className="mt-12 text-xs text-slate-500 bg-slate-50 p-4 rounded-md">
+                <h4 className="font-bold text-slate-700 mb-2">{clauses.payment_terms.title}</h4>
+                <p className="mb-2">{clauses.payment_terms.due_date}</p>
+                <p>{clauses.payment_terms.iban_label}</p>
+                <p className="font-mono bg-white p-1 rounded border border-slate-200 my-1">{formData.iban || 'FRXX XXXX XXXX XXXX XXXX XXXX XXX'}</p>
+                <p className="italic mt-2">{clauses.payment_terms.late_penalty}</p>
+            </section>
 
-                <div className="bg-[#f4f4f5] p-6 rounded-lg text-sm">
-                    <h4 className="font-bold text-[#09090b] mb-2">{clauses.payment_terms.title}</h4>
-                    <p className="text-[#707079] mb-2">{clauses.payment_terms.due_date}</p>
-                    <p className="text-[#707079]">{clauses.payment_terms.iban_label}</p>
-                    <p className="font-mono bg-white p-2 rounded border border-[#f4f4f5] mb-2">{formData.iban || 'FRXX XXXX XXXX XXXX XXXX XXXX XXX'}</p>
-                    <p className="text-xs italic text-[#707079]">{clauses.payment_terms.late_penalty}</p>
-                </div>
-            </main>
-
-            <footer className="mt-16 pt-6 border-t border-[#f4f4f5] text-center text-xs text-[#707079]">
-                <p>© 2025 CAPFINFY. Tous droits réservés.</p>
-                <p className="font-semibold text-[#09090b]">Ce document est généré électroniquement et est confidentiel.</p>
-            </footer>
-        </div>
+             <div className="text-center text-xs text-slate-500 mt-12">
+                 <p className="font-semibold">{clauses.footer.thank_you}</p>
+                 <p>{clauses.footer.contact_info}</p>
+            </div>
+            
+        </DocumentWrapper>
     );
 };
 
