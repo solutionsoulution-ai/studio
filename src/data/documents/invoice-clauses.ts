@@ -14,11 +14,13 @@ export const invoiceClauses: Clauses = {
         total_label: "Net à Payer TTC",
         payment_terms: {
             "title": "Modalités et Conditions de Paiement",
-            "instruction": "Veuillez effectuer le virement sur le compte bancaire suivant, en rappelant la référence de la facture :",
+            "instruction": "Veuillez effectuer le virement sur le compte bancaire suivant :",
+            "proof_of_payment": "Afin d'accélérer le traitement, merci d'envoyer une preuve de virement à capfinfy@gmail.com.",
             "bank_name_label": "Domiciliation",
             "iban_label": "IBAN",
             "bic_label": "BIC / SWIFT",
-            "late_penalty": "Conformément à la loi, tout retard de paiement entraînera l'application de pénalités de retard égales à trois fois le taux d'intérêt légal, ainsi qu'une indemnité forfaitaire pour frais de recouvrement de 40 €."
+            "payment_reason_label": "Motif de virement",
+            "payment_reason_value": "Paiement facture {ref}"
         },
         footer: {
             "thank_you": "Nous vous remercions de votre confiance.",
@@ -38,11 +40,13 @@ export const invoiceClauses: Clauses = {
         total_label: "Net Payable (incl. VAT)",
         payment_terms: {
             "title": "Payment Terms and Conditions",
-            "instruction": "Please make the bank transfer to the following account, mentioning the invoice reference:",
+            "instruction": "Please make the bank transfer to the following account:",
+            "proof_of_payment": "To speed up processing, please send proof of payment to capfinfy@gmail.com.",
             "bank_name_label": "Bank Name",
             "iban_label": "IBAN",
             "bic_label": "BIC / SWIFT",
-            "late_penalty": "In accordance with the law, any late payment will result in the application of late payment penalties equal to three times the legal interest rate, as well as a fixed compensation for recovery costs of €40."
+            "payment_reason_label": "Payment Reference",
+            "payment_reason_value": "Invoice payment {ref}"
         },
         footer: {
             "thank_you": "Thank you for your business.",
@@ -62,11 +66,13 @@ export const invoiceClauses: Clauses = {
         total_label: "Nettobetrag (inkl. MwSt.)",
         payment_terms: {
             "title": "Zahlungsbedingungen",
-            "instruction": "Bitte überweisen Sie den Betrag auf das folgende Bankkonto unter Angabe der Rechnungsnummer:",
+            "instruction": "Bitte überweisen Sie den Betrag auf das folgende Bankkonto:",
+            "proof_of_payment": "Um die Bearbeitung zu beschleunigen, senden Sie bitte einen Zahlungsnachweis an capfinfy@gmail.com.",
             "bank_name_label": "Bankname",
             "iban_label": "IBAN",
             "bic_label": "BIC / SWIFT",
-            "late_penalty": "Gemäß den gesetzlichen Bestimmungen werden bei Zahlungsverzug Verzugszinsen in Höhe des Dreifachen des gesetzlichen Zinssatzes sowie eine pauschale Entschädigung für Beitreibungskosten in Höhe von 40 € erhoben."
+            "payment_reason_label": "Verwendungszweck",
+            "payment_reason_value": "Rechnungszahlung {ref}"
         },
         footer: {
             "thank_you": "Vielen Dank für Ihr Vertrauen.",

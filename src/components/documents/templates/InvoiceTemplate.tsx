@@ -39,6 +39,8 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ formData, lang }) => 
     const total = subtotal + vat;
 
     const dueDate = formData.date ? new Date(new Date(formData.date).setDate(new Date(formData.date).getDate() + 30)).toLocaleDateString(lang) : '___________';
+    
+    const replaceRef = (text: string) => text.replace(/{ref}/g, formData.ref || '___________');
 
     return (
         <DocumentWrapper 
@@ -121,8 +123,12 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ formData, lang }) => 
                         <span className="font-sans font-semibold text-slate-600">{clauses.payment_terms.bic_label}: </span>
                         <span>{formData.bic || 'BIGBIFR1XXX'}</span>
                     </div>
+                    <div>
+                        <span className="font-sans font-semibold text-slate-600">{clauses.payment_terms.payment_reason_label}: </span>
+                        <span>{replaceRef(clauses.payment_terms.payment_reason_value)}</span>
+                    </div>
                 </div>
-                <p className="italic mt-2">{clauses.payment_terms.late_penalty}</p>
+                <p className="italic mt-2">{clauses.payment_terms.proof_of_payment}</p>
             </section>
 
              <div className="text-center text-xs text-slate-500 mt-12">
