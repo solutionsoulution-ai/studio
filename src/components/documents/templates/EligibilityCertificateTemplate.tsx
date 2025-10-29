@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Image from 'next/image';
 import { eligibilityCertificateClauses } from '@/data/documents/eligibility-certificate-clauses';
