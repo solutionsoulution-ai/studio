@@ -13,10 +13,13 @@ interface InvoiceTemplateProps {
 const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ formData, lang }) => {
     const clauses = invoiceClauses[lang] || invoiceClauses['fr'];
     const signer = signatureData.finance;
-    const items = formData.items || [{ description: 'Frais de dossier', amount: 450 }];
-    const subtotal = items.reduce((acc: number, item: any) => acc + (Number(item.amount) || 0), 0);
-    const vat = 0;
+    const items = formData.items || [{ description: 'Frais de dossier pour ouverture de prêt', quantity: 1, unit_price: 450 }];
+    const subtotal = items.reduce((acc: number, item: any) => acc + (Number(item.quantity) || 0) * (Number(item.unit_price) || 0), 0);
+    const vatRate = 0.20;
+    const vat = subtotal * vatRate;
     const total = subtotal + vat;
+
+    const dueDate = formData.date ? new Date(new Date(formData.date).setDate(new Date(formData.date).getDate() + 30)).toLocaleDateString(lang) : '___________';
 
     return (
         <div className="bg-white text-[#09090b] font-sans p-8 max-w-4xl mx-auto border border-[#f4f4f5] shadow-lg">
@@ -36,6 +39,7 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ formData, lang }) => 
                     <div className="mt-2 text-sm text-[#707079]">
                         <p>{clauses.invoice_number_label} {formData.ref || '___________'}</p>
                         <p>{clauses.date_label} {formData.date ? new Date(formData.date).toLocaleDateString(lang) : '___________'}</p>
+                        <p className="font-bold text-[#09090b]">{clauses.due_date_label} {dueDate}</p>
                     </div>
                 </div>
             </header>
@@ -55,6 +59,8 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ formData, lang }) => 
                     <thead className="bg-[#f4f4f5]">
                         <tr>
                             <th className="p-3 text-left font-semibold text-[#09090b] uppercase">{clauses.table_headers.description}</th>
+                            <th className="p-3 text-center font-semibold text-[#09090b] uppercase">{clauses.table_headers.quantity}</th>
+                            <th className="p-3 text-right font-semibold text-[#09090b] uppercase">{clauses.table_headers.unit_price}</th>
                             <th className="p-3 text-right font-semibold text-[#09090b] uppercase">{clauses.table_headers.amount}</th>
                         </tr>
                     </thead>
@@ -62,7 +68,9 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ formData, lang }) => 
                         {items.map((item: any, index: number) => (
                             <tr key={index} className="border-b border-[#f4f4f5]">
                                 <td className="p-3">{item.description || '___________'}</td>
-                                <td className="p-3 text-right">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(Number(item.amount) || 0)}</td>
+                                <td className="p-3 text-center">{item.quantity || 1}</td>
+                                <td className="p-3 text-right">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(Number(item.unit_price) || 0)}</td>
+                                <td className="p-3 text-right">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format((Number(item.quantity) || 1) * (Number(item.unit_price) || 0))}</td>
                             </tr>
                         ))}
                     </tbody>
@@ -70,26 +78,27 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ formData, lang }) => 
                 
                 <div className="flex justify-end mb-12">
                     <div className="w-full max-w-xs text-sm">
-                        <div className="flex justify-between py-2">
-                            <span className="text-[#707079]">Sous-total :</span>
+                        <div className="flex justify-between py-2 border-b border-[#f4f4f5]">
+                            <span className="text-[#707079]">{clauses.subtotal_label}:</span>
                             <span className="font-semibold">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(subtotal)}</span>
                         </div>
                         <div className="flex justify-between py-2 border-b border-[#f4f4f5]">
-                             <span className="text-[#707079]">TVA (0%) :</span>
+                             <span className="text-[#707079]">{clauses.vat_label}:</span>
                              <span className="font-semibold">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(vat)}</span>
                         </div>
-                        <div className="flex justify-between py-3 mt-2 font-bold text-lg text-[#3d5afe]">
-                            <span>{clauses.total_label} :</span>
-                            <span>{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(total)}</span>
+                        <div className="flex justify-between py-3 mt-2 font-bold text-lg bg-[#f4f4f5] px-2 rounded-md">
+                            <span className="text-[#3d5afe]">{clauses.total_label} :</span>
+                            <span className="text-[#3d5afe]">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(total)}</span>
                         </div>
                     </div>
                 </div>
 
                 <div className="bg-[#f4f4f5] p-6 rounded-lg text-sm">
                     <h4 className="font-bold text-[#09090b] mb-2">{clauses.payment_terms.title}</h4>
-                    <p className="text-[#707079] mb-4">{clauses.payment_terms.due_date}</p>
+                    <p className="text-[#707079] mb-2">{clauses.payment_terms.due_date}</p>
                     <p className="text-[#707079]">{clauses.payment_terms.iban_label}</p>
-                    <p className="font-mono bg-white p-2 rounded border border-[#f4f4f5]">{formData.iban || 'FRXX XXXX XXXX XXXX XXXX XXXX XXX'}</p>
+                    <p className="font-mono bg-white p-2 rounded border border-[#f4f4f5] mb-2">{formData.iban || 'FRXX XXXX XXXX XXXX XXXX XXXX XXX'}</p>
+                    <p className="text-xs italic text-[#707079]">{clauses.payment_terms.late_penalty}</p>
                 </div>
                  <div className="mt-16 text-center">
                     {signer.signatureUrl && <Image src={signer.signatureUrl} alt={`Signature de ${signer.name}`} width={120} height={40} className="mx-auto" />}

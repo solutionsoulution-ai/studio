@@ -45,6 +45,8 @@ const SuretyBondTemplate: React.FC<SuretyBondTemplateProps> = ({ formData, lang 
                     <h3 className="font-bold text-lg mb-2 text-[#09090b]">{clauses.importance.title}</h3>
                     <p className="text-[#707079]">{clauses.importance.description}</p>
                 </div>
+                <p className="italic text-xs text-center text-[#707079] mb-8">{clauses.preamble}</p>
+
                 <div className="mb-8">
                     <h3 className="font-bold text-lg mb-2 border-b border-[#f4f4f5] pb-1 text-[#3d5afe]">{clauses.parties.lender_label}</h3>
                     <p>Capfinfy, 1 Place de la Bourse, 69002 Lyon</p>
@@ -65,10 +67,13 @@ const SuretyBondTemplate: React.FC<SuretyBondTemplateProps> = ({ formData, lang 
                     <div className="font-bold text-center uppercase text-[#3d5afe]">{replacePlaceholders(clauses.articles.scope.title)}</div>
                     <p>{replacePlaceholders(clauses.articles.scope.content)}</p>
 
-                    <div className="mt-8 p-4 border-l-4 border-[#3d5afe] bg-[#f4f4f5]">
+                    <div className="font-bold text-center uppercase text-[#3d5afe]">{replacePlaceholders(clauses.articles.duration.title)}</div>
+                    <p>{replacePlaceholders(clauses.articles.duration.content)}</p>
+
+                    <div className="mt-8 p-4 border-l-4 border-red-500 bg-red-50">
                         <h4 className="font-bold text-md mb-2">{clauses.handwritten_mention.title}</h4>
-                        <p className="text-xs italic mb-2 text-[#707079]">{clauses.handwritten_mention.instruction}</p>
-                        <div className="border border-dashed border-[#707079] p-4 min-h-[100px] text-[#707079]">
+                        <p className="text-xs italic mb-2 text-red-700">{clauses.handwritten_mention.instruction}</p>
+                        <div className="border border-dashed border-[#707079] p-4 min-h-[100px] text-sm text-[#707079]">
                            {replacePlaceholders(clauses.handwritten_mention.content)}
                         </div>
                     </div>

@@ -42,10 +42,15 @@ const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, l
             </header>
 
             <main className="text-sm">
-                <div className="bg-[#f4f4f5] p-6 rounded-lg mb-8">
+                <div className="bg-[#f4f4f5] p-6 rounded-lg mb-8 text-sm">
                     <h3 className="font-bold text-lg mb-2 text-[#09090b]">{clauses.importance.title}</h3>
-                    <p className="text-sm text-[#707079]">{clauses.importance.description}</p>
+                    <p className="text-[#707079]">{clauses.importance.description}</p>
                 </div>
+                
+                <h3 className="font-bold text-center uppercase mb-2 text-[#3d5afe]">{clauses.preamble.title}</h3>
+                <p className="italic text-center text-xs text-[#707079] mb-6">{clauses.preamble.content}</p>
+
+
                 <h3 className="font-bold text-center uppercase mb-6 text-[#3d5afe]">{clauses.parties.title}</h3>
                 <div className="grid grid-cols-2 gap-8 mb-8">
                     <div>
@@ -67,8 +72,14 @@ const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, l
                     <h4 className="font-bold uppercase text-[#3d5afe]">{replacePlaceholders(clauses.articles.repayment.title)}</h4>
                     <p>{replacePlaceholders(clauses.articles.repayment.content)}</p>
 
+                     <h4 className="font-bold uppercase text-[#3d5afe]">{replacePlaceholders(clauses.articles.early_repayment.title)}</h4>
+                    <p>{replacePlaceholders(clauses.articles.early_repayment.content)}</p>
+
                     <h4 className="font-bold uppercase text-[#3d5afe]">{replacePlaceholders(clauses.articles.default.title)}</h4>
                     <p>{replacePlaceholders(clauses.articles.default.content)}</p>
+
+                    <h4 className="font-bold uppercase text-[#3d5afe]">{replacePlaceholders(clauses.articles.insurance.title)}</h4>
+                    <p>{replacePlaceholders(clauses.articles.insurance.content)}</p>
 
                     <h4 className="font-bold uppercase text-[#3d5afe]">{replacePlaceholders(clauses.articles.jurisdiction.title)}</h4>
                     <p>{replacePlaceholders(clauses.articles.jurisdiction.content)}</p>

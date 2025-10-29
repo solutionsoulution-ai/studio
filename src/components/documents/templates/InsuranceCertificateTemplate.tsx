@@ -85,6 +85,11 @@ const InsuranceCertificateTemplate: React.FC<InsuranceCertificateTemplateProps> 
                         </div>
                     </div>
                 </div>
+
+                <div className="mt-8 bg-blue-50 border-l-4 border-blue-400 p-4 text-sm text-blue-800">
+                    <h4 className="font-bold">{clauses.validity.title}</h4>
+                    <p>{clauses.validity.description}</p>
+                </div>
             </main>
 
             <footer className="mt-16 flex justify-between items-end">

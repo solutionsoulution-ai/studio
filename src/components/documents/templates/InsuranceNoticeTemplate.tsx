@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Landmark, FileText, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { Landmark, FileText, AlertTriangle, ShieldCheck, Info } from 'lucide-react';
 import { insuranceNoticeClauses } from '@/data/documents/insurance-notice-clauses';
 
 interface InsuranceNoticeTemplateProps {
@@ -59,6 +59,7 @@ const InsuranceNoticeTemplate: React.FC<InsuranceNoticeTemplateProps> = ({ formD
                         <AlertTriangle className="h-6 w-6 text-red-600 mr-3" />
                         <h3 className="text-xl font-bold uppercase text-[#09090b]">{clauses.exclusions.title}</h3>
                     </div>
+                     <p className="text-sm text-[#707079] ml-9 mb-4">{clauses.exclusions.intro}</p>
                     <ul className="list-disc list-inside space-y-2 text-sm text-[#707079] ml-9">
                         {clauses.exclusions.items.map((item: string, index: number) => (
                             <li key={index}>{item}</li>
@@ -72,6 +73,14 @@ const InsuranceNoticeTemplate: React.FC<InsuranceNoticeTemplateProps> = ({ formD
                         <h3 className="text-xl font-bold uppercase text-[#09090b]">{clauses.waiver.title}</h3>
                     </div>
                     <p className="text-sm text-[#707079] ml-9">{clauses.waiver.description}</p>
+                </div>
+
+                <div className="mb-8">
+                    <div className="flex items-center mb-2">
+                        <Info className="h-6 w-6 text-[#3d5afe] mr-3" />
+                        <h3 className="text-xl font-bold uppercase text-[#09090b]">{clauses.claim.title}</h3>
+                    </div>
+                    <p className="text-sm text-[#707079] ml-9">{clauses.claim.description}</p>
                 </div>
             </main>
         </div>
