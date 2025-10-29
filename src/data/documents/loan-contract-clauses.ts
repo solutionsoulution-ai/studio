@@ -25,7 +25,7 @@ export const loanContractClauses: Clauses = {
                 amount: "Montant du capital prêté : {loan_amount} ({loan_amount_in_words} euros).",
                 taeg: "Taux d'intérêt Annuel Effectif Global (TAEG) fixe : {taeg}.",
                 term: "Durée totale du remboursement : {loan_term} mois.",
-                availability: "Date de mise à disposition des fonds : Au plus tard 8 jours après l'expiration du délai de rétractation.",
+                availability: "Date de mise à disposition des fonds : Au plus tard 10 jours après l'expiration du délai de rétractation.",
             },
             repayment: {
                 title: "Article 3 : Modalités de Remboursement",
