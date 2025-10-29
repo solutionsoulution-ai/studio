@@ -17,55 +17,73 @@ const DebtRecognitionTemplate: React.FC<DebtRecognitionTemplateProps> = ({ formD
     const replacePlaceholders = (text: string) => {
         return text
             .replace(/{ref}/g, formData.ref || '___________')
-            .replace(/{borrower_name}/g, formData.borrower_name || '___________')
-            .replace(/{borrower_address}/g, formData.borrower_address || '___________')
-            .replace(/{lender_name}/g, "Capfinfy")
-            .replace(/{loan_date}/g, formData.loan_date ? new Date(formData.loan_date).toLocaleDateString(lang) : '___________')
+            .replace(/{date}/g, formData.date ? new Date(formData.date).toLocaleDateString(lang) : '___________')
+            .replace(/{debtor_name}/g, formData.debtor_name || '___________')
+            .replace(/{debtor_address}/g, formData.debtor_address || '___________')
+            .replace(/{debtor_id}/g, formData.debtor_id || '___________')
             .replace(/{loan_amount}/g, formData.loan_amount ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.loan_amount) : '___________')
             .replace(/{loan_amount_in_words}/g, formData.loan_amount_in_words || '___________')
-            .replace(/{repayment_deadline}/g, formData.repayment_deadline ? new Date(formData.repayment_deadline).toLocaleDateString(lang) : '___________')
-            .replace(/{signature_location}/g, formData.signature_location || '___________')
-            .replace(/{signature_date}/g, formData.signature_date ? new Date(formData.signature_date).toLocaleDateString(lang) : '___________');
+            .replace(/{loan_contract_ref}/g, formData.loan_contract_ref || '___________')
+            .replace(/{loan_term}/g, formData.loan_term || '___________');
     };
 
     return (
         <div className="bg-white text-[#09090b] font-serif p-8 max-w-4xl mx-auto border-t-8 border-[#3d5afe] shadow-lg">
-            <header className="flex justify-between items-center mb-12 border-b pb-4 border-[#f4f4f5]">
-                <div className="flex items-center">
-                  <Landmark className="h-8 w-8 text-[#3d5afe] mr-3" />
-                  <h1 className="text-2xl font-bold text-[#09090b]">Capfinfy</h1>
-                </div>
-                <div className="text-right">
-                    <h2 className="text-2xl font-bold uppercase tracking-wider text-[#3d5afe]">{clauses.title}</h2>
-                    <p className="text-xs text-[#707079] mt-1">{replacePlaceholders(clauses.reference)}</p>
-                </div>
+            <header className="text-center mb-10">
+                <p className="text-xs text-[#707079]">{clauses.header.line1}</p>
+                <p className="text-xs text-[#707079] font-semibold">{clauses.header.line2}</p>
             </header>
 
-            <main className="text-justify text-md leading-relaxed">
-                <div className="bg-[#f4f4f5] p-6 rounded-lg mb-8 text-sm">
-                    <h3 className="font-bold text-lg mb-2 text-[#09090b]">{clauses.importance.title}</h3>
-                    <p className="text-[#707079]">{clauses.importance.description}</p>
+            <main className="text-sm">
+                <div className="text-center mb-8">
+                    <h2 className="text-2xl font-bold uppercase text-[#09090b]">{replacePlaceholders(clauses.title)}</h2>
+                    <p className="text-xs text-[#707079] mt-2">{replacePlaceholders(clauses.reference)} // {replacePlaceholders(clauses.date)}</p>
                 </div>
-            
-                <p className="mb-6">{replacePlaceholders(clauses.introduction)}</p>
-                <p className="mb-6">{replacePlaceholders(clauses.acknowledgment)}</p>
-                <p className="mb-6">{replacePlaceholders(clauses.repayment)}</p>
-                <p className="mb-6">{replacePlaceholders(clauses.interest_clause)}</p>
-                <p className="mb-10">{replacePlaceholders(clauses.legal_value)}</p>
+                
+                <h3 className="font-bold uppercase mb-4 text-[#3d5afe]">{clauses.parties.title}</h3>
+                <div className="grid grid-cols-2 gap-8 mb-8 text-xs">
+                    <div>
+                        <h4 className="font-semibold underline mb-2">{clauses.parties.creditor_label}</h4>
+                        <p>Capfinfy, agissant en tant qu'intermédiaire pour ses partenaires financiers</p>
+                        <p>1 Place de la Bourse, 69002 Lyon, France</p>
+                    </div>
+                    <div>
+                        <h4 className="font-semibold underline mb-2">{clauses.parties.debtor_label}</h4>
+                        <p>Nom : {formData.debtor_name || '___________'}</p>
+                        <p>Adresse : {formData.debtor_address || '___________'}</p>
+                        <p>N° Pièce d'identité : {formData.debtor_id || '___________'}</p>
+                    </div>
+                </div>
 
-                <p className="text-sm mb-16">{replacePlaceholders(clauses.signature_preamble)}</p>
+                <div className="space-y-4 leading-relaxed">
+                    <div>
+                        <h4 className="font-bold uppercase text-[#3d5afe]">{clauses.articles.recognition.title}</h4>
+                        <p>{replacePlaceholders(clauses.articles.recognition.content)}</p>
+                    </div>
+                    <div>
+                        <h4 className="font-bold uppercase text-[#3d5afe]">{clauses.articles.repayment.title}</h4>
+                        <p>{replacePlaceholders(clauses.articles.repayment.content)}</p>
+                    </div>
+                     <div>
+                        <h4 className="font-bold uppercase text-[#3d5afe]">{clauses.articles.default.title}</h4>
+                        <p>{replacePlaceholders(clauses.articles.default.content)}</p>
+                    </div>
+                     <div>
+                        <h4 className="font-bold uppercase text-[#3d5afe]">{clauses.articles.mention.title}</h4>
+                        <p>{replacePlaceholders(clauses.articles.mention.content)}</p>
+                    </div>
+                </div>
 
-                <div className="grid grid-cols-2 gap-16">
+                <div className="grid grid-cols-2 gap-16 mt-16 pt-8">
                     <div className="text-center">
-                        <div className="border-t-2 border-[#707079] pt-2">
-                             <p className="font-semibold">{clauses.borrower_signature_label}</p>
-                             <p className="text-xs text-[#707079] mt-2">{formData.borrower_name || '___________'}</p>
+                         <div className="border-t-2 border-[#707079] pt-2 mt-20">
+                             <p className="font-semibold">{clauses.parties.debtor_label}</p>
                         </div>
                     </div>
                     <div className="text-center">
                         {signer.signatureUrl && <Image src={signer.signatureUrl} alt={`Signature de ${signer.name}`} width={150} height={50} className="mx-auto" />}
                         <div className="border-t-2 border-[#707079] pt-2 mt-2">
-                            <p className="font-semibold">{clauses.lender_signature_label}</p>
+                            <p className="font-semibold">{clauses.parties.creditor_label}</p>
                             <p className="text-xs text-[#707079] mt-2">{signer.name}, {signer.title[lang]}</p>
                         </div>
                     </div>

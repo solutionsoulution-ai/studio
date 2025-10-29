@@ -3,37 +3,67 @@ import type { Clauses } from "./languages";
 
 export const debtRecognitionClauses: Clauses = {
     fr: {
-        title: "Reconnaissance de Dette",
-        department: "Département Juridique & Financier",
-        reference: "Référence du document : {ref}",
-        importance: {
-            title: "Importance de ce document",
-            description: "Cet acte est une preuve juridique formelle qui constate l'existence et les modalités d'une dette entre deux parties. Il protège à la fois le créancier en lui donnant un titre pour recouvrer sa créance, et le débiteur en clarifiant le montant et l'échéance du remboursement."
+        header: {
+            line1: "Service Financier Européen",
+            line2: "Département Juridique et des Garanties • Unité de Formalisation des Engagements",
         },
-        introduction: "Je soussigné(e), {borrower_name}, demeurant à {borrower_address}, reconnais par la présente devoir la somme décrite ci-dessous à Capfinfy, société sise 1 Place de la Bourse, 69002 Lyon, France, ci-après dénommé 'le Créancier'.",
-        acknowledgment: "Je reconnais avoir reçu de la part de {lender_name}, sous forme de prêt en date du {loan_date}, la somme de {loan_amount} ({loan_amount_in_words}). Cette somme m'a été remise par virement bancaire et je confirme en avoir eu la pleine et entière disposition. Ce prêt a été consenti sans intérêt, sauf application de la clause ci-dessous.",
-        repayment: "Je m'engage formellement et irrévocablement à rembourser intégralement cette somme en un seul versement au plus tard le {repayment_deadline}. Le remboursement devra être effectué par virement bancaire sur le compte qui sera communiqué par le créancier en temps utile. Tout remboursement partiel ne sera pas considéré comme libératoire.",
-        interest_clause: "À défaut de remboursement intégral à l'échéance convenue, et ce, dès le premier jour de retard, cette somme portera de plein droit et sans qu'il soit besoin d'une mise en demeure préalable, un intérêt de retard calculé au taux légal en vigueur majoré de cinq points. Les intérêts courront jusqu'au jour du paiement complet du principal et des accessoires.",
-        legal_value: "La présente reconnaissance de dette est établie pour servir et valoir ce que de droit. Elle est soumise au droit français. En cas de litige, et à défaut de résolution amiable, les tribunaux compétents de Lyon seront seuls saisis.",
-        signature_preamble: "Fait à {signature_location}, le {signature_date}, en deux exemplaires originaux, dont un est remis à chaque partie qui le reconnaît.",
-        borrower_signature_label: "L'Emprunteur (le Débiteur)",
-        lender_signature_label: "Le Prêteur (le Créancier)"
+        title: "Reconnaissance de Dette pour un {type_of_loan}",
+        reference: "Document N°: {ref}",
+        date: "Date: {date}",
+        parties: {
+            title: "Entre les soussignés :",
+            creditor_label: "Le Créancier :",
+            debtor_label: "Le Débiteur :",
+        },
+        articles: {
+            recognition: {
+                title: "Article 1 : Reconnaissance de la Dette",
+                content: "Je soussigné(e), {debtor_name}, demeurant au {debtor_address}, reconnais par la présente devoir à Capfinfy, agissant au nom de ses partenaires financiers, la somme de : {loan_amount} ({loan_amount_in_words}). Cette somme correspond au capital d'un {type_of_loan} qui m'a été accordé et dont je confirme avoir reçu les fonds.",
+            },
+            repayment: {
+                title: "Article 2 : Modalités de Remboursement",
+                content: "Je m'engage à rembourser cette somme en intégralité, ainsi que les intérêts et frais associés, conformément aux échéances et conditions définies dans le contrat de {type_of_loan} N° {loan_contract_ref} que j'ai signé séparément. La durée de remboursement convenue est de {loan_term} mois, sauf en cas de remboursement anticipé ou d'incident de paiement modifiant l'échéancier.",
+            },
+            default: {
+                title: "Article 3 : Clause de Défaut",
+                content: "En cas de non-paiement d'une ou plusieurs échéances, je reconnais que le Créancier pourra se prévaloir des clauses prévues dans le contrat de prêt, y compris l'exigibilité anticipée de la totalité du capital restant dû, majoré des intérêts et pénalités applicables.",
+            },
+            mention: {
+                title: "Article 4 : Compréhension de l'Engagement",
+                content: "L'article L. 313-24 du Code de la consommation stipule l'importance de l'engagement. Le débiteur reconnaît avoir lu et compris l'intégralité du contrat de prêt auquel cette reconnaissance de dette se rapporte et avoir reçu un exemplaire de chaque document.",
+            }
+        },
     },
     en: {
-        title: "Acknowledgment of Debt",
-        department: "Legal & Financial Department",
-        reference: "Document Reference: {ref}",
-        importance: {
-            title: "Importance of this document",
-            description: "This act is a formal legal proof that records the existence and terms of a debt between two parties. It protects both the creditor by providing a title to recover the debt, and the debtor by clarifying the amount and the repayment deadline."
+        header: {
+            line1: "European Financial Service",
+            line2: "Legal and Guarantees Department • Commitment Formalization Unit",
         },
-        introduction: "I, the undersigned, {borrower_name}, residing at {borrower_address}, hereby acknowledge that I owe the sum described below to Capfinfy, a company located at 1 Place de la Bourse, 69002 Lyon, France, hereinafter referred to as 'the Creditor'.",
-        acknowledgment: "I acknowledge having received from {lender_name}, as a loan dated {loan_date}, the sum of {loan_amount} ({loan_amount_in_words}). This sum was delivered to me by bank transfer and I confirm having had full and complete disposal of it. This loan was granted without interest, except as provided in the clause below.",
-        repayment: "I formally and irrevocably undertake to repay this entire sum in a single payment no later than {repayment_deadline}. The repayment shall be made by bank transfer to the account to be provided by the creditor in due course. Any partial repayment will not be considered as a discharge of the debt.",
-        interest_clause: "In the event of non-payment in full by the agreed-upon deadline, and from the first day of delay, this sum will automatically and without the need for prior formal notice, bear late payment interest calculated at the legal rate in effect plus five points. Interest will accrue until the day of full payment of the principal and accessories.",
-        legal_value: "This acknowledgment of debt is established to serve as legal proof. It is subject to French law. In the event of a dispute, and failing an amicable resolution, the competent courts of Lyon will have sole jurisdiction.",
-        signature_preamble: "Done at {signature_location}, on {signature_date}, in two original copies, one of which is given to each party who acknowledges it.",
-        borrower_signature_label: "The Borrower (The Debtor)",
-        lender_signature_label: "The Lender (The Creditor)"
+        title: "Acknowledgment of Debt for a {type_of_loan}",
+        reference: "Document No: {ref}",
+        date: "Date: {date}",
+        parties: {
+            title: "Between the undersigned:",
+            creditor_label: "The Creditor:",
+            debtor_label: "The Debtor:",
+        },
+        articles: {
+            recognition: {
+                title: "Article 1: Acknowledgment of Debt",
+                content: "I, the undersigned, {debtor_name}, residing at {debtor_address}, hereby acknowledge that I owe Capfinfy, acting on behalf of its financial partners, the sum of: {loan_amount} ({loan_amount_in_words}). This amount corresponds to the principal of a {type_of_loan} that has been granted to me and for which I confirm receipt of the funds.",
+            },
+            repayment: {
+                title: "Article 2: Repayment Terms",
+                content: "I undertake to repay this sum in full, along with the associated interest and fees, in accordance with the schedule and conditions defined in the {type_of_loan} contract No. {loan_contract_ref} which I have signed separately. The agreed repayment term is {loan_term} months, except in the case of early repayment or payment default altering the schedule.",
+            },
+            default: {
+                title: "Article 3: Default Clause",
+                content: "In the event of non-payment of one or more installments, I acknowledge that the Creditor may invoke the clauses provided for in the loan contract, including the early demand for the entire outstanding principal, plus applicable interest and penalties.",
+            },
+            mention: {
+                title: "Article 4: Understanding of Commitment",
+                content: "Article L. 313-24 of the Consumer Code stipulates the importance of the commitment. The debtor acknowledges having read and understood the entire loan contract to which this acknowledgment of debt relates and having received a copy of each document.",
+            }
+        },
     }
 };

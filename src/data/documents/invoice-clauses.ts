@@ -4,10 +4,6 @@ import type { Clauses } from "./languages";
 export const invoiceClauses: Clauses = {
     fr: {
         title: "Facture",
-        importance: {
-            "title": "Importance de ce document",
-            "description": "La facture est un document commercial, comptable et juridique qui détaille une prestation de service ou une vente de marchandise. Elle est obligatoire, sert de preuve de la transaction et de justificatif pour la comptabilité et la TVA."
-        },
         invoice_number_label: "Facture n°:",
         date_label: "Date :",
         due_date_label: "Échéance :",
@@ -21,14 +17,14 @@ export const invoiceClauses: Clauses = {
             "due_date": "Paiement dû à réception de la facture, au plus tard sous 30 jours.",
             "iban_label": "Veuillez effectuer le virement sur le compte bancaire suivant, en rappelant la référence de la facture :",
             "late_penalty": "Conformément à la loi, tout retard de paiement entraînera l'application de pénalités de retard égales à trois fois le taux d'intérêt légal, ainsi qu'une indemnité forfaitaire pour frais de recouvrement de 40 €."
+        },
+        footer: {
+            "thank_you": "Nous vous remercions de votre confiance.",
+            "contact_info": "Pour toute question, contactez notre service comptabilité à contact@capfinfy.com"
         }
     },
     en: {
         title: "Invoice",
-        importance: {
-            "title": "Importance of this document",
-            "description": "The invoice is a commercial, accounting, and legal document that details a service provided or a sale of goods. It is mandatory, serves as proof of the transaction, and as a supporting document for accounting and VAT."
-        },
         invoice_number_label: "Invoice #:",
         date_label: "Date:",
         due_date_label: "Due Date:",
@@ -42,6 +38,10 @@ export const invoiceClauses: Clauses = {
             "due_date": "Payment due upon receipt of the invoice, no later than 30 days.",
             "iban_label": "Please make the bank transfer to the following account, mentioning the invoice reference:",
             "late_penalty": "In accordance with the law, any late payment will result in the application of late payment penalties equal to three times the legal interest rate, as well as a fixed compensation for recovery costs of €40."
+        },
+        footer: {
+            "thank_you": "Thank you for your business.",
+            "contact_info": "For any questions, please contact our accounting department at contact@capfinfy.com"
         }
     }
 };

@@ -15,58 +15,63 @@ const EligibilityCertificateTemplate: React.FC<EligibilityCertificateTemplatePro
     const signer = signatureData.analysis;
 
     const replacePlaceholders = (text: string) => {
+        const validityDate = formData.date ? new Date(new Date(formData.date).setDate(new Date(formData.date).getDate() + 30)).toLocaleDateString(lang) : '___________';
         return text
             .replace(/{ref}/g, formData.ref || '___________')
-            .replace(/{date}/g, formData.date ? new Date(formData.date).toLocaleDateString(lang) : '___________')
+            .replace(/{validity_date}/g, validityDate)
             .replace(/{beneficiary_name}/g, formData.beneficiary_name || '___________')
             .replace(/{beneficiary_address}/g, formData.beneficiary_address || '___________')
-            .replace(/{amount}/g, formData.amount ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.amount) : '___________')
-            .replace(/{validity_end_date}/g, formData.validity_end_date ? new Date(formData.validity_end_date).toLocaleDateString(lang) : '___________');
+            .replace(/{beneficiary_id}/g, formData.beneficiary_id || '___________')
+            .replace(/{project_type}/g, formData.project_type || '___________')
+            .replace(/{max_amount}/g, formData.max_amount ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.max_amount) : '___________')
+            .replace(/{max_amount_in_words}/g, formData.max_amount_in_words || '___________');
     };
 
     return (
-        <div className="bg-white text-[#09090b] font-serif p-10 max-w-4xl mx-auto border-2 border-[#3d5afe] shadow-lg">
-            <header className="flex justify-between items-center mb-10 pb-4 border-b-2 border-[#3d5afe]">
-                 <div className="flex items-center">
-                    <Landmark className="h-8 w-8 text-[#3d5afe] mr-3" />
-                    <div>
-                        <h1 className="text-xl font-bold text-[#09090b]">Capfinfy</h1>
-                        <p className="text-xs text-[#707079]">{clauses.department}</p>
-                    </div>
-                </div>
-                <div className="text-right text-xs text-[#707079]">
-                     <p>{replacePlaceholders(clauses.location_and_date)}</p>
-                     <p>{replacePlaceholders(clauses.reference)}</p>
-                </div>
+        <div className="bg-white text-[#09090b] font-serif p-8 max-w-4xl mx-auto border-t-8 border-[#3d5afe] shadow-lg">
+            <header className="text-center mb-10">
+                <p className="text-xs text-[#707079]">{clauses.header.line1}</p>
+                <p className="text-xs text-[#707079] font-semibold">{clauses.header.line2}</p>
             </header>
 
-            <main>
-                <h2 className="text-3xl font-bold text-center text-[#3d5afe] mb-8">{clauses.title}</h2>
+            <main className="text-sm">
+                <div className="text-center mb-8">
+                    <h2 className="text-2xl font-bold uppercase text-[#09090b]">{replacePlaceholders(clauses.title)}</h2>
+                    <p className="text-xs text-[#707079] mt-2">{replacePlaceholders(clauses.reference)} // {replacePlaceholders(clauses.validity)}</p>
+                </div>
                 
-                <div className="bg-[#f4f4f5] p-6 rounded-lg mb-8 text-sm">
-                    <h3 className="font-bold text-lg mb-2 text-[#09090b]">{clauses.importance.title}</h3>
-                    <p className="text-[#707079]">{clauses.importance.description}</p>
+                <h3 className="font-bold uppercase mb-4 text-[#3d5afe]">{clauses.beneficiary.title}</h3>
+                <div className="mb-8 text-xs bg-[#f4f4f5] p-4 rounded">
+                    <p>Nom : {formData.beneficiary_name || '___________'}</p>
+                    <p>Adresse : {formData.beneficiary_address || '___________'}</p>
+                    <p>N° Pièce d'identité : {formData.beneficiary_id || '___________'}</p>
                 </div>
 
-                <div className="text-md leading-relaxed space-y-6">
-                    <p>{replacePlaceholders(clauses.introduction)}</p>
-                    <p className="font-bold text-lg text-center p-4 bg-[#f4f4f5] rounded-md">
-                        {replacePlaceholders(clauses.eligibility_statement)}
-                    </p>
-                    <p>{replacePlaceholders(clauses.conditions)}</p>
-                    <p className="text-sm italic text-[#707079]">{replacePlaceholders(clauses.conclusion)}</p>
-                </div>
-            </main>
-
-            <footer className="mt-16 text-right">
-                <div className="inline-block text-center">
-                    {signer.signatureUrl && <Image src={signer.signatureUrl} alt={`Signature de ${signer.name}`} width={150} height={50} className="mx-auto" />}
-                    <div className="border-t border-[#707079] mt-2 pt-2">
-                        <p className="font-semibold">{signer.name}</p>
-                        <p className="text-sm text-[#707079]">{signer.title[lang]}</p>
+                <div className="space-y-4 leading-relaxed">
+                    <div>
+                        <h4 className="font-bold uppercase text-[#3d5afe]">{clauses.articles.object.title}</h4>
+                        <p>{replacePlaceholders(clauses.articles.object.content)}</p>
+                    </div>
+                    <div>
+                        <h4 className="font-bold uppercase text-[#3d5afe]">{clauses.articles.scope.title}</h4>
+                        <p>{replacePlaceholders(clauses.articles.scope.content)}</p>
+                    </div>
+                     <div>
+                        <h4 className="font-bold uppercase text-[#3d5afe]">{clauses.articles.validity.title}</h4>
+                        <p>{replacePlaceholders(clauses.articles.validity.content)}</p>
                     </div>
                 </div>
-            </footer>
+
+                <div className="text-right mt-16">
+                    <div className="inline-block text-center">
+                        {signer.signatureUrl && <Image src={signer.signatureUrl} alt={`Signature de ${signer.name}`} width={150} height={50} className="mx-auto" />}
+                        <div className="border-t-2 border-[#707079] pt-2 mt-2">
+                            <p className="font-semibold text-sm">{signer.name}</p>
+                            <p className="text-xs text-[#707079]">{signer.title[lang]}</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
         </div>
     );
 };

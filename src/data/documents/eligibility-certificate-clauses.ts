@@ -3,31 +3,57 @@ import type { Clauses } from "./languages";
 
 export const eligibilityCertificateClauses: Clauses = {
     fr: {
-        title: "Attestation d'Éligibilité au Financement",
-        department: "Département Analyse de Crédit",
-        location_and_date: "Fait à Lyon, le {date}",
-        reference: "Référence : {ref}",
-        importance: {
-            title: "Importance de ce document",
-            description: "Cette attestation est une validation préliminaire de votre capacité d'emprunt basée sur les informations déclaratives fournies. Elle vous permet de prouver votre sérieux auprès de tiers (agents immobiliers, vendeurs, etc.) et de sécuriser vos négociations."
+        header: {
+            line1: "Département d'Analyse Financière",
+            line2: "Unité de Certification de Solvabilité",
         },
-        introduction: "Nous soussignés, Capfinfy, agissant en qualité de conseil financier, attestons par la présente que, sur la base des informations financières et personnelles fournies par le bénéficiaire et sans engagement de notre part, le profil de : {beneficiary_name}, demeurant à {beneficiary_address}, présente les caractéristiques requises pour être considéré comme éligible à une solution de financement.",
-        eligibility_statement: "Sous réserve des conditions détaillées ci-après, le montant de financement pour lequel le bénéficiaire est jugé éligible s'élève à {amount}.",
-        conditions: "Cette attestation est fournie à titre purement indicatif. Elle est valable trente (30) jours calendaires à compter de sa date d'émission, soit jusqu'au {validity_end_date}. Sa validité est strictement conditionnée à la vérification des documents originaux (justificatifs d'identité, de revenus, de domicile, etc.) et à l'absence de toute modification substantielle de la situation financière ou personnelle du bénéficiaire.",
-        conclusion: "Cette attestation ne constitue en aucun cas une offre de prêt ferme et définitive au sens de la loi. L'octroi final d'un financement reste conditionné à l'étude approfondie et complète du dossier par l'un de nos partenaires prêteurs, à leur propre politique d'acceptation des risques, et à la signature d'une offre de prêt formelle."
+        title: "Certificat de Solvabilité Pré-approuvée pour un projet de {project_type}",
+        reference: "Certificat N°: {ref}",
+        validity: "Valide jusqu'au: {validity_date}",
+        beneficiary: {
+            title: "Bénéficiaire du certificat :",
+        },
+        articles: {
+            object: {
+                title: "Article 1 : Objet du Certificat",
+                content: "Capfinfy, agissant en tant qu'intermédiaire financier, certifie par la présente avoir procédé à une analyse préliminaire de la situation financière du bénéficiaire susmentionné. Sur la base des éléments déclarés et en l'état actuel de nos critères d'évaluation, le bénéficiaire est jugé éligible à un financement pour un montant maximum de :",
+                amount_label: "Montant d'éligibilité maximal",
+            },
+            scope: {
+                title: "Article 2 : Portée et Limites",
+                content: "Ce certificat atteste d'une capacité de financement théorique au jour de son émission. Il est destiné à être présenté à des tiers (agents immobiliers, vendeurs, etc.) comme un élément de réassurance de la capacité du bénéficiaire à financer un projet. Il ne constitue en aucun cas une offre de prêt ferme et ne saurait engager Capfinfy ou ses partenaires prêteurs.",
+            },
+            validity: {
+                title: "Article 3 : Validité",
+                content: "Le présent certificat est valable 30 jours calendaires à compter de sa date d'émission, soit jusqu'au {validity_date}. Passé ce délai, une nouvelle évaluation sera nécessaire. La validité est conditionnée à l'absence de changement significatif dans la situation financière du bénéficiaire et à la vérification ultérieure des pièces justificatives originales.",
+            }
+        },
     },
     en: {
-        title: "Certificate of Funding Eligibility",
-        department: "Credit Analysis Department",
-        location_and_date: "Done in Lyon, on {date}",
-        reference: "Reference: {ref}",
-        importance: {
-            title: "Importance of this document",
-            description: "This certificate is a preliminary validation of your borrowing capacity based on the declarative information provided. It allows you to prove your seriousness to third parties (real estate agents, sellers, etc.) and to secure your negotiations."
+        header: {
+            line1: "Financial Analysis Department",
+            line2: "Solvency Certification Unit",
         },
-        introduction: "We, the undersigned, Capfinfy, acting as financial advisor, hereby certify that, based on the financial and personal information provided by the beneficiary and without commitment on our part, the profile of: {beneficiary_name}, residing at {beneficiary_address}, presents the required characteristics to be considered eligible for a financing solution.",
-        eligibility_statement: "Subject to the conditions detailed below, the financing amount for which the beneficiary is deemed eligible is {amount}.",
-        conditions: "This certificate is provided for indicative purposes only. It is valid for thirty (30) calendar days from its date of issue, i.e., until {validity_end_date}. Its validity is strictly conditional upon the verification of original documents (proof of identity, income, residence, etc.) and the absence of any substantial change in the beneficiary's financial or personal situation.",
-        conclusion: "This certificate in no way constitutes a firm and final loan offer within the meaning of the law. The final granting of financing remains conditional on the thorough and complete review of the file by one of our lending partners, their own risk acceptance policy, and the signing of a formal loan offer."
+        title: "Certificate of Pre-Approved Solvency for a {project_type} project",
+        reference: "Certificate No: {ref}",
+        validity: "Valid until: {validity_date}",
+        beneficiary: {
+            title: "Beneficiary of the certificate:",
+        },
+        articles: {
+            object: {
+                title: "Article 1: Purpose of the Certificate",
+                content: "Capfinfy, acting as a financial intermediary, hereby certifies that it has conducted a preliminary analysis of the financial situation of the above-mentioned beneficiary. Based on the declared elements and our current evaluation criteria, the beneficiary is deemed eligible for financing up to a maximum amount of:",
+                amount_label: "Maximum Eligibility Amount",
+            },
+            scope: {
+                title: "Article 2: Scope and Limitations",
+                content: "This certificate attests to a theoretical financing capacity as of its date of issue. It is intended to be presented to third parties (real estate agents, sellers, etc.) as an element of reassurance of the beneficiary's ability to finance a project. It in no way constitutes a firm loan offer and shall not bind Capfinfy or its lending partners.",
+            },
+            validity: {
+                title: "Article 3: Validity",
+                content: "This certificate is valid for 30 calendar days from its date of issue, i.e., until {validity_date}. After this period, a new assessment will be required. The validity is conditional on the absence of any significant change in the beneficiary's financial situation and on the subsequent verification of the original supporting documents.",
+            }
+        },
     }
 };

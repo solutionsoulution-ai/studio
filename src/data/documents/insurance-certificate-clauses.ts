@@ -3,47 +3,83 @@ import type { Clauses } from "./languages";
 
 export const insuranceCertificateClauses: Clauses = {
     fr: {
-        title: "Attestation d'Assurance Emprunteur",
-        department: "Capfinfy Assurance",
-        reference: "N° d'attestation : {ref}",
-        importance: {
-            title: "Importance de ce document",
-            description: "Cette attestation est le document officiel qui prouve que votre prêt est couvert par une assurance. Elle est exigée par l'organisme prêteur et protège l'emprunteur ainsi que ses proches en cas de coup dur (décès, invalidité), en assurant la continuité du remboursement."
+        header: {
+            line1: "Département des Assurances",
+            line2: "Service des Adhésions • Unité de Certification des Garanties Emprunteur",
         },
-        introduction: "Capfinfy Assurance, société d'assurance, atteste par la présente que l'assuré(e) désigné(e) ci-dessous est bien couvert(e) par le contrat d'assurance de groupe n°789-101112 souscrit par Capfinfy, pour les garanties et le prêt identifiés ci-après.",
-        insured_label: "Assuré(e)",
-        loan_id_label: "Prêt Assuré (Contrat N°)",
-        capital_label: "Capital initialement assuré",
-        coverage_summary: "Résumé des Garanties Acquises par l'Assuré(e)",
+        title: "Attestation d'Assurance Emprunteur pour un {loan_type}",
+        reference: "Certificat N°: {ref}",
+        issue_date: "Date d'émission: {issue_date}",
+        insured: {
+            title: "L'Assuré :",
+        },
+        beneficiary: {
+            title: "Le Bénéficiaire :",
+            content: "L'organisme prêteur partenaire de Capfinfy, pour le compte du contrat de prêt N° {loan_contract_ref}.",
+        },
+        object_title: "Objet : Attestation d'assurance groupe pour un {loan_type}",
+        object_content: "Nous soussignés, agissant pour le compte de notre partenaire assureur, certifions par la présente que l'assuré(e) susmentionné(e) est couvert(e) par le contrat d'assurance groupe n°789-456, souscrit par Capfinfy dans le cadre de son prêt.",
+        loan_details: {
+            title: "Détails du prêt assuré",
+            nature: "Nature du prêt : {loan_type}",
+            ref: "Numéro du prêt associé : {loan_contract_ref}",
+            amount: "Montant du capital assuré : {insured_capital}",
+            duration: "Durée de la couverture d'assurance : {coverage_duration} mois, coïncidant avec la durée du prêt.",
+        },
         guarantees: {
-            death: { "title": "Décès", "description": "En cas de décès de l'assuré avant l'âge de 75 ans, l'assureur verse au prêteur le capital restant dû au jour du décès." },
-            disability: { "title": "Perte Totale et Irréversible d'Autonomie (PTIA)", "description": "Si l'assuré est reconnu en état de PTIA, l'assureur verse au prêteur le capital restant dû, entraînant la clôture du prêt." },
-            incapacity: { "title": "Incapacité Temporaire Totale de travail (ITT)", "description": "En cas d'arrêt de travail pour maladie ou accident, prise en charge des échéances du prêt à 100% après une franchise de 90 jours continus." }
+            title: "Garanties applicables",
+            intro: "Sous réserve des termes, conditions et exclusions stipulées dans la notice d'information du contrat d'assurance, l'assuré(e) bénéficie des garanties suivantes :",
+            death: "Décès : Versement du capital restant dû à l'organisme prêteur.",
+            ptia: "Perte Totale et Irréversible d'Autonomie (PTIA) : Versement du capital restant dû à l'organisme prêteur.",
+            itt: "Incapacité Temporaire Totale de Travail (ITT) : Prise en charge des échéances du prêt après une période de franchise.",
         },
-        validity: { "title": "Validité", "description": "La présente attestation est valable sous réserve du paiement régulier des cotisations d'assurance et tant que le prêt susmentionné est en cours de remboursement." },
-        conclusion: "Fait à Lyon, le {signature_date}, pour servir et valoir ce que de droit.",
-        director_title: "Directrice des Assurances"
+        premium: {
+            title: "Coût de l'Assurance",
+            content: "Prime d'assurance mensuelle : {monthly_premium} / mois. Ce montant est payable mensuellement, en supplément de votre échéance de prêt.",
+        },
+        validity: {
+            title: "Date d'effet et Validité",
+            content: "La présente attestation est établie pour faire valoir ce que de droit. Les garanties prendront effet à la date du déblocage des fonds du prêt et cesseront au terme du remboursement complet de celui-ci.",
+        }
     },
     en: {
-        title: "Borrower's Insurance Certificate",
-        department: "Capfinfy Insurance",
+        header: {
+            line1: "Insurance Department",
+            line2: "Membership Service • Borrower Guarantee Certification Unit",
+        },
+        title: "Borrower's Insurance Certificate for a {loan_type}",
         reference: "Certificate No: {ref}",
-        importance: {
-            title: "Importance of this document",
-            description: "This certificate is the official document proving that your loan is covered by insurance. It is required by the lending institution and protects the borrower and their family in case of hardship (death, disability) by ensuring the continuity of repayment."
+        issue_date: "Issue Date: {issue_date}",
+        insured: {
+            title: "The Insured:",
         },
-        introduction: "Capfinfy Insurance, an insurance company, hereby certifies that the insured person designated below is covered by the group insurance contract No. 789-101112 underwritten by Capfinfy, for the guarantees and the loan identified below.",
-        insured_label: "Insured",
-        loan_id_label: "Insured Loan (Contract No.)",
-        capital_label: "Initially Insured Capital",
-        coverage_summary: "Summary of Guarantees Acquired by the Insured",
+        beneficiary: {
+            title: "The Beneficiary:",
+            content: "The lending institution partner of Capfinfy, for loan contract No. {loan_contract_ref}.",
+        },
+        object_title: "Subject: Group insurance certificate for a {loan_type}",
+        object_content: "We, the undersigned, acting on behalf of our insurance partner, hereby certify that the above-mentioned insured person is covered by the group insurance contract No. 789-456, underwritten by Capfinfy as part of their loan.",
+        loan_details: {
+            title: "Details of the Insured Loan",
+            nature: "Type of loan: {loan_type}",
+            ref: "Associated loan number: {loan_contract_ref}",
+            amount: "Amount of insured capital: {insured_capital}",
+            duration: "Duration of insurance coverage: {coverage_duration} months, coinciding with the loan term.",
+        },
         guarantees: {
-            death: { "title": "Death", "description": "In the event of the insured's death before the age of 75, the insurer pays the outstanding capital to the lender as of the date of death." },
-            disability: { "title": "Total and Irreversible Loss of Autonomy (PTIA)", "description": "If the insured is recognized as being in a state of PTIA, the insurer pays the outstanding capital to the lender, leading to the closure of the loan." },
-            incapacity: { "title": "Total Temporary Incapacity for Work (ITT)", "description": "In the event of a work stoppage due to illness or accident, coverage of 100% of the loan installments after a continuous deductible period of 90 days." }
+            title: "Applicable Guarantees",
+            intro: "Subject to the terms, conditions, and exclusions stipulated in the insurance contract information notice, the insured person benefits from the following guarantees:",
+            death: "Death: Payment of the outstanding capital to the lending institution.",
+            ptia: "Total and Irreversible Loss of Autonomy (PTIA): Payment of the outstanding capital to the lending institution.",
+            itt: "Total Temporary Incapacity for Work (ITT): Coverage of loan installments after a deductible period.",
         },
-        validity: { "title": "Validity", "description": "This certificate is valid subject to the regular payment of insurance premiums and as long as the aforementioned loan is being repaid." },
-        conclusion: "Done in Lyon, on {signature_date}, to serve as legal proof.",
-        director_title: "Director of Insurance"
+        premium: {
+            title: "Cost of Insurance",
+            content: "Monthly insurance premium: {monthly_premium} / month. This amount is payable monthly, in addition to your loan installment.",
+        },
+        validity: {
+            title: "Effective Date and Validity",
+            content: "This certificate is issued to serve as legal proof. The guarantees will take effect on the date the loan funds are disbursed and will cease upon full repayment of the loan.",
+        }
     }
 };

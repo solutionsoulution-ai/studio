@@ -1,9 +1,7 @@
 
 import React from 'react';
-import Image from 'next/image';
-import { Landmark, Phone, Mail } from 'lucide-react';
+import { Landmark } from 'lucide-react';
 import { invoiceClauses } from '@/data/documents/invoice-clauses';
-import { signatureData } from '@/data/documents/signature-data';
 
 interface InvoiceTemplateProps {
     formData: any;
@@ -12,7 +10,6 @@ interface InvoiceTemplateProps {
 
 const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ formData, lang }) => {
     const clauses = invoiceClauses[lang] || invoiceClauses['fr'];
-    const signer = signatureData.finance;
     const items = formData.items || [{ description: 'Frais de dossier pour ouverture de prêt', quantity: 1, unit_price: 450 }];
     const subtotal = items.reduce((acc: number, item: any) => acc + (Number(item.quantity) || 0) * (Number(item.unit_price) || 0), 0);
     const vatRate = 0.20;
@@ -45,10 +42,6 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ formData, lang }) => 
             </header>
 
             <main>
-                <div className="bg-[#f4f4f5] p-6 rounded-lg mb-8 text-sm">
-                    <h3 className="font-bold text-lg mb-2 text-[#09090b]">{clauses.importance.title}</h3>
-                    <p className="text-[#707079]">{clauses.importance.description}</p>
-                </div>
                 <div className="mb-12">
                     <h3 className="text-sm font-semibold uppercase text-[#707079] mb-2">{clauses.bill_to_label}</h3>
                     <p className="font-bold text-lg text-[#09090b]">{formData.client_name || '___________'}</p>
@@ -100,21 +93,11 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ formData, lang }) => 
                     <p className="font-mono bg-white p-2 rounded border border-[#f4f4f5] mb-2">{formData.iban || 'FRXX XXXX XXXX XXXX XXXX XXXX XXX'}</p>
                     <p className="text-xs italic text-[#707079]">{clauses.payment_terms.late_penalty}</p>
                 </div>
-                 <div className="mt-16 text-center">
-                    {signer.signatureUrl && <Image src={signer.signatureUrl} alt={`Signature de ${signer.name}`} width={120} height={40} className="mx-auto" />}
-                    <p className="text-sm font-semibold border-t border-[#707079] mt-2 pt-2 inline-block px-4">{signer.name}</p>
-                    <p className="text-xs text-[#707079]">{signer.title[lang]}</p>
-                </div>
             </main>
 
             <footer className="mt-16 pt-8 border-t border-[#f4f4f5] text-center text-xs text-[#707079]">
-                 <p className="mb-4">
-                    Pour toute question concernant cette facture, veuillez contacter notre service comptabilité.
-                 </p>
-                <div className="flex justify-center items-center space-x-4">
-                    <span className="flex items-center"><Phone className="h-3 w-3 mr-1" /> +33 7 56 98 67 69</span>
-                    <span className="flex items-center"><Mail className="h-3 w-3 mr-1" /> contact@capfinfy.com</span>
-                </div>
+                 <p>{clauses.footer.thank_you}</p>
+                 <p>{clauses.footer.contact_info}</p>
             </footer>
         </div>
     );
