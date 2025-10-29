@@ -28,29 +28,38 @@ export function usePDFGenerator() {
         setIsLoading(true);
 
         try {
+            // Force html2canvas to capture the full scrollable height
             const canvas = await html2canvas(input, {
                 scale: 2,
                 useCORS: true,
                 logging: false,
+                // These are the key properties to capture full content
+                windowHeight: input.scrollHeight,
+                scrollY: -window.scrollY, 
             });
 
             const imgData = canvas.toDataURL('image/jpeg', 0.98);
             const pdf = new jsPDF(orientation, 'mm', 'a4');
+            
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = pdf.internal.pageSize.getHeight();
 
             const canvasWidth = canvas.width;
             const canvasHeight = canvas.height;
+            
             const ratio = canvasWidth / pdfWidth;
             const imgHeight = canvasHeight / ratio;
+
             let heightLeft = imgHeight;
             let position = 0;
 
+            // Add the first page
             pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, imgHeight);
             heightLeft -= pdfHeight;
 
+            // Add new pages if content is longer than one page
             while (heightLeft > 0) {
-                position -= pdfHeight;
+                position = heightLeft - imgHeight; // Recalculate position for the new page
                 pdf.addPage();
                 pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, imgHeight);
                 heightLeft -= pdfHeight;
