@@ -80,8 +80,8 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ formData, lang }) => 
                     <tbody>
                         {items.map((item: any, index: number) => (
                             <tr key={index} className="border-b border-slate-200">
-                                <td className="p-2">{item.description || ''}</td>
-                                <td className="p-2 text-center">{item.quantity || 1}</td>
+                                <td className="p-2">{item.description}</td>
+                                <td className="p-2 text-center">{item.quantity}</td>
                                 <td className="p-2 text-right">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(Number(item.unit_price) || 0)}</td>
                                 <td className="p-2 text-right font-semibold">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format((Number(item.quantity) || 1) * (Number(item.unit_price) || 0))}</td>
                             </tr>
@@ -117,6 +117,10 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ formData, lang }) => 
                 <h4 className="font-bold text-slate-700 mb-2">{clauses.payment_terms.title}</h4>
                 <p className="mb-2">{clauses.payment_terms.instruction}</p>
                 <div className="space-y-2 bg-white p-3 rounded border border-slate-200 my-1 font-mono text-xs">
+                    <div>
+                        <span className="font-sans font-semibold text-slate-600">{clauses.payment_terms.account_holder_label}: </span>
+                        <span>{formData.account_holder_name || ''}</span>
+                    </div>
                     <div>
                         <span className="font-sans font-semibold text-slate-600">{clauses.payment_terms.bank_name_label}: </span>
                         <span>{formData.bank_name || ''}</span>

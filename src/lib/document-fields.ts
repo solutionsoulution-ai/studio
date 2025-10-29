@@ -97,6 +97,7 @@ export const documentFields: { [key: string]: DocumentField[] } = {
       { name: 'item3_unit_price', label: {fr: 'Article 3 - Prix U. (€)'}, type: 'number', validation: { type: 'any' } },
     ]},
     { name: 'bank_details_group', label: {fr: 'Coordonnées Bancaires', en: 'Bank Details', de: 'Bankverbindung'}, type: 'group', validation: {type: 'any'}, fields: [
+      { name: 'account_holder_name', label: {fr: 'Nom du titulaire du compte', en: 'Account Holder Name', de: 'Name des Kontoinhabers'}, type: 'text', validation: { type: 'string' } },
       { name: 'bank_name', label: {fr: 'Nom de la banque (Domiciliation)', en: 'Bank Name', de: 'Bankname'}, type: 'text', validation: { type: 'string' } },
       { name: 'iban', label: {fr:'IBAN', en: 'IBAN', de: 'IBAN'}, type: 'text', validation: { type: 'string' } },
       { name: 'bic', label: {fr:'BIC / SWIFT', en: 'BIC / SWIFT', de: 'BIC / SWIFT'}, type: 'text', validation: { type: 'string' } },
