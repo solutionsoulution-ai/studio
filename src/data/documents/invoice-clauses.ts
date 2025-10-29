@@ -23,7 +23,8 @@ export const invoiceClauses: Clauses = {
         footer: {
             "thank_you": "Nous vous remercions de votre confiance.",
             "contact_info": "Pour toute question, contactez notre service comptabilité à contact@capfinfy.com"
-        }
+        },
+        items_section_title: "Détails de la facturation"
     },
     en: {
         title: "Invoice",
@@ -46,7 +47,8 @@ export const invoiceClauses: Clauses = {
         footer: {
             "thank_you": "Thank you for your business.",
             "contact_info": "For any questions, please contact our accounting department at contact@capfinfy.com"
-        }
+        },
+        items_section_title: "Billing Details"
     },
     de: {
         title: "Rechnung",
@@ -69,7 +71,7 @@ export const invoiceClauses: Clauses = {
         footer: {
             "thank_you": "Vielen Dank für Ihr Vertrauen.",
             "contact_info": "Bei Fragen wenden Sie sich bitte an unsere Buchhaltung unter contact@capfinfy.com"
-        }
+        },
+        items_section_title: "Rechnungsdetails"
     }
 };
-

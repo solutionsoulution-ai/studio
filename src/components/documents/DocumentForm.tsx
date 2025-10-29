@@ -20,42 +20,79 @@ interface DocumentFormProps {
   documentType: string;
 }
 
-const DocumentForm: React.FC<DocumentFormProps> = ({ documentType }) => {
-  const { setFormData, lang, setLang } = useDocumentGenerator();
-  const { generatePDF, isLoading } = usePDFGenerator();
+const buildSchema = (fields: DocumentField[]): z.ZodObject<any> => {
+    const shape: any = {};
+    fields.forEach((field) => {
+        if (field.type === 'group' && field.fields) {
+            field.fields.forEach(subField => {
+                shape[subField.name] = buildFieldSchema(subField);
+            });
+        } else {
+            shape[field.name] = buildFieldSchema(field);
+        }
+    });
+    return z.object(shape);
+};
 
-  const currentFields = documentFields[documentType as keyof typeof documentFields] || [];
-
-  const schema = z.object(
-    currentFields.reduce((acc: any, field: DocumentField) => {
-      let fieldSchema;
-      switch (field.validation.type) {
+const buildFieldSchema = (field: DocumentField): z.ZodType<any, any> => {
+    let fieldSchema;
+    switch (field.validation.type) {
         case 'string':
-          fieldSchema = z.string().min(1, { message: "Ce champ est requis." });
-          if (field.validation.email) fieldSchema = fieldSchema.email({ message: "Adresse e-mail invalide." });
-          break;
+            fieldSchema = z.string().min(1, { message: "Ce champ est requis." });
+            if (field.validation.email) fieldSchema = fieldSchema.email({ message: "Adresse e-mail invalide." });
+            break;
         case 'number':
-          fieldSchema = z.preprocess(
-            (val) => Number(String(val)),
-            z.number().min(0, { message: "Doit être un nombre positif." })
-          );
-          break;
+            fieldSchema = z.preprocess(
+                (val) => val === '' ? null : Number(String(val)),
+                 z.number().min(0, { message: "Doit être un nombre positif." }).nullable()
+            );
+            break;
         case 'date':
             fieldSchema = z.string().refine((val) => !isNaN(Date.parse(val)), {
                 message: "Date invalide",
             });
             break;
+        case 'any':
+             fieldSchema = z.any().optional();
+             break;
         default:
-          fieldSchema = z.any();
-      }
-      acc[field.name] = fieldSchema;
-      return acc;
-    }, {})
-  );
+            fieldSchema = z.any();
+    }
+    // Make fields not required if they are not the first item fields for invoice
+     if (field.name.includes('item') && !field.name.includes('item1')) {
+       return fieldSchema.optional().nullable();
+    }
+    if (field.validation.type === 'string' && !field.name.includes('item1_description')) {
+        const schema = fieldSchema as z.ZodString;
+        if(field.name.includes('item')) return schema.optional().nullable();
+    }
+
+
+    return fieldSchema;
+};
+
+
+const DocumentForm: React.FC<DocumentFormProps> = ({ documentType }) => {
+  const { setFormData, lang, setLang } = useDocumentGenerator();
+  const { generatePDF, isLoading } = usePDFGenerator();
+
+  const currentFields = documentFields[documentType as keyof typeof documentFields] || [];
+  
+  const schema = buildSchema(currentFields);
 
   const methods = useForm({
     resolver: zodResolver(schema),
-    mode: 'onChange'
+    mode: 'onChange',
+    defaultValues: currentFields.reduce((acc: any, field) => {
+        if (field.type === 'group' && field.fields) {
+            field.fields.forEach(subField => {
+                acc[subField.name] = subField.defaultValue ?? '';
+            });
+        } else {
+            acc[field.name] = field.defaultValue ?? '';
+        }
+        return acc;
+    }, {}),
   });
 
   const { handleSubmit, control, watch } = methods;
@@ -72,19 +109,32 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType }) => {
   };
 
   const renderField = (field: DocumentField) => {
+    if (field.type === 'group') {
+      return (
+        <div key={field.name} className="space-y-4 rounded-lg border p-4">
+          <p className="font-medium text-sm">{field.label[lang] || field.label['fr']}</p>
+          <div className="grid gap-4 sm:grid-cols-1">
+            {field.fields?.map(subField => (
+                 <div key={subField.name} className="grid grid-cols-1 items-center gap-2">
+                    {renderField(subField)}
+                </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
     return (
       <div key={field.name} className="space-y-2">
-        <Label htmlFor={field.name}>{field.label['fr']}</Label>
+        <Label htmlFor={field.name}>{field.label[lang] || field.label['fr']}</Label>
         <Controller
           name={field.name}
           control={control}
-          defaultValue={field.defaultValue || ''}
           render={({ field: controllerField, fieldState }) => (
             <>
               {field.type === 'textarea' ? (
-                <Textarea {...controllerField} id={field.name} placeholder={field.placeholder?.['fr']} />
+                <Textarea {...controllerField} id={field.name} placeholder={field.placeholder?.[lang] || field.placeholder?.['fr']} />
               ) : (
-                <Input {...controllerField} id={field.name} type={field.type} placeholder={field.placeholder?.['fr']} />
+                <Input {...controllerField} value={controllerField.value || ''} id={field.name} type={field.type} placeholder={field.placeholder?.[lang] || field.placeholder?.['fr']} />
               )}
               {fieldState.error && <p className="text-sm text-red-500">{fieldState.error.message}</p>}
             </>

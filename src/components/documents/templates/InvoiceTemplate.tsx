@@ -10,7 +10,29 @@ interface InvoiceTemplateProps {
 
 const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ formData, lang }) => {
     const clauses = invoiceClauses[lang] || invoiceClauses['fr'];
-    const items = formData.items || [{ description: 'Frais de dossier pour ouverture de prêt', quantity: 1, unit_price: 450 }];
+
+    const getItemsFromFormData = (data: any) => {
+        const items = [];
+        for (let i = 1; i <= 3; i++) {
+            const description = data[`item${i}_description`];
+            const quantity = data[`item${i}_quantity`];
+            const unit_price = data[`item${i}_unit_price`];
+
+            if (description && description.trim() !== '') {
+                items.push({
+                    description,
+                    quantity: Number(quantity) || 1,
+                    unit_price: Number(unit_price) || 0,
+                });
+            }
+        }
+        if (items.length === 0) {
+            return [{ description: 'Frais de dossier pour ouverture de prêt', quantity: 1, unit_price: 450 }];
+        }
+        return items;
+    };
+    
+    const items = getItemsFromFormData(formData);
     const subtotal = items.reduce((acc: number, item: any) => acc + (Number(item.quantity) || 0) * (Number(item.unit_price) || 0), 0);
     const vatRate = 0.20;
     const vat = subtotal * vatRate;
@@ -113,4 +135,3 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ formData, lang }) => 
 };
 
 export default InvoiceTemplate;
-
