@@ -1,47 +1,12 @@
 
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
-import { signatureData } from '@/data/documents/signature-data';
-
-const imageCache: { [key: string]: string } = {};
-
-async function getBase64Image(url: string): Promise<string> {
-    if (imageCache[url]) {
-        return imageCache[url];
-    }
-    try {
-        const response = await fetch(url);
-        const blob = await response.blob();
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                const base64data = reader.result as string;
-                imageCache[url] = base64data;
-                resolve(base64data);
-            };
-            reader.onerror = reject;
-        });
-    } catch (error) {
-        console.error(`Failed to fetch image directly: ${url}`, error);
-        // Fallback or error handling
-        return '';
-    }
-}
-
 
 export function usePDFGenerator() {
     const [isLoading, setIsLoading] = useState(false);
-
-    useEffect(() => {
-        // Pre-cache signature images on component mount
-        Object.values(signatureData).forEach(signer => {
-            if (signer.signatureUrl) {
-                getBase64Image(signer.signatureUrl);
-            }
-        });
-    }, []);
 
     const generatePDF = async ({
         elementId,
@@ -55,46 +20,53 @@ export function usePDFGenerator() {
 
         setIsLoading(true);
 
-        const pdf = new jsPDF('p', 'pt', 'a4');
-        const margin = 40;
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const contentWidth = pdfWidth - margin * 2;
-        let y = margin;
-
-        const processNode = async (node: Element) => {
-            if (y > pdf.internal.pageSize.getHeight() - margin) {
-                pdf.addPage();
-                y = margin;
-            }
-
-            const styles = window.getComputedStyle(node);
-            const fontSize = parseFloat(styles.fontSize);
-            pdf.setFontSize(fontSize);
-            
-            const isBold = parseInt(styles.fontWeight) >= 600;
-            pdf.setFont(isBold ? 'Helvetica-Bold' : 'Helvetica', isBold ? 'bold' : 'normal');
-
-            let nodeText = node.textContent?.trim() || '';
-            const tagName = node.tagName.toLowerCase();
-
-            if (tagName === 'h1' || tagName === 'h2' || tagName === 'h3' || tagName === 'h4' || tagName === 'h5') {
-                 y += fontSize / 2;
-            }
-            
-            const splitText = pdf.splitTextToSize(nodeText, contentWidth);
-            pdf.text(splitText, margin, y);
-            y += (splitText.length * fontSize) * 1.2;
-
-            if(node.children.length > 0) {
-                 for (const child of Array.from(node.children)) {
-                    await processNode(child as Element);
-                 }
-            }
-        };
-
         try {
-            await processNode(input);
+            // 1. Capture the entire element as a high-resolution canvas
+            const canvas = await html2canvas(input, {
+                scale: 3, // High resolution capture
+                useCORS: true, // Important for external images like signatures
+                logging: false,
+                windowHeight: input.scrollHeight, // Ensure full height is captured
+                scrollY: -window.scrollY,
+            });
+
+            // 2. Get image data from the canvas
+            const imgData = canvas.toDataURL('image/png');
+
+            // 3. Create a new PDF in A4 format
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'pt',
+                format: 'a4',
+            });
+
+            // 4. Calculate dimensions
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+            const canvasWidth = canvas.width;
+            const canvasHeight = canvas.height;
+            const ratio = canvasWidth / pdfWidth;
+            const imgHeight = canvasHeight / ratio;
+
+            // 5. Paginate the image
+            let heightLeft = imgHeight;
+            let position = 0;
+
+            // Add the first page
+            pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
+            heightLeft -= pdfHeight;
+
+            // Add new pages if the content is longer than one page
+            while (heightLeft > 0) {
+                position = heightLeft - imgHeight;
+                pdf.addPage();
+                pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
+                heightLeft -= pdfHeight;
+            }
+
+            // 6. Save the PDF
             pdf.save(fileName);
+
         } catch (error) {
             console.error("Error generating PDF:", error);
         } finally {
