@@ -28,11 +28,8 @@ export function usePDFGenerator() {
         setIsLoading(true);
 
         try {
-            // Hide the scrollbar during capture
-            input.style.overflow = 'hidden';
-
             const canvas = await html2canvas(input, {
-                scale: 2, // Increase scale for better quality
+                scale: 2, // Higher scale for better resolution
                 useCORS: true,
                 logging: false,
                 width: input.scrollWidth,
@@ -41,12 +38,8 @@ export function usePDFGenerator() {
                 windowHeight: input.scrollHeight,
             });
             
-             // Restore scrollbar
-            input.style.overflow = '';
-
             const imgData = canvas.toDataURL('image/png');
             
-            // A4 dimensions in mm: 210 x 297
             const pdf = new jsPDF({
                 orientation,
                 unit: 'mm',
@@ -57,21 +50,46 @@ export function usePDFGenerator() {
             const pdfHeight = pdf.internal.pageSize.getHeight();
             const canvasWidth = canvas.width;
             const canvasHeight = canvas.height;
-            const ratio = canvasWidth / canvasHeight;
-
-            let imgWidth = pdfWidth;
-            let imgHeight = imgWidth / ratio;
-
-            if (imgHeight > pdfHeight) {
-                imgHeight = pdfHeight;
-                imgWidth = imgHeight * ratio;
-            }
             
-            // Center the image on the page
-            const x = (pdfWidth - imgWidth) / 2;
-            const y = (pdfHeight - imgHeight) / 2;
+            const pdfAspectRatio = pdfWidth / pdfHeight;
+            const canvasAspectRatio = canvasWidth / canvasHeight;
 
-            pdf.addImage(imgData, 'PNG', x, y, imgWidth, imgHeight);
+            let renderWidth = pdfWidth;
+            let renderHeight = pdfHeight;
+            
+            if (canvasAspectRatio > pdfAspectRatio) {
+                renderHeight = pdfWidth / canvasAspectRatio;
+            } else {
+                renderWidth = pdfHeight * canvasAspectRatio;
+            }
+
+            const x = (pdfWidth - renderWidth) / 2;
+            let y = 0; // Start at the top for multi-page
+            
+            let canvasRemainingHeight = canvasHeight;
+            const pageCanvasHeight = (canvasWidth / pdfWidth) * pdfHeight;
+
+
+            while (canvasRemainingHeight > 0) {
+                const pageCanvas = document.createElement('canvas');
+                pageCanvas.width = canvasWidth;
+                pageCanvas.height = pageCanvasHeight;
+                const pageCtx = pageCanvas.getContext('2d');
+
+                if (pageCtx) {
+                    pageCtx.drawImage(canvas, 0, y * (canvasWidth/pdfWidth) , canvasWidth, pageCanvasHeight, 0, 0, canvasWidth, pageCanvasHeight);
+                    const pageImgData = pageCanvas.toDataURL('image/png');
+
+                    if (y > 0) {
+                        pdf.addPage();
+                    }
+                    pdf.addImage(pageImgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                }
+                
+                y += pdfHeight;
+                canvasRemainingHeight -= pageCanvasHeight;
+            }
+
             pdf.save(fileName);
         } catch (error) {
             console.error("Error generating PDF:", error);

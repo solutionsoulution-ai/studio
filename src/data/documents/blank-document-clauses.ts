@@ -11,6 +11,13 @@ export const blankDocumentClauses = {
         footer: "Capfinfy © " + new Date().getFullYear() + " - Tous droits réservés."
     },
     en: {
-        // English version can be added here
+        title: "Document Title",
+        department: "Legal & Financial Department",
+        importance: {
+            title: "Importance of this document",
+            description: "This document serves as a basic template. Its importance will be defined by the content you add to it. It establishes a formal and professional framework for written communication.",
+        },
+        placeholder: "The content of this document is being defined. Please replace this text with the necessary clauses, articles, and information.",
+        footer: "Capfinfy © " + new Date().getFullYear() + " - All rights reserved."
     }
-}
+};
