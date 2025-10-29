@@ -81,5 +81,45 @@ export const insuranceCertificateClauses: Clauses = {
             title: "Effective Date and Validity",
             content: "This certificate is issued to serve as legal proof. The guarantees will take effect on the date the loan funds are disbursed and will cease upon full repayment of the loan.",
         }
+    },
+    de: {
+        header: {
+            line1: "Versicherungsabteilung",
+            line2: "Mitgliederservice • Abteilung für die Zertifizierung von Kreditnehmergarantien",
+        },
+        title: "Kreditnehmer-Versicherungszertifikat für ein {loan_type}",
+        reference: "Zertifikat Nr.: {ref}",
+        issue_date: "Ausstellungsdatum: {issue_date}",
+        insured: {
+            title: "Der Versicherte:",
+        },
+        beneficiary: {
+            title: "Der Begünstigte:",
+            content: "Die kreditgebende Institution, Partner von Capfinfy, für den Darlehensvertrag Nr. {loan_contract_ref}.",
+        },
+        object_title: "Betreff: Gruppenversicherungszertifikat für ein {loan_type}",
+        object_content: "Wir, die Unterzeichner, handeln im Namen unseres Versicherungspartners und bescheinigen hiermit, dass die oben genannte versicherte Person durch den von Capfinfy im Rahmen ihres Darlehens abgeschlossenen Gruppenversicherungsvertrag Nr. 789-456 versichert ist.",
+        loan_details: {
+            title: "Details des versicherten Darlehens",
+            nature: "Art des Darlehens: {loan_type}",
+            ref: "Zugehörige Darlehensnummer: {loan_contract_ref}",
+            amount: "Versicherte Kapitalsumme: {insured_capital}",
+            duration: "Dauer des Versicherungsschutzes: {coverage_duration} Monate, übereinstimmend mit der Darlehenslaufzeit.",
+        },
+        guarantees: {
+            title: "Anwendbare Garantien",
+            intro: "Vorbehaltlich der in der Informationsbroschüre des Versicherungsvertrags festgelegten Bedingungen und Ausschlüsse profitiert die versicherte Person von den folgenden Garantien:",
+            death: "Tod: Zahlung des Restkapitals an das kreditgebende Institut.",
+            ptia: "Vollständiger und unwiderruflicher Autonomieverlust (PTIA): Zahlung des Restkapitals an das kreditgebende Institut.",
+            itt: "Vollständige vorübergehende Arbeitsunfähigkeit (ITT): Übernahme der Darlehensraten nach einer Karenzzeit.",
+        },
+        premium: {
+            title: "Versicherungskosten",
+            content: "Monatliche Versicherungsprämie: {monthly_premium} / Monat. Dieser Betrag ist monatlich zusätzlich zu Ihrer Darlehensrate zu zahlen.",
+        },
+        validity: {
+            title: "Gültigkeitsdatum und Wirksamkeit",
+            content: "Dieses Zertifikat wird ausgestellt, um als Rechtsnachweis zu dienen. Die Garantien treten am Tag der Auszahlung der Darlehensmittel in Kraft und enden mit der vollständigen Rückzahlung des Darlehens.",
+        }
     }
 };

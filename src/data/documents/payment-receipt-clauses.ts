@@ -43,5 +43,26 @@ export const paymentReceiptClauses: Clauses = {
             content: "We, the undersigned, Capfinfy, hereby confirm receipt of the aforementioned sum. This receipt serves as proof of partial or total settlement of the referenced debt. Barring errors or omissions, this payment settles the amount due.",
         },
         signature_label: "For Capfinfy, Accounting Department",
+    },
+    de: {
+        title: "Zahlungsbeleg",
+        header: {
+            line1: "Buchhaltung",
+            line2: "Abteilung für Zahlungsverfolgung",
+        },
+        reference: "Beleg Nr.: {ref}",
+        date: "Zahlungsdatum: {payment_date}",
+        received_from: "Erhalten von:",
+        payment_details: {
+            title: "Zahlungsdetails",
+            amount_label: "Erhaltener Betrag",
+            method_label: "Zahlungsmethode",
+            reference_label: "Für die folgende Referenz",
+        },
+        confirmation: {
+            title: "Bestätigung",
+            content: "Wir, die Unterzeichner, Capfinfy, bestätigen hiermit den Erhalt des oben genannten Betrags. Dieser Beleg dient als Nachweis für die teilweise oder vollständige Begleichung der angegebenen Forderung. Irrtümer und Auslassungen vorbehalten, begleicht diese Zahlung den fälligen Betrag.",
+        },
+        signature_label: "Für Capfinfy, Buchhaltung",
     }
 };

@@ -55,5 +55,32 @@ export const eligibilityCertificateClauses: Clauses = {
                 content: "This certificate is valid for 30 calendar days from its date of issue, i.e., until {validity_date}. After this period, a new assessment will be required. The validity is conditional on the absence of any significant change in the beneficiary's financial situation and on the subsequent verification of the original supporting documents.",
             }
         },
+    },
+    de: {
+        header: {
+            line1: "Finanzanalyseabteilung",
+            line2: "Abteilung für Bonitätszertifizierung",
+        },
+        title: "Zertifikat über vorab genehmigte Bonität für ein {project_type}-Projekt",
+        reference: "Zertifikat Nr.: {ref}",
+        validity: "Gültig bis: {validity_date}",
+        beneficiary: {
+            title: "Begünstigter des Zertifikats:",
+        },
+        articles: {
+            object: {
+                title: "Artikel 1: Zweck des Zertifikats",
+                content: "Capfinfy, handelnd als Finanzvermittler, bescheinigt hiermit, eine vorläufige Analyse der finanziellen Situation des oben genannten Begünstigten durchgeführt zu haben. Auf der Grundlage der angegebenen Elemente und unserer aktuellen Bewertungskriterien wird der Begünstigte als kreditwürdig für eine Finanzierung bis zu einem Höchstbetrag von:",
+                amount_label: "Maximaler Förderbetrag",
+            },
+            scope: {
+                title: "Artikel 2: Geltungsbereich und Einschränkungen",
+                content: "Dieses Zertifikat bescheinigt eine theoretische Finanzierungskapazität zum Zeitpunkt seiner Ausstellung. Es ist dazu bestimmt, Dritten (Immobilienmaklern, Verkäufern usw.) als Sicherheit für die Fähigkeit des Begünstigten zur Finanzierung eines Projekts vorgelegt zu werden. Es stellt in keiner Weise ein verbindliches Darlehensangebot dar und bindet Capfinfy oder seine darlehensgebenden Partner nicht.",
+            },
+            validity: {
+                title: "Artikel 3: Gültigkeit",
+                content: "Dieses Zertifikat ist 30 Kalendertage ab Ausstellungsdatum gültig, d.h. bis zum {validity_date}. Nach diesem Zeitraum ist eine neue Bewertung erforderlich. Die Gültigkeit ist an die Bedingung geknüpft, dass sich die finanzielle Situation des Begünstigten nicht wesentlich ändert und die Originalbelege nachträglich überprüft werden.",
+            }
+        },
     }
 };

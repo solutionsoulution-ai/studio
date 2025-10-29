@@ -43,5 +43,26 @@ export const invoiceClauses: Clauses = {
             "thank_you": "Thank you for your business.",
             "contact_info": "For any questions, please contact our accounting department at contact@capfinfy.com"
         }
+    },
+    de: {
+        title: "Rechnung",
+        invoice_number_label: "Rechnung Nr.:",
+        date_label: "Datum:",
+        due_date_label: "Fälligkeitsdatum:",
+        bill_to_label: "Rechnung an:",
+        table_headers: { "description": "Beschreibung", "quantity": "Menge", "unit_price": "Einzelpreis (exkl. MwSt.)", "amount": "Betrag (exkl. MwSt.)" },
+        subtotal_label: "Zwischensumme (exkl. MwSt.)",
+        vat_label: "MwSt. (20%)",
+        total_label: "Nettobetrag (inkl. MwSt.)",
+        payment_terms: {
+            "title": "Zahlungsbedingungen",
+            "due_date": "Zahlung fällig bei Rechnungserhalt, spätestens innerhalb von 30 Tagen.",
+            "iban_label": "Bitte überweisen Sie den Betrag auf das folgende Bankkonto unter Angabe der Rechnungsnummer:",
+            "late_penalty": "Gemäß den gesetzlichen Bestimmungen werden bei Zahlungsverzug Verzugszinsen in Höhe des Dreifachen des gesetzlichen Zinssatzes sowie eine pauschale Entschädigung für Beitreibungskosten in Höhe von 40 € erhoben."
+        },
+        footer: {
+            "thank_you": "Vielen Dank für Ihr Vertrauen.",
+            "contact_info": "Bei Fragen wenden Sie sich bitte an unsere Buchhaltung unter contact@capfinfy.com"
+        }
     }
 };

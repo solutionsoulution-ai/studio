@@ -13,16 +13,17 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { usePDFGenerator } from '@/hooks/use-pdf-generator';
 import { Loader2 } from 'lucide-react';
 import { documentFields, DocumentField } from '@/lib/document-fields';
+import type { Language } from '@/data/documents/languages';
 
 interface DocumentFormProps {
   documentType: string;
   onFormChange: (data: any) => void;
-  onLanguageChange: (lang: 'fr' | 'en') => void;
-  initialLang: 'fr' | 'en';
+  onLanguageChange: (lang: Language) => void;
+  initialLang: Language;
 }
 
 const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, onFormChange, onLanguageChange, initialLang }) => {
-  const [lang, setLang] = useState<'fr' | 'en'>(initialLang);
+  const [lang, setLang] = useState<Language>(initialLang);
   const { generatePDF, isLoading } = usePDFGenerator();
 
   const currentFields = documentFields[documentType as keyof typeof documentFields] || [];
@@ -72,7 +73,7 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, onFormChange,
     generatePDF({ elementId: 'pdf-content', fileName: `${documentType}.pdf` });
   };
   
-  const handleLangChange = (newLang: 'fr' | 'en') => {
+  const handleLangChange = (newLang: Language) => {
       setLang(newLang);
       onLanguageChange(newLang);
   }
@@ -118,6 +119,7 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, onFormChange,
                 <SelectContent>
                   <SelectItem value="fr">Français</SelectItem>
                   <SelectItem value="en">English</SelectItem>
+                  <SelectItem value="de">Deutsch</SelectItem>
                 </SelectContent>
               </Select>
             </div>

@@ -65,5 +65,37 @@ export const debtRecognitionClauses: Clauses = {
                 content: "Article L. 313-24 of the Consumer Code stipulates the importance of the commitment. The debtor acknowledges having read and understood the entire loan contract to which this acknowledgment of debt relates and having received a copy of each document.",
             }
         },
+    },
+    de: {
+        header: {
+            line1: "Europäischer Finanzdienst",
+            line2: "Rechts- und Garantieabteilung • Abteilung für die Formalisierung von Verpflichtungen",
+        },
+        title: "Schuldanerkenntnis für ein {type_of_loan}",
+        reference: "Dokument Nr.: {ref}",
+        date: "Datum: {date}",
+        parties: {
+            title: "Zwischen den Unterzeichnern:",
+            creditor_label: "Der Gläubiger:",
+            debtor_label: "Der Schuldner:",
+        },
+        articles: {
+            recognition: {
+                title: "Artikel 1: Schuldanerkenntnis",
+                content: "Ich, der/die Unterzeichnende, {debtor_name}, wohnhaft in {debtor_address}, erkenne hiermit an, Capfinfy, handelnd im Namen seiner Finanzpartner, die Summe von: {loan_amount} ({loan_amount_in_words}) zu schulden. Dieser Betrag entspricht dem Kapital eines {type_of_loan}, das mir gewährt wurde und dessen Erhalt ich bestätige.",
+            },
+            repayment: {
+                title: "Artikel 2: Rückzahlungsmodalitäten",
+                content: "Ich verpflichte mich, diesen Betrag vollständig zurückzuzahlen, zusammen mit den damit verbundenen Zinsen und Gebühren, gemäß dem Zeitplan und den Bedingungen, die im {type_of_loan}-Vertrag Nr. {loan_contract_ref}, den ich separat unterzeichnet habe, festgelegt sind. Die vereinbarte Rückzahlungsfrist beträgt {loan_term} Monate, außer im Falle einer vorzeitigen Rückzahlung oder eines Zahlungsverzugs, der den Zeitplan ändert.",
+            },
+            default: {
+                title: "Artikel 3: Verzugsklausel",
+                content: "Im Falle der Nichtzahlung einer oder mehrerer Raten erkenne ich an, dass der Gläubiger die im Darlehensvertrag vorgesehenen Klauseln geltend machen kann, einschließlich der sofortigen Fälligstellung des gesamten ausstehenden Kapitals zuzüglich anfallender Zinsen und Strafen.",
+            },
+            mention: {
+                title: "Artikel 4: Verständnis der Verpflichtung",
+                content: "Artikel L. 313-24 des Verbrauchergesetzbuches unterstreicht die Bedeutung der Verpflichtung. Der Schuldner bestätigt, den gesamten Darlehensvertrag, auf den sich dieses Schuldanerkenntnis bezieht, gelesen und verstanden zu haben und eine Kopie jedes Dokuments erhalten zu haben.",
+            }
+        },
     }
 };

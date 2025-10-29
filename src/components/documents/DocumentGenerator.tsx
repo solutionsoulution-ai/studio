@@ -12,8 +12,7 @@ import InsuranceNoticeTemplate from './templates/InsuranceNoticeTemplate';
 import InvoiceTemplate from './templates/InvoiceTemplate';
 import BlankDocumentTemplate from './templates/BlankDocumentTemplate';
 import PaymentReceiptTemplate from './templates/PaymentReceiptTemplate';
-
-type Language = 'fr' | 'en';
+import type { Language } from '@/data/documents/languages';
 
 const documentTemplates: { [key: string]: React.FC<any> } = {
   'reconnaissance-de-dette': DebtRecognitionTemplate,

@@ -41,5 +41,42 @@ export const suretyBondClauses: Clauses = {
     },
     en: {
        // English translations
+    },
+    de: {
+        header: {
+            line1: "Rechts- und Garantieabteilung",
+            line2: "Abteilung für Verpflichtungen • Abteilung für die Formalisierung von Garantien",
+        },
+        title: "Gesamtschuldnerische Bürgschaftsurkunde für ein {type_of_loan}",
+        reference: "Urkunde Nr.: {act_ref}",
+        parties: {
+            title: "Zwischen den Unterzeichnern:",
+            creditor_label: "Der Gläubiger:",
+            debtor_label: "Der Schuldner (Darlehensnehmer):",
+        },
+        articles: {
+            object: {
+                title: "Artikel 1: Gegenstand der Verpflichtung",
+                content: "Mit dieser Urkunde verpflichtet sich der Schuldner, dem Gläubiger die aus dem nachstehend genannten {type_of_loan}-Vertrag geschuldeten Beträge zu zahlen:",
+                acknowledgment: "Der Schuldner erklärt, die Art und den Umfang seiner Verpflichtungen vollständig zu kennen.",
+            },
+            scope: {
+                title: "Artikel 2: Umfang der Garantie",
+                content: "Die Verpflichtung des Schuldners erstreckt sich auf die Zahlung des Kapitals, der Zinsen, Provisionen, Gebühren und Nebenkosten sowie allgemein aller Beträge, die aus dem oben genannten Darlehensvertrag geschuldet werden könnten. Die Verpflichtung wird für die gesamte Laufzeit des Darlehens eingegangen.",
+            },
+            solidarity: {
+                title: "Artikel 3: Gesamtschuldnerische Haftung und Unteilbarkeit",
+                content: "Der Schuldner ist allein für die Schuld verantwortlich. Im Falle eines Ausfalls kann der Gläubiger die gesamte Schuld vom Schuldner einfordern.",
+            },
+            mention: {
+                title: "Artikel 4: Obligatorischer handschriftlicher Vermerk",
+                instruction: "Der Schuldner muss den folgenden Vermerk gemäß dem Gesetz handschriftlich kopieren:",
+                content: "'Ich, {borrower_name}, verpflichte mich, dem Kreditgeber die auf meinen Einkünften und meinem Vermögen geschuldeten Beträge zurückzuzahlen.'",
+            },
+            information: {
+                title: "Artikel 5: Geschuldete Informationen",
+                content: "Der Gläubiger verpflichtet sich, den Schuldner über jede Vertragsänderung zu informieren.",
+            },
+        },
     }
 };

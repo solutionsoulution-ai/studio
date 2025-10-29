@@ -71,5 +71,40 @@ export const insuranceNoticeClauses: Clauses = {
             title: "ARTICLE 5: CLAIM DECLARATION",
             description: "In the event of a claim (death, accident, illness), you or your beneficiaries must declare it to the insurer within the deadlines stipulated in the contract, enclosing all required supporting documents (medical certificate, death certificate, etc.)."
         }
+    },
+    de: {
+        title: "Informationsbroschüre",
+        subtitle: "Gruppen-Kreditnehmerversicherungsvertrag Nr. 789-101112",
+        importance: {
+            "title": "Bedeutung dieses Dokuments",
+            "description": "Dieses vorvertragliche Dokument ist unerlässlich. Es informiert Sie detailliert über die Merkmale Ihrer Kreditnehmerversicherung, einschließlich Garantien, Ausschlüsse und Ihrer Rechte, sodass Sie in voller Kenntnis der Sachlage abschließen und mit anderen Angeboten vergleichen können."
+        },
+        introduction: "Diese Broschüre soll Sie über die Hauptmerkmale Ihrer Mitgliedschaft in der Kreditnehmerversicherung informieren. Sie hat keinen vertraglichen Wert, stellt aber eine Zusammenfassung der allgemeinen und besonderen Bedingungen dar, die gelten werden. Wir bitten Sie, sie sorgfältig zu lesen.",
+        guarantees: {
+            title: "ARTIKEL 1: ANGEBOTENE GARANTIEN",
+            items: {
+                death: { "title": "Todesfallleistung", "description": "Im Todesfall des Versicherten vor Ende des Darlehens verpflichtet sich der Versicherer, dem Kreditgeber das am Todestag ausstehende Kapital entsprechend dem versicherten Anteil zurückzuzahlen." },
+                disability: { "title": "Leistung bei vollständigem und unwiderruflichem Autonomieverlust (PTIA)", "description": "Wenn der Versicherte infolge einer Krankheit oder eines Unfalls als PTIA anerkannt wird (Hilfe einer dritten Person für die Verrichtungen des täglichen Lebens erforderlich), übernimmt der Versicherer die Rückzahlung des ausstehenden Kapitals." },
+                incapacity: { "title": "Leistung bei vollständiger vorübergehender Arbeitsunfähigkeit (ITT)", "description": "Im Falle einer vollständigen und ununterbrochenen Arbeitsniederlegung aufgrund von Krankheit oder Unfall und nach einer Karenzzeit (in der Regel 90 Tage) übernimmt der Versicherer die Zahlung Ihrer Darlehensraten für die Dauer Ihrer Arbeitsunfähigkeit." }
+            }
+        },
+        exclusions: {
+            title: "ARTIKEL 2: HAUPTAUSSCHLÜSSE",
+            intro: "Bestimmte Situationen sind vom Vertrag nicht abgedeckt. Insbesondere sind ausgeschlossen:",
+            items: [
+                "Der Selbstmord des Versicherten im ersten Versicherungsjahr.",
+                "Die Folgen von Bürger- oder Auslandskriegen, Aufruhren, Terrorakten.",
+                "Die Ausübung von Luftsportarten, professionellem Wettkampfsport oder jeder Sportart, die ein erhöhtes Risiko darstellt.",
+                "Psychiatrische Erkrankungen und nicht stationär behandelte Rückenleiden (für die ITT-Garantie)."
+            ]
+        },
+        waiver: {
+            title: "ARTIKEL 4: WIDERRUFSRECHT",
+            description: "Sie haben eine gesetzliche Frist von 30 Kalendertagen ab dem Datum der Unterzeichnung Ihrer Mitgliedschaft, um diese ohne Gebühren oder Strafen per Einschreiben mit Rückschein zu widerrufen."
+        },
+        claim: {
+            title: "ARTIKEL 5: SCHADENMELDUNG",
+            description: "Im Falle eines Schadens (Tod, Unfall, Krankheit) müssen Sie oder Ihre Anspruchsberechtigten diesen dem Versicherer innerhalb der im Vertrag vorgesehenen Fristen melden und alle erforderlichen Belege (ärztliches Attest, Sterbeurkunde usw.) beifügen."
+        }
     }
 };

@@ -7,7 +7,7 @@ export const loanContractClauses: Clauses = {
             line1: "Service Financier Européen",
             line2: "Département des crédits à la consommation • Bureau des Accords de Prêt • Unité de Vérification des Engagements",
         },
-        title: "Contrat de {type_of_loan}",
+        title: "Contrat de Prêt",
         reference: "Contrat N°: {contract_ref}",
         location_and_date: "Fait à Lyon, le {contract_date}",
         parties: {
@@ -59,5 +59,60 @@ export const loanContractClauses: Clauses = {
     },
     en: {
         // English translations would go here
+    },
+    de: {
+        header: {
+            line1: "Europäischer Finanzdienstleister",
+            line2: "Abteilung für Verbraucherkredite • Büro für Darlehensvereinbarungen • Abteilung für die Überprüfung von Verpflichtungen",
+        },
+        title: "Darlehensvertrag",
+        reference: "Vertrag Nr.: {contract_ref}",
+        location_and_date: "Ausgestellt in Lyon, am {contract_date}",
+        parties: {
+            title: "Zwischen den Unterzeichnern:",
+            lender_label: "Der Darlehensgeber:",
+            borrower_label: "Der Darlehensnehmer:",
+        },
+        articles: {
+            object: {
+                title: "Artikel 1: Vertragsgegenstand",
+                content: "Der Darlehensgeber gewährt dem Darlehensnehmer, der dies annimmt, ein Tilgungsdarlehen des Typs {type_of_loan} für den nicht-gewerblichen Gebrauch, das den Bestimmungen des Verbrauchergesetzbuches sowie den vorliegenden allgemeinen und besonderen Bedingungen unterliegt.",
+            },
+            characteristics: {
+                title: "Artikel 2: Betrag und Merkmale des Darlehens",
+                amount: "Geliehener Kapitalbetrag: {loan_amount} ({loan_amount_in_words} Euro).",
+                taeg: "Fester effektiver Jahreszins (TAEG): {taeg}.",
+                term: "Gesamte Rückzahlungsdauer: {loan_term} Monate.",
+                availability: "Datum der Mittelbereitstellung: Spätestens 10 Tage nach Ablauf der Widerrufsfrist.",
+            },
+            repayment: {
+                title: "Artikel 3: Rückzahlungsmodalitäten",
+                intro: "Der Darlehensnehmer verpflichtet sich, das Kapital und die Zinsen in {loan_term} konstanten Monatsraten zurückzuzahlen. Die erste Rate ist am {start_date} fällig und die letzte am {end_date}.",
+                monthly_payment: "Monatliche Rate (ohne Versicherung): {monthly_payment}. Dieser Betrag wird am 5. eines jeden Monats abgebucht.",
+                total_cost: "Die Gesamtkosten des Kredits (Zinsen) belaufen sich auf {total_cost}.",
+                total_due: "Gesamter geschuldeter Betrag: {total_due} (Geliehenes Kapital + Gesamtkosten der Zinsen).",
+            },
+            withdrawal: {
+                title: "Artikel 4: Widerrufsrecht",
+                content: "Der Darlehensnehmer hat eine Widerrufsfrist von vierzehn (14) Kalendertagen ab dem Datum der Unterzeichnung des Kreditvertragsangebots. Um zu widerrufen, muss der Darlehensnehmer das dem Angebot beigefügte Widerrufsformular per Einschreiben mit Rückschein zurücksenden.",
+            },
+            default: {
+                title: "Artikel 5: Zahlungsverzug",
+                content: "Bei Nichtzahlung einer Rate zum Fälligkeitsdatum kann der Darlehensgeber die sofortige Rückzahlung des ausstehenden Kapitals zuzüglich der fälligen und unbezahlten Zinsen verlangen. Verzugsstrafen können gemäß der geltenden Gesetzgebung erhoben werden.",
+            },
+            insurance: {
+                title: "Artikel 6: Obligatorische Kreditnehmerversicherung",
+                content: "Die Gewährung dieses Darlehens ist an den Abschluss einer Versicherung durch den Darlehensnehmer geknüpft, die die Risiken Tod, vollständiger und unwiderruflicher Autonomieverlust (PTIA) und Arbeitsunfähigkeit (IT) abdeckt. Die Kosten dieser Versicherung sind in den Monatsraten enthalten oder werden je nach den vereinbarten Bedingungen separat in Rechnung gestellt. Der Darlehensnehmer bestätigt, die Bedingungen dieser Versicherung erhalten und akzeptiert zu haben, die Gegenstand einer separaten Versicherungsbescheinigung sind, die von Capfinfy oder seinen Versicherungspartnern ausgestellt wird.",
+            },
+            data: {
+                title: "Artikel 7: Schutz personenbezogener Daten",
+                content: "Die erhobenen Informationen sind für die Bearbeitung des Darlehensantrags erforderlich. Sie werden elektronisch verarbeitet und sind für die Abteilungen des Darlehensgebers und seiner Partner bestimmt. Gemäß der DSGVO hat der Darlehensnehmer das Recht auf Zugang, Berichtigung und Löschung seiner personenbezogenen Daten, indem er den Darlehensgeber unter der Adresse {contact_email} kontaktiert.",
+            },
+            law: {
+                title: "Artikel 8: Anwendbares Recht und Streitigkeiten",
+                content: "Dieser Vertrag unterliegt dem französischen Recht. Im Falle eines Rechtsstreits verpflichten sich die Parteien, eine gütliche Einigung zu suchen. Andernfalls ist das zuständige Gericht das am Wohnsitz des Darlehensnehmers.",
+            },
+        },
+        signature_preamble: "Ausgefertigt in zwei Originalexemplaren, eines für jede Partei.",
     }
 };
