@@ -14,18 +14,18 @@ const EligibilityCertificateTemplate: React.FC<EligibilityCertificateTemplatePro
     const clauses = eligibilityCertificateClauses[lang] || eligibilityCertificateClauses['fr'];
     const signer = signatureData.analysis;
 
-    const validityDate = formData.date ? new Date(new Date(formData.date).setDate(new Date(formData.date).getDate() + 30)).toLocaleDateString(lang) : '___________';
+    const validityDate = formData.date ? new Date(new Date(formData.date).setDate(new Date(formData.date).getDate() + 30)).toLocaleDateString(lang) : '';
     
     const replacePlaceholders = (text: string) => {
         return text
-            .replace(/{ref}/g, formData.ref || '___________')
+            .replace(/{ref}/g, formData.ref || '')
             .replace(/{validity_date}/g, validityDate)
-            .replace(/{beneficiary_name}/g, formData.beneficiary_name || '___________')
-            .replace(/{beneficiary_address}/g, formData.beneficiary_address || '___________')
-            .replace(/{beneficiary_id}/g, formData.beneficiary_id || '___________')
-            .replace(/{project_type}/g, formData.project_type || '___________')
-            .replace(/{max_amount}/g, formData.max_amount ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.max_amount) : '___________')
-            .replace(/{max_amount_in_words}/g, formData.max_amount_in_words || '___________');
+            .replace(/{beneficiary_name}/g, formData.beneficiary_name || '')
+            .replace(/{beneficiary_address}/g, formData.beneficiary_address || '')
+            .replace(/{beneficiary_id}/g, formData.beneficiary_id || '')
+            .replace(/{project_type}/g, formData.project_type || '')
+            .replace(/{max_amount}/g, formData.max_amount ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.max_amount) : '')
+            .replace(/{max_amount_in_words}/g, formData.max_amount_in_words || '');
     };
 
     return (
@@ -39,9 +39,9 @@ const EligibilityCertificateTemplate: React.FC<EligibilityCertificateTemplatePro
             <section className="mb-6">
                  <h2 className="text-sm font-bold uppercase text-[hsl(215,39%,29%)] mb-3">{clauses.beneficiary.title}</h2>
                  <div className="bg-slate-100 p-3 rounded-md text-xs">
-                     <p>Nom: {formData.beneficiary_name || '___________'}</p>
-                     <p>Adresse: {formData.beneficiary_address || '___________'}</p>
-                     <p>ID: {formData.beneficiary_id || '___________'}</p>
+                     <p>Nom: {formData.beneficiary_name || ''}</p>
+                     <p>Adresse: {formData.beneficiary_address || ''}</p>
+                     <p>ID: {formData.beneficiary_id || ''}</p>
                  </div>
             </section>
             

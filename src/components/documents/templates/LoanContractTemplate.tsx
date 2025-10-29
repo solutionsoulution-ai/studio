@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Image from 'next/image';
 import { loanContractClauses } from '@/data/documents/loan-contract-clauses';
@@ -15,21 +16,21 @@ const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, l
 
     const replacePlaceholders = (text: string) => {
         return text
-            .replace(/{type_of_loan}/g, formData.type_of_loan || 'Prêt')
-            .replace(/{contract_ref}/g, formData.contract_ref || '___________')
-            .replace(/{contract_date}/g, formData.contract_date ? new Date(formData.contract_date).toLocaleDateString(lang) : '___________')
-            .replace(/{borrower_name}/g, formData.borrower_name || '___________')
-            .replace(/{borrower_address}/g, formData.borrower_address || '___________')
-            .replace(/{borrower_id}/g, formData.borrower_id || '___________')
-            .replace(/{loan_amount}/g, formData.loan_amount ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.loan_amount) : '___________')
-            .replace(/{loan_amount_in_words}/g, formData.loan_amount_in_words || '___________')
-            .replace(/{taeg}/g, formData.taeg || '2.00%')
-            .replace(/{loan_term}/g, formData.loan_term || '___________')
-            .replace(/{start_date}/g, formData.start_date ? new Date(formData.start_date).toLocaleDateString(lang) : '___________')
-            .replace(/{end_date}/g, formData.end_date ? new Date(formData.end_date).toLocaleDateString(lang) : '___________')
-            .replace(/{total_cost}/g, formData.total_cost ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.total_cost) : '___________')
-            .replace(/{monthly_payment}/g, formData.monthly_payment ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.monthly_payment) : '___________')
-            .replace(/{total_due}/g, formData.total_due ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.total_due) : '___________')
+            .replace(/{type_of_loan}/g, formData.type_of_loan || '')
+            .replace(/{contract_ref}/g, formData.contract_ref || '')
+            .replace(/{contract_date}/g, formData.contract_date ? new Date(formData.contract_date).toLocaleDateString(lang) : '')
+            .replace(/{borrower_name}/g, formData.borrower_name || '')
+            .replace(/{borrower_address}/g, formData.borrower_address || '')
+            .replace(/{borrower_id}/g, formData.borrower_id || '')
+            .replace(/{loan_amount}/g, formData.loan_amount ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.loan_amount) : '')
+            .replace(/{loan_amount_in_words}/g, formData.loan_amount_in_words || '')
+            .replace(/{taeg}/g, formData.taeg || '')
+            .replace(/{loan_term}/g, formData.loan_term || '')
+            .replace(/{start_date}/g, formData.start_date ? new Date(formData.start_date).toLocaleDateString(lang) : '')
+            .replace(/{end_date}/g, formData.end_date ? new Date(formData.end_date).toLocaleDateString(lang) : '')
+            .replace(/{total_cost}/g, formData.total_cost ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.total_cost) : '')
+            .replace(/{monthly_payment}/g, formData.monthly_payment ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.monthly_payment) : '')
+            .replace(/{total_due}/g, formData.total_due ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.total_due) : '')
             .replace(/{contact_email}/g, "contact@capfinfy.com");
     };
 
@@ -51,9 +52,9 @@ const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, l
                      </div>
                      <div>
                          <h3 className="font-semibold underline mb-1">{clauses.parties.borrower_label}</h3>
-                         <p>Nom: {formData.borrower_name || '___________'}</p>
-                         <p>Adresse: {formData.borrower_address || '___________'}</p>
-                         <p>ID: {formData.borrower_id || '___________'}</p>
+                         <p>Nom: {formData.borrower_name || ''}</p>
+                         <p>Adresse: {formData.borrower_address || ''}</p>
+                         <p>ID: {formData.borrower_id || ''}</p>
                      </div>
                  </div>
             </section>

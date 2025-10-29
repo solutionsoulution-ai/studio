@@ -27,7 +27,7 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ formData, lang }) => 
             }
         }
         if (items.length === 0) {
-            return [{ description: 'Frais de dossier pour ouverture de prêt', quantity: 1, unit_price: 450 }];
+            return [];
         }
         return items;
     };
@@ -86,6 +86,12 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ formData, lang }) => 
                                 <td className="p-2 text-right font-semibold">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format((Number(item.quantity) || 1) * (Number(item.unit_price) || 0))}</td>
                             </tr>
                         ))}
+                         {items.length === 0 && (
+                            <tr className="border-b border-slate-200">
+                                <td className="p-2 text-slate-400 italic">Aucun article...</td>
+                                <td/><td/><td/>
+                            </tr>
+                         )}
                     </tbody>
                 </table>
             </section>

@@ -16,13 +16,13 @@ const PaymentReceiptTemplate: React.FC<PaymentReceiptTemplateProps> = ({ formDat
 
     const replacePlaceholders = (text: string) => {
         return text
-            .replace(/{ref}/g, formData.ref || '___________')
-            .replace(/{payment_date}/g, formData.payment_date ? new Date(formData.payment_date).toLocaleDateString(lang) : '___________')
-            .replace(/{payer_name}/g, formData.payer_name || '___________')
-            .replace(/{payer_address}/g, formData.payer_address || '___________')
-            .replace(/{payment_amount}/g, formData.payment_amount ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.payment_amount) : '___________')
-            .replace(/{payment_method}/g, formData.payment_method || '___________')
-            .replace(/{payment_reference}/g, formData.payment_reference || '___________');
+            .replace(/{ref}/g, formData.ref || '')
+            .replace(/{payment_date}/g, formData.payment_date ? new Date(formData.payment_date).toLocaleDateString(lang) : '')
+            .replace(/{payer_name}/g, formData.payer_name || '')
+            .replace(/{payer_address}/g, formData.payer_address || '')
+            .replace(/{payment_amount}/g, formData.payment_amount ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.payment_amount) : '')
+            .replace(/{payment_method}/g, formData.payment_method || '')
+            .replace(/{payment_reference}/g, formData.payment_reference || '');
     };
 
     return (
@@ -37,8 +37,8 @@ const PaymentReceiptTemplate: React.FC<PaymentReceiptTemplateProps> = ({ formDat
                 <section className="mb-8">
                     <h2 className="text-sm font-bold uppercase text-[hsl(215,39%,29%)] mb-2">{clauses.received_from}</h2>
                     <div className="bg-slate-100 p-3 rounded-md text-xs">
-                        <p className="font-bold">{formData.payer_name || '___________'}</p>
-                        <p className="whitespace-pre-line">{formData.payer_address || '___________'}</p>
+                        <p className="font-bold">{formData.payer_name || ''}</p>
+                        <p className="whitespace-pre-line">{formData.payer_address || ''}</p>
                     </div>
                 </section>
 
@@ -51,11 +51,11 @@ const PaymentReceiptTemplate: React.FC<PaymentReceiptTemplateProps> = ({ formDat
                     <div className="grid grid-cols-2 gap-4 text-xs mt-4">
                         <div>
                             <p className="font-semibold">{clauses.payment_details.method_label}:</p>
-                            <p>{formData.payment_method || '___________'}</p>
+                            <p>{formData.payment_method || ''}</p>
                         </div>
                         <div>
                             <p className="font-semibold">{clauses.payment_details.reference_label}:</p>
-                            <p>{formData.payment_reference || '___________'}</p>
+                            <p>{formData.payment_reference || ''}</p>
                         </div>
                     </div>
                 </section>

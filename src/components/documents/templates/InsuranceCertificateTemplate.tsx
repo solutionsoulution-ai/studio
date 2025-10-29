@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Image from 'next/image';
 import { insuranceCertificateClauses } from '@/data/documents/insurance-certificate-clauses';
@@ -15,17 +16,17 @@ const InsuranceCertificateTemplate: React.FC<InsuranceCertificateTemplateProps> 
 
     const replacePlaceholders = (text: string) => {
         return text
-            .replace(/{ref}/g, formData.ref || '___________')
-            .replace(/{issue_date}/g, formData.issue_date ? new Date(formData.issue_date).toLocaleDateString(lang) : '___________')
-            .replace(/{insured_name}/g, formData.insured_name || '___________')
-            .replace(/{insured_dob}/g, formData.insured_dob ? new Date(formData.insured_dob).toLocaleDateString(lang) : '___________')
-            .replace(/{insured_address}/g, formData.insured_address || '___________')
-            .replace(/{insured_id}/g, formData.insured_id || '___________')
-            .replace(/{loan_contract_ref}/g, formData.loan_contract_ref || '___________')
-            .replace(/{loan_type}/g, formData.loan_type || '___________')
-            .replace(/{insured_capital}/g, formData.insured_capital ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.insured_capital) : '___________')
-            .replace(/{coverage_duration}/g, formData.coverage_duration || '___________')
-            .replace(/{monthly_premium}/g, formData.monthly_premium ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.monthly_premium) : '___________');
+            .replace(/{ref}/g, formData.ref || '')
+            .replace(/{issue_date}/g, formData.issue_date ? new Date(formData.issue_date).toLocaleDateString(lang) : '')
+            .replace(/{insured_name}/g, formData.insured_name || '')
+            .replace(/{insured_dob}/g, formData.insured_dob ? new Date(formData.insured_dob).toLocaleDateString(lang) : '')
+            .replace(/{insured_address}/g, formData.insured_address || '')
+            .replace(/{insured_id}/g, formData.insured_id || '')
+            .replace(/{loan_contract_ref}/g, formData.loan_contract_ref || '')
+            .replace(/{loan_type}/g, formData.loan_type || '')
+            .replace(/{insured_capital}/g, formData.insured_capital ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.insured_capital) : '')
+            .replace(/{coverage_duration}/g, formData.coverage_duration || '')
+            .replace(/{monthly_premium}/g, formData.monthly_premium ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.monthly_premium) : '');
     };
 
     return (
@@ -40,10 +41,10 @@ const InsuranceCertificateTemplate: React.FC<InsuranceCertificateTemplateProps> 
                 <div className="grid grid-cols-2 gap-4 text-xs">
                     <div className="bg-slate-100 p-3 rounded-md">
                         <h3 className="font-bold underline mb-2">{clauses.insured.title}</h3>
-                        <p>Nom et Prénom: {formData.insured_name || '___________'}</p>
+                        <p>Nom et Prénom: {formData.insured_name || ''}</p>
                         <p>Date de Naissance: {replacePlaceholders('{insured_dob}')}</p>
-                        <p>Adresse: {formData.insured_address || '___________'}</p>
-                        <p>ID: {formData.insured_id || '___________'}</p>
+                        <p>Adresse: {formData.insured_address || ''}</p>
+                        <p>ID: {formData.insured_id || ''}</p>
                     </div>
                      <div className="bg-slate-100 p-3 rounded-md">
                         <h3 className="font-bold underline mb-2">{clauses.beneficiary.title}</h3>

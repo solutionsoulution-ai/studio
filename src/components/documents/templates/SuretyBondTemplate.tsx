@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Image from 'next/image';
 import { suretyBondClauses } from '@/data/documents/surety-bond-clauses';
@@ -15,16 +16,16 @@ const SuretyBondTemplate: React.FC<SuretyBondTemplateProps> = ({ formData, lang 
 
     const replacePlaceholders = (text: string) => {
         return text
-            .replace(/{type_of_loan}/g, formData.type_of_loan || 'Personnel')
-            .replace(/{act_ref}/g, formData.act_ref || '___________')
-            .replace(/{date}/g, formData.date ? new Date(formData.date).toLocaleDateString(lang) : '___________')
-            .replace(/{borrower_name}/g, formData.borrower_name || '___________')
-            .replace(/{borrower_address}/g, formData.borrower_address || '___________')
-            .replace(/{borrower_id}/g, formData.borrower_id || '___________')
-            .replace(/{loan_contract_ref}/g, formData.loan_contract_ref || '___________')
-            .replace(/{loan_amount}/g, formData.loan_amount ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.loan_amount) : '___________')
-            .replace(/{loan_amount_in_words}/g, formData.loan_amount_in_words || '___________')
-            .replace(/{loan_term}/g, formData.loan_term || '___________');
+            .replace(/{type_of_loan}/g, formData.type_of_loan || '')
+            .replace(/{act_ref}/g, formData.act_ref || '')
+            .replace(/{date}/g, formData.date ? new Date(formData.date).toLocaleDateString(lang) : '')
+            .replace(/{borrower_name}/g, formData.borrower_name || '')
+            .replace(/{borrower_address}/g, formData.borrower_address || '')
+            .replace(/{borrower_id}/g, formData.borrower_id || '')
+            .replace(/{loan_contract_ref}/g, formData.loan_contract_ref || '')
+            .replace(/{loan_amount}/g, formData.loan_amount ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.loan_amount) : '')
+            .replace(/{loan_amount_in_words}/g, formData.loan_amount_in_words || '')
+            .replace(/{loan_term}/g, formData.loan_term || '');
     };
 
     return (
@@ -45,9 +46,9 @@ const SuretyBondTemplate: React.FC<SuretyBondTemplateProps> = ({ formData, lang 
                      </div>
                      <div>
                          <h3 className="font-semibold underline mb-1">{clauses.parties.debtor_label}</h3>
-                         <p>Nom: {formData.borrower_name || '___________'}</p>
-                         <p>Adresse: {formData.borrower_address || '___________'}</p>
-                         <p>ID: {formData.borrower_id || '___________'}</p>
+                         <p>Nom: {formData.borrower_name || ''}</p>
+                         <p>Adresse: {formData.borrower_address || ''}</p>
+                         <p>ID: {formData.borrower_id || ''}</p>
                      </div>
                  </div>
             </section>
@@ -57,9 +58,9 @@ const SuretyBondTemplate: React.FC<SuretyBondTemplateProps> = ({ formData, lang 
                     <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{clauses.articles.object.title}</h3>
                     <p>{replacePlaceholders(clauses.articles.object.content)}</p>
                      <ul className="text-xs bg-slate-100 p-3 rounded-md mt-2 space-y-1">
-                        <li>Numéro du contrat de prêt : {formData.loan_contract_ref || '___________'}</li>
+                        <li>Numéro du contrat de prêt : {formData.loan_contract_ref || ''}</li>
                         <li>Montant du capital : {replacePlaceholders('{loan_amount}')}</li>
-                        <li>Durée du prêt : {formData.loan_term || '___________'} mois</li>
+                        <li>Durée du prêt : {formData.loan_term || ''} mois</li>
                     </ul>
                     <p className="mt-2 text-xs italic">{replacePlaceholders(clauses.articles.object.acknowledgment)}</p>
                 </article>

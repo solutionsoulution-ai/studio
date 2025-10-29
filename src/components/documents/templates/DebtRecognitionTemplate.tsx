@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Image from 'next/image';
 import { debtRecognitionClauses } from '@/data/documents/debt-recognition-clauses';
@@ -16,16 +17,16 @@ const DebtRecognitionTemplate: React.FC<DebtRecognitionTemplateProps> = ({ formD
 
     const replacePlaceholders = (text: string) => {
         return text
-            .replace(/{ref}/g, formData.ref || '___________')
-            .replace(/{date}/g, formData.date ? new Date(formData.date).toLocaleDateString(lang) : '___________')
-            .replace(/{debtor_name}/g, formData.debtor_name || '___________')
-            .replace(/{debtor_address}/g, formData.debtor_address || '___________')
-            .replace(/{debtor_id}/g, formData.debtor_id || '___________')
-            .replace(/{loan_amount}/g, formData.loan_amount ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.loan_amount) : '___________')
-            .replace(/{loan_amount_in_words}/g, formData.loan_amount_in_words || '___________')
-            .replace(/{loan_contract_ref}/g, formData.loan_contract_ref || '___________')
-            .replace(/{loan_term}/g, formData.loan_term || '___________')
-            .replace(/{type_of_loan}/g, formData.type_of_loan || '___________');
+            .replace(/{ref}/g, formData.ref || '')
+            .replace(/{date}/g, formData.date ? new Date(formData.date).toLocaleDateString(lang) : '')
+            .replace(/{debtor_name}/g, formData.debtor_name || '')
+            .replace(/{debtor_address}/g, formData.debtor_address || '')
+            .replace(/{debtor_id}/g, formData.debtor_id || '')
+            .replace(/{loan_amount}/g, formData.loan_amount ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.loan_amount) : '')
+            .replace(/{loan_amount_in_words}/g, formData.loan_amount_in_words || '')
+            .replace(/{loan_contract_ref}/g, formData.loan_contract_ref || '')
+            .replace(/{loan_term}/g, formData.loan_term || '')
+            .replace(/{type_of_loan}/g, formData.type_of_loan || '');
     };
 
     return (
@@ -46,9 +47,9 @@ const DebtRecognitionTemplate: React.FC<DebtRecognitionTemplateProps> = ({ formD
                      </div>
                      <div>
                          <h3 className="font-semibold underline mb-1">{clauses.parties.debtor_label}</h3>
-                         <p>Nom: {formData.debtor_name || '___________'}</p>
-                         <p>Adresse: {formData.debtor_address || '___________'}</p>
-                         <p>ID: {formData.debtor_id || '___________'}</p>
+                         <p>Nom: {formData.debtor_name || ''}</p>
+                         <p>Adresse: {formData.debtor_address || ''}</p>
+                         <p>ID: {formData.debtor_id || ''}</p>
                      </div>
                  </div>
             </section>
