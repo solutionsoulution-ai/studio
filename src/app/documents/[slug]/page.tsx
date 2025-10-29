@@ -10,6 +10,7 @@ export function generateStaticParams() {
     { slug: 'attestation-assurance-emprunteur' },
     { slug: 'notice-information-assurance' },
     { slug: 'facture' },
+    { slug: 'recu-de-paiement' },
     { slug: 'document-vierge' },
   ];
 }

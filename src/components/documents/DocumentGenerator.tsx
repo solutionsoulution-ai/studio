@@ -11,6 +11,7 @@ import InsuranceCertificateTemplate from './templates/InsuranceCertificateTempla
 import InsuranceNoticeTemplate from './templates/InsuranceNoticeTemplate';
 import InvoiceTemplate from './templates/InvoiceTemplate';
 import BlankDocumentTemplate from './templates/BlankDocumentTemplate';
+import PaymentReceiptTemplate from './templates/PaymentReceiptTemplate';
 
 type Language = 'fr' | 'en';
 
@@ -22,6 +23,7 @@ const documentTemplates: { [key: string]: React.FC<any> } = {
   'attestation-assurance-emprunteur': InsuranceCertificateTemplate,
   'notice-information-assurance': InsuranceNoticeTemplate,
   'facture': InvoiceTemplate,
+  'recu-de-paiement': PaymentReceiptTemplate,
   'document-vierge': BlankDocumentTemplate,
 };
 

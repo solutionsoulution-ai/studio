@@ -12,6 +12,7 @@ const documents = [
   { slug: 'attestation-assurance-emprunteur', title: "Attestation d'Assurance", description: 'Produisez une attestation de couverture d\'assurance prêt.' },
   { slug: 'notice-information-assurance', title: "Notice d'Information d'Assurance", description: 'Consultez les détails et exclusions d\'une assurance.' },
   { slug: 'facture', title: 'Facture', description: 'Émettez une facture professionnelle pour vos services.' },
+  { slug: 'recu-de-paiement', title: 'Reçu de Paiement', description: 'Confirmez la réception d\'un paiement pour un service ou un remboursement.' },
   { slug: 'document-vierge', title: 'Document Vierge', description: 'Partez d\'un modèle vierge avec en-tête de Capfinfy.' },
 ];
 
