@@ -65,7 +65,7 @@ const EligibilityCertificateTemplate: React.FC<EligibilityCertificateTemplatePro
                 </article>
             </section>
 
-             <div className="mt-16 pt-8 flex justify-end">
+             <div className="mt-12 pt-4 flex justify-end">
                  <div className="text-center">
                     {signer.signatureUrl && <Image src={signer.signatureUrl} alt={`Signature de ${signer.name}`} width={150} height={50} className="mx-auto" />}
                     <div className="border-t border-slate-400 pt-2 mt-2 text-xs">
