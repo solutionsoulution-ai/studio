@@ -6,7 +6,7 @@ import DocumentWrapper from './DocumentWrapper';
 
 interface SuretyBondTemplateProps {
     formData: any;
-    lang: 'fr' | 'en';
+    lang: 'fr' | 'en' | 'de';
 }
 
 const SuretyBondTemplate: React.FC<SuretyBondTemplateProps> = ({ formData, lang }) => {
@@ -33,6 +33,7 @@ const SuretyBondTemplate: React.FC<SuretyBondTemplateProps> = ({ formData, lang 
             department={clauses.header.line2}
             docRef={replacePlaceholders(clauses.reference)}
             docDate={`Date: ${replacePlaceholders('{date}')}`}
+            lang={lang}
         >
             <section className="mb-6">
                  <h2 className="text-sm font-bold uppercase text-[hsl(215,39%,29%)] mb-3">{clauses.parties.title}</h2>

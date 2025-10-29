@@ -7,7 +7,7 @@ import { Landmark } from 'lucide-react';
 
 interface DebtRecognitionTemplateProps {
     formData: any;
-    lang: 'fr' | 'en';
+    lang: 'fr' | 'en' | 'de';
 }
 
 const DebtRecognitionTemplate: React.FC<DebtRecognitionTemplateProps> = ({ formData, lang }) => {
@@ -34,6 +34,7 @@ const DebtRecognitionTemplate: React.FC<DebtRecognitionTemplateProps> = ({ formD
             department={clauses.header.line2}
             docRef={replacePlaceholders(clauses.reference)}
             docDate={replacePlaceholders(clauses.date)}
+            lang={lang}
         >
             <section className="mb-6">
                  <h2 className="text-sm font-bold uppercase text-[hsl(215,39%,29%)] mb-3">{clauses.parties.title}</h2>

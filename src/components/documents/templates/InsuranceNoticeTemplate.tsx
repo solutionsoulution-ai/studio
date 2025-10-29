@@ -5,7 +5,7 @@ import DocumentWrapper from './DocumentWrapper';
 
 interface InsuranceNoticeTemplateProps {
     formData: any;
-    lang: 'fr' | 'en';
+    lang: 'fr' | 'en' | 'de';
 }
 
 const InsuranceNoticeTemplate: React.FC<InsuranceNoticeTemplateProps> = ({ formData, lang }) => {
@@ -15,6 +15,7 @@ const InsuranceNoticeTemplate: React.FC<InsuranceNoticeTemplateProps> = ({ formD
         <DocumentWrapper 
             title={clauses.title}
             department={clauses.subtitle}
+            lang={lang}
         >
             <div className="bg-slate-100 p-4 rounded-md mb-8">
                 <h3 className="font-bold text-sm text-[hsl(215,39%,29%)] flex items-center gap-2 mb-2"><Landmark size={16}/> {clauses.importance.title}</h3>

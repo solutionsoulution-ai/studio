@@ -6,7 +6,7 @@ import DocumentWrapper from './DocumentWrapper';
 
 interface LoanContractTemplateProps {
     formData: any;
-    lang: 'fr' | 'en';
+    lang: 'fr' | 'en' | 'de';
 }
 
 const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, lang }) => {
@@ -39,6 +39,7 @@ const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, l
             department={clauses.header.line2}
             docRef={replacePlaceholders(clauses.reference)}
             docDate={replacePlaceholders(clauses.location_and_date)}
+            lang={lang}
         >
              <section className="mb-6">
                  <h2 className="text-sm font-bold uppercase text-[hsl(215,39%,29%)] mb-3">{clauses.parties.title}</h2>

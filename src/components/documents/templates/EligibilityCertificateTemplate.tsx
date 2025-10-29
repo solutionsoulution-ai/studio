@@ -6,7 +6,7 @@ import DocumentWrapper from './DocumentWrapper';
 
 interface EligibilityCertificateTemplateProps {
     formData: any;
-    lang: 'fr' | 'en';
+    lang: 'fr' | 'en' | 'de';
 }
 
 const EligibilityCertificateTemplate: React.FC<EligibilityCertificateTemplateProps> = ({ formData, lang }) => {
@@ -33,6 +33,7 @@ const EligibilityCertificateTemplate: React.FC<EligibilityCertificateTemplatePro
             department={clauses.header.line2}
             docRef={replacePlaceholders(clauses.reference)}
             docDate={replacePlaceholders(clauses.validity)}
+            lang={lang}
         >
             <section className="mb-6">
                  <h2 className="text-sm font-bold uppercase text-[hsl(215,39%,29%)] mb-3">{clauses.beneficiary.title}</h2>

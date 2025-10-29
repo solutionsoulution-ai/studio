@@ -7,9 +7,27 @@ interface DocumentWrapperProps {
   docRef?: string;
   docDate?: string;
   hideDepartment?: boolean;
+  lang: 'fr' | 'en' | 'de';
 }
 
-const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, department, docRef, docDate, hideDepartment = false }) => {
+const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, department, docRef, docDate, hideDepartment = false, lang }) => {
+  const footerText = {
+    fr: {
+      copyright: '© 2025 CAPFINFY. Tous droits réservés.',
+      confidential: 'Ce document est généré électroniquement et est confidentiel.'
+    },
+    en: {
+      copyright: '© 2025 CAPFINFY. All rights reserved.',
+      confidential: 'This document is electronically generated and is confidential.'
+    },
+    de: {
+      copyright: '© 2025 CAPFINFY. Alle Rechte vorbehalten.',
+      confidential: 'Dieses Dokument wird elektronisch erstellt und ist vertraulich.'
+    }
+  };
+
+  const currentFooterText = footerText[lang] || footerText['fr'];
+
   return (
     <div 
         style={{
@@ -67,8 +85,8 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
                 color: 'hsl(220, 8.9%, 46.1%)'
             }}
         >
-            <p style={{fontWeight: 'bold', color: 'hsl(224, 71.4%, 4.1%)'}}>© 2025 CAPFINFY. Tous droits réservés.</p>
-            <p>Ce document est généré électroniquement et est confidentiel.</p>
+            <p style={{fontWeight: 'bold', color: 'hsl(224, 71.4%, 4.1%)'}}>{currentFooterText.copyright}</p>
+            <p>{currentFooterText.confidential}</p>
         </footer>
     </div>
   );

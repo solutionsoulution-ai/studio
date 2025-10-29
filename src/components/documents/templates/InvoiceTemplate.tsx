@@ -4,7 +4,7 @@ import DocumentWrapper from './DocumentWrapper';
 
 interface InvoiceTemplateProps {
     formData: any;
-    lang: 'fr' | 'en';
+    lang: 'fr' | 'en' | 'de';
 }
 
 const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ formData, lang }) => {
@@ -21,6 +21,7 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ formData, lang }) => 
         <DocumentWrapper 
             title={clauses.title}
             hideDepartment
+            lang={lang}
         >
             <header className="flex justify-between items-start mb-8 pb-4">
                 <div>

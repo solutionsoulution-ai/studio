@@ -6,7 +6,7 @@ import DocumentWrapper from './DocumentWrapper';
 
 interface InsuranceCertificateTemplateProps {
     formData: any;
-    lang: 'fr' | 'en';
+    lang: 'fr' | 'en' | 'de';
 }
 
 const InsuranceCertificateTemplate: React.FC<InsuranceCertificateTemplateProps> = ({ formData, lang }) => {
@@ -34,6 +34,7 @@ const InsuranceCertificateTemplate: React.FC<InsuranceCertificateTemplateProps> 
             department={clauses.header.line2}
             docRef={replacePlaceholders(clauses.reference)}
             docDate={replacePlaceholders(clauses.issue_date)}
+            lang={lang}
         >
             <section className="mb-6">
                 <div className="grid grid-cols-2 gap-4 text-xs">
