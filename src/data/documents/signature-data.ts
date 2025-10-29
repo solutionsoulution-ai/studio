@@ -33,7 +33,7 @@ export const signatureData = {
             en: "Director of Financial Analysis",
             de: "Leiter der Finanzanalyse",
         },
-        signatureUrl: "https://i.postimg.cc/TydC5VfH/signature-benoit-leroy.png"
+        signatureUrl: "https://i.postimg.cc/8z0KBqy8/signature-9.png"
     },
     insurance: {
         name: "Isabelle Petit",
