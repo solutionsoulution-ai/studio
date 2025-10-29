@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
+  const { searchParams } = request.nextUrl;
   const url = searchParams.get('url');
 
   if (!url) {
@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     }
     const blob = await response.blob();
     const headers = new Headers();
-    headers.set('Content-Type', blob.type);
+    headers.set('Content-Type', blob.type || 'image/png');
     headers.set('Cache-Control', 'public, max-age=31536000, immutable');
 
     return new NextResponse(blob, { status: 200, headers });
