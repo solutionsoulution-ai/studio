@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { invoiceClauses } from '@/data/documents/invoice-clauses';
 import DocumentWrapper from './DocumentWrapper';
@@ -84,9 +85,21 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ formData, lang }) => 
             
             <section className="mt-12 text-xs text-slate-500 bg-slate-50 p-4 rounded-md">
                 <h4 className="font-bold text-slate-700 mb-2">{clauses.payment_terms.title}</h4>
-                <p className="mb-2">{clauses.payment_terms.due_date}</p>
-                <p>{clauses.payment_terms.iban_label}</p>
-                <p className="font-mono bg-white p-1 rounded border border-slate-200 my-1">{formData.iban || 'FRXX XXXX XXXX XXXX XXXX XXXX XXX'}</p>
+                <p className="mb-2">{clauses.payment_terms.instruction}</p>
+                <div className="space-y-2 bg-white p-3 rounded border border-slate-200 my-1 font-mono text-xs">
+                    <div>
+                        <span className="font-sans font-semibold text-slate-600">{clauses.payment_terms.bank_name_label}: </span>
+                        <span>{formData.bank_name || 'NOM DE LA BANQUE'}</span>
+                    </div>
+                    <div>
+                        <span className="font-sans font-semibold text-slate-600">{clauses.payment_terms.iban_label}: </span>
+                        <span>{formData.iban || 'FRXX XXXX XXXX XXXX XXXX XXXX XXX'}</span>
+                    </div>
+                    <div>
+                        <span className="font-sans font-semibold text-slate-600">{clauses.payment_terms.bic_label}: </span>
+                        <span>{formData.bic || 'BIGBIFR1XXX'}</span>
+                    </div>
+                </div>
                 <p className="italic mt-2">{clauses.payment_terms.late_penalty}</p>
             </section>
 
@@ -100,3 +113,4 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ formData, lang }) => 
 };
 
 export default InvoiceTemplate;
+

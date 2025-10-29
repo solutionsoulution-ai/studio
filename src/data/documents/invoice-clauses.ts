@@ -14,8 +14,10 @@ export const invoiceClauses: Clauses = {
         total_label: "Net à Payer TTC",
         payment_terms: {
             "title": "Modalités et Conditions de Paiement",
-            "due_date": "Paiement dû à réception de la facture, au plus tard sous 30 jours.",
-            "iban_label": "Veuillez effectuer le virement sur le compte bancaire suivant, en rappelant la référence de la facture :",
+            "instruction": "Veuillez effectuer le virement sur le compte bancaire suivant, en rappelant la référence de la facture :",
+            "bank_name_label": "Domiciliation",
+            "iban_label": "IBAN",
+            "bic_label": "BIC / SWIFT",
             "late_penalty": "Conformément à la loi, tout retard de paiement entraînera l'application de pénalités de retard égales à trois fois le taux d'intérêt légal, ainsi qu'une indemnité forfaitaire pour frais de recouvrement de 40 €."
         },
         footer: {
@@ -35,8 +37,10 @@ export const invoiceClauses: Clauses = {
         total_label: "Net Payable (incl. VAT)",
         payment_terms: {
             "title": "Payment Terms and Conditions",
-            "due_date": "Payment due upon receipt of the invoice, no later than 30 days.",
-            "iban_label": "Please make the bank transfer to the following account, mentioning the invoice reference:",
+            "instruction": "Please make the bank transfer to the following account, mentioning the invoice reference:",
+            "bank_name_label": "Bank Name",
+            "iban_label": "IBAN",
+            "bic_label": "BIC / SWIFT",
             "late_penalty": "In accordance with the law, any late payment will result in the application of late payment penalties equal to three times the legal interest rate, as well as a fixed compensation for recovery costs of €40."
         },
         footer: {
@@ -56,8 +60,10 @@ export const invoiceClauses: Clauses = {
         total_label: "Nettobetrag (inkl. MwSt.)",
         payment_terms: {
             "title": "Zahlungsbedingungen",
-            "due_date": "Zahlung fällig bei Rechnungserhalt, spätestens innerhalb von 30 Tagen.",
-            "iban_label": "Bitte überweisen Sie den Betrag auf das folgende Bankkonto unter Angabe der Rechnungsnummer:",
+            "instruction": "Bitte überweisen Sie den Betrag auf das folgende Bankkonto unter Angabe der Rechnungsnummer:",
+            "bank_name_label": "Bankname",
+            "iban_label": "IBAN",
+            "bic_label": "BIC / SWIFT",
             "late_penalty": "Gemäß den gesetzlichen Bestimmungen werden bei Zahlungsverzug Verzugszinsen in Höhe des Dreifachen des gesetzlichen Zinssatzes sowie eine pauschale Entschädigung für Beitreibungskosten in Höhe von 40 € erhoben."
         },
         footer: {
@@ -66,3 +72,4 @@ export const invoiceClauses: Clauses = {
         }
     }
 };
+
