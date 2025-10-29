@@ -42,7 +42,7 @@ const DebtRecognitionTemplate: React.FC<DebtRecognitionTemplateProps> = ({ formD
             </header>
 
             <main className="text-justify text-md leading-relaxed">
-                 <div className="bg-[#f4f4f5] p-6 rounded-lg mb-8 text-sm">
+                <div className="bg-[#f4f4f5] p-6 rounded-lg mb-8 text-sm">
                     <h3 className="font-bold text-lg mb-2 text-[#09090b]">{clauses.importance.title}</h3>
                     <p className="text-[#707079]">{clauses.importance.description}</p>
                 </div>

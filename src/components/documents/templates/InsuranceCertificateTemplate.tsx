@@ -39,6 +39,10 @@ const InsuranceCertificateTemplate: React.FC<InsuranceCertificateTemplateProps> 
             </header>
 
             <main>
+                <div className="bg-[#f4f4f5] p-6 rounded-lg mb-8 text-sm">
+                    <h3 className="font-bold text-lg mb-2 text-[#09090b]">{clauses.importance.title}</h3>
+                    <p className="text-[#707079]">{clauses.importance.description}</p>
+                </div>
                 <p className="text-md leading-relaxed mb-8">{replacePlaceholders(clauses.introduction)}</p>
                 
                 <div className="grid grid-cols-2 gap-8 mb-10">
@@ -81,7 +85,6 @@ const InsuranceCertificateTemplate: React.FC<InsuranceCertificateTemplateProps> 
                         </div>
                     </div>
                 </div>
-                <p className="text-xs text-center text-[#707079] mt-6">{clauses.notice_reference}</p>
             </main>
 
             <footer className="mt-16 flex justify-between items-end">

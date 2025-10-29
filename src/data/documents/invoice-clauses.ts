@@ -4,6 +4,10 @@ import type { Clauses } from "./languages";
 export const invoiceClauses: Clauses = {
     fr: {
         title: "Facture",
+        importance: {
+            "title": "Importance de ce document",
+            "description": "La facture est un document commercial, comptable et juridique qui détaille une prestation de service ou une vente de marchandise. Elle est obligatoire et sert de preuve de la transaction."
+        },
         invoice_number_label: "Facture n°:",
         date_label: "Date :",
         bill_to_label: "Facturé à :",
@@ -17,6 +21,10 @@ export const invoiceClauses: Clauses = {
     },
     en: {
         title: "Invoice",
+        importance: {
+            "title": "Importance of this document",
+            "description": "The invoice is a commercial, accounting, and legal document that details a service provided or a sale of goods. It is mandatory and serves as proof of the transaction."
+        },
         invoice_number_label: "Invoice #:",
         date_label: "Date:",
         bill_to_label: "Bill to:",

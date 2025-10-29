@@ -14,13 +14,13 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ formData, lang }) => 
     const clauses = invoiceClauses[lang] || invoiceClauses['fr'];
     const signer = signatureData.finance;
     const items = formData.items || [{ description: 'Frais de dossier', amount: 450 }];
-    const subtotal = items.reduce((acc: number, item: any) => acc + (item.amount || 0), 0);
+    const subtotal = items.reduce((acc: number, item: any) => acc + (Number(item.amount) || 0), 0);
     const vat = 0;
     const total = subtotal + vat;
 
     return (
         <div className="bg-white text-[#09090b] font-sans p-8 max-w-4xl mx-auto border border-[#f4f4f5] shadow-lg">
-            <header className="flex justify-between items-start mb-16">
+            <header className="flex justify-between items-start mb-16 pb-8 border-b-2 border-[#3d5afe]">
                 <div>
                     <div className="flex items-center mb-4">
                         <Landmark className="h-8 w-8 text-[#3d5afe] mr-3" />
@@ -41,6 +41,10 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ formData, lang }) => 
             </header>
 
             <main>
+                <div className="bg-[#f4f4f5] p-6 rounded-lg mb-8 text-sm">
+                    <h3 className="font-bold text-lg mb-2 text-[#09090b]">{clauses.importance.title}</h3>
+                    <p className="text-[#707079]">{clauses.importance.description}</p>
+                </div>
                 <div className="mb-12">
                     <h3 className="text-sm font-semibold uppercase text-[#707079] mb-2">{clauses.bill_to_label}</h3>
                     <p className="font-bold text-lg text-[#09090b]">{formData.client_name || '___________'}</p>
@@ -58,7 +62,7 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ formData, lang }) => 
                         {items.map((item: any, index: number) => (
                             <tr key={index} className="border-b border-[#f4f4f5]">
                                 <td className="p-3">{item.description || '___________'}</td>
-                                <td className="p-3 text-right">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(item.amount || 0)}</td>
+                                <td className="p-3 text-right">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(Number(item.amount) || 0)}</td>
                             </tr>
                         ))}
                     </tbody>

@@ -41,7 +41,10 @@ const SuretyBondTemplate: React.FC<SuretyBondTemplateProps> = ({ formData, lang 
 
             <main>
                 <h2 className="text-3xl font-bold text-center text-[#3d5afe] mb-10">{clauses.title}</h2>
-
+                <div className="bg-[#f4f4f5] p-6 rounded-lg mb-8 text-sm">
+                    <h3 className="font-bold text-lg mb-2 text-[#09090b]">{clauses.importance.title}</h3>
+                    <p className="text-[#707079]">{clauses.importance.description}</p>
+                </div>
                 <div className="mb-8">
                     <h3 className="font-bold text-lg mb-2 border-b border-[#f4f4f5] pb-1 text-[#3d5afe]">{clauses.parties.lender_label}</h3>
                     <p>Capfinfy, 1 Place de la Bourse, 69002 Lyon</p>
