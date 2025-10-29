@@ -29,11 +29,11 @@ const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, l
     };
 
     return (
-        <div className="bg-white text-gray-800 font-serif p-8 max-w-4xl mx-auto border-2 border-gray-700">
+        <div className="bg-white text-[#09090b] font-serif p-8 max-w-4xl mx-auto border-2 border-[#09090b]">
             <header className="text-center mb-10">
-                <h1 className="text-2xl font-bold uppercase text-gray-900">{replacePlaceholders(clauses.title)}</h1>
-                <p className="text-sm text-gray-500">{clauses.department}</p>
-                <p className="text-xs text-gray-500 mt-2">{replacePlaceholders(clauses.reference)}</p>
+                <h1 className="text-2xl font-bold uppercase text-[#09090b]">{replacePlaceholders(clauses.title)}</h1>
+                <p className="text-sm text-[#707079]">{clauses.department}</p>
+                <p className="text-xs text-[#707079] mt-2">{replacePlaceholders(clauses.reference)}</p>
             </header>
 
             <main className="text-sm">
@@ -69,16 +69,16 @@ const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, l
 
                 <div className="grid grid-cols-2 gap-16 mt-16 pt-8">
                     <div className="text-center">
-                        <div className="border-t border-gray-400 pt-2">
+                        <div className="border-t border-[#707079] pt-2">
                              <p className="font-semibold">{clauses.parties.borrower}</p>
-                             <p className="text-xs text-gray-500 mt-2">{formData.borrower_name || '___________'}</p>
+                             <p className="text-xs text-[#707079] mt-2">{formData.borrower_name || '___________'}</p>
                         </div>
                     </div>
                     <div className="text-center">
                         {signer.signatureUrl && <Image src={signer.signatureUrl} alt={`Signature de ${signer.name}`} width={150} height={50} className="mx-auto" />}
-                        <div className="border-t border-gray-400 pt-2 mt-2">
+                        <div className="border-t border-[#707079] pt-2 mt-2">
                             <p className="font-semibold">{clauses.parties.lender}</p>
-                            <p className="text-xs text-gray-500 mt-2">{signer.name}, {signer.title[lang]}</p>
+                            <p className="text-xs text-[#707079] mt-2">{signer.name}, {signer.title[lang]}</p>
                         </div>
                     </div>
                 </div>
