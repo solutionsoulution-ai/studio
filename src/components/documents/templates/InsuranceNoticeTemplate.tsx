@@ -18,7 +18,7 @@ const InsuranceNoticeTemplate: React.FC<InsuranceNoticeTemplateProps> = ({ formD
     };
 
     return (
-        <div className="bg-white text-[#09090b] font-sans p-8 max-w-4xl mx-auto border border-[#f4f4f5]">
+        <div className="bg-white text-[#09090b] font-sans p-8 max-w-4xl mx-auto border border-[#f4f4f5] shadow-lg">
             <header className="flex justify-between items-center mb-10 border-b-2 border-[#f4f4f5] pb-5">
                 <div className="flex items-center">
                     <Landmark className="h-8 w-8 text-[#3d5afe] mr-3" />
@@ -39,7 +39,7 @@ const InsuranceNoticeTemplate: React.FC<InsuranceNoticeTemplateProps> = ({ formD
 
                 <div className="mb-8">
                     <div className="flex items-center mb-4">
-                        <FileText className="h-6 w-6 text-[#3d5afe] mr-3" />
+                        <ShieldCheck className="h-6 w-6 text-[#3d5afe] mr-3" />
                         <h3 className="text-xl font-bold uppercase text-[#09090b]">{clauses.guarantees.title}</h3>
                     </div>
                     <p className="text-sm text-[#707079] mb-4 ml-9">{clauses.guarantees.description}</p>
@@ -74,7 +74,7 @@ const InsuranceNoticeTemplate: React.FC<InsuranceNoticeTemplateProps> = ({ formD
                 
                  <div className="mb-8">
                     <div className="flex items-center mb-2">
-                        <ShieldCheck className="h-6 w-6 text-green-600 mr-3" />
+                        <FileText className="h-6 w-6 text-[#3d5afe] mr-3" />
                         <h3 className="text-xl font-bold uppercase text-[#09090b]">{clauses.waiver.title}</h3>
                     </div>
                     <p className="text-sm text-[#707079] ml-9">{clauses.waiver.description}</p>

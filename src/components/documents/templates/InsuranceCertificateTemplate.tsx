@@ -23,7 +23,7 @@ const InsuranceCertificateTemplate: React.FC<InsuranceCertificateTemplateProps> 
     };
 
     return (
-        <div className="bg-white text-[#09090b] font-sans p-10 max-w-4xl mx-auto border-4 border-[#3d5afe]">
+        <div className="bg-white text-[#09090b] font-sans p-10 max-w-4xl mx-auto border-4 border-[#f4f4f5] shadow-lg">
             <header className="flex justify-between items-center mb-10 pb-5 border-b-2 border-[#3d5afe]">
                 <div className="flex items-center">
                     <Landmark className="h-10 w-10 text-[#3d5afe] mr-4" />
@@ -50,7 +50,7 @@ const InsuranceCertificateTemplate: React.FC<InsuranceCertificateTemplateProps> 
                         <h3 className="text-sm font-bold text-[#707079] uppercase tracking-wider mb-2">{clauses.loan_id_label}</h3>
                         <p className="text-lg font-semibold text-[#09090b]">{formData.loan_id_label || '___________'}</p>
                     </div>
-                    <div className="bg-[#f4f4f5] p-4 rounded-lg">
+                    <div className="bg-[#f4f4f5] p-4 rounded-lg col-span-2">
                         <h3 className="text-sm font-bold text-[#707079] uppercase tracking-wider mb-2">{clauses.capital_label}</h3>
                         <p className="text-lg font-semibold text-[#09090b]">{formData.capital ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.capital) : '___________'}</p>
                     </div>
@@ -60,21 +60,21 @@ const InsuranceCertificateTemplate: React.FC<InsuranceCertificateTemplateProps> 
                 
                 <div className="space-y-4">
                     <div className="flex items-start p-4 bg-[#f4f4f5] rounded-lg">
-                        <ShieldCheck className="h-6 w-6 text-green-500 mr-4 mt-1 flex-shrink-0" />
+                        <ShieldCheck className="h-6 w-6 text-[#8ef95a] mr-4 mt-1 flex-shrink-0" />
                         <div>
                             <h4 className="font-semibold text-[#09090b]">{clauses.guarantees.death.title}</h4>
                             <p className="text-sm text-[#707079]">{clauses.guarantees.death.description}</p>
                         </div>
                     </div>
                     <div className="flex items-start p-4 bg-[#f4f4f5] rounded-lg">
-                        <ShieldCheck className="h-6 w-6 text-green-500 mr-4 mt-1 flex-shrink-0" />
+                        <ShieldCheck className="h-6 w-6 text-[#8ef95a] mr-4 mt-1 flex-shrink-0" />
                         <div>
                             <h4 className="font-semibold text-[#09090b]">{clauses.guarantees.disability.title}</h4>
                             <p className="text-sm text-[#707079]">{clauses.guarantees.disability.description}</p>
                         </div>
                     </div>
                     <div className="flex items-start p-4 bg-[#f4f4f5] rounded-lg">
-                        <ShieldCheck className="h-6 w-6 text-green-500 mr-4 mt-1 flex-shrink-0" />
+                        <ShieldCheck className="h-6 w-6 text-[#8ef95a] mr-4 mt-1 flex-shrink-0" />
                         <div>
                             <h4 className="font-semibold text-[#09090b]">{clauses.guarantees.incapacity.title}</h4>
                             <p className="text-sm text-[#707079]">{clauses.guarantees.incapacity.description}</p>

@@ -27,7 +27,7 @@ const SuretyBondTemplate: React.FC<SuretyBondTemplateProps> = ({ formData, lang 
     };
 
     return (
-        <div className="bg-white text-[#09090b] font-serif p-8 max-w-4xl mx-auto border border-[#f4f4f5]">
+        <div className="bg-white text-[#09090b] font-serif p-8 max-w-4xl mx-auto border border-[#f4f4f5] shadow-lg">
             <header className="flex justify-between items-start mb-12 border-b-2 border-[#09090b] pb-4">
                 <div className="flex items-center">
                     <Landmark className="h-8 w-8 text-[#3d5afe] mr-3" />
@@ -43,23 +43,23 @@ const SuretyBondTemplate: React.FC<SuretyBondTemplateProps> = ({ formData, lang 
                 <h2 className="text-3xl font-bold text-center text-[#3d5afe] mb-10">{clauses.title}</h2>
 
                 <div className="mb-8">
-                    <h3 className="font-bold text-lg mb-2 border-b border-[#f4f4f5] pb-1">{clauses.parties.lender_label}</h3>
+                    <h3 className="font-bold text-lg mb-2 border-b border-[#f4f4f5] pb-1 text-[#3d5afe]">{clauses.parties.lender_label}</h3>
                     <p>Capfinfy, 1 Place de la Bourse, 69002 Lyon</p>
                 </div>
                 <div className="mb-8">
-                    <h3 className="font-bold text-lg mb-2 border-b border-[#f4f4f5] pb-1">{clauses.parties.borrower_label}</h3>
+                    <h3 className="font-bold text-lg mb-2 border-b border-[#f4f4f5] pb-1 text-[#3d5afe]">{clauses.parties.borrower_label}</h3>
                     <p>{formData.borrower_name || '___________'}</p>
                 </div>
                 <div className="mb-12">
-                    <h3 className="font-bold text-lg mb-2 border-b border-[#f4f4f5] pb-1">{clauses.parties.guarantor_label}</h3>
+                    <h3 className="font-bold text-lg mb-2 border-b border-[#f4f4f5] pb-1 text-[#3d5afe]">{clauses.parties.guarantor_label}</h3>
                     <p>{formData.guarantor_name || '___________'}</p>
                 </div>
                 
                 <div className="space-y-6 text-sm leading-relaxed">
-                    <div className="font-bold text-center uppercase">{replacePlaceholders(clauses.articles.commitment.title)}</div>
+                    <div className="font-bold text-center uppercase text-[#3d5afe]">{replacePlaceholders(clauses.articles.commitment.title)}</div>
                     <p>{replacePlaceholders(clauses.articles.commitment.content)}</p>
 
-                    <div className="font-bold text-center uppercase">{replacePlaceholders(clauses.articles.scope.title)}</div>
+                    <div className="font-bold text-center uppercase text-[#3d5afe]">{replacePlaceholders(clauses.articles.scope.title)}</div>
                     <p>{replacePlaceholders(clauses.articles.scope.content)}</p>
 
                     <div className="mt-8 p-4 border-l-4 border-[#3d5afe] bg-[#f4f4f5]">

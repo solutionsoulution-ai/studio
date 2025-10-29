@@ -30,13 +30,18 @@ const DebtRecognitionTemplate: React.FC<DebtRecognitionTemplateProps> = ({ formD
 
     return (
         <div className="bg-white text-[#09090b] font-serif p-8 max-w-4xl mx-auto border-t-8 border-[#3d5afe] shadow-lg">
-            <header className="text-center mb-12">
-                <h1 className="text-3xl font-bold uppercase tracking-wider text-[#09090b]">{clauses.title}</h1>
-                <p className="text-sm text-[#707079] mt-2">{clauses.department}</p>
-                <p className="text-xs text-[#707079] mt-1">{replacePlaceholders(clauses.reference)}</p>
+            <header className="flex justify-between items-center mb-12 border-b pb-4 border-[#f4f4f5]">
+                <div className="flex items-center">
+                  <Landmark className="h-8 w-8 text-[#3d5afe] mr-3" />
+                  <h1 className="text-2xl font-bold text-[#09090b]">Capfinfy</h1>
+                </div>
+                <div className="text-right">
+                    <h2 className="text-2xl font-bold uppercase tracking-wider text-[#3d5afe]">{clauses.title}</h2>
+                    <p className="text-xs text-[#707079] mt-1">{replacePlaceholders(clauses.reference)}</p>
+                </div>
             </header>
 
-            <main className="text-justify text-md leading-loose">
+            <main className="text-justify text-md leading-relaxed">
                  <div className="bg-[#f4f4f5] p-6 rounded-lg mb-8 text-sm">
                     <h3 className="font-bold text-lg mb-2 text-[#09090b]">{clauses.importance.title}</h3>
                     <p className="text-[#707079]">{clauses.importance.description}</p>

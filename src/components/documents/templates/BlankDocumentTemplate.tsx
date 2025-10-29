@@ -12,7 +12,7 @@ const BlankDocumentTemplate: React.FC<BlankDocumentTemplateProps> = ({ lang }) =
   const currentYear = new Date().getFullYear();
 
   return (
-    <div className="bg-white text-[#09090b] font-sans text-sm p-8 max-w-4xl mx-auto border border-[#f4f4f5]">
+    <div className="bg-white text-[#09090b] font-sans text-sm p-8 max-w-4xl mx-auto border border-[#f4f4f5] shadow-lg">
       <header className="flex justify-between items-center mb-12 border-b pb-4 border-[#f4f4f5]">
         <div className="flex items-center">
           <Landmark className="h-8 w-8 text-[#3d5afe] mr-3" />
@@ -34,7 +34,7 @@ const BlankDocumentTemplate: React.FC<BlankDocumentTemplateProps> = ({ lang }) =
             <p className="text-[#707079]">{clauses.importance.description}</p>
         </div>
 
-        <div className="space-y-6 text-[#707079] leading-relaxed">
+        <div className="space-y-6 text-[#707079] leading-relaxed min-h-[300px]">
             <p>{clauses.placeholder}</p>
         </div>
       </main>

@@ -1,5 +1,6 @@
 
 import React from 'react';
+import Image from 'next/image';
 import { Landmark, Phone, Mail } from 'lucide-react';
 import { invoiceClauses } from '@/data/documents/invoice-clauses';
 import { signatureData } from '@/data/documents/signature-data';
@@ -17,16 +18,8 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ formData, lang }) => 
     const vat = 0;
     const total = subtotal + vat;
 
-    const replacePlaceholders = (text: string) => {
-        return text
-            .replace(/{ref}/g, formData.ref || '___________')
-            .replace(/{date}/g, formData.date ? new Date(formData.date).toLocaleDateString(lang) : '___________')
-            .replace(/{client_name}/g, formData.client_name || '___________')
-            .replace(/{client_address}/g, formData.client_address || '___________');
-    };
-
     return (
-        <div className="bg-white text-[#09090b] font-sans p-8 max-w-4xl mx-auto border border-[#f4f4f5]">
+        <div className="bg-white text-[#09090b] font-sans p-8 max-w-4xl mx-auto border border-[#f4f4f5] shadow-lg">
             <header className="flex justify-between items-start mb-16">
                 <div>
                     <div className="flex items-center mb-4">
@@ -93,6 +86,11 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ formData, lang }) => 
                     <p className="text-[#707079] mb-4">{clauses.payment_terms.due_date}</p>
                     <p className="text-[#707079]">{clauses.payment_terms.iban_label}</p>
                     <p className="font-mono bg-white p-2 rounded border border-[#f4f4f5]">{formData.iban || 'FRXX XXXX XXXX XXXX XXXX XXXX XXX'}</p>
+                </div>
+                 <div className="mt-16 text-center">
+                    {signer.signatureUrl && <Image src={signer.signatureUrl} alt={`Signature de ${signer.name}`} width={120} height={40} className="mx-auto" />}
+                    <p className="text-sm font-semibold border-t border-[#707079] mt-2 pt-2 inline-block px-4">{signer.name}</p>
+                    <p className="text-xs text-[#707079]">{signer.title[lang]}</p>
                 </div>
             </main>
 

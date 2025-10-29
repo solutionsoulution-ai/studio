@@ -1,7 +1,6 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { Landmark } from 'lucide-react';
 import { loanContractClauses } from '@/data/documents/loan-contract-clauses';
 import { signatureData } from '@/data/documents/signature-data';
 
@@ -29,7 +28,7 @@ const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, l
     };
 
     return (
-        <div className="bg-white text-[#09090b] font-serif p-8 max-w-4xl mx-auto border-2 border-[#09090b]">
+        <div className="bg-white text-[#09090b] font-serif p-8 max-w-4xl mx-auto border-2 border-[#09090b] shadow-lg">
             <header className="text-center mb-10">
                 <h1 className="text-2xl font-bold uppercase text-[#09090b]">{replacePlaceholders(clauses.title)}</h1>
                 <p className="text-sm text-[#707079]">{clauses.department}</p>
@@ -37,7 +36,7 @@ const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, l
             </header>
 
             <main className="text-sm">
-                <h2 className="font-bold text-center uppercase mb-6">{clauses.parties.title}</h2>
+                <h2 className="font-bold text-center uppercase mb-6 text-[#3d5afe]">{clauses.parties.title}</h2>
                 <div className="grid grid-cols-2 gap-8 mb-8">
                     <div>
                         <h3 className="font-semibold underline mb-2">{clauses.parties.lender}</h3>
@@ -52,16 +51,16 @@ const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, l
                 </div>
 
                 <div className="space-y-6 leading-relaxed">
-                    <h4 className="font-bold uppercase">{replacePlaceholders(clauses.articles.object.title)}</h4>
+                    <h4 className="font-bold uppercase text-[#3d5afe]">{replacePlaceholders(clauses.articles.object.title)}</h4>
                     <p>{replacePlaceholders(clauses.articles.object.content)}</p>
 
-                    <h4 className="font-bold uppercase">{replacePlaceholders(clauses.articles.repayment.title)}</h4>
+                    <h4 className="font-bold uppercase text-[#3d5afe]">{replacePlaceholders(clauses.articles.repayment.title)}</h4>
                     <p>{replacePlaceholders(clauses.articles.repayment.content)}</p>
 
-                    <h4 className="font-bold uppercase">{replacePlaceholders(clauses.articles.default.title)}</h4>
+                    <h4 className="font-bold uppercase text-[#3d5afe]">{replacePlaceholders(clauses.articles.default.title)}</h4>
                     <p>{replacePlaceholders(clauses.articles.default.content)}</p>
 
-                    <h4 className="font-bold uppercase">{replacePlaceholders(clauses.articles.jurisdiction.title)}</h4>
+                    <h4 className="font-bold uppercase text-[#3d5afe]">{replacePlaceholders(clauses.articles.jurisdiction.title)}</h4>
                     <p>{replacePlaceholders(clauses.articles.jurisdiction.content)}</p>
                 </div>
 

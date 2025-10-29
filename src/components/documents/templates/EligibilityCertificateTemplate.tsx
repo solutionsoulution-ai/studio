@@ -25,7 +25,7 @@ const EligibilityCertificateTemplate: React.FC<EligibilityCertificateTemplatePro
     };
 
     return (
-        <div className="bg-white text-[#09090b] font-serif p-10 max-w-4xl mx-auto border-2 border-[#3d5afe]">
+        <div className="bg-white text-[#09090b] font-serif p-10 max-w-4xl mx-auto border-2 border-[#3d5afe] shadow-lg">
             <header className="flex justify-between items-center mb-10 pb-4 border-b-2 border-[#3d5afe]">
                  <div className="flex items-center">
                     <Landmark className="h-8 w-8 text-[#3d5afe] mr-3" />
