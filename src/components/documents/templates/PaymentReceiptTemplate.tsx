@@ -66,8 +66,12 @@ const PaymentReceiptTemplate: React.FC<PaymentReceiptTemplateProps> = ({ formDat
                 </section>
 
                 <div className="mt-20 pt-8 grid grid-cols-2 items-end">
-                     <div>
-                        {/* Espace pour le cachet */}
+                     <div className="text-left text-xs text-slate-500">
+                        <p className="font-semibold text-slate-700">{clauses.footer.thank_you}</p>
+                        <p>{clauses.footer.contact_info}</p>
+                        {clauses.footer.emails.map((email: string) => (
+                            <p key={email}>{email}</p>
+                        ))}
                     </div>
                     <div className="text-right">
                         <div className="inline-block text-center text-xs">
