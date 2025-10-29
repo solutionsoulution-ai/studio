@@ -85,7 +85,7 @@ export const documentFields: { [key: string]: DocumentField[] } = {
     { name: 'date', label: {fr:'Date de facturation', en: 'Invoice Date', de: 'Rechnungsdatum'}, type: 'date', defaultValue: new Date().toISOString().split('T')[0], validation: { type: 'date' } },
     { name: 'client_name', label: {fr:'Nom du client', en: 'Client Name', de: 'Kundenname'}, type: 'text', validation: { type: 'string' } },
     { name: 'client_address', label: {fr:'Adresse du client', en: 'Client Address', de: 'Kundenadresse'}, type: 'textarea', validation: { type: 'string' } },
-    { name: 'group', label: {fr: "Détails de la facturation", en: "Billing Details", de: "Rechnungsdetails"}, type: 'group', validation: {type: 'any'}, fields: [
+    { name: 'items_group', label: {fr: "Détails de la facturation", en: "Billing Details", de: "Rechnungsdetails"}, type: 'group', validation: {type: 'any'}, fields: [
       { name: 'item1_description', label: {fr: 'Article 1 - Description'}, type: 'text', validation: { type: 'string' } },
       { name: 'item1_quantity', label: {fr: 'Article 1 - Quantité'}, type: 'number', defaultValue: 1, validation: { type: 'number' } },
       { name: 'item1_unit_price', label: {fr: 'Article 1 - Prix U. (€)'}, type: 'number', validation: { type: 'number' } },
@@ -96,7 +96,7 @@ export const documentFields: { [key: string]: DocumentField[] } = {
       { name: 'item3_quantity', label: {fr: 'Article 3 - Quantité'}, type: 'number', defaultValue: 1, validation: { type: 'any' } },
       { name: 'item3_unit_price', label: {fr: 'Article 3 - Prix U. (€)'}, type: 'number', validation: { type: 'any' } },
     ]},
-    { name: 'group', label: {fr: 'Coordonnées Bancaires', en: 'Bank Details', de: 'Bankverbindung'}, type: 'group', validation: {type: 'any'}, fields: [
+    { name: 'bank_details_group', label: {fr: 'Coordonnées Bancaires', en: 'Bank Details', de: 'Bankverbindung'}, type: 'group', validation: {type: 'any'}, fields: [
       { name: 'bank_name', label: {fr: 'Nom de la banque (Domiciliation)', en: 'Bank Name', de: 'Bankname'}, type: 'text', validation: { type: 'string' } },
       { name: 'iban', label: {fr:'IBAN', en: 'IBAN', de: 'IBAN'}, type: 'text', validation: { type: 'string' } },
       { name: 'bic', label: {fr:'BIC / SWIFT', en: 'BIC / SWIFT', de: 'BIC / SWIFT'}, type: 'text', validation: { type: 'string' } },
