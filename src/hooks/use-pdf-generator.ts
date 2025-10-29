@@ -29,13 +29,12 @@ export function usePDFGenerator() {
 
         try {
             const canvas = await html2canvas(input, {
-                scale: 1.5, // Réduction de l'échelle pour diminuer la résolution de base
+                scale: 1.5,
                 useCORS: true,
                 logging: false,
             });
 
-            // Utilisation du format JPEG avec une qualité contrôlée pour réduire la taille
-            const imgData = canvas.toDataURL('image/jpeg', 0.92); 
+            const imgData = canvas.toDataURL('image/jpeg', 0.92);
             const pdf = new jsPDF(orientation, 'mm', 'a4');
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = pdf.internal.pageSize.getHeight();
@@ -43,18 +42,18 @@ export function usePDFGenerator() {
             const canvasWidth = canvas.width;
             const canvasHeight = canvas.height;
             const ratio = canvasWidth / pdfWidth;
-
-            let heightLeft = canvasHeight;
+            const imgHeight = canvasHeight / ratio;
+            let heightLeft = imgHeight;
             let position = 0;
 
-            pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, canvasHeight / ratio);
-            heightLeft -= pdfHeight * ratio;
+            pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, imgHeight);
+            heightLeft -= pdfHeight;
 
             while (heightLeft > 0) {
                 position = position - pdfHeight;
                 pdf.addPage();
-                pdf.addImage(imgData, 'JPEG', 0, position / ratio, pdfWidth, canvasHeight / ratio);
-                heightLeft -= pdfHeight * ratio;
+                pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, imgHeight);
+                heightLeft -= pdfHeight;
             }
 
             pdf.save(fileName);
