@@ -29,12 +29,12 @@ export function usePDFGenerator() {
 
         try {
             const canvas = await html2canvas(input, {
-                scale: 1.5,
+                scale: 2,
                 useCORS: true,
                 logging: false,
             });
 
-            const imgData = canvas.toDataURL('image/jpeg', 0.92);
+            const imgData = canvas.toDataURL('image/jpeg', 0.98);
             const pdf = new jsPDF(orientation, 'mm', 'a4');
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = pdf.internal.pageSize.getHeight();
@@ -50,7 +50,7 @@ export function usePDFGenerator() {
             heightLeft -= pdfHeight;
 
             while (heightLeft > 0) {
-                position = position - pdfHeight;
+                position -= pdfHeight;
                 pdf.addPage();
                 pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, imgHeight);
                 heightLeft -= pdfHeight;
