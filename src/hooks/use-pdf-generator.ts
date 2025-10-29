@@ -32,45 +32,32 @@ export function usePDFGenerator() {
                 scale: 2,
                 useCORS: true,
                 logging: false,
-                // Assurer que la capture se fait sur toute la hauteur du contenu
-                windowHeight: input.scrollHeight,
-                scrollY: -window.scrollY,
+                height: input.getBoundingClientRect().height,
+                windowHeight: input.getBoundingClientRect().height,
+                scrollY: 0
             });
 
             const imgData = canvas.toDataURL('image/jpeg', 0.98);
             
-            const pdfWidth = 210; // A4 width in mm
-            const pdfHeight = 297; // A4 height in mm
+            const pdf = new jsPDF(orientation, 'mm', 'a4');
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
 
             const canvasWidth = canvas.width;
             const canvasHeight = canvas.height;
-            
-            // Calculer le ratio pour maintenir les proportions de l'image
-            const canvasAspectRatio = canvasWidth / canvasHeight;
-            const pdfAspectRatio = pdfWidth / pdfHeight;
+            const ratio = canvasWidth / canvasHeight;
 
-            let finalImgWidth = pdfWidth;
-            let finalImgHeight = pdfWidth / canvasAspectRatio;
-
-            // Si l'image est plus haute que la page, on la fait déborder sur plusieurs pages
-            if (finalImgHeight > pdfHeight) {
-                finalImgHeight = pdfHeight;
-                finalImgWidth = finalImgHeight * canvasAspectRatio;
-            }
-
-            const pdf = new jsPDF(orientation, 'mm', 'a4');
-            let heightLeft = canvasHeight * (pdfWidth / canvasWidth); // Hauteur totale de l'image en mm
+            let imgHeight = pdfWidth / ratio;
+            let heightLeft = imgHeight;
             let position = 0;
 
-            // Ajouter la première page
-            pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, heightLeft);
+            pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, imgHeight);
             heightLeft -= pdfHeight;
 
-            // Ajouter des pages supplémentaires si nécessaire
             while (heightLeft > 0) {
-                position -= pdfHeight;
+                position = heightLeft - imgHeight;
                 pdf.addPage();
-                pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, canvasHeight * (pdfWidth / canvasWidth));
+                pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, imgHeight);
                 heightLeft -= pdfHeight;
             }
 
