@@ -38,9 +38,9 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ formData, lang }) => 
     const vat = subtotal * vatRate;
     const total = subtotal + vat;
 
-    const dueDate = formData.date ? new Date(new Date(formData.date).setDate(new Date(formData.date).getDate() + 30)).toLocaleDateString(lang) : '___________';
+    const dueDate = formData.date ? new Date(new Date(formData.date).setDate(new Date(formData.date).getDate() + 30)).toLocaleDateString(lang) : '';
     
-    const replaceRef = (text: string) => text.replace(/{ref}/g, formData.ref || '___________');
+    const replaceRef = (text: string) => text.replace(/{ref}/g, formData.ref || '');
 
     return (
         <DocumentWrapper 
@@ -52,19 +52,19 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ formData, lang }) => 
                 <div>
                      <h2 className="text-2xl font-bold uppercase text-[hsl(215,39%,29%)]">{clauses.title}</h2>
                      <p className="text-xs text-slate-500">
-                         {clauses.invoice_number_label} {formData.ref || '___________'}
+                         {clauses.invoice_number_label} {formData.ref || ''}
                      </p>
                 </div>
                  <div className="text-right text-xs">
-                     <p><span className="font-bold">{clauses.date_label}</span> {formData.date ? new Date(formData.date).toLocaleDateString(lang) : '___________'}</p>
+                     <p><span className="font-bold">{clauses.date_label}</span> {formData.date ? new Date(formData.date).toLocaleDateString(lang) : ''}</p>
                      <p><span className="font-bold">{clauses.due_date_label}</span> {dueDate}</p>
                  </div>
             </header>
             
             <section className="mb-8">
                  <h3 className="text-xs font-bold uppercase text-slate-500 mb-1">{clauses.bill_to_label}</h3>
-                 <p className="font-bold">{formData.client_name || '___________'}</p>
-                 <p className="text-sm text-slate-600 whitespace-pre-line">{formData.client_address || '___________'}</p>
+                 <p className="font-bold">{formData.client_name || ''}</p>
+                 <p className="text-sm text-slate-600 whitespace-pre-line">{formData.client_address || ''}</p>
             </section>
             
             <section>
@@ -80,7 +80,7 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ formData, lang }) => 
                     <tbody>
                         {items.map((item: any, index: number) => (
                             <tr key={index} className="border-b border-slate-200">
-                                <td className="p-2">{item.description || '___________'}</td>
+                                <td className="p-2">{item.description || ''}</td>
                                 <td className="p-2 text-center">{item.quantity || 1}</td>
                                 <td className="p-2 text-right">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(Number(item.unit_price) || 0)}</td>
                                 <td className="p-2 text-right font-semibold">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format((Number(item.quantity) || 1) * (Number(item.unit_price) || 0))}</td>
@@ -113,15 +113,15 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ formData, lang }) => 
                 <div className="space-y-2 bg-white p-3 rounded border border-slate-200 my-1 font-mono text-xs">
                     <div>
                         <span className="font-sans font-semibold text-slate-600">{clauses.payment_terms.bank_name_label}: </span>
-                        <span>{formData.bank_name || 'NOM DE LA BANQUE'}</span>
+                        <span>{formData.bank_name || ''}</span>
                     </div>
                     <div>
                         <span className="font-sans font-semibold text-slate-600">{clauses.payment_terms.iban_label}: </span>
-                        <span>{formData.iban || 'FRXX XXXX XXXX XXXX XXXX XXXX XXX'}</span>
+                        <span>{formData.iban || ''}</span>
                     </div>
                     <div>
                         <span className="font-sans font-semibold text-slate-600">{clauses.payment_terms.bic_label}: </span>
-                        <span>{formData.bic || 'BIGBIFR1XXX'}</span>
+                        <span>{formData.bic || ''}</span>
                     </div>
                     <div>
                         <span className="font-sans font-semibold text-slate-600">{clauses.payment_terms.payment_reason_label}: </span>
