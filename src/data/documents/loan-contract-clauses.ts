@@ -42,9 +42,9 @@ export const loanContractClauses: Clauses = {
                 title: "Article 5 : Défaut de Paiement",
                 content: "En cas de non-paiement d'une échéance à sa date, Le Prêteur pourra exiger le remboursement immédiat du capital restant dû, majoré des intérêts échus et non payés. Des indemnités de retard pourront être appliquées conformément à la législation en vigueur.",
             },
-            insurance: {
-                title: "Article 6 : Assurance Emprunteur Obligatoire",
-                content: "L'octroi de ce prêt est conditionné à la souscription par l'Emprunteur d'une assurance couvrant les risques de Décès, Perte Totale et Irréversible d'Autonomie (PTIA), et Incapacité de Travail (IT). Le coût de cette assurance est inclus dans les mensualités ou facturé séparément, selon les termes convenus. L'Emprunteur reconnaît avoir reçu et accepté les conditions de cette assurance, qui font l'objet d'une attestation d'assurance distincte fournie par Capfinfy ou ses partenaires assureurs.",
+            early_repayment: {
+                title: "Article 6 : Remboursement Anticipé",
+                content: "L'Emprunteur a le droit, à tout moment, de rembourser par anticipation, en totalité ou en partie, le crédit qui lui a été consenti. Conformément à notre politique commerciale, aucune indemnité de remboursement anticipé ne sera exigée, quel que soit le montant. L'Emprunteur devra simplement notifier le Prêteur de son intention par écrit afin d'organiser les modalités pratiques du remboursement.",
             },
             data: {
                 title: "Article 7 : Protection des Données Personnelles",
@@ -100,9 +100,9 @@ export const loanContractClauses: Clauses = {
                 title: "Artikel 5: Zahlungsverzug",
                 content: "Bei Nichtzahlung einer Rate zum Fälligkeitsdatum kann der Darlehensgeber die sofortige Rückzahlung des ausstehenden Kapitals zuzüglich der fälligen und unbezahlten Zinsen verlangen. Verzugsstrafen können gemäß der geltenden Gesetzgebung erhoben werden.",
             },
-            insurance: {
-                title: "Artikel 6: Obligatorische Kreditnehmerversicherung",
-                content: "Die Gewährung dieses Darlehens ist an den Abschluss einer Versicherung durch den Darlehensnehmer geknüpft, die die Risiken Tod, vollständiger und unwiderruflicher Autonomieverlust (PTIA) und Arbeitsunfähigkeit (IT) abdeckt. Die Kosten dieser Versicherung sind in den Monatsraten enthalten oder werden je nach den vereinbarten Bedingungen separat in Rechnung gestellt. Der Darlehensnehmer bestätigt, die Bedingungen dieser Versicherung erhalten und akzeptiert zu haben, die Gegenstand einer separaten Versicherungsbescheinigung sind, die von Capfinfy oder seinen Versicherungspartnern ausgestellt wird.",
+            early_repayment: {
+                title: "Artikel 6: Vorzeitige Rückzahlung",
+                content: "Der Darlehensnehmer hat das Recht, den ihm gewährten Kredit jederzeit ganz oder teilweise vorzeitig zurückzuzahlen. Gemäß unserer Geschäftspolitik wird keine Vorfälligkeitsentschädigung erhoben, unabhängig von der Höhe des Betrags. Der Darlehensnehmer muss den Darlehensgeber lediglich schriftlich über seine Absicht informieren, um die praktischen Modalitäten der Rückzahlung zu regeln.",
             },
             data: {
                 title: "Artikel 7: Schutz personenbezogener Daten",
@@ -116,3 +116,5 @@ export const loanContractClauses: Clauses = {
         signature_preamble: "Ausgefertigt in zwei Originalexemplaren, eines für jede Partei.",
     }
 };
+
+    
