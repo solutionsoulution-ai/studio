@@ -21,15 +21,8 @@ const PaymentReceiptTemplate: React.FC<PaymentReceiptTemplateProps> = ({ formDat
             .replace(/{payer_name}/g, formData.payer_name || '___________')
             .replace(/{payer_address}/g, formData.payer_address || '___________')
             .replace(/{payment_amount}/g, formData.payment_amount ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.payment_amount) : '___________')
-            .replace(/{payment_amount_in_words}/g, formData.payment_amount_in_words || '___________')
             .replace(/{payment_method}/g, formData.payment_method || '___________')
             .replace(/{payment_reference}/g, formData.payment_reference || '___________');
-    };
-
-    const paidStampText = {
-        fr: 'PAYÉ',
-        en: 'PAID',
-        de: 'BEZAHLT'
     };
 
     return (
@@ -40,7 +33,7 @@ const PaymentReceiptTemplate: React.FC<PaymentReceiptTemplateProps> = ({ formDat
             docDate={replacePlaceholders(clauses.date)}
             lang={lang}
         >
-            <div style={{ position: 'relative' }}>
+            <div>
                 <section className="mb-8">
                     <h2 className="text-sm font-bold uppercase text-[hsl(215,39%,29%)] mb-2">{clauses.received_from}</h2>
                     <div className="bg-slate-100 p-3 rounded-md text-xs">
@@ -71,23 +64,6 @@ const PaymentReceiptTemplate: React.FC<PaymentReceiptTemplateProps> = ({ formDat
                     <h2 className="text-sm font-bold uppercase text-[hsl(215,39%,29%)] mb-2">{clauses.confirmation.title}</h2>
                     <p>{clauses.confirmation.content}</p>
                 </section>
-
-                <div style={{
-                    position: 'absolute',
-                    bottom: '80px',
-                    left: '20px',
-                    transform: 'rotate(-15deg)',
-                    border: '3px solid red',
-                    color: 'red',
-                    padding: '5px 10px',
-                    borderRadius: '5px',
-                    fontWeight: 'bold',
-                    fontSize: '24px',
-                    opacity: '0.8',
-                    zIndex: 10
-                }}>
-                    {paidStampText[lang]}
-                </div>
 
                 <div className="mt-20 pt-8 grid grid-cols-2 items-end">
                      <div>
