@@ -29,34 +29,32 @@ export function usePDFGenerator() {
 
         try {
             const canvas = await html2canvas(input, {
-                scale: 2,
+                scale: 1.5, // Réduction de l'échelle pour diminuer la résolution de base
                 useCORS: true,
                 logging: false,
-                width: input.offsetWidth,
-                height: input.offsetHeight,
-                windowWidth: window.innerWidth,
-                windowHeight: window.innerHeight,
             });
 
-            const imgData = canvas.toDataURL('image/png');
+            // Utilisation du format JPEG avec une qualité contrôlée pour réduire la taille
+            const imgData = canvas.toDataURL('image/jpeg', 0.92); 
             const pdf = new jsPDF(orientation, 'mm', 'a4');
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = pdf.internal.pageSize.getHeight();
-            const imgWidth = canvas.width;
-            const imgHeight = canvas.height;
-            const ratio = imgWidth / pdfWidth;
-            const pageHeight = pdfHeight * ratio;
-            let heightLeft = imgHeight;
+
+            const canvasWidth = canvas.width;
+            const canvasHeight = canvas.height;
+            const ratio = canvasWidth / pdfWidth;
+
+            let heightLeft = canvasHeight;
             let position = 0;
 
-            pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight / ratio);
-            heightLeft -= pageHeight;
+            pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, canvasHeight / ratio);
+            heightLeft -= pdfHeight * ratio;
 
             while (heightLeft > 0) {
-                position = heightLeft - imgHeight;
+                position = position - pdfHeight;
                 pdf.addPage();
-                pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight / ratio);
-                heightLeft -= pageHeight;
+                pdf.addImage(imgData, 'JPEG', 0, position / ratio, pdfWidth, canvasHeight / ratio);
+                heightLeft -= pdfHeight * ratio;
             }
 
             pdf.save(fileName);
