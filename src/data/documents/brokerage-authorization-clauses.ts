@@ -10,7 +10,7 @@ export const brokerageAuthorizationClauses: Clauses = {
         company_name: "Capfinfy SAS",
         company_address: "1 Place de la Bourse, 69002 Lyon, France",
         registration_number: "Numéro d'immatriculation national unique : {ref}",
-        validity: "Cette immatriculation est valable pour l'année civile en cours et doit faire l'objet d'un renouvellement annuel. Sa validité peut être vérifiée à tout moment sur le site internet public de l'ORIAS (www.orias.fr).",
+        validity: "",
         location_and_date: "Fait à Paris, le {issue_date}",
         signature_label_1: "Pour l'ORIAS, Le Président du Registre",
         signature_label_2: "Le Secrétaire Général"
