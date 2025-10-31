@@ -2,7 +2,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { brokerageAuthorizationClauses } from '@/data/documents/brokerage-authorization-clauses';
-import { FileText, ShieldCheck, UserCheck, Umbrella } from 'lucide-react';
+import { FileText, ShieldCheck, UserCheck, Umbrella, Banknote } from 'lucide-react';
 import DocumentWrapper from './DocumentWrapper';
 
 interface BrokerageAuthorizationTemplateProps {
@@ -63,6 +63,10 @@ const BrokerageAuthorizationTemplate: React.FC<BrokerageAuthorizationTemplatePro
                      <article>
                          <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><ShieldCheck size={16} />{clauses.articles.conduct.title}</h3>
                          <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{clauses.articles.conduct.content}</p>
+                    </article>
+                    <article>
+                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><Banknote size={16} />{clauses.articles.lcbft.title}</h3>
+                         <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{clauses.articles.lcbft.content}</p>
                     </article>
                 </div>
 

@@ -18,7 +18,7 @@ export const brokerageAuthorizationClauses: Clauses = {
             },
             activities: {
                 title: "Article 2 - Activités Autorisées",
-                description: "En vertu de cette immatriculation, Capfinfy est autorisée à présenter, proposer ou aider à la conclusion des opérations de banque ou des services de paiement et à effectuer tous travaux et conseils préparatoires à leur réalisation.",
+                description: "Capfinfy est autorisée à présenter, proposer ou aider à la conclusion des opérations de banque ou des services de paiement et à effectuer tous travaux et conseils préparatoires à leur réalisation.",
             },
             insurance: {
                 title: "Article 3 - Assurance de Responsabilité Civile Professionnelle",
@@ -26,7 +26,11 @@ export const brokerageAuthorizationClauses: Clauses = {
             },
             conduct: {
                 title: "Article 4 - Règles de Bonne Conduite",
-                content: "L'intermédiaire est tenu de respecter les règles de bonne conduite et de protection de la clientèle, notamment en fournissant des informations claires, précises et non trompeuses, et en agissant de manière honnête, loyale et professionnelle au mieux des intérêts de ses clients."
+                content: "L'intermédiaire est tenu de respecter les règles de bonne conduite, notamment en fournissant des informations claires, précises et non trompeuses, et en agissant de manière honnête, loyale et professionnelle au mieux des intérêts de ses clients."
+            },
+            lcbft: {
+                title: "Article 5 - Obligations LCB-FT",
+                content: "En tant qu'intermédiaire, Capfinfy est assujettie aux obligations de vigilance en matière de lutte contre le blanchiment des capitaux et le financement du terrorisme."
             }
         },
         validity: "Cette immatriculation est valable pour l'année civile en cours et fait l'objet d'un renouvellement annuel. Sa validité peut être vérifiée à tout moment sur le site officiel orias.fr.",
@@ -34,9 +38,9 @@ export const brokerageAuthorizationClauses: Clauses = {
         signature_label: "Pour l'ORIAS, Le Président du Registre",
     },
     en: {
-        // ... (english translations)
+        // ... (english translations will follow the same new structure)
     },
     de: {
-        // ... (german translations)
+        // ... (german translations will follow the same new structure)
     }
 };
