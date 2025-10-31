@@ -13,6 +13,8 @@ const documents = [
   { slug: 'notice-information-assurance', title: "Notice d'Information d'Assurance", description: 'Consultez les détails et exclusions d\'une assurance.' },
   { slug: 'facture', title: 'Facture', description: 'Émettez une facture professionnelle pour vos services.' },
   { slug: 'recu-de-paiement', title: 'Reçu de Paiement', description: 'Confirmez la réception d\'un paiement pour un service ou un remboursement.' },
+  { slug: 'licence-bancaire', title: 'Licence Bancaire', description: 'Générez un certificat de licence d\'établissement de crédit.' },
+  { slug: 'autorisation-courtage', title: 'Autorisation de Courtage', description: 'Générez une attestation d\'autorisation pour le courtage de prêt.' },
   { slug: 'document-vierge', title: 'Document Vierge', description: 'Partez d\'un modèle vierge avec en-tête de Capfinfy.' },
 ];
 

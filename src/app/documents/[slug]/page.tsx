@@ -11,6 +11,8 @@ export function generateStaticParams() {
     { slug: 'notice-information-assurance' },
     { slug: 'facture' },
     { slug: 'recu-de-paiement' },
+    { slug: 'licence-bancaire' },
+    { slug: 'autorisation-courtage' },
     { slug: 'document-vierge' },
   ];
 }

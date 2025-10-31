@@ -13,6 +13,8 @@ import InsuranceNoticeTemplate from '@/components/documents/templates/InsuranceN
 import InvoiceTemplate from '@/components/documents/templates/InvoiceTemplate';
 import BlankDocumentTemplate from '@/components/documents/templates/BlankDocumentTemplate';
 import PaymentReceiptTemplate from '@/components/documents/templates/PaymentReceiptTemplate';
+import BankingLicenseTemplate from '@/components/documents/templates/BankingLicenseTemplate';
+import BrokerageAuthorizationTemplate from '@/components/documents/templates/BrokerageAuthorizationTemplate';
 
 const documentTemplates: { [key: string]: React.FC<any> } = {
   'reconnaissance-de-dette': DebtRecognitionTemplate,
@@ -23,6 +25,8 @@ const documentTemplates: { [key: string]: React.FC<any> } = {
   'notice-information-assurance': InsuranceNoticeTemplate,
   'facture': InvoiceTemplate,
   'recu-de-paiement': PaymentReceiptTemplate,
+  'licence-bancaire': BankingLicenseTemplate,
+  'autorisation-courtage': BrokerageAuthorizationTemplate,
   'document-vierge': BlankDocumentTemplate,
 };
 

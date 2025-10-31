@@ -112,5 +112,13 @@ export const documentFields: { [key: string]: DocumentField[] } = {
     { name: 'payment_method', label: { fr: 'Moyen de paiement' }, type: 'text', defaultValue: 'Virement bancaire', validation: { type: 'string' } },
     { name: 'payment_reference', label: { fr: 'Référence du paiement (ex: facture, contrat)' }, type: 'text', validation: { type: 'string' } },
   ],
+  'licence-bancaire': [
+    { name: 'ref', label: {fr: 'Numéro de Licence'}, type: 'text', defaultValue: `LB-CE-${new Date().getFullYear()}-`, validation: { type: 'string' } },
+    { name: 'issue_date', label: {fr: 'Date de délivrance'}, type: 'date', defaultValue: new Date().toISOString().split('T')[0], validation: { type: 'date' } },
+  ],
+  'autorisation-courtage': [
+    { name: 'ref', label: {fr: 'Numéro d\'Immatriculation ORIAS'}, type: 'text', defaultValue: `21008679`, validation: { type: 'string' } },
+    { name: 'issue_date', label: {fr: 'Date d\'émission'}, type: 'date', defaultValue: new Date().toISOString().split('T')[0], validation: { type: 'date' } },
+  ],
   'document-vierge': [],
 };
