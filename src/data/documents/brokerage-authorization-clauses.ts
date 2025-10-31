@@ -39,7 +39,8 @@ export const brokerageAuthorizationClauses: Clauses = {
         },
         validity: "Cette immatriculation est valable pour l'année civile en cours et doit faire l'objet d'un renouvellement annuel. Sa validité peut être vérifiée à tout moment sur le site internet public de l'ORIAS (www.orias.fr).",
         location_and_date: "Fait à Paris, le {issue_date}",
-        signature_label: "Pour l'ORIAS, Le Président du Registre",
+        signature_label_1: "Pour l'ORIAS, Le Président du Registre",
+        signature_label_2: "Le Secrétaire Général"
     },
     en: {
         // ... (english translations will follow the same new structure)

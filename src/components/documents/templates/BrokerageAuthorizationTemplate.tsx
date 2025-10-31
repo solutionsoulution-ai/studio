@@ -12,7 +12,8 @@ interface BrokerageAuthorizationTemplateProps {
 
 const BrokerageAuthorizationTemplate: React.FC<BrokerageAuthorizationTemplateProps> = ({ formData, lang }) => {
     const clauses = brokerageAuthorizationClauses[lang] || brokerageAuthorizationClauses['fr'];
-    const signer = { signatureUrl: "https://i.postimg.cc/P5tM0G3p/signature-generic.png" }; // Generic institutional signature
+    const signer1 = { signatureUrl: "https://i.postimg.cc/HWfMw9wD/signature-8.png" };
+    const signer2 = { signatureUrl: "https://i.postimg.cc/BQ4Sf8sD/signature-6.png" };
 
     const replacePlaceholders = (text: string) => {
         return text
@@ -80,10 +81,18 @@ const BrokerageAuthorizationTemplate: React.FC<BrokerageAuthorizationTemplatePro
                     <div className="text-xs">
                         <p>{replacePlaceholders(clauses.location_and_date)}</p>
                     </div>
-                    <div className="text-center">
-                        {signer.signatureUrl && <Image src={signer.signatureUrl} alt={`Signature`} width={120} height={40} className="mx-auto" />}
-                        <div className="border-t border-slate-400 pt-1 mt-1 text-xs">
-                            <p className="font-bold">{clauses.signature_label}</p>
+                     <div className="flex gap-8">
+                        <div className="text-center">
+                            {signer1.signatureUrl && <Image src={signer1.signatureUrl} alt={`Signature 1`} width={120} height={40} className="mx-auto" />}
+                            <div className="border-t border-slate-400 pt-1 mt-1 text-xs">
+                                <p className="font-bold">{clauses.signature_label_1}</p>
+                            </div>
+                        </div>
+                         <div className="text-center">
+                            {signer2.signatureUrl && <Image src={signer2.signatureUrl} alt={`Signature 2`} width={120} height={40} className="mx-auto" />}
+                            <div className="border-t border-slate-400 pt-1 mt-1 text-xs">
+                                <p className="font-bold">{clauses.signature_label_2}</p>
+                            </div>
                         </div>
                     </div>
                 </div>

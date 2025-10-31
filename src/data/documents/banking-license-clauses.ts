@@ -43,7 +43,8 @@ export const bankingLicenseClauses: Clauses = {
         },
         validity: "Cette licence est accordée pour une durée indéterminée, sous réserve du respect constant des conditions de son octroi et de la réglementation en vigueur. Elle peut être modifiée, suspendue ou révoquée par l'ACPR en cas de manquement grave aux obligations légales et réglementaires.",
         location_and_date: "Fait à Paris, le {issue_date}",
-        signature_label: "Pour l'ACPR, Le Secrétaire Général",
+        signature_label_1: "Le Gouverneur de la Banque de France",
+        signature_label_2: "Le Secrétaire Général de l'ACPR",
     },
     en: {
         // ... (english translations will follow the same new structure)
