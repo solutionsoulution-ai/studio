@@ -2,7 +2,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { bankingLicenseClauses } from '@/data/documents/banking-license-clauses';
-import { ShieldCheck, FileText, BarChart, FileWarning, Banknote } from 'lucide-react';
+import { ShieldCheck, FileText, BarChart, FileWarning, Banknote, Landmark } from 'lucide-react';
 import DocumentWrapper from './DocumentWrapper';
 
 interface BankingLicenseTemplateProps {
@@ -39,15 +39,15 @@ const BankingLicenseTemplate: React.FC<BankingLicenseTemplateProps> = ({ formDat
                 
                 <p className="text-xs leading-relaxed mb-6">{clauses.intro}</p>
 
-                <p className="text-sm font-bold text-center mb-2">{clauses.grant_to}</p>
-                <div className="text-center bg-white p-4 rounded-md border border-slate-200 mb-8">
-                    <p className="text-xl font-bold">{clauses.company_name}</p>
-                    <p className="text-xs text-slate-500">{clauses.company_address}</p>
+                <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><Landmark size={16} /> {clauses.grant_to}</h3>
+                <div className="bg-white p-4 rounded-md border border-slate-200 mb-6">
+                    <p className="text-xl font-bold text-center">{clauses.company_name}</p>
+                    <p className="text-xs text-slate-500 text-center">{clauses.company_address}</p>
+                    <p className="text-sm font-semibold text-center mt-2">{clauses.status}</p>
                 </div>
 
-                <p className="text-sm font-semibold text-center mb-8">{clauses.status}</p>
 
-                <div className="space-y-4 text-sm">
+                <div className="space-y-4 text-sm mt-8">
                     <article>
                          <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><FileText size={16} />{clauses.articles.scope.title}</h3>
                          <div className="bg-white p-4 rounded-md border border-slate-200 text-xs space-y-2">
@@ -60,8 +60,12 @@ const BankingLicenseTemplate: React.FC<BankingLicenseTemplateProps> = ({ formDat
                          </div>
                     </article>
                     <article>
-                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><FileWarning size={16} />{clauses.articles.obligations.title}</h3>
-                         <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{clauses.articles.obligations.content}</p>
+                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><BarChart size={16} />{clauses.articles.prudential.title}</h3>
+                         <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{clauses.articles.prudential.content}</p>
+                    </article>
+                    <article>
+                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><FileWarning size={16} />{clauses.articles.internal_control.title}</h3>
+                         <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{clauses.articles.internal_control.content}</p>
                     </article>
                     <article>
                          <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><Banknote size={16} />{clauses.articles.lcbft.title}</h3>
@@ -70,6 +74,10 @@ const BankingLicenseTemplate: React.FC<BankingLicenseTemplateProps> = ({ formDat
                      <article>
                          <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><ShieldCheck size={16} />{clauses.articles.customer_protection.title}</h3>
                          <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{clauses.articles.customer_protection.content}</p>
+                    </article>
+                     <article>
+                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><FileText size={16} />{clauses.articles.reporting.title}</h3>
+                         <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{clauses.articles.reporting.content}</p>
                     </article>
                 </div>
                 
