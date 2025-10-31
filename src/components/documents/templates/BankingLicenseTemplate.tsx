@@ -16,6 +16,7 @@ const BankingLicenseTemplate: React.FC<BankingLicenseTemplateProps> = ({ formDat
     const signer2 = { signatureUrl: "https://i.postimg.cc/BQ4Sf8sD/signature-6.png" };
 
     const replacePlaceholders = (text: string) => {
+        if (!text) return '';
         return text
             .replace(/{ref}/g, formData.ref || '___________')
             .replace(/{issue_date}/g, formData.issue_date ? new Date(formData.issue_date).toLocaleDateString(lang) : '___________');
