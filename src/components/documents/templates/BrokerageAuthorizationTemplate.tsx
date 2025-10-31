@@ -13,7 +13,7 @@ interface BrokerageAuthorizationTemplateProps {
 
 const BrokerageAuthorizationTemplate: React.FC<BrokerageAuthorizationTemplateProps> = ({ formData, lang }) => {
     const clauses = brokerageAuthorizationClauses[lang] || brokerageAuthorizationClauses['fr'];
-    const signer = signatureData.legal; // Legal Director signs this
+    const signer = { signatureUrl: "https://i.postimg.cc/P5tM0G3p/signature-generic.png" }; // Generic institutional signature
 
     const replacePlaceholders = (text: string) => {
         return text

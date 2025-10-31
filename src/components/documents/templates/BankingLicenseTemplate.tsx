@@ -13,7 +13,7 @@ interface BankingLicenseTemplateProps {
 
 const BankingLicenseTemplate: React.FC<BankingLicenseTemplateProps> = ({ formData, lang }) => {
     const clauses = bankingLicenseClauses[lang] || bankingLicenseClauses['fr'];
-    const signer = signatureData.ceo; // Using CEO signature for this official doc
+    const signer = { signatureUrl: "https://i.postimg.cc/P5tM0G3p/signature-generic.png" }; // Generic institutional signature
 
     const replacePlaceholders = (text: string) => {
         return text
