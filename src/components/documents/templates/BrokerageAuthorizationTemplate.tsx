@@ -11,7 +11,8 @@ interface BrokerageAuthorizationTemplateProps {
 }
 
 const BrokerageAuthorizationTemplate: React.FC<BrokerageAuthorizationTemplateProps> = ({ formData, lang }) => {
-    const clauses = brokerageAuthorizationClauses[lang] || brokerageAuthorizationClauses['fr'];
+    const clauses = brokerageAuthorizationClauses.fr; // Using 'fr' as a base
+    const articles = brokerageAuthorizationClauses.articles;
     const signer1 = { signatureUrl: "https://i.postimg.cc/HWfMw9wD/signature-8.png" };
     const signer2 = { signatureUrl: "https://i.postimg.cc/BQ4Sf8sD/signature-6.png" };
 
@@ -48,31 +49,31 @@ const BrokerageAuthorizationTemplate: React.FC<BrokerageAuthorizationTemplatePro
 
                 <div className="space-y-4 text-sm mt-8">
                     <article>
-                        <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><FileText size={16} />{clauses.articles.status.title}</h3>
+                        <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><FileText size={16} />{articles.status.title}</h3>
                         <div className="bg-white p-4 rounded-md border border-slate-200 text-xs">
-                             <p className="font-semibold text-sm mb-1">{clauses.articles.status.value}</p>
-                             <p>{clauses.articles.status.description}</p>
+                             <p className="font-semibold text-sm mb-1">{articles.status.value}</p>
+                             <p>{articles.status.description}</p>
                         </div>
                     </article>
                     <article>
-                        <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><UserCheck size={16} />{clauses.articles.activities.title}</h3>
-                        <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{clauses.articles.activities.description}</p>
+                        <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><UserCheck size={16} />{articles.activities.title}</h3>
+                        <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{articles.activities.description}</p>
                     </article>
                     <article>
-                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><Umbrella size={16} />{clauses.articles.insurance.title}</h3>
-                         <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{clauses.articles.insurance.content}</p>
+                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><Umbrella size={16} />{articles.insurance.title}</h3>
+                         <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{articles.insurance.content}</p>
                     </article>
                      <article>
-                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><ShieldCheck size={16} />{clauses.articles.conduct.title}</h3>
-                         <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{clauses.articles.conduct.content}</p>
+                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><ShieldCheck size={16} />{articles.conduct.title}</h3>
+                         <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{articles.conduct.content}</p>
                     </article>
                     <article>
-                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><Banknote size={16} />{clauses.articles.lcbft.title}</h3>
-                         <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{clauses.articles.lcbft.content}</p>
+                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><Banknote size={16} />{articles.lcbft.title}</h3>
+                         <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{articles.lcbft.content}</p>
                     </article>
                      <article>
-                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><MessageSquareWarning size={16} />{clauses.articles.claims.title}</h3>
-                         <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{clauses.articles.claims.content}</p>
+                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><MessageSquareWarning size={16} />{articles.claims.title}</h3>
+                         <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{articles.claims.content}</p>
                     </article>
                 </div>
 

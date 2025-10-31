@@ -11,7 +11,8 @@ interface BankingLicenseTemplateProps {
 }
 
 const BankingLicenseTemplate: React.FC<BankingLicenseTemplateProps> = ({ formData, lang }) => {
-    const clauses = bankingLicenseClauses[lang] || bankingLicenseClauses['fr'];
+    const clauses = bankingLicenseClauses.fr; // Using 'fr' as a base, assuming other languages follow suit
+    const articles = bankingLicenseClauses.articles;
     const signer1 = { signatureUrl: "https://i.postimg.cc/HWfMw9wD/signature-8.png" };
     const signer2 = { signatureUrl: "https://i.postimg.cc/BQ4Sf8sD/signature-6.png" };
 
@@ -51,35 +52,35 @@ const BankingLicenseTemplate: React.FC<BankingLicenseTemplateProps> = ({ formDat
 
                 <div className="space-y-4 text-sm mt-8">
                     <article>
-                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><FileText size={16} />{clauses.articles.scope.title}</h3>
+                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><FileText size={16} />{articles.scope.title}</h3>
                          <div className="bg-white p-4 rounded-md border border-slate-200 text-xs space-y-2">
-                             <p>{clauses.articles.scope.intro}</p>
+                             <p>{articles.scope.intro}</p>
                              <ul className="list-disc list-inside space-y-1 pl-2">
-                                <li>{clauses.articles.scope.item1}</li>
-                                <li>{clauses.articles.scope.item2}</li>
-                                <li>{clauses.articles.scope.item3}</li>
+                                <li>{articles.scope.item1}</li>
+                                <li>{articles.scope.item2}</li>
+                                <li>{articles.scope.item3}</li>
                             </ul>
                          </div>
                     </article>
                     <article>
-                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><BarChart size={16} />{clauses.articles.prudential.title}</h3>
-                         <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{clauses.articles.prudential.content}</p>
+                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><BarChart size={16} />{articles.prudential.title}</h3>
+                         <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{articles.prudential.content}</p>
                     </article>
                     <article>
-                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><FileWarning size={16} />{clauses.articles.internal_control.title}</h3>
-                         <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{clauses.articles.internal_control.content}</p>
+                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><FileWarning size={16} />{articles.internal_control.title}</h3>
+                         <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{articles.internal_control.content}</p>
                     </article>
                     <article>
-                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><Banknote size={16} />{clauses.articles.lcbft.title}</h3>
-                         <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{clauses.articles.lcbft.content}</p>
+                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><Banknote size={16} />{articles.lcbft.title}</h3>
+                         <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{articles.lcbft.content}</p>
                     </article>
                      <article>
-                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><ShieldCheck size={16} />{clauses.articles.customer_protection.title}</h3>
-                         <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{clauses.articles.customer_protection.content}</p>
+                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><ShieldCheck size={16} />{articles.customer_protection.title}</h3>
+                         <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{articles.customer_protection.content}</p>
                     </article>
                      <article>
-                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><FileText size={16} />{clauses.articles.reporting.title}</h3>
-                         <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{clauses.articles.reporting.content}</p>
+                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><FileText size={16} />{articles.reporting.title}</h3>
+                         <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{articles.reporting.content}</p>
                     </article>
                 </div>
                 
