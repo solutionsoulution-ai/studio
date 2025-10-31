@@ -2,9 +2,8 @@
 import React from 'react';
 import Image from 'next/image';
 import { brokerageAuthorizationClauses } from '@/data/documents/brokerage-authorization-clauses';
-import { signatureData } from '@/data/documents/signature-data';
+import { FileText, ShieldCheck, UserCheck, Umbrella } from 'lucide-react';
 import DocumentWrapper from './DocumentWrapper';
-import { ShieldCheck } from 'lucide-react';
 
 interface BrokerageAuthorizationTemplateProps {
     formData: any;
@@ -17,8 +16,8 @@ const BrokerageAuthorizationTemplate: React.FC<BrokerageAuthorizationTemplatePro
 
     const replacePlaceholders = (text: string) => {
         return text
-            .replace(/{ref}/g, formData.ref || '')
-            .replace(/{issue_date}/g, formData.issue_date ? new Date(formData.issue_date).toLocaleDateString(lang) : '');
+            .replace(/{ref}/g, formData.ref || '___________')
+            .replace(/{issue_date}/g, formData.issue_date ? new Date(formData.issue_date).toLocaleDateString(lang) : '___________');
     };
 
     return (
@@ -38,25 +37,36 @@ const BrokerageAuthorizationTemplate: React.FC<BrokerageAuthorizationTemplatePro
                     <p className="text-xs">{clauses.subtitle}</p>
                 </div>
                 
-                <p className="text-sm text-center mb-4">{clauses.intro}</p>
+                <p className="text-xs leading-relaxed mb-6 text-center">{clauses.intro}</p>
 
-                <div className="text-center bg-white p-4 rounded-md border border-slate-200 mb-6">
+                <div className="text-center bg-white p-4 rounded-md border border-slate-200 mb-8">
                     <p className="text-xl font-bold">{clauses.company_name}</p>
                     <p className="text-xs text-slate-500">{clauses.company_address}</p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-6">
-                    <div className="bg-white p-4 rounded-md border border-slate-200">
-                        <h3 className="font-bold text-xs uppercase text-[hsl(215,39%,29%)] mb-1">{clauses.status.title}</h3>
-                        <p className="font-semibold">{clauses.status.value}</p>
-                    </div>
-                     <div className="bg-white p-4 rounded-md border border-slate-200">
-                        <h3 className="font-bold text-xs uppercase text-[hsl(215,39%,29%)] mb-1">{clauses.activities.title}</h3>
-                        <p className="text-xs">{clauses.activities.description}</p>
-                    </div>
+                <div className="space-y-4 text-sm">
+                    <article>
+                        <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><FileText size={16} />{clauses.articles.status.title}</h3>
+                        <div className="bg-white p-4 rounded-md border border-slate-200 text-xs">
+                             <p className="font-semibold text-sm mb-1">{clauses.articles.status.value}</p>
+                             <p>{clauses.articles.status.description}</p>
+                        </div>
+                    </article>
+                    <article>
+                        <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><UserCheck size={16} />{clauses.articles.activities.title}</h3>
+                        <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{clauses.articles.activities.description}</p>
+                    </article>
+                    <article>
+                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><Umbrella size={16} />{clauses.articles.insurance.title}</h3>
+                         <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{clauses.articles.insurance.content}</p>
+                    </article>
+                     <article>
+                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><ShieldCheck size={16} />{clauses.articles.conduct.title}</h3>
+                         <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{clauses.articles.conduct.content}</p>
+                    </article>
                 </div>
 
-                <p className="text-xs italic text-center text-slate-500 mb-8">{clauses.validity}</p>
+                <p className="text-xs italic text-center text-slate-500 mt-8 mb-8">{clauses.validity}</p>
 
                 <div className="mt-12 flex justify-between items-end">
                     <div className="text-xs">
