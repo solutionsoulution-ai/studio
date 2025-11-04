@@ -7,7 +7,7 @@ export const insuranceCertificateClauses: Clauses = {
             line1: "Département des Assurances",
             line2: "Service des Adhésions • Unité de Certification des Garanties Emprunteur",
         },
-        title: "Attestation d'Assurance Emprunteur pour un {loan_type}",
+        title: "Attestation d'Assurance Emprunteur",
         reference: "Certificat N°: {ref}",
         issue_date: "Date d'émission: {issue_date}",
         insured: {
@@ -47,7 +47,7 @@ export const insuranceCertificateClauses: Clauses = {
             line1: "Insurance Department",
             line2: "Membership Service • Borrower Guarantee Certification Unit",
         },
-        title: "Borrower's Insurance Certificate for a {loan_type}",
+        title: "Borrower's Insurance Certificate",
         reference: "Certificate No: {ref}",
         issue_date: "Issue Date: {issue_date}",
         insured: {
@@ -87,7 +87,7 @@ export const insuranceCertificateClauses: Clauses = {
             line1: "Versicherungsabteilung",
             line2: "Mitgliederservice • Abteilung für die Zertifizierung von Kreditnehmergarantien",
         },
-        title: "Kreditnehmer-Versicherungszertifikat für ein {loan_type}",
+        title: "Kreditnehmer-Versicherungszertifikat",
         reference: "Zertifikat Nr.: {ref}",
         issue_date: "Ausstellungsdatum: {issue_date}",
         insured: {
