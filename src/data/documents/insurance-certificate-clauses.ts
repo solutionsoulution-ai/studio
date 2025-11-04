@@ -17,7 +17,7 @@ export const insuranceCertificateClauses: Clauses = {
             title: "Le Bénéficiaire :",
             content: "L'organisme prêteur partenaire de Capfinfy, pour le compte du contrat de prêt N° {loan_contract_ref}.",
         },
-        object_title: "Objet : Attestation d'assurance groupe pour un {loan_type}",
+        object_title: "Objet : Attestation d'assurance groupe relative au prêt N° {loan_contract_ref}",
         object_content: "Nous soussignés, agissant pour le compte de notre partenaire assureur, certifions par la présente que l'assuré(e) susmentionné(e) est couvert(e) par le contrat d'assurance groupe n°789-456, souscrit par Capfinfy dans le cadre de son prêt.",
         loan_details: {
             title: "Détails du prêt assuré",
@@ -57,7 +57,7 @@ export const insuranceCertificateClauses: Clauses = {
             title: "The Beneficiary:",
             content: "The lending institution partner of Capfinfy, for loan contract No. {loan_contract_ref}.",
         },
-        object_title: "Subject: Group insurance certificate for a {loan_type}",
+        object_title: "Subject: Group insurance certificate regarding loan No. {loan_contract_ref}",
         object_content: "We, the undersigned, acting on behalf of our insurance partner, hereby certify that the above-mentioned insured person is covered by the group insurance contract No. 789-456, underwritten by Capfinfy as part of their loan.",
         loan_details: {
             title: "Details of the Insured Loan",
@@ -97,7 +97,7 @@ export const insuranceCertificateClauses: Clauses = {
             title: "Der Begünstigte:",
             content: "Die kreditgebende Institution, Partner von Capfinfy, für den Darlehensvertrag Nr. {loan_contract_ref}.",
         },
-        object_title: "Betreff: Gruppenversicherungszertifikat für ein {loan_type}",
+        object_title: "Betreff: Gruppenversicherungszertifikat bezüglich Darlehen Nr. {loan_contract_ref}",
         object_content: "Wir, die Unterzeichner, handeln im Namen unseres Versicherungspartners und bescheinigen hiermit, dass die oben genannte versicherte Person durch den von Capfinfy im Rahmen ihres Darlehens abgeschlossenen Gruppenversicherungsvertrag Nr. 789-456 versichert ist.",
         loan_details: {
             title: "Details des versicherten Darlehens",
