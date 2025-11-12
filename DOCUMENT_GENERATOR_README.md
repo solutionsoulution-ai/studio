@@ -260,7 +260,71 @@ Voici le contenu textuel de chaque document, tel que défini dans les fichiers `
 }
 ```
 
-... (Et ainsi de suite pour les autres documents) ...
+### 6. Facture (`invoice-clauses.ts`)
+```json
+{
+  "title": "Facture",
+  "invoice_number_label": "Facture n°:",
+  "date_label": "Date :",
+  "due_date_label": "Échéance :",
+  "bill_to_label": "Facturé à :",
+  "table_headers": {
+    "description": "Description",
+    "quantity": "Qté",
+    "unit_price": "P.U. HT",
+    "amount": "Montant HT"
+  },
+  "subtotal_label": "Sous-total HT",
+  "vat_label": "TVA (20%)",
+  "total_label": "Net à Payer TTC",
+  "payment_terms": {
+    "title": "Modalités et Conditions de Paiement",
+    "instruction": "Veuillez effectuer le virement sur le compte bancaire suivant :",
+    "proof_of_payment": "Afin d'accélérer le traitement, merci d'envoyer une preuve de virement à capfinfy@gmail.com.",
+    "account_holder_label": "Titulaire du compte",
+    "bank_name_label": "Domiciliation",
+    "iban_label": "IBAN",
+    "bic_label": "BIC / SWIFT",
+    "payment_reason_label": "Motif de virement",
+    "payment_reason_value": "Paiement Facture {ref}"
+  },
+  "footer": {
+    "thank_you": "Nous vous remercions de votre confiance.",
+    "contact_info": "Pour toute question, contactez notre service comptabilité à contact@capfinfy.com"
+  },
+  "items_section_title": "Détails de la facturation"
+}
+```
+
+### 7. Reçu de Paiement (`payment-receipt-clauses.ts`)
+```json
+{
+  "title": "Reçu de Paiement",
+  "header": {
+    "line1": "Service Comptabilité",
+    "line2": "Unité de Suivi des Règlements"
+  },
+  "reference": "Reçu N°: {ref}",
+  "date": "Date du paiement: {payment_date}",
+  "received_from": "Reçu de :",
+  "payment_details": {
+    "title": "Détails du Paiement",
+    "amount_label": "Montant Reçu",
+    "method_label": "Méthode de Paiement",
+    "reference_label": "Pour la référence suivante"
+  },
+  "confirmation": {
+    "title": "Confirmation",
+    "content": "Nous soussignés, Capfinfy, confirmons par la présente avoir reçu la somme susmentionnée. Ce reçu atteste du règlement partiel ou total de la créance référencée. Sauf erreur ou omission, ce paiement solde le montant dû."
+  },
+  "signature_label": "Pour Capfinfy, Service Comptabilité",
+  "footer": {
+    "thank_you": "Nous vous remercions de votre confiance.",
+    "contact_info": "Pour toute question, contactez notre service comptabilité à :",
+    "emails": ["contact@capfinfy.com", "capfinfy@gmail.com"]
+  }
+}
+```
 
 ---
 
@@ -285,16 +349,29 @@ L'apparence des documents est conçue pour être sobre, professionnelle et align
 
 ## 5. Processus de Génération : Comment ça Marche ?
 
+Le système de génération de documents est entièrement orchestré côté client pour offrir un aperçu en temps réel sans nécessiter de rechargement de page.
+
 1.  **Navigation** : L'utilisateur accède à `/documents/[slug]`, où `[slug]` correspond au type de document (ex: `contrat-de-pret-personnel`).
-2.  **Initialisation** : La page charge le composant `DocumentPageClient` avec le `slug` du document.
-3.  **Rendu du Formulaire** : `DocumentForm` lit `src/lib/document-fields.ts` pour trouver les champs correspondant au `slug` et les affiche à l'aide de `react-hook-form`.
-4.  **Rendu de l'Aperçu** : Simultanément, `DocumentPageClient` sélectionne le composant de template approprié (ex: `LoanContractTemplate`) et le rend dans `DocumentPreview`.
-5.  **Synchronisation des Données** :
-    -   À chaque modification dans le formulaire, `react-hook-form` met à jour son état.
-    -   Un Contexte React partage cet état avec `DocumentPreview`.
-    -   Le template (ex: `LoanContractTemplate`) reçoit les nouvelles données, lit les clauses correspondantes dans `src/data/documents/*-clauses.ts`, remplace les placeholders (ex: `{borrower_name}`) par les données du formulaire, et affiche le résultat.
-6.  **Génération du PDF** :
-    -   Lorsque l'utilisateur clique sur "Générer le PDF", le hook `usePDFGenerator` est appelé.
-    -   `html2canvas` prend une "capture d'écran" haute résolution du `div` contenant l'aperçu (`#pdf-content`).
-    -   `jspdf` prend cette image et la place dans un document PDF au format A4, gérant la pagination si le contenu est plus long qu'une page.
-    -   Le fichier PDF est ensuite proposé au téléchargement dans le navigateur de l'utilisateur.
+
+2.  **Initialisation** : La page charge le composant `DocumentPageClient` avec le `slug` du document. Ce composant est le cœur du système : il initialise un **Contexte React** (`DocumentGeneratorContext`) qui partagera l'état du formulaire et la langue sélectionnée entre le formulaire de saisie et l'aperçu du document.
+
+3.  **Rendu du Formulaire** (`DocumentForm.tsx`) :
+    *   Ce composant lit la configuration des champs depuis `src/lib/document-fields.ts` pour le `slug` actuel.
+    *   Il génère dynamiquement les champs de saisie (Inputs, Textareas, etc.) à l'aide de la librairie **React Hook Form**.
+    *   Chaque champ est associé à une règle de validation définie avec **Zod**, garantissant que les données saisies sont correctes.
+
+4.  **Rendu de l'Aperçu** (`DocumentPreview.tsx` et `templates/*.tsx`) :
+    *   Simultanément, `DocumentPageClient` sélectionne le composant de template approprié (ex: `LoanContractTemplate.tsx`) en fonction du `slug`.
+    *   Ce template est rendu à l'intérieur du `DocumentPreview`, qui n'est qu'un simple conteneur.
+
+5.  **Synchronisation des Données en Temps Réel** :
+    *   Grâce au Contexte React, chaque modification dans le formulaire (`DocumentForm`) est immédiatement disponible pour le composant de template du document.
+    *   Le template (ex: `LoanContractTemplate.tsx`) reçoit les nouvelles données, lit les clauses correspondantes dans les fichiers `src/data/documents/*-clauses.ts`, remplace les placeholders (ex: `{borrower_name}`) par les données du formulaire, et affiche le résultat instantanément. L'aperçu est donc toujours à jour.
+
+6.  **Génération du PDF** (`usePDFGenerator.ts`) :
+    *   Lorsque l'utilisateur clique sur "Générer le PDF", le hook `usePDFGenerator` est appelé.
+    *   **html2canvas** prend une "capture d'écran" haute résolution du `div` contenant l'aperçu (`#pdf-content`). L'option `scale: 2` est utilisée pour garantir une image nette.
+    *   **jsPDF** prend cette image (convertie en JPEG pour optimiser la taille) et la place dans un document PDF au format A4. Si le contenu est plus long qu'une page, jsPDF gère automatiquement la pagination.
+    *   Le fichier PDF final est ensuite proposé au téléchargement dans le navigateur de l'utilisateur.
+
+Ce système permet une expérience utilisateur fluide et interactive, tout en produisant des documents PDF professionnels et de haute qualité.
