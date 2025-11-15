@@ -51,10 +51,6 @@ const nextConfig: NextConfig = {
       config.entry = async () => {
         const entries = await originalEntry();
         
-        // This keeps the calculator entry separate if needed.
-        // If not, it can be removed. For now, we keep it.
-        entries['calculator'] = './src/app/calculator-entry.tsx';
-        
         if (entries['app/page']) {
            entries['main'] = entries['app/page'];
            delete entries['app/page'];
