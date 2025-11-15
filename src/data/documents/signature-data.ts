@@ -16,7 +16,7 @@ export const signatureData = {
             en: "Legal Director",
             de: "Leiter der Rechtsabteilung",
         },
-        signatureUrl: "https://i.postimg.cc/T1Mdkb2Q/signature-david-rousseau.png"
+        signatureUrl: "https://i.postimg.cc/HL4yXh3X/signature-pandadoc-removebg-preview.png"
     },
     finance: {
         name: "Julien Moreau",
@@ -43,6 +43,6 @@ export const signatureData = {
             en: "Director of Insurance",
             de: "Versicherungsdirektorin",
         },
-        signatureUrl: "https://i.postimg.cc/L6vkQ2ff/signature.png"
+        signatureUrl: "https://i.postimg.cc/Y0G3BbrV/signature-isabelle-petit.png"
     }
 };
