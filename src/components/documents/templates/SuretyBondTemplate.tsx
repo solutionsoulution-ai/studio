@@ -72,12 +72,20 @@ const SuretyBondTemplate: React.FC<SuretyBondTemplateProps> = ({ formData, lang 
                     <p>{replacePlaceholders(clauses.articles.scope.content)}</p>
                 </article>
 
-                {clauses.articles.deposit && (
-                    <article>
-                        <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{clauses.articles.deposit.title}</h3>
-                        <p>{replacePlaceholders(clauses.articles.deposit.content)}</p>
-                    </article>
-                )}
+                <article>
+                    <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{clauses.articles.deposit_principle.title}</h3>
+                    <p>{replacePlaceholders(clauses.articles.deposit_principle.content)}</p>
+                </article>
+
+                <article>
+                    <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{clauses.articles.activation_procedure.title}</h3>
+                    <p>{replacePlaceholders(clauses.articles.activation_procedure.content)}</p>
+                </article>
+
+                <article>
+                    <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{clauses.articles.restitution.title}</h3>
+                    <p>{replacePlaceholders(clauses.articles.restitution.content)}</p>
+                </article>
 
                 <article>
                     <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{clauses.articles.solidarity.title}</h3>
