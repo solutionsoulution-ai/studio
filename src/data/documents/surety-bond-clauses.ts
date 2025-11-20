@@ -7,7 +7,7 @@ export const suretyBondClauses: Clauses = {
             line1: "Service Juridique et des Garanties",
             line2: "Département des Engagements • Unité de Formalisation des Garanties",
         },
-        title: "Acte de Cautionnement Solidaire pour un {type_of_loan}",
+        title: "Acte de Cautionnement Solidaire pour un Prêt",
         reference: "Acte N°: {act_ref}",
         parties: {
             title: "Entre les soussignés :",
@@ -17,7 +17,7 @@ export const suretyBondClauses: Clauses = {
         articles: {
             object: {
                 title: "Article 1 : Objet de l'engagement",
-                content: "Par le présent acte, le Débiteur s'engage à régler au Créancier les sommes dues au titre du contrat de {type_of_loan} référencé ci-dessous :",
+                content: "Par le présent acte, le Débiteur s'engage à régler au Créancier les sommes dues au titre du contrat de prêt de type '{type_of_loan}' référencé ci-dessous :",
                 acknowledgment: "Le Débiteur déclare avoir une parfaite connaissance de la nature et de l'étendue de ses obligations.",
             },
             scope: {
@@ -47,7 +47,7 @@ export const suretyBondClauses: Clauses = {
             line1: "Rechts- und Garantieabteilung",
             line2: "Abteilung für Verpflichtungen • Abteilung für die Formalisierung von Garantien",
         },
-        title: "Gesamtschuldnerische Bürgschaftsurkunde für ein {type_of_loan}",
+        title: "Gesamtschuldnerische Bürgschaftsurkunde für ein Darlehen",
         reference: "Urkunde Nr.: {act_ref}",
         parties: {
             title: "Zwischen den Unterzeichnern:",
@@ -57,7 +57,7 @@ export const suretyBondClauses: Clauses = {
         articles: {
             object: {
                 title: "Artikel 1: Gegenstand der Verpflichtung",
-                content: "Mit dieser Urkunde verpflichtet sich der Schuldner, dem Gläubiger die aus dem nachstehend genannten {type_of_loan}-Vertrag geschuldeten Beträge zu zahlen:",
+                content: "Mit dieser Urkunde verpflichtet sich der Schuldner, dem Gläubiger die aus dem nachstehend genannten '{type_of_loan}'-Darlehensvertrag geschuldeten Beträge zu zahlen:",
                 acknowledgment: "Der Schuldner erklärt, die Art und den Umfang seiner Verpflichtungen vollständig zu kennen.",
             },
             scope: {

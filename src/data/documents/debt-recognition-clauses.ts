@@ -7,7 +7,7 @@ export const debtRecognitionClauses: Clauses = {
             line1: "Service Financier Européen",
             line2: "Département Juridique et des Garanties • Unité de Formalisation des Engagements",
         },
-        title: "Reconnaissance de Dette pour un {type_of_loan}",
+        title: "Reconnaissance de Dette pour un Prêt",
         reference: "Document N°: {ref}",
         date: "Date: {date}",
         parties: {
@@ -18,11 +18,11 @@ export const debtRecognitionClauses: Clauses = {
         articles: {
             recognition: {
                 title: "Article 1 : Reconnaissance de la Dette",
-                content: "Je soussigné(e), {debtor_name}, demeurant au {debtor_address}, reconnais par la présente devoir à Capfinfy, agissant au nom de ses partenaires financiers, la somme de : {loan_amount} ({loan_amount_in_words}). Cette somme correspond au capital d'un {type_of_loan} qui m'a été accordé et dont je confirme avoir reçu les fonds.",
+                content: "Je soussigné(e), {debtor_name}, demeurant au {debtor_address}, reconnais par la présente devoir à Capfinfy, agissant au nom de ses partenaires financiers, la somme de : {loan_amount} ({loan_amount_in_words}). Cette somme correspond au capital d'un prêt de type '{type_of_loan}' qui m'a été accordé et dont je confirme avoir reçu les fonds.",
             },
             repayment: {
                 title: "Article 2 : Modalités de Remboursement",
-                content: "Je m'engage à rembourser cette somme en intégralité, ainsi que les intérêts et frais associés, conformément aux échéances et conditions définies dans le contrat de {type_of_loan} N° {loan_contract_ref} que j'ai signé séparément. La durée de remboursement convenue est de {loan_term} mois, sauf en cas de remboursement anticipé ou d'incident de paiement modifiant l'échéancier.",
+                content: "Je m'engage à rembourser cette somme en intégralité, ainsi que les intérêts et frais associés, conformément aux échéances et conditions définies dans le contrat de prêt N° {loan_contract_ref} que j'ai signé séparément. La durée de remboursement convenue est de {loan_term} mois, sauf en cas de remboursement anticipé ou d'incident de paiement modifiant l'échéancier.",
             },
             default: {
                 title: "Article 3 : Clause de Défaut",
@@ -39,7 +39,7 @@ export const debtRecognitionClauses: Clauses = {
             line1: "European Financial Service",
             line2: "Legal and Guarantees Department • Commitment Formalization Unit",
         },
-        title: "Acknowledgment of Debt for a {type_of_loan}",
+        title: "Acknowledgment of Debt for a Loan",
         reference: "Document No: {ref}",
         date: "Date: {date}",
         parties: {
@@ -50,11 +50,11 @@ export const debtRecognitionClauses: Clauses = {
         articles: {
             recognition: {
                 title: "Article 1: Acknowledgment of Debt",
-                content: "I, the undersigned, {debtor_name}, residing at {debtor_address}, hereby acknowledge that I owe Capfinfy, acting on behalf of its financial partners, the sum of: {loan_amount} ({loan_amount_in_words}). This amount corresponds to the principal of a {type_of_loan} that has been granted to me and for which I confirm receipt of the funds.",
+                content: "I, the undersigned, {debtor_name}, residing at {debtor_address}, hereby acknowledge that I owe Capfinfy, acting on behalf of its financial partners, the sum of: {loan_amount} ({loan_amount_in_words}). This amount corresponds to the principal of a '{type_of_loan}' loan that has been granted to me and for which I confirm receipt of the funds.",
             },
             repayment: {
                 title: "Article 2: Repayment Terms",
-                content: "I undertake to repay this sum in full, along with the associated interest and fees, in accordance with the schedule and conditions defined in the {type_of_loan} contract No. {loan_contract_ref} which I have signed separately. The agreed repayment term is {loan_term} months, except in the case of early repayment or payment default altering the schedule.",
+                content: "I undertake to repay this sum in full, along with the associated interest and fees, in accordance with the schedule and conditions defined in the loan contract No. {loan_contract_ref} which I have signed separately. The agreed repayment term is {loan_term} months, except in the case of early repayment or payment default altering the schedule.",
             },
             default: {
                 title: "Article 3: Default Clause",
@@ -71,7 +71,7 @@ export const debtRecognitionClauses: Clauses = {
             line1: "Europäischer Finanzdienst",
             line2: "Rechts- und Garantieabteilung • Abteilung für die Formalisierung von Verpflichtungen",
         },
-        title: "Schuldanerkenntnis für ein {type_of_loan}",
+        title: "Schuldanerkenntnis für ein Darlehen",
         reference: "Dokument Nr.: {ref}",
         date: "Datum: {date}",
         parties: {
@@ -82,11 +82,11 @@ export const debtRecognitionClauses: Clauses = {
         articles: {
             recognition: {
                 title: "Artikel 1: Schuldanerkenntnis",
-                content: "Ich, der/die Unterzeichnende, {debtor_name}, wohnhaft in {debtor_address}, erkenne hiermit an, Capfinfy, handelnd im Namen seiner Finanzpartner, die Summe von: {loan_amount} ({loan_amount_in_words}) zu schulden. Dieser Betrag entspricht dem Kapital eines {type_of_loan}, das mir gewährt wurde und dessen Erhalt ich bestätige.",
+                content: "Ich, der/die Unterzeichnende, {debtor_name}, wohnhaft in {debtor_address}, erkenne hiermit an, Capfinfy, handelnd im Namen seiner Finanzpartner, die Summe von: {loan_amount} ({loan_amount_in_words}) zu schulden. Dieser Betrag entspricht dem Kapital eines '{type_of_loan}'-Darlehens, das mir gewährt wurde und dessen Erhalt ich bestätige.",
             },
             repayment: {
                 title: "Artikel 2: Rückzahlungsmodalitäten",
-                content: "Ich verpflichte mich, diesen Betrag vollständig zurückzuzahlen, zusammen mit den damit verbundenen Zinsen und Gebühren, gemäß dem Zeitplan und den Bedingungen, die im {type_of_loan}-Vertrag Nr. {loan_contract_ref}, den ich separat unterzeichnet habe, festgelegt sind. Die vereinbarte Rückzahlungsfrist beträgt {loan_term} Monate, außer im Falle einer vorzeitigen Rückzahlung oder eines Zahlungsverzugs, der den Zeitplan ändert.",
+                content: "Ich verpflichte mich, diesen Betrag vollständig zurückzuzahlen, zusammen mit den damit verbundenen Zinsen und Gebühren, gemäß dem Zeitplan und den Bedingungen, die im Darlehensvertrag Nr. {loan_contract_ref}, den ich separat unterzeichnet habe, festgelegt sind. Die vereinbarte Rückzahlungsfrist beträgt {loan_term} Monate, außer im Falle einer vorzeitigen Rückzahlung oder eines Zahlungsverzugs, der den Zeitplan ändert.",
             },
             default: {
                 title: "Artikel 3: Verzugsklausel",
