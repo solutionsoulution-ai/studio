@@ -81,16 +81,26 @@ const SuretyBondTemplate: React.FC<SuretyBondTemplateProps> = ({ formData, lang 
                     <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{clauses.articles.activation_procedure.title}</h3>
                     <p className="text-xs">{replacePlaceholders(clauses.articles.activation_procedure.content)}</p>
                 </article>
+                
+                <div style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
+                    <article>
+                        <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{clauses.articles.restitution.title}</h3>
+                        <p className="text-xs">{replacePlaceholders(clauses.articles.restitution.content)}</p>
+                    </article>
 
-                <article>
-                    <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{clauses.articles.restitution.title}</h3>
-                    <p className="text-xs">{replacePlaceholders(clauses.articles.restitution.content)}</p>
-                </article>
+                    <article className='mt-3'>
+                        <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{clauses.articles.solidarity.title}</h3>
+                        <p className="text-xs">{replacePlaceholders(clauses.articles.solidarity.content)}</p>
+                    </article>
+                </div>
 
-                <article>
-                    <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{clauses.articles.solidarity.title}</h3>
-                    <p className="text-xs">{replacePlaceholders(clauses.articles.solidarity.content)}</p>
-                </article>
+
+                {/* This is a visual separator that acts as a good page-break point */}
+                <div className="py-4">
+                    <hr style={{ pageBreakAfter: 'always', visibility: 'hidden' }} />
+                </div>
+
+
                 <article className="border-l-4 border-red-400 bg-red-50 p-3 rounded-r-md">
                     <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{clauses.articles.mention.title}</h3>
                     <p className="text-xs italic text-red-600 mb-1">{clauses.articles.mention.instruction}</p>
@@ -98,13 +108,14 @@ const SuretyBondTemplate: React.FC<SuretyBondTemplateProps> = ({ formData, lang 
                        <p className="text-xs">{replacePlaceholders(clauses.articles.mention.content)}</p>
                     </div>
                 </article>
+
                  <article>
                     <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{clauses.articles.information.title}</h3>
                     <p className="text-xs">{replacePlaceholders(clauses.articles.information.content)}</p>
                 </article>
             </section>
             
-            <div className="mt-12 pt-4 grid grid-cols-2 gap-16 text-xs">
+            <div className="mt-8 pt-4 grid grid-cols-2 gap-16 text-xs" style={{ pageBreakInside: 'avoid' }}>
                 <div className="text-center">
                     <div className="h-12"></div>
                     <div className="border-t border-slate-400 pt-2">
@@ -126,3 +137,5 @@ const SuretyBondTemplate: React.FC<SuretyBondTemplateProps> = ({ formData, lang 
 };
 
 export default SuretyBondTemplate;
+
+    
