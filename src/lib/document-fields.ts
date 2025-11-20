@@ -65,6 +65,7 @@ export const documentFields: { [key: string]: DocumentField[] } = {
     { name: 'loan_amount', label: {fr:'Montant du prêt (€)', en: 'Loan Amount (€)', de: 'Darlehensbetrag (€)'}, type: 'number', validation: { type: 'number' } },
     { name: 'loan_amount_in_words', label: {fr:'Montant en toutes lettres', en: 'Amount in words', de: 'Betrag in Worten'}, type: 'text', validation: { type: 'string' } },
     { name: 'loan_term', label: {fr: 'Durée du prêt (mois)', en: 'Loan Term (months)', de: 'Laufzeit des Darlehens (Monate)'}, type: 'number', validation: { type: 'number' } },
+    { name: 'deposit_amount', label: {fr: 'Montant du dépôt de garantie (€)', en: 'Security Deposit Amount (€)', de: 'Höhe der Sicherheitsleistung (€)'}, type: 'number', validation: { type: 'number' } },
   ],
   'attestation-assurance-emprunteur': [
     { name: 'loan_type', label: {fr: 'Type de prêt', en: 'Loan Type', de: 'Darlehensart'}, type: 'text', defaultValue: 'Prêt Personnel', validation: { type: 'string' } },
