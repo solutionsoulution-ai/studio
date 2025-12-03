@@ -127,6 +127,17 @@ Le contenu de chaque document doit être externalisé dans des fichiers de donn�
       "lender_signature_label": "Le Prêteur (le Créancier)"
   }
   ```
+- **Formulaire :**
+    - Référence du document (Texte)
+    - Date d'émission (Date)
+    - Nom du débiteur (Texte)
+    - Adresse du débiteur (Texte)
+    - N° Pièce d'identité du débiteur (Texte)
+    - Type de prêt concerné (Texte)
+    - Référence du Contrat de Prêt (Texte)
+    - Montant du prêt (€) (Nombre)
+    - Montant en toutes lettres (Texte)
+    - Durée du prêt (mois) (Nombre)
 
 #### 2. Attestation d'Éligibilité (`eligibility-certificate-clauses.ts`)
 - **Signataire Capfinfy :** Benoît Leroy (Directeur d'Analyse Financière)
@@ -147,6 +158,15 @@ Le contenu de chaque document doit être externalisé dans des fichiers de donn�
       "conclusion": "Cette attestation ne constitue pas une offre de prêt ferme. L'octroi définitif reste conditionné à l'étude approfondie du dossier."
   }
   ```
+- **Formulaire :**
+    - Référence du certificat (Texte)
+    - Date d'émission (Date)
+    - Nom du bénéficiaire (Texte)
+    - Adresse du bénéficiaire (Texte)
+    - N° Pièce d'identité du bénéficiaire (Texte)
+    - Type de projet (Texte)
+    - Montant d'éligibilité max. (€) (Nombre)
+    - Montant en toutes lettres (Texte)
 
 #### 3. Contrat de Prêt Personnel (`loan-contract-clauses.ts`)
 - **Signataire Capfinfy :** Alexandre Dubois (Directeur Général)
@@ -166,6 +186,22 @@ Le contenu de chaque document doit être externalisé dans des fichiers de donn�
       "signature_preamble": "Fait à {location}, le {date}, en deux exemplaires originaux."
   }
   ```
+- **Formulaire :**
+    - Type de prêt (Texte)
+    - Référence du contrat (Texte)
+    - Date du contrat (Date)
+    - Nom de l'emprunteur (Texte)
+    - Adresse de l'emprunteur (Texte)
+    - N° Pièce d'identité (Texte)
+    - Montant du prêt (€) (Nombre)
+    - Montant en toutes lettres (Texte)
+    - TAEG Fixe (Texte)
+    - Durée du prêt (mois) (Nombre)
+    - Date de 1ère échéance (Date)
+    - Date de dernière échéance (Date)
+    - Mensualité (€) (Nombre)
+    - Coût total du crédit (€) (Nombre)
+    - Montant total dû (€) (Nombre)
 
 #### 4. Acte de Cautionnement Solidaire (`surety-bond-clauses.ts`)
 - **Signataire Capfinfy :** David Rousseau (Directeur Juridique)
@@ -188,6 +224,18 @@ Le contenu de chaque document doit être externalisé dans des fichiers de donn�
       "signature_preamble": "Fait à {location}, le {date}."
   }
   ```
+- **Formulaire :**
+    - Type de prêt concerné (Texte)
+    - Référence de l'acte (Texte)
+    - Date de signature (Date)
+    - Nom du débiteur (emprunteur) (Texte)
+    - Adresse du débiteur (Texte)
+    - N° Pièce d'identité du débiteur (Texte)
+    - Référence du Contrat de Prêt (Texte)
+    - Montant du prêt (€) (Nombre)
+    - Montant en toutes lettres (Texte)
+    - Durée du prêt (mois) (Nombre)
+    - Montant du dépôt de garantie (€) (Nombre)
 
 #### 5. Attestation d'Assurance Emprunteur (`insurance-certificate-clauses.ts`)
 - **Signataire Capfinfy :** Isabelle Petit (Directrice des Assurances)
@@ -210,6 +258,18 @@ Le contenu de chaque document doit être externalisé dans des fichiers de donn�
       "director_title": "Directrice des Assurances"
   }
   ```
+- **Formulaire :**
+    - Type de prêt (Texte)
+    - N° de certificat (Texte)
+    - Date d'émission (Date)
+    - Nom de l'assuré (Texte)
+    - Date de naissance de l'assuré (Date)
+    - Adresse de l'assuré (Texte)
+    - N° Pièce d'identité de l'assuré (Texte)
+    - N° du contrat de prêt (Texte)
+    - Capital assuré (€) (Nombre)
+    - Durée de la couverture (mois) (Nombre)
+    - Prime mensuelle (€) (Nombre)
 
 #### 6. Notice d'Information d'Assurance (`insurance-notice-clauses.ts`)
 - **Document informatif, pas de signataire.**
@@ -241,6 +301,8 @@ Le contenu de chaque document doit être externalisé dans des fichiers de donn�
       }
   }
   ```
+- **Formulaire :**
+    - (Aucun formulaire)
 
 #### 7. Facture (`invoice-clauses.ts`)
 - **Signataire Capfinfy :** Julien Moreau (Directeur Financier)
@@ -260,6 +322,26 @@ Le contenu de chaque document doit être externalisé dans des fichiers de donn�
       }
   }
   ```
+- **Formulaire :**
+    - N° de facture (Texte)
+    - Date de facturation (Date)
+    - Nom du client (Texte)
+    - Adresse du client (Zone de texte)
+    - Détails de la facturation (Groupe de champs) :
+        - Article 1 - Description (Texte)
+        - Article 1 - Quantité (Nombre)
+        - Article 1 - Prix U. (€) (Nombre)
+        - Article 2 - Description (Texte)
+        - Article 2 - Quantité (Nombre)
+        - Article 2 - Prix U. (€) (Nombre)
+        - Article 3 - Description (Texte)
+        - Article 3 - Quantité (Nombre)
+        - Article 3 - Prix U. (€) (Nombre)
+    - Coordonnées Bancaires (Groupe de champs) :
+        - Nom du titulaire du compte (Texte)
+        - Nom de la banque (Domiciliation) (Texte)
+        - IBAN (Texte)
+        - BIC / SWIFT (Texte)
 
 #### 8. Document Vierge (`blank-document-clauses.ts`)
 - **Document générique, pas de signataire.**
@@ -276,6 +358,8 @@ Le contenu de chaque document doit être externalisé dans des fichiers de donn�
       "footer": "Capfinfy © {current_year} - Tous droits réservés."
   }
   ```
+- **Formulaire :**
+    - (Aucun formulaire)
 
 ---
 
