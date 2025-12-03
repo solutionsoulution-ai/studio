@@ -1,6 +1,6 @@
-# Contenu de Tous les Documents
+# Contenu de Tous les Documents (Version Simplifiée - Français Uniquement)
 
-Ce fichier regroupe l'intégralité du contenu textuel (clauses, titres, etc.) pour chaque type de document généré par l'application.
+Ce fichier regroupe l'intégralité du contenu textuel français (clauses, titres, etc.) pour chaque type de document généré par l'application, sans les informations de signataires.
 
 ---
 ---
@@ -40,70 +40,6 @@ Ce fichier regroupe l'intégralité du contenu textuel (clauses, titres, etc.) p
                 "content": "L'article L. 313-24 du Code de la consommation stipule l'importance de l'engagement. Le débiteur reconnaît avoir lu et compris l'intégralité du contrat de prêt auquel cette reconnaissance de dette se rapporte et avoir reçu un exemplaire de chaque document."
             }
         }
-    },
-    "en": {
-        "header": {
-            "line1": "European Financial Service",
-            "line2": "Legal and Guarantees Department • Commitment Formalization Unit"
-        },
-        "title": "Acknowledgment of Debt for a Loan",
-        "reference": "Document No: {ref}",
-        "date": "Date: {date}",
-        "parties": {
-            "title": "Between the undersigned:",
-            "creditor_label": "The Creditor:",
-            "debtor_label": "The Debtor:"
-        },
-        "articles": {
-            "recognition": {
-                "title": "Article 1: Acknowledgment of Debt",
-                "content": "I, the undersigned, {debtor_name}, residing at {debtor_address}, hereby acknowledge that I owe Capfinfy, acting on behalf of its financial partners, the sum of: {loan_amount} ({loan_amount_in_words}). This amount corresponds to the principal of a '{type_of_loan}' loan that has been granted to me and for which I confirm receipt of the funds."
-            },
-            "repayment": {
-                "title": "Article 2: Repayment Terms",
-                "content": "I undertake to repay this sum in full, along with the associated interest and fees, in accordance with the schedule and conditions defined in the loan contract No. {loan_contract_ref} which I have signed separately. The agreed repayment term is {loan_term} months, except in the case of early repayment or payment default altering the schedule."
-            },
-            "default": {
-                "title": "Article 3: Default Clause",
-                "content": "In the event of non-payment of one or more installments, I acknowledge that the Creditor may invoke the clauses provided for in the loan contract, including the early demand for the entire outstanding principal, plus applicable interest and penalties."
-            },
-            "mention": {
-                "title": "Article 4: Understanding of Commitment",
-                "content": "Article L. 313-24 of the Consumer Code stipulates the importance of the commitment. The debtor acknowledges having read and understood the entire loan contract to which this acknowledgment of debt relates and having received a copy of each document."
-            }
-        }
-    },
-    "de": {
-        "header": {
-            "line1": "Europäischer Finanzdienst",
-            "line2": "Rechts- und Garantieabteilung • Abteilung für die Formalisierung von Verpflichtungen"
-        },
-        "title": "Schuldanerkenntnis für ein Darlehen",
-        "reference": "Dokument Nr.: {ref}",
-        "date": "Datum: {date}",
-        "parties": {
-            "title": "Zwischen den Unterzeichnern:",
-            "creditor_label": "Der Gläubiger:",
-            "debtor_label": "Der Schuldner:"
-        },
-        "articles": {
-            "recognition": {
-                "title": "Artikel 1: Schuldanerkenntnis",
-                "content": "Ich, der/die Unterzeichnende, {debtor_name}, wohnhaft in {debtor_address}, erkenne hiermit an, Capfinfy, handelnd im Namen seiner Finanzpartner, die Summe von: {loan_amount} ({loan_amount_in_words}) zu schulden. Dieser Betrag entspricht dem Kapital eines '{type_of_loan}'-Darlehens, das mir gewährt wurde und dessen Erhalt ich bestätige."
-            },
-            "repayment": {
-                "title": "Artikel 2: Rückzahlungsmodalitäten",
-                "content": "Ich verpflichte mich, diesen Betrag vollständig zurückzuzahlen, zusammen mit den damit verbundenen Zinsen und Gebühren, gemäß dem Zeitplan und den Bedingungen, die im Darlehensvertrag Nr. {loan_contract_ref}, den ich separat unterzeichnet habe, festgelegt sind. Die vereinbarte Rückzahlungsfrist beträgt {loan_term} Monate, außer im Falle einer vorzeitigen Rückzahlung oder eines Zahlungsverzugs, der den Zeitplan ändert."
-            },
-            "default": {
-                "title": "Artikel 3: Verzugsklausel",
-                "content": "Im Falle der Nichtzahlung einer oder mehrerer Raten erkenne ich an, dass der Gläubiger die im Darlehensvertrag vorgesehenen Klauseln geltend machen kann, einschließlich der sofortigen Fälligstellung des gesamten ausstehenden Kapitals zuzüglich anfallender Zinsen und Strafen."
-            },
-            "mention": {
-                "title": "Artikel 4: Verständnis der Verpflichtung",
-                "content": "Artikel L. 313-24 des Verbrauchergesetzbuches unterstreicht die Bedeutung der Verpflichtung. Der Schuldner bestätigt, den gesamten Darlehensvertrag, auf den sich dieses Schuldanerkenntnis bezieht, gelesen und verstanden zu haben und eine Kopie jedes Dokuments erhalten zu haben."
-            }
-        }
     }
 }
 ```
@@ -138,60 +74,6 @@ Ce fichier regroupe l'intégralité du contenu textuel (clauses, titres, etc.) p
             "validity": {
                 "title": "Article 3 : Validité",
                 "content": "Le présent certificat est valable 30 jours calendaires à compter de sa date d'émission, soit jusqu'au {validity_date}. Passé ce délai, une nouvelle évaluation sera nécessaire. La validité est conditionnée à l'absence de changement significatif dans la situation financière du bénéficiaire et à la vérification ultérieure des pièces justificatives originales."
-            }
-        }
-    },
-    "en": {
-        "header": {
-            "line1": "Financial Analysis Department",
-            "line2": "Solvency Certification Unit"
-        },
-        "title": "Certificate of Pre-Approved Solvency for a {project_type} project",
-        "reference": "Certificate No: {ref}",
-        "validity": "Valid until: {validity_date}",
-        "beneficiary": {
-            "title": "Beneficiary of the certificate:"
-        },
-        "articles": {
-            "object": {
-                "title": "Article 1: Purpose of the Certificate",
-                "content": "Capfinfy, acting as a financial intermediary, hereby certifies that it has conducted a preliminary analysis of the financial situation of the above-mentioned beneficiary. Based on the declared elements and our current evaluation criteria, the beneficiary is deemed eligible for financing up to a maximum amount of:",
-                "amount_label": "Maximum Eligibility Amount"
-            },
-            "scope": {
-                "title": "Article 2: Scope and Limitations",
-                "content": "This certificate attests to a theoretical financing capacity as of its date of issue. It is intended to be presented to third parties (real estate agents, sellers, etc.) as an element of reassurance of the beneficiary's ability to finance a project. It in no way constitutes a firm loan offer and shall not bind Capfinfy or its lending partners."
-            },
-            "validity": {
-                "title": "Article 3: Validity",
-                "content": "This certificate is valid for 30 calendar days from its date of issue, i.e., until {validity_date}. After this period, a new assessment will be required. The validity is conditional on the absence of any significant change in the beneficiary's financial situation and on the subsequent verification of the original supporting documents."
-            }
-        }
-    },
-    "de": {
-        "header": {
-            "line1": "Finanzanalyseabteilung",
-            "line2": "Abteilung für Bonitätszertifizierung"
-        },
-        "title": "Zertifikat über vorab genehmigte Bonität für ein {project_type}-Projekt",
-        "reference": "Zertifikat Nr.: {ref}",
-        "validity": "Gültig bis: {validity_date}",
-        "beneficiary": {
-            "title": "Begünstigter des Zertifikats:"
-        },
-        "articles": {
-            "object": {
-                "title": "Artikel 1: Zweck des Zertifikats",
-                "content": "Capfinfy, handelnd als Finanzvermittler, bescheinigt hiermit, eine vorläufige Analyse der finanziellen Situation des oben genannten Begünstigten durchgeführt zu haben. Auf der Grundlage der angegebenen Elemente und unserer aktuellen Bewertungskriterien wird der Begünstigte als kreditwürdig für eine Finanzierung bis zu einem Höchstbetrag von:",
-                "amount_label": "Maximaler Förderbetrag"
-            },
-            "scope": {
-                "title": "Artikel 2: Geltungsbereich und Einschränkungen",
-                "content": "Dieses Zertifikat bescheinigt eine theoretische Finanzierungskapazität zum Zeitpunkt seiner Ausstellung. Es ist dazu bestimmt, Dritten (Immobilienmaklern, Verkäufern usw.) als Sicherheit für die Fähigkeit des Begünstigten zur Finanzierung eines Projekts vorgelegt zu werden. Es stellt in keiner Weise ein verbindliches Darlehensangebot dar und bindet Capfinfy oder seine darlehensgebenden Partner nicht."
-            },
-            "validity": {
-                "title": "Artikel 3: Gültigkeit",
-                "content": "Dieses Zertifikat ist 30 Kalendertage ab Ausstellungsdatum gültig, d.h. bis zum {validity_date}. Nach diesem Zeitraum ist eine neue Bewertung erforderlich. Die Gültigkeit ist an die Bedingung geknüpft, dass sich die finanzielle Situation des Begünstigten nicht wesentlich ändert und die Originalbelege nachträglich überprüft werden."
             }
         }
     }
@@ -258,61 +140,6 @@ Ce fichier regroupe l'intégralité du contenu textuel (clauses, titres, etc.) p
             }
         },
         "signature_preamble": "Fait en deux exemplaires originaux, dont un pour chaque partie."
-    },
-    "de": {
-        "header": {
-            "line1": "Europäischer Finanzdienstleister",
-            "line2": "Abteilung für Verbraucherkredite • Büro für Darlehensvereinbarungen • Abteilung für die Überprüfung von Verpflichtungen"
-        },
-        "title": "Darlehensvertrag",
-        "reference": "Vertrag Nr.: {contract_ref}",
-        "location_and_date": "Ausgestellt in Lyon, am {contract_date}",
-        "parties": {
-            "title": "Zwischen den Unterzeichnern:",
-            "lender_label": "Der Darlehensgeber:",
-            "borrower_label": "Der Darlehensnehmer:"
-        },
-        "articles": {
-            "object": {
-                "title": "Artikel 1: Vertragsgegenstand",
-                "content": "Der Darlehensgeber gewährt dem Darlehensnehmer, der dies annimmt, ein Tilgungsdarlehen des Typs {type_of_loan} für den nicht-gewerblichen Gebrauch, das den Bestimmungen des Verbrauchergesetzbuches sowie den vorliegenden allgemeinen und besonderen Bedingungen unterliegt."
-            },
-            "characteristics": {
-                "title": "Artikel 2: Betrag und Merkmale des Darlehens",
-                "amount": "Geliehener Kapitalbetrag: {loan_amount} ({loan_amount_in_words} Euro).",
-                "taeg": "Fester effektiver Jahreszins (TAEG): {taeg}.",
-                "term": "Gesamte Rückzahlungsdauer: {loan_term} Monate.",
-                "availability": "Datum der Mittelbereitstellung: Spätestens 10 Tage nach Ablauf der Widerrufsfrist."
-            },
-            "repayment": {
-                "title": "Artikel 3: Rückzahlungsmodalitäten",
-                "intro": "Der Darlehensnehmer verpflichtet sich, das Kapital und die Zinsen in {loan_term} konstanten Monatsraten zurückzuzahlen. Die erste Rate ist am {start_date} fällig und die letzte am {end_date}.",
-                "monthly_payment": "Monatliche Rate (ohne Versicherung): {monthly_payment}. Dieser Betrag wird am 5. eines jeden Monats abgebucht.",
-                "total_cost": "Die Gesamtkosten des Kredits (Zinsen) belaufen sich auf {total_cost}.",
-                "total_due": "Gesamter geschuldeter Betrag: {total_due} (Geliehenes Kapital + Gesamtkosten der Zinsen)."
-            },
-            "withdrawal": {
-                "title": "Artikel 4: Widerrufsrecht",
-                "content": "Der Darlehensnehmer hat eine Widerrufsfrist von vierzehn (14) Kalendertagen ab dem Datum der Unterzeichnung des Kreditvertragsangebots. Um zu widerrufen, muss der Darlehensnehmer das dem Angebot beigefügte Widerrufsformular per Einschreiben mit Rückschein zurücksenden."
-            },
-            "default": {
-                "title": "Artikel 5: Zahlungsverzug",
-                "content": "Bei Nichtzahlung einer Rate zum Fälligkeitsdatum kann der Darlehensgeber die sofortige Rückzahlung des ausstehenden Kapitals zuzüglich der fälligen und unbezahlten Zinsen verlangen. Verzugsstrafen können gemäß der geltenden Gesetzgebung erhoben werden."
-            },
-            "early_repayment": {
-                "title": "Artikel 6: Vorzeitige Rückzahlung",
-                "content": "Der Darlehensnehmer hat das Recht, den ihm gewährten Kredit jederzeit ganz oder teilweise vorzeitig zurückzuzahlen. Gemäß unserer Geschäftspolitik wird keine Vorfälligkeitsentschädigung erhoben, unabhängig von der Höhe des Betrags. Der Darlehensnehmer muss den Darlehensgeber lediglich schriftlich über seine Absicht informieren, um die praktischen Modalitäten der Rückzahlung zu regeln."
-            },
-            "data": {
-                "title": "Artikel 7: Schutz personenbezogener Daten",
-                "content": "Die erhobenen Informationen sind für die Bearbeitung des Darlehensantrags erforderlich. Sie werden elektronisch verarbeitet und sind für die Abteilungen des Darlehensgebers und seiner Partner bestimmt. Gemäß der DSGVO hat der Darlehensnehmer das Recht auf Zugang, Berichtigung und Löschung seiner personenbezogenen Daten, indem er den Darlehensgeber unter der Adresse {contact_email} kontaktiert."
-            },
-            "law": {
-                "title": "Artikel 8: Anwendbares Recht und Streitigkeiten",
-                "content": "Dieser Vertrag unterliegt dem französischen Recht. Im Falle eines Rechtsstreits verpflichten sich die Parteien, eine gütliche Einigung zu suchen. Andernfalls ist das zuständige Gericht das am Wohnsitz des Darlehensnehmers."
-            }
-        },
-        "signature_preamble": "Ausgefertigt in zwei Originalexemplaren, eines für jede Partei."
     }
 }
 ```
@@ -371,104 +198,6 @@ Ce fichier regroupe l'intégralité du contenu textuel (clauses, titres, etc.) p
                 "content": "Le Créancier s'engage à informer le Débiteur de toute modification du contrat."
             }
         }
-    },
-    "en": {
-        "header": {
-            "line1": "Legal and Guarantees Department",
-            "line2": "Commitments Department • Guarantee Formalization Unit"
-        },
-        "title": "Solidarity Surety Bond for a Loan",
-        "reference": "Act No: {act_ref}",
-        "parties": {
-            "title": "Between the undersigned:",
-            "creditor_label": "The Creditor:",
-            "debtor_label": "The Debtor (Borrower):"
-        },
-        "articles": {
-            "object": {
-                "title": "Article 1: Purpose of the Commitment",
-                "content": "By this act, the Debtor undertakes to pay the Creditor the sums due under the '{type_of_loan}' loan agreement referenced below:",
-                "acknowledgment": "The Debtor declares to have a perfect understanding of the nature and extent of his obligations."
-            },
-            "scope": {
-                "title": "Article 2: Scope of the Guarantee",
-                "content": "The Debtor's commitment covers the payment of the principal, interest, commissions, fees and accessories, and generally, all sums that may be due under the aforementioned loan agreement. The commitment is granted for the entire term of the loan."
-            },
-            "deposit_principle": {
-                "title": "Article 3: Principle of the Security Deposit",
-                "content": "To prove their ability to meet their commitments, the Debtor agrees to make a security deposit of {deposit_amount}. It is expressly agreed that this sum is neither a payment nor a fee, but a simple, fully, and immediately refundable deposit into their own client account."
-            },
-            "activation_procedure": {
-                "title": "Article 4: Technical Activation Procedure",
-                "content": "For technical reasons, the Capfinfy client account can initially only receive funds from Capfinfy. The security deposit is therefore a mandatory step to activate withdrawal operations. The Debtor must strictly follow the instructions provided by Capfinfy to make this deposit into the account created for them."
-            },
-            "restitution": {
-                "title": "Article 5: Immediate Refund of Funds",
-                "content": "Once the deposit is received, the Debtor's client account is instantly activated. The deposit amount is immediately credited to this same account, adding to the loan amount. The Debtor can then, without any delay, transfer the entire available funds (including the loan and their security deposit) to their personal local bank account."
-            },
-            "solidarity": {
-                "title": "Article 6: Solidarity and Indivisibility",
-                "content": "The Debtor is solely responsible for the debt. In the event of default, the Creditor may claim the entire debt from the Debtor."
-            },
-            "mention": {
-                "title": "Article 7: Mandatory Handwritten Mention",
-                "instruction": "The Debtor must copy the following statement by hand, in accordance with the law:",
-                "content": "'I, {borrower_name}, undertake to repay the lender the sums due from my income and my assets.'"
-            },
-            "information": {
-                "title": "Article 8: Information Due",
-                "content": "The Creditor undertakes to inform the Debtor of any modification to the contract."
-            }
-        }
-    },
-    "de": {
-        "header": {
-            "line1": "Rechts- und Garantieabteilung",
-            "line2": "Abteilung für Verpflichtungen • Abteilung für die Formalisierung von Garantien"
-        },
-        "title": "Gesamtschuldnerische Bürgschaftsurkunde für ein Darlehen",
-        "reference": "Urkunde Nr.: {act_ref}",
-        "parties": {
-            "title": "Zwischen den Unterzeichnern:",
-            "creditor_label": "Der Gläubiger:",
-            "debtor_label": "Der Schuldner (Darlehensnehmer):"
-        },
-        "articles": {
-            "object": {
-                "title": "Artikel 1: Gegenstand der Verpflichtung",
-                "content": "Mit dieser Urkunde verpflichtet sich der Schuldner, dem Gläubiger die aus dem nachstehend genannten '{type_of_loan}'-Darlehensvertrag geschuldeten Beträge zu zahlen:",
-                "acknowledgment": "Der Schuldner erklärt, die Art und den Umfang seiner Verpflichtungen vollständig zu kennen."
-            },
-            "scope": {
-                "title": "Artikel 2: Umfang der Garantie",
-                "content": "Die Verpflichtung des Schuldners erstreckt sich auf die Zahlung des Kapitals, der Zinsen, Provisionen, Gebühren und Nebenkosten sowie allgemein aller Beträge, die aus dem oben genannten Darlehensvertrag geschuldet werden könnten. Die Verpflichtung wird für die gesamte Laufzeit des Darlehens eingegangen."
-            },
-            "deposit_principle": {
-                "title": "Artikel 3: Prinzip der Sicherheitsleistung",
-                "content": "Um seine Fähigkeit zur Erfüllung seiner Verpflichtungen nachzuweisen, verpflichtet sich der Schuldner, eine Sicherheitsleistung in Höhe von {deposit_amount} zu leisten. Es wird ausdrücklich vereinbart, dass dieser Betrag weder eine Zahlung noch eine Gebühr ist, sondern eine einfache, vollständig und sofort erstattungsfähige Einlage auf sein eigenes Kundenkonto."
-            },
-            "activation_procedure": {
-                "title": "Artikel 4: Technisches Aktivierungsverfahren",
-                "content": "Aus technischen Gründen kann das Capfinfy-Kundenkonto anfangs nur Gelder von Capfinfy empfangen. Die Sicherheitsleistung ist daher ein zwingender Schritt zur Aktivierung von Auszahlungsvorgängen. Der Schuldner muss die von Capfinfy bereitgestellten Anweisungen zur Durchführung dieser Einzahlung auf das für ihn erstellte Konto strikt befolgen."
-            },
-            "restitution": {
-                "title": "Artikel 5: Sofortige Rückerstattung der Gelder",
-                "content": "Sobald die Einzahlung eingegangen ist, wird das Kundenkonto des Schuldners sofort aktiviert. Der Einzahlungsbetrag wird demselben Konto sofort gutgeschrieben und zum Darlehensbetrag hinzugefügt. Der Schuldner kann dann ohne Verzögerung das gesamte verfügbare Guthaben (einschließlich des Darlehens und seiner Sicherheitsleistung) auf sein persönliches lokales Bankkonto überweisen."
-            },
-            "solidarity": {
-                "title": "Artikel 6: Gesamtschuldnerische Haftung und Unteilbarkeit",
-                "content": "Der Schuldner ist allein für die Schuld verantwortlich. Im Falle eines Ausfalls kann der Gläubiger die gesamte Schuld vom Schuldner einfordern."
-            },
-            "mention": {
-                "title": "Artikel 7: Obligatorischer handschriftlicher Vermerk",
-                "instruction": "Der Schuldner muss den folgenden Vermerk gemäß dem Gesetz handschriftlich kopieren:",
-                "content": "'Ich, {borrower_name}, verpflichte mich, dem Kreditgeber die auf meinen Einkünften und meinem Vermögen geschuldeten Beträge zurückzuzahlen.'"
-            },
-            "information": {
-                "title": "Artikel 8: Geschuldete Informationen",
-                "content": "Der Gläubiger verpflichtet sich, den Schuldner über jede Vertragsänderung zu informieren."
-            }
-        }
     }
 }
 ```
@@ -518,82 +247,6 @@ Ce fichier regroupe l'intégralité du contenu textuel (clauses, titres, etc.) p
             "title": "Date d'effet et Validité",
             "content": "La présente attestation est établie pour faire valoir ce que de droit. Les garanties prendront effet à la date du déblocage des fonds du prêt et cesseront au terme du remboursement complet de celui-ci."
         }
-    },
-    "en": {
-        "header": {
-            "line1": "Insurance Department",
-            "line2": "Membership Service • Borrower Guarantee Certification Unit"
-        },
-        "title": "Borrower's Insurance Certificate",
-        "reference": "Certificate No: {ref}",
-        "issue_date": "Issue Date: {issue_date}",
-        "insured": { "title": "The Insured:" },
-        "beneficiary": {
-            "title": "The Beneficiary:",
-            "content": "The lending institution partner of Capfinfy, for loan contract No. {loan_contract_ref}."
-        },
-        "object_title": "Subject: Group insurance certificate regarding loan No. {loan_contract_ref}",
-        "object_content": "We, the undersigned, acting on behalf of our insurance partner, hereby certify that the above-mentioned insured person is covered by the group insurance contract No. 789-456, underwritten by Capfinfy as part of their loan.",
-        "loan_details": {
-            "title": "Details of the Insured Loan",
-            "nature": "Type of loan: {loan_type}",
-            "ref": "Associated loan number: {loan_contract_ref}",
-            "amount": "Amount of insured capital: {insured_capital}",
-            "duration": "Duration of insurance coverage: {coverage_duration} months, coinciding with the loan term."
-        },
-        "guarantees": {
-            "title": "Applicable Guarantees",
-            "intro": "Subject to the terms, conditions, and exclusions stipulated in the insurance contract information notice, the insured person benefits from the following guarantees:",
-            "death": "Death: Payment of the outstanding capital to the lending institution.",
-            "ptia": "Total and Irreversible Loss of Autonomy (PTIA): Payment of the outstanding capital to the lending institution.",
-            "itt": "Total Temporary Incapacity for Work (ITT): Coverage of loan installments after a deductible period."
-        },
-        "premium": {
-            "title": "Cost of Insurance",
-            "content": "Monthly insurance premium: {monthly_premium} / month. This amount is payable monthly, in addition to your loan installment."
-        },
-        "validity": {
-            "title": "Effective Date and Validity",
-            "content": "This certificate is issued to serve as legal proof. The guarantees will take effect on the date the loan funds are disbursed and will cease upon full repayment of the loan."
-        }
-    },
-    "de": {
-        "header": {
-            "line1": "Versicherungsabteilung",
-            "line2": "Mitgliederservice • Abteilung für die Zertifizierung von Kreditnehmergarantien"
-        },
-        "title": "Kreditnehmer-Versicherungszertifikat",
-        "reference": "Zertifikat Nr.: {ref}",
-        "issue_date": "Ausstellungsdatum: {issue_date}",
-        "insured": { "title": "Der Versicherte:" },
-        "beneficiary": {
-            "title": "Der Begünstigte:",
-            "content": "Die kreditgebende Institution, Partner von Capfinfy, für den Darlehensvertrag Nr. {loan_contract_ref}."
-        },
-        "object_title": "Betreff: Gruppenversicherungszertifikat bezüglich Darlehen Nr. {loan_contract_ref}",
-        "object_content": "Wir, die Unterzeichner, handeln im Namen unseres Versicherungspartners und bescheinigen hiermit, dass die oben genannte versicherte Person durch den von Capfinfy im Rahmen ihres Darlehens abgeschlossenen Gruppenversicherungsvertrag Nr. 789-456 versichert ist.",
-        "loan_details": {
-            "title": "Details des versicherten Darlehens",
-            "nature": "Art des Darlehens: {loan_type}",
-            "ref": "Zugehörige Darlehensnummer: {loan_contract_ref}",
-            "amount": "Versicherte Kapitalsumme: {insured_capital}",
-            "duration": "Dauer des Versicherungsschutzes: {coverage_duration} Monate, übereinstimmend mit der Darlehenslaufzeit."
-        },
-        "guarantees": {
-            "title": "Anwendbare Garantien",
-            "intro": "Vorbehaltlich der in der Informationsbroschüre des Versicherungsvertrags festgelegten Bedingungen und Ausschlüsse profitiert die versicherte Person von den folgenden Garantien:",
-            "death": "Tod: Zahlung des Restkapitals an das kreditgebende Institut.",
-            "ptia": "Vollständiger und unwiderruflicher Autonomieverlust (PTIA): Zahlung des Restkapitals an das kreditgebende Institut.",
-            "itt": "Vollständige vorübergehende Arbeitsunfähigkeit (ITT): Übernahme der Darlehensraten nach einer Karenzzeit."
-        },
-        "premium": {
-            "title": "Versicherungskosten",
-            "content": "Monatliche Versicherungsprämie: {monthly_premium} / Monat. Dieser Betrag ist monatlich zusätzlich zu Ihrer Darlehensrate zu zahlen."
-        },
-        "validity": {
-            "title": "Gültigkeitsdatum und Wirksamkeit",
-            "content": "Dieses Zertifikat wird ausgestellt, um als Rechtsnachweis zu dienen. Die Garantien treten am Tag der Auszahlung der Darlehensmittel in Kraft und enden mit der vollständigen Rückzahlung des Darlehens."
-        }
     }
 }
 ```
@@ -638,76 +291,6 @@ Ce fichier regroupe l'intégralité du contenu textuel (clauses, titres, etc.) p
             "title": "ARTICLE 5 : DÉCLARATION DE SINISTRE",
             "description": "En cas de sinistre (décès, accident, maladie), vous ou vos ayants droit devez le déclarer à l'assureur dans les délais prévus au contrat, en joignant toutes les pièces justificatives requises (certificat médical, acte de décès, etc.)."
         }
-    },
-    "en": {
-        "title": "Information Notice",
-        "subtitle": "Group Borrower Insurance Contract No. 789-101112",
-        "importance": {
-            "title": "Importance of this document",
-            "description": "This pre-contractual document is essential. It informs you in detail about the features of your borrower insurance, including guarantees, exclusions, and your rights, allowing you to subscribe with full knowledge and to compare with other offers."
-        },
-        "introduction": "This notice is intended to inform you of the main features of your membership in the borrower insurance. It has no contractual value but constitutes a summary of the general and special conditions that will prevail. We invite you to read it carefully.",
-        "guarantees": {
-            "title": "ARTICLE 1: PROPOSED GUARANTEES",
-            "items": {
-                "death": { "title": "Death Benefit", "description": "In the event of the insured's death before the end of the loan, the insurer undertakes to repay the outstanding capital to the lender as of the date of death, according to the insured percentage." },
-                "disability": { "title": "Total and Irreversible Loss of Autonomy (PTIA) Benefit", "description": "If, following an illness or accident, the insured is recognized as being in a state of PTIA (requiring the assistance of a third person for daily life activities), the insurer covers the repayment of the outstanding capital." },
-                "incapacity": { "title": "Total Temporary Incapacity for Work (ITT) Benefit", "description": "In the event of a total and continuous work stoppage due to illness or accident, and after a deductible period (usually 90 days), the insurer covers the payment of your loan installments for the duration of your incapacity." }
-            }
-        },
-        "exclusions": {
-            "title": "ARTICLE 2: MAIN EXCLUSIONS",
-            "intro": "Certain situations are not covered by the contract. The following are notably excluded:",
-            "items": [
-                "The insured's suicide during the first year of insurance.",
-                "The consequences of acts of civil or foreign war, riots, acts of terrorism.",
-                "The practice of aerial sports, professional competitive sports, or any sport presenting an aggravated risk.",
-                "Psychiatric conditions and back pathologies without hospitalization (for the ITT guarantee)."
-            ]
-        },
-        "waiver": {
-            "title": "ARTICLE 4: RIGHT OF WAIVER",
-            "description": "You have a legal period of 30 calendar days from the date of signing your membership to waive it, without fees or penalties, by registered letter with acknowledgment of receipt."
-        },
-        "claim": {
-            "title": "ARTICLE 5: CLAIM DECLARATION",
-            "description": "In the event of a claim (death, accident, illness), you or your beneficiaries must declare it to the insurer within the deadlines stipulated in the contract, enclosing all required supporting documents (medical certificate, death certificate, etc.)."
-        }
-    },
-    "de": {
-        "title": "Informationsbroschüre",
-        "subtitle": "Gruppen-Kreditnehmerversicherungsvertrag Nr. 789-101112",
-        "importance": {
-            "title": "Bedeutung dieses Dokuments",
-            "description": "Dieses vorvertragliche Dokument ist unerlässlich. Es informiert Sie detailliert über die Merkmale Ihrer Kreditnehmerversicherung, einschließlich Garantien, Ausschlüsse und Ihrer Rechte, sodass Sie in voller Kenntnis der Sachlage abschließen und mit anderen Angeboten vergleichen können."
-        },
-        "introduction": "Diese Broschüre soll Sie über die Hauptmerkmale Ihrer Mitgliedschaft in der Kreditnehmerversicherung informieren. Sie hat keinen vertraglichen Wert, stellt aber eine Zusammenfassung der allgemeinen und besonderen Bedingungen dar, die gelten werden. Wir bitten Sie, sie sorgfältig zu lesen.",
-        "guarantees": {
-            "title": "ARTIKEL 1: ANGEBOTENE GARANTIEN",
-            "items": {
-                "death": { "title": "Todesfallleistung", "description": "Im Todesfall des Versicherten vor Ende des Darlehens verpflichtet sich der Versicherer, dem Kreditgeber das am Todestag ausstehende Kapital entsprechend dem versicherten Anteil zurückzuzahlen." },
-                "disability": { "title": "Leistung bei vollständigem und unwiderruflichem Autonomieverlust (PTIA)", "description": "Wenn der Versicherte infolge einer Krankheit oder eines Unfalls als PTIA anerkannt wird (Hilfe einer dritten Person für die Verrichtungen des täglichen Lebens erforderlich), übernimmt der Versicherer die Rückzahlung des ausstehenden Kapitals." },
-                "incapacity": { "title": "Leistung bei vollständiger vorübergehender Arbeitsunfähigkeit (ITT)", "description": "Im Falle einer vollständigen und ununterbrochenen Arbeitsniederlegung aufgrund von Krankheit oder Unfall und nach einer Karenzzeit (in der Regel 90 Tage) übernimmt der Versicherer die Zahlung Ihrer Darlehensraten für die Dauer Ihrer Arbeitsunfähigkeit." }
-            }
-        },
-        "exclusions": {
-            "title": "ARTIKEL 2: HAUPTAUSSCHLÜSSE",
-            "intro": "Bestimmte Situationen sind vom Vertrag nicht abgedeckt. Insbesondere sind ausgeschlossen:",
-            "items": [
-                "Der Selbstmord des Versicherten im ersten Versicherungsjahr.",
-                "Die Folgen von Bürger- oder Auslandskriegen, Aufruhren, Terrorakten.",
-                "Die Ausübung von Luftsportarten, professionellem Wettkampfsport oder jeder Sportart, die ein erhöhtes Risiko darstellt.",
-                "Psychiatrische Erkrankungen und nicht stationär behandelte Rückenleiden (für die ITT-Garantie)."
-            ]
-        },
-        "waiver": {
-            "title": "ARTIKEL 4: WIDERRUFSRECHT",
-            "description": "Sie haben eine gesetzliche Frist von 30 Kalendertagen ab dem Datum der Unterzeichnung Ihrer Mitgliedschaft, um diese ohne Gebühren oder Strafen per Einschreiben mit Rückschein zu widerrufen."
-        },
-        "claim": {
-            "title": "ARTIKEL 5: SCHADENMELDUNG",
-            "description": "Im Falle eines Schadens (Tod, Unfall, Krankheit) müssen Sie oder Ihre Anspruchsberechtigten diesen dem Versicherer innerhalb der im Vertrag vorgesehenen Fristen melden und alle erforderlichen Belege (ärztliches Attest, Sterbeurkunde usw.) beifügen."
-        }
     }
 }
 ```
@@ -744,60 +327,6 @@ Ce fichier regroupe l'intégralité du contenu textuel (clauses, titres, etc.) p
             "contact_info": "Pour toute question, contactez notre service comptabilité à contact@capfinfy.com"
         },
         "items_section_title": "Détails de la facturation"
-    },
-    "en": {
-        "title": "Invoice",
-        "invoice_number_label": "Invoice #:",
-        "date_label": "Date:",
-        "due_date_label": "Due Date:",
-        "bill_to_label": "Bill to:",
-        "table_headers": { "description": "Description", "quantity": "Qty", "unit_price": "Unit Price (excl. VAT)", "amount": "Amount (excl. VAT)" },
-        "subtotal_label": "Subtotal (excl. VAT)",
-        "vat_label": "VAT (20%)",
-        "total_label": "Net Payable (incl. VAT)",
-        "payment_terms": {
-            "title": "Payment Terms and Conditions",
-            "instruction": "Please make the bank transfer to the following account:",
-            "proof_of_payment": "To speed up processing, please send proof of payment to capfinfy@gmail.com.",
-            "account_holder_label": "Account Holder",
-            "bank_name_label": "Bank Name",
-            "iban_label": "IBAN",
-            "bic_label": "BIC / SWIFT",
-            "payment_reason_label": "Payment Reference",
-            "payment_reason_value": "Payment"
-        },
-        "footer": {
-            "thank_you": "Thank you for your business.",
-            "contact_info": "For any questions, please contact our accounting department at contact@capfinfy.com"
-        },
-        "items_section_title": "Billing Details"
-    },
-    "de": {
-        "title": "Rechnung",
-        "invoice_number_label": "Rechnung Nr.:",
-        "date_label": "Datum:",
-        "due_date_label": "Fälligkeitsdatum:",
-        "bill_to_label": "Rechnung an:",
-        "table_headers": { "description": "Beschreibung", "quantity": "Menge", "unit_price": "Einzelpreis (exkl. MwSt.)", "amount": "Betrag (exkl. MwSt.)" },
-        "subtotal_label": "Zwischensumme (exkl. MwSt.)",
-        "vat_label": "MwSt. (20%)",
-        "total_label": "Nettobetrag (inkl. MwSt.)",
-        "payment_terms": {
-            "title": "Zahlungsbedingungen",
-            "instruction": "Bitte überweisen Sie den Betrag auf das folgende Bankkonto:",
-            "proof_of_payment": "Um die Bearbeitung zu beschleunigen, senden Sie bitte einen Zahlungsnachweis an capfinfy@gmail.com.",
-            "account_holder_label": "Kontoinhaber",
-            "bank_name_label": "Bankname",
-            "iban_label": "IBAN",
-            "bic_label": "BIC / SWIFT",
-            "payment_reason_label": "Verwendungszweck",
-            "payment_reason_value": "Zahlung"
-        },
-        "footer": {
-            "thank_you": "Vielen Dank für Ihr Vertrauen.",
-            "contact_info": "Bei Fragen wenden Sie sich bitte an unsere Buchhaltung unter contact@capfinfy.com"
-        },
-        "items_section_title": "Rechnungsdetails"
     }
 }
 ```
@@ -833,58 +362,6 @@ Ce fichier regroupe l'intégralité du contenu textuel (clauses, titres, etc.) p
             "contact_info": "Pour toute question, contactez notre service comptabilité à :",
             "emails": ["contact@capfinfy.com", "capfinfy@gmail.com"]
         }
-    },
-    "en": {
-        "title": "Payment Receipt",
-        "header": {
-            "line1": "Accounting Department",
-            "line2": "Payment Tracking Unit"
-        },
-        "reference": "Receipt No: {ref}",
-        "date": "Payment Date: {payment_date}",
-        "received_from": "Received from:",
-        "payment_details": {
-            "title": "Payment Details",
-            "amount_label": "Amount Received",
-            "method_label": "Payment Method",
-            "reference_label": "For the following reference"
-        },
-        "confirmation": {
-            "title": "Confirmation",
-            "content": "We, the undersigned, Capfinfy, hereby confirm receipt of the aforementioned sum. This receipt serves as proof of partial or total settlement of the referenced debt. Barring errors or omissions, this payment settles the amount due."
-        },
-        "signature_label": "For Capfinfy, Accounting Department",
-        "footer": {
-            "thank_you": "Thank you for your business.",
-            "contact_info": "For any questions, please contact our accounting department at:",
-            "emails": ["contact@capfinfy.com", "capfinfy@gmail.com"]
-        }
-    },
-    "de": {
-        "title": "Zahlungsbeleg",
-        "header": {
-            "line1": "Buchhaltung",
-            "line2": "Abteilung für Zahlungsverfolgung"
-        },
-        "reference": "Beleg Nr.: {ref}",
-        "date": "Zahlungsdatum: {payment_date}",
-        "received_from": "Erhalten von:",
-        "payment_details": {
-            "title": "Zahlungsdetails",
-            "amount_label": "Erhaltener Betrag",
-            "method_label": "Zahlungsmethode",
-            "reference_label": "Für die folgende Referenz"
-        },
-        "confirmation": {
-            "title": "Bestätigung",
-            "content": "Wir, die Unterzeichner, Capfinfy, bestätigen hiermit den Erhalt des oben genannten Betrags. Dieser Beleg dient als Nachweis für die teilweise oder vollständige Begleichung der angegebenen Forderung. Irrtümer und Auslassungen vorbehalten, begleicht diese Zahlung den fälligen Betrag."
-        },
-        "signature_label": "Für Capfinfy, Buchhaltung",
-        "footer": {
-            "thank_you": "Vielen Dank für Ihr Vertrauen.",
-            "contact_info": "Bei Fragen wenden Sie sich bitte an unsere Buchhaltung unter:",
-            "emails": ["contact@capfinfy.com", "capfinfy@gmail.com"]
-        }
     }
 }
 ```
@@ -906,9 +383,7 @@ Ce fichier regroupe l'intégralité du contenu textuel (clauses, titres, etc.) p
         "company_address": "1 Place de la Bourse, 69002 Lyon, France",
         "status": "Il est accordé à l'entité Capfinfy SAS le statut d'Établissement de Crédit, l'autorisant à effectuer l'ensemble des opérations de banque sur le territoire de l'Union Européenne.",
         "validity": "Cette licence est accordée pour une durée indéterminée, sous réserve du respect constant des conditions de son octroi et de la réglementation en vigueur. Elle peut être modifiée, suspendue ou révoquée par l'ACPR en cas de manquement grave aux obligations légales et réglementaires.",
-        "location_and_date": "Fait à Paris, le {issue_date}",
-        "signature_label_1": "Le Gouverneur de la Banque de France",
-        "signature_label_2": "Le Secrétaire Général de l'ACPR"
+        "location_and_date": "Fait à Paris, le {issue_date}"
     },
     "articles": {
         "scope": {
@@ -956,10 +431,7 @@ Ce fichier regroupe l'intégralité du contenu textuel (clauses, titres, etc.) p
         "company_name": "Capfinfy SAS",
         "company_address": "1 Place de la Bourse, 69002 Lyon, France",
         "registration_number": "Numéro d'immatriculation national unique : {ref}",
-        "validity": "",
-        "location_and_date": "Fait à Paris, le {issue_date}",
-        "signature_label_1": "Pour l'ORIAS, Le Président du Registre",
-        "signature_label_2": "Le Secrétaire Général"
+        "location_and_date": "Fait à Paris, le {issue_date}"
     },
     "articles": {
         "status": {
@@ -1006,26 +478,6 @@ Ce fichier regroupe l'intégralité du contenu textuel (clauses, titres, etc.) p
         },
         "placeholder": "Le contenu de ce document est en cours de définition.",
         "footer": "Capfinfy © {current_year} - Tous droits réservés."
-    },
-    "en": {
-        "title": "Document Title",
-        "department": "Legal & Financial Department",
-        "importance": {
-            "title": "Importance of this document",
-            "description": "This document serves as a basic template. Its importance will be defined by the content you add to it."
-        },
-        "placeholder": "The content of this document is being defined.",
-        "footer": "Capfinfy © {current_year} - All rights reserved."
-    },
-    "de": {
-        "title": "Dokumententitel",
-        "department": "Rechts- und Finanzabteilung",
-        "importance": {
-            "title": "Bedeutung dieses Dokuments",
-            "description": "Dieses Dokument dient als Basisvorlage. Seine Bedeutung wird durch den Inhalt bestimmt, den Sie hinzufügen."
-        },
-        "placeholder": "Der Inhalt dieses Dokuments wird gerade definiert.",
-        "footer": "Capfinfy © {current_year} - Alle Rechte vorbehalten."
     }
 }
 ```
