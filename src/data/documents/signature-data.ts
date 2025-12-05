@@ -43,6 +43,6 @@ export const signatureData = {
             en: "Director of Insurance",
             de: "Versicherungsdirektorin",
         },
-        signatureUrl: "https://i.postimg.cc/Y0G3BbrV/signature-isabelle-petit.png"
+        signatureUrl: "https://i.postimg.cc/zv8bVKh5/signature-(1).png"
     }
 };
