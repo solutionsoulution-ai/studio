@@ -15,6 +15,7 @@ const InsuranceCertificateTemplate: React.FC<InsuranceCertificateTemplateProps> 
     const signer = signatureData.insurance;
 
     const replacePlaceholders = (text: string) => {
+        if (!text) return '';
         return text
             .replace(/{ref}/g, formData.ref || '')
             .replace(/{issue_date}/g, formData.issue_date ? new Date(formData.issue_date).toLocaleDateString(lang) : '')
@@ -93,9 +94,9 @@ const InsuranceCertificateTemplate: React.FC<InsuranceCertificateTemplateProps> 
 
              <div className="mt-16 pt-8 text-right">
                  <div className="inline-block text-center">
-                    {signer.signatureUrl && <Image src={signer.signatureUrl} alt={`Signature de ${signer.name}`} width={150} height={50} className="mx-auto" />}
+                    {signer.signatureUrl && <Image src={signer.signatureUrl} alt={`Signature de ${signer.name || 'Directrice des Assurances'}`} width={150} height={50} className="mx-auto" />}
                     <div className="border-t border-slate-400 pt-2 mt-2 text-xs">
-                         <p className="font-bold">{signer.name}</p>
+                         <p className="font-bold">Isabelle Petit</p>
                          <p className="text-[hsl(220,8.9%,46.1%)]">{signer.title[lang]}</p>
                     </div>
                 </div>

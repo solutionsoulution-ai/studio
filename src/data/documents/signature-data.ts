@@ -1,7 +1,7 @@
 
 export const signatureData = {
     ceo: {
-        name: "",
+        name: "Alexandre Dubois",
         title: {
             fr: "Directeur Général",
             en: "CEO",
@@ -10,7 +10,7 @@ export const signatureData = {
         signatureUrl: "https://i.postimg.cc/jq1H8SMP/signature-5.png"
     },
     legal: {
-        name: "",
+        name: "David Rousseau",
         title: {
             fr: "Directeur Juridique",
             en: "Legal Director",
@@ -19,7 +19,7 @@ export const signatureData = {
         signatureUrl: "https://i.postimg.cc/HL4yXh3X/signature-pandadoc-removebg-preview.png"
     },
     finance: {
-        name: "",
+        name: "Julien Moreau",
         title: {
             fr: "Directeur Financier",
             en: "Finance Director",
@@ -28,7 +28,7 @@ export const signatureData = {
         signatureUrl: "https://i.postimg.cc/fLt4Yb2Q/signature-3.png"
     },
     analysis: {
-        name: "",
+        name: "Benoît Leroy",
         title: {
             fr: "Directeur d'Analyse Financière",
             en: "Director of Financial Analysis",
@@ -37,7 +37,7 @@ export const signatureData = {
         signatureUrl: "https://i.postimg.cc/8z0KBqy8/signature-9.png"
     },
     insurance: {
-        name: "",
+        name: "Isabelle Petit",
         title: {
             fr: "Directrice des Assurances",
             en: "Director of Insurance",
