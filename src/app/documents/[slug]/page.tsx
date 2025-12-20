@@ -15,6 +15,7 @@ export function generateStaticParams() {
     { slug: 'autorisation-courtage' },
     { slug: 'document-vierge' },
     { slug: 'recu-neofonds' },
+    { slug: 'facture-neofonds' },
   ];
 }
 
