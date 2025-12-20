@@ -20,14 +20,8 @@ export const neofondsInvoiceClauses: Clauses = {
         total_label: "Net à Payer TTC",
         payment_terms: {
             "title": "Modalités de Paiement",
-            "instruction": "Veuillez effectuer le virement sur le compte bancaire suivant :",
-            "proof_of_payment": "Afin d'accélérer le traitement, merci d'envoyer une preuve de virement à contact@neofonds.com.",
-            "account_holder_label": "Titulaire du compte",
-            "bank_name_label": "Domiciliation",
-            "iban_label": "IBAN",
-            "bic_label": "BIC / SWIFT",
-            "payment_reason_label": "Motif de virement",
-            "payment_reason_value": "Paiement Facture {ref}"
+            "instruction": "Paiement à réception de la facture.",
+            "proof_of_payment": "Pour toute question, veuillez nous contacter.",
         },
         footer: {
             "thank_you": "Nous vous remercions de votre confiance.",

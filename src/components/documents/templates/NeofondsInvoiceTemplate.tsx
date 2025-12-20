@@ -124,21 +124,9 @@ const NeofondsInvoiceTemplate: React.FC<NeofondsInvoiceTemplateProps> = ({ formD
                     </div>
                 </section>
                 
-                <section style={{ marginTop: '40px', fontSize: '10pt', color: colors.muted, backgroundColor: colors.surface, padding: '16px', borderRadius: '6px' }}>
-                    <h4 style={{ fontWeight: 'bold', color: colors.text, marginBottom: '8px' }}>{clauses.payment_terms.title}</h4>
-                    <p style={{ marginBottom: '8px' }}>{clauses.payment_terms.instruction}</p>
-                    <div style={{ padding: '12px', borderRadius: '4px', border: `1px solid ${colors.border}`, backgroundColor: colors.background, fontFamily: 'monospace', fontSize: '9pt' }}>
-                        <div><strong>{clauses.payment_terms.account_holder_label}:</strong> {formData.account_holder_name || '________________'}</div>
-                        <div><strong>{clauses.payment_terms.bank_name_label}:</strong> {formData.bank_name || '________________'}</div>
-                        <div><strong>{clauses.payment_terms.iban_label}:</strong> {formData.iban || '________________'}</div>
-                        <div><strong>{clauses.payment_terms.bic_label}:</strong> {formData.bic || '________________'}</div>
-                        <div><strong>{clauses.payment_terms.payment_reason_label}:</strong> {replaceRef(clauses.payment_terms.payment_reason_value)}</div>
-                    </div>
-                    <p style={{ fontStyle: 'italic', marginTop: '8px' }}>{clauses.payment_terms.proof_of_payment}</p>
-                </section>
             </main>
 
-            <footer style={{ marginTop: '40px', paddingTop: '20px', borderTop: `1px solid ${colors.border}`, textAlign: 'center', fontSize: '9pt', color: colors.muted }}>
+            <footer style={{ marginTop: '80px', paddingTop: '20px', borderTop: `1px solid ${colors.border}`, textAlign: 'center', fontSize: '9pt', color: colors.muted }}>
                 <p style={{ fontWeight: 'bold', color: colors.text }}>{clauses.footer.thank_you}</p>
                 <p>{clauses.footer.contact_info}</p>
             </footer>
