@@ -29,9 +29,55 @@ export const neofondsInvoiceClauses: Clauses = {
         }
     },
     en: {
-        // Translations could be added here
+        company: {
+            name: "Neofonds",
+            address: "Mainzer Landstraße 50, 60325 Frankfurt am Main, Germany",
+            phone: "+49 163 2247344",
+            emails: ["neofonds@europe.com"]
+        },
+        title: "Invoice",
+        invoice_number_label: "Invoice #:",
+        date_label: "Date:",
+        due_date_label: "Due Date:",
+        bill_to_label: "Bill To:",
+        table_headers: { "description": "Description", "quantity": "Qty", "unit_price": "Unit Price (excl. VAT)", "amount": "Amount (excl. VAT)" },
+        subtotal_label: "Subtotal (excl. VAT)",
+        vat_label: "VAT (19%)",
+        total_label: "Net Payable (incl. VAT)",
+        payment_terms: {
+            "title": "Payment Terms",
+            "instruction": "Payment upon receipt of invoice.",
+            "proof_of_payment": "For any questions, please contact us.",
+        },
+        footer: {
+            "thank_you": "Thank you for your business.",
+            "contact_info": "For any questions, please contact our accounting department at neofonds@europe.com"
+        }
     },
     de: {
-        // Translations could be added here
+        company: {
+            name: "Neofonds",
+            address: "Mainzer Landstraße 50, 60325 Frankfurt am Main, Deutschland",
+            phone: "+49 163 2247344",
+            emails: ["neofonds@europe.com"]
+        },
+        title: "Rechnung",
+        invoice_number_label: "Rechnung Nr.:",
+        date_label: "Datum:",
+        due_date_label: "Fälligkeitsdatum:",
+        bill_to_label: "Rechnung an:",
+        table_headers: { "description": "Beschreibung", "quantity": "Menge", "unit_price": "Einzelpreis (exkl. MwSt.)", "amount": "Betrag (exkl. MwSt.)" },
+        subtotal_label: "Zwischensumme (exkl. MwSt.)",
+        vat_label: "MwSt. (19%)",
+        total_label: "Nettobetrag (inkl. MwSt.)",
+        payment_terms: {
+            "title": "Zahlungsbedingungen",
+            "instruction": "Zahlung bei Rechnungserhalt.",
+            "proof_of_payment": "Bei Fragen kontaktieren Sie uns bitte.",
+        },
+        footer: {
+            "thank_you": "Vielen Dank für Ihr Vertrauen.",
+            "contact_info": "Bei Fragen wenden Sie sich bitte an unsere Buchhaltung unter neofonds@europe.com"
+        }
     }
 };
