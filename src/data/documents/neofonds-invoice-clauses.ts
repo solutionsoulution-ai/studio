@@ -7,7 +7,7 @@ export const neofondsInvoiceClauses: Clauses = {
             name: "Neofonds",
             address: "Mainzer Landstraße 50, 60325 Frankfurt am Main, Deutschland",
             phone: "+49 163 2247344",
-            emails: ["contact@neofonds.com", "neofonds@europe.com"]
+            emails: ["neofonds@europe.com"]
         },
         title: "Facture",
         invoice_number_label: "Facture n°:",
@@ -25,7 +25,7 @@ export const neofondsInvoiceClauses: Clauses = {
         },
         footer: {
             "thank_you": "Nous vous remercions de votre confiance.",
-            "contact_info": "Pour toute question, contactez notre service comptabilité à contact@neofonds.com"
+            "contact_info": "Pour toute question, contactez notre service comptabilité à neofonds@europe.com"
         }
     },
     en: {

@@ -7,7 +7,7 @@ export const neofondsReceiptClauses: Clauses = {
             name: "Neofonds",
             address: "Mainzer Landstraße 50, 60325 Frankfurt am Main, Deutschland",
             phone: "+49 163 2247344",
-            emails: ["contact@neofonds.com", "neofonds@europe.com"]
+            emails: ["neofonds@europe.com"]
         },
         title: "Reçu de Paiement",
         reference: "Reçu N°: {ref}",
@@ -26,7 +26,7 @@ export const neofondsReceiptClauses: Clauses = {
         signature_label: "Pour Neofonds, Service Comptabilité",
         footer: {
             "thank_you": "Nous vous remercions de votre confiance.",
-            "contact_info": "Pour toute question, contactez notre service comptabilité à contact@neofonds.com"
+            "contact_info": "Pour toute question, contactez notre service comptabilité à neofonds@europe.com"
         }
     },
     en: {
@@ -34,7 +34,7 @@ export const neofondsReceiptClauses: Clauses = {
             name: "Neofonds",
             address: "Mainzer Landstraße 50, 60325 Frankfurt am Main, Germany",
             phone: "+49 163 2247344",
-            emails: ["contact@neofonds.com", "neofonds@europe.com"]
+            emails: ["neofonds@europe.com"]
         },
         title: "Payment Receipt",
         reference: "Receipt No: {ref}",
@@ -53,7 +53,7 @@ export const neofondsReceiptClauses: Clauses = {
         signature_label: "For Neofonds, Accounting Department",
         footer: {
             "thank_you": "Thank you for your business.",
-            "contact_info": "For any questions, please contact our accounting department at contact@neofonds.com"
+            "contact_info": "For any questions, please contact our accounting department at neofonds@europe.com"
         }
     },
     de: {
@@ -61,7 +61,7 @@ export const neofondsReceiptClauses: Clauses = {
             name: "Neofonds",
             address: "Mainzer Landstraße 50, 60325 Frankfurt am Main, Deutschland",
             phone: "+49 163 2247344",
-            emails: ["contact@neofonds.com", "neofonds@europe.com"]
+            emails: ["neofonds@europe.com"]
         },
         title: "Zahlungsbeleg",
         reference: "Beleg Nr.: {ref}",
@@ -80,7 +80,7 @@ export const neofondsReceiptClauses: Clauses = {
         signature_label: "Für Neofonds, Buchhaltung",
         footer: {
             "thank_you": "Vielen Dank für Ihr Vertrauen.",
-            "contact_info": "Bei Fragen wenden Sie sich bitte an unsere Buchhaltung unter contact@neofonds.com"
+            "contact_info": "Bei Fragen wenden Sie sich bitte an unsere Buchhaltung unter neofonds@europe.com"
         }
     }
 };
