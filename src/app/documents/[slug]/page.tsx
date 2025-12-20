@@ -14,6 +14,7 @@ export function generateStaticParams() {
     { slug: 'licence-bancaire' },
     { slug: 'autorisation-courtage' },
     { slug: 'document-vierge' },
+    { slug: 'recu-neofonds' },
   ];
 }
 

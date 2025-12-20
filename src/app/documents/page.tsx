@@ -15,6 +15,7 @@ const documents = [
   { slug: 'recu-de-paiement', title: 'Reçu de Paiement', description: 'Confirmez la réception d\'un paiement pour un service ou un remboursement.' },
   { slug: 'licence-bancaire', title: 'Licence Bancaire', description: 'Générez un certificat de licence d\'établissement de crédit.' },
   { slug: 'autorisation-courtage', title: 'Autorisation de Courtage', description: 'Générez une attestation d\'autorisation pour le courtage de prêt.' },
+  { slug: 'recu-neofonds', title: 'Reçu de Paiement (Neofonds)', description: 'Version personnalisée pour l\'entreprise Neofonds.' },
   { slug: 'document-vierge', title: 'Document Vierge', description: 'Partez d\'un modèle vierge avec en-tête de Capfinfy.' },
 ];
 
@@ -29,7 +30,7 @@ export default function DocumentsHomePage() {
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {documents.map((doc) => (
+        {documents.sort((a,b) => a.title.localeCompare(b.title)).map((doc) => (
           <Card key={doc.slug} className="flex flex-col">
             <CardHeader>
               <div className="flex items-center gap-4">

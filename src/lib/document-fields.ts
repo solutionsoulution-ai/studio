@@ -113,6 +113,15 @@ export const documentFields: { [key: string]: DocumentField[] } = {
     { name: 'payment_method', label: { fr: 'Moyen de paiement' }, type: 'text', defaultValue: 'Virement bancaire', validation: { type: 'string' } },
     { name: 'payment_reference', label: { fr: 'Référence du paiement (ex: facture, contrat)' }, type: 'text', validation: { type: 'string' } },
   ],
+  'recu-neofonds': [
+    { name: 'ref', label: { fr: 'Référence du reçu' }, type: 'text', defaultValue: `NEO-RECU-${new Date().getFullYear()}-`, validation: { type: 'string' } },
+    { name: 'payment_date', label: { fr: 'Date du paiement' }, type: 'date', defaultValue: new Date().toISOString().split('T')[0], validation: { type: 'date' } },
+    { name: 'payer_name', label: { fr: 'Nom du payeur' }, type: 'text', validation: { type: 'string' } },
+    { name: 'payer_address', label: { fr: 'Adresse du payeur' }, type: 'text', validation: { type: 'string' } },
+    { name: 'payment_amount', label: { fr: 'Montant reçu (€)' }, type: 'number', validation: { type: 'number' } },
+    { name: 'payment_method', label: { fr: 'Moyen de paiement' }, type: 'text', defaultValue: 'Virement bancaire', validation: { type: 'string' } },
+    { name: 'payment_reference', label: { fr: 'Référence du paiement (ex: facture, contrat)' }, type: 'text', validation: { type: 'string' } },
+  ],
   'licence-bancaire': [
     { name: 'ref', label: {fr: 'Numéro de Licence'}, type: 'text', defaultValue: `LB-CE-${new Date().getFullYear()}-`, validation: { type: 'string' } },
     { name: 'issue_date', label: {fr: 'Date de délivrance'}, type: 'date', defaultValue: new Date().toISOString().split('T')[0], validation: { type: 'date' } },
