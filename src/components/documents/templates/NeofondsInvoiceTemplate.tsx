@@ -36,7 +36,6 @@ const NeofondsInvoiceTemplate: React.FC<NeofondsInvoiceTemplateProps> = ({ formD
     const vat = subtotal * vatRate;
     const total = subtotal + vat;
 
-    const dueDate = formData.date ? new Date(new Date(formData.date).setDate(new Date(formData.date).getDate() + 30)).toLocaleDateString(lang) : '';
     const replaceRef = (text: string) => text.replace(/{ref}/g, formData.ref || '');
 
     const colors = {
@@ -72,7 +71,6 @@ const NeofondsInvoiceTemplate: React.FC<NeofondsInvoiceTemplateProps> = ({ formD
                     </div>
                     <div style={{ textAlign: 'right', fontSize: '10pt' }}>
                         <p><strong style={{ color: colors.text }}>{clauses.date_label}</strong> {formData.date ? new Date(formData.date).toLocaleDateString(lang) : '___________'}</p>
-                        <p><strong style={{ color: colors.text }}>{clauses.due_date_label}</strong> {dueDate || '___________'}</p>
                     </div>
                 </div>
 
