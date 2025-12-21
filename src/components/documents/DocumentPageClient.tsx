@@ -15,6 +15,7 @@ import BankingLicenseTemplate from '@/components/documents/templates/BankingLice
 import BrokerageAuthorizationTemplate from '@/components/documents/templates/BrokerageAuthorizationTemplate';
 import NeofondsReceiptTemplate from './templates/NeofondsReceiptTemplate';
 import NeofondsInvoiceTemplate from './templates/NeofondsInvoiceTemplate';
+import AmlCertificateTemplate from './templates/AmlCertificateTemplate';
 
 const documentTemplates: { [key: string]: React.FC<any> } = {
   'reconnaissance-de-dette': DebtRecognitionTemplate,
@@ -27,6 +28,7 @@ const documentTemplates: { [key: string]: React.FC<any> } = {
   'autorisation-courtage': BrokerageAuthorizationTemplate,
   'recu-neofonds': NeofondsReceiptTemplate,
   'facture-neofonds': NeofondsInvoiceTemplate,
+  'certificat-non-blanchiment': AmlCertificateTemplate,
   'document-vierge': BlankDocumentTemplate,
 };
 

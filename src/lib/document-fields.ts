@@ -117,5 +117,15 @@ export const documentFields: { [key: string]: DocumentField[] } = {
     { name: 'ref', label: {fr: 'Numéro d\'Immatriculation ORIAS'}, type: 'text', defaultValue: `21008679`, validation: { type: 'string' } },
     { name: 'issue_date', label: {fr: 'Date d\'émission'}, type: 'date', defaultValue: new Date().toISOString().split('T')[0], validation: { type: 'date' } },
   ],
+  'certificat-non-blanchiment': [
+    { name: 'ref', label: {fr: 'Référence du certificat'}, type: 'text', defaultValue: `AML-${new Date().getFullYear()}-`, validation: { type: 'string' } },
+    { name: 'date', label: {fr: 'Date de déclaration'}, type: 'date', defaultValue: new Date().toISOString().split('T')[0], validation: { type: 'date' } },
+    { name: 'client_name', label: {fr: 'Nom complet du déclarant'}, type: 'text', validation: { type: 'string' } },
+    { name: 'client_address', label: {fr: 'Adresse du déclarant'}, type: 'text', validation: { type: 'string' } },
+    { name: 'transaction_ref', label: {fr: 'Référence de la transaction'}, type: 'text', validation: { type: 'string' } },
+    { name: 'transaction_amount', label: {fr: 'Montant de la transaction (€)'}, type: 'number', validation: { type: 'number' } },
+    { name: 'transaction_amount_in_words', label: {fr: 'Montant en toutes lettres'}, type: 'text', validation: { type: 'string' } },
+    { name: 'funds_origin', label: {fr: 'Description de l\'origine des fonds'}, type: 'textarea', validation: { type: 'string' } },
+  ],
   'document-vierge': [],
 };
