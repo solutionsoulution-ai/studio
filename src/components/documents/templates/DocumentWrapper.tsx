@@ -33,8 +33,8 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
   const Seal = () => (
     <div style={{
       position: 'absolute',
-      right: '80px',
-      bottom: '120px',
+      right: '60px',
+      bottom: '100px',
       width: '130px',
       height: '130px',
       border: '4px double #3b82f6',
@@ -42,7 +42,7 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      opacity: '0.2',
+      opacity: '1',
       transform: 'rotate(-15deg)',
     }}>
         <Image src="https://i.postimg.cc/ZqGtbXxd/Capture-d-ecran-2025-12-20-110200.png" alt="Neofonds Seal" width={90} height={25} />
