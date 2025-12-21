@@ -37,15 +37,15 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
       bottom: '100px',
       width: '130px',
       height: '130px',
-      border: '4px double #3b82f6',
+      border: '3px solid hsl(217, 91%, 60%, 0.9)',
       borderRadius: '50%',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      opacity: '1',
+      opacity: '0.9',
       transform: 'rotate(-15deg)',
     }}>
-        <Image src="https://i.postimg.cc/ZqGtbXxd/Capture-d-ecran-2025-12-20-110200.png" alt="Neofonds Seal" width={90} height={25} />
+        <Image src="https://i.postimg.cc/ZqGtbXxd/Capture-d-ecran-2025-12-20-110200.png" alt="Neofonds Seal" width={90} height={25} style={{ opacity: 0.85 }}/>
     </div>
   );
 
