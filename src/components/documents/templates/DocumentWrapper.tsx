@@ -30,6 +30,25 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
 
   const currentFooterText = footerText[lang] || footerText['fr'];
 
+  const Seal = () => (
+    <div style={{
+      position: 'absolute',
+      right: '100px',
+      bottom: '100px',
+      width: '120px',
+      height: '120px',
+      border: '3px solid #3b82f6',
+      borderRadius: '50%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      opacity: '0.1',
+      transform: 'rotate(-15deg)',
+    }}>
+        <Image src="https://i.postimg.cc/ZqGtbXxd/Capture-d-ecran-2025-12-20-110200.png" alt="Neofonds Seal" width={80} height={20} />
+    </div>
+  );
+
   return (
     <div 
         style={{
@@ -40,9 +59,11 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
             padding: '40px',
             maxWidth: '800px',
             margin: 'auto',
-            border: '1px solid #e2e8f0'
+            border: '1px solid #e2e8f0',
+            position: 'relative'
         }}
     >
+        <Seal />
         <header 
             style={{
                 display: 'flex',
