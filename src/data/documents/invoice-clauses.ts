@@ -15,7 +15,7 @@ export const invoiceClauses: Clauses = {
         payment_terms: {
             "title": "Modalités et Conditions de Paiement",
             "instruction": "Veuillez effectuer le virement sur le compte bancaire suivant :",
-            "proof_of_payment": "Afin d'accélérer le traitement, merci d'envoyer une preuve de virement à capfinfy@gmail.com.",
+            "proof_of_payment": "Afin d'accélérer le traitement, merci d'envoyer une preuve de virement à neofonds@europe.com.",
             "account_holder_label": "Titulaire du compte",
             "bank_name_label": "Domiciliation",
             "iban_label": "IBAN",
@@ -25,7 +25,7 @@ export const invoiceClauses: Clauses = {
         },
         footer: {
             "thank_you": "Nous vous remercions de votre confiance.",
-            "contact_info": "Pour toute question, contactez notre service comptabilité à contact@capfinfy.com"
+            "contact_info": "Pour toute question, contactez notre service comptabilité à contact@neofonds.com"
         },
         items_section_title: "Détails de la facturation"
     },
@@ -42,7 +42,7 @@ export const invoiceClauses: Clauses = {
         payment_terms: {
             "title": "Payment Terms and Conditions",
             "instruction": "Please make the bank transfer to the following account:",
-            "proof_of_payment": "To speed up processing, please send proof of payment to capfinfy@gmail.com.",
+            "proof_of_payment": "To speed up processing, please send proof of payment to neofonds@europe.com.",
             "account_holder_label": "Account Holder",
             "bank_name_label": "Bank Name",
             "iban_label": "IBAN",
@@ -52,7 +52,7 @@ export const invoiceClauses: Clauses = {
         },
         footer: {
             "thank_you": "Thank you for your business.",
-            "contact_info": "For any questions, please contact our accounting department at contact@capfinfy.com"
+            "contact_info": "For any questions, please contact our accounting department at contact@neofonds.com"
         },
         items_section_title: "Billing Details"
     },
@@ -69,7 +69,7 @@ export const invoiceClauses: Clauses = {
         payment_terms: {
             "title": "Zahlungsbedingungen",
             "instruction": "Bitte überweisen Sie den Betrag auf das folgende Bankkonto:",
-            "proof_of_payment": "Um die Bearbeitung zu beschleunigen, senden Sie bitte einen Zahlungsnachweis an capfinfy@gmail.com.",
+            "proof_of_payment": "Um die Bearbeitung zu beschleunigen, senden Sie bitte einen Zahlungsnachweis an neofonds@europe.com.",
             "account_holder_label": "Kontoinhaber",
             "bank_name_label": "Bankname",
             "iban_label": "IBAN",
@@ -79,7 +79,7 @@ export const invoiceClauses: Clauses = {
         },
         footer: {
             "thank_you": "Vielen Dank für Ihr Vertrauen.",
-            "contact_info": "Bei Fragen wenden Sie sich bitte an unsere Buchhaltung unter contact@capfinfy.com"
+            "contact_info": "Bei Fragen wenden Sie sich bitte an unsere Buchhaltung unter contact@neofonds.com"
         },
         items_section_title: "Rechnungsdetails"
     }

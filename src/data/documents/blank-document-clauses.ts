@@ -8,7 +8,7 @@ export const blankDocumentClauses = {
             description: "Ce document sert de modèle de base. Son importance sera définie par le contenu que vous y ajouterez."
         },
         placeholder: "Le contenu de ce document est en cours de définition.",
-        footer: "Capfinfy © {current_year} - Tous droits réservés."
+        footer: "Neofonds © {current_year} - Tous droits réservés."
     },
     en: {
         title: "Document Title",
@@ -18,7 +18,7 @@ export const blankDocumentClauses = {
             description: "This document serves as a basic template. Its importance will be defined by the content you add to it."
         },
         placeholder: "The content of this document is being defined.",
-        footer: "Capfinfy © {current_year} - All rights reserved."
+        footer: "Neofonds © {current_year} - All rights reserved."
     },
     de: {
         title: "Dokumententitel",
@@ -28,6 +28,6 @@ export const blankDocumentClauses = {
             description: "Dieses Dokument dient als Basisvorlage. Seine Bedeutung wird durch den Inhalt bestimmt, den Sie hinzufügen."
         },
         placeholder: "Der Inhalt dieses Dokuments wird gerade definiert.",
-        footer: "Capfinfy © {current_year} - Alle Rechte vorbehalten."
+        footer: "Neofonds © {current_year} - Alle Rechte vorbehalten."
     }
 };
