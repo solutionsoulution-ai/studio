@@ -10,9 +10,7 @@ import LoanContractTemplate from '@/components/documents/templates/LoanContractT
 import SuretyBondTemplate from '@/components/documents/templates/SuretyBondTemplate';
 import InsuranceCertificateTemplate from '@/components/documents/templates/InsuranceCertificateTemplate';
 import InsuranceNoticeTemplate from '@/components/documents/templates/InsuranceNoticeTemplate';
-import InvoiceTemplate from '@/components/documents/templates/InvoiceTemplate';
 import BlankDocumentTemplate from '@/components/documents/templates/BlankDocumentTemplate';
-import PaymentReceiptTemplate from '@/components/documents/templates/PaymentReceiptTemplate';
 import BankingLicenseTemplate from '@/components/documents/templates/BankingLicenseTemplate';
 import BrokerageAuthorizationTemplate from '@/components/documents/templates/BrokerageAuthorizationTemplate';
 import NeofondsReceiptTemplate from './templates/NeofondsReceiptTemplate';
@@ -25,8 +23,6 @@ const documentTemplates: { [key: string]: React.FC<any> } = {
   'acte-de-cautionnement-solidaire': SuretyBondTemplate,
   'attestation-assurance-emprunteur': InsuranceCertificateTemplate,
   'notice-information-assurance': InsuranceNoticeTemplate,
-  'facture': InvoiceTemplate,
-  'recu-de-paiement': PaymentReceiptTemplate,
   'licence-bancaire': BankingLicenseTemplate,
   'autorisation-courtage': BrokerageAuthorizationTemplate,
   'recu-neofonds': NeofondsReceiptTemplate,

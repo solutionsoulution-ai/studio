@@ -11,13 +11,11 @@ const documents = [
   { slug: 'acte-de-cautionnement-solidaire', title: 'Acte de Cautionnement Solidaire', description: 'Formalisez un engagement de caution pour un prêt.' },
   { slug: 'attestation-assurance-emprunteur', title: "Attestation d'Assurance", description: 'Produisez une attestation de couverture d\'assurance prêt.' },
   { slug: 'notice-information-assurance', title: "Notice d'Information d'Assurance", description: 'Consultez les détails et exclusions d\'une assurance.' },
-  { slug: 'facture', title: 'Facture (Capfinfy)', description: 'Émettez une facture professionnelle pour vos services.' },
-  { slug: 'recu-de-paiement', title: 'Reçu de Paiement (Capfinfy)', description: 'Confirmez la réception d\'un paiement pour un service ou un remboursement.' },
   { slug: 'licence-bancaire', title: 'Licence Bancaire', description: 'Générez un certificat de licence d\'établissement de crédit.' },
   { slug: 'autorisation-courtage', title: 'Autorisation de Courtage', description: 'Générez une attestation d\'autorisation pour le courtage de prêt.' },
   { slug: 'recu-neofonds', title: 'Reçu de Paiement (Neofonds)', description: 'Version personnalisée pour l\'entreprise Neofonds.' },
   { slug: 'facture-neofonds', title: 'Facture (Neofonds)', description: 'Générez une facture aux couleurs de Neofonds.' },
-  { slug: 'document-vierge', title: 'Document Vierge', description: 'Partez d\'un modèle vierge avec en-tête de Capfinfy.' },
+  { slug: 'document-vierge', title: 'Document Vierge', description: 'Partez d\'un modèle vierge avec en-tête de Neofonds.' },
 ];
 
 export default function DocumentsHomePage() {

@@ -14,30 +14,6 @@ export type DocumentField = {
   fields?: DocumentField[]; // For grouping
 };
 
-const invoiceFields: DocumentField[] = [
-  { name: 'ref', label: {fr:'N° de facture', en: 'Invoice No.', de: 'Rechnungs-Nr.'}, type: 'text', defaultValue: `FACT-${new Date().getFullYear()}-`, validation: { type: 'string' } },
-  { name: 'date', label: {fr:'Date de facturation', en: 'Invoice Date', de: 'Rechnungsdatum'}, type: 'date', defaultValue: new Date().toISOString().split('T')[0], validation: { type: 'date' } },
-  { name: 'client_name', label: {fr:'Nom du client', en: 'Client Name', de: 'Kundenname'}, type: 'text', validation: { type: 'string' } },
-  { name: 'client_address', label: {fr:'Adresse du client', en: 'Client Address', de: 'Kundenadresse'}, type: 'textarea', validation: { type: 'string' } },
-  { name: 'items_group', label: {fr: "Détails de la facturation", en: "Billing Details", de: "Rechnungsdetails"}, type: 'group', validation: {type: 'any'}, fields: [
-    { name: 'item1_description', label: {fr: 'Article 1 - Description'}, type: 'text', validation: { type: 'string' } },
-    { name: 'item1_quantity', label: {fr: 'Article 1 - Quantité'}, type: 'number', defaultValue: 1, validation: { type: 'number' } },
-    { name: 'item1_unit_price', label: {fr: 'Article 1 - Prix U. (€)'}, type: 'number', validation: { type: 'number' } },
-    { name: 'item2_description', label: {fr: 'Article 2 - Description'}, type: 'text', validation: { type: 'any' } },
-    { name: 'item2_quantity', label: {fr: 'Article 2 - Quantité'}, type: 'number', defaultValue: 1, validation: { type: 'any' } },
-    { name: 'item2_unit_price', label: {fr: 'Article 2 - Prix U. (€)'}, type: 'number', validation: { type: 'any' } },
-    { name: 'item3_description', label: {fr: 'Article 3 - Description'}, type: 'text', validation: { type: 'any' } },
-    { name: 'item3_quantity', label: {fr: 'Article 3 - Quantité'}, type: 'number', defaultValue: 1, validation: { type: 'any' } },
-    { name: 'item3_unit_price', label: {fr: 'Article 3 - Prix U. (€)'}, type: 'number', validation: { type: 'any' } },
-  ]},
-  { name: 'bank_details_group', label: {fr: 'Coordonnées Bancaires', en: 'Bank Details', de: 'Bankverbindung'}, type: 'group', validation: {type: 'any'}, fields: [
-    { name: 'account_holder_name', label: {fr: 'Nom du titulaire du compte', en: 'Account Holder Name', de: 'Name des Kontoinhabers'}, type: 'text', validation: { type: 'string' } },
-    { name: 'bank_name', label: {fr: 'Nom de la banque (Domiciliation)', en: 'Bank Name', de: 'Bankname'}, type: 'text', validation: { type: 'string' } },
-    { name: 'iban', label: {fr:'IBAN', en: 'IBAN', de: 'IBAN'}, type: 'text', validation: { type: 'string' } },
-    { name: 'bic', label: {fr:'BIC / SWIFT', en: 'BIC / SWIFT', de: 'BIC / SWIFT'}, type: 'text', validation: { type: 'string' } },
-  ]},
-];
-
 const neofondsInvoiceFields: DocumentField[] = [
   { name: 'ref', label: {fr:'N° de facture', en: 'Invoice No.', de: 'Rechnungs-Nr.'}, type: 'text', defaultValue: `NEOFACT-${new Date().getFullYear()}-`, validation: { type: 'string' } },
   { name: 'date', label: {fr:'Date de facturation', en: 'Invoice Date', de: 'Rechnungsdatum'}, type: 'date', defaultValue: new Date().toISOString().split('T')[0], validation: { type: 'date' } },
@@ -123,17 +99,7 @@ export const documentFields: { [key: string]: DocumentField[] } = {
     { name: 'monthly_premium', label: {fr:'Prime mensuelle (€)', en: 'Monthly Premium (€)', de: 'Monatliche Prämie (€)'}, type: 'number', validation: { type: 'number' } },
   ],
   'notice-information-assurance': [],
-  'facture': invoiceFields,
   'facture-neofonds': neofondsInvoiceFields,
-  'recu-de-paiement': [
-    { name: 'ref', label: { fr: 'Référence du reçu' }, type: 'text', defaultValue: `RECU-${new Date().getFullYear()}-`, validation: { type: 'string' } },
-    { name: 'payment_date', label: { fr: 'Date du paiement' }, type: 'date', defaultValue: new Date().toISOString().split('T')[0], validation: { type: 'date' } },
-    { name: 'payer_name', label: { fr: 'Nom du payeur' }, type: 'text', validation: { type: 'string' } },
-    { name: 'payer_address', label: { fr: 'Adresse du payeur' }, type: 'text', validation: { type: 'string' } },
-    { name: 'payment_amount', label: { fr: 'Montant reçu (€)' }, type: 'number', validation: { type: 'number' } },
-    { name: 'payment_method', label: { fr: 'Moyen de paiement' }, type: 'text', defaultValue: 'Virement bancaire', validation: { type: 'string' } },
-    { name: 'payment_reference', label: { fr: 'Référence du paiement (ex: facture, contrat)' }, type: 'text', validation: { type: 'string' } },
-  ],
   'recu-neofonds': [
     { name: 'ref', label: { fr: 'Référence du reçu' }, type: 'text', defaultValue: `NEO-RECU-${new Date().getFullYear()}-`, validation: { type: 'string' } },
     { name: 'payment_date', label: { fr: 'Date du paiement' }, type: 'date', defaultValue: new Date().toISOString().split('T')[0], validation: { type: 'date' } },
