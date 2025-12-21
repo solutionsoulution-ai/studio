@@ -1,6 +1,7 @@
 import type {Metadata} from 'next';
 import './globals.css';
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "@/components/ui/toaster";
+import PasswordProtect from '@/components/PasswordProtect';
 
 export const metadata: Metadata = {
   title: 'Neofonds - Générateur de Documents',
@@ -21,7 +22,9 @@ export default function RootLayout({
         <link rel="icon" href="https://i.postimg.cc/ZqGtbXxd/Capture-d-ecran-2025-12-20-110200.png" />
       </head>
       <body className="font-body antialiased bg-muted/20">
-        {children}
+        <PasswordProtect>
+          {children}
+        </PasswordProtect>
         <Toaster />
       </body>
     </html>
