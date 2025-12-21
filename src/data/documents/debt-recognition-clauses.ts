@@ -4,7 +4,7 @@ import type { Clauses } from "./languages";
 export const debtRecognitionClauses: Clauses = {
     fr: {
         header: {
-            line1: "Service Financier Européen",
+            line1: "Service Financier",
             line2: "Département Juridique et des Garanties • Unité de Formalisation des Engagements",
         },
         title: "Reconnaissance de Dette pour un Prêt",
@@ -18,7 +18,7 @@ export const debtRecognitionClauses: Clauses = {
         articles: {
             recognition: {
                 title: "Article 1 : Reconnaissance de la Dette",
-                content: "Je soussigné(e), {debtor_name}, demeurant au {debtor_address}, reconnais par la présente devoir à Capfinfy, agissant au nom de ses partenaires financiers, la somme de : {loan_amount} ({loan_amount_in_words}). Cette somme correspond au capital d'un prêt de type '{type_of_loan}' qui m'a été accordé et dont je confirme avoir reçu les fonds.",
+                content: "Je soussigné(e), {debtor_name}, demeurant au {debtor_address}, reconnais par la présente devoir à Neofonds, agissant au nom de ses partenaires financiers, la somme de : {loan_amount} ({loan_amount_in_words}). Cette somme correspond au capital d'un prêt de type '{type_of_loan}' qui m'a été accordé et dont je confirme avoir reçu les fonds.",
             },
             repayment: {
                 title: "Article 2 : Modalités de Remboursement",
@@ -36,7 +36,7 @@ export const debtRecognitionClauses: Clauses = {
     },
     en: {
         header: {
-            line1: "European Financial Service",
+            line1: "Financial Service",
             line2: "Legal and Guarantees Department • Commitment Formalization Unit",
         },
         title: "Acknowledgment of Debt for a Loan",
@@ -50,7 +50,7 @@ export const debtRecognitionClauses: Clauses = {
         articles: {
             recognition: {
                 title: "Article 1: Acknowledgment of Debt",
-                content: "I, the undersigned, {debtor_name}, residing at {debtor_address}, hereby acknowledge that I owe Capfinfy, acting on behalf of its financial partners, the sum of: {loan_amount} ({loan_amount_in_words}). This amount corresponds to the principal of a '{type_of_loan}' loan that has been granted to me and for which I confirm receipt of the funds.",
+                content: "I, the undersigned, {debtor_name}, residing at {debtor_address}, hereby acknowledge that I owe Neofonds, acting on behalf of its financial partners, the sum of: {loan_amount} ({loan_amount_in_words}). This amount corresponds to the principal of a '{type_of_loan}' loan that has been granted to me and for which I confirm receipt of the funds.",
             },
             repayment: {
                 title: "Article 2: Repayment Terms",
@@ -68,7 +68,7 @@ export const debtRecognitionClauses: Clauses = {
     },
     de: {
         header: {
-            line1: "Europäischer Finanzdienst",
+            line1: "Finanzdienst",
             line2: "Rechts- und Garantieabteilung • Abteilung für die Formalisierung von Verpflichtungen",
         },
         title: "Schuldanerkenntnis für ein Darlehen",
@@ -82,7 +82,7 @@ export const debtRecognitionClauses: Clauses = {
         articles: {
             recognition: {
                 title: "Artikel 1: Schuldanerkenntnis",
-                content: "Ich, der/die Unterzeichnende, {debtor_name}, wohnhaft in {debtor_address}, erkenne hiermit an, Capfinfy, handelnd im Namen seiner Finanzpartner, die Summe von: {loan_amount} ({loan_amount_in_words}) zu schulden. Dieser Betrag entspricht dem Kapital eines '{type_of_loan}'-Darlehens, das mir gewährt wurde und dessen Erhalt ich bestätige.",
+                content: "Ich, der/die Unterzeichnende, {debtor_name}, wohnhaft in {debtor_address}, erkenne hiermit an, Neofonds, handelnd im Namen seiner Finanzpartner, die Summe von: {loan_amount} ({loan_amount_in_words}) zu schulden. Dieser Betrag entspricht dem Kapital eines '{type_of_loan}'-Darlehens, das mir gewährt wurde und dessen Erhalt ich bestätige.",
             },
             repayment: {
                 title: "Artikel 2: Rückzahlungsmodalitäten",

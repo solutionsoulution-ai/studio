@@ -16,12 +16,12 @@ export const eligibilityCertificateClauses: Clauses = {
         articles: {
             object: {
                 title: "Article 1 : Objet du Certificat",
-                content: "Capfinfy, agissant en tant qu'intermédiaire financier, certifie par la présente avoir procédé à une analyse préliminaire de la situation financière du bénéficiaire susmentionné. Sur la base des éléments déclarés et en l'état actuel de nos critères d'évaluation, le bénéficiaire est jugé éligible à un financement pour un montant maximum de :",
+                content: "Neofonds, agissant en tant qu'intermédiaire financier, certifie par la présente avoir procédé à une analyse préliminaire de la situation financière du bénéficiaire susmentionné. Sur la base des éléments déclarés et en l'état actuel de nos critères d'évaluation, le bénéficiaire est jugé éligible à un financement pour un montant maximum de :",
                 amount_label: "Montant d'éligibilité maximal",
             },
             scope: {
                 title: "Article 2 : Portée et Limites",
-                content: "Ce certificat atteste d'une capacité de financement théorique au jour de son émission. Il est destiné à être présenté à des tiers (agents immobiliers, vendeurs, etc.) comme un élément de réassurance de la capacité du bénéficiaire à financer un projet. Il ne constitue en aucun cas une offre de prêt ferme et ne saurait engager Capfinfy ou ses partenaires prêteurs.",
+                content: "Ce certificat atteste d'une capacité de financement théorique au jour de son émission. Il est destiné à être présenté à des tiers (agents immobiliers, vendeurs, etc.) comme un élément de réassurance de la capacité du bénéficiaire à financer un projet. Il ne constitue en aucun cas une offre de prêt ferme et ne saurait engager Neofonds ou ses partenaires prêteurs.",
             },
             validity: {
                 title: "Article 3 : Validité",
@@ -43,12 +43,12 @@ export const eligibilityCertificateClauses: Clauses = {
         articles: {
             object: {
                 title: "Article 1: Purpose of the Certificate",
-                content: "Capfinfy, acting as a financial intermediary, hereby certifies that it has conducted a preliminary analysis of the financial situation of the above-mentioned beneficiary. Based on the declared elements and our current evaluation criteria, the beneficiary is deemed eligible for financing up to a maximum amount of:",
+                content: "Neofonds, acting as a financial intermediary, hereby certifies that it has conducted a preliminary analysis of the financial situation of the above-mentioned beneficiary. Based on the declared elements and our current evaluation criteria, the beneficiary is deemed eligible for financing up to a maximum amount of:",
                 amount_label: "Maximum Eligibility Amount",
             },
             scope: {
                 title: "Article 2: Scope and Limitations",
-                content: "This certificate attests to a theoretical financing capacity as of its date of issue. It is intended to be presented to third parties (real estate agents, sellers, etc.) as an element of reassurance of the beneficiary's ability to finance a project. It in no way constitutes a firm loan offer and shall not bind Capfinfy or its lending partners.",
+                content: "This certificate attests to a theoretical financing capacity as of its date of issue. It is intended to be presented to third parties (real estate agents, sellers, etc.) as an element of reassurance of the beneficiary's ability to finance a project. It in no way constitutes a firm loan offer and shall not bind Neofonds or its lending partners.",
             },
             validity: {
                 title: "Article 3: Validity",
@@ -70,12 +70,12 @@ export const eligibilityCertificateClauses: Clauses = {
         articles: {
             object: {
                 title: "Artikel 1: Zweck des Zertifikats",
-                content: "Capfinfy, handelnd als Finanzvermittler, bescheinigt hiermit, eine vorläufige Analyse der finanziellen Situation des oben genannten Begünstigten durchgeführt zu haben. Auf der Grundlage der angegebenen Elemente und unserer aktuellen Bewertungskriterien wird der Begünstigte als kreditwürdig für eine Finanzierung bis zu einem Höchstbetrag von:",
+                content: "Neofonds, handelnd als Finanzvermittler, bescheinigt hiermit, eine vorläufige Analyse der finanziellen Situation des oben genannten Begünstigten durchgeführt zu haben. Auf der Grundlage der angegebenen Elemente und unserer aktuellen Bewertungskriterien wird der Begünstigte als kreditwürdig für eine Finanzierung bis zu einem Höchstbetrag von:",
                 amount_label: "Maximaler Förderbetrag",
             },
             scope: {
                 title: "Artikel 2: Geltungsbereich und Einschränkungen",
-                content: "Dieses Zertifikat bescheinigt eine theoretische Finanzierungskapazität zum Zeitpunkt seiner Ausstellung. Es ist dazu bestimmt, Dritten (Immobilienmaklern, Verkäufern usw.) als Sicherheit für die Fähigkeit des Begünstigten zur Finanzierung eines Projekts vorgelegt zu werden. Es stellt in keiner Weise ein verbindliches Darlehensangebot dar und bindet Capfinfy oder seine darlehensgebenden Partner nicht.",
+                content: "Dieses Zertifikat bescheinigt eine theoretische Finanzierungskapazität zum Zeitpunkt seiner Ausstellung. Es ist dazu bestimmt, Dritten (Immobilienmaklern, Verkäufern usw.) als Sicherheit für die Fähigkeit des Begünstigten zur Finanzierung eines Projekts vorgelegt zu werden. Es stellt in keiner Weise ein verbindliches Darlehensangebot dar und bindet Neofonds oder seine darlehensgebenden Partner nicht.",
             },
             validity: {
                 title: "Artikel 3: Gültigkeit",

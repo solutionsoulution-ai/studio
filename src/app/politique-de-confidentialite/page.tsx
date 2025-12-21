@@ -16,7 +16,7 @@ export default function PolitiqueDeConfidentialitePage() {
               <div>
                 <h2>1. Introduction et Responsable du Traitement</h2>
                 <p>
-                  Capfinfy, société par actions simplifiée (SAS) située au 1 Place de la Bourse, 69002 Lyon, France ("nous", "notre", "nos"), s'engage à protéger la vie privée de ses utilisateurs ("vous", "votre"). Cette politique de confidentialité explique quelles informations nous collectons, comment nous les utilisons, et quels sont vos droits concernant vos données personnelles, conformément au Règlement Général sur la Protection des Données (RGPD).
+                  Neofonds GmbH, société à responsabilité limitée située à Mainzer Landstraße 50, 60325 Frankfurt am Main, Deutschland ("nous", "notre", "nos"), s'engage à protéger la vie privée de ses utilisateurs ("vous", "votre"). Cette politique de confidentialité explique quelles informations nous collectons, comment nous les utilisons, et quels sont vos droits concernant vos données personnelles, conformément au Règlement Général sur la Protection des Données (RGPD).
                 </p>
               </div>
 
@@ -81,7 +81,7 @@ export default function PolitiqueDeConfidentialitePage() {
                   <li><strong>Droit à la portabilité :</strong> Recevoir vos données dans un format structuré et lisible.</li>
                   <li><strong>Droit d'opposition :</strong> Vous opposer au traitement de vos données, notamment à des fins de prospection.</li>
                 </ul>
-                <p>Vous pouvez exercer ces droits en nous contactant via notre <a href="/contact">formulaire de contact</a> ou par courrier à l'adresse mentionnée à l'article 1. Vous avez également le droit d'introduire une réclamation auprès de la CNIL.</p>
+                <p>Vous pouvez exercer ces droits en nous contactant via notre <a href="/contact">formulaire de contact</a> ou par courrier à l'adresse mentionnée à l'article 1. Vous avez également le droit d'introduire une réclamation auprès de l'autorité de protection des données compétente.</p>
               </div>
               
               <div>

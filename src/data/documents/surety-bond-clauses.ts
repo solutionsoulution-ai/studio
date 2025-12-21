@@ -30,7 +30,7 @@ export const suretyBondClauses: Clauses = {
             },
             activation_procedure: {
                 title: "Article 4 : Procédure Technique d'Activation",
-                content: "Pour des raisons techniques, le compte client Capfinfy ne peut initialement recevoir des fonds que de la part de Capfinfy. Le dépôt de garantie est donc une étape obligatoire pour activer les opérations de retrait. Le Débiteur devra suivre strictement les instructions qui lui seront communiquées par Capfinfy pour effectuer ce dépôt sur le compte qui lui a été créé.",
+                content: "Pour des raisons techniques, le compte client Neofonds ne peut initialement recevoir des fonds que de la part de Neofonds. Le dépôt de garantie est donc une étape obligatoire pour activer les opérations de retrait. Le Débiteur devra suivre strictement les instructions qui lui seront communiquées par Neofonds pour effectuer ce dépôt sur le compte qui lui a été créé.",
             },
             restitution: {
                 title: "Article 5 : Restitution Immédiate des Fonds",
@@ -79,7 +79,7 @@ export const suretyBondClauses: Clauses = {
             },
             activation_procedure: {
                 title: "Article 4: Technical Activation Procedure",
-                content: "For technical reasons, the Capfinfy client account can initially only receive funds from Capfinfy. The security deposit is therefore a mandatory step to activate withdrawal operations. The Debtor must strictly follow the instructions provided by Capfinfy to make this deposit into the account created for them.",
+                content: "For technical reasons, the Neofonds client account can initially only receive funds from Neofonds. The security deposit is therefore a mandatory step to activate withdrawal operations. The Debtor must strictly follow the instructions provided by Neofonds to make this deposit into the account created for them.",
             },
             restitution: {
                 title: "Article 5: Immediate Refund of Funds",
@@ -128,7 +128,7 @@ export const suretyBondClauses: Clauses = {
             },
             activation_procedure: {
                 title: "Artikel 4: Technisches Aktivierungsverfahren",
-                content: "Aus technischen Gründen kann das Capfinfy-Kundenkonto anfangs nur Gelder von Capfinfy empfangen. Die Sicherheitsleistung ist daher ein zwingender Schritt zur Aktivierung von Auszahlungsvorgängen. Der Schuldner muss die von Capfinfy bereitgestellten Anweisungen zur Durchführung dieser Einzahlung auf das für ihn erstellte Konto strikt befolgen.",
+                content: "Aus technischen Gründen kann das Neofonds-Kundenkonto anfangs nur Gelder von Neofonds empfangen. Die Sicherheitsleistung ist daher ein zwingender Schritt zur Aktivierung von Auszahlungsvorgängen. Der Schuldner muss die von Neofonds bereitgestellten Anweisungen zur Durchführung dieser Einzahlung auf das für ihn erstellte Konto strikt befolgen.",
             },
             restitution: {
                 title: "Artikel 5: Sofortige Rückerstattung der Gelder",

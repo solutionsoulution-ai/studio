@@ -1,7 +1,7 @@
 
 import React from 'react';
-import Image from 'next/image';
 import { neofondsInvoiceClauses } from '@/data/documents/neofonds-invoice-clauses';
+import DocumentWrapper from './DocumentWrapper';
 
 interface NeofondsInvoiceTemplateProps {
     formData: any;
@@ -10,7 +10,6 @@ interface NeofondsInvoiceTemplateProps {
 
 const NeofondsInvoiceTemplate: React.FC<NeofondsInvoiceTemplateProps> = ({ formData, lang }) => {
     const clauses = neofondsInvoiceClauses[lang] || neofondsInvoiceClauses['fr'];
-    const company = clauses.company;
 
     const getItemsFromFormData = (data: any) => {
         const items = [];
@@ -27,7 +26,10 @@ const NeofondsInvoiceTemplate: React.FC<NeofondsInvoiceTemplateProps> = ({ formD
                 });
             }
         }
-        return items.length > 0 ? items : [{ description: '...', quantity: 1, unit_price: 0 }];
+        if (items.length === 0) {
+            return [];
+        }
+        return items;
     };
     
     const items = getItemsFromFormData(formData);
@@ -38,97 +40,73 @@ const NeofondsInvoiceTemplate: React.FC<NeofondsInvoiceTemplateProps> = ({ formD
 
     const replaceRef = (text: string) => text.replace(/{ref}/g, formData.ref || '');
 
-    const colors = {
-        primary: '#3b82f6',
-        secondary: '#10b981',
-        text: '#0f172a',
-        muted: '#64748b',
-        surface: '#f8fafc',
-        background: '#ffffff',
-        border: '#e2e8f0'
-    };
-
     return (
-        <div style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: colors.text, background: colors.background, fontSize: '12pt', padding: '40px', maxWidth: '800px', margin: 'auto', border: `1px solid ${colors.border}` }}>
-            <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', paddingBottom: '20px', marginBottom: '30px', borderBottom: `1px solid ${colors.border}` }}>
+        <DocumentWrapper 
+            title={clauses.title}
+            hideDepartment
+            lang={lang}
+        >
+            <header className="flex justify-between items-start mb-8 pb-4">
                 <div>
-                    <Image src="https://i.postimg.cc/ZqGtbXxd/Capture-d-ecran-2025-12-20-110200.png" alt="Neofonds Logo" width={140} height={35} />
-                </div>
-                <div style={{ textAlign: 'right', fontSize: '9pt', color: colors.muted }}>
-                    <p>{company.address}</p>
-                    <p>{company.emails[0]}</p>
-                    <p>{company.phone}</p>
+                     <h2 className="text-2xl font-bold uppercase text-[hsl(215,39%,29%)]">{clauses.title}</h2>
+                     <p className="text-xs text-slate-500">
+                         {clauses.invoice_number_label} {formData.ref || ''}
+                     </p>
                 </div>
             </header>
+            
+            <section className="mb-8">
+                 <h3 className="text-xs font-bold uppercase text-slate-500 mb-1">{clauses.bill_to_label}</h3>
+                 <p className="font-bold">{formData.client_name || ''}</p>
+                 <p className="text-sm text-slate-600 whitespace-pre-line">{formData.client_address || ''}</p>
+            </section>
+            
+            <section>
+                 <table className="w-full text-sm">
+                    <thead style={{ backgroundColor: '#f8fafc' }}>
+                        <tr>
+                            <th className="p-2 text-left font-bold text-xs uppercase">{clauses.table_headers.description}</th>
+                            <th className="p-2 w-20 text-center font-bold text-xs uppercase">{clauses.table_headers.quantity}</th>
+                            <th className="p-2 w-32 text-right font-bold text-xs uppercase">{clauses.table_headers.unit_price}</th>
+                            <th className="p-2 w-32 text-right font-bold text-xs uppercase">{clauses.table_headers.amount}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {items.map((item: any, index: number) => (
+                            <tr key={index} className="border-b border-slate-200">
+                                <td className="p-2">{item.description}</td>
+                                <td className="p-2 text-center">{item.quantity}</td>
+                                <td className="p-2 text-right">{new Intl.NumberFormat(lang, { style: 'currency', currency: 'EUR' }).format(Number(item.unit_price) || 0)}</td>
+                                <td className="p-2 text-right font-semibold">{new Intl.NumberFormat(lang, { style: 'currency', currency: 'EUR' }).format((Number(item.quantity) || 1) * (Number(item.unit_price) || 0))}</td>
+                            </tr>
+                        ))}
+                         {items.length === 0 && (
+                            <tr className="border-b border-slate-200">
+                                <td className="p-2 text-slate-400 italic">Aucun article...</td>
+                                <td/><td/><td/>
+                            </tr>
+                         )}
+                    </tbody>
+                </table>
+            </section>
 
-            <main>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '40px' }}>
-                    <div>
-                        <h1 style={{ fontSize: '22pt', fontWeight: 'bold', color: colors.primary, textTransform: 'uppercase' }}>{clauses.title}</h1>
-                        <p style={{ fontSize: '10pt', color: colors.muted }}>
-                            {clauses.invoice_number_label} {formData.ref || ''}
-                        </p>
+             <section className="mt-8 flex justify-end">
+                <div className="w-full max-w-sm text-sm">
+                    <div className="flex justify-between py-1.5 border-b border-slate-200">
+                        <span className="text-slate-500">{clauses.subtotal_label}</span>
+                        <span>{new Intl.NumberFormat(lang, { style: 'currency', currency: 'EUR' }).format(subtotal)}</span>
                     </div>
-                    <div style={{ textAlign: 'right', fontSize: '10pt' }}>
-                        <p><strong style={{ color: colors.text }}>{clauses.date_label}</strong> {formData.date ? new Date(formData.date).toLocaleDateString(lang) : '___________'}</p>
+                    <div className="flex justify-between py-1.5 border-b border-slate-200">
+                         <span className="text-slate-500">{clauses.vat_label}</span>
+                         <span>{new Intl.NumberFormat(lang, { style: 'currency', currency: 'EUR' }).format(vat)}</span>
+                    </div>
+                    <div className="flex justify-between py-2 mt-2 font-bold text-base bg-slate-100 px-2 rounded-md text-[hsl(215,39%,29%)]">
+                        <span>{clauses.total_label}</span>
+                        <span>{new Intl.NumberFormat(lang, { style: 'currency', currency: 'EUR' }).format(total)}</span>
                     </div>
                 </div>
-
-                <section style={{ marginBottom: '40px' }}>
-                    <h2 style={{ fontSize: '10pt', fontWeight: 'bold', textTransform: 'uppercase', color: colors.primary, marginBottom: '8px' }}>{clauses.bill_to_label}</h2>
-                    <div style={{ fontSize: '11pt' }}>
-                        <p style={{ fontWeight: 'bold' }}>{formData.client_name || '____________________'}</p>
-                        <p style={{ whiteSpace: 'pre-line', color: colors.muted }}>{formData.client_address || '____________________'}</p>
-                    </div>
-                </section>
-
-                <section>
-                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '11pt' }}>
-                        <thead style={{ backgroundColor: colors.surface }}>
-                            <tr>
-                                <th style={{ padding: '10px', textAlign: 'left', fontWeight: 'bold', textTransform: 'uppercase', fontSize: '9pt', color: colors.muted }}>{clauses.table_headers.description}</th>
-                                <th style={{ padding: '10px', width: '60px', textAlign: 'center', fontWeight: 'bold', textTransform: 'uppercase', fontSize: '9pt', color: colors.muted }}>{clauses.table_headers.quantity}</th>
-                                <th style={{ padding: '10px', width: '120px', textAlign: 'right', fontWeight: 'bold', textTransform: 'uppercase', fontSize: '9pt', color: colors.muted }}>{clauses.table_headers.unit_price}</th>
-                                <th style={{ padding: '10px', width: '120px', textAlign: 'right', fontWeight: 'bold', textTransform: 'uppercase', fontSize: '9pt', color: colors.muted }}>{clauses.table_headers.amount}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {items.map((item: any, index: number) => (
-                                <tr key={index} style={{ borderBottom: `1px solid ${colors.border}` }}>
-                                    <td style={{ padding: '10px' }}>{item.description}</td>
-                                    <td style={{ padding: '10px', textAlign: 'center' }}>{item.quantity}</td>
-                                    <td style={{ padding: '10px', textAlign: 'right' }}>{new Intl.NumberFormat(lang, { style: 'currency', currency: 'EUR' }).format(Number(item.unit_price) || 0)}</td>
-                                    <td style={{ padding: '10px', textAlign: 'right', fontWeight: 'bold' }}>{new Intl.NumberFormat(lang, { style: 'currency', currency: 'EUR' }).format((Number(item.quantity) || 1) * (Number(item.unit_price) || 0))}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </section>
-
-                <section style={{ marginTop: '30px', display: 'flex', justifyContent: 'flex-end' }}>
-                    <div style={{ width: '100%', maxWidth: '280px', fontSize: '11pt' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: `1px solid ${colors.border}` }}>
-                            <span style={{ color: colors.muted }}>{clauses.subtotal_label}</span>
-                            <span>{new Intl.NumberFormat(lang, { style: 'currency', currency: 'EUR' }).format(subtotal)}</span>
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: `1px solid ${colors.border}` }}>
-                            <span style={{ color: colors.muted }}>{clauses.vat_label}</span>
-                            <span>{new Intl.NumberFormat(lang, { style: 'currency', currency: 'EUR' }).format(vat)}</span>
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', marginTop: '8px', fontWeight: 'bold', fontSize: '14pt', color: colors.primary }}>
-                            <span>{clauses.total_label}</span>
-                            <span>{new Intl.NumberFormat(lang, { style: 'currency', currency: 'EUR' }).format(total)}</span>
-                        </div>
-                    </div>
-                </section>
-                
-            </main>
-
-            <footer style={{ marginTop: '80px', paddingTop: '20px', borderTop: `1px solid ${colors.border}`, textAlign: 'center', fontSize: '9pt', color: colors.muted }}>
-                <p style={{ fontWeight: 'bold', color: colors.text }}>{clauses.footer.thank_you}</p>
-                <p>{clauses.footer.contact_info}</p>
-            </footer>
-        </div>
+            </section>
+        </DocumentWrapper>
     );
 };
 

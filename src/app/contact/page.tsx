@@ -1,5 +1,4 @@
 
-
 import SiteHeader from "@/components/site/site-header";
 import SiteFooter from "@/components/site/site-footer";
 import ContactForm from "@/components/site/contact-form";
@@ -30,21 +29,17 @@ export default function ContactPage() {
                     <h2 className="text-2xl font-semibold">Nos Coordonnées</h2>
                     <Card>
                         <CardContent className="p-6 space-y-4 text-muted-foreground">
-                            <a href="mailto:contact@capfinfy.com" className="flex items-center gap-3 group">
+                            <a href="mailto:contact@neofonds.com" className="flex items-center gap-3 group">
                                 <Mail className="w-5 h-5 text-primary"/>
-                                <span className="group-hover:text-primary transition-colors">contact@capfinfy.com</span>
+                                <span className="group-hover:text-primary transition-colors">contact@neofonds.com</span>
                             </a>
-                            <a href="mailto:capfinfy@gmail.com" className="flex items-center gap-3 group">
-                                <Mail className="w-5 h-5 text-primary"/>
-                                <span className="group-hover:text-primary transition-colors">capfinfy@gmail.com</span>
-                            </a>
-                            <a href="tel:+33756986769" className="flex items-center gap-3 group">
+                            <a href="tel:+491632247344" className="flex items-center gap-3 group">
                                 <Phone className="w-5 h-5 text-primary"/>
-                                <span className="group-hover:text-primary transition-colors">+33 7 56 98 67 69</span>
+                                <span className="group-hover:text-primary transition-colors">+49 163 2247344</span>
                             </a>
                             <div className="flex items-center gap-3">
                                 <MapPin className="w-5 h-5 text-primary"/>
-                                <span>Lyon, France</span>
+                                <span>Mainzer Landstraße 50, 60325 Frankfurt am Main, Deutschland</span>
                             </div>
                         </CardContent>
                     </Card>

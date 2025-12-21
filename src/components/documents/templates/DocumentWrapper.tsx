@@ -1,4 +1,6 @@
+
 import React from 'react';
+import Image from 'next/image';
 
 interface DocumentWrapperProps {
   children: React.ReactNode;
@@ -13,15 +15,15 @@ interface DocumentWrapperProps {
 const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, department, docRef, docDate, hideDepartment = false, lang }) => {
   const footerText = {
     fr: {
-      copyright: '© 2025 CAPFINFY. Tous droits réservés.',
+      copyright: '© 2025 Neofonds. Tous droits réservés.',
       confidential: 'Ce document est généré électroniquement et est confidentiel.'
     },
     en: {
-      copyright: '© 2025 CAPFINFY. All rights reserved.',
+      copyright: '© 2025 Neofonds. All rights reserved.',
       confidential: 'This document is electronically generated and is confidential.'
     },
     de: {
-      copyright: '© 2025 CAPFINFY. Alle Rechte vorbehalten.',
+      copyright: '© 2025 Neofonds. Alle Rechte vorbehalten.',
       confidential: 'Dieses Dokument wird elektronisch erstellt und ist vertraulich.'
     }
   };
@@ -32,13 +34,13 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
     <div 
         style={{
             fontFamily: 'Helvetica, Arial, sans-serif',
-            color: 'hsl(224, 71.4%, 4.1%)',
-            background: 'hsl(0, 0%, 100%)',
+            color: '#0f172a',
+            background: '#ffffff',
             fontSize: '12pt',
             padding: '40px',
             maxWidth: '800px',
             margin: 'auto',
-            border: '1px solid hsl(220, 13%, 91%)'
+            border: '1px solid #e2e8f0'
         }}
     >
         <header 
@@ -48,25 +50,25 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
                 alignItems: 'flex-start',
                 paddingBottom: '20px',
                 marginBottom: '30px',
-                borderBottom: '1px solid hsl(220, 13%, 91%)'
+                borderBottom: '1px solid #e2e8f0'
             }}
         >
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span style={{ fontSize: '24pt', fontWeight: 'bold', color: 'hsl(215, 39%, 29%)' }}>Capfinfy</span>
+                <Image src="https://i.postimg.cc/ZqGtbXxd/Capture-d-ecran-2025-12-20-110200.png" alt="Neofonds Logo" width={140} height={35} />
             </div>
-            <div style={{ textAlign: 'right', fontSize: '9pt', color: 'hsl(220, 8.9%, 46.1%)' }}>
-                <p>1 Place de la Bourse, 69002 Lyon, France</p>
-                <p>contact@capfinfy.com</p>
-                <p>www.capfinfy.com</p>
+            <div style={{ textAlign: 'right', fontSize: '9pt', color: '#64748b' }}>
+                <p>Mainzer Landstraße 50, 60325 Frankfurt am Main, Deutschland</p>
+                <p>contact@neofonds.com</p>
+                <p>+49 163 2247344</p>
             </div>
         </header>
 
         <main>
             <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-                 <h1 style={{ fontSize: '20pt', fontWeight: 'bold', color: 'hsl(215, 39%, 29%)', textTransform: 'uppercase' }}>{title}</h1>
-                 {!hideDepartment && <p style={{ fontSize: '10pt', color: 'hsl(220, 8.9%, 46.1%)' }}>{department}</p>}
+                 <h1 style={{ fontSize: '20pt', fontWeight: 'bold', color: '#3b82f6', textTransform: 'uppercase' }}>{title}</h1>
+                 {!hideDepartment && <p style={{ fontSize: '10pt', color: '#64748b' }}>{department}</p>}
                  {(docRef || docDate) && (
-                    <p style={{ fontSize: '9pt', color: 'hsl(220, 8.9%, 46.1%)', marginTop: '4px' }}>
+                    <p style={{ fontSize: '9pt', color: '#64748b', marginTop: '4px' }}>
                         {docRef} {docRef && docDate && '//'} {docDate}
                     </p>
                  )}
@@ -79,13 +81,13 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
             style={{
                 marginTop: '40px',
                 paddingTop: '20px',
-                borderTop: '1px solid hsl(220, 13%, 91%)',
+                borderTop: '1px solid #e2e8f0',
                 textAlign: 'center',
                 fontSize: '9pt',
-                color: 'hsl(220, 8.9%, 46.1%)'
+                color: '#64748b'
             }}
         >
-            <p style={{fontWeight: 'bold', color: 'hsl(224, 71.4%, 4.1%)'}}>{currentFooterText.copyright}</p>
+            <p style={{fontWeight: 'bold', color: '#0f172a'}}>{currentFooterText.copyright}</p>
             <p>{currentFooterText.confidential}</p>
         </footer>
     </div>

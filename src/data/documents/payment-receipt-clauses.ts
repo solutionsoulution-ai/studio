@@ -19,13 +19,13 @@ export const paymentReceiptClauses: Clauses = {
         },
         confirmation: {
             title: "Confirmation",
-            content: "Nous soussignés, Capfinfy, confirmons par la présente avoir reçu la somme susmentionnée. Ce reçu atteste du règlement partiel ou total de la créance référencée. Sauf erreur ou omission, ce paiement solde le montant dû.",
+            content: "Nous soussignés, Neofonds, confirmons par la présente avoir reçu la somme susmentionnée. Ce reçu atteste du règlement partiel ou total de la créance référencée. Sauf erreur ou omission, ce paiement solde le montant dû.",
         },
-        signature_label: "Pour Capfinfy, Service Comptabilité",
+        signature_label: "Pour Neofonds, Service Comptabilité",
         footer: {
             "thank_you": "Nous vous remercions de votre confiance.",
             "contact_info": "Pour toute question, contactez notre service comptabilité à :",
-            "emails": ["contact@capfinfy.com", "capfinfy@gmail.com"]
+            "emails": ["contact@neofonds.com"]
         }
     },
     en: {
@@ -45,13 +45,13 @@ export const paymentReceiptClauses: Clauses = {
         },
         confirmation: {
             title: "Confirmation",
-            content: "We, the undersigned, Capfinfy, hereby confirm receipt of the aforementioned sum. This receipt serves as proof of partial or total settlement of the referenced debt. Barring errors or omissions, this payment settles the amount due.",
+            content: "We, the undersigned, Neofonds, hereby confirm receipt of the aforementioned sum. This receipt serves as proof of partial or total settlement of the referenced debt. Barring errors or omissions, this payment settles the amount due.",
         },
-        signature_label: "For Capfinfy, Accounting Department",
+        signature_label: "For Neofonds, Accounting Department",
         footer: {
             "thank_you": "Thank you for your business.",
             "contact_info": "For any questions, please contact our accounting department at:",
-            "emails": ["contact@capfinfy.com", "capfinfy@gmail.com"]
+            "emails": ["contact@neofonds.com"]
         }
     },
     de: {
@@ -71,13 +71,13 @@ export const paymentReceiptClauses: Clauses = {
         },
         confirmation: {
             title: "Bestätigung",
-            content: "Wir, die Unterzeichner, Capfinfy, bestätigen hiermit den Erhalt des oben genannten Betrags. Dieser Beleg dient als Nachweis für die teilweise oder vollständige Begleichung der angegebenen Forderung. Irrtümer und Auslassungen vorbehalten, begleicht diese Zahlung den fälligen Betrag.",
+            content: "Wir, die Unterzeichner, Neofonds, bestätigen hiermit den Erhalt des oben genannten Betrags. Dieser Beleg dient als Nachweis für die teilweise oder vollständige Begleichung der angegebenen Forderung. Irrtümer und Auslassungen vorbehalten, begleicht diese Zahlung den fälligen Betrag.",
         },
-        signature_label: "Für Capfinfy, Buchhaltung",
+        signature_label: "Für Neofonds, Buchhaltung",
         footer: {
             "thank_you": "Vielen Dank für Ihr Vertrauen.",
             "contact_info": "Bei Fragen wenden Sie sich bitte an unsere Buchhaltung unter:",
-            "emails": ["contact@capfinfy.com", "capfinfy@gmail.com"]
+            "emails": ["contact@neofonds.com"]
         }
     }
 };

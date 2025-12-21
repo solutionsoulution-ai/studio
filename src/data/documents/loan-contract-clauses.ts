@@ -4,12 +4,12 @@ import type { Clauses } from "./languages";
 export const loanContractClauses: Clauses = {
     fr: {
         header: {
-            line1: "Service Financier Européen",
+            line1: "Service Financier",
             line2: "Département des crédits à la consommation • Bureau des Accords de Prêt • Unité de Vérification des Engagements",
         },
         title: "Contrat de Prêt",
         reference: "Contrat N°: {contract_ref}",
-        location_and_date: "Fait à Lyon, le {contract_date}",
+        location_and_date: "Fait à Frankfurt am Main, le {contract_date}",
         parties: {
             title: "Entre les soussignés :",
             lender_label: "Le Prêteur :",
@@ -52,7 +52,7 @@ export const loanContractClauses: Clauses = {
             },
             law: {
                 title: "Article 8 : Droit Applicable et Litiges",
-                content: "Le présent contrat est soumis au droit français. En cas de litige, les parties s'engagent à rechercher une solution amiable. À défaut, le tribunal compétent sera celui du lieu de domicile de l'Emprunteur.",
+                content: "Le présent contrat est soumis au droit allemand. En cas de litige, les parties s'engagent à rechercher une solution amiable. À défaut, le tribunal compétent sera celui du lieu de domicile de l'Emprunteur.",
             },
         },
         signature_preamble: "Fait en deux exemplaires originaux, dont un pour chaque partie.",
@@ -62,12 +62,12 @@ export const loanContractClauses: Clauses = {
     },
     de: {
         header: {
-            line1: "Europäischer Finanzdienstleister",
+            line1: "Finanzdienstleister",
             line2: "Abteilung für Verbraucherkredite • Büro für Darlehensvereinbarungen • Abteilung für die Überprüfung von Verpflichtungen",
         },
         title: "Darlehensvertrag",
         reference: "Vertrag Nr.: {contract_ref}",
-        location_and_date: "Ausgestellt in Lyon, am {contract_date}",
+        location_and_date: "Ausgestellt in Frankfurt am Main, am {contract_date}",
         parties: {
             title: "Zwischen den Unterzeichnern:",
             lender_label: "Der Darlehensgeber:",
@@ -110,7 +110,7 @@ export const loanContractClauses: Clauses = {
             },
             law: {
                 title: "Artikel 8: Anwendbares Recht und Streitigkeiten",
-                content: "Dieser Vertrag unterliegt dem französischen Recht. Im Falle eines Rechtsstreits verpflichten sich die Parteien, eine gütliche Einigung zu suchen. Andernfalls ist das zuständige Gericht das am Wohnsitz des Darlehensnehmers.",
+                content: "Dieser Vertrag unterliegt dem deutschen Recht. Im Falle eines Rechtsstreits verpflichten sich die Parteien, eine gütliche Einigung zu suchen. Andernfalls ist das zuständige Gericht das am Wohnsitz des Darlehensnehmers.",
             },
         },
         signature_preamble: "Ausgefertigt in zwei Originalexemplaren, eines für jede Partei.",

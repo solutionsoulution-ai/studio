@@ -7,6 +7,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { Landmark, Menu, X, ChevronDown, Briefcase, User, Home, Car, Recycle, UserSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import Image from "next/image";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -40,8 +41,7 @@ export default function SiteHeader() {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-screen-2xl items-center">
         <Link href="/" className="mr-6 flex items-center space-x-2">
-          <Landmark className="h-6 w-6 text-primary" />
-          <span className="font-bold sm:inline-block">Capfinfy</span>
+            <Image src="https://i.postimg.cc/ZqGtbXxd/Capture-d-ecran-2025-12-20-110200.png" alt="Neofonds Logo" width={120} height={30} />
         </Link>
         <nav className="hidden lg:flex flex-1 items-center space-x-4 text-sm font-medium">
           <DropdownMenu>
@@ -92,8 +92,7 @@ export default function SiteHeader() {
               <div className="flex h-full flex-col">
                 <div className="flex items-center justify-between border-b p-4">
                   <Link href="/" className="flex items-center space-x-2" onClick={closeMobileMenu}>
-                    <Landmark className="h-6 w-6 text-primary" />
-                    <span className="font-bold">Capfinfy</span>
+                     <Image src="https://i.postimg.cc/ZqGtbXxd/Capture-d-ecran-2025-12-20-110200.png" alt="Neofonds Logo" width={120} height={30} />
                   </Link>
                   <SheetTrigger asChild>
                      <Button variant="ghost" size="icon">
