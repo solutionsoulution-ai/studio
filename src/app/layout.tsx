@@ -4,8 +4,8 @@ import { Toaster } from "@/components/ui/toaster"
 import Script from "next/script";
 
 export const metadata: Metadata = {
-  title: 'Capfinfy - Centre de Prêt',
-  description: 'Solutions de financement rapides et flexibles pour aider votre entreprise à prospérer.',
+  title: 'Neofonds - Générateur de Documents',
+  description: 'Générez des documents financiers professionnels.',
 };
 
 export default function RootLayout({
@@ -21,14 +21,9 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body className="font-body antialiased">
+      <body className="font-body antialiased bg-muted/20">
         {children}
         <Toaster />
-        <div className="gtranslate_wrapper"></div>
-        <Script id="gtranslate-settings">
-          {`window.gtranslateSettings = {"default_language":"fr","native_language_names":true,"detect_browser_language":true,"languages":["fr","es","de","it","el","pt","lv","sk","sl","fi","lt","et"],"wrapper_selector":".gtranslate_wrapper","switcher_horizontal_position":"right"}`}
-        </Script>
-        <Script src="https://cdn.gtranslate.net/widgets/latest/float.js" strategy="lazyOnload" />
       </body>
     </html>
   );
