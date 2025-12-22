@@ -4,7 +4,6 @@ import { amlCertificateClauses } from '@/data/documents/aml-certificate-clauses'
 import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from './DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
-import { FileText, AlertTriangle, ShieldCheck } from 'lucide-react';
 
 interface AmlCertificateTemplateProps {
     formData: any;
@@ -26,6 +25,11 @@ const AmlCertificateTemplate: React.FC<AmlCertificateTemplateProps> = ({ formDat
             .replace(/{transaction_amount_in_words}/g, formData.transaction_amount_in_words || '___________')
             .replace(/{transaction_ref}/g, formData.transaction_ref || '___________');
     };
+    
+    const ShieldCheckIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>;
+    const FileTextIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>;
+    const AlertTriangleIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>;
+
 
     return (
         <DocumentWrapper
@@ -45,7 +49,7 @@ const AmlCertificateTemplate: React.FC<AmlCertificateTemplateProps> = ({ formDat
 
             <section className="space-y-4 text-sm leading-relaxed">
                 <article>
-                    <ArticleHeader title={clauses.articles.declaration.title} icon={<ShieldCheck size={14}/>} />
+                    <ArticleHeader title={clauses.articles.declaration.title} icon={<ShieldCheckIcon />} />
                     <p>{replacePlaceholders(clauses.articles.declaration.content)}</p>
                     <div className="mt-2 border-t border-dashed pt-2">
                         <p className="text-xs font-semibold">{clauses.articles.declaration.origin_label}</p>
@@ -54,12 +58,12 @@ const AmlCertificateTemplate: React.FC<AmlCertificateTemplateProps> = ({ formDat
                 </article>
 
                 <article>
-                    <ArticleHeader title={clauses.articles.commitment.title} icon={<FileText size={14}/>} />
+                    <ArticleHeader title={clauses.articles.commitment.title} icon={<FileTextIcon />} />
                     <p>{replacePlaceholders(clauses.articles.commitment.content)}</p>
                 </article>
 
                 <article className="bg-destructive/10 border-l-4 border-destructive p-3 rounded-r-md">
-                    <ArticleHeader title={clauses.articles.warning.title} icon={<AlertTriangle size={14}/>} className="text-destructive" />
+                    <ArticleHeader title={clauses.articles.warning.title} icon={<AlertTriangleIcon />} className="text-destructive" />
                     <p className="text-xs text-destructive/80">{replacePlaceholders(clauses.articles.warning.content)}</p>
                 </article>
             </section>

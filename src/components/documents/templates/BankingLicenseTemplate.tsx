@@ -2,7 +2,6 @@
 import React from 'react';
 import Image from 'next/image';
 import { bankingLicenseClauses } from '@/data/documents/banking-license-clauses';
-import { ShieldCheck, FileText, BarChart, FileWarning, Banknote, Landmark } from 'lucide-react';
 import DocumentWrapper from './DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
 
@@ -23,6 +22,14 @@ const BankingLicenseTemplate: React.FC<BankingLicenseTemplateProps> = ({ formDat
             .replace(/{ref}/g, formData.ref || '___________')
             .replace(/{issue_date}/g, formData.issue_date ? new Date(formData.issue_date).toLocaleDateString(lang) : '___________');
     };
+    
+    const LandmarkIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>;
+    const FileTextIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>;
+    const BarChartIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" x2="12" y1="20" y2="10"/><line x1="18" x2="18" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="16"/></svg>;
+    const FileWarningIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>;
+    const BanknoteIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>;
+    const ShieldCheckIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>;
+
 
     return (
         <DocumentWrapper
@@ -43,7 +50,7 @@ const BankingLicenseTemplate: React.FC<BankingLicenseTemplateProps> = ({ formDat
                 
                 <p className="text-xs leading-relaxed mb-6">{clauses.intro}</p>
 
-                <ArticleHeader title={clauses.grant_to} icon={<Landmark size={16} />} />
+                <ArticleHeader title={clauses.grant_to} icon={<LandmarkIcon />} />
                 <div className="bg-white p-4 rounded-md border border-slate-200 mb-6">
                     <p className="text-xl font-bold text-center">{clauses.company_name}</p>
                     <p className="text-xs text-slate-500 text-center">{clauses.company_address}</p>
@@ -53,7 +60,7 @@ const BankingLicenseTemplate: React.FC<BankingLicenseTemplateProps> = ({ formDat
 
                 <div className="space-y-4 text-sm mt-8">
                     <article>
-                         <ArticleHeader title={articles.scope.title} icon={<FileText size={16} />}/>
+                         <ArticleHeader title={articles.scope.title} icon={<FileTextIcon />}/>
                          <div className="bg-white p-4 rounded-md border border-slate-200 text-xs space-y-2">
                              <p>{articles.scope.intro}</p>
                              <ul className="list-disc list-inside space-y-1 pl-2">
@@ -64,23 +71,23 @@ const BankingLicenseTemplate: React.FC<BankingLicenseTemplateProps> = ({ formDat
                          </div>
                     </article>
                     <article>
-                        <ArticleHeader title={articles.prudential.title} icon={<BarChart size={16} />}/>
+                        <ArticleHeader title={articles.prudential.title} icon={<BarChartIcon />}/>
                          <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{articles.prudential.content}</p>
                     </article>
                     <article>
-                         <ArticleHeader title={articles.internal_control.title} icon={<FileWarning size={16} />}/>
+                         <ArticleHeader title={articles.internal_control.title} icon={<FileWarningIcon />}/>
                          <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{articles.internal_control.content}</p>
                     </article>
                     <article>
-                         <ArticleHeader title={articles.lcbft.title} icon={<Banknote size={16} />}/>
+                         <ArticleHeader title={articles.lcbft.title} icon={<BanknoteIcon />}/>
                          <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{articles.lcbft.content}</p>
                     </article>
                      <article>
-                         <ArticleHeader title={articles.customer_protection.title} icon={<ShieldCheck size={16} />}/>
+                         <ArticleHeader title={articles.customer_protection.title} icon={<ShieldCheckIcon />}/>
                          <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{articles.customer_protection.content}</p>
                     </article>
                      <article>
-                        <ArticleHeader title={articles.reporting.title} icon={<FileText size={16} />}/>
+                        <ArticleHeader title={articles.reporting.title} icon={<FileTextIcon />}/>
                          <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{articles.reporting.content}</p>
                     </article>
                 </div>
