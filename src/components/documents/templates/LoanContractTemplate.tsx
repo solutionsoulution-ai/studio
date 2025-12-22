@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Image from 'next/image';
 import { loanContractClauses } from '@/data/documents/loan-contract-clauses';
@@ -8,15 +9,16 @@ import { useBrand } from '@/context/BrandContext';
 
 interface LoanContractTemplateProps {
     formData: any;
-    lang: 'fr' | 'en' | 'de';
+    lang: 'fr' | 'en' | 'de' | 'lt';
 }
 
 const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, lang }) => {
     const { companyInfo } = useBrand();
-    const clauses = loanContractClauses[lang] || loanContractClauses['fr'];
+    const clauses = loanContractClauses(companyInfo.city)[lang] || loanContractClauses(companyInfo.city)['fr'];
     const signer = signatureData(companyInfo.brandKey).ceo;
 
     const replacePlaceholders = (text: string) => {
+        if (!text) return '';
         return text
             .replace(/{type_of_loan}/g, formData.type_of_loan || '')
             .replace(/{contract_ref}/g, formData.contract_ref || '')

@@ -31,7 +31,7 @@ const brandData: Record<BrandKey, Omit<CompanyInfo, 'brandKey'>> = {
         phone: "+49 163 2247344",
         legal: "",
         creditWarning: "",
-        logoUrl: "https://i.postimg.cc/PqYp5T7g/neofonds-logo.png"
+        logoUrl: "https://i.postimg.cc/76wJbHLK/Capture-d-ecran-2025-12-20-110200.png"
     },
     finarcy: {
         name: "Finarcy",

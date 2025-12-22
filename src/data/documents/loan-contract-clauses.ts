@@ -1,7 +1,7 @@
 
 import type { Clauses } from "./languages";
 
-export const loanContractClauses: Clauses = {
+export const loanContractClauses = (companyCity: string): Clauses => ({
     fr: {
         header: {
             line1: "Service Financier",
@@ -9,7 +9,7 @@ export const loanContractClauses: Clauses = {
         },
         title: "Contrat de Prêt",
         reference: "Contrat N°: {contract_ref}",
-        location_and_date: "Fait à Frankfurt am Main, le {contract_date}",
+        location_and_date: `Fait à ${companyCity}, le {contract_date}`,
         parties: {
             title: "Entre les soussignés :",
             lender_label: "Le Prêteur :",
@@ -52,7 +52,7 @@ export const loanContractClauses: Clauses = {
             },
             law: {
                 title: "Article 8 : Droit Applicable et Litiges",
-                content: "Le présent contrat est soumis au droit allemand. En cas de litige, les parties s'engagent à rechercher une solution amiable. À défaut, le tribunal compétent sera celui du lieu de domicile de l'Emprunteur.",
+                content: "Le présent contrat est soumis au droit français. En cas de litige, les parties s'engagent à rechercher une solution amiable. À défaut, le tribunal compétent sera celui du lieu de domicile de l'Emprunteur.",
             },
         },
         signature_preamble: "Fait en deux exemplaires originaux, dont un pour chaque partie.",
@@ -67,7 +67,7 @@ export const loanContractClauses: Clauses = {
         },
         title: "Darlehensvertrag",
         reference: "Vertrag Nr.: {contract_ref}",
-        location_and_date: "Ausgestellt in Frankfurt am Main, am {contract_date}",
+        location_and_date: `Ausgestellt in ${companyCity}, am {contract_date}`,
         parties: {
             title: "Zwischen den Unterzeichnern:",
             lender_label: "Der Darlehensgeber:",
@@ -122,7 +122,7 @@ export const loanContractClauses: Clauses = {
         },
         title: "Paskolos sutartis",
         reference: "Sutarties Nr.: {contract_ref}",
-        location_and_date: "Sudaryta Frankfurte prie Maino, {contract_date}",
+        location_and_date: `Sudaryta ${companyCity}, {contract_date}`,
         parties: {
             title: "Tarp pasirašiusiųjų:",
             lender_label: "Paskolos davėjas:",
@@ -165,9 +165,9 @@ export const loanContractClauses: Clauses = {
             },
             law: {
                 title: "8 straipsnis: Taikoma teisė ir ginčai",
-                content: "Šiai sutarčiai taikoma Vokietijos teisė. Ginčo atveju šalys įsipareigoja ieškoti taikaus sprendimo. Priešingu atveju kompetentingas teismas bus Paskolos gavėjo gyvenamosios vietos teismas.",
+                content: "Šiai sutarčiai taikoma Prancūzijos teisė. Ginčo atveju šalys įsipareigoja ieškoti taikaus sprendimo. Priešingu atveju kompetentingas teismas bus Paskolos gavėjo gyvenamosios vietos teismas.",
             },
         },
         signature_preamble: "Sudaryta dviem originaliais egzemplioriais, po vieną kiekvienai šaliai.",
     }
-};
+});
