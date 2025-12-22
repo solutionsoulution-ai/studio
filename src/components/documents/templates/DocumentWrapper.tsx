@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import { useBrand } from '@/context/BrandContext';
 
 interface DocumentWrapperProps {
@@ -44,7 +45,7 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      opacity: 0.1,
+      opacity: 0.08,
       transform: 'rotate(-15deg)',
       color: 'hsl(var(--primary))',
       textAlign: 'center',
@@ -96,7 +97,11 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
             }}
         >
              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <h1 style={{ fontWeight: 'bold', fontSize: '24px' }}>{companyInfo.name}</h1>
+                {companyInfo.logoUrl ? (
+                    <Image src={companyInfo.logoUrl} alt={`${companyInfo.name} logo`} width={140} height={40} style={{ mixBlendMode: 'darken' }} />
+                ) : (
+                    <h1 style={{ fontWeight: 'bold', fontSize: '24px' }}>{companyInfo.name}</h1>
+                )}
              </div>
             <div style={{ textAlign: 'right', fontSize: '9pt', color: '#64748b' }}>
                 <p>{companyInfo.address}</p>

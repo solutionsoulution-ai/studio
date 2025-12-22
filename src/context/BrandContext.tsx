@@ -7,6 +7,7 @@ type BrandKey = 'neofonds' | 'finarcy';
 interface CompanyInfo {
     brandKey: BrandKey;
     name: string;
+    logoUrl?: string; // Optional logo URL
     address: string;
     city: string;
     email: string;
@@ -29,7 +30,8 @@ const brandData: Record<BrandKey, Omit<CompanyInfo, 'brandKey'>> = {
         email: "contact@neofonds.com",
         phone: "+49 163 2247344",
         legal: "",
-        creditWarning: ""
+        creditWarning: "",
+        logoUrl: undefined
     },
     finarcy: {
         name: "Finarcy",
@@ -38,7 +40,8 @@ const brandData: Record<BrandKey, Omit<CompanyInfo, 'brandKey'>> = {
         email: "contact@finarcy.com",
         phone: "+33 6 27 77 57 23",
         legal: "RCS Lyon 841 085 359 | N° SIRET : 800 785 339 00007 | N° ORIAS : 21008519",
-        creditWarning: "Un crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager."
+        creditWarning: "Un crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.",
+        logoUrl: "https://i.postimg.cc/DzRqxk59/Capture-d-ecran-2025-12-22-164917.png"
     }
 };
 
