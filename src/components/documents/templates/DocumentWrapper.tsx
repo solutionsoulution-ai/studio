@@ -1,6 +1,5 @@
-
 import React from 'react';
-import Image from 'next/image';
+import { useBrand } from '@/context/BrandContext';
 
 interface DocumentWrapperProps {
   children: React.ReactNode;
@@ -13,17 +12,19 @@ interface DocumentWrapperProps {
 }
 
 const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, department, docRef, docDate, hideDepartment = false, lang }) => {
+  const { companyInfo, brand } = useBrand();
+
   const footerText = {
     fr: {
-      copyright: '© 2025 Neofonds. Tous droits réservés.',
+      copyright: `© ${new Date().getFullYear()} ${companyInfo.name}. Tous droits réservés.`,
       confidential: 'Ce document est généré électroniquement et est confidentiel.'
     },
     en: {
-      copyright: '© 2025 Neofonds. All rights reserved.',
+      copyright: `© ${new Date().getFullYear()} ${companyInfo.name}. All rights reserved.`,
       confidential: 'This document is electronically generated and is confidential.'
     },
     de: {
-      copyright: '© 2025 Neofonds. Alle Rechte vorbehalten.',
+      copyright: `© ${new Date().getFullYear()} ${companyInfo.name}. Alle Rechte vorbehalten.`,
       confidential: 'Dieses Dokument wird elektronisch erstellt und ist vertraulich.'
     }
   };
@@ -43,7 +44,7 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      opacity: 0.15,
+      opacity: 0.1,
       transform: 'rotate(-15deg)',
       color: 'hsl(var(--primary))',
       textAlign: 'center',
@@ -55,7 +56,7 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
         fontSize: '14px',
         lineHeight: '1.2',
         textTransform: 'uppercase'
-      }}>Neofonds GmbH</div>
+      }}>{companyInfo.name}</div>
       <div style={{
         height: '2px',
         width: '50%',
@@ -65,7 +66,7 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
       <div style={{
         fontSize: '9px',
         lineHeight: '1.1',
-      }}>Frankfurt am Main</div>
+      }}>{companyInfo.city}</div>
     </div>
   );
 
@@ -77,7 +78,7 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
             background: '#ffffff',
             fontSize: '12pt',
             padding: '40px',
-            maxWidth: '794px',
+            width: '794px',
             margin: 'auto',
             border: '1px solid #e2e8f0',
             position: 'relative'
@@ -94,19 +95,19 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
                 borderBottom: '1px solid #e2e8f0'
             }}
         >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <Image src="https://i.postimg.cc/ZqGtbXxd/Capture-d-ecran-2025-12-20-110200.png" alt="Neofonds Logo" width={140} height={35} />
-            </div>
+             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <h1 style={{ fontWeight: 'bold', fontSize: '24px' }}>{companyInfo.name}</h1>
+             </div>
             <div style={{ textAlign: 'right', fontSize: '9pt', color: '#64748b' }}>
-                <p>Mainzer Landstraße 50, 60325 Frankfurt am Main, Deutschland</p>
-                <p>contact@neofonds.com</p>
-                <p>+49 163 2247344</p>
+                <p>{companyInfo.address}</p>
+                <p>{companyInfo.email}</p>
+                <p>{companyInfo.phone}</p>
             </div>
         </header>
 
         <main>
             <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-                 <h1 style={{ fontSize: '20pt', fontWeight: 'bold', color: 'hsl(var(--primary))', textTransform: 'uppercase' }}>{title}</h1>
+                 <h2 style={{ fontSize: '20pt', fontWeight: 'bold', color: 'hsl(var(--primary))', textTransform: 'uppercase' }}>{title}</h2>
                  {!hideDepartment && <p style={{ fontSize: '10pt', color: '#64748b' }}>{department}</p>}
                  {(docRef || docDate) && (
                     <p style={{ fontSize: '9pt', color: '#64748b', marginTop: '4px' }}>
@@ -130,6 +131,8 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
         >
             <p style={{fontWeight: 'bold', color: '#0f172a'}}>{currentFooterText.copyright}</p>
             <p>{currentFooterText.confidential}</p>
+            <p className="mt-2 text-xs">{companyInfo.legal}</p>
+            <p className="font-bold text-xs mt-1">{companyInfo.creditWarning}</p>
         </footer>
     </div>
   );

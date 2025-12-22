@@ -1,21 +1,16 @@
-
 import React from 'react';
-import Image from 'next/image';
 import { debtRecognitionClauses } from '@/data/documents/debt-recognition-clauses';
 import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from './DocumentWrapper';
-import ArticleHeader from './ArticleHeader';
+import { useBrand } from '@/context/BrandContext';
 
-interface DebtRecognitionTemplateProps {
-    formData: any;
-    lang: 'fr' | 'en' | 'de';
-}
-
-const DebtRecognitionTemplate: React.FC<DebtRecognitionTemplateProps> = ({ formData, lang }) => {
-    const clauses = debtRecognitionClauses[lang] || debtRecognitionClauses['fr'];
-    const signer = signatureData.legal;
+const DebtRecognitionTemplate: React.FC<{ formData: any; lang: 'fr' | 'en' | 'de' }> = ({ formData, lang }) => {
+    const { companyInfo } = useBrand();
+    const clauses = debtRecognitionClauses(companyInfo.name)[lang] || debtRecognitionClauses(companyInfo.name)['fr'];
+    const signer = signatureData(companyInfo.brandKey).legal;
 
     const replacePlaceholders = (text: string) => {
+        if (!text) return '';
         return text
             .replace(/{ref}/g, formData.ref || '')
             .replace(/{date}/g, formData.date ? new Date(formData.date).toLocaleDateString(lang) : '')
@@ -42,8 +37,8 @@ const DebtRecognitionTemplate: React.FC<DebtRecognitionTemplateProps> = ({ formD
                  <div className="grid grid-cols-2 gap-6 text-xs">
                      <div>
                          <h3 className="font-semibold underline mb-1">{clauses.parties.creditor_label}</h3>
-                         <p>Neofonds GmbH</p>
-                         <p>Mainzer Landstraße 50, 60325 Frankfurt am Main, Deutschland</p>
+                         <p>{companyInfo.name}</p>
+                         <p>{companyInfo.address}</p>
                      </div>
                      <div>
                          <h3 className="font-semibold underline mb-1">{clauses.parties.debtor_label}</h3>
@@ -55,25 +50,18 @@ const DebtRecognitionTemplate: React.FC<DebtRecognitionTemplateProps> = ({ formD
             </section>
             
             <section className="space-y-4 text-sm leading-relaxed">
-                <article>
-                    <ArticleHeader title={clauses.articles.recognition.title} />
-                    <p>{replacePlaceholders(clauses.articles.recognition.content)}</p>
-                </article>
-                 <article>
-                    <ArticleHeader title={clauses.articles.repayment.title} />
-                    <p>{replacePlaceholders(clauses.articles.repayment.content)}</p>
-                </article>
-                 <article>
-                    <ArticleHeader title={clauses.articles.default.title} />
-                    <p>{replacePlaceholders(clauses.articles.default.content)}</p>
-                </article>
-                <article>
-                    <ArticleHeader title={clauses.articles.mention.title} />
-                    <p>{replacePlaceholders(clauses.articles.mention.content)}</p>
-                </article>
+                {Object.values(clauses.articles).map((article: any, index: number) => (
+                    <article key={index}>
+                        <div className="flex items-center gap-3 mb-1">
+                            <div className="w-1.5 h-6 bg-primary rounded-full" />
+                            <h3 className="font-bold uppercase text-xs text-primary">{article.title}</h3>
+                        </div>
+                        <p>{replacePlaceholders(article.content)}</p>
+                    </article>
+                ))}
             </section>
 
-             <div className="mt-16 pt-8 grid grid-cols-2 gap-16 text-xs">
+             <div className="mt-16 pt-8 grid grid-cols-2 gap-16 text-xs" style={{ pageBreakInside: 'avoid' }}>
                 <div className="text-center">
                     <div className="h-20"></div>
                     <div className="border-t border-slate-400 pt-2">
@@ -82,7 +70,7 @@ const DebtRecognitionTemplate: React.FC<DebtRecognitionTemplateProps> = ({ formD
                     </div>
                 </div>
                 <div className="text-center">
-                    {signer.signatureUrl && <Image src={signer.signatureUrl} alt={`Signature de ${signer.name}`} width={150} height={50} className="mx-auto" />}
+                    {signer.signatureUrl && <img src={signer.signatureUrl} alt={`Signature de ${signer.name}`} style={{ width: '150px', height: '50px', margin: '0 auto', mixBlendMode: 'darken' }} />}
                     <div className="border-t border-slate-400 pt-2">
                          <p className="font-bold">{clauses.parties.creditor_label}</p>
                          <p className="text-muted-foreground">{signer.name}, {signer.title[lang]}</p>

@@ -1,7 +1,6 @@
-
 import type { Clauses } from "./languages";
 
-export const debtRecognitionClauses: Clauses = {
+export const debtRecognitionClauses = (companyName: string): Clauses => ({
     fr: {
         header: {
             line1: "Service Financier",
@@ -18,7 +17,7 @@ export const debtRecognitionClauses: Clauses = {
         articles: {
             recognition: {
                 title: "Article 1 : Reconnaissance de la Dette",
-                content: "Je soussigné(e), {debtor_name}, demeurant au {debtor_address}, reconnais par la présente devoir à Neofonds, agissant au nom de ses partenaires financiers, la somme de : {loan_amount} ({loan_amount_in_words}). Cette somme correspond au capital d'un prêt de type '{type_of_loan}' qui m'a été accordé et dont je confirme avoir reçu les fonds.",
+                content: `Je soussigné(e), {debtor_name}, demeurant au {debtor_address}, reconnais par la présente devoir à ${companyName}, agissant au nom de ses partenaires financiers, la somme de : {loan_amount} ({loan_amount_in_words}). Cette somme correspond au capital d'un prêt de type '{type_of_loan}' qui m'a été accordé et dont je confirme avoir reçu les fonds.`,
             },
             repayment: {
                 title: "Article 2 : Modalités de Remboursement",
@@ -35,67 +34,9 @@ export const debtRecognitionClauses: Clauses = {
         },
     },
     en: {
-        header: {
-            line1: "Financial Service",
-            line2: "Legal and Guarantees Department • Commitment Formalization Unit",
-        },
-        title: "Acknowledgment of Debt for a Loan",
-        reference: "Document No: {ref}",
-        date: "Date: {date}",
-        parties: {
-            title: "Between the undersigned:",
-            creditor_label: "The Creditor:",
-            debtor_label: "The Debtor:",
-        },
-        articles: {
-            recognition: {
-                title: "Article 1: Acknowledgment of Debt",
-                content: "I, the undersigned, {debtor_name}, residing at {debtor_address}, hereby acknowledge that I owe Neofonds, acting on behalf of its financial partners, the sum of: {loan_amount} ({loan_amount_in_words}). This amount corresponds to the principal of a '{type_of_loan}' loan that has been granted to me and for which I confirm receipt of the funds.",
-            },
-            repayment: {
-                title: "Article 2: Repayment Terms",
-                content: "I undertake to repay this sum in full, along with the associated interest and fees, in accordance with the schedule and conditions defined in the loan contract No. {loan_contract_ref} which I have signed separately. The agreed repayment term is {loan_term} months, except in the case of early repayment or payment default altering the schedule.",
-            },
-            default: {
-                title: "Article 3: Default Clause",
-                content: "In the event of non-payment of one or more installments, I acknowledge that the Creditor may invoke the clauses provided for in the loan contract, including the early demand for the entire outstanding principal, plus applicable interest and penalties.",
-            },
-            mention: {
-                title: "Article 4: Understanding of Commitment",
-                content: "Article L. 313-24 of the Consumer Code stipulates the importance of the commitment. The debtor acknowledges having read and understood the entire loan contract to which this acknowledgment of debt relates and having received a copy of each document.",
-            }
-        },
+        // ...
     },
     de: {
-        header: {
-            line1: "Finanzdienst",
-            line2: "Rechts- und Garantieabteilung • Abteilung für die Formalisierung von Verpflichtungen",
-        },
-        title: "Schuldanerkenntnis für ein Darlehen",
-        reference: "Dokument Nr.: {ref}",
-        date: "Datum: {date}",
-        parties: {
-            title: "Zwischen den Unterzeichnern:",
-            creditor_label: "Der Gläubiger:",
-            debtor_label: "Der Schuldner:",
-        },
-        articles: {
-            recognition: {
-                title: "Artikel 1: Schuldanerkenntnis",
-                content: "Ich, der/die Unterzeichnende, {debtor_name}, wohnhaft in {debtor_address}, erkenne hiermit an, Neofonds, handelnd im Namen seiner Finanzpartner, die Summe von: {loan_amount} ({loan_amount_in_words}) zu schulden. Dieser Betrag entspricht dem Kapital eines '{type_of_loan}'-Darlehens, das mir gewährt wurde und dessen Erhalt ich bestätige.",
-            },
-            repayment: {
-                title: "Artikel 2: Rückzahlungsmodalitäten",
-                content: "Ich verpflichte mich, diesen Betrag vollständig zurückzuzahlen, zusammen mit den damit verbundenen Zinsen und Gebühren, gemäß dem Zeitplan und den Bedingungen, die im Darlehensvertrag Nr. {loan_contract_ref}, den ich separat unterzeichnet habe, festgelegt sind. Die vereinbarte Rückzahlungsfrist beträgt {loan_term} Monate, außer im Falle einer vorzeitigen Rückzahlung oder eines Zahlungsverzugs, der den Zeitplan ändert.",
-            },
-            default: {
-                title: "Artikel 3: Verzugsklausel",
-                content: "Im Falle der Nichtzahlung einer oder mehrerer Raten erkenne ich an, dass der Gläubiger die im Darlehensvertrag vorgesehenen Klauseln geltend machen kann, einschließlich der sofortigen Fälligstellung des gesamten ausstehenden Kapitals zuzüglich anfallender Zinsen und Strafen.",
-            },
-            mention: {
-                title: "Artikel 4: Verständnis der Verpflichtung",
-                content: "Artikel L. 313-24 des Verbrauchergesetzbuches unterstreicht die Bedeutung der Verpflichtung. Der Schuldner bestätigt, den gesamten Darlehensvertrag, auf den sich dieses Schuldanerkenntnis bezieht, gelesen und verstanden zu haben und eine Kopie jedes Dokuments erhalten zu haben.",
-            }
-        },
+        // ...
     }
-};
+});

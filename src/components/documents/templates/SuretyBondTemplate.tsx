@@ -1,19 +1,13 @@
-
 import React from 'react';
-import Image from 'next/image';
 import { suretyBondClauses } from '@/data/documents/surety-bond-clauses';
 import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from './DocumentWrapper';
-import ArticleHeader from './ArticleHeader';
+import { useBrand } from '@/context/BrandContext';
 
-interface SuretyBondTemplateProps {
-    formData: any;
-    lang: 'fr' | 'en' | 'de';
-}
-
-const SuretyBondTemplate: React.FC<SuretyBondTemplateProps> = ({ formData, lang }) => {
-    const clauses = suretyBondClauses[lang] || suretyBondClauses['fr'];
-    const signer = signatureData.legal;
+const SuretyBondTemplate: React.FC<{ formData: any; lang: 'fr' | 'en' | 'de' }> = ({ formData, lang }) => {
+    const { companyInfo } = useBrand();
+    const clauses = suretyBondClauses(companyInfo.name)[lang] || suretyBondClauses(companyInfo.name)['fr'];
+    const signer = signatureData(companyInfo.brandKey).legal;
 
     const replacePlaceholders = (text: string) => {
         if (!text) return '';
@@ -44,8 +38,8 @@ const SuretyBondTemplate: React.FC<SuretyBondTemplateProps> = ({ formData, lang 
                  <div className="grid grid-cols-2 gap-6 text-xs">
                      <div>
                          <h3 className="font-semibold underline mb-1">{clauses.parties.creditor_label}</h3>
-                         <p>Neofonds GmbH</p>
-                         <p>Mainzer Landstraße 50, 60325 Frankfurt am Main, Deutschland</p>
+                         <p>{companyInfo.name}</p>
+                         <p>{companyInfo.address}</p>
                      </div>
                      <div>
                          <h3 className="font-semibold underline mb-1">{clauses.parties.debtor_label}</h3>
@@ -58,7 +52,10 @@ const SuretyBondTemplate: React.FC<SuretyBondTemplateProps> = ({ formData, lang 
 
             <section className="space-y-3 text-sm leading-relaxed">
                 <article>
-                    <ArticleHeader title={clauses.articles.object.title} />
+                    <div className="flex items-center gap-3 mb-1">
+                        <div className="w-1.5 h-6 bg-primary rounded-full" />
+                        <h3 className="font-bold uppercase text-xs text-primary">{clauses.articles.object.title}</h3>
+                    </div>
                     <p className="text-xs">{replacePlaceholders(clauses.articles.object.content)}</p>
                      <ul className="text-xs bg-muted p-2 rounded-md mt-1 space-y-0.5">
                         <li>Numéro du contrat de prêt : {formData.loan_contract_ref || ''}</li>
@@ -69,41 +66,56 @@ const SuretyBondTemplate: React.FC<SuretyBondTemplateProps> = ({ formData, lang 
                 </article>
                 
                 <article>
-                    <ArticleHeader title={clauses.articles.scope.title} />
+                    <div className="flex items-center gap-3 mb-1">
+                        <div className="w-1.5 h-6 bg-primary rounded-full" />
+                        <h3 className="font-bold uppercase text-xs text-primary">{clauses.articles.scope.title}</h3>
+                    </div>
                     <p className="text-xs">{replacePlaceholders(clauses.articles.scope.content)}</p>
                 </article>
 
                 <article>
-                    <ArticleHeader title={clauses.articles.deposit_principle.title} />
+                    <div className="flex items-center gap-3 mb-1">
+                        <div className="w-1.5 h-6 bg-primary rounded-full" />
+                        <h3 className="font-bold uppercase text-xs text-primary">{clauses.articles.deposit_principle.title}</h3>
+                    </div>
                     <p className="text-xs">{replacePlaceholders(clauses.articles.deposit_principle.content)}</p>
                 </article>
 
                 <article>
-                    <ArticleHeader title={clauses.articles.activation_procedure.title} />
+                    <div className="flex items-center gap-3 mb-1">
+                        <div className="w-1.5 h-6 bg-primary rounded-full" />
+                        <h3 className="font-bold uppercase text-xs text-primary">{clauses.articles.activation_procedure.title}</h3>
+                    </div>
                     <p className="text-xs">{replacePlaceholders(clauses.articles.activation_procedure.content)}</p>
                 </article>
                 
                 <div style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
                     <article>
-                        <ArticleHeader title={clauses.articles.restitution.title} />
+                        <div className="flex items-center gap-3 mb-1">
+                            <div className="w-1.5 h-6 bg-primary rounded-full" />
+                            <h3 className="font-bold uppercase text-xs text-primary">{clauses.articles.restitution.title}</h3>
+                        </div>
                         <p className="text-xs">{replacePlaceholders(clauses.articles.restitution.content)}</p>
                     </article>
 
                     <article className='mt-3'>
-                        <ArticleHeader title={clauses.articles.solidarity.title} />
+                        <div className="flex items-center gap-3 mb-1">
+                            <div className="w-1.5 h-6 bg-primary rounded-full" />
+                            <h3 className="font-bold uppercase text-xs text-primary">{clauses.articles.solidarity.title}</h3>
+                        </div>
                         <p className="text-xs">{replacePlaceholders(clauses.articles.solidarity.content)}</p>
                     </article>
                 </div>
 
-
-                {/* This is a visual separator that acts as a good page-break point */}
                 <div className="py-4">
                     <hr style={{ pageBreakAfter: 'always', visibility: 'hidden' }} />
                 </div>
 
-
                 <article className="border-l-4 border-destructive bg-destructive/10 p-3 rounded-r-md">
-                    <ArticleHeader title={clauses.articles.mention.title} className="text-destructive" />
+                    <div className="flex items-center gap-3 mb-1 text-destructive">
+                        <div className="w-1.5 h-6 bg-destructive rounded-full" />
+                        <h3 className="font-bold uppercase text-xs">{clauses.articles.mention.title}</h3>
+                    </div>
                     <p className="text-xs italic text-destructive mb-1">{clauses.articles.mention.instruction}</p>
                     <div className="border border-dashed border-slate-400 p-2 min-h-[40px] bg-background">
                        <p className="text-xs">{replacePlaceholders(clauses.articles.mention.content)}</p>
@@ -111,7 +123,10 @@ const SuretyBondTemplate: React.FC<SuretyBondTemplateProps> = ({ formData, lang 
                 </article>
 
                  <article>
-                    <ArticleHeader title={clauses.articles.information.title} />
+                    <div className="flex items-center gap-3 mb-1">
+                        <div className="w-1.5 h-6 bg-primary rounded-full" />
+                        <h3 className="font-bold uppercase text-xs text-primary">{clauses.articles.information.title}</h3>
+                    </div>
                     <p className="text-xs">{replacePlaceholders(clauses.articles.information.content)}</p>
                 </article>
             </section>
@@ -125,7 +140,7 @@ const SuretyBondTemplate: React.FC<SuretyBondTemplateProps> = ({ formData, lang 
                     </div>
                 </div>
                 <div className="text-center">
-                    {signer.signatureUrl && <Image src={signer.signatureUrl} alt={`Signature de ${signer.name}`} width={120} height={40} className="mx-auto" />}
+                    {signer.signatureUrl && <img src={signer.signatureUrl} alt={`Signature de ${signer.name}`} style={{ width: '120px', height: '40px', margin: '0 auto', mixBlendMode: 'darken' }} />}
                     <div className="border-t border-slate-400 pt-2">
                          <p className="font-bold">{clauses.parties.creditor_label}</p>
                          <p className="text-muted-foreground">{signer.name}, {signer.title[lang]}</p>

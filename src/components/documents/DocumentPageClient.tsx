@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState } from 'react';
 import DocumentGenerator, { DocumentGeneratorContext } from "@/components/documents/DocumentGenerator";
@@ -16,6 +15,7 @@ import BrokerageAuthorizationTemplate from '@/components/documents/templates/Bro
 import NeofondsReceiptTemplate from './templates/NeofondsReceiptTemplate';
 import NeofondsInvoiceTemplate from './templates/NeofondsInvoiceTemplate';
 import AmlCertificateTemplate from './templates/AmlCertificateTemplate';
+import { useBrand } from '@/context/BrandContext';
 
 const documentTemplates: { [key: string]: React.FC<any> } = {
   'reconnaissance-de-dette': DebtRecognitionTemplate,
@@ -35,6 +35,7 @@ const documentTemplates: { [key: string]: React.FC<any> } = {
 export default function DocumentPageClient({ slug }: { slug: string }) {
   const [formData, setFormData] = useState({});
   const [lang, setLang] = useState<Language>('fr');
+  const { brand } = useBrand(); // Consume brand context
 
   const TemplateComponent = documentTemplates[slug];
 
