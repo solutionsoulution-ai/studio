@@ -2,7 +2,6 @@
 "use client";
 
 import { useState } from 'react';
-import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
 export function usePDFGenerator() {
@@ -21,44 +20,25 @@ export function usePDFGenerator() {
         setIsLoading(true);
 
         try {
-            const canvas = await html2canvas(input, {
-                scale: 2, // High resolution capture
-                useCORS: true,
-                logging: false,
-                windowHeight: input.scrollHeight, // Capture full height
-                scrollY: -window.scrollY,
-            });
-            
-            // Use JPEG with high quality for a good balance of size and clarity
-            const imgData = canvas.toDataURL('image/jpeg', 0.95);
-
             const pdf = new jsPDF({
-                orientation: 'portrait',
+                orientation: 'p',
                 unit: 'pt',
                 format: 'a4',
+                putOnlyUsedFonts: true,
+                floatPrecision: 16
             });
 
-            const pdfWidth = pdf.internal.pageSize.getWidth();
-            const pdfHeight = pdf.internal.pageSize.getHeight();
-            const canvasWidth = canvas.width;
-            const canvasHeight = canvas.height;
-            const ratio = canvasWidth / pdfWidth;
-            const imgHeight = canvasHeight / ratio;
-
-            let heightLeft = imgHeight;
-            let position = 0;
-
-            pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, imgHeight);
-            heightLeft -= pdfHeight;
-
-            while (heightLeft > 0) {
-                position = heightLeft - imgHeight;
-                pdf.addPage();
-                pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, imgHeight);
-                heightLeft -= pdfHeight;
-            }
-
-            pdf.save(fileName);
+            await pdf.html(input, {
+                callback: function (doc) {
+                    doc.save(fileName);
+                },
+                x: 0,
+                y: 0,
+                autoPaging: 'text',
+                width: pdf.internal.pageSize.getWidth(),
+                windowWidth: input.scrollWidth,
+                margin: [40, 40, 40, 40]
+            });
 
         } catch (error) {
             console.error("Error generating PDF:", error);
