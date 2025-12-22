@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { debtRecognitionClauses } from '@/data/documents/debt-recognition-clauses';
 import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from './DocumentWrapper';
-import { Landmark } from 'lucide-react';
+import ArticleHeader from './ArticleHeader';
 
 interface DebtRecognitionTemplateProps {
     formData: any;
@@ -38,12 +38,12 @@ const DebtRecognitionTemplate: React.FC<DebtRecognitionTemplateProps> = ({ formD
             lang={lang}
         >
             <section className="mb-6">
-                 <h2 className="text-sm font-bold uppercase text-[hsl(215,39%,29%)] mb-3">{clauses.parties.title}</h2>
+                 <h2 className="text-sm font-bold uppercase text-primary mb-3">{clauses.parties.title}</h2>
                  <div className="grid grid-cols-2 gap-6 text-xs">
                      <div>
                          <h3 className="font-semibold underline mb-1">{clauses.parties.creditor_label}</h3>
-                         <p>Capfinfy</p>
-                         <p>1 Place de la Bourse, 69002 Lyon, France</p>
+                         <p>Neofonds GmbH</p>
+                         <p>Mainzer Landstraße 50, 60325 Frankfurt am Main, Deutschland</p>
                      </div>
                      <div>
                          <h3 className="font-semibold underline mb-1">{clauses.parties.debtor_label}</h3>
@@ -56,19 +56,19 @@ const DebtRecognitionTemplate: React.FC<DebtRecognitionTemplateProps> = ({ formD
             
             <section className="space-y-4 text-sm leading-relaxed">
                 <article>
-                    <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{clauses.articles.recognition.title}</h3>
+                    <ArticleHeader title={clauses.articles.recognition.title} />
                     <p>{replacePlaceholders(clauses.articles.recognition.content)}</p>
                 </article>
                  <article>
-                    <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{clauses.articles.repayment.title}</h3>
+                    <ArticleHeader title={clauses.articles.repayment.title} />
                     <p>{replacePlaceholders(clauses.articles.repayment.content)}</p>
                 </article>
                  <article>
-                    <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{clauses.articles.default.title}</h3>
+                    <ArticleHeader title={clauses.articles.default.title} />
                     <p>{replacePlaceholders(clauses.articles.default.content)}</p>
                 </article>
                 <article>
-                    <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{clauses.articles.mention.title}</h3>
+                    <ArticleHeader title={clauses.articles.mention.title} />
                     <p>{replacePlaceholders(clauses.articles.mention.content)}</p>
                 </article>
             </section>
@@ -78,14 +78,14 @@ const DebtRecognitionTemplate: React.FC<DebtRecognitionTemplateProps> = ({ formD
                     <div className="h-20"></div>
                     <div className="border-t border-slate-400 pt-2">
                         <p className="font-bold">{clauses.parties.debtor_label}</p>
-                        <p className="text-[hsl(220,8.9%,46.1%)]">Lu et approuvé</p>
+                        <p className="text-muted-foreground">Lu et approuvé</p>
                     </div>
                 </div>
                 <div className="text-center">
                     {signer.signatureUrl && <Image src={signer.signatureUrl} alt={`Signature de ${signer.name}`} width={150} height={50} className="mx-auto" />}
                     <div className="border-t border-slate-400 pt-2">
                          <p className="font-bold">{clauses.parties.creditor_label}</p>
-                         <p className="text-[hsl(220,8.9%,46.1%)]">{signer.name}, {signer.title[lang]}</p>
+                         <p className="text-muted-foreground">{signer.name}, {signer.title[lang]}</p>
                     </div>
                 </div>
             </div>

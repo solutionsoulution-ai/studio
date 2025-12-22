@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { eligibilityCertificateClauses } from '@/data/documents/eligibility-certificate-clauses';
 import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from './DocumentWrapper';
+import ArticleHeader from './ArticleHeader';
 
 interface EligibilityCertificateTemplateProps {
     formData: any;
@@ -37,8 +38,8 @@ const EligibilityCertificateTemplate: React.FC<EligibilityCertificateTemplatePro
             lang={lang}
         >
             <section className="mb-6">
-                 <h2 className="text-sm font-bold uppercase text-[hsl(215,39%,29%)] mb-3">{clauses.beneficiary.title}</h2>
-                 <div className="bg-slate-100 p-3 rounded-md text-xs">
+                 <h2 className="text-sm font-bold uppercase text-primary mb-3">{clauses.beneficiary.title}</h2>
+                 <div className="bg-muted p-3 rounded-md text-xs">
                      <p>Nom: {formData.beneficiary_name || ''}</p>
                      <p>Adresse: {formData.beneficiary_address || ''}</p>
                      <p>ID: {formData.beneficiary_id || ''}</p>
@@ -47,20 +48,20 @@ const EligibilityCertificateTemplate: React.FC<EligibilityCertificateTemplatePro
             
             <section className="space-y-4 text-sm leading-relaxed">
                 <article>
-                    <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{clauses.articles.object.title}</h3>
+                    <ArticleHeader title={clauses.articles.object.title} />
                     <p>{replacePlaceholders(clauses.articles.object.content)}</p>
-                    <div className="my-4 text-center bg-slate-100 p-4 rounded-md">
-                        <p className="uppercase text-xs text-[hsl(220,8.9%,46.1%)]">{clauses.articles.object.amount_label}</p>
-                        <p className="font-bold text-lg text-[hsl(215,39%,29%)]">{replacePlaceholders('{max_amount}')}</p>
+                    <div className="my-4 text-center bg-muted p-4 rounded-md">
+                        <p className="uppercase text-xs text-muted-foreground">{clauses.articles.object.amount_label}</p>
+                        <p className="font-bold text-lg text-primary">{replacePlaceholders('{max_amount}')}</p>
                         <p className="italic text-xs">({replacePlaceholders('{max_amount_in_words}')})</p>
                     </div>
                 </article>
                  <article>
-                    <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{clauses.articles.scope.title}</h3>
+                    <ArticleHeader title={clauses.articles.scope.title} />
                     <p>{replacePlaceholders(clauses.articles.scope.content)}</p>
                 </article>
                  <article>
-                    <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{clauses.articles.validity.title}</h3>
+                    <ArticleHeader title={clauses.articles.validity.title} />
                     <p>{replacePlaceholders(clauses.articles.validity.content)}</p>
                 </article>
             </section>
@@ -70,7 +71,7 @@ const EligibilityCertificateTemplate: React.FC<EligibilityCertificateTemplatePro
                     {signer.signatureUrl && <Image src={signer.signatureUrl} alt={`Signature de ${signer.name}`} width={150} height={50} className="mx-auto" />}
                     <div className="border-t border-slate-400 pt-2 mt-2 text-xs">
                          <p className="font-bold">{signer.name}</p>
-                         <p className="text-[hsl(220,8.9%,46.1%)]">{signer.title[lang]}</p>
+                         <p className="text-muted-foreground">{signer.title[lang]}</p>
                     </div>
                 </div>
             </div>

@@ -3,7 +3,8 @@ import React from 'react';
 import { amlCertificateClauses } from '@/data/documents/aml-certificate-clauses';
 import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from './DocumentWrapper';
-import { Landmark, FileText, AlertTriangle, ShieldCheck } from 'lucide-react';
+import ArticleHeader from './ArticleHeader';
+import { FileText, AlertTriangle, ShieldCheck } from 'lucide-react';
 
 interface AmlCertificateTemplateProps {
     formData: any;
@@ -35,8 +36,8 @@ const AmlCertificateTemplate: React.FC<AmlCertificateTemplateProps> = ({ formDat
             lang={lang}
         >
             <section className="mb-6">
-                <h2 className="text-sm font-bold uppercase text-[hsl(215,39%,29%)] mb-3">{clauses.declarer.title}</h2>
-                <div className="bg-slate-100 p-3 rounded-md text-xs">
+                <h2 className="text-sm font-bold uppercase text-primary mb-3">{clauses.declarer.title}</h2>
+                <div className="bg-muted p-3 rounded-md text-xs">
                     <p><span className="font-semibold">Nom:</span> {formData.client_name || ''}</p>
                     <p><span className="font-semibold">Adresse:</span> {formData.client_address || ''}</p>
                 </div>
@@ -44,22 +45,22 @@ const AmlCertificateTemplate: React.FC<AmlCertificateTemplateProps> = ({ formDat
 
             <section className="space-y-4 text-sm leading-relaxed">
                 <article>
-                    <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1 flex items-center gap-2"><ShieldCheck size={14}/> {clauses.articles.declaration.title}</h3>
+                    <ArticleHeader title={clauses.articles.declaration.title} icon={<ShieldCheck size={14}/>} />
                     <p>{replacePlaceholders(clauses.articles.declaration.content)}</p>
                     <div className="mt-2 border-t border-dashed pt-2">
                         <p className="text-xs font-semibold">{clauses.articles.declaration.origin_label}</p>
-                        <p className="text-xs italic bg-slate-50 p-2 rounded-md min-h-[40px]">{formData.funds_origin || '___________________________'}</p>
+                        <p className="text-xs italic bg-muted p-2 rounded-md min-h-[40px]">{formData.funds_origin || '___________________________'}</p>
                     </div>
                 </article>
 
                 <article>
-                    <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1 flex items-center gap-2"><FileText size={14}/> {clauses.articles.commitment.title}</h3>
+                    <ArticleHeader title={clauses.articles.commitment.title} icon={<FileText size={14}/>} />
                     <p>{replacePlaceholders(clauses.articles.commitment.content)}</p>
                 </article>
 
-                <article className="bg-red-50 border-l-4 border-red-400 p-3 rounded-r-md">
-                    <h3 className="font-bold uppercase text-xs text-red-700 mb-1 flex items-center gap-2"><AlertTriangle size={14}/> {clauses.articles.warning.title}</h3>
-                    <p className="text-xs text-red-800">{replacePlaceholders(clauses.articles.warning.content)}</p>
+                <article className="bg-destructive/10 border-l-4 border-destructive p-3 rounded-r-md">
+                    <ArticleHeader title={clauses.articles.warning.title} icon={<AlertTriangle size={14}/>} className="text-destructive" />
+                    <p className="text-xs text-destructive/80">{replacePlaceholders(clauses.articles.warning.content)}</p>
                 </article>
             </section>
 
@@ -67,16 +68,16 @@ const AmlCertificateTemplate: React.FC<AmlCertificateTemplateProps> = ({ formDat
                 <div className="text-center">
                     <div className="h-12 border-b border-slate-400 mb-2"></div>
                     <p className="font-bold">{clauses.signature_label}</p>
-                    <p className="text-slate-500">Lu et approuvé</p>
+                    <p className="text-muted-foreground">Lu et approuvé</p>
                 </div>
                  <div className="text-center">
-                    <p className="text-slate-500">Pour Neofonds,</p>
+                    <p className="text-muted-foreground">Pour Neofonds,</p>
                     <div className="h-12 flex items-center justify-center">
                         <img src={complianceSigner.signatureUrl} alt={`Signature de ${complianceSigner.name}`} style={{ height: '40px', objectFit: 'contain' }} />
                     </div>
                     <div className="border-t border-slate-400 pt-2">
                          <p className="font-bold">{complianceSigner.name}</p>
-                         <p className="text-slate-500">{complianceSigner.title[lang]}</p>
+                         <p className="text-muted-foreground">{complianceSigner.title[lang]}</p>
                     </div>
                 </div>
             </div>

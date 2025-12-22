@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { bankingLicenseClauses } from '@/data/documents/banking-license-clauses';
 import { ShieldCheck, FileText, BarChart, FileWarning, Banknote, Landmark } from 'lucide-react';
 import DocumentWrapper from './DocumentWrapper';
+import ArticleHeader from './ArticleHeader';
 
 interface BankingLicenseTemplateProps {
     formData: any;
@@ -29,20 +30,20 @@ const BankingLicenseTemplate: React.FC<BankingLicenseTemplateProps> = ({ formDat
             hideDepartment
             lang={lang}
         >
-            <div style={{ border: "2px solid hsl(215, 39%, 29%)", padding: '2rem', borderRadius: '8px', backgroundColor: '#f8f9fa' }}>
+            <div style={{ border: "2px solid hsl(var(--primary))", padding: '2rem', borderRadius: '8px', backgroundColor: 'hsl(var(--muted))' }}>
                 <div className="text-center mb-8">
-                    <p className="font-semibold text-lg text-[hsl(215,39%,29%)]">{clauses.authority}</p>
+                    <p className="font-semibold text-lg text-primary">{clauses.authority}</p>
                     <p className="text-sm text-slate-500">{replacePlaceholders(clauses.decision)}</p>
                 </div>
 
                 <div className="text-center mb-6">
-                    <h2 className="text-2xl font-bold uppercase text-[hsl(215,39%,29%)]">{clauses.title}</h2>
+                    <h2 className="text-2xl font-bold uppercase text-primary">{clauses.title}</h2>
                     <p className="text-xs">{clauses.subtitle}</p>
                 </div>
                 
                 <p className="text-xs leading-relaxed mb-6">{clauses.intro}</p>
 
-                <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><Landmark size={16} /> {clauses.grant_to}</h3>
+                <ArticleHeader title={clauses.grant_to} icon={<Landmark size={16} />} />
                 <div className="bg-white p-4 rounded-md border border-slate-200 mb-6">
                     <p className="text-xl font-bold text-center">{clauses.company_name}</p>
                     <p className="text-xs text-slate-500 text-center">{clauses.company_address}</p>
@@ -52,7 +53,7 @@ const BankingLicenseTemplate: React.FC<BankingLicenseTemplateProps> = ({ formDat
 
                 <div className="space-y-4 text-sm mt-8">
                     <article>
-                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><FileText size={16} />{articles.scope.title}</h3>
+                         <ArticleHeader title={articles.scope.title} icon={<FileText size={16} />}/>
                          <div className="bg-white p-4 rounded-md border border-slate-200 text-xs space-y-2">
                              <p>{articles.scope.intro}</p>
                              <ul className="list-disc list-inside space-y-1 pl-2">
@@ -63,23 +64,23 @@ const BankingLicenseTemplate: React.FC<BankingLicenseTemplateProps> = ({ formDat
                          </div>
                     </article>
                     <article>
-                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><BarChart size={16} />{articles.prudential.title}</h3>
+                        <ArticleHeader title={articles.prudential.title} icon={<BarChart size={16} />}/>
                          <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{articles.prudential.content}</p>
                     </article>
                     <article>
-                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><FileWarning size={16} />{articles.internal_control.title}</h3>
+                         <ArticleHeader title={articles.internal_control.title} icon={<FileWarning size={16} />}/>
                          <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{articles.internal_control.content}</p>
                     </article>
                     <article>
-                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><Banknote size={16} />{articles.lcbft.title}</h3>
+                         <ArticleHeader title={articles.lcbft.title} icon={<Banknote size={16} />}/>
                          <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{articles.lcbft.content}</p>
                     </article>
                      <article>
-                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><ShieldCheck size={16} />{articles.customer_protection.title}</h3>
+                         <ArticleHeader title={articles.customer_protection.title} icon={<ShieldCheck size={16} />}/>
                          <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{articles.customer_protection.content}</p>
                     </article>
                      <article>
-                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><FileText size={16} />{articles.reporting.title}</h3>
+                        <ArticleHeader title={articles.reporting.title} icon={<FileText size={16} />}/>
                          <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{articles.reporting.content}</p>
                     </article>
                 </div>

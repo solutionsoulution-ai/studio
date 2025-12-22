@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { loanContractClauses } from '@/data/documents/loan-contract-clauses';
 import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from './DocumentWrapper';
+import ArticleHeader from './ArticleHeader';
 
 interface LoanContractTemplateProps {
     formData: any;
@@ -31,7 +32,7 @@ const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, l
             .replace(/{total_cost}/g, formData.total_cost ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.total_cost) : '')
             .replace(/{monthly_payment}/g, formData.monthly_payment ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.monthly_payment) : '')
             .replace(/{total_due}/g, formData.total_due ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.total_due) : '')
-            .replace(/{contact_email}/g, "contact@capfinfy.com");
+            .replace(/{contact_email}/g, "contact@neofonds.com");
     };
 
     return (
@@ -43,12 +44,12 @@ const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, l
             lang={lang}
         >
              <section className="mb-6">
-                 <h2 className="text-sm font-bold uppercase text-[hsl(215,39%,29%)] mb-3">{clauses.parties.title}</h2>
+                 <h2 className="text-sm font-bold uppercase text-primary mb-3">{clauses.parties.title}</h2>
                  <div className="grid grid-cols-2 gap-6 text-xs">
                      <div>
                          <h3 className="font-semibold underline mb-1">{clauses.parties.lender_label}</h3>
-                         <p>Capfinfy</p>
-                         <p>1 Place de la Bourse, 69002 Lyon, France</p>
+                         <p>Neofonds GmbH</p>
+                         <p>Mainzer Landstraße 50, 60325 Frankfurt am Main, Deutschland</p>
                      </div>
                      <div>
                          <h3 className="font-semibold underline mb-1">{clauses.parties.borrower_label}</h3>
@@ -61,12 +62,12 @@ const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, l
 
              <section className="space-y-4 text-sm leading-relaxed">
                 <article>
-                    <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{clauses.articles.object.title}</h3>
+                    <ArticleHeader title={clauses.articles.object.title} />
                     <p>{replacePlaceholders(clauses.articles.object.content)}</p>
                 </article>
                 <article>
-                    <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{clauses.articles.characteristics.title}</h3>
-                    <ul className="text-xs bg-slate-100 p-3 rounded-md space-y-1">
+                    <ArticleHeader title={clauses.articles.characteristics.title} />
+                    <ul className="text-xs bg-muted p-3 rounded-md space-y-1">
                         <li>{replacePlaceholders(clauses.articles.characteristics.amount)}</li>
                         <li>{replacePlaceholders(clauses.articles.characteristics.taeg)}</li>
                         <li>{replacePlaceholders(clauses.articles.characteristics.term)}</li>
@@ -74,9 +75,9 @@ const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, l
                     </ul>
                 </article>
                 <article>
-                    <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{clauses.articles.repayment.title}</h3>
+                    <ArticleHeader title={clauses.articles.repayment.title} />
                     <p>{replacePlaceholders(clauses.articles.repayment.intro)}</p>
-                    <div className="text-xs bg-slate-100 p-3 rounded-md mt-2 space-y-1">
+                    <div className="text-xs bg-muted p-3 rounded-md mt-2 space-y-1">
                         <p>{replacePlaceholders(clauses.articles.repayment.monthly_payment)}</p>
                         <p>{replacePlaceholders(clauses.articles.repayment.total_cost)}</p>
                         <p className="font-semibold">{replacePlaceholders(clauses.articles.repayment.total_due)}</p>
@@ -84,7 +85,7 @@ const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, l
                 </article>
                  {Object.entries(clauses.articles).slice(3).map(([key, article]: [string, any]) => (
                     <article key={key}>
-                        <h3 className="font-bold uppercase text-xs text-[hsl(215,39%,29%)] mb-1">{article.title}</h3>
+                        <ArticleHeader title={article.title} />
                         <p>{replacePlaceholders(article.content)}</p>
                     </article>
                 ))}
@@ -96,14 +97,14 @@ const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, l
                     <div className="h-20"></div>
                     <div className="border-t border-slate-400 pt-2">
                         <p className="font-bold">{clauses.parties.borrower_label}</p>
-                        <p className="text-[hsl(220,8.9%,46.1%)]">Lu et approuvé</p>
+                        <p className="text-muted-foreground">Lu et approuvé</p>
                     </div>
                 </div>
                 <div className="text-center">
                     {signer.signatureUrl && <Image src={signer.signatureUrl} alt={`Signature de ${signer.name}`} width={150} height={50} className="mx-auto" />}
                     <div className="border-t border-slate-400 pt-2">
                          <p className="font-bold">{clauses.parties.lender_label}</p>
-                         <p className="text-[hsl(220,8.9%,46.1%)]">{signer.name}, {signer.title[lang]}</p>
+                         <p className="text-muted-foreground">{signer.name}, {signer.title[lang]}</p>
                     </div>
                 </div>
             </div>

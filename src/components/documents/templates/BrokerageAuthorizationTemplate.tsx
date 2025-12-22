@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { brokerageAuthorizationClauses } from '@/data/documents/brokerage-authorization-clauses';
 import { FileText, ShieldCheck, UserCheck, Umbrella, Banknote, MessageSquareWarning } from 'lucide-react';
 import DocumentWrapper from './DocumentWrapper';
+import ArticleHeader from './ArticleHeader';
 
 interface BrokerageAuthorizationTemplateProps {
     formData: any;
@@ -29,14 +30,14 @@ const BrokerageAuthorizationTemplate: React.FC<BrokerageAuthorizationTemplatePro
             hideDepartment
             lang={lang}
         >
-            <div style={{ border: "2px solid hsl(215, 39%, 29%)", padding: '2rem', borderRadius: '8px', backgroundColor: '#f8f9fa' }}>
+            <div style={{ border: "2px solid hsl(var(--primary))", padding: '2rem', borderRadius: '8px', backgroundColor: 'hsl(var(--muted))' }}>
                 <div className="text-center mb-8">
-                    <p className="font-semibold text-lg text-[hsl(215,39%,29%)]">{clauses.authority}</p>
+                    <p className="font-semibold text-lg text-primary">{clauses.authority}</p>
                     <p className="text-sm text-slate-500">{replacePlaceholders(clauses.registration_number)}</p>
                 </div>
 
                 <div className="text-center mb-6">
-                    <h2 className="text-2xl font-bold uppercase text-[hsl(215,39%,29%)]">{clauses.title}</h2>
+                    <h2 className="text-2xl font-bold uppercase text-primary">{clauses.title}</h2>
                     <p className="text-xs">{clauses.subtitle}</p>
                 </div>
                 
@@ -49,30 +50,30 @@ const BrokerageAuthorizationTemplate: React.FC<BrokerageAuthorizationTemplatePro
 
                 <div className="space-y-4 text-sm mt-8">
                     <article>
-                        <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><FileText size={16} />{articles.status.title}</h3>
+                        <ArticleHeader title={articles.status.title} icon={<FileText size={16} />} />
                         <div className="bg-white p-4 rounded-md border border-slate-200 text-xs">
                              <p className="font-semibold text-sm mb-1">{articles.status.value}</p>
                              <p>{articles.status.description}</p>
                         </div>
                     </article>
                     <article>
-                        <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><UserCheck size={16} />{articles.activities.title}</h3>
+                        <ArticleHeader title={articles.activities.title} icon={<UserCheck size={16} />}/>
                         <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{articles.activities.description}</p>
                     </article>
                     <article>
-                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><Umbrella size={16} />{articles.insurance.title}</h3>
+                         <ArticleHeader title={articles.insurance.title} icon={<Umbrella size={16} />}/>
                          <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{articles.insurance.content}</p>
                     </article>
                      <article>
-                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><ShieldCheck size={16} />{articles.conduct.title}</h3>
+                         <ArticleHeader title={articles.conduct.title} icon={<ShieldCheck size={16} />}/>
                          <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{articles.conduct.content}</p>
                     </article>
                     <article>
-                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><Banknote size={16} />{articles.lcbft.title}</h3>
+                         <ArticleHeader title={articles.lcbft.title} icon={<Banknote size={16} />}/>
                          <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{articles.lcbft.content}</p>
                     </article>
                      <article>
-                         <h3 className="font-bold text-sm uppercase text-[hsl(215,39%,29%)] mb-2 flex items-center gap-2"><MessageSquareWarning size={16} />{articles.claims.title}</h3>
+                         <ArticleHeader title={articles.claims.title} icon={<MessageSquareWarning size={16} />}/>
                          <p className="text-xs leading-relaxed border border-dashed border-slate-300 p-3 rounded-md">{articles.claims.content}</p>
                     </article>
                 </div>
