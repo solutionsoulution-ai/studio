@@ -35,17 +35,37 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
       position: 'absolute',
       right: '60px',
       bottom: '100px',
-      width: '130px',
-      height: '130px',
-      border: '4px solid hsl(217, 80%, 55%, 0.2)',
+      width: '140px',
+      height: '140px',
+      border: '5px double hsl(var(--primary))',
       borderRadius: '50%',
       display: 'flex',
+      flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      opacity: 1,
+      opacity: 0.8,
       transform: 'rotate(-15deg)',
+      color: 'hsl(var(--primary))',
+      textAlign: 'center',
+      padding: '10px',
+      boxSizing: 'border-box',
     }}>
-        <Image src="https://i.postimg.cc/ZqGtbXxd/Capture-d-ecran-2025-12-20-110200.png" alt="Neofonds Seal" width={90} height={25} style={{ opacity: 0.85, mixBlendMode: 'multiply' }}/>
+      <div style={{
+        fontWeight: 'bold',
+        fontSize: '14px',
+        lineHeight: '1.2',
+        textTransform: 'uppercase'
+      }}>Neofonds GmbH</div>
+      <div style={{
+        height: '2px',
+        width: '50%',
+        backgroundColor: 'hsl(var(--primary))',
+        margin: '4px 0'
+      }}></div>
+      <div style={{
+        fontSize: '9px',
+        lineHeight: '1.1',
+      }}>Frankfurt am Main</div>
     </div>
   );
 
@@ -86,7 +106,7 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
 
         <main>
             <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-                 <h1 style={{ fontSize: '20pt', fontWeight: 'bold', color: '#3b82f6', textTransform: 'uppercase' }}>{title}</h1>
+                 <h1 style={{ fontSize: '20pt', fontWeight: 'bold', color: 'hsl(var(--primary))', textTransform: 'uppercase' }}>{title}</h1>
                  {!hideDepartment && <p style={{ fontSize: '10pt', color: '#64748b' }}>{department}</p>}
                  {(docRef || docDate) && (
                     <p style={{ fontSize: '9pt', color: '#64748b', marginTop: '4px' }}>
