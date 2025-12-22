@@ -163,6 +163,7 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType }) => {
                   <SelectItem value="fr">Français</SelectItem>
                   <SelectItem value="en">English</SelectItem>
                   <SelectItem value="de">Deutsch</SelectItem>
+                  <SelectItem value="lt">Lietuvių</SelectItem>
                 </SelectContent>
               </Select>
             </div>

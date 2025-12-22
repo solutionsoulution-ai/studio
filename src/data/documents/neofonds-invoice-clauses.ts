@@ -76,5 +76,30 @@ export const neofondsInvoiceClauses: Clauses = {
             "thank_you": "Vielen Dank für Ihr Vertrauen.",
             "contact_info": "Bei Fragen wenden Sie sich bitte an unsere Buchhaltung unter neofonds@europe.com"
         }
+    },
+    lt: {
+        company: {
+            name: "Neofonds",
+            address: "Mainzer Landstraße 50, 60325 Frankfurt am Main, Vokietija",
+            phone: "+49 163 2247344",
+            emails: ["neofonds@europe.com"]
+        },
+        title: "Sąskaita faktūra",
+        invoice_number_label: "Sąskaitos Nr.:",
+        date_label: "Data:",
+        bill_to_label: "Sąskaita išrašyta:",
+        table_headers: { "description": "Aprašymas", "quantity": "Kiekis", "unit_price": "Vieneto kaina (be PVM)", "amount": "Suma (be PVM)" },
+        subtotal_label: "Tarpinė suma (be PVM)",
+        vat_label: "PVM (19%)",
+        total_label: "Bendra mokėtina suma (su PVM)",
+        payment_terms: {
+            "title": "Mokėjimo sąlygos",
+            "instruction": "Apmokėjimas gavus sąskaitą.",
+            "proof_of_payment": "Jei turite klausimų, susisiekite su mumis.",
+        },
+        footer: {
+            "thank_you": "Dėkojame už jūsų pasitikėjimą.",
+            "contact_info": "Jei turite klausimų, susisiekite su mūsų buhalterija el. paštu neofonds@europe.com"
+        }
     }
 };

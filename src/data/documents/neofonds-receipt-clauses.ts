@@ -82,5 +82,32 @@ export const neofondsReceiptClauses: Clauses = {
             "thank_you": "Vielen Dank für Ihr Vertrauen.",
             "contact_info": "Bei Fragen wenden Sie sich bitte an unsere Buchhaltung unter neofonds@europe.com"
         }
+    },
+    lt: {
+        company: {
+            name: "Neofonds",
+            address: "Mainzer Landstraße 50, 60325 Frankfurt am Main, Vokietija",
+            phone: "+49 163 2247344",
+            emails: ["neofonds@europe.com"]
+        },
+        title: "Mokėjimo kvitas",
+        reference: "Kvito Nr.: {ref}",
+        date: "Mokėjimo data: {payment_date}",
+        received_from: "Gauta iš:",
+        payment_details: {
+            title: "Mokėjimo informacija",
+            amount_label: "Gauta suma",
+            method_label: "Mokėjimo būdas",
+            reference_label: "Pagal šią nuorodą",
+        },
+        confirmation: {
+            title: "Patvirtinimas",
+            content: "Mes, žemiau pasirašiusieji, Neofonds, šiuo patvirtiname, kad gavome minėtą sumą. Šis kvitas patvirtina dalinį ar visišką nurodytos skolos apmokėjimą. Išskyrus klaidas ar praleidimus, šis mokėjimas padengia visą mokėtiną sumą.",
+        },
+        signature_label: "Už Neofonds, Buhalterijos skyrius",
+        footer: {
+            "thank_you": "Dėkojame už jūsų pasitikėjimą.",
+            "contact_info": "Jei turite klausimų, susisiekite su mūsų buhalterija el. paštu neofonds@europe.com"
+        }
     }
 };

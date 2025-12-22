@@ -1,3 +1,4 @@
+
 import type { Clauses } from "./languages";
 
 export const suretyBondClauses = (companyName: string): Clauses => ({
@@ -55,5 +56,54 @@ export const suretyBondClauses = (companyName: string): Clauses => ({
     },
     de: {
         // ...
+    },
+    lt: {
+        header: {
+            line1: "Teisės ir garantijų tarnyba",
+            line2: "Įsipareigojimų departamentas • Garantijų formalizavimo skyrius",
+        },
+        title: "Solidariosios garantijos aktas dėl paskolos",
+        reference: "Akto Nr.: {act_ref}",
+        parties: {
+            title: "Tarp pasirašiusiųjų:",
+            creditor_label: "Kreditorius:",
+            debtor_label: "Skolininkas (Paskolos gavėjas):",
+        },
+        articles: {
+            object: {
+                title: "1 straipsnis: Įsipareigojimo objektas",
+                content: "Šiuo aktu Skolininkas įsipareigoja sumokėti Kreditoriui sumas, priklausančias pagal žemiau nurodytą '{type_of_loan}' tipo paskolos sutartį:",
+                acknowledgment: "Skolininkas pareiškia, kad puikiai supranta savo įsipareigojimų pobūdį ir apimtį.",
+            },
+            scope: {
+                title: "2 straipsnis: Garantijos apimtis",
+                content: "Skolininko įsipareigojimas apima pagrindinės sumos, palūkanų, komisinių, mokesčių ir priedų, ir apskritai visų sumų, kurios galėtų būti mokėtinos pagal minėtą paskolos sutartį, mokėjimą. Įsipareigojimas suteikiamas visam paskolos laikotarpiui.",
+            },
+            deposit_principle: {
+                title: "3 straipsnis: Garantinio įnašo principas",
+                content: "Siekdamas įrodyti savo gebėjimą vykdyti įsipareigojimus, Skolininkas įsipareigoja atlikti garantinį įnašą {deposit_amount} suma. Aiškiai sutariama, kad ši suma nėra nei mokėjimas, nei mokestis, o tiesiog įnašas į savo kliento sąskaitą, kuris yra visiškai ir nedelsiant grąžinamas.",
+            },
+            activation_procedure: {
+                title: "4 straipsnis: Techninė aktyvavimo procedūra",
+                content: `Dėl techninių priežasčių, ${companyName} kliento sąskaita iš pradžių gali gauti lėšas tik iš ${companyName}. Todėl garantinis įnašas yra privalomas žingsnis norint aktyvuoti išėmimo operacijas. Skolininkas turės griežtai laikytis ${companyName} pateiktų nurodymų, kad atliktų šį įnašą į jam sukurtą sąskaitą.`,
+            },
+            restitution: {
+                title: "5 straipsnis: Nedelsiamas lėšų grąžinimas",
+                content: "Gavus įnašą, Skolininko kliento sąskaita yra nedelsiant aktyvuojama. Įnašo suma iš karto įskaitoma į tą pačią sąskaitą, pridedant prie paskolos sumos. Tada Skolininkas gali nedelsdamas pervesti visas turimas lėšas (įskaitant paskolą ir garantinį įnašą) į savo asmeninę vietinę banko sąskaitą.",
+            },
+            solidarity: {
+                title: "6 straipsnis: Solidarumas ir nedalomumas",
+                content: "Skolininkas yra vienintelis atsakingas už skolą. Įsipareigojimų nevykdymo atveju Kreditorius gali reikalauti visos skolos iš Skolininko.",
+            },
+            mention: {
+                title: "7 straipsnis: Privalomas ranka rašytas įrašas",
+                instruction: "Skolininkas turi ranka perrašyti šį įrašą, laikydamasis įstatymų:",
+                content: "'Aš, {borrower_name}, įsipareigoju grąžinti skolintojui priklausančias sumas iš savo pajamų ir turto.'",
+            },
+            information: {
+                title: "8 straipsnis: Reikalinga informacija",
+                content: "Kreditorius įsipareigoja informuoti Skolininką apie bet kokius sutarties pakeitimus.",
+            },
+        },
     }
 });

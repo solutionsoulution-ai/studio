@@ -1,3 +1,4 @@
+
 import type { Clauses } from "./languages";
 
 export const debtRecognitionClauses = (companyName: string): Clauses => ({
@@ -38,5 +39,37 @@ export const debtRecognitionClauses = (companyName: string): Clauses => ({
     },
     de: {
         // ...
+    },
+    lt: {
+        header: {
+            line1: "Finansų tarnyba",
+            line2: "Teisės ir garantijų departamentas • Įsipareigojimų formalizavimo skyrius",
+        },
+        title: "Skolos pripažinimo raštas dėl paskolos",
+        reference: "Dokumento Nr.: {ref}",
+        date: "Data: {date}",
+        parties: {
+            title: "Tarp pasirašiusiųjų:",
+            creditor_label: "Kreditorius:",
+            debtor_label: "Skolininkas:",
+        },
+        articles: {
+            recognition: {
+                title: "1 straipsnis: Skolos pripažinimas",
+                content: `Aš, {debtor_name}, gyvenantis {debtor_address}, šiuo raštu pripažįstu, kad esu skolingas ${companyName}, veikiančiai jos finansinių partnerių vardu, šią sumą: {loan_amount} ({loan_amount_in_words}). Ši suma atitinka man suteiktos '{type_of_loan}' tipo paskolos kapitalą, kurio lėšas patvirtinu gavęs.`,
+            },
+            repayment: {
+                title: "2 straipsnis: Grąžinimo sąlygos",
+                content: "Įsipareigoju grąžinti visą šią sumą, taip pat susijusias palūkanas ir mokesčius, laikydamasis atskirai pasirašyto paskolos sutarties Nr. {loan_contract_ref} nustatytų terminų ir sąlygų. Sutarta grąžinimo trukmė yra {loan_term} mėnesių, išskyrus išankstinio grąžinimo ar mokėjimo sutrikimo atvejus, keičiančius grafiką.",
+            },
+            default: {
+                title: "3 straipsnis: Įsipareigojimų nevykdymo sąlyga",
+                content: "Vieno ar kelių įmokų nesumokėjimo atveju pripažįstu, kad Kreditorius gali pasinaudoti paskolos sutartyje numatytomis sąlygomis, įskaitant išankstinį visos likusios skolos dalies, padidintos taikomomis palūkanomis ir baudomis, pareikalavimą.",
+            },
+            mention: {
+                title: "4 straipsnis: Įsipareigojimo supratimas",
+                content: "Vartojimo kodekso L. 313-24 straipsnis pabrėžia įsipareigojimo svarbą. Skolininkas pripažįsta, kad perskaitė ir suprato visą paskolos sutartį, su kuria susijęs šis skolos pripažinimo raštas, ir gavo po vieną kiekvieno dokumento egzempliorių.",
+            }
+        },
     }
 });

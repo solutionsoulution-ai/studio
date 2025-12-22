@@ -1,3 +1,4 @@
+
 import type { Clauses } from "./languages";
 
 export const amlCertificateClauses = (companyName: string): Clauses => ({
@@ -34,5 +35,33 @@ export const amlCertificateClauses = (companyName: string): Clauses => ({
     },
     de: {
         // ...
+    },
+    lt: {
+        header: {
+            line1: "Atitikties departamentas",
+            line2: "Pinigų plovimo prevencijos skyrius (AML/CFT)",
+        },
+        title: "Pinigų neplovimo sertifikatas",
+        reference: "Sertifikato Nr.: {ref}",
+        date: "Data: {date}",
+        declarer: {
+            title: "Deklaruojantis asmuo",
+        },
+        articles: {
+            declaration: {
+                title: "1 straipsnis: Deklaracija dėl lėšų kilmės",
+                content: `Aš, {client_name}, garbės žodžiu pareiškiu, kad {transaction_amount} ({transaction_amount_in_words}) sumos lėšos, naudojamos sandoryje, kurio nuoroda {transaction_ref}, yra gautos iš teisėtų šaltinių ir nėra susijusios su nusikalstama veika ar pinigų plovimu, laikantis Direktyvos (ES) 2015/849.`,
+                origin_label: "Deklaruota lėšų kilmė:",
+            },
+            commitment: {
+                title: "2 straipsnis: Skaidrumo įsipareigojimas",
+                content: `Įsipareigoju, ${companyName} paprašius, pateikti bet kokius patvirtinančius dokumentus (atlyginimo lapelius, mokesčių deklaracijas, pirkimo-pardavimo sutartis ir kt.), patvirtinančius aukščiau nurodytą lėšų kilmę.`,
+            },
+            warning: {
+                title: "3 straipsnis: Įspėjimas dėl melagingų deklaracijų",
+                content: `Patvirtinu, kad buvau informuotas (-a), jog už bet kokią melagingą deklaraciją gali būti taikoma teisinė atsakomybė ir tai gali lemti neatidėliotiną visų verslo santykių su ${companyName} nutraukimą bei pranešimą apie įtartiną veiklą kompetentingoms institucijoms.`,
+            },
+        },
+        signature_label: "Deklaruojančio asmens parašas",
     }
 });

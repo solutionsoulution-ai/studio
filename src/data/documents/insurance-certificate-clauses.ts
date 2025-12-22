@@ -1,3 +1,4 @@
+
 import type { Clauses } from "./languages";
 
 export const insuranceCertificateClauses = (companyName: string): Clauses => ({
@@ -119,6 +120,46 @@ export const insuranceCertificateClauses = (companyName: string): Clauses => ({
         validity: {
             title: "Gültigkeitsdatum und Wirksamkeit",
             content: "Dieses Zertifikat wird ausgestellt, um als Rechtsnachweis zu dienen. Die Garantien treten am Tag der Auszahlung der Darlehensmittel in Kraft und enden mit der vollständigen Rückzahlung des Darlehens.",
+        }
+    },
+    lt: {
+        header: {
+            line1: "Draudimo departamentas",
+            line2: "Narystės tarnyba • Paskolos gavėjo garantijų sertifikavimo skyrius",
+        },
+        title: "Paskolos gavėjo draudimo liudijimas",
+        reference: "Liudijimo Nr.: {ref}",
+        issue_date: "Išdavimo data: {issue_date}",
+        insured: {
+            title: "Apdraustasis:",
+        },
+        beneficiary: {
+            title: "Naudos gavėjas:",
+            content: `Paskolą teikianti institucija, ${companyName} partnerė, pagal paskolos sutartį Nr. {loan_contract_ref}.`,
+        },
+        object_title: "Tema: Grupinio draudimo liudijimas dėl paskolos Nr. {loan_contract_ref}",
+        object_content: `Mes, žemiau pasirašiusieji, veikdami savo draudimo partnerio vardu, šiuo patvirtiname, kad aukščiau minėtas apdraustasis asmuo yra apdraustas pagal grupinio draudimo sutartį Nr. 789-456, kurią ${companyName} sudarė kaip dalį savo paskolos.`,
+        loan_details: {
+            title: "Apdraustos paskolos detalės",
+            nature: "Paskolos pobūdis: {loan_type}",
+            ref: "Susijusios paskolos numeris: {loan_contract_ref}",
+            amount: "Apdraustojo kapitalo suma: {insured_capital}",
+            duration: "Draudimo apsaugos trukmė: {coverage_duration} mėn., sutampanti su paskolos trukme.",
+        },
+        guarantees: {
+            title: "Taikomos garantijos",
+            intro: "Atsižvelgiant į draudimo sutarties informaciniame pranešime nurodytas sąlygas ir išimtis, apdraustasis asmuo gauna šias garantijas:",
+            death: "Mirtis: likusio kapitalo išmokėjimas paskolą teikiančiai institucijai.",
+            ptia: "Visiškas ir negrįžtamas savarankiškumo praradimas (PTIA): likusio kapitalo išmokėjimas paskolą teikiančiai institucijai.",
+            itt: "Visiškas laikinasis nedarbingumas (ITT): paskolos įmokų padengimas po franšizės laikotarpio.",
+        },
+        premium: {
+            title: "Draudimo kaina",
+            content: "Mėnesinė draudimo įmoka: {monthly_premium} / mėn. Ši suma mokama kas mėnesį, papildomai prie jūsų paskolos įmokos.",
+        },
+        validity: {
+            title: "Įsigaliojimo data ir galiojimas",
+            content: "Šis liudijimas išduodamas tam, kad galiotų teisės aktuose numatyta tvarka. Garantijos įsigalioja paskolos lėšų išmokėjimo dieną ir nustoja galioti visiškai grąžinus paskolą.",
         }
     }
 });

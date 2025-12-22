@@ -51,5 +51,20 @@ export const bankingLicenseClauses: Clauses = {
     },
     de: {
         // ... (german translations will follow the same new structure)
+    },
+    lt: {
+        authority: "Prudencinės kontrolės ir pertvarkymo institucija (ACPR)",
+        title: "Kredito įstaigos licencija",
+        subtitle: "Pagal Pinigų ir finansų kodekso L. 511-1 ir vėlesnius straipsnius",
+        decision: "ACPR kolegijos sprendimas dėl leidimo Nr. {ref}",
+        intro: "Atsižvelgdama į Pinigų ir finansų kodeksą ir išnagrinėjusi pateiktą paraiškos bylą, Prudencinės kontrolės ir pertvarkymo institucija (ACPR), po svarstymo, NUSPRENDŽIA:",
+        grant_to: "1 straipsnis: Leidimas",
+        company_name: "Neofonds GmbH",
+        company_address: "Mainzer Landstraße 50, 60325 Frankfurt am Main, Deutschland",
+        status: "Subjektui Neofonds GmbH suteikiamas Kredito įstaigos statusas, leidžiantis vykdyti visas bankines operacijas Europos Sąjungos teritorijoje.",
+        validity: "Ši licencija suteikiama neribotam laikui, su sąlyga, kad nuolat bus laikomasi jos suteikimo sąlygų ir galiojančių teisės aktų. ACPR gali ją pakeisti, sustabdyti arba atšaukti esant rimtam teisinių ir norminių įsipareigojimų pažeidimui.",
+        location_and_date: "Sudaryta Paryžiuje, {issue_date}",
+        signature_label_1: "Prancūzijos banko valdytojas",
+        signature_label_2: "ACPR generalinis sekretorius",
     }
 };

@@ -29,5 +29,15 @@ export const blankDocumentClauses = {
         },
         placeholder: "Der Inhalt dieses Dokuments wird gerade definiert.",
         footer: "Neofonds © {current_year} - Alle Rechte vorbehalten."
+    },
+    lt: {
+        title: "Dokumento pavadinimas",
+        department: "Teisės ir finansų departamentas",
+        importance: {
+            title: "Šio dokumento svarba",
+            description: "Šis dokumentas yra pagrindinis šablonas. Jo svarbą nulems turinys, kurį pridėsite."
+        },
+        placeholder: "Šio dokumento turinys yra ruošiamas.",
+        footer: "Neofonds © {current_year} - Visos teisės saugomos."
     }
 };

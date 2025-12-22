@@ -1,3 +1,4 @@
+
 import type { Clauses } from "./languages";
 
 export const eligibilityCertificateClauses = (companyName: string): Clauses => ({
@@ -79,6 +80,33 @@ export const eligibilityCertificateClauses = (companyName: string): Clauses => (
             validity: {
                 title: "Artikel 3: Gültigkeit",
                 content: "Dieses Zertifikat ist 30 Kalendertage ab Ausstellungsdatum gültig, d.h. bis zum {validity_date}. Nach diesem Zeitraum ist eine neue Bewertung erforderlich. Die Gültigkeit ist an die Bedingung geknüpft, dass sich die finanzielle Situation des Begünstigten nicht wesentlich ändert und die Originalbelege nachträglich überprüft werden.",
+            }
+        },
+    },
+    lt: {
+        header: {
+            line1: "Finansinės analizės departamentas",
+            line2: "Mokumo patvirtinimo skyrius",
+        },
+        title: "Iš anksto patvirtinto mokumo sertifikatas {project_type} projektui",
+        reference: "Sertifikato Nr.: {ref}",
+        validity: "Galioja iki: {validity_date}",
+        beneficiary: {
+            title: "Sertifikato gavėjas:",
+        },
+        articles: {
+            object: {
+                title: "1 straipsnis: Sertifikato paskirtis",
+                content: `${companyName}, veikdama kaip finansų tarpininkė, šiuo patvirtina, kad atliko preliminarią minėto gavėjo finansinės padėties analizę. Remiantis deklaruotais duomenimis ir dabartiniais vertinimo kriterijais, gavėjas laikomas tinkamu gauti finansavimą iki šios maksimalios sumos:`,
+                amount_label: "Maksimali tinkamumo suma",
+            },
+            scope: {
+                title: "2 straipsnis: Apimtis ir apribojimai",
+                content: `Šis sertifikatas patvirtina teorinį finansavimo pajėgumą jo išdavimo dieną. Jis skirtas pateikti trečiosioms šalims (nekilnojamojo turto agentams, pardavėjams ir kt.) kaip patikinimą dėl gavėjo gebėjimo finansuoti projektą. Tai jokiu būdu nėra įpareigojantis paskolos pasiūlymas ir nesaisto ${companyName} ar jos paskolų partnerių.`,
+            },
+            validity: {
+                title: "3 straipsnis: Galiojimas",
+                content: "Šis sertifikatas galioja 30 kalendorinių dienų nuo jo išdavimo dienos, t. y. iki {validity_date}. Pasibaigus šiam laikotarpiui, reikės naujo vertinimo. Galiojimas priklauso nuo to, ar nebus reikšmingų gavėjo finansinės padėties pokyčių ir ar bus vėliau patikrinti originalūs patvirtinamieji dokumentai.",
             }
         },
     }

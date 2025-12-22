@@ -114,7 +114,60 @@ export const loanContractClauses: Clauses = {
             },
         },
         signature_preamble: "Ausgefertigt in zwei Originalexemplaren, eines für jede Partei.",
+    },
+    lt: {
+        header: {
+            line1: "Finansų tarnyba",
+            line2: "Vartojimo kreditų departamentas • Paskolų sutarčių biuras • Įsipareigojimų patikros skyrius",
+        },
+        title: "Paskolos sutartis",
+        reference: "Sutarties Nr.: {contract_ref}",
+        location_and_date: "Sudaryta Frankfurte prie Maino, {contract_date}",
+        parties: {
+            title: "Tarp pasirašiusiųjų:",
+            lender_label: "Paskolos davėjas:",
+            borrower_label: "Paskolos gavėjas:",
+        },
+        articles: {
+            object: {
+                title: "1 straipsnis: Sutarties objektas",
+                content: "Paskolos davėjas suteikia Paskolos gavėjui, o šis priima, {type_of_loan} tipo amortizuojamąją paskolą neprofesiniam naudojimui, kuriai taikomos Vartojimo kodekso nuostatos ir šios bendrosios bei specialiosios sąlygos.",
+            },
+            characteristics: {
+                title: "2 straipsnis: Paskolos suma ir charakteristikos",
+                amount: "Paskolinto kapitalo suma: {loan_amount} ({loan_amount_in_words} eurų).",
+                taeg: "Fiksuota metinė bendra palūkanų norma (BVKKMN): {taeg}.",
+                term: "Bendra grąžinimo trukmė: {loan_term} mėnesių.",
+                availability: "Lėšų suteikimo data: Ne vėliau kaip per 10 dienų nuo atsisakymo teisės termino pabaigos.",
+            },
+            repayment: {
+                title: "3 straipsnis: Grąžinimo sąlygos",
+                intro: "Paskolos gavėjas įsipareigoja grąžinti kapitalą ir palūkanas per {loan_term} pastovių mėnesinių įmokų. Pirmoji įmoka mokama {start_date}, o paskutinė – {end_date}.",
+                monthly_payment: "Mėnesinė įmoka (be draudimo): {monthly_payment}. Ši suma bus nuskaičiuojama kiekvieno mėnesio 5 dieną.",
+                total_cost: "Bendra kredito kaina (palūkanos) sudaro {total_cost}.",
+                total_due: "Bendra mokėtina suma: {total_due} (Paskolintas kapitalas + bendra palūkanų kaina).",
+            },
+            withdrawal: {
+                title: "4 straipsnis: Atsisakymo teisė",
+                content: "Paskolos gavėjas turi keturiolikos (14) kalendorinių dienų atsisakymo teisę nuo kredito sutarties pasiūlymo pasirašymo dienos. Norėdamas atsisakyti, Paskolos gavėjas turi išsiųsti pasiūlyme pridėtą atsisakymo formą registruotu laišku su gavimo patvirtinimu.",
+            },
+            default: {
+                title: "5 straipsnis: Mokėjimo nevykdymas",
+                content: "Nesumokėjus įmokos nustatytu laiku, Paskolos davėjas gali reikalauti nedelsiant grąžinti likusį kapitalą, padidintą pradelstomis ir nesumokėtomis palūkanomis. Gali būti taikomos delspinigiai pagal galiojančius teisės aktus.",
+            },
+            early_repayment: {
+                title: "6 straipsnis: Išankstinis grąžinimas",
+                content: "Paskolos gavėjas turi teisę bet kada iš anksto grąžinti visą ar dalį jam suteikto kredito. Pagal mūsų komercinę politiką, jokia išankstinio grąžinimo kompensacija nebus reikalaujama, nepriklausomai nuo sumos. Paskolos gavėjas tiesiog turės raštu pranešti Paskolos davėjui apie savo ketinimą, kad būtų galima suorganizuoti praktines grąžinimo sąlygas.",
+            },
+            data: {
+                title: "7 straipsnis: Asmens duomenų apsauga",
+                content: "Surinkta informacija yra būtina paskolos paraiškai apdoroti. Ji apdorojama kompiuteriu ir skirta Paskolos davėjo bei jo partnerių tarnyboms. Pagal BDAR, Paskolos gavėjas turi teisę susipažinti su savo asmens duomenimis, juos ištaisyti ir ištrinti, susisiekęs su Paskolos davėju el. pašto adresu {contact_email}.",
+            },
+            law: {
+                title: "8 straipsnis: Taikoma teisė ir ginčai",
+                content: "Šiai sutarčiai taikoma Vokietijos teisė. Ginčo atveju šalys įsipareigoja ieškoti taikaus sprendimo. Priešingu atveju kompetentingas teismas bus Paskolos gavėjo gyvenamosios vietos teismas.",
+            },
+        },
+        signature_preamble: "Sudaryta dviem originaliais egzemplioriais, po vieną kiekvienai šaliai.",
     }
 };
-
-    

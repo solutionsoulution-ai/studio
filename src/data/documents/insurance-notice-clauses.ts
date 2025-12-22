@@ -106,5 +106,40 @@ export const insuranceNoticeClauses: Clauses = {
             title: "ARTIKEL 5: SCHADENMELDUNG",
             description: "Im Falle eines Schadens (Tod, Unfall, Krankheit) müssen Sie oder Ihre Anspruchsberechtigten diesen dem Versicherer innerhalb der im Vertrag vorgesehenen Fristen melden und alle erforderlichen Belege (ärztliches Attest, Sterbeurkunde usw.) beifügen."
         }
+    },
+    lt: {
+        title: "Informacinis pranešimas",
+        subtitle: "Grupinio paskolos gavėjo draudimo sutartis Nr. 789-101112",
+        importance: {
+            title: "Šio dokumento svarba",
+            description: "Šis ikisutartinis dokumentas yra būtinas. Jame išsamiai informuojama apie jūsų paskolos gavėjo draudimo ypatybes, įskaitant garantijas, išimtis ir jūsų teises, leidžiančias jums sudaryti sutartį turint visą informaciją ir palyginti su kitais pasiūlymais."
+        },
+        introduction: "Šio pranešimo tikslas - informuoti jus apie pagrindines jūsų narystės paskolos gavėjo draudime ypatybes. Jis neturi sutartinės vertės, bet yra bendrųjų ir specialiųjų sąlygų, kurios galios, santrauka. Kviečiame atidžiai jį perskaityti.",
+        guarantees: {
+            title: "1 STRAIPSNIS: SIŪLOMOS GARANTIJOS",
+            items: {
+                death: { title: "Mirties atvejo garantija", description: "Apdraustojo mirties atveju iki paskolos pabaigos draudikas įsipareigoja grąžinti skolintojui likusį kapitalą mirties dieną, pagal apdraustą dalį." },
+                disability: { title: "Visiško ir negrįžtamo savarankiškumo praradimo (PTIA) garantija", description: "Jei dėl ligos ar nelaimingo atsitikimo apdraustasis pripažįstamas PTIA būsenoje (reikalaujančioje trečiojo asmens pagalbos kasdieniame gyvenime), draudikas padengia likusio kapitalo grąžinimą." },
+                incapacity: { title: "Laikino visiško nedarbingumo (ITT) garantija", description: "Visiško ir nepertraukiamo darbo nutraukimo dėl ligos ar nelaimingo atsitikimo atveju, ir po franšizės laikotarpio (paprastai 90 dienų), draudikas padengia jūsų paskolos įmokas jūsų nedarbingumo laikotarpiu." }
+            }
+        },
+        exclusions: {
+            title: "2 STRAIPSNIS: PAGRINDINĖS IŠIMTYS",
+            intro: "Kai kurios situacijos nėra draudžiamos pagal sutartį. Ypač neįtraukiama:",
+            items: [
+                "Apdraustojo savižudybė per pirmuosius draudimo metus.",
+                "Pilietinio ar užsienio karo, riaušių, terorizmo aktų pasekmės.",
+                "Užsiėmimas oro sportu, profesionaliomis varžybomis ar bet kokiu sportu, keliančiu padidintą riziką.",
+                "Psichiatrinės ligos ir nugaros patologijos be hospitalizacijos (ITT garantijai)."
+            ]
+        },
+        waiver: {
+            title: "4 STRAIPSNIS: ATSISAKYMO TEISĖ",
+            description: "Jūs turite teisę per 30 kalendorinių dienų nuo narystės pasirašymo dienos atsisakyti jos be jokių mokesčių ar baudų, išsiųsdami registruotą laišką su gavimo patvirtinimu."
+        },
+        claim: {
+            title: "5 STRAIPSNIS: PRANEŠIMAS APIE ŽALĄ",
+            description: "Įvykus draudiminiam įvykiui (mirtis, nelaimingas atsitikimas, liga), jūs arba jūsų teisių perėmėjai privalote apie tai pranešti draudikui per sutartyje numatytus terminus, pridėdami visus reikiamus patvirtinamuosius dokumentus (medicininę pažymą, mirties liudijimą ir kt.)."
+        }
     }
 };

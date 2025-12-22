@@ -47,5 +47,18 @@ export const brokerageAuthorizationClauses: Clauses = {
     },
     de: {
         // ... (german translations will follow the same new structure)
+    },
+    lt: {
+        authority: "Federal Financial Supervisory Authority (BaFin)",
+        title: "Kredito tarpininkavimo leidimas",
+        subtitle: "Bankininkystės operacijų ir mokėjimo paslaugų tarpininkas (IOBSP)",
+        intro: "BaFin, remdamasi Vokietijos kredito įstatymo (Kreditwesengesetz) nuostatomis, patvirtina, kad toliau nurodytas subjektas yra įregistruotas ir įgaliotas veikti kaip tarpininkas:",
+        company_name: "Neofonds GmbH",
+        company_address: "Mainzer Landstraße 50, 60325 Frankfurt am Main, Deutschland",
+        registration_number: "Unikalus nacionalinis registracijos numeris: {ref}",
+        validity: "",
+        location_and_date: "Sudaryta Frankfurte, {issue_date}",
+        signature_label_1: "Už BaFin, Prezidentas",
+        signature_label_2: "Vykdomasis direktorius"
     }
 };
