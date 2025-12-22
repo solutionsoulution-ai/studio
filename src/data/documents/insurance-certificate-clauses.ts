@@ -1,7 +1,6 @@
-
 import type { Clauses } from "./languages";
 
-export const insuranceCertificateClauses: Clauses = {
+export const insuranceCertificateClauses = (companyName: string): Clauses => ({
     fr: {
         header: {
             line1: "Département des Assurances",
@@ -15,10 +14,10 @@ export const insuranceCertificateClauses: Clauses = {
         },
         beneficiary: {
             title: "Le Bénéficiaire :",
-            content: "L'organisme prêteur partenaire de Neofonds, pour le compte du contrat de prêt N° {loan_contract_ref}.",
+            content: `L'organisme prêteur partenaire de ${companyName}, pour le compte du contrat de prêt N° {loan_contract_ref}.`,
         },
         object_title: "Objet : Attestation d'assurance groupe relative au prêt N° {loan_contract_ref}",
-        object_content: "Nous soussignés, agissant pour le compte de notre partenaire assureur, certifions par la présente que l'assuré(e) susmentionné(e) est couvert(e) par le contrat d'assurance groupe n°789-456, souscrit par Neofonds dans le cadre de son prêt.",
+        object_content: `Nous soussignés, agissant pour le compte de notre partenaire assureur, certifions par la présente que l'assuré(e) susmentionné(e) est couvert(e) par le contrat d'assurance groupe n°789-456, souscrit par ${companyName} dans le cadre de son prêt.`,
         loan_details: {
             title: "Détails du prêt assuré",
             nature: "Nature du prêt : {loan_type}",
@@ -55,10 +54,10 @@ export const insuranceCertificateClauses: Clauses = {
         },
         beneficiary: {
             title: "The Beneficiary:",
-            content: "The lending institution partner of Neofonds, for loan contract No. {loan_contract_ref}.",
+            content: `The lending institution partner of ${companyName}, for loan contract No. {loan_contract_ref}.`,
         },
         object_title: "Subject: Group insurance certificate regarding loan No. {loan_contract_ref}",
-        object_content: "We, the undersigned, acting on behalf of our insurance partner, hereby certify that the above-mentioned insured person is covered by the group insurance contract No. 789-456, underwritten by Neofonds as part of their loan.",
+        object_content: `We, the undersigned, acting on behalf of our insurance partner, hereby certify that the above-mentioned insured person is covered by the group insurance contract No. 789-456, underwritten by ${companyName} as part of their loan.`,
         loan_details: {
             title: "Details of the Insured Loan",
             nature: "Type of loan: {loan_type}",
@@ -95,10 +94,10 @@ export const insuranceCertificateClauses: Clauses = {
         },
         beneficiary: {
             title: "Der Begünstigte:",
-            content: "Die kreditgebende Institution, Partner von Neofonds, für den Darlehensvertrag Nr. {loan_contract_ref}.",
+            content: `Die kreditgebende Institution, Partner von ${companyName}, für den Darlehensvertrag Nr. {loan_contract_ref}.`,
         },
         object_title: "Betreff: Gruppenversicherungszertifikat bezüglich Darlehen Nr. {loan_contract_ref}",
-        object_content: "Wir, die Unterzeichner, handeln im Namen unseres Versicherungspartners und bescheinigen hiermit, dass die oben genannte versicherte Person durch den von Neofonds im Rahmen ihres Darlehens abgeschlossenen Gruppenversicherungsvertrag Nr. 789-456 versichert ist.",
+        object_content: `Wir, die Unterzeichner, handeln im Namen unseres Versicherungspartners und bescheinigen hiermit, dass die oben genannte versicherte Person durch den von ${companyName} im Rahmen ihres Darlehens abgeschlossenen Gruppenversicherungsvertrag Nr. 789-456 versichert ist.`,
         loan_details: {
             title: "Details des versicherten Darlehens",
             nature: "Art des Darlehens: {loan_type}",
@@ -122,4 +121,4 @@ export const insuranceCertificateClauses: Clauses = {
             content: "Dieses Zertifikat wird ausgestellt, um als Rechtsnachweis zu dienen. Die Garantien treten am Tag der Auszahlung der Darlehensmittel in Kraft und enden mit der vollständigen Rückzahlung des Darlehens.",
         }
     }
-};
+});

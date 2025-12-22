@@ -1,10 +1,10 @@
-
 import React from 'react';
 import Image from 'next/image';
 import { insuranceCertificateClauses } from '@/data/documents/insurance-certificate-clauses';
 import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from './DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
+import { useBrand } from '@/context/BrandContext';
 
 interface InsuranceCertificateTemplateProps {
     formData: any;
@@ -12,8 +12,9 @@ interface InsuranceCertificateTemplateProps {
 }
 
 const InsuranceCertificateTemplate: React.FC<InsuranceCertificateTemplateProps> = ({ formData, lang }) => {
-    const clauses = insuranceCertificateClauses[lang] || insuranceCertificateClauses['fr'];
-    const signer = signatureData.insurance;
+    const { companyInfo } = useBrand();
+    const clauses = insuranceCertificateClauses(companyInfo.name)[lang] || insuranceCertificateClauses(companyInfo.name)['fr'];
+    const signer = signatureData(companyInfo.brandKey).insurance;
 
     const replacePlaceholders = (text: string) => {
         if (!text) return '';
@@ -93,9 +94,9 @@ const InsuranceCertificateTemplate: React.FC<InsuranceCertificateTemplateProps> 
 
             </section>
 
-             <div className="mt-16 pt-8 text-right">
+             <div className="mt-16 pt-8 text-right" style={{ pageBreakInside: 'avoid' }}>
                  <div className="inline-block text-center text-xs">
-                    {signer.signatureUrl && <Image src={signer.signatureUrl} alt={`Signature de ${signer.name}`} width={150} height={50} className="mx-auto" />}
+                    {signer.signatureUrl && <Image src={signer.signatureUrl} alt={`Signature de ${signer.name}`} width={150} height={50} style={{ margin: '0 auto', mixBlendMode: 'darken' }} />}
                     <div className="border-t border-slate-400 pt-2 mt-2">
                          <p className="font-bold">{signer.name}</p>
                          <p className="text-muted-foreground">{signer.title[lang]}</p>

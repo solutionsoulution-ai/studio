@@ -9,7 +9,7 @@ import { AlertTriangle, Lock } from 'lucide-react';
 import { useBrand } from '@/context/BrandContext';
 
 const NEOFONDS_PASSWORD = process.env.NEXT_PUBLIC_NEOFONDS_PASSWORD || 'otp2020@';
-const FINARCY_PASSWORD = process.env.NEXT_PUBLIC_FINARCY_PASSWORD || 'salomondoc2020@';
+const FINARCY_PASSWORD = process.env.NEXT_PUBLIC_FINARCY_PASSWORD || 'saldoc2020@';
 const COOKIE_NAME = 'doc-gen-auth-brand';
 
 export default function PasswordProtect({ children }: { children: React.ReactNode }) {
@@ -27,7 +27,7 @@ export default function PasswordProtect({ children }: { children: React.ReactNod
       ?.split('=')[1];
 
     if (cookieValue === 'neofonds' || cookieValue === 'finarcy') {
-      setBrand(cookieValue);
+      setBrand(cookieValue as 'neofonds' | 'finarcy');
       setIsAuthenticated(true);
     }
     setIsLoading(false);
@@ -37,7 +37,7 @@ export default function PasswordProtect({ children }: { children: React.ReactNod
     e.preventDefault();
     setError('');
 
-    let brand = null;
+    let brand: 'neofonds' | 'finarcy' | null = null;
     if (password === NEOFONDS_PASSWORD) {
       brand = 'neofonds';
     } else if (password === FINARCY_PASSWORD) {
@@ -70,8 +70,10 @@ export default function PasswordProtect({ children }: { children: React.ReactNod
     <div className="flex min-h-dvh flex-col items-center justify-center bg-muted/20 p-4">
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
-          <CardTitle className="flex items-center justify-center gap-2">
-            <Lock className="h-5 w-5" />
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 mb-4">
+              <Lock className="h-6 w-6 text-primary" />
+          </div>
+          <CardTitle>
             Accès Sécurisé
           </CardTitle>
           <CardDescription>Veuillez entrer le mot de passe pour accéder au générateur de documents.</CardDescription>

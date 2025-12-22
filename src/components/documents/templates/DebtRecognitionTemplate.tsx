@@ -2,6 +2,7 @@ import React from 'react';
 import { debtRecognitionClauses } from '@/data/documents/debt-recognition-clauses';
 import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from './DocumentWrapper';
+import ArticleHeader from './ArticleHeader';
 import { useBrand } from '@/context/BrandContext';
 
 const DebtRecognitionTemplate: React.FC<{ formData: any; lang: 'fr' | 'en' | 'de' }> = ({ formData, lang }) => {
@@ -52,10 +53,7 @@ const DebtRecognitionTemplate: React.FC<{ formData: any; lang: 'fr' | 'en' | 'de
             <section className="space-y-4 text-sm leading-relaxed">
                 {Object.values(clauses.articles).map((article: any, index: number) => (
                     <article key={index}>
-                        <div className="flex items-center gap-3 mb-1">
-                            <div className="w-1.5 h-6 bg-primary rounded-full" />
-                            <h3 className="font-bold uppercase text-xs text-primary">{article.title}</h3>
-                        </div>
+                        <ArticleHeader title={article.title} />
                         <p>{replacePlaceholders(article.content)}</p>
                     </article>
                 ))}

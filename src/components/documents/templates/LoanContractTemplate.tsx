@@ -1,10 +1,10 @@
-
 import React from 'react';
 import Image from 'next/image';
 import { loanContractClauses } from '@/data/documents/loan-contract-clauses';
 import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from './DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
+import { useBrand } from '@/context/BrandContext';
 
 interface LoanContractTemplateProps {
     formData: any;
@@ -12,8 +12,9 @@ interface LoanContractTemplateProps {
 }
 
 const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, lang }) => {
+    const { companyInfo } = useBrand();
     const clauses = loanContractClauses[lang] || loanContractClauses['fr'];
-    const signer = signatureData.ceo;
+    const signer = signatureData(companyInfo.brandKey).ceo;
 
     const replacePlaceholders = (text: string) => {
         return text
@@ -32,7 +33,7 @@ const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, l
             .replace(/{total_cost}/g, formData.total_cost ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.total_cost) : '')
             .replace(/{monthly_payment}/g, formData.monthly_payment ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.monthly_payment) : '')
             .replace(/{total_due}/g, formData.total_due ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.total_due) : '')
-            .replace(/{contact_email}/g, "contact@neofonds.com");
+            .replace(/{contact_email}/g, companyInfo.email);
     };
 
     return (
@@ -48,8 +49,8 @@ const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, l
                  <div className="grid grid-cols-2 gap-6 text-xs">
                      <div>
                          <h3 className="font-semibold underline mb-1">{clauses.parties.lender_label}</h3>
-                         <p>Neofonds GmbH</p>
-                         <p>Mainzer Landstraße 50, 60325 Frankfurt am Main, Deutschland</p>
+                         <p>{companyInfo.name}</p>
+                         <p>{companyInfo.address}</p>
                      </div>
                      <div>
                          <h3 className="font-semibold underline mb-1">{clauses.parties.borrower_label}</h3>
@@ -92,7 +93,7 @@ const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, l
             </section>
             
             <p className="text-center mt-8 text-xs">{clauses.signature_preamble}</p>
-            <div className="mt-10 pt-8 grid grid-cols-2 gap-16 text-xs">
+            <div className="mt-10 pt-8 grid grid-cols-2 gap-16 text-xs" style={{ pageBreakInside: 'avoid' }}>
                 <div className="text-center">
                     <div className="h-20"></div>
                     <div className="border-t border-slate-400 pt-2">
@@ -101,7 +102,7 @@ const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, l
                     </div>
                 </div>
                 <div className="text-center">
-                    {signer.signatureUrl && <Image src={signer.signatureUrl} alt={`Signature de ${signer.name}`} width={150} height={50} className="mx-auto" />}
+                    {signer.signatureUrl && <Image src={signer.signatureUrl} alt={`Signature de ${signer.name}`} width={150} height={50} style={{ margin: '0 auto', mixBlendMode: 'darken' }} />}
                     <div className="border-t border-slate-400 pt-2">
                          <p className="font-bold">{clauses.parties.lender_label}</p>
                          <p className="text-muted-foreground">{signer.name}, {signer.title[lang]}</p>

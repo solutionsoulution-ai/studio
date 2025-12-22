@@ -1,9 +1,9 @@
-
 import React from 'react';
 import { amlCertificateClauses } from '@/data/documents/aml-certificate-clauses';
 import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from './DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
+import { useBrand } from '@/context/BrandContext';
 
 interface AmlCertificateTemplateProps {
     formData: any;
@@ -11,8 +11,9 @@ interface AmlCertificateTemplateProps {
 }
 
 const AmlCertificateTemplate: React.FC<AmlCertificateTemplateProps> = ({ formData, lang }) => {
-    const clauses = amlCertificateClauses[lang] || amlCertificateClauses['fr'];
-    const complianceSigner = signatureData.legal; 
+    const { companyInfo } = useBrand();
+    const clauses = amlCertificateClauses(companyInfo.name)[lang] || amlCertificateClauses(companyInfo.name)['fr'];
+    const complianceSigner = signatureData(companyInfo.brandKey).legal; 
 
     const replacePlaceholders = (text: string) => {
         if (!text) return '';
@@ -63,16 +64,16 @@ const AmlCertificateTemplate: React.FC<AmlCertificateTemplateProps> = ({ formDat
                 </article>
             </section>
 
-            <div className="mt-16 pt-8 grid grid-cols-2 gap-16 text-xs items-end">
+            <div className="mt-16 pt-8 grid grid-cols-2 gap-16 text-xs items-end" style={{ pageBreakInside: 'avoid' }}>
                 <div className="text-center">
                     <div className="h-12 border-b border-slate-400 mb-2"></div>
                     <p className="font-bold">{clauses.signature_label}</p>
                     <p className="text-muted-foreground">Lu et approuvé</p>
                 </div>
                  <div className="text-center">
-                    <p className="text-muted-foreground">Pour Neofonds,</p>
+                    <p className="text-muted-foreground">Pour {companyInfo.name},</p>
                     <div className="h-12 flex items-center justify-center">
-                        <img src={complianceSigner.signatureUrl} alt={`Signature de ${complianceSigner.name}`} style={{ height: '40px', objectFit: 'contain' }} />
+                        <img src={complianceSigner.signatureUrl} alt={`Signature de ${complianceSigner.name}`} style={{ height: '40px', objectFit: 'contain', mixBlendMode: 'darken' }} />
                     </div>
                     <div className="border-t border-slate-400 pt-2">
                          <p className="font-bold">{complianceSigner.name}</p>

@@ -1,10 +1,10 @@
-
 import React from 'react';
 import Image from 'next/image';
 import { neofondsReceiptClauses } from '@/data/documents/neofonds-receipt-clauses';
 import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from './DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
+import { useBrand } from '@/context/BrandContext';
 
 interface NeofondsReceiptTemplateProps {
     formData: any;
@@ -12,8 +12,9 @@ interface NeofondsReceiptTemplateProps {
 }
 
 const NeofondsReceiptTemplate: React.FC<NeofondsReceiptTemplateProps> = ({ formData, lang }) => {
+    const { companyInfo } = useBrand();
     const clauses = neofondsReceiptClauses[lang] || neofondsReceiptClauses['fr'];
-    const signer = signatureData.finance;
+    const signer = signatureData(companyInfo.brandKey).finance;
 
     const replacePlaceholders = (text: string) => {
         if (!text) return '';
@@ -67,7 +68,7 @@ const NeofondsReceiptTemplate: React.FC<NeofondsReceiptTemplateProps> = ({ formD
                     <p>{clauses.confirmation.content}</p>
                 </section>
 
-                <div className="mt-20 pt-8 grid grid-cols-2 items-end">
+                <div className="mt-20 pt-8 grid grid-cols-2 items-end" style={{ pageBreakInside: 'avoid' }}>
                      <div className="text-left text-xs text-muted-foreground">
                         <p className="font-semibold text-foreground">{clauses.footer.thank_you}</p>
                         <p>{clauses.footer.contact_info}</p>
@@ -75,7 +76,7 @@ const NeofondsReceiptTemplate: React.FC<NeofondsReceiptTemplateProps> = ({ formD
                     </div>
                     <div className="text-right">
                         <div className="inline-block text-center text-xs">
-                            {signer.signatureUrl && <Image src={signer.signatureUrl} alt={`Signature de ${signer.name}`} width={150} height={50} className="mx-auto" />}
+                            {signer.signatureUrl && <Image src={signer.signatureUrl} alt={`Signature de ${signer.name}`} width={150} height={50} style={{ margin: '0 auto', mixBlendMode: 'darken' }} />}
                             <div className="border-t border-slate-400 pt-2 mt-2">
                                 <p className="font-bold">{clauses.signature_label}</p>
                                 <p className="text-muted-foreground">{signer.name}, {signer.title[lang]}</p>

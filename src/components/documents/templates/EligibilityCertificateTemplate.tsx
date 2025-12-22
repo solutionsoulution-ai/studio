@@ -1,10 +1,10 @@
-
 import React from 'react';
 import Image from 'next/image';
 import { eligibilityCertificateClauses } from '@/data/documents/eligibility-certificate-clauses';
 import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from './DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
+import { useBrand } from '@/context/BrandContext';
 
 interface EligibilityCertificateTemplateProps {
     formData: any;
@@ -12,8 +12,9 @@ interface EligibilityCertificateTemplateProps {
 }
 
 const EligibilityCertificateTemplate: React.FC<EligibilityCertificateTemplateProps> = ({ formData, lang }) => {
-    const clauses = eligibilityCertificateClauses[lang] || eligibilityCertificateClauses['fr'];
-    const signer = signatureData.analysis;
+    const { companyInfo } = useBrand();
+    const clauses = eligibilityCertificateClauses(companyInfo.name)[lang] || eligibilityCertificateClauses(companyInfo.name)['fr'];
+    const signer = signatureData(companyInfo.brandKey).analysis;
 
     const validityDate = formData.date ? new Date(new Date(formData.date).setDate(new Date(formData.date).getDate() + 30)).toLocaleDateString(lang) : '';
     
@@ -66,9 +67,9 @@ const EligibilityCertificateTemplate: React.FC<EligibilityCertificateTemplatePro
                 </article>
             </section>
 
-             <div className="mt-8 pt-4 flex justify-end">
+             <div className="mt-8 pt-4 flex justify-end" style={{ pageBreakInside: 'avoid' }}>
                  <div className="text-center">
-                    {signer.signatureUrl && <Image src={signer.signatureUrl} alt={`Signature de ${signer.name}`} width={150} height={50} className="mx-auto" />}
+                    {signer.signatureUrl && <Image src={signer.signatureUrl} alt={`Signature de ${signer.name}`} width={150} height={50} style={{ margin: '0 auto', mixBlendMode: 'darken' }} />}
                     <div className="border-t border-slate-400 pt-2 mt-2 text-xs">
                          <p className="font-bold">{signer.name}</p>
                          <p className="text-muted-foreground">{signer.title[lang]}</p>

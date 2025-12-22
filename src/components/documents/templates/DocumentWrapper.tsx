@@ -12,7 +12,7 @@ interface DocumentWrapperProps {
 }
 
 const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, department, docRef, docDate, hideDepartment = false, lang }) => {
-  const { companyInfo, brand } = useBrand();
+  const { companyInfo } = useBrand();
 
   const footerText = {
     fr: {

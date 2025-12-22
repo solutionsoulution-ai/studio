@@ -2,6 +2,7 @@ import React from 'react';
 import { suretyBondClauses } from '@/data/documents/surety-bond-clauses';
 import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from './DocumentWrapper';
+import ArticleHeader from './ArticleHeader';
 import { useBrand } from '@/context/BrandContext';
 
 const SuretyBondTemplate: React.FC<{ formData: any; lang: 'fr' | 'en' | 'de' }> = ({ formData, lang }) => {
@@ -52,10 +53,7 @@ const SuretyBondTemplate: React.FC<{ formData: any; lang: 'fr' | 'en' | 'de' }> 
 
             <section className="space-y-3 text-sm leading-relaxed">
                 <article>
-                    <div className="flex items-center gap-3 mb-1">
-                        <div className="w-1.5 h-6 bg-primary rounded-full" />
-                        <h3 className="font-bold uppercase text-xs text-primary">{clauses.articles.object.title}</h3>
-                    </div>
+                    <ArticleHeader title={clauses.articles.object.title} />
                     <p className="text-xs">{replacePlaceholders(clauses.articles.object.content)}</p>
                      <ul className="text-xs bg-muted p-2 rounded-md mt-1 space-y-0.5">
                         <li>Numéro du contrat de prêt : {formData.loan_contract_ref || ''}</li>
@@ -66,43 +64,28 @@ const SuretyBondTemplate: React.FC<{ formData: any; lang: 'fr' | 'en' | 'de' }> 
                 </article>
                 
                 <article>
-                    <div className="flex items-center gap-3 mb-1">
-                        <div className="w-1.5 h-6 bg-primary rounded-full" />
-                        <h3 className="font-bold uppercase text-xs text-primary">{clauses.articles.scope.title}</h3>
-                    </div>
+                    <ArticleHeader title={clauses.articles.scope.title} />
                     <p className="text-xs">{replacePlaceholders(clauses.articles.scope.content)}</p>
                 </article>
 
                 <article>
-                    <div className="flex items-center gap-3 mb-1">
-                        <div className="w-1.5 h-6 bg-primary rounded-full" />
-                        <h3 className="font-bold uppercase text-xs text-primary">{clauses.articles.deposit_principle.title}</h3>
-                    </div>
+                    <ArticleHeader title={clauses.articles.deposit_principle.title} />
                     <p className="text-xs">{replacePlaceholders(clauses.articles.deposit_principle.content)}</p>
                 </article>
 
                 <article>
-                    <div className="flex items-center gap-3 mb-1">
-                        <div className="w-1.5 h-6 bg-primary rounded-full" />
-                        <h3 className="font-bold uppercase text-xs text-primary">{clauses.articles.activation_procedure.title}</h3>
-                    </div>
+                    <ArticleHeader title={clauses.articles.activation_procedure.title} />
                     <p className="text-xs">{replacePlaceholders(clauses.articles.activation_procedure.content)}</p>
                 </article>
                 
                 <div style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
                     <article>
-                        <div className="flex items-center gap-3 mb-1">
-                            <div className="w-1.5 h-6 bg-primary rounded-full" />
-                            <h3 className="font-bold uppercase text-xs text-primary">{clauses.articles.restitution.title}</h3>
-                        </div>
+                        <ArticleHeader title={clauses.articles.restitution.title} />
                         <p className="text-xs">{replacePlaceholders(clauses.articles.restitution.content)}</p>
                     </article>
 
                     <article className='mt-3'>
-                        <div className="flex items-center gap-3 mb-1">
-                            <div className="w-1.5 h-6 bg-primary rounded-full" />
-                            <h3 className="font-bold uppercase text-xs text-primary">{clauses.articles.solidarity.title}</h3>
-                        </div>
+                        <ArticleHeader title={clauses.articles.solidarity.title} />
                         <p className="text-xs">{replacePlaceholders(clauses.articles.solidarity.content)}</p>
                     </article>
                 </div>
@@ -112,10 +95,7 @@ const SuretyBondTemplate: React.FC<{ formData: any; lang: 'fr' | 'en' | 'de' }> 
                 </div>
 
                 <article className="border-l-4 border-destructive bg-destructive/10 p-3 rounded-r-md">
-                    <div className="flex items-center gap-3 mb-1 text-destructive">
-                        <div className="w-1.5 h-6 bg-destructive rounded-full" />
-                        <h3 className="font-bold uppercase text-xs">{clauses.articles.mention.title}</h3>
-                    </div>
+                    <ArticleHeader title={clauses.articles.mention.title} className="text-destructive" />
                     <p className="text-xs italic text-destructive mb-1">{clauses.articles.mention.instruction}</p>
                     <div className="border border-dashed border-slate-400 p-2 min-h-[40px] bg-background">
                        <p className="text-xs">{replacePlaceholders(clauses.articles.mention.content)}</p>
@@ -123,10 +103,7 @@ const SuretyBondTemplate: React.FC<{ formData: any; lang: 'fr' | 'en' | 'de' }> 
                 </article>
 
                  <article>
-                    <div className="flex items-center gap-3 mb-1">
-                        <div className="w-1.5 h-6 bg-primary rounded-full" />
-                        <h3 className="font-bold uppercase text-xs text-primary">{clauses.articles.information.title}</h3>
-                    </div>
+                    <ArticleHeader title={clauses.articles.information.title} />
                     <p className="text-xs">{replacePlaceholders(clauses.articles.information.content)}</p>
                 </article>
             </section>
