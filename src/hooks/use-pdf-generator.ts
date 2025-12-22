@@ -28,6 +28,8 @@ export function usePDFGenerator() {
                 floatPrecision: 16
             });
 
+            const page_A4_width = 595; // A4 width in pt
+
             await pdf.html(input, {
                 callback: function (doc) {
                     doc.save(fileName);
@@ -35,9 +37,9 @@ export function usePDFGenerator() {
                 x: 0,
                 y: 0,
                 autoPaging: 'text',
-                width: pdf.internal.pageSize.getWidth(),
+                width: page_A4_width, 
                 windowWidth: input.scrollWidth,
-                margin: [40, 40, 40, 40]
+                margin: 0
             });
 
         } catch (error) {

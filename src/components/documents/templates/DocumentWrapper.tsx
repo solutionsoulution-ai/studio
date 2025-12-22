@@ -43,7 +43,7 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      opacity: 0.8,
+      opacity: 0.15,
       transform: 'rotate(-15deg)',
       color: 'hsl(var(--primary))',
       textAlign: 'center',
@@ -77,7 +77,7 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
             background: '#ffffff',
             fontSize: '12pt',
             padding: '40px',
-            maxWidth: '800px',
+            maxWidth: '794px',
             margin: 'auto',
             border: '1px solid #e2e8f0',
             position: 'relative'
