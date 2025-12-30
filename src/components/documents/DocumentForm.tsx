@@ -45,8 +45,8 @@ const buildFieldSchema = (field: DocumentField): z.ZodType<any, any> => {
             break;
         case 'number':
             fieldSchema = z.preprocess(
-                (val) => val === '' ? null : Number(String(val)),
-                 z.number().min(0, { message: "Doit être un nombre positif." }).nullable()
+                (val) => val === '' ? null : Number(String(val).replace(/,/g, '.')),
+                 z.number({invalid_type_error: "Doit être un nombre."}).min(0, { message: "Doit être un nombre positif." }).nullable()
             );
             break;
         case 'date':
@@ -60,8 +60,8 @@ const buildFieldSchema = (field: DocumentField): z.ZodType<any, any> => {
         default:
             fieldSchema = z.any();
     }
-    // Make fields not required if they are not the first item fields for invoice
-     if (field.name.includes('item') && !field.name.includes('item1')) {
+    
+    if (field.name.includes('item') && !field.name.includes('item1')) {
        return fieldSchema.optional().nullable();
     }
     if (field.validation.type === 'string' && !field.name.includes('item1_description')) {
@@ -69,13 +69,12 @@ const buildFieldSchema = (field: DocumentField): z.ZodType<any, any> => {
         if(field.name.includes('item')) return schema.optional().nullable();
     }
 
-
     return fieldSchema;
 };
 
 
 const DocumentForm: React.FC<DocumentFormProps> = ({ documentType }) => {
-  const { formData, setFormData, lang, setLang, currency, setCurrency } = useDocumentGenerator();
+  const { initialData, setFormData, lang, setLang, currency, setCurrency } = useDocumentGenerator();
   const { generatePDF, isLoading } = usePDFGenerator();
 
   const currentFields = useMemo(() => documentFields[documentType as keyof typeof documentFields] || [], [documentType]);
@@ -85,30 +84,27 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType }) => {
   const methods = useForm({
     resolver: zodResolver(schema),
     mode: 'onChange',
-    defaultValues: formData,
+    defaultValues: initialData,
   });
 
-  const { handleSubmit, control, watch, reset } = methods;
+  const { handleSubmit, control, watch, reset, formState: { errors } } = methods;
   
-  // Use a "debounced" value for watched form data to prevent excessive re-renders.
   const watchedValues = watch();
   const [debouncedValues] = useDebounce(watchedValues, 300);
 
-  // This useEffect now runs only when debouncedValues changes, not on every keystroke.
   useEffect(() => {
-      setFormData(debouncedValues);
+    setFormData(debouncedValues);
   }, [debouncedValues, setFormData]);
 
-  // This useEffect resets the form only when the initial data from the parent changes.
   useEffect(() => {
-    reset(formData);
-  }, [formData, reset]);
+    reset(initialData);
+  }, [initialData, reset]);
 
 
   const onSubmit = (data: any) => {
     generatePDF({ elementId: 'pdf-content', fileName: `${documentType}.pdf` });
   };
-
+  
   const renderField = (field: DocumentField) => {
     const currencySymbol = currency === 'USD' ? '$' : '€';
     const labelText = field.label[lang] || field.label['fr'];
@@ -129,7 +125,7 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType }) => {
     }
     return (
       <div key={field.name} className="space-y-2">
-        <Label htmlFor={field.name}>{`${labelText} ${field.type === 'number' && field.name.includes('amount') ? `(${currencySymbol})` : ''}`}</Label>
+        <Label htmlFor={field.name}>{`${labelText} ${field.type === 'number' && (field.name.includes('amount') || field.name.includes('price')) ? `(${currencySymbol})` : ''}`}</Label>
         <Controller
           name={field.name}
           control={control}
@@ -201,3 +197,5 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType }) => {
 };
 
 export default DocumentForm;
+
+    

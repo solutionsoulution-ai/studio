@@ -6,8 +6,8 @@ import type { Language } from '@/data/documents/languages';
 import type { Currency } from './DocumentPageClient';
 
 export const DocumentGeneratorContext = React.createContext<{
-    formData: any;
-    setFormData: React.Dispatch<React.SetStateAction<any>>;
+    initialData: any; // Used to reset the form
+    setFormData: React.Dispatch<React.SetStateAction<any>>; // Used by the debounced effect
     lang: Language;
     setLang: React.Dispatch<React.SetStateAction<Language>>;
     currency: Currency;
@@ -31,3 +31,5 @@ const DocumentGenerator = ({ documentType }: { documentType: string }) => {
 };
 
 export default DocumentGenerator;
+
+    
