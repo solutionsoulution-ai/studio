@@ -16,6 +16,7 @@ import { documentFields, DocumentField } from '@/lib/document-fields';
 import type { Language } from '@/data/documents/languages';
 import { useDocumentGenerator } from './DocumentGenerator';
 import { Currency } from './DocumentPageClient';
+import { useDebounce } from 'use-debounce';
 
 interface DocumentFormProps {
   documentType: string;
@@ -89,16 +90,19 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType }) => {
 
   const { handleSubmit, control, watch, reset } = methods;
   
+  // Use a "debounced" value for watched form data to prevent excessive re-renders.
+  const watchedValues = watch();
+  const [debouncedValues] = useDebounce(watchedValues, 500);
+
+  // This useEffect now runs only when debouncedValues changes, not on every keystroke.
+  useEffect(() => {
+      setFormData(debouncedValues);
+  }, [debouncedValues, setFormData]);
+
+  // This useEffect resets the form only when the initial data from the parent changes.
   useEffect(() => {
     reset(formData);
   }, [formData, reset]);
-
-  useEffect(() => {
-    const subscription = watch((value) => {
-      setFormData(value as any);
-    });
-    return () => subscription.unsubscribe();
-  }, [watch, setFormData]);
 
 
   const onSubmit = (data: any) => {
