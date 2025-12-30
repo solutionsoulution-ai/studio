@@ -84,25 +84,22 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType }) => {
   const methods = useForm({
     resolver: zodResolver(schema),
     mode: 'onChange',
-    defaultValues: initialData,
   });
 
-  const { handleSubmit, control, watch, reset, formState: { errors, dirtyFields } } = methods;
+  const { handleSubmit, control, watch, reset, formState: { errors } } = methods;
   
   const watchedValues = watch();
   const [debouncedValues] = useDebounce(watchedValues, 300);
 
   useEffect(() => {
-    setFormData(debouncedValues);
+    if (setFormData) {
+        setFormData(debouncedValues);
+    }
   }, [debouncedValues, setFormData]);
 
   useEffect(() => {
-    // Reset form only if initialData changes and form is not dirty
-    // This handles brand/doc changes without losing user input
-    if (Object.keys(dirtyFields).length === 0) {
-      reset(initialData);
-    }
-  }, [initialData, reset, dirtyFields]);
+    reset(initialData);
+  }, [initialData, reset]);
 
 
   const onSubmit = (data: any) => {

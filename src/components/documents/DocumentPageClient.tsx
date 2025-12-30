@@ -1,6 +1,6 @@
 
 "use client";
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import DocumentGenerator, { DocumentGeneratorContext } from "@/components/documents/DocumentGenerator";
 import DocumentPreview from "@/components/documents/DocumentPreview";
 import type { Language } from '@/data/documents/languages';
@@ -83,7 +83,7 @@ export default function DocumentPageClient({ slug }: { slug: string }) {
   }, [brand, slug]);
 
   const [formData, setFormData] = useState(initialData);
-
+  
   useEffect(() => {
     setFormData(initialData);
   }, [initialData]);
@@ -91,8 +91,12 @@ export default function DocumentPageClient({ slug }: { slug: string }) {
 
   const TemplateComponent = documentTemplates[slug];
 
+  const handleFormDataChange = useCallback((newFormData: any) => {
+    setFormData(newFormData);
+  }, []);
+
   return (
-    <DocumentGeneratorContext.Provider value={{ initialData, setFormData, lang, setLang, currency, setCurrency }}>
+    <DocumentGeneratorContext.Provider value={{ initialData, setFormData: handleFormDataChange, lang, setLang, currency, setCurrency }}>
       <div className="flex flex-col lg:flex-row w-full min-h-screen bg-muted/20">
         <div className="w-full lg:w-1/3 lg:h-screen lg:overflow-y-auto p-4">
           <DocumentGenerator documentType={slug} />
@@ -106,5 +110,3 @@ export default function DocumentPageClient({ slug }: { slug: string }) {
     </DocumentGeneratorContext.Provider>
   );
 }
-
-    
