@@ -111,7 +111,7 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <Image src={companyInfo.logoUrl} alt={`${companyInfo.name} logo`} width={120} height={35} />
                     <div style={{borderLeft: '1px solid #cdd1d5', height: '30px'}}></div>
-                    <h1 style={{ fontWeight: 'bold', fontSize: '24px' }}>{companyInfo.name}</h1>
+                    <h1 style={{ fontWeight: 'bold', fontSize: '24px', color: 'hsl(var(--primary))' }}>{companyInfo.name}</h1>
                   </div>
                 ) : companyInfo.brandKey === 'finarcy' && companyInfo.logoUrl ? (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
