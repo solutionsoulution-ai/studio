@@ -81,38 +81,25 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType }) => {
   
   const schema = buildSchema(currentFields);
   
-  const getDefaultValues = () => {
-    const defaultVals: any = {};
-    currentFields.forEach(field => {
-      if (field.type === 'group' && field.fields) {
-        field.fields.forEach(subField => {
-          defaultVals[subField.name] = subField.defaultValue ?? '';
-        });
-      } else {
-        defaultVals[field.name] = field.defaultValue ?? '';
-      }
-    });
-    return defaultVals;
-  };
-
   const methods = useForm({
     resolver: zodResolver(schema),
     mode: 'onChange',
-    defaultValues: formData && Object.keys(formData).length > 0 ? formData : getDefaultValues(),
+    defaultValues: formData,
   });
 
   const { handleSubmit, control, watch, reset } = methods;
-
+  
   useEffect(() => {
     reset(formData);
   }, [formData, reset]);
-  
+
   useEffect(() => {
     const subscription = watch((value) => {
-      setFormData(value);
+      setFormData(value as any);
     });
     return () => subscription.unsubscribe();
   }, [watch, setFormData]);
+
 
   const onSubmit = (data: any) => {
     generatePDF({ elementId: 'pdf-content', fileName: `${documentType}.pdf` });
