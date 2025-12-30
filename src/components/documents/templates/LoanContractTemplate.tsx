@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Image from 'next/image';
 import { loanContractClauses } from '@/data/documents/loan-contract-clauses';
@@ -13,9 +12,20 @@ interface LoanContractTemplateProps {
 }
 
 const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, lang }) => {
-    const { companyInfo } = useBrand();
-    const clauses = loanContractClauses(companyInfo.city)[lang] || loanContractClauses(companyInfo.city)['fr'];
+    const { companyInfo, brand } = useBrand();
+
+    const getClauses = () => {
+        const allClauses = loanContractClauses(companyInfo.city);
+        if (brand === 'vantex' && allClauses.vantex) {
+            return allClauses.vantex;
+        }
+        return allClauses[lang] || allClauses['fr'];
+    }
+
+    const clauses = getClauses();
     const signer = signatureData(companyInfo.brandKey).ceo;
+
+    const borrower_name = brand === 'vantex' ? 'Sophie Martin' : formData.borrower_name;
 
     const replacePlaceholders = (text: string) => {
         if (!text) return '';
@@ -23,7 +33,7 @@ const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, l
             .replace(/{type_of_loan}/g, formData.type_of_loan || '')
             .replace(/{contract_ref}/g, formData.contract_ref || '')
             .replace(/{contract_date}/g, formData.contract_date ? new Date(formData.contract_date).toLocaleDateString(lang) : '')
-            .replace(/{borrower_name}/g, formData.borrower_name || '')
+            .replace(/{borrower_name}/g, borrower_name || '')
             .replace(/{borrower_address}/g, formData.borrower_address || '')
             .replace(/{borrower_id}/g, formData.borrower_id || '')
             .replace(/{loan_amount}/g, formData.loan_amount ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.loan_amount) : '')
@@ -52,13 +62,17 @@ const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, l
                      <div>
                          <h3 className="font-semibold underline mb-1">{clauses.parties.lender_label}</h3>
                          <p>{companyInfo.name}</p>
-                         <p>{companyInfo.address}</p>
+                         {brand !== 'vantex' && <p>{companyInfo.address}</p>}
                      </div>
                      <div>
                          <h3 className="font-semibold underline mb-1">{clauses.parties.borrower_label}</h3>
-                         <p>Nom: {formData.borrower_name || ''}</p>
-                         <p>Adresse: {formData.borrower_address || ''}</p>
-                         <p>ID: {formData.borrower_id || ''}</p>
+                         <p>Nom: {borrower_name || ''}</p>
+                         { brand !== 'vantex' &&
+                           <>
+                            <p>Adresse: {formData.borrower_address || ''}</p>
+                            <p>ID: {formData.borrower_id || ''}</p>
+                           </>
+                         }
                      </div>
                  </div>
             </section>
