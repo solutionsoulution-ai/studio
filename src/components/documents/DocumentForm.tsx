@@ -87,7 +87,7 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType }) => {
     defaultValues: initialData,
   });
 
-  const { handleSubmit, control, watch, reset, formState: { errors } } = methods;
+  const { handleSubmit, control, watch, reset, formState: { errors, dirtyFields } } = methods;
   
   const watchedValues = watch();
   const [debouncedValues] = useDebounce(watchedValues, 300);
@@ -97,8 +97,12 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType }) => {
   }, [debouncedValues, setFormData]);
 
   useEffect(() => {
-    reset(initialData);
-  }, [initialData, reset]);
+    // Reset form only if initialData changes and form is not dirty
+    // This handles brand/doc changes without losing user input
+    if (Object.keys(dirtyFields).length === 0) {
+      reset(initialData);
+    }
+  }, [initialData, reset, dirtyFields]);
 
 
   const onSubmit = (data: any) => {
@@ -197,5 +201,3 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType }) => {
 };
 
 export default DocumentForm;
-
-    
