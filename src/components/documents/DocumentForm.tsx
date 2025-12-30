@@ -83,10 +83,11 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType }) => {
   
   const methods = useForm({
     resolver: zodResolver(schema),
+    defaultValues: initialData,
     mode: 'onChange',
   });
 
-  const { handleSubmit, control, watch, reset, formState: { errors } } = methods;
+  const { handleSubmit, control, watch, reset } = methods;
   
   const watchedValues = watch();
   const [debouncedValues] = useDebounce(watchedValues, 300);
@@ -184,7 +185,7 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType }) => {
                 </div>
             </div>
 
-            {currentFields.map(renderField)}
+            {currentFields.map(field => renderField(field))}
             
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

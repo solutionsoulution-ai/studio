@@ -21,21 +21,6 @@ import { documentFields } from '@/lib/document-fields';
 
 export type Currency = 'EUR' | 'USD';
 
-const documentTemplates: { [key: string]: React.FC<any> } = {
-  'reconnaissance-de-dette': DebtRecognitionTemplate,
-  'attestation-eligibilite': EligibilityCertificateTemplate,
-  'contrat-de-pret-personnel': LoanContractTemplate,
-  'acte-de-cautionnement-solidaire': SuretyBondTemplate,
-  'attestation-assurance-emprunteur': InsuranceCertificateTemplate,
-  'notice-information-assurance': InsuranceNoticeTemplate,
-  'licence-bancaire': BankingLicenseTemplate,
-  'autorisation-courtage': BrokerageAuthorizationTemplate,
-  'recu-neofonds': NeofondsReceiptTemplate,
-  'facture-neofonds': NeofondsInvoiceTemplate,
-  'certificat-non-blanchiment': AmlCertificateTemplate,
-  'document-vierge': BlankDocumentTemplate,
-};
-
 const vantexLoanDefaultValues = {
   type_of_loan: 'Prêt Personnel Amortissable',
   contract_ref: 'PR-88210',
@@ -45,6 +30,7 @@ const vantexLoanDefaultValues = {
   borrower_id: '',
   loan_amount: 15000,
   loan_amount_in_words: 'quinze mille',
+  loan_amount_in_words_dollars: 'fifteen thousand',
   taeg: '4.5%',
   loan_term: 48,
   start_date: '2024-03-05',
@@ -52,7 +38,6 @@ const vantexLoanDefaultValues = {
   monthly_payment: 342.05,
   total_cost: 1418.51,
   total_due: 16418.51,
-  loan_amount_in_words_dollars: '15 mille dollars'
 };
 
 const getDefaultValuesForDoc = (docSlug: string) => {
@@ -88,15 +73,19 @@ export default function DocumentPageClient({ slug }: { slug: string }) {
     setFormData(initialData);
   }, [initialData]);
 
-
   const TemplateComponent = documentTemplates[slug];
 
-  const handleFormDataChange = useCallback((newFormData: any) => {
-    setFormData(newFormData);
-  }, []);
+  const contextValue = useMemo(() => ({
+    initialData,
+    setFormData,
+    lang,
+    setLang,
+    currency,
+    setCurrency
+  }), [initialData, setFormData, lang, setLang, currency, setCurrency]);
 
   return (
-    <DocumentGeneratorContext.Provider value={{ initialData, setFormData: handleFormDataChange, lang, setLang, currency, setCurrency }}>
+    <DocumentGeneratorContext.Provider value={contextValue}>
       <div className="flex flex-col lg:flex-row w-full min-h-screen bg-muted/20">
         <div className="w-full lg:w-1/3 lg:h-screen lg:overflow-y-auto p-4">
           <DocumentGenerator documentType={slug} />
