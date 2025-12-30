@@ -9,7 +9,7 @@ interface DocumentWrapperProps {
   docRef?: string;
   docDate?: string;
   hideDepartment?: boolean;
-  lang: 'fr' | 'en' | 'de';
+  lang: 'fr' | 'en' | 'de' | 'lt';
 }
 
 const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, department, docRef, docDate, hideDepartment = false, lang }) => {
@@ -27,6 +27,10 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
     de: {
       copyright: `© ${new Date().getFullYear()} ${companyInfo.name}. Alle Rechte vorbehalten.`,
       confidential: 'Dieses Dokument wird elektronisch erstellt und ist vertraulich.'
+    },
+    lt: {
+      copyright: `© ${new Date().getFullYear()} ${companyInfo.name}. Visos teisės saugomos.`,
+      confidential: 'Šis dokumentas yra sugeneruotas elektroniniu būdu ir yra konfidencialus.'
     }
   };
 
@@ -97,13 +101,18 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
             }}
         >
              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                {companyInfo.logoUrl && companyInfo.brandKey === 'vantex' ? (
+                {companyInfo.brandKey === 'vantex' && companyInfo.logoUrl ? (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <Image src={companyInfo.logoUrl} alt={`${companyInfo.name} logo`} width={120} height={35} style={{ mixBlendMode: 'darken' }} />
                     <span style={{ fontWeight: 'bold', fontSize: '24px', color: 'hsl(var(--primary))' }}>{companyInfo.name}</span>
                   </div>
+                ) : companyInfo.brandKey === 'finarcy' && companyInfo.logoUrl ? (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <Image src={companyInfo.logoUrl} alt={`${companyInfo.name} logo`} width={40} height={40} />
+                        <span style={{ fontWeight: 'bold', fontSize: '24px' }}>{companyInfo.name}</span>
+                    </div>
                 ) : companyInfo.logoUrl ? (
-                  <Image src={companyInfo.logoUrl} alt={`${companyInfo.name} logo`} width={140} height={40} style={{ mixBlendMode: 'darken' }} />
+                    <Image src={companyInfo.logoUrl} alt={`${companyInfo.name} logo`} width={140} height={40} style={{ mixBlendMode: 'darken' }} />
                 ) : (
                     <h1 style={{ fontWeight: 'bold', fontSize: '24px' }}>{companyInfo.name}</h1>
                 )}
