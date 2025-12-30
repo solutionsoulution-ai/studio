@@ -35,11 +35,16 @@ const NeofondsInvoiceTemplate: React.FC<NeofondsInvoiceTemplateProps> = ({ formD
     
     const items = getItemsFromFormData(formData);
     const subtotal = items.reduce((acc: number, item: any) => acc + (Number(item.quantity) || 0) * (Number(item.unit_price) || 0), 0);
-    const vatRate = 0.19; // German VAT rate
+    const vatRate = formData.vat_rate ? Number(formData.vat_rate) / 100 : 0.19;
     const vat = subtotal * vatRate;
     const total = subtotal + vat;
 
-    const replaceRef = (text: string) => text.replace(/{ref}/g, formData.ref || '');
+    const replacePlaceholders = (text: string) => {
+        if (!text) return '';
+        return text
+            .replace(/{ref}/g, formData.ref || '')
+            .replace(/{vat_rate}/g, (vatRate * 100).toFixed(0));
+    };
 
     return (
         <DocumentWrapper 
@@ -98,7 +103,7 @@ const NeofondsInvoiceTemplate: React.FC<NeofondsInvoiceTemplateProps> = ({ formD
                         <span>{new Intl.NumberFormat(lang, { style: 'currency', currency: 'EUR' }).format(subtotal)}</span>
                     </div>
                     <div className="flex justify-between py-1.5 border-b border-slate-200">
-                         <span className="text-slate-500">{clauses.vat_label}</span>
+                         <span className="text-slate-500">{replacePlaceholders(clauses.vat_label)}</span>
                          <span>{new Intl.NumberFormat(lang, { style: 'currency', currency: 'EUR' }).format(vat)}</span>
                     </div>
                     <div className="flex justify-between py-2 mt-2 font-bold text-base bg-slate-100 px-2 rounded-md text-[hsl(215,39%,29%)]">

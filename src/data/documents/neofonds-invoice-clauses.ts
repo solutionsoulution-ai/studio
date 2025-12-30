@@ -15,7 +15,7 @@ export const neofondsInvoiceClauses: Clauses = {
         bill_to_label: "Facturé à :",
         table_headers: { "description": "Description", "quantity": "Qté", "unit_price": "P.U. HT", "amount": "Montant HT" },
         subtotal_label: "Sous-total HT",
-        vat_label: "TVA (19%)", // Standard German VAT
+        vat_label: "TVA ({vat_rate}%)", // Standard German VAT
         total_label: "Net à Payer TTC",
         payment_terms: {
             "title": "Modalités de Paiement",
@@ -40,7 +40,7 @@ export const neofondsInvoiceClauses: Clauses = {
         bill_to_label: "Bill To:",
         table_headers: { "description": "Description", "quantity": "Qty", "unit_price": "Unit Price (excl. VAT)", "amount": "Amount (excl. VAT)" },
         subtotal_label: "Subtotal (excl. VAT)",
-        vat_label: "VAT (19%)",
+        vat_label: "VAT ({vat_rate}%)",
         total_label: "Net Payable (incl. VAT)",
         payment_terms: {
             "title": "Payment Terms",
@@ -65,7 +65,7 @@ export const neofondsInvoiceClauses: Clauses = {
         bill_to_label: "Rechnung an:",
         table_headers: { "description": "Beschreibung", "quantity": "Menge", "unit_price": "Einzelpreis (exkl. MwSt.)", "amount": "Betrag (exkl. MwSt.)" },
         subtotal_label: "Zwischensumme (exkl. MwSt.)",
-        vat_label: "MwSt. (19%)",
+        vat_label: "MwSt. ({vat_rate}%)",
         total_label: "Nettobetrag (inkl. MwSt.)",
         payment_terms: {
             "title": "Zahlungsbedingungen",
@@ -90,7 +90,7 @@ export const neofondsInvoiceClauses: Clauses = {
         bill_to_label: "Sąskaita išrašyta:",
         table_headers: { "description": "Aprašymas", "quantity": "Kiekis", "unit_price": "Vieneto kaina (be PVM)", "amount": "Suma (be PVM)" },
         subtotal_label: "Tarpinė suma (be PVM)",
-        vat_label: "PVM (19%)",
+        vat_label: "PVM ({vat_rate}%)",
         total_label: "Bendra mokėtina suma (su PVM)",
         payment_terms: {
             "title": "Mokėjimo sąlygos",
@@ -115,7 +115,7 @@ export const neofondsInvoiceClauses: Clauses = {
         bill_to_label: "Gefactureerd aan:",
         table_headers: { "description": "Omschrijving", "quantity": "Aantal", "unit_price": "Eenheidsprijs (excl. BTW)", "amount": "Bedrag (excl. BTW)" },
         subtotal_label: "Subtotaal (excl. BTW)",
-        vat_label: "BTW (19%)",
+        vat_label: "BTW ({vat_rate}%)",
         total_label: "Netto te betalen (incl. BTW)",
         payment_terms: {
             "title": "Betalingsvoorwaarden",
