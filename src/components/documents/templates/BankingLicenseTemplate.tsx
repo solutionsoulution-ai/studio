@@ -4,14 +4,15 @@ import Image from 'next/image';
 import { bankingLicenseClauses } from '@/data/documents/banking-license-clauses';
 import DocumentWrapper from './DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
+import { Language } from '@/data/documents/languages';
 
 interface BankingLicenseTemplateProps {
     formData: any;
-    lang: 'fr' | 'en' | 'de';
+    lang: Language;
 }
 
 const BankingLicenseTemplate: React.FC<BankingLicenseTemplateProps> = ({ formData, lang }) => {
-    const clauses = bankingLicenseClauses.fr; // Using 'fr' as a base, assuming other languages follow suit
+    const clauses = bankingLicenseClauses[lang] || bankingLicenseClauses.fr;
     const articles = bankingLicenseClauses.articles;
     const signer1 = { signatureUrl: "https://i.postimg.cc/HWfMw9wD/signature-8.png" };
     const signer2 = { signatureUrl: "https://i.postimg.cc/BQ4Sf8sD/signature-6.png" };

@@ -109,5 +109,32 @@ export const eligibilityCertificateClauses = (companyName: string): Clauses => (
                 content: "Šis sertifikatas galioja 30 kalendorinių dienų nuo jo išdavimo dienos, t. y. iki {validity_date}. Pasibaigus šiam laikotarpiui, reikės naujo vertinimo. Galiojimas priklauso nuo to, ar nebus reikšmingų gavėjo finansinės padėties pokyčių ir ar bus vėliau patikrinti originalūs patvirtinamieji dokumentai.",
             }
         },
+    },
+    nl: {
+        header: {
+            line1: "Afdeling Financiële Analyse",
+            line2: "Eenheid voor Solvabiliteitscertificering",
+        },
+        title: "Certificaat van Vooraf Goedgekeurde Solvabiliteit voor een {project_type} project",
+        reference: "Certificaat Nr: {ref}",
+        validity: "Geldig tot: {validity_date}",
+        beneficiary: {
+            title: "Begunstigde van het certificaat:",
+        },
+        articles: {
+            object: {
+                title: "Artikel 1: Doel van het Certificaat",
+                content: `${companyName}, handelend als financieel tussenpersoon, certificeert hierbij een voorlopige analyse te hebben uitgevoerd van de financiële situatie van de bovengenoemde begunstigde. Op basis van de opgegeven elementen en volgens onze huidige evaluatiecriteria wordt de begunstigde in aanmerking geacht te komen voor een financiering tot een maximaal bedrag van:`,
+                amount_label: "Maximaal in aanmerking komend bedrag",
+            },
+            scope: {
+                title: "Artikel 2: Reikwijdte en Beperkingen",
+                content: `Dit certificaat getuigt van een theoretische financieringscapaciteit op de dag van afgifte. Het is bedoeld om aan derden (makelaars, verkopers, enz.) te worden voorgelegd als een element van geruststelling over de capaciteit van de begunstigde om een project te financieren. Het vormt in geen geval een bindend kredietaanbod en kan ${companyName} of haar kredietpartners niet binden.`,
+            },
+            validity: {
+                title: "Artikel 3: Geldigheid",
+                content: "Dit certificaat is 30 kalenderdagen geldig vanaf de datum van afgifte, d.w.z. tot {validity_date}. Na deze periode is een nieuwe evaluatie vereist. De geldigheid is afhankelijk van de afwezigheid van een significante verandering in de financiële situatie van de begunstigde en van de latere verificatie van de originele bewijsstukken.",
+            }
+        },
     }
 });

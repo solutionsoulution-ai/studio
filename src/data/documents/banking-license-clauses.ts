@@ -66,5 +66,20 @@ export const bankingLicenseClauses: Clauses = {
         location_and_date: "Sudaryta Paryžiuje, {issue_date}",
         signature_label_1: "Prancūzijos banko valdytojas",
         signature_label_2: "ACPR generalinis sekretorius",
+    },
+    nl: {
+        authority: "Autoriteit voor Prudentieel Toezicht en Resolutie (ACPR)",
+        title: "Vergunning als Kredietinstelling",
+        subtitle: "Overeenkomstig de artikelen L. 511-1 en volgende van de Monetaire en Financiële Code",
+        decision: "Goedkeuringsbesluit nr. {ref} van het college van de ACPR",
+        intro: "Gezien de Monetaire en Financiële Code, en na onderzoek van het ingediende aanvraagdossier, BESLUIT de Autoriteit voor Prudentieel Toezicht en Resolutie (ACPR), na beraadslaging:",
+        grant_to: "Artikel 1: Goedkeuring",
+        company_name: "Neofonds GmbH",
+        company_address: "Mainzer Landstraße 50, 60325 Frankfurt am Main, Deutschland",
+        status: "Aan de entiteit Neofonds GmbH wordt de status van Kredietinstelling verleend, die haar machtigt om alle bankactiviteiten op het grondgebied van de Europese Unie uit te voeren.",
+        validity: "Deze vergunning wordt voor onbepaalde tijd verleend, op voorwaarde van voortdurende naleving van de voorwaarden voor de toekenning ervan en de geldende regelgeving. Ze kan door de ACPR worden gewijzigd, opgeschort of ingetrokken in geval van een ernstige inbreuk op de wettelijke en reglementaire verplichtingen.",
+        location_and_date: "Gedaan te Parijs, op {issue_date}",
+        signature_label_1: "De Gouverneur van de Banque de France",
+        signature_label_2: "De Secretaris-Generaal van de ACPR",
     }
 };

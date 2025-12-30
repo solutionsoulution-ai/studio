@@ -105,5 +105,54 @@ export const suretyBondClauses = (companyName: string): Clauses => ({
                 content: "Kreditorius įsipareigoja informuoti Skolininką apie bet kokius sutarties pakeitimus.",
             },
         },
+    },
+    nl: {
+        header: {
+            line1: "Juridische en Garantieafdeling",
+            line2: "Afdeling Verbintenissen • Eenheid voor Formalisering van Garanties",
+        },
+        title: "Akte van Hoofdelijke Borgstelling voor een Lening",
+        reference: "Akte Nr: {act_ref}",
+        parties: {
+            title: "Tussen de ondergetekenden:",
+            creditor_label: "De Schuldeiser:",
+            debtor_label: "De Schuldenaar (Kredietnemer):",
+        },
+        articles: {
+            object: {
+                title: "Artikel 1: Voorwerp van de verbintenis",
+                content: "Met deze akte verbindt de Schuldenaar zich ertoe aan de Schuldeiser de verschuldigde bedragen te betalen uit hoofde van de leningsovereenkomst van het type '{type_of_loan}' waarnaar hieronder wordt verwezen:",
+                acknowledgment: "De Schuldenaar verklaart volledig op de hoogte te zijn van de aard en de omvang van zijn verplichtingen.",
+            },
+            scope: {
+                title: "Artikel 2: Omvang van de garantie",
+                content: "De verbintenis van de Schuldenaar heeft betrekking op de betaling van de hoofdsom, rente, commissies, kosten en bijkomende kosten, en in het algemeen, alle bedragen die verschuldigd kunnen zijn uit hoofde van de bovengenoemde leningsovereenkomst. De verbintenis wordt aangegaan voor de gehele looptijd van de lening.",
+            },
+            deposit_principle: {
+                title: "Artikel 3: Principe van de Garantieborg",
+                content: "Om zijn vermogen om aan zijn verplichtingen te voldoen te bewijzen, verbindt de Schuldenaar zich ertoe een garantieborg te storten van {deposit_amount}. Er wordt uitdrukkelijk overeengekomen dat dit bedrag geen betaling of vergoeding is, maar een eenvoudige storting op zijn eigen klantenrekening, die volledig en onmiddellijk terugbetaalbaar is.",
+            },
+            activation_procedure: {
+                title: "Artikel 4: Technische Activeringsprocedure",
+                content: `Om technische redenen kan de klantenrekening van ${companyName} aanvankelijk alleen fondsen ontvangen van ${companyName}. De garantieborg is daarom een verplichte stap om opnameoperaties te activeren. De Schuldenaar dient de instructies die hem door ${companyName} worden verstrekt strikt op te volgen om deze storting te doen op de voor hem aangemaakte rekening.`,
+            },
+            restitution: {
+                title: "Artikel 5: Onmiddellijke Teruggave van Fondsen",
+                content: "Zodra de borg is ontvangen, wordt de klantenrekening van de Schuldenaar onmiddellijk geactiveerd. Het bedrag van de borg wordt onmiddellijk op dezelfde rekening gecrediteerd, bovenop het geleende bedrag. De Schuldenaar kan dan onverwijld alle beschikbare fondsen (inclusief de lening en zijn garantieborg) overmaken naar zijn persoonlijke lokale bankrekening.",
+            },
+            solidarity: {
+                title: "Artikel 6: Hoofdelijkheid en Ondeelbaarheid",
+                content: "De Schuldenaar is als enige verantwoordelijk voor de schuld. In geval van wanbetaling kan de Schuldeiser de volledige schuld van de Schuldenaar vorderen.",
+            },
+            mention: {
+                title: "Artikel 7: Verplichte Handgeschreven Vermelding",
+                instruction: "De Schuldenaar moet de volgende vermelding handgeschreven overnemen, conform de wet:",
+                content: "'Ik, {borrower_name}, verbind mij ertoe de aan de kredietverstrekker verschuldigde bedragen terug te betalen met mijn inkomsten en mijn bezittingen.'",
+            },
+            information: {
+                title: "Artikel 8: Vereiste Informatie",
+                content: "De Schuldeiser verbindt zich ertoe de Schuldenaar te informeren over elke wijziging van de overeenkomst.",
+            },
+        },
     }
 });

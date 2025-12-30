@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Image from 'next/image';
 import { neofondsReceiptClauses } from '@/data/documents/neofonds-receipt-clauses';
@@ -5,10 +6,11 @@ import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from './DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
 import { useBrand } from '@/context/BrandContext';
+import { Language } from '@/data/documents/languages';
 
 interface NeofondsReceiptTemplateProps {
     formData: any;
-    lang: 'fr' | 'en' | 'de';
+    lang: Language;
 }
 
 const NeofondsReceiptTemplate: React.FC<NeofondsReceiptTemplateProps> = ({ formData, lang }) => {

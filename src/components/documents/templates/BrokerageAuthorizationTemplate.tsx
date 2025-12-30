@@ -4,14 +4,15 @@ import Image from 'next/image';
 import { brokerageAuthorizationClauses } from '@/data/documents/brokerage-authorization-clauses';
 import DocumentWrapper from './DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
+import { Language } from '@/data/documents/languages';
 
 interface BrokerageAuthorizationTemplateProps {
     formData: any;
-    lang: 'fr' | 'en' | 'de';
+    lang: Language;
 }
 
 const BrokerageAuthorizationTemplate: React.FC<BrokerageAuthorizationTemplateProps> = ({ formData, lang }) => {
-    const clauses = brokerageAuthorizationClauses.fr; // Using 'fr' as a base
+    const clauses = brokerageAuthorizationClauses[lang] || brokerageAuthorizationClauses.fr;
     const articles = brokerageAuthorizationClauses.articles;
     const signer1 = { signatureUrl: "https://i.postimg.cc/HWfMw9wD/signature-8.png" };
     const signer2 = { signatureUrl: "https://i.postimg.cc/BQ4Sf8sD/signature-6.png" };

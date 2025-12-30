@@ -3,10 +3,11 @@ import React from 'react';
 import { insuranceNoticeClauses } from '@/data/documents/insurance-notice-clauses';
 import DocumentWrapper from './DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
+import { Language } from '@/data/documents/languages';
 
 interface InsuranceNoticeTemplateProps {
     formData: any;
-    lang: 'fr' | 'en' | 'de';
+    lang: Language;
 }
 
 const InsuranceNoticeTemplate: React.FC<InsuranceNoticeTemplateProps> = ({ formData, lang }) => {

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Image from 'next/image';
 import { useBrand } from '@/context/BrandContext';
@@ -9,7 +10,7 @@ interface DocumentWrapperProps {
   docRef?: string;
   docDate?: string;
   hideDepartment?: boolean;
-  lang: 'fr' | 'en' | 'de' | 'lt';
+  lang: 'fr' | 'en' | 'de' | 'lt' | 'nl';
 }
 
 const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, department, docRef, docDate, hideDepartment = false, lang }) => {
@@ -31,6 +32,10 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
     lt: {
       copyright: `© ${new Date().getFullYear()} ${companyInfo.name}. Visos teisės saugomos.`,
       confidential: 'Šis dokumentas yra sugeneruotas elektroniniu būdu ir yra konfidencialus.'
+    },
+    nl: {
+      copyright: `© ${new Date().getFullYear()} ${companyInfo.name}. Alle rechten voorbehouden.`,
+      confidential: 'Dit document is elektronisch gegenereerd en is vertrouwelijk.'
     }
   };
 
@@ -104,12 +109,10 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
                 {companyInfo.brandKey === 'vantex' && companyInfo.logoUrl ? (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <Image src={companyInfo.logoUrl} alt={`${companyInfo.name} logo`} width={120} height={35} style={{ mixBlendMode: 'darken' }} />
-                    <span style={{ fontWeight: 'bold', fontSize: '24px', color: 'hsl(var(--primary))' }}>{companyInfo.name}</span>
                   </div>
                 ) : companyInfo.brandKey === 'finarcy' && companyInfo.logoUrl ? (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <Image src={companyInfo.logoUrl} alt={`${companyInfo.name} logo`} width={40} height={40} />
-                        <span style={{ fontWeight: 'bold', fontSize: '24px' }}>{companyInfo.name}</span>
                     </div>
                 ) : companyInfo.logoUrl ? (
                     <Image src={companyInfo.logoUrl} alt={`${companyInfo.name} logo`} width={140} height={40} style={{ mixBlendMode: 'darken' }} />
@@ -117,6 +120,11 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
                     <h1 style={{ fontWeight: 'bold', fontSize: '24px' }}>{companyInfo.name}</h1>
                 )}
              </div>
+             {companyInfo.brandKey === 'finarcy' ? (
+                <div style={{ textAlign: 'center', flexGrow: 1 }}>
+                    <h1 style={{ fontWeight: 'bold', fontSize: '24px', color: 'hsl(var(--primary))' }}>{companyInfo.name}</h1>
+                </div>
+            ) : null}
             <div style={{ textAlign: 'right', fontSize: '9pt', color: '#64748b' }}>
                 <p>{companyInfo.address}</p>
                 <p>{companyInfo.email}</p>

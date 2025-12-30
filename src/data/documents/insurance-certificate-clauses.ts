@@ -161,5 +161,45 @@ export const insuranceCertificateClauses = (companyName: string): Clauses => ({
             title: "Įsigaliojimo data ir galiojimas",
             content: "Šis liudijimas išduodamas tam, kad galiotų teisės aktuose numatyta tvarka. Garantijos įsigalioja paskolos lėšų išmokėjimo dieną ir nustoja galioti visiškai grąžinus paskolą.",
         }
+    },
+    nl: {
+        header: {
+            line1: "Verzekeringsafdeling",
+            line2: "Lidmaatschapsservice • Eenheid voor Certificering van Kredietnemersgaranties",
+        },
+        title: "Verzekeringsattest voor Kredietnemer",
+        reference: "Certificaat Nr: {ref}",
+        issue_date: "Datum van afgifte: {issue_date}",
+        insured: {
+            title: "De Verzekerde:",
+        },
+        beneficiary: {
+            title: "De Begunstigde:",
+            content: `De kredietverstrekkende instelling, partner van ${companyName}, voor leningsovereenkomst nr. {loan_contract_ref}.`,
+        },
+        object_title: "Onderwerp: Groepsverzekeringsattest met betrekking tot lening nr. {loan_contract_ref}",
+        object_content: `Wij, ondergetekenden, handelend namens onze verzekeringspartner, verklaren hierbij dat de bovengenoemde verzekerde gedekt is door de groepsverzekeringsovereenkomst nr. 789-456, afgesloten door ${companyName} in het kader van zijn lening.`,
+        loan_details: {
+            title: "Details van de verzekerde lening",
+            nature: "Aard van de lening: {loan_type}",
+            ref: "Bijbehorend leningnummer: {loan_contract_ref}",
+            amount: "Verzekerd kapitaalbedrag: {insured_capital}",
+            duration: "Duur van de verzekeringsdekking: {coverage_duration} maanden, samenvallend met de looptijd van de lening.",
+        },
+        guarantees: {
+            title: "Toepasselijke garanties",
+            intro: "Onder voorbehoud van de bepalingen, voorwaarden en uitsluitingen zoals vermeld in de informatienota van de verzekeringsovereenkomst, geniet de verzekerde de volgende garanties:",
+            death: "Overlijden: Uitbetaling van het resterende verschuldigde kapitaal aan de kredietverstrekkende instelling.",
+            ptia: "Volledig en onomkeerbaar verlies van autonomie (PTIA): Uitbetaling van het resterende verschuldigde kapitaal aan de kredietverstrekkende instelling.",
+            itt: "Tijdelijke volledige arbeidsongeschiktheid (ITT): Dekking van de leningtermijnen na een eigenrisicoperiode.",
+        },
+        premium: {
+            title: "Kosten van de verzekering",
+            content: "Maandelijkse verzekeringspremie: {monthly_premium} / maand. Dit bedrag is maandelijks verschuldigd, bovenop uw leningtermijn.",
+        },
+        validity: {
+            title: "Ingangsdatum en geldigheid",
+            content: "Dit attest wordt opgesteld om te dienen en te gelden waar nodig. De garanties worden van kracht op de datum van vrijgave van de leningfondsen en eindigen bij de volledige terugbetaling ervan.",
+        }
     }
 });

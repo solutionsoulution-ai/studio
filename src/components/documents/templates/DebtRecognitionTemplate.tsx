@@ -1,11 +1,13 @@
+
 import React from 'react';
 import { debtRecognitionClauses } from '@/data/documents/debt-recognition-clauses';
 import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from './DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
 import { useBrand } from '@/context/BrandContext';
+import { Language } from '@/data/documents/languages';
 
-const DebtRecognitionTemplate: React.FC<{ formData: any; lang: 'fr' | 'en' | 'de' }> = ({ formData, lang }) => {
+const DebtRecognitionTemplate: React.FC<{ formData: any; lang: Language }> = ({ formData, lang }) => {
     const { companyInfo } = useBrand();
     const clauses = debtRecognitionClauses(companyInfo.name)[lang] || debtRecognitionClauses(companyInfo.name)['fr'];
     const signer = signatureData(companyInfo.brandKey).legal;

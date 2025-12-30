@@ -63,5 +63,33 @@ export const amlCertificateClauses = (companyName: string): Clauses => ({
             },
         },
         signature_label: "Deklaruojančio asmens parašas",
+    },
+    nl: {
+        header: {
+            line1: "Afdeling Naleving",
+            line2: "Eenheid voor de Bestrijding van Witwassen (AML-CFT)",
+        },
+        title: "Certificaat van Niet-Witwassen van Geld",
+        reference: "Certificaat Nr: {ref}",
+        date: "Datum: {date}",
+        declarer: {
+            title: "Declarant",
+        },
+        articles: {
+            declaration: {
+                title: "Artikel 1: Verklaring over de Herkomst van de Fondsen",
+                content: `Ik, ondergetekende, {client_name}, verklaar op erewoord dat de fondsen ten bedrage van {transaction_amount} ({transaction_amount_in_words}) die worden gebruikt in het kader van de transactie met referentie {transaction_ref}, afkomstig zijn van legitieme bronnen en niet het resultaat zijn van criminele activiteiten of het witwassen van geld, in overeenstemming met Richtlijn (EU) 2015/849.`,
+                origin_label: "Aangegeven herkomst van de fondsen:",
+            },
+            commitment: {
+                title: "Artikel 2: Transparantieverplichting",
+                content: `Ik verbind mij ertoe om op eenvoudig verzoek aan ${companyName} elk bewijsstuk (loonstroken, belastingaanslagen, verkoopakten, enz.) te verstrekken dat de hierboven aangegeven herkomst van de fondsen bevestigt.`,
+            },
+            warning: {
+                title: "Artikel 3: Waarschuwing voor Valse Verklaringen",
+                content: `Ik erken te zijn geïnformeerd dat elke valse verklaring kan leiden tot gerechtelijke vervolging en de onmiddellijke beëindiging van elke zakelijke relatie met ${companyName}, evenals een melding van verdachte transacties aan de bevoegde autoriteiten.`,
+            },
+        },
+        signature_label: "Handtekening van de Declarant",
     }
 });

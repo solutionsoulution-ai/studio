@@ -39,5 +39,15 @@ export const blankDocumentClauses = {
         },
         placeholder: "Šio dokumento turinys yra ruošiamas.",
         footer: "Neofonds © {current_year} - Visos teisės saugomos."
+    },
+    nl: {
+        title: "Documenttitel",
+        department: "Juridische & Financiële Afdeling",
+        importance: {
+            title: "Belang van dit document",
+            description: "Dit document dient als basissjabloon. Het belang ervan wordt bepaald door de inhoud die u eraan toevoegt."
+        },
+        placeholder: "De inhoud van dit document wordt momenteel opgesteld.",
+        footer: "Neofonds © {current_year} - Alle rechten voorbehouden."
     }
 };

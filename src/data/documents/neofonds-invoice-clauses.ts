@@ -101,5 +101,30 @@ export const neofondsInvoiceClauses: Clauses = {
             "thank_you": "Dėkojame už jūsų pasitikėjimą.",
             "contact_info": "Jei turite klausimų, susisiekite su mūsų buhalterija el. paštu neofonds@europe.com"
         }
+    },
+    nl: {
+        company: {
+            name: "Neofonds",
+            address: "Mainzer Landstraße 50, 60325 Frankfurt am Main, Duitsland",
+            phone: "+49 163 2247344",
+            emails: ["neofonds@europe.com"]
+        },
+        title: "Factuur",
+        invoice_number_label: "Factuur nr:",
+        date_label: "Datum:",
+        bill_to_label: "Gefactureerd aan:",
+        table_headers: { "description": "Omschrijving", "quantity": "Aantal", "unit_price": "Eenheidsprijs (excl. BTW)", "amount": "Bedrag (excl. BTW)" },
+        subtotal_label: "Subtotaal (excl. BTW)",
+        vat_label: "BTW (19%)",
+        total_label: "Netto te betalen (incl. BTW)",
+        payment_terms: {
+            "title": "Betalingsvoorwaarden",
+            "instruction": "Betaling bij ontvangst van de factuur.",
+            "proof_of_payment": "Neem bij vragen contact met ons op.",
+        },
+        footer: {
+            "thank_you": "Dank u voor uw vertrouwen.",
+            "contact_info": "Voor vragen kunt u contact opnemen met onze boekhoudafdeling via neofonds@europe.com"
+        }
     }
 };

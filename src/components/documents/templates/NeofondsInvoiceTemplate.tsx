@@ -2,10 +2,11 @@
 import React from 'react';
 import { neofondsInvoiceClauses } from '@/data/documents/neofonds-invoice-clauses';
 import DocumentWrapper from './DocumentWrapper';
+import { Language } from '@/data/documents/languages';
 
 interface NeofondsInvoiceTemplateProps {
     formData: any;
-    lang: 'fr' | 'en' | 'de';
+    lang: Language;
 }
 
 const NeofondsInvoiceTemplate: React.FC<NeofondsInvoiceTemplateProps> = ({ formData, lang }) => {

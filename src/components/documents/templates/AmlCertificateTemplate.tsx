@@ -1,13 +1,15 @@
+
 import React from 'react';
 import { amlCertificateClauses } from '@/data/documents/aml-certificate-clauses';
 import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from './DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
 import { useBrand } from '@/context/BrandContext';
+import { Language } from '@/data/documents/languages';
 
 interface AmlCertificateTemplateProps {
     formData: any;
-    lang: 'fr' | 'en' | 'de';
+    lang: Language;
 }
 
 const AmlCertificateTemplate: React.FC<AmlCertificateTemplateProps> = ({ formData, lang }) => {

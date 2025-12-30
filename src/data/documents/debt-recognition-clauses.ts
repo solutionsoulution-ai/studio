@@ -71,5 +71,37 @@ export const debtRecognitionClauses = (companyName: string): Clauses => ({
                 content: "Vartojimo kodekso L. 313-24 straipsnis pabrėžia įsipareigojimo svarbą. Skolininkas pripažįsta, kad perskaitė ir suprato visą paskolos sutartį, su kuria susijęs šis skolos pripažinimo raštas, ir gavo po vieną kiekvieno dokumento egzempliorių.",
             }
         },
+    },
+    nl: {
+        header: {
+            line1: "Financiële Dienst",
+            line2: "Juridische en Garantieafdeling • Eenheid voor Formalisering van Verbintenissen",
+        },
+        title: "Schuldbekentenis voor een Lening",
+        reference: "Document Nr: {ref}",
+        date: "Datum: {date}",
+        parties: {
+            title: "Tussen de ondergetekenden:",
+            creditor_label: "De Schuldeiser:",
+            debtor_label: "De Schuldenaar:",
+        },
+        articles: {
+            recognition: {
+                title: "Artikel 1: Erkenning van de Schuld",
+                content: `Ik, ondergetekende, {debtor_name}, wonende te {debtor_address}, erken hierbij verschuldigd te zijn aan ${companyName}, handelend namens haar financiële partners, de som van: {loan_amount} ({loan_amount_in_words}). Dit bedrag komt overeen met het kapitaal van een lening van het type '{type_of_loan}' die mij is verleend en waarvan ik bevestig de fondsen te hebben ontvangen.`,
+            },
+            repayment: {
+                title: "Artikel 2: Terugbetalingsvoorwaarden",
+                content: "Ik verbind mij ertoe dit bedrag volledig terug te betalen, evenals de bijbehorende rente en kosten, in overeenstemming met de termijnen en voorwaarden die zijn vastgelegd in de leningsovereenkomst Nr. {loan_contract_ref} die ik afzonderlijk heb ondertekend. De overeengekomen aflossingsperiode is {loan_term} maanden, behalve in geval van vervroegde aflossing of betalingsachterstand die de planning wijzigt.",
+            },
+            default: {
+                title: "Artikel 3: Wanbetalingsclausule",
+                content: "In geval van niet-betaling van een of meer termijnen, erken ik dat de Schuldeiser zich kan beroepen op de clausules in de leningsovereenkomst, inclusief de vervroegde opeisbaarheid van het totale resterende kapitaal, verhoogd met de toepasselijke rente en boetes.",
+            },
+            mention: {
+                title: "Artikel 4: Begrip van de Verbintenis",
+                content: "Artikel L. 313-24 van de Consumentenwet benadrukt het belang van de verbintenis. De schuldenaar erkent de volledige leningsovereenkomst waarop deze schuldbekentenis betrekking heeft, te hebben gelezen en begrepen en een exemplaar van elk document te hebben ontvangen.",
+            }
+        },
     }
 });

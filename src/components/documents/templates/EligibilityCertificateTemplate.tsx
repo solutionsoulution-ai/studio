@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Image from 'next/image';
 import { eligibilityCertificateClauses } from '@/data/documents/eligibility-certificate-clauses';
@@ -5,10 +6,11 @@ import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from './DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
 import { useBrand } from '@/context/BrandContext';
+import { Language } from '@/data/documents/languages';
 
 interface EligibilityCertificateTemplateProps {
     formData: any;
-    lang: 'fr' | 'en' | 'de';
+    lang: Language;
 }
 
 const EligibilityCertificateTemplate: React.FC<EligibilityCertificateTemplateProps> = ({ formData, lang }) => {

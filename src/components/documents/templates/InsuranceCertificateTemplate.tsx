@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Image from 'next/image';
 import { insuranceCertificateClauses } from '@/data/documents/insurance-certificate-clauses';
@@ -5,10 +6,11 @@ import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from './DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
 import { useBrand } from '@/context/BrandContext';
+import { Language } from '@/data/documents/languages';
 
 interface InsuranceCertificateTemplateProps {
     formData: any;
-    lang: 'fr' | 'en' | 'de';
+    lang: Language;
 }
 
 const InsuranceCertificateTemplate: React.FC<InsuranceCertificateTemplateProps> = ({ formData, lang }) => {

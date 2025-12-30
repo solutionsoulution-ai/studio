@@ -2,9 +2,10 @@
 import React from 'react';
 import { blankDocumentClauses } from '@/data/documents/blank-document-clauses';
 import DocumentWrapper from './DocumentWrapper';
+import { Language } from '@/data/documents/languages';
 
 type BlankDocumentTemplateProps = {
-  lang: 'fr' | 'en' | 'de';
+  lang: Language;
   formData: any;
 };
 

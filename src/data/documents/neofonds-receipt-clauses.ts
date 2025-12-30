@@ -109,5 +109,32 @@ export const neofondsReceiptClauses: Clauses = {
             "thank_you": "Dėkojame už jūsų pasitikėjimą.",
             "contact_info": "Jei turite klausimų, susisiekite su mūsų buhalterija el. paštu neofonds@europe.com"
         }
+    },
+    nl: {
+        company: {
+            name: "Neofonds",
+            address: "Mainzer Landstraße 50, 60325 Frankfurt am Main, Duitsland",
+            phone: "+49 163 2247344",
+            emails: ["neofonds@europe.com"]
+        },
+        title: "Betalingsbewijs",
+        reference: "Bewijs Nr: {ref}",
+        date: "Betalingsdatum: {payment_date}",
+        received_from: "Ontvangen van:",
+        payment_details: {
+            title: "Betalingsgegevens",
+            amount_label: "Ontvangen Bedrag",
+            method_label: "Betalingsmethode",
+            reference_label: "Voor de volgende referentie",
+        },
+        confirmation: {
+            title: "Bevestiging",
+            content: "Wij, ondergetekenden, Neofonds, bevestigen hierbij de ontvangst van het bovengenoemde bedrag. Dit bewijs getuigt van de gedeeltelijke of volledige vereffening van de genoemde schuld. Fouten en omissies voorbehouden, deze betaling vereffent het verschuldigde bedrag.",
+        },
+        signature_label: "Voor Neofonds, Boekhoudafdeling",
+        footer: {
+            "thank_you": "Dank u voor uw vertrouwen.",
+            "contact_info": "Voor vragen kunt u contact opnemen met onze boekhoudafdeling via neofonds@europe.com"
+        }
     }
 };

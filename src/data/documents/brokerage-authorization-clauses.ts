@@ -60,5 +60,18 @@ export const brokerageAuthorizationClauses: Clauses = {
         location_and_date: "Sudaryta Frankfurte, {issue_date}",
         signature_label_1: "Už BaFin, Prezidentas",
         signature_label_2: "Vykdomasis direktorius"
+    },
+    nl: {
+        authority: "Bundesanstalt für Finanzdienstleistungsaufsicht (BaFin)",
+        title: "Vergunning voor Kredietbemiddeling",
+        subtitle: "Tussenpersoon in Banktransacties en Betalingsdiensten (IOBSP)",
+        intro: "De BaFin, krachtens de bepalingen van de Duitse Kredietwet (Kreditwesengesetz), verklaart dat de hieronder genoemde entiteit is geregistreerd en gemachtigd is om op te treden als tussenpersoon:",
+        company_name: "Neofonds GmbH",
+        company_address: "Mainzer Landstraße 50, 60325 Frankfurt am Main, Duitsland",
+        registration_number: "Uniek nationaal registratienummer: {ref}",
+        validity: "",
+        location_and_date: "Gedaan te Frankfurt, op {issue_date}",
+        signature_label_1: "Voor de BaFin, de President",
+        signature_label_2: "De Uitvoerend Directeur"
     }
 };

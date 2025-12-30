@@ -141,5 +141,40 @@ export const insuranceNoticeClauses: Clauses = {
             title: "5 STRAIPSNIS: PRANEŠIMAS APIE ŽALĄ",
             description: "Įvykus draudiminiam įvykiui (mirtis, nelaimingas atsitikimas, liga), jūs arba jūsų teisių perėmėjai privalote apie tai pranešti draudikui per sutartyje numatytus terminus, pridėdami visus reikiamus patvirtinamuosius dokumentus (medicininę pažymą, mirties liudijimą ir kt.)."
         }
+    },
+    nl: {
+        title: "Informatiebrochure",
+        subtitle: "Groepsverzekeringscontract voor Kredietnemers nr. 789-101112",
+        importance: {
+            "title": "Belang van dit document",
+            "description": "Dit precontractuele document is essentieel. Het informeert u gedetailleerd over de kenmerken van uw kredietnemersverzekering, met name de garanties, uitsluitingen en uw rechten, zodat u met volledige kennis van zaken kunt inschrijven en kunt vergelijken met andere aanbiedingen."
+        },
+        introduction: "Deze brochure heeft tot doel u te informeren over de belangrijkste kenmerken van uw toetreding tot de kredietnemersverzekering. Het heeft geen contractuele waarde, maar vormt een samenvatting van de algemene en bijzondere voorwaarden die van toepassing zullen zijn. Wij nodigen u uit om het aandachtig te lezen.",
+        guarantees: {
+            title: "ARTIKEL 1: VOORGESTELDE GARANTIES",
+            items: {
+                death: { "title": "Overlijdensgarantie", "description": "In geval van overlijden van de verzekerde voor het einde van de lening, verbindt de verzekeraar zich ertoe het resterende verschuldigde kapitaal op de dag van overlijden terug te betalen aan de kredietverstrekker, volgens het verzekerde quotum." },
+                disability: { "title": "Garantie voor Totaal en Onomkeerbaar Verlies van Autonomie (PTIA)", "description": "Indien, als gevolg van een ziekte of een ongeval, de verzekerde wordt erkend als zijnde in een staat van PTIA (waarbij de hulp van een derde persoon nodig is voor de handelingen van het dagelijks leven), dekt de verzekeraar de terugbetaling van het resterende verschuldigde kapitaal." },
+                incapacity: { "title": "Garantie voor Tijdelijke Volledige Arbeidsongeschiktheid (ITT)", "description": "In geval van een volledige en ononderbroken werkonderbreking als gevolg van een ziekte of ongeval, en na een franchiseperiode (meestal 90 dagen), dekt de verzekeraar de betaling van uw leningtermijnen gedurende uw arbeidsongeschiktheid." }
+            }
+        },
+        exclusions: {
+            title: "ARTIKEL 2: BELANGRIJKSTE UITSLUITINGEN",
+            intro: "Sommige situaties worden niet gedekt door het contract. Met name uitgesloten zijn:",
+            items: [
+                "Zelfmoord van de verzekerde tijdens het eerste verzekeringsjaar.",
+                "De gevolgen van burgerlijke of buitenlandse oorlogen, rellen, terreurdaden.",
+                "De beoefening van luchtsporten, professionele wedstrijdsporten of elke sport die een verhoogd risico met zich meebrengt.",
+                "Psychiatrische aandoeningen en niet-gehospitaliseerde rugpathologieën (voor de ITT-garantie)."
+            ]
+        },
+        waiver: {
+            title: "ARTIKEL 4: RECHT VAN AFSTAND",
+            description: "U beschikt over een wettelijke termijn van 30 kalenderdagen vanaf de datum van ondertekening van uw toetreding om hiervan af te zien, zonder kosten of boetes, per aangetekende brief met ontvangstbevestiging."
+        },
+        claim: {
+            title: "ARTIKEL 5: AANGIFTE VAN SCHADE",
+            description: "In geval van een schadegeval (overlijden, ongeval, ziekte), moet u of uw rechtverkrijgenden dit binnen de in het contract voorziene termijnen aangeven bij de verzekeraar, met bijvoeging van alle vereiste bewijsstukken (medisch attest, overlijdensakte, enz.)."
+        }
     }
 };

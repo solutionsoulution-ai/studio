@@ -1,3 +1,4 @@
+
 import type { Clauses } from "./languages";
 
 export const loanContractClauses = (companyCity: string): Clauses => ({
@@ -223,5 +224,60 @@ export const loanContractClauses = (companyCity: string): Clauses => ({
             },
         },
         signature_preamble: "Sudaryta dviem originaliais egzemplioriais, po vieną kiekvienai šaliai.",
+    },
+    nl: {
+        header: {
+            line1: "Financiële Dienst",
+            line2: "Afdeling Consumentenkrediet • Bureau voor Leningsovereenkomsten • Eenheid voor Verificatie van Verbintenissen",
+        },
+        title: "Leningsovereenkomst",
+        reference: "Overeenkomst Nr: {contract_ref}",
+        location_and_date: `Opgemaakt te ${companyCity}, op {contract_date}`,
+        parties: {
+            title: "Tussen de ondergetekenden:",
+            lender_label: "De Kredietgever:",
+            borrower_label: "De Kredietnemer:",
+        },
+        articles: {
+            object: {
+                title: "Artikel 1: Voorwerp van de Overeenkomst",
+                content: "De Kredietgever verstrekt aan de Kredietnemer, die aanvaardt, een aflosbare lening van het type {type_of_loan} voor niet-professioneel gebruik, beheerst door de bepalingen van het Wetboek van Consumentenrecht en door deze algemene en bijzondere voorwaarden.",
+            },
+            characteristics: {
+                title: "Artikel 2: Bedrag en Kenmerken van de Lening",
+                amount: "Geleend kapitaalbedrag: {loan_amount} ({loan_amount_in_words} euro).",
+                taeg: "Vast Jaarlijks Kostenpercentage (JKP): {taeg}.",
+                term: "Totale aflossingsduur: {loan_term} maanden.",
+                availability: "Datum van terbeschikkingstelling van de fondsen: Uiterlijk 10 dagen na het verstrijken van de herroepingstermijn.",
+            },
+            repayment: {
+                title: "Artikel 3: Aflossingsvoorwaarden",
+                intro: "De Kredietnemer verbindt zich ertoe het kapitaal en de rente terug te betalen in {loan_term} vaste maandelijkse termijnen. De eerste termijn is verschuldigd op {start_date} en de laatste op {end_date}.",
+                monthly_payment: "Maandelijkse aflossing (exclusief verzekering): {monthly_payment}. Dit bedrag wordt op de 5e van elke maand geïnd.",
+                total_cost: "De totale kosten van het krediet (rente) bedragen {total_cost}.",
+                total_due: "Totaal verschuldigd bedrag: {total_due} (Geleend kapitaal + totale rentekosten).",
+            },
+            withdrawal: {
+                title: "Artikel 4: Herroepingsrecht",
+                content: "De Kredietnemer beschikt over een herroepingstermijn van veertien (14) kalenderdagen vanaf de datum van ondertekening van het kredietaanbod. Om gebruik te maken van het herroepingsrecht, moet de Kredietnemer het bijgevoegde herroepingsformulier per aangetekende brief met ontvangstbevestiging terugsturen.",
+            },
+            default: {
+                title: "Artikel 5: Wanbetaling",
+                content: "In geval van niet-betaling van een termijn op de vervaldag, kan de Kredietgever de onmiddellijke terugbetaling van het resterende verschuldigde kapitaal eisen, vermeerderd met de vervallen en onbetaalde rente. Vertragingstoeslagen kunnen worden toegepast in overeenstemming met de geldende wetgeving.",
+            },
+            early_repayment: {
+                title: "Artikel 6: Vervroegde Aflossing",
+                content: "De Kredietnemer heeft te allen tijde het recht om het hem verstrekte krediet geheel of gedeeltelijk vervroegd af te lossen. Conform ons commercieel beleid zal geen boete voor vervroegde aflossing worden geëist, ongeacht het bedrag. De Kredietnemer dient de Kredietgever enkel schriftelijk op de hoogte te stellen van zijn voornemen om de praktische modaliteiten van de aflossing te regelen.",
+            },
+            data: {
+                title: "Artikel 7: Bescherming van Persoonsgegevens",
+                content: "De verzamelde informatie is noodzakelijk voor de verwerking van de leningaanvraag. Deze wordt elektronisch verwerkt en is bestemd voor de diensten van de Kredietgever en zijn partners. Conform de AVG heeft de Kredietnemer recht op toegang, rectificatie en verwijdering van zijn persoonsgegevens door contact op te nemen met de Kredietgever op het adres {contact_email}.",
+            },
+            law: {
+                title: "Artikel 8: Toepasselijk Recht en Geschillen",
+                content: "Deze overeenkomst is onderworpen aan het Belgisch recht. In geval van een geschil verbinden de partijen zich ertoe een minnelijke schikking te zoeken. Bij gebreke daarvan is de bevoegde rechtbank die van de woonplaats van de Kredietnemer.",
+            },
+        },
+        signature_preamble: "Opgemaakt in twee originele exemplaren, één voor elke partij.",
     }
 });
