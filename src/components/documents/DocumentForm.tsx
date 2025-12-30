@@ -1,6 +1,6 @@
 
 "use client";
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useForm, FormProvider, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -78,9 +78,9 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType }) => {
   const { formData, setFormData, lang, setLang, currency, setCurrency } = useDocumentGenerator();
   const { generatePDF, isLoading } = usePDFGenerator();
 
-  const currentFields = documentFields[documentType as keyof typeof documentFields] || [];
+  const currentFields = useMemo(() => documentFields[documentType as keyof typeof documentFields] || [], [documentType]);
   
-  const schema = buildSchema(currentFields);
+  const schema = useMemo(() => buildSchema(currentFields), [currentFields]);
   
   const methods = useForm({
     resolver: zodResolver(schema),
@@ -92,7 +92,7 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType }) => {
   
   // Use a "debounced" value for watched form data to prevent excessive re-renders.
   const watchedValues = watch();
-  const [debouncedValues] = useDebounce(watchedValues, 500);
+  const [debouncedValues] = useDebounce(watchedValues, 300);
 
   // This useEffect now runs only when debouncedValues changes, not on every keystroke.
   useEffect(() => {
