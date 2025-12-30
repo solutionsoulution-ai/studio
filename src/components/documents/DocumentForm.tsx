@@ -1,6 +1,6 @@
 
 "use client";
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm, FormProvider, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -73,17 +73,18 @@ const buildFieldSchema = (field: DocumentField): z.ZodType<any, any> => {
 
 
 const DocumentForm: React.FC<DocumentFormProps> = ({ documentType }) => {
-  const { setFormData, lang, setLang } = useDocumentGenerator();
+  const { formData, setFormData, lang, setLang } = useDocumentGenerator();
   const { generatePDF, isLoading } = usePDFGenerator();
 
   const currentFields = documentFields[documentType as keyof typeof documentFields] || [];
   
   const schema = buildSchema(currentFields);
-
-  const methods = useForm({
-    resolver: zodResolver(schema),
-    mode: 'onChange',
-    defaultValues: currentFields.reduce((acc: any, field) => {
+  
+  const getDefaultValues = () => {
+    if (Object.keys(formData).length > 0) {
+      return formData;
+    }
+    return currentFields.reduce((acc: any, field) => {
         if (field.type === 'group' && field.fields) {
             field.fields.forEach(subField => {
                 acc[subField.name] = subField.defaultValue ?? '';
@@ -92,12 +93,22 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType }) => {
             acc[field.name] = field.defaultValue ?? '';
         }
         return acc;
-    }, {}),
+    }, {});
+  };
+
+  const methods = useForm({
+    resolver: zodResolver(schema),
+    mode: 'onChange',
+    defaultValues: getDefaultValues(),
   });
 
-  const { handleSubmit, control, watch } = methods;
+  const { handleSubmit, control, watch, reset } = methods;
 
-  React.useEffect(() => {
+  useEffect(() => {
+    reset(getDefaultValues());
+  }, [formData, documentType, reset]);
+  
+  useEffect(() => {
     const subscription = watch((value) => {
       setFormData(value);
     });

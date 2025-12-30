@@ -1,5 +1,6 @@
+
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DocumentGenerator, { DocumentGeneratorContext } from "@/components/documents/DocumentGenerator";
 import DocumentPreview from "@/components/documents/DocumentPreview";
 import type { Language } from '@/data/documents/languages';
@@ -32,10 +33,37 @@ const documentTemplates: { [key: string]: React.FC<any> } = {
   'document-vierge': BlankDocumentTemplate,
 };
 
+const vantexLoanDefaultValues = {
+  type_of_loan: 'Prêt Personnel Amortissable',
+  contract_ref: 'PR-88210',
+  contract_date: '2025-12-30',
+  borrower_name: 'Sophie Martin',
+  borrower_address: '',
+  borrower_id: '',
+  loan_amount: 15000,
+  loan_amount_in_words: 'quinze mille',
+  taeg: '4.5%',
+  loan_term: 48,
+  start_date: '2024-03-05',
+  end_date: '',
+  monthly_payment: 342.05,
+  total_cost: 1418.51,
+  total_due: 16418.51,
+};
+
 export default function DocumentPageClient({ slug }: { slug: string }) {
   const [formData, setFormData] = useState({});
   const [lang, setLang] = useState<Language>('fr');
-  const { brand } = useBrand(); // Consume brand context
+  const { brand } = useBrand();
+
+  useEffect(() => {
+    if (brand === 'vantex' && slug === 'contrat-de-pret-personnel') {
+      setFormData(vantexLoanDefaultValues);
+    } else {
+      setFormData({}); // Reset for other documents/brands
+    }
+  }, [brand, slug]);
+
 
   const TemplateComponent = documentTemplates[slug];
 
