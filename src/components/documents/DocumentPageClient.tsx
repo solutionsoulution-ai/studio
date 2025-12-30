@@ -55,6 +55,21 @@ const getDefaultValuesForDoc = (docSlug: string) => {
   return defaultVals;
 }
 
+const documentTemplates: { [key: string]: React.FC<any> } = {
+  'reconnaissance-de-dette': DebtRecognitionTemplate,
+  'attestation-eligibilite': EligibilityCertificateTemplate,
+  'contrat-de-pret-personnel': LoanContractTemplate,
+  'acte-de-cautionnement-solidaire': SuretyBondTemplate,
+  'attestation-assurance-emprunteur': InsuranceCertificateTemplate,
+  'notice-information-assurance': InsuranceNoticeTemplate,
+  'facture-neofonds': NeofondsInvoiceTemplate,
+  'recu-neofonds': NeofondsReceiptTemplate,
+  'licence-bancaire': BankingLicenseTemplate,
+  'autorisation-courtage': BrokerageAuthorizationTemplate,
+  'certificat-non-blanchiment': AmlCertificateTemplate,
+  'document-vierge': BlankDocumentTemplate,
+};
+
 export default function DocumentPageClient({ slug }: { slug: string }) {
   const [lang, setLang] = useState<Language>('fr');
   const [currency, setCurrency] = useState<Currency>('EUR');
