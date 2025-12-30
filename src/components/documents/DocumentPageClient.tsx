@@ -18,6 +18,8 @@ import NeofondsInvoiceTemplate from './templates/NeofondsInvoiceTemplate';
 import AmlCertificateTemplate from './templates/AmlCertificateTemplate';
 import { useBrand } from '@/context/BrandContext';
 
+export type Currency = 'EUR' | 'USD';
+
 const documentTemplates: { [key: string]: React.FC<any> } = {
   'reconnaissance-de-dette': DebtRecognitionTemplate,
   'attestation-eligibilite': EligibilityCertificateTemplate,
@@ -49,11 +51,13 @@ const vantexLoanDefaultValues = {
   monthly_payment: 342.05,
   total_cost: 1418.51,
   total_due: 16418.51,
+  loan_amount_in_words_dollars: '15 mille dollars'
 };
 
 export default function DocumentPageClient({ slug }: { slug: string }) {
   const [formData, setFormData] = useState({});
   const [lang, setLang] = useState<Language>('fr');
+  const [currency, setCurrency] = useState<Currency>('EUR');
   const { brand } = useBrand();
 
   useEffect(() => {
@@ -68,14 +72,14 @@ export default function DocumentPageClient({ slug }: { slug: string }) {
   const TemplateComponent = documentTemplates[slug];
 
   return (
-    <DocumentGeneratorContext.Provider value={{ formData, setFormData, lang, setLang }}>
+    <DocumentGeneratorContext.Provider value={{ formData, setFormData, lang, setLang, currency, setCurrency }}>
       <div className="flex flex-col lg:flex-row w-full min-h-screen bg-muted/20">
         <div className="w-full lg:w-1/3 lg:h-screen lg:overflow-y-auto p-4">
           <DocumentGenerator documentType={slug} />
         </div>
         <div className="w-full lg:w-2/3 h-auto lg:h-screen lg:overflow-y-auto p-4">
           <DocumentPreview>
-              {TemplateComponent ? <TemplateComponent formData={formData} lang={lang} /> : <p>Modèle non trouvé</p>}
+              {TemplateComponent ? <TemplateComponent formData={formData} lang={lang} currency={currency} /> : <p>Modèle non trouvé</p>}
           </DocumentPreview>
         </div>
       </div>

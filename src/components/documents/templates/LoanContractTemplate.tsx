@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Image from 'next/image';
 import { loanContractClauses } from '@/data/documents/loan-contract-clauses';
@@ -5,13 +6,15 @@ import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from './DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
 import { useBrand } from '@/context/BrandContext';
+import { Currency } from '../DocumentPageClient';
 
 interface LoanContractTemplateProps {
     formData: any;
     lang: 'fr' | 'en' | 'de' | 'lt';
+    currency: Currency;
 }
 
-const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, lang }) => {
+const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, lang, currency }) => {
     const { companyInfo, brand } = useBrand();
 
     const getClauses = () => {
@@ -27,6 +30,12 @@ const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, l
 
     const borrower_name = brand === 'vantex' ? 'Sophie Martin' : formData.borrower_name;
 
+    const formatCurrency = (amount: number) => {
+        return new Intl.NumberFormat(lang, { style: 'currency', currency: currency }).format(amount);
+    }
+    
+    const loanAmountInWords = currency === 'USD' ? formData.loan_amount_in_words_dollars : formData.loan_amount_in_words;
+
     const replacePlaceholders = (text: string) => {
         if (!text) return '';
         return text
@@ -36,15 +45,15 @@ const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, l
             .replace(/{borrower_name}/g, borrower_name || '')
             .replace(/{borrower_address}/g, formData.borrower_address || '')
             .replace(/{borrower_id}/g, formData.borrower_id || '')
-            .replace(/{loan_amount}/g, formData.loan_amount ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.loan_amount) : '')
-            .replace(/{loan_amount_in_words}/g, formData.loan_amount_in_words || '')
+            .replace(/{loan_amount}/g, formData.loan_amount ? formatCurrency(formData.loan_amount) : '')
+            .replace(/{loan_amount_in_words}/g, loanAmountInWords || '')
             .replace(/{taeg}/g, formData.taeg || '')
             .replace(/{loan_term}/g, formData.loan_term || '')
             .replace(/{start_date}/g, formData.start_date ? new Date(formData.start_date).toLocaleDateString(lang) : '')
             .replace(/{end_date}/g, formData.end_date ? new Date(formData.end_date).toLocaleDateString(lang) : '')
-            .replace(/{total_cost}/g, formData.total_cost ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.total_cost) : '')
-            .replace(/{monthly_payment}/g, formData.monthly_payment ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.monthly_payment) : '')
-            .replace(/{total_due}/g, formData.total_due ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.total_due) : '')
+            .replace(/{total_cost}/g, formData.total_cost ? formatCurrency(formData.total_cost) : '')
+            .replace(/{monthly_payment}/g, formData.monthly_payment ? formatCurrency(formData.monthly_payment) : '')
+            .replace(/{total_due}/g, formData.total_due ? formatCurrency(formData.total_due) : '')
             .replace(/{contact_email}/g, companyInfo.email);
     };
 

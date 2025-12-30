@@ -3,12 +3,15 @@
 import React from 'react';
 import DocumentForm from './DocumentForm';
 import type { Language } from '@/data/documents/languages';
+import type { Currency } from './DocumentPageClient';
 
 export const DocumentGeneratorContext = React.createContext<{
     formData: any;
     setFormData: React.Dispatch<React.SetStateAction<any>>;
     lang: Language;
     setLang: React.Dispatch<React.SetStateAction<Language>>;
+    currency: Currency;
+    setCurrency: React.Dispatch<React.SetStateAction<Currency>>;
 } | null>(null);
 
 export const useDocumentGenerator = () => {
