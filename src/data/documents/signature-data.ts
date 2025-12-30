@@ -5,7 +5,7 @@ export const signatureData = (brandKey: 'neofonds' | 'finarcy' | 'vantex') => {
             ceo: {
                 name: "Klaus Schmidt",
                 title: { fr: "Directeur Général", en: "CEO", de: "Geschäftsführer", lt: "Generalinis direktorius" },
-                signatureUrl: "https://i.postimg.cc/jq1H8SMP/signature-5.png"
+                signatureUrl: "https://i.postimg.cc/76wJbHLK/Capture-d-ecran-2025-12-20-110200.png"
             },
             legal: {
                 name: "Markus Weber",
