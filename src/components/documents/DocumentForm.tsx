@@ -82,32 +82,30 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType }) => {
   const schema = buildSchema(currentFields);
   
   const getDefaultValues = () => {
-    if (Object.keys(formData).length > 0) {
-      return formData;
-    }
-    return currentFields.reduce((acc: any, field) => {
-        if (field.type === 'group' && field.fields) {
-            field.fields.forEach(subField => {
-                acc[subField.name] = subField.defaultValue ?? '';
-            });
-        } else {
-            acc[field.name] = field.defaultValue ?? '';
-        }
-        return acc;
-    }, {});
+    const defaultVals: any = {};
+    currentFields.forEach(field => {
+      if (field.type === 'group' && field.fields) {
+        field.fields.forEach(subField => {
+          defaultVals[subField.name] = subField.defaultValue ?? '';
+        });
+      } else {
+        defaultVals[field.name] = field.defaultValue ?? '';
+      }
+    });
+    return defaultVals;
   };
 
   const methods = useForm({
     resolver: zodResolver(schema),
     mode: 'onChange',
-    defaultValues: getDefaultValues(),
+    defaultValues: formData && Object.keys(formData).length > 0 ? formData : getDefaultValues(),
   });
 
   const { handleSubmit, control, watch, reset } = methods;
 
   useEffect(() => {
-    reset(getDefaultValues());
-  }, [formData, documentType, reset]);
+    reset(formData);
+  }, [formData, reset]);
   
   useEffect(() => {
     const subscription = watch((value) => {

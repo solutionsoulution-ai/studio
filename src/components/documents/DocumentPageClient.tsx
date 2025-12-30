@@ -17,6 +17,7 @@ import NeofondsReceiptTemplate from './templates/NeofondsReceiptTemplate';
 import NeofondsInvoiceTemplate from './templates/NeofondsInvoiceTemplate';
 import AmlCertificateTemplate from './templates/AmlCertificateTemplate';
 import { useBrand } from '@/context/BrandContext';
+import { documentFields } from '@/lib/document-fields';
 
 export type Currency = 'EUR' | 'USD';
 
@@ -54,8 +55,23 @@ const vantexLoanDefaultValues = {
   loan_amount_in_words_dollars: '15 mille dollars'
 };
 
+const getDefaultValuesForDoc = (docSlug: string) => {
+  const fields = documentFields[docSlug as keyof typeof documentFields] || [];
+  const defaultVals: any = {};
+  fields.forEach(field => {
+    if (field.type === 'group' && field.fields) {
+      field.fields.forEach(subField => {
+        defaultVals[subField.name] = subField.defaultValue ?? '';
+      });
+    } else {
+      defaultVals[field.name] = field.defaultValue ?? '';
+    }
+  });
+  return defaultVals;
+}
+
 export default function DocumentPageClient({ slug }: { slug: string }) {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState(() => getDefaultValuesForDoc(slug));
   const [lang, setLang] = useState<Language>('fr');
   const [currency, setCurrency] = useState<Currency>('EUR');
   const { brand } = useBrand();
@@ -64,7 +80,7 @@ export default function DocumentPageClient({ slug }: { slug: string }) {
     if (brand === 'vantex' && slug === 'contrat-de-pret-personnel') {
       setFormData(vantexLoanDefaultValues);
     } else {
-      setFormData({}); // Reset for other documents/brands
+      setFormData(getDefaultValuesForDoc(slug));
     }
   }, [brand, slug]);
 
