@@ -3,7 +3,7 @@ import React from 'react';
 import Image from 'next/image';
 import { loanContractClauses } from '@/data/documents/loan-contract-clauses';
 import { signatureData } from '@/data/documents/signature-data';
-import DocumentWrapper from './DocumentWrapper';
+import DocumentWrapper from '../DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
 import { useBrand } from '@/context/BrandContext';
 import { Currency } from '../DocumentPageClient';
@@ -123,7 +123,7 @@ const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, l
                     <div className="h-20"></div>
                     <div className="border-t border-slate-400 pt-2">
                         <p className="font-bold">{clauses.parties.borrower_label}</p>
-                        <p className="text-muted-foreground">Lu et approuvé</p>
+                        <p className="text-muted-foreground">{clauses.parties.read_and_approved}</p>
                     </div>
                 </div>
                 <div className="text-center">
@@ -140,5 +140,3 @@ const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, l
 };
 
 export default LoanContractTemplate;
-
-    

@@ -1,5 +1,5 @@
 
-import type { Clauses } from "./languages";
+import type { Clauses, Language } from "./languages";
 
 export const debtRecognitionClauses = (companyName: string): Clauses => ({
     fr: {
@@ -14,6 +14,7 @@ export const debtRecognitionClauses = (companyName: string): Clauses => ({
             title: "Entre les soussignés :",
             creditor_label: "Le Créancier :",
             debtor_label: "Le Débiteur :",
+            read_and_approved: "Lu et approuvé"
         },
         articles: {
             recognition: {
@@ -52,6 +53,7 @@ export const debtRecognitionClauses = (companyName: string): Clauses => ({
             title: "Tarp pasirašiusiųjų:",
             creditor_label: "Kreditorius:",
             debtor_label: "Skolininkas:",
+            read_and_approved: "Perskaityta ir patvirtinta"
         },
         articles: {
             recognition: {
@@ -84,6 +86,7 @@ export const debtRecognitionClauses = (companyName: string): Clauses => ({
             title: "Tussen de ondergetekenden:",
             creditor_label: "De Schuldeiser:",
             debtor_label: "De Schuldenaar:",
+            read_and_approved: "Gelezen en goedgekeurd"
         },
         articles: {
             recognition: {

@@ -13,6 +13,7 @@ export const suretyBondClauses = (companyName: string): Clauses => ({
             title: "Entre les soussignés :",
             creditor_label: "Le Créancier :",
             debtor_label: "Le Débiteur (Emprunteur) :",
+            read_and_approved: "Lu et approuvé"
         },
         articles: {
             object: {
@@ -68,6 +69,7 @@ export const suretyBondClauses = (companyName: string): Clauses => ({
             title: "Tarp pasirašiusiųjų:",
             creditor_label: "Kreditorius:",
             debtor_label: "Skolininkas (Paskolos gavėjas):",
+            read_and_approved: "Perskaityta ir patvirtinta"
         },
         articles: {
             object: {
@@ -117,6 +119,7 @@ export const suretyBondClauses = (companyName: string): Clauses => ({
             title: "Tussen de ondergetekenden:",
             creditor_label: "De Schuldeiser:",
             debtor_label: "De Schuldenaar (Kredietnemer):",
+            read_and_approved: "Gelezen en goedgekeurd"
         },
         articles: {
             object: {

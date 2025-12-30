@@ -2,7 +2,7 @@
 import React from 'react';
 import { suretyBondClauses } from '@/data/documents/surety-bond-clauses';
 import { signatureData } from '@/data/documents/signature-data';
-import DocumentWrapper from './DocumentWrapper';
+import DocumentWrapper from '../DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
 import { useBrand } from '@/context/BrandContext';
 import { Language } from '@/data/documents/languages';
@@ -115,7 +115,7 @@ const SuretyBondTemplate: React.FC<{ formData: any; lang: Language }> = ({ formD
                     <div className="h-12"></div>
                     <div className="border-t border-slate-400 pt-2">
                         <p className="font-bold">{clauses.parties.debtor_label}</p>
-                        <p className="text-muted-foreground">Lu et approuvé</p>
+                        <p className="text-muted-foreground">{clauses.parties.read_and_approved}</p>
                     </div>
                 </div>
                 <div className="text-center">

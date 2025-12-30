@@ -14,6 +14,7 @@ export const loanContractClauses = (companyCity: string): Clauses => ({
             title: "Entre les soussignés :",
             lender_label: "Le Prêteur :",
             borrower_label: "L'Emprunteur :",
+            read_and_approved: "Lu et approuvé",
         },
         articles: {
             object: {
@@ -69,6 +70,7 @@ export const loanContractClauses = (companyCity: string): Clauses => ({
             title: "Entre les soussignés :",
             lender_label: "Le Prêteur :",
             borrower_label: "L'Emprunteur :",
+            read_and_approved: "Lu et approuvé",
         },
         articles: {
             object: {
@@ -127,6 +129,7 @@ export const loanContractClauses = (companyCity: string): Clauses => ({
             title: "Zwischen den Unterzeichnern:",
             lender_label: "Der Darlehensgeber:",
             borrower_label: "Der Darlehensnehmer:",
+            read_and_approved: "Gelesen und genehmigt",
         },
         articles: {
             object: {
@@ -182,6 +185,7 @@ export const loanContractClauses = (companyCity: string): Clauses => ({
             title: "Tarp pasirašiusiųjų:",
             lender_label: "Paskolos davėjas:",
             borrower_label: "Paskolos gavėjas:",
+            read_and_approved: "Perskaityta ir patvirtinta",
         },
         articles: {
             object: {
@@ -237,6 +241,7 @@ export const loanContractClauses = (companyCity: string): Clauses => ({
             title: "Tussen de ondergetekenden:",
             lender_label: "De Kredietgever:",
             borrower_label: "De Kredietnemer:",
+            read_and_approved: "Gelezen en goedgekeurd",
         },
         articles: {
             object: {

@@ -2,6 +2,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { useBrand } from '@/context/BrandContext';
+import { Language } from '@/data/documents/languages';
 
 interface DocumentWrapperProps {
   children: React.ReactNode;
@@ -10,7 +11,7 @@ interface DocumentWrapperProps {
   docRef?: string;
   docDate?: string;
   hideDepartment?: boolean;
-  lang: 'fr' | 'en' | 'de' | 'lt' | 'nl';
+  lang: Language;
 }
 
 const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, department, docRef, docDate, hideDepartment = false, lang }) => {
@@ -108,7 +109,7 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 {companyInfo.brandKey === 'vantex' && companyInfo.logoUrl ? (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <Image src={companyInfo.logoUrl} alt={`${companyInfo.name} logo`} width={120} height={35} style={{ mixBlendMode: 'darken' }} />
+                    <Image src={companyInfo.logoUrl} alt={`${companyInfo.name} logo`} width={120} height={35} />
                   </div>
                 ) : companyInfo.brandKey === 'finarcy' && companyInfo.logoUrl ? (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -158,8 +159,8 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
         >
             <p style={{fontWeight: 'bold', color: '#0f172a'}}>{currentFooterText.copyright}</p>
             <p>{currentFooterText.confidential}</p>
-            <p className="mt-2 text-xs">{companyInfo.legal}</p>
-            <p className="font-bold text-xs mt-1">{companyInfo.creditWarning}</p>
+            <p className="mt-2 text-xs">{companyInfo.legal[lang]}</p>
+            <p className="font-bold text-xs mt-1">{companyInfo.creditWarning[lang]}</p>
         </footer>
     </div>
   );
