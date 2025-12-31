@@ -1,6 +1,6 @@
 
 "use client";
-import React, { useEffect, useMemo, useCallback } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useForm, FormProvider, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -93,16 +93,13 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType }) => {
   const [debouncedValues, { flush }] = useDebounce(watchedValues, 300);
 
   useEffect(() => {
-    if (setFormData) {
-        setFormData(debouncedValues);
-    }
+      setFormData(debouncedValues);
   }, [debouncedValues, setFormData]);
 
   useEffect(() => {
     reset(initialData);
   }, [initialData, reset]);
-
-  // Cleanup function to cancel any pending debounced updates when component unmounts
+  
   useEffect(() => {
     return () => {
       flush();
