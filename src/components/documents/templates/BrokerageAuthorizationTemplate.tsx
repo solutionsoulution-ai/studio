@@ -1,19 +1,25 @@
-
 import React from 'react';
 import Image from 'next/image';
 import { brokerageAuthorizationClauses } from '@/data/documents/brokerage-authorization-clauses';
+import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from '../DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
 import { useDocumentGenerator } from '../DocumentGenerator';
+import { useBrand } from '@/context/BrandContext';
 
 const BrokerageAuthorizationTemplate: React.FC = () => {
     const { formData, lang } = useDocumentGenerator();
-    const clausesData = brokerageAuthorizationClauses;
+    const { companyInfo, brand } = useBrand();
+
+    const authority = brand === 'neofonds' ? 'Bundesanstalt für Finanzdienstleistungsaufsicht (BaFin)' : 'Organisme pour le Registre Unique des Intermédiaires (ORIAS)';
+    const location = brand === 'neofonds' ? 'Frankfurt' : 'Paris';
+
+    const clausesData = brokerageAuthorizationClauses(companyInfo.name, authority, location);
     const clauses = clausesData[lang] || clausesData.fr;
-    const articlesData = brokerageAuthorizationClauses.articles;
-    const articles = articlesData; // assuming articles are not translated per language in this file structure
-    const signer1 = { signatureUrl: "https://i.postimg.cc/HWfMw9wD/signature-8.png" };
-    const signer2 = { signatureUrl: "https://i.postimg.cc/BQ4Sf8sD/signature-6.png" };
+    const articles = clausesData.articles;
+    
+    const ceoSigner = signatureData(brand).ceo;
+    const legalSigner = signatureData(brand).legal;
 
     const replacePlaceholders = (text: string) => {
         if (!text) return '';
@@ -42,8 +48,8 @@ const BrokerageAuthorizationTemplate: React.FC = () => {
                 <p className="text-xs leading-relaxed mb-6 text-center">{clauses.intro}</p>
 
                 <div className="text-center bg-white p-4 rounded-md border border-slate-200 mb-8">
-                    <p className="text-xl font-bold">{clauses.company_name}</p>
-                    <p className="text-xs text-slate-500">{clauses.company_address}</p>
+                    <p className="text-xl font-bold">{companyInfo.name}</p>
+                    <p className="text-xs text-slate-500">{companyInfo.address}</p>
                 </div>
 
                 <div className="space-y-4 text-sm mt-8">
@@ -84,13 +90,13 @@ const BrokerageAuthorizationTemplate: React.FC = () => {
                     </div>
                      <div className="flex gap-8">
                         <div className="text-center">
-                            {signer1.signatureUrl && <Image src={signer1.signatureUrl} alt={`Signature 1`} width={120} height={40} className="mx-auto" />}
+                            {ceoSigner.signatureUrl && <Image src={ceoSigner.signatureUrl} alt={`Signature 1`} width={120} height={40} className="mx-auto" />}
                             <div className="border-t border-slate-400 pt-1 mt-1 text-xs">
                                 <p className="font-bold">{clauses.signature_label_1}</p>
                             </div>
                         </div>
                          <div className="text-center">
-                            {signer2.signatureUrl && <Image src={signer2.signatureUrl} alt={`Signature 2`} width={120} height={40} className="mx-auto" />}
+                            {legalSigner.signatureUrl && <Image src={legalSigner.signatureUrl} alt={`Signature 2`} width={120} height={40} className="mx-auto" />}
                             <div className="border-t border-slate-400 pt-1 mt-1 text-xs">
                                 <p className="font-bold">{clauses.signature_label_2}</p>
                             </div>
