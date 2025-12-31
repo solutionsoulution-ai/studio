@@ -58,7 +58,7 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      opacity: 0.08,
+      opacity: 0.1,
       transform: 'rotate(-15deg)',
       color: 'hsl(var(--primary))',
       textAlign: 'center',
