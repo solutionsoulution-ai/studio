@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { neofondsInvoiceClauses } from '@/data/documents/neofonds-invoice-clauses';
-import DocumentWrapper from './DocumentWrapper';
+import DocumentWrapper from '../DocumentWrapper';
 import { useDocumentGenerator } from '../DocumentGenerator';
 
 const NeofondsInvoiceTemplate: React.FC = () => {

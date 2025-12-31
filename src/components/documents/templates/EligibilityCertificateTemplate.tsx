@@ -3,7 +3,7 @@ import React from 'react';
 import Image from 'next/image';
 import { eligibilityCertificateClauses } from '@/data/documents/eligibility-certificate-clauses';
 import { signatureData } from '@/data/documents/signature-data';
-import DocumentWrapper from './DocumentWrapper';
+import DocumentWrapper from '../DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
 import { useBrand } from '@/context/BrandContext';
 import { useDocumentGenerator } from '../DocumentGenerator';
@@ -17,6 +17,7 @@ const EligibilityCertificateTemplate: React.FC = () => {
     const validityDate = formData.date ? new Date(new Date(formData.date).setDate(new Date(formData.date).getDate() + 30)).toLocaleDateString(lang) : '';
     
     const replacePlaceholders = (text: string) => {
+        if (!text) return '';
         return text
             .replace(/{ref}/g, formData.ref || '')
             .replace(/{validity_date}/g, validityDate)

@@ -3,7 +3,7 @@ import React from 'react';
 import Image from 'next/image';
 import { neofondsReceiptClauses } from '@/data/documents/neofonds-receipt-clauses';
 import { signatureData } from '@/data/documents/signature-data';
-import DocumentWrapper from './DocumentWrapper';
+import DocumentWrapper from '../DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
 import { useBrand } from '@/context/BrandContext';
 import { useDocumentGenerator } from '../DocumentGenerator';
