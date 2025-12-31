@@ -54,7 +54,7 @@ const AmlCertificateTemplate: React.FC = () => {
 
                 <article>
                     <ArticleHeader title={clauses.articles.source_justification.title} />
-                    <p className="text-xs italic">{clauses.articles.source_justification.content}</p>
+                    <p className="text-xs">{clauses.articles.source_justification.content}</p>
                     <div className="mt-2 space-y-1 text-xs">
                         {clauses.articles.source_justification.options.map((option: string) => (
                              <div key={option} className="flex items-center gap-2">
@@ -73,6 +73,11 @@ const AmlCertificateTemplate: React.FC = () => {
                 <article className="bg-destructive/10 border-l-4 border-destructive p-3 rounded-r-md">
                     <ArticleHeader title={clauses.articles.warning.title} className="text-destructive" />
                     <p className="text-xs text-destructive/80">{replacePlaceholders(clauses.articles.warning.content)}</p>
+                </article>
+
+                <article>
+                    <ArticleHeader title={clauses.articles.lender_declaration.title} />
+                    <p>{replacePlaceholders(clauses.articles.lender_declaration.content)}</p>
                 </article>
             </section>
 
