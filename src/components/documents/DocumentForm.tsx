@@ -13,7 +13,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { usePDFGenerator } from '@/hooks/use-pdf-generator';
 import { Loader2 } from 'lucide-react';
 import { documentFields, DocumentField } from '@/lib/document-fields';
-import { useDebounce } from 'use-debounce';
 import { useDocumentGenerator } from './DocumentGenerator';
 import { Language } from '@/data/documents/languages';
 import { Currency } from './DocumentPageClient';
@@ -21,6 +20,7 @@ import { Currency } from './DocumentPageClient';
 interface DocumentFormProps {
   documentType: string;
   initialData: any;
+  onFormChange: (data: any) => void;
 }
 
 const buildSchema = (fields: DocumentField[]): z.ZodObject<any> => {
@@ -74,9 +74,9 @@ const buildFieldSchema = (field: DocumentField): z.ZodType<any, any> => {
 };
 
 
-const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData }) => {
+const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData, onFormChange }) => {
   const { generatePDF, isLoading } = usePDFGenerator();
-  const { setFormData, setLang, setCurrency } = useDocumentGenerator();
+  const { setLang, setCurrency } = useDocumentGenerator();
   
   const currentFields = useMemo(() => documentFields[documentType as keyof typeof documentFields] || [], [documentType]);
   const schema = useMemo(() => buildSchema(currentFields), [currentFields]);
@@ -90,20 +90,23 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData }
   const { handleSubmit, control, watch, reset, setValue } = methods;
 
   const watchedValues = watch();
-  const [debouncedFormData] = useDebounce(watchedValues, 300);
+
+  useEffect(() => {
+      const subscription = watch((value) => {
+          onFormChange(value);
+      });
+      return () => subscription.unsubscribe();
+  }, [watch, onFormChange]);
+
 
   useEffect(() => {
     reset(initialData);
   }, [initialData, reset]);
 
-  useEffect(() => {
-    setFormData(debouncedFormData);
-  }, [debouncedFormData, setFormData]);
-
   // Dynamic calculation for loan contract
   useEffect(() => {
     if (documentType === 'contrat-de-pret-personnel') {
-        const { loan_amount, loan_term, taeg } = debouncedFormData;
+        const { loan_amount, loan_term, taeg } = watchedValues;
 
         const amount = Number(loan_amount);
         const term = Number(loan_term);
@@ -123,12 +126,12 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData }
             const totalDue = monthlyPayment * term;
             const totalCost = totalDue - amount;
             
-            setValue('monthly_payment', Number(monthlyPayment.toFixed(2)), { shouldValidate: true });
-            setValue('total_cost', Number(totalCost.toFixed(2)), { shouldValidate: true });
-            setValue('total_due', Number(totalDue.toFixed(2)), { shouldValidate: true });
+            setValue('monthly_payment', Number(monthlyPayment.toFixed(2)), { shouldValidate: true, shouldDirty: true });
+            setValue('total_cost', Number(totalCost.toFixed(2)), { shouldValidate: true, shouldDirty: true });
+            setValue('total_due', Number(totalDue.toFixed(2)), { shouldValidate: true, shouldDirty: true });
         }
     }
-  }, [debouncedFormData, documentType, setValue]);
+  }, [watchedValues, documentType, setValue]);
 
 
   const onSubmit = () => {

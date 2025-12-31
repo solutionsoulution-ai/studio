@@ -7,7 +7,6 @@ import type { Currency } from './DocumentPageClient';
 // Define the shape of the context data
 export interface DocumentGeneratorContextType {
     formData: any;
-    setFormData: React.Dispatch<React.SetStateAction<any>>;
     lang: Language;
     setLang: React.Dispatch<React.SetStateAction<Language>>;
     currency: Currency;

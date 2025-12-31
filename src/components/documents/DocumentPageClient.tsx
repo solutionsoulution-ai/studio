@@ -1,6 +1,6 @@
 
 "use client";
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import { DocumentGeneratorContext, DocumentGeneratorContextType } from "@/components/documents/DocumentGenerator";
 import DocumentForm from "@/components/documents/DocumentForm";
 import DocumentPreview from "@/components/documents/DocumentPreview";
@@ -86,10 +86,13 @@ export default function DocumentPageClient({ slug }: { slug: string }) {
   const [currency, setCurrency] = useState<Currency>('EUR');
 
   const TemplateComponent = documentTemplates[slug];
+  
+  const handleFormChange = useCallback((data: any) => {
+    setFormData(data);
+  }, []);
 
   const contextValue: DocumentGeneratorContextType = useMemo(() => ({
     formData,
-    setFormData,
     lang,
     setLang,
     currency,
@@ -103,6 +106,7 @@ export default function DocumentPageClient({ slug }: { slug: string }) {
               <DocumentForm 
                   documentType={slug} 
                   initialData={initialData}
+                  onFormChange={handleFormChange}
               />
           </div>
           <div className="w-full lg:w-2/3 h-auto lg:h-screen lg:overflow-y-auto p-4">
