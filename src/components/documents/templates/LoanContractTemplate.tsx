@@ -28,11 +28,13 @@ const LoanContractTemplate: React.FC = () => {
     const signer = signatureData(companyInfo.brandKey).ceo;
 
     const formatCurrency = (amount: number) => {
-        if (isNaN(amount)) return '';
+        if (isNaN(amount) || amount === null) return '';
         return new Intl.NumberFormat(lang, { style: 'currency', currency: currency }).format(amount);
     }
     
     const loanAmountInWords = currency === 'USD' ? formData.loan_amount_in_words_dollars : formData.loan_amount_in_words;
+    
+    const totalDue = (formData.total_due || 0) + (formData.reimbursed_fees || 0);
 
     const replacePlaceholders = (text: string) => {
         if (!text) return '';
@@ -43,18 +45,21 @@ const LoanContractTemplate: React.FC = () => {
             .replace(/{borrower_name}/g, formData.borrower_name || '___________')
             .replace(/{borrower_address}/g, formData.borrower_address || '___________')
             .replace(/{borrower_id}/g, formData.borrower_id || '___________')
-            .replace(/{loan_amount}/g, formData.loan_amount ? formatCurrency(formData.loan_amount) : '___________')
+            .replace(/{loan_amount}/g, formatCurrency(formData.loan_amount))
             .replace(/{loan_amount_in_words}/g, loanAmountInWords || '___________')
             .replace(/{taeg}/g, formData.taeg || '___________')
             .replace(/{loan_term}/g, formData.loan_term || '___________')
             .replace(/{availability_days}/g, formData.availability_days || '10')
             .replace(/{start_date}/g, formData.start_date ? new Date(formData.start_date).toLocaleDateString(lang) : '___________')
-            .replace(/{total_cost}/g, formData.total_cost ? formatCurrency(formData.total_cost) : '___________')
-            .replace(/{monthly_payment}/g, formData.monthly_payment ? formatCurrency(formData.monthly_payment) : '___________')
-            .replace(/{total_due}/g, formData.total_due ? formatCurrency(formData.total_due) : '___________')
+            .replace(/{total_cost}/g, formatCurrency(formData.total_cost))
+            .replace(/{monthly_payment}/g, formatCurrency(formData.monthly_payment))
+            .replace(/{total_due}/g, formatCurrency(totalDue))
+            .replace(/{reimbursed_fees}/g, formatCurrency(formData.reimbursed_fees))
             .replace(/{withdrawal_days}/g, formData.withdrawal_days || '14')
             .replace(/{contact_email}/g, companyInfo.email);
     };
+
+    const articles = Object.entries(clauses.articles || {});
 
     return (
         <DocumentWrapper
@@ -86,34 +91,35 @@ const LoanContractTemplate: React.FC = () => {
             </section>
 
              <section className="space-y-4 text-sm leading-relaxed">
-                <article>
-                    <ArticleHeader title={clauses.articles.object.title} />
-                    <p>{replacePlaceholders(clauses.articles.object.content)}</p>
-                </article>
-                <article>
-                    <ArticleHeader title={clauses.articles.characteristics.title} />
-                    <ul className="text-xs bg-muted p-3 rounded-md space-y-1">
-                        <li>{replacePlaceholders(clauses.articles.characteristics.amount)}</li>
-                        <li>{replacePlaceholders(clauses.articles.characteristics.taeg)}</li>
-                        <li>{replacePlaceholders(clauses.articles.characteristics.term)}</li>
-                        <li>{replacePlaceholders(clauses.articles.characteristics.availability)}</li>
-                    </ul>
-                </article>
-                <article>
-                    <ArticleHeader title={clauses.articles.repayment.title} />
-                    <p>{replacePlaceholders(clauses.articles.repayment.intro)}</p>
-                    <div className="text-xs bg-muted p-3 rounded-md mt-2 space-y-1">
-                        <p>{replacePlaceholders(clauses.articles.repayment.monthly_payment)}</p>
-                        <p>{replacePlaceholders(clauses.articles.repayment.total_cost)}</p>
-                        <p className="font-semibold">{replacePlaceholders(clauses.articles.repayment.total_due)}</p>
-                    </div>
-                </article>
-                 {Object.entries(clauses.articles).slice(3).map(([key, article]: [string, any]) => (
-                    <article key={key}>
-                        <ArticleHeader title={article.title} />
-                        <p>{replacePlaceholders(article.content)}</p>
-                    </article>
-                ))}
+                {articles.map(([key, article]: [string, any]) => {
+                    if (key === 'reimbursement' && brand !== 'vantex') {
+                        return null; // Skip this article if not vantex
+                    }
+                    return (
+                        <article key={key}>
+                            <ArticleHeader title={article.title} />
+                            {key === 'characteristics' ? (
+                                <ul className="text-xs bg-muted p-3 rounded-md space-y-1">
+                                    <li>{replacePlaceholders(article.amount)}</li>
+                                    <li>{replacePlaceholders(article.taeg)}</li>
+                                    <li>{replacePlaceholders(article.term)}</li>
+                                    <li>{replacePlaceholders(article.availability)}</li>
+                                </ul>
+                            ) : key === 'repayment' ? (
+                                <>
+                                    <p>{replacePlaceholders(article.intro)}</p>
+                                    <div className="text-xs bg-muted p-3 rounded-md mt-2 space-y-1">
+                                        <p>{replacePlaceholders(article.monthly_payment)}</p>
+                                        <p>{replacePlaceholders(article.total_cost)}</p>
+                                        <p className="font-semibold">{replacePlaceholders(article.total_due)}</p>
+                                    </div>
+                                </>
+                            ) : (
+                                <p>{replacePlaceholders(article.content)}</p>
+                            )}
+                        </article>
+                    )
+                })}
             </section>
             
             <p className="text-center mt-8 text-xs">{clauses.signature_preamble}</p>

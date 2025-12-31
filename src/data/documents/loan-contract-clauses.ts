@@ -80,21 +80,21 @@ export const loanContractClauses = (companyCity: string): Clauses => ({
                 },
                 characteristics: {
                     title: "Article 2 : Montant et Caractéristiques du Prêt",
-                    amount: "Montant du capital prêté : 15000 € (quinze mille euros).",
-                    taeg: "Taux d'intérêt Annuel Effectif Global (TAEG) fixe : 4.5%.",
-                    term: "Durée totale du remboursement : 48 mois.",
-                    availability: "Date de mise à disposition des fonds : Au plus tard 10 jours après l'expiration du délai de rétractation.",
+                    amount: "Montant du capital prêté : {loan_amount} ({loan_amount_in_words}).",
+                    taeg: "Taux d'intérêt Annuel Effectif Global (TAEG) fixe : {taeg}.",
+                    term: "Durée totale du remboursement : {loan_term} mois.",
+                    availability: "Date de mise à disposition des fonds : Au plus tard {availability_days} jours après l'expiration du délai de rétractation.",
                 },
                 repayment: {
                     title: "Article 3 : Modalités de Remboursement",
-                    intro: "L'Emprunteur s'engage à rembourser le capital et les intérêts en 48 mensualités constantes. La première échéance interviendra le 05/03/2024.",
-                    monthly_payment: "Mensualité (hors assurance) : 342.05 €. Ce montant sera prélevé le 5 de chaque mois.",
-                    total_cost: "Le coût total du crédit (intérêts) s'élève à 1418.51 €.",
-                    total_due: "Montant total dû : 16418.51 € (Capital emprunté + coût total des intérêts).",
+                    intro: "L'Emprunteur s'engage à rembourser le capital et les intérêts en {loan_term} mensualités constantes. La première échéance interviendra le {start_date}.",
+                    monthly_payment: "Mensualité (hors assurance) : {monthly_payment}. Ce montant sera prélevé le 5 de chaque mois.",
+                    total_cost: "Le coût total du crédit (intérêts) s'élève à {total_cost}.",
+                    total_due: "Montant total dû : {total_due} (Capital emprunté + coût total des intérêts + frais remboursés).",
                 },
                 withdrawal: {
                     title: "Article 4 : Droit de Rétractation",
-                    content: "L'Emprunteur dispose d'un délai de rétractation de quatorze (14) jours calendaires à compter de la date de signature de l'offre de contrat de crédit. Pour se rétracter, l'Emprunteur doit renvoyer le bordereau de rétractation joint à l'offre par lettre recommandée avec accusé de réception.",
+                    content: "L'Emprunteur dispose d'un délai de rétractation de {withdrawal_days} jours calendaires à compter de la date de signature de l'offre de contrat de crédit. Pour se rétracter, l'Emprunteur doit renvoyer le bordereau de rétractation joint à l'offre par lettre recommandée avec accusé de réception.",
                 },
                 default: {
                     title: "Article 5 : Défaut de Paiement",
@@ -112,6 +112,10 @@ export const loanContractClauses = (companyCity: string): Clauses => ({
                     title: "Article 8 : Droit Applicable et Litiges",
                     content: "Le présent contrat est soumis au droit allemand. En cas de litige, les parties s'engagent à rechercher une solution amiable. À défaut, le tribunal compétent sera celui du lieu de domicile de l'Emprunteur.",
                 },
+                reimbursement: {
+                    title: "Article 9 : Remboursement des Frais",
+                    content: "Le Prêteur s'engage à rembourser à l'Emprunteur les frais avancés durant la procédure d'octroi du prêt, estimés à {reimbursed_fees}. Ce montant sera ajouté au capital versé à l'Emprunteur."
+                }
             },
             signature_preamble: "",
         }
