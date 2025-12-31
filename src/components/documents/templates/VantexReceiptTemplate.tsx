@@ -32,7 +32,7 @@ const VantexReceiptTemplate: React.FC = () => {
     return (
         <DocumentWrapper 
             title={clauses.title}
-            department={companyDetails.name}
+            department={clauses.header?.line1}
             docRef={replacePlaceholders(clauses.reference)}
             docDate={replacePlaceholders(clauses.date)}
             lang={lang}
