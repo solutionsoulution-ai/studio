@@ -14,9 +14,13 @@ const LoanContractTemplate: React.FC = () => {
 
     const getClauses = () => {
         const allClauses = loanContractClauses(companyInfo.city);
-        if (brand === 'vantex' && lang === 'fr') { // Only use vantex specific for french
-            return allClauses.vantex[lang];
+        
+        // Prioritize brand-specific clauses if they exist for the current language
+        if (allClauses[brand] && allClauses[brand][lang]) {
+            return allClauses[brand][lang];
         }
+
+        // Fallback to generic language clauses
         return allClauses[lang] || allClauses['fr'];
     }
 
