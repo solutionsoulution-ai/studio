@@ -41,6 +41,9 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
   };
 
   const currentFooterText = footerText[lang] || footerText['fr'];
+  const legalText = companyInfo.legal[lang] || companyInfo.legal['fr'];
+  const creditWarningText = companyInfo.creditWarning[lang] || companyInfo.creditWarning['fr'];
+
 
   const Seal = () => (
     <div style={{
@@ -161,8 +164,8 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
         >
             <p style={{fontWeight: 'bold', color: '#0f172a'}}>{currentFooterText.copyright}</p>
             <p>{currentFooterText.confidential}</p>
-            <p className="mt-2 text-xs">{companyInfo.legal[lang]}</p>
-            <p className="font-bold text-xs mt-1">{companyInfo.creditWarning[lang]}</p>
+            <p className="mt-2 text-xs">{legalText}</p>
+            <p className="font-bold text-xs mt-1">{creditWarningText}</p>
         </footer>
     </div>
   );
