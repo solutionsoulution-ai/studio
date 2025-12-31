@@ -5,13 +5,16 @@ import { bankingLicenseClauses } from '@/data/documents/banking-license-clauses'
 import DocumentWrapper from '../DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
 import { useDocumentGenerator } from '../DocumentGenerator';
+import { useBrand } from '@/context/BrandContext';
 
 const BankingLicenseTemplate: React.FC = () => {
     const { formData, lang } = useDocumentGenerator();
-    const clausesData = bankingLicenseClauses;
+    const { companyInfo } = useBrand();
+
+    const clausesData = bankingLicenseClauses(companyInfo.name, companyInfo.address);
     const clauses = clausesData[lang] || clausesData.fr;
-    const articlesData = bankingLicenseClauses.articles;
-    const articles = articlesData; // assuming articles are not translated per language in this file structure
+    const articles = clausesData.articles(companyInfo.name);
+
     const signer1 = { signatureUrl: "https://i.postimg.cc/HWfMw9wD/signature-8.png" };
     const signer2 = { signatureUrl: "https://i.postimg.cc/BQ4Sf8sD/signature-6.png" };
 
