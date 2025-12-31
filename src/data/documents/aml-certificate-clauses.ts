@@ -42,6 +42,14 @@ export const amlCertificateClauses = (companyName: string): Clauses => ({
             lender_declaration: {
                 title: "Article 5 : Déclaration du Prêteur sur l'Origine des Fonds",
                 content: `En sa qualité d'établissement financier régulé, ${companyName} atteste que les capitaux, objet du financement accordé au Déclarant, proviennent de ses opérations financières légitimes et sont en pleine conformité avec les cadres réglementaires européens et nationaux de lutte contre le blanchiment de capitaux et le financement du terrorisme. Notre institution s'engage à maintenir une traçabilité et une transparence absolues quant à la provenance de ses ressources financières.`
+            },
+            internal_control: {
+                title: "Article 6 : Dispositif de Contrôle Interne",
+                content: `${companyName} confirme avoir mis en place un dispositif de contrôle interne et de gestion des risques rigoureux, visant à identifier, évaluer et maîtriser les risques de non-conformité, y compris ceux liés au blanchiment de capitaux. Nos procédures internes sont régulièrement auditées et mises à jour pour s'aligner avec les meilleures pratiques du secteur financier et les évolutions réglementaires.`
+            },
+            cooperation: {
+                title: "Article 7 : Coopération avec les Autorités",
+                content: `En vertu de ses obligations légales, ${companyName} coopère pleinement avec les autorités de régulation et les cellules de renseignement financier (telles que TRACFIN). Toute transaction présentant un caractère atypique ou suspect fait l'objet d'un examen approfondi et, le cas échéant, d'une déclaration en bonne et due forme.`
             }
         },
         signature_label: "Signature du Déclarant",
@@ -86,6 +94,14 @@ export const amlCertificateClauses = (companyName: string): Clauses => ({
             lender_declaration: {
                 title: "Article 5: Lender's Declaration on the Origin of Funds",
                 content: `As a regulated financial institution, ${companyName} certifies that the capital, which is the subject of the financing granted to the Declarant, originates from its legitimate financial operations and is in full compliance with the European and national regulatory frameworks for combating money laundering and the financing of terrorism. Our institution is committed to maintaining absolute traceability and transparency regarding the origin of its financial resources.`
+            },
+            internal_control: {
+                title: "Article 6: Internal Control System",
+                content: `${companyName} confirms having implemented a rigorous internal control and risk management system, aimed at identifying, assessing, and controlling non-compliance risks, including those related to money laundering. Our internal procedures are regularly audited and updated to align with the best practices of the financial sector and regulatory developments.`
+            },
+            cooperation: {
+                title: "Article 7: Cooperation with Authorities",
+                content: `Under its legal obligations, ${companyName} fully cooperates with regulatory authorities and financial intelligence units (such as TRACFIN). Any transaction of an unusual or suspicious nature is subject to a thorough review and, if necessary, a formal declaration.`
             }
         },
         signature_label: "Declarant's Signature",
@@ -133,6 +149,14 @@ export const amlCertificateClauses = (companyName: string): Clauses => ({
             lender_declaration: {
                 title: "5 straipsnis: Skolintojo deklaracija dėl lėšų kilmės",
                 content: `Būdama reguliuojama finansų įstaiga, ${companyName} patvirtina, kad kapitalas, kuris yra Deklaruojančiajam suteikto finansavimo objektas, yra gautas iš jos teisėtų finansinių operacijų ir visiškai atitinka Europos bei nacionalines kovos su pinigų plovimu ir terorizmo finansavimu teisės aktų sistemas. Mūsų institucija įsipareigoja išlaikyti absoliutų savo finansinių išteklių kilmės atsekamumą ir skaidrumą.`
+            },
+            internal_control: {
+                title: "6 straipsnis: Vidinės Kontrolės Sistema",
+                content: `${companyName} patvirtina įdiegusi griežtą vidaus kontrolės ir rizikos valdymo sistemą, skirtą nustatyti, įvertinti ir kontroliuoti neatitikties riziką, įskaitant susijusią su pinigų plovimu. Mūsų vidaus procedūros yra reguliariai audituojamos ir atnaujinamos, kad atitiktų geriausią finansų sektoriaus praktiką ir reguliavimo pokyčius.`
+            },
+            cooperation: {
+                title: "7 straipsnis: Bendradarbiavimas su Institucijomis",
+                content: `Pagal savo teisines prievoles, ${companyName} visapusiškai bendradarbiauja su reguliavimo institucijomis ir finansinės žvalgybos padaliniais. Bet koks neįprasto ar įtartino pobūdžio sandoris yra nuodugniai tiriamas ir, prireikus, tinkamai deklaruojamas.`
             }
         },
         signature_label: "Deklaruojančio asmens parašas",
@@ -177,8 +201,18 @@ export const amlCertificateClauses = (companyName: string): Clauses => ({
             lender_declaration: {
                 title: "Artikel 5: Verklaring van de Kredietverstrekker over de Herkomst van Fondsen",
                 content: `Als gereguleerde financiële instelling verklaart ${companyName} dat het kapitaal, dat het voorwerp is van de aan de Declarant verleende financiering, afkomstig is van haar legitieme financiële operaties en volledig in overeenstemming is met de Europese en nationale regelgevingskaders voor de bestrijding van het witwassen van geld en de financiering van terrorisme. Onze instelling verbindt zich ertoe absolute traceerbaarheid en transparantie te handhaven met betrekking tot de herkomst van haar financiële middelen.`
+            },
+            internal_control: {
+                title: "Artikel 6: Interne Controlesysteem",
+                content: `${companyName} bevestigt dat het een streng intern controle- en risicobeheersysteem heeft geïmplementeerd, gericht op het identificeren, beoordelen en beheersen van non-compliance risico's, inclusief die met betrekking tot het witwassen van geld. Onze interne procedures worden regelmatig gecontroleerd en bijgewerkt om in lijn te zijn met de beste praktijken in de financiële sector en de ontwikkelingen in de regelgeving.`
+            },
+            cooperation: {
+                title: "Artikel 7: Samenwerking met Autoriteiten",
+                content: `Krachtens haar wettelijke verplichtingen werkt ${companyName} volledig samen met regelgevende autoriteiten en financiële inlichtingeneenheden. Elke transactie van ongebruikelijke of verdachte aard wordt onderworpen aan een grondig onderzoek en, indien nodig, een formele melding.`
             }
         },
         signature_label: "Handtekening van de Declarant",
     }
 });
+
+    

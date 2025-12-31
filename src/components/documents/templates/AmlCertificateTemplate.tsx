@@ -79,6 +79,16 @@ const AmlCertificateTemplate: React.FC = () => {
                     <ArticleHeader title={clauses.articles.lender_declaration.title} />
                     <p>{replacePlaceholders(clauses.articles.lender_declaration.content)}</p>
                 </article>
+                
+                <article>
+                    <ArticleHeader title={clauses.articles.internal_control.title} />
+                    <p>{replacePlaceholders(clauses.articles.internal_control.content)}</p>
+                </article>
+
+                <article>
+                    <ArticleHeader title={clauses.articles.cooperation.title} />
+                    <p>{replacePlaceholders(clauses.articles.cooperation.content)}</p>
+                </article>
             </section>
 
             <div className="mt-16 pt-8 grid grid-cols-2 gap-16 text-xs items-end" style={{ pageBreakInside: 'avoid' }}>
@@ -103,3 +113,5 @@ const AmlCertificateTemplate: React.FC = () => {
 };
 
 export default AmlCertificateTemplate;
+
+    
