@@ -67,7 +67,28 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
       overflow: 'hidden'
     }}>
       {companyInfo.brandKey === 'vantex' && companyInfo.logoUrl ? (
-        <img src={companyInfo.logoUrl} alt="Vantex Logo" style={{ width: '80%', height: 'auto', objectFit: 'contain', mixBlendMode: 'darken' }}/>
+        <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+          <img src={companyInfo.logoUrl} alt="Vantex Logo" style={{ position: 'absolute', width: '90%', height: '90%', objectFit: 'contain', mixBlendMode: 'darken', opacity: 0.2 }}/>
+          <div style={{
+            position: 'relative',
+            fontWeight: 'bold',
+            fontSize: '14px',
+            lineHeight: '1.2',
+            textTransform: 'uppercase'
+          }}>{companyInfo.name}</div>
+          <div style={{
+            position: 'relative',
+            height: '2px',
+            width: '50%',
+            backgroundColor: 'hsl(var(--primary))',
+            margin: '4px 0'
+          }}></div>
+          <div style={{
+            position: 'relative',
+            fontSize: '9px',
+            lineHeight: '1.1',
+          }}>{companyInfo.city}</div>
+        </div>
       ) : (
         <>
           <div style={{
