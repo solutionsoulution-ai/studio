@@ -155,5 +155,19 @@ export const documentFields: { [key: string]: DocumentField[] } = {
     { name: 'transaction_amount_in_words', label: {fr: 'Montant en toutes lettres'}, type: 'text', validation: { type: 'string' } },
     { name: 'funds_origin', label: {fr: 'Description de l\'origine des fonds'}, type: 'textarea', validation: { type: 'string' } },
   ],
+  'autorisation-virement': [
+    { name: 'ref', label: { fr: 'Référence du document' }, type: 'text', defaultValue: `AV-${new Date().getFullYear()}-`, validation: { type: 'string' } },
+    { name: 'date', label: { fr: 'Date d\'émission' }, type: 'date', defaultValue: new Date().toISOString().split('T')[0], validation: { type: 'date' } },
+    { name: 'loan_contract_ref', label: { fr: 'Référence du Contrat de Prêt' }, type: 'text', validation: { type: 'string' } },
+    { name: 'loan_amount', label: { fr: 'Montant du virement' }, type: 'number', validation: { type: 'number' } },
+    { name: 'loan_amount_in_words', label: { fr: 'Montant en toutes lettres' }, type: 'text', validation: { type: 'string' } },
+    { name: 'borrower_name', label: { fr: 'Nom du bénéficiaire' }, type: 'text', validation: { type: 'string' } },
+    { name: 'bank_name', label: { fr: 'Nom de la banque du bénéficiaire' }, type: 'text', validation: { type: 'string' } },
+    { name: 'account_holder', label: { fr: 'Titulaire du compte' }, type: 'text', validation: { type: 'string' } },
+    { name: 'iban', label: { fr: 'IBAN' }, type: 'text', validation: { type: 'string' } },
+    { name: 'bic_swift', label: { fr: 'Code BIC / SWIFT' }, type: 'text', validation: { type: 'string' } },
+  ],
   'document-vierge': [],
 };
+
+    

@@ -18,6 +18,7 @@ import VantexReceiptTemplate from './templates/VantexReceiptTemplate';
 import NeofondsInvoiceTemplate from './templates/NeofondsInvoiceTemplate';
 import VantexInvoiceTemplate from './templates/VantexInvoiceTemplate';
 import AmlCertificateTemplate from './templates/AmlCertificateTemplate';
+import WireAuthorizationTemplate from './templates/WireAuthorizationTemplate';
 import { useBrand } from '@/context/BrandContext';
 import { documentFields } from '@/lib/document-fields';
 import type { Language } from '@/data/documents/languages';
@@ -75,6 +76,7 @@ const documentTemplates: { [key: string]: React.FC<any> } = {
   'licence-bancaire': BankingLicenseTemplate,
   'autorisation-courtage': BrokerageAuthorizationTemplate,
   'certificat-non-blanchiment': AmlCertificateTemplate,
+  'autorisation-virement': WireAuthorizationTemplate,
   'document-vierge': BlankDocumentTemplate,
 };
 
@@ -133,3 +135,5 @@ export default function DocumentPageClient({ slug }: { slug: string }) {
       </DocumentGeneratorContext.Provider>
   );
 }
+
+    

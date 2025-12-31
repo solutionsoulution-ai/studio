@@ -18,6 +18,7 @@ const documents = [
   { slug: 'facture-neofonds', title: 'Facture (Neofonds)', description: 'Générez une facture aux couleurs de Neofonds.' },
   { slug: 'facture-vantex', title: 'Facture (Vantex)', description: 'Générez une facture aux couleurs de Vantex Bank.' },
   { slug: 'certificat-non-blanchiment', title: 'Certificat de Non-Blanchiment', description: 'Déclarez l\'origine légitime des fonds pour une transaction.' },
+  { slug: 'autorisation-virement', title: 'Autorisation de Virement', description: 'Autorisez un virement de fonds et déclarez leur origine légitime.' },
   { slug: 'document-vierge', title: 'Document Vierge', description: 'Partez d\'un modèle vierge avec en-tête de Neofonds.' },
 ];
 
@@ -58,3 +59,5 @@ export default function DocumentsHomePage() {
     </div>
   );
 }
+
+    
