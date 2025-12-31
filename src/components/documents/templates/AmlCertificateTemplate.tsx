@@ -8,7 +8,7 @@ import { useBrand } from '@/context/BrandContext';
 import { useDocumentGenerator } from '../DocumentGenerator';
 
 const AmlCertificateTemplate: React.FC = () => {
-    const { formData, lang } = useDocumentGenerator();
+    const { formData, lang, currency } = useDocumentGenerator();
     const { companyInfo } = useBrand();
     const clausesData = amlCertificateClauses(companyInfo.name);
     const clauses = clausesData[lang] || clausesData['fr'];
@@ -21,7 +21,7 @@ const AmlCertificateTemplate: React.FC = () => {
             .replace(/{date}/g, formData.date ? new Date(formData.date).toLocaleDateString(lang) : '___________')
             .replace(/{client_name}/g, formData.client_name || '___________')
             .replace(/{client_address}/g, formData.client_address || '___________')
-            .replace(/{transaction_amount}/g, formData.transaction_amount ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.transaction_amount) : '___________')
+            .replace(/{transaction_amount}/g, formData.transaction_amount ? new Intl.NumberFormat(lang, { style: 'currency', currency: currency }).format(formData.transaction_amount) : '___________')
             .replace(/{transaction_amount_in_words}/g, formData.transaction_amount_in_words || '___________')
             .replace(/{transaction_ref}/g, formData.transaction_ref || '___________');
     };

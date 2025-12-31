@@ -31,7 +31,32 @@ export const amlCertificateClauses = (companyName: string): Clauses => ({
         signature_label: "Signature du Déclarant",
     },
     en: {
-        // ...
+        header: {
+            line1: "Compliance Department",
+            line2: "Anti-Money Laundering Unit (AML/CFT)",
+        },
+        title: "Certificate of Non-Money Laundering",
+        reference: "Certificate No: {ref}",
+        date: "Date: {date}",
+        declarer: {
+            title: "Declarant",
+        },
+        articles: {
+            declaration: {
+                title: "Article 1: Declaration on the Origin of Funds",
+                content: `I, the undersigned, {client_name}, hereby declare on my honor that the funds amounting to {transaction_amount} ({transaction_amount_in_words}) used in the transaction referenced {transaction_ref} originate from legitimate sources and are not the proceeds of criminal activities or money laundering, in accordance with Directive (EU) 2015/849.`,
+                origin_label: "Declared origin of funds:",
+            },
+            commitment: {
+                title: "Article 2: Commitment to Transparency",
+                content: `I undertake to provide ${companyName}, upon request, with any supporting documents (payslips, tax notices, deeds of sale, etc.) that verify the origin of the funds declared above.`,
+            },
+            warning: {
+                title: "Article 3: Warning on False Declarations",
+                content: `I acknowledge that I have been informed that any false declaration is liable to legal prosecution and may result in the immediate termination of any business relationship with ${companyName}, as well as a suspicious activity report to the competent authorities.`,
+            },
+        },
+        signature_label: "Declarant's Signature",
     },
     de: {
         // ...
