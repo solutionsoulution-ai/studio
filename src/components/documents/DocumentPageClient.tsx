@@ -1,7 +1,7 @@
 
 "use client";
 import React, { useMemo, useState } from 'react';
-import { DocumentGeneratorContext } from "@/components/documents/DocumentGenerator";
+import { DocumentGeneratorContext, DocumentGeneratorContextType } from "@/components/documents/DocumentGenerator";
 import DocumentForm from "@/components/documents/DocumentForm";
 import DocumentPreview from "@/components/documents/DocumentPreview";
 import DebtRecognitionTemplate from '@/components/documents/templates/DebtRecognitionTemplate';
@@ -87,10 +87,13 @@ export default function DocumentPageClient({ slug }: { slug: string }) {
 
   const TemplateComponent = documentTemplates[slug];
 
-  const contextValue = useMemo(() => ({
+  const contextValue: DocumentGeneratorContextType = useMemo(() => ({
     formData,
+    setFormData,
     lang,
+    setLang,
     currency,
+    setCurrency,
   }), [formData, lang, currency]);
   
   return (
@@ -100,9 +103,6 @@ export default function DocumentPageClient({ slug }: { slug: string }) {
               <DocumentForm 
                   documentType={slug} 
                   initialData={initialData}
-                  onFormChange={setFormData}
-                  onLangChange={setLang}
-                  onCurrencyChange={setCurrency}
               />
           </div>
           <div className="w-full lg:w-2/3 h-auto lg:h-screen lg:overflow-y-auto p-4">

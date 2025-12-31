@@ -13,16 +13,14 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { usePDFGenerator } from '@/hooks/use-pdf-generator';
 import { Loader2 } from 'lucide-react';
 import { documentFields, DocumentField } from '@/lib/document-fields';
-import type { Language } from '@/data/documents/languages';
-import type { Currency } from './DocumentPageClient';
 import { useDebounce } from 'use-debounce';
+import { useDocumentGenerator } from './DocumentGenerator';
+import { Language } from '@/data/documents/languages';
+import { Currency } from './DocumentPageClient';
 
 interface DocumentFormProps {
   documentType: string;
   initialData: any;
-  onFormChange: (data: any) => void;
-  onLangChange: (lang: Language) => void;
-  onCurrencyChange: (currency: Currency) => void;
 }
 
 const buildSchema = (fields: DocumentField[]): z.ZodObject<any> => {
@@ -76,8 +74,9 @@ const buildFieldSchema = (field: DocumentField): z.ZodType<any, any> => {
 };
 
 
-const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData, onFormChange, onLangChange, onCurrencyChange }) => {
+const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData }) => {
   const { generatePDF, isLoading } = usePDFGenerator();
+  const { setFormData, setLang, setCurrency } = useDocumentGenerator();
 
   const currentFields = useMemo(() => documentFields[documentType as keyof typeof documentFields] || [], [documentType]);
   const schema = useMemo(() => buildSchema(currentFields), [currentFields]);
@@ -98,8 +97,8 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData, 
   }, [initialData, reset]);
 
   useEffect(() => {
-    onFormChange(debouncedFormData);
-  }, [debouncedFormData, onFormChange]);
+    setFormData(debouncedFormData);
+  }, [debouncedFormData, setFormData]);
 
 
   const onSubmit = () => {
@@ -157,7 +156,7 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData, 
               <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                   <Label>Langue</Label>
-                  <Select onValueChange={(v) => onLangChange(v as Language)} defaultValue="fr">
+                  <Select onValueChange={(v) => setLang(v as Language)} defaultValue="fr">
                       <SelectTrigger>
                       <SelectValue placeholder="Sélectionner la langue" />
                       </SelectTrigger>
@@ -172,7 +171,7 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData, 
                   </div>
                   <div className="space-y-2">
                       <Label>Devise</Label>
-                      <Select onValueChange={(v) => onCurrencyChange(v as Currency)} defaultValue="EUR">
+                      <Select onValueChange={(v) => setCurrency(v as Currency)} defaultValue="EUR">
                           <SelectTrigger>
                               <SelectValue placeholder="Sélectionner la devise" />
                           </SelectTrigger>

@@ -1,24 +1,22 @@
 
 "use client";
-import React, { useContext } from 'react';
-import { DocumentGeneratorContext, useDocumentGenerator } from './DocumentGenerator';
+import React from 'react';
+import { useDocumentGenerator } from './DocumentGenerator';
 
 interface DocumentPreviewProps {
   children: React.ReactNode;
 }
 
 const DocumentPreview: React.FC<DocumentPreviewProps> = ({ children }) => {
-  const context = useContext(DocumentGeneratorContext);
+  const { formData, lang, currency } = useDocumentGenerator();
 
-  if (!context) {
+  if (!formData) {
     return (
         <div className="bg-background shadow-lg rounded-lg h-full overflow-hidden flex items-center justify-center">
             <p>Chargement des données du formulaire...</p>
         </div>
     );
   }
-
-  const { formData, lang, currency } = context;
 
   return (
     <div className="bg-background shadow-lg rounded-lg h-full overflow-hidden">
