@@ -6,14 +6,10 @@ import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from './DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
 import { useBrand } from '@/context/BrandContext';
-import { Language } from '@/data/documents/languages';
+import { useDocumentGenerator } from '../DocumentGenerator';
 
-interface InsuranceCertificateTemplateProps {
-    formData: any;
-    lang: Language;
-}
-
-const InsuranceCertificateTemplate: React.FC<InsuranceCertificateTemplateProps> = ({ formData, lang }) => {
+const InsuranceCertificateTemplate: React.FC = () => {
+    const { formData, lang } = useDocumentGenerator();
     const { companyInfo } = useBrand();
     const clauses = insuranceCertificateClauses(companyInfo.name)[lang] || insuranceCertificateClauses(companyInfo.name)['fr'];
     const signer = signatureData(companyInfo.brandKey).insurance;

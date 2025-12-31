@@ -2,14 +2,10 @@
 import React from 'react';
 import { neofondsInvoiceClauses } from '@/data/documents/neofonds-invoice-clauses';
 import DocumentWrapper from './DocumentWrapper';
-import { Language } from '@/data/documents/languages';
+import { useDocumentGenerator } from '../DocumentGenerator';
 
-interface NeofondsInvoiceTemplateProps {
-    formData: any;
-    lang: Language;
-}
-
-const NeofondsInvoiceTemplate: React.FC<NeofondsInvoiceTemplateProps> = ({ formData, lang }) => {
+const NeofondsInvoiceTemplate: React.FC = () => {
+    const { formData, lang } = useDocumentGenerator();
     const clauses = neofondsInvoiceClauses[lang] || neofondsInvoiceClauses['fr'];
 
     const getItemsFromFormData = (data: any) => {

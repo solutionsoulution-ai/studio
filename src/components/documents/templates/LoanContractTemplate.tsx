@@ -6,16 +6,10 @@ import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from '../DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
 import { useBrand } from '@/context/BrandContext';
-import { Currency } from '../DocumentPageClient';
-import { Language } from '@/data/documents/languages';
+import { useDocumentGenerator } from '../DocumentGenerator';
 
-interface LoanContractTemplateProps {
-    formData: any;
-    lang: Language;
-    currency: Currency;
-}
-
-const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, lang, currency }) => {
+const LoanContractTemplate: React.FC = () => {
+    const { formData, lang, currency } = useDocumentGenerator();
     const { companyInfo, brand } = useBrand();
 
     const getClauses = () => {

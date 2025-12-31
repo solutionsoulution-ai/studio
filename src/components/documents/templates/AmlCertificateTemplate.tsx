@@ -2,17 +2,13 @@
 import React from 'react';
 import { amlCertificateClauses } from '@/data/documents/aml-certificate-clauses';
 import { signatureData } from '@/data/documents/signature-data';
-import DocumentWrapper from './DocumentWrapper';
+import DocumentWrapper from '../DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
 import { useBrand } from '@/context/BrandContext';
-import { Language } from '@/data/documents/languages';
+import { useDocumentGenerator } from '../DocumentGenerator';
 
-interface AmlCertificateTemplateProps {
-    formData: any;
-    lang: Language;
-}
-
-const AmlCertificateTemplate: React.FC<AmlCertificateTemplateProps> = ({ formData, lang }) => {
+const AmlCertificateTemplate: React.FC = () => {
+    const { formData, lang } = useDocumentGenerator();
     const { companyInfo } = useBrand();
     const clauses = amlCertificateClauses(companyInfo.name)[lang] || amlCertificateClauses(companyInfo.name)['fr'];
     const complianceSigner = signatureData(companyInfo.brandKey).legal; 

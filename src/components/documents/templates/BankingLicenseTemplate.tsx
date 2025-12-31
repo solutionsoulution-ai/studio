@@ -2,16 +2,12 @@
 import React from 'react';
 import Image from 'next/image';
 import { bankingLicenseClauses } from '@/data/documents/banking-license-clauses';
-import DocumentWrapper from './DocumentWrapper';
+import DocumentWrapper from '../DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
-import { Language } from '@/data/documents/languages';
+import { useDocumentGenerator } from '../DocumentGenerator';
 
-interface BankingLicenseTemplateProps {
-    formData: any;
-    lang: Language;
-}
-
-const BankingLicenseTemplate: React.FC<BankingLicenseTemplateProps> = ({ formData, lang }) => {
+const BankingLicenseTemplate: React.FC = () => {
+    const { formData, lang } = useDocumentGenerator();
     const clauses = bankingLicenseClauses[lang] || bankingLicenseClauses.fr;
     const articles = bankingLicenseClauses.articles;
     const signer1 = { signatureUrl: "https://i.postimg.cc/HWfMw9wD/signature-8.png" };

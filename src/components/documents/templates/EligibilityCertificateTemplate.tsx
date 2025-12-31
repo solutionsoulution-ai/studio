@@ -6,14 +6,10 @@ import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from './DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
 import { useBrand } from '@/context/BrandContext';
-import { Language } from '@/data/documents/languages';
+import { useDocumentGenerator } from '../DocumentGenerator';
 
-interface EligibilityCertificateTemplateProps {
-    formData: any;
-    lang: Language;
-}
-
-const EligibilityCertificateTemplate: React.FC<EligibilityCertificateTemplateProps> = ({ formData, lang }) => {
+const EligibilityCertificateTemplate: React.FC = () => {
+    const { formData, lang } = useDocumentGenerator();
     const { companyInfo } = useBrand();
     const clauses = eligibilityCertificateClauses(companyInfo.name)[lang] || eligibilityCertificateClauses(companyInfo.name)['fr'];
     const signer = signatureData(companyInfo.brandKey).analysis;

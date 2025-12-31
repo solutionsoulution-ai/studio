@@ -1,6 +1,6 @@
 
 "use client";
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useForm, FormProvider, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -14,12 +14,13 @@ import { usePDFGenerator } from '@/hooks/use-pdf-generator';
 import { Loader2 } from 'lucide-react';
 import { documentFields, DocumentField } from '@/lib/document-fields';
 import type { Language } from '@/data/documents/languages';
-import { useDocumentGenerator } from './DocumentGenerator';
 import { Currency } from './DocumentPageClient';
-import { useDebounce } from 'use-debounce';
+import { DocumentGeneratorContext } from './DocumentGenerator';
 
 interface DocumentFormProps {
   documentType: string;
+  initialData: any;
+  children: React.ReactNode; // To render the form in the correct layout position
 }
 
 const buildSchema = (fields: DocumentField[]): z.ZodObject<any> => {
@@ -73,12 +74,10 @@ const buildFieldSchema = (field: DocumentField): z.ZodType<any, any> => {
 };
 
 
-const DocumentForm: React.FC<DocumentFormProps> = ({ documentType }) => {
-  const { initialData, setFormData, lang, setLang, currency, setCurrency } = useDocumentGenerator();
+const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData, children }) => {
   const { generatePDF, isLoading } = usePDFGenerator();
 
   const currentFields = useMemo(() => documentFields[documentType as keyof typeof documentFields] || [], [documentType]);
-  
   const schema = useMemo(() => buildSchema(currentFields), [currentFields]);
   
   const methods = useForm({
@@ -88,24 +87,17 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType }) => {
   });
 
   const { handleSubmit, control, watch, reset } = methods;
+
+  const [lang, setLang] = useState<Language>('fr');
+  const [currency, setCurrency] = useState<Currency>('EUR');
   
+  // The watched values from the form become the source of truth for the context
   const watchedValues = watch();
-  const [debouncedValues, { flush }] = useDebounce(watchedValues, 300);
 
-  useEffect(() => {
-      setFormData(debouncedValues);
-  }, [debouncedValues, setFormData]);
-
+  // Reset form when initialData changes (e.g., brand or doc type changes)
   useEffect(() => {
     reset(initialData);
   }, [initialData, reset]);
-  
-  useEffect(() => {
-    return () => {
-      flush();
-    };
-  }, [flush]);
-
 
   const onSubmit = (data: any) => {
     generatePDF({ elementId: 'pdf-content', fileName: `${documentType}.pdf` });
@@ -150,55 +142,77 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType }) => {
     );
   };
 
-  return (
-    <FormProvider {...methods}>
-      <Card className="h-full">
-        <CardHeader>
-          <CardTitle>Générateur de Document</CardTitle>
-          <CardDescription>Remplissez les champs pour générer votre document.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>Langue</Label>
-                   <Select onValueChange={(v) => setLang(v as Language)} defaultValue={lang}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Sélectionner la langue" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="fr">Français</SelectItem>
-                      <SelectItem value="en">English</SelectItem>
-                      <SelectItem value="de">Deutsch</SelectItem>
-                      <SelectItem value="lt">Lietuvių</SelectItem>
-                      <SelectItem value="nl">Nederlands</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                 <div className="space-y-2">
-                    <Label>Devise</Label>
-                    <Select onValueChange={(v) => setCurrency(v as Currency)} defaultValue={currency}>
-                        <SelectTrigger>
-                            <SelectValue placeholder="Sélectionner la devise" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="EUR">Euro (€)</SelectItem>
-                            <SelectItem value="USD">Dollar ($)</SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
-            </div>
+  const contextValue = useMemo(() => ({
+    formData: watchedValues,
+    lang,
+    setLang,
+    currency,
+    setCurrency,
+  }), [watchedValues, lang, currency]);
+  
+  // Replace the placeholder div with the actual form
+  const childrenArray = React.Children.toArray(children);
+  const formSlot = childrenArray[0];
 
-            {currentFields.map(field => renderField(field))}
-            
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {isLoading ? 'Génération en cours...' : 'Générer le PDF'}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
-    </FormProvider>
+  return (
+    <DocumentGeneratorContext.Provider value={contextValue}>
+        <FormProvider {...methods}>
+            {React.isValidElement(formSlot) ? React.cloneElement(formSlot as React.ReactElement, {
+                children: (
+                    <Card className="h-full">
+                        <CardHeader>
+                        <CardTitle>Générateur de Document</CardTitle>
+                        <CardDescription>Remplissez les champs pour générer votre document.</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                <Label>Langue</Label>
+                                <Select onValueChange={(v) => setLang(v as Language)} defaultValue={lang}>
+                                    <SelectTrigger>
+                                    <SelectValue placeholder="Sélectionner la langue" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                    <SelectItem value="fr">Français</SelectItem>
+                                    <SelectItem value="en">English</SelectItem>
+                                    <SelectItem value="de">Deutsch</SelectItem>
+                                    <SelectItem value="lt">Lietuvių</SelectItem>
+                                    <SelectItem value="nl">Nederlands</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                </div>
+                                <div className="space-y-2">
+                                    <Label>Devise</Label>
+                                    <Select onValueChange={(v) => setCurrency(v as Currency)} defaultValue={currency}>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Sélectionner la devise" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="EUR">Euro (€)</SelectItem>
+                                            <SelectItem value="USD">Dollar ($)</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </div>
+
+                            {currentFields.map(field => renderField(field))}
+                            
+                            <Button type="submit" className="w-full" disabled={isLoading}>
+                            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                            {isLoading ? 'Génération en cours...' : 'Générer le PDF'}
+                            </Button>
+                        </form>
+                        </CardContent>
+                    </Card>
+                )
+            }) : null}
+
+            {childrenArray.slice(1)}
+        </FormProvider>
+        {/* The preview is passed as a child */}
+        {React.cloneElement(childrenArray[1] as React.ReactElement, {})}
+    </DocumentGeneratorContext.Provider>
   );
 };
 

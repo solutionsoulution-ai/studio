@@ -5,9 +5,10 @@ import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from '../DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
 import { useBrand } from '@/context/BrandContext';
-import { Language } from '@/data/documents/languages';
+import { useDocumentGenerator } from '../DocumentGenerator';
 
-const SuretyBondTemplate: React.FC<{ formData: any; lang: Language }> = ({ formData, lang }) => {
+const SuretyBondTemplate: React.FC = () => {
+    const { formData, lang } = useDocumentGenerator();
     const { companyInfo } = useBrand();
     const clauses = suretyBondClauses(companyInfo.name)[lang] || suretyBondClauses(companyInfo.name)['fr'];
     const signer = signatureData(companyInfo.brandKey).legal;

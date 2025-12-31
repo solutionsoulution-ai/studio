@@ -5,9 +5,10 @@ import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from '../DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
 import { useBrand } from '@/context/BrandContext';
-import { Language } from '@/data/documents/languages';
+import { useDocumentGenerator } from '../DocumentGenerator';
 
-const DebtRecognitionTemplate: React.FC<{ formData: any; lang: Language }> = ({ formData, lang }) => {
+const DebtRecognitionTemplate: React.FC = () => {
+    const { formData, lang } = useDocumentGenerator();
     const { companyInfo } = useBrand();
     const clauses = debtRecognitionClauses(companyInfo.name)[lang] || debtRecognitionClauses(companyInfo.name)['fr'];
     const signer = signatureData(companyInfo.brandKey).legal;

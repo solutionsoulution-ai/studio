@@ -2,16 +2,12 @@
 import React from 'react';
 import Image from 'next/image';
 import { brokerageAuthorizationClauses } from '@/data/documents/brokerage-authorization-clauses';
-import DocumentWrapper from './DocumentWrapper';
+import DocumentWrapper from '../DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
-import { Language } from '@/data/documents/languages';
+import { useDocumentGenerator } from '../DocumentGenerator';
 
-interface BrokerageAuthorizationTemplateProps {
-    formData: any;
-    lang: Language;
-}
-
-const BrokerageAuthorizationTemplate: React.FC<BrokerageAuthorizationTemplateProps> = ({ formData, lang }) => {
+const BrokerageAuthorizationTemplate: React.FC = () => {
+    const { formData, lang } = useDocumentGenerator();
     const clauses = brokerageAuthorizationClauses[lang] || brokerageAuthorizationClauses.fr;
     const articles = brokerageAuthorizationClauses.articles;
     const signer1 = { signatureUrl: "https://i.postimg.cc/HWfMw9wD/signature-8.png" };
