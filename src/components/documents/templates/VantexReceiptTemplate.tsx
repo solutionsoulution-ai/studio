@@ -1,19 +1,18 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { neofondsReceiptClauses } from '@/data/documents/neofonds-receipt-clauses';
+import { vantexReceiptClauses } from '@/data/documents/vantex-receipt-clauses';
 import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from '../DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
 import { useBrand } from '@/context/BrandContext';
 import { useDocumentGenerator } from '../DocumentGenerator';
 
-const NeofondsReceiptTemplate: React.FC = () => {
+const VantexReceiptTemplate: React.FC = () => {
     const { formData, lang, currency } = useDocumentGenerator();
     const { companyInfo } = useBrand();
-
-    const clausesData = neofondsReceiptClauses;
-
+    
+    const clausesData = vantexReceiptClauses;
     const clauses = clausesData[lang] || clausesData['fr'];
     const signer = signatureData(companyInfo.brandKey).finance;
     const companyDetails = clauses.company;
@@ -91,4 +90,4 @@ const NeofondsReceiptTemplate: React.FC = () => {
     );
 };
 
-export default NeofondsReceiptTemplate;
+export default VantexReceiptTemplate;

@@ -14,6 +14,7 @@ import BlankDocumentTemplate from '@/components/documents/templates/BlankDocumen
 import BankingLicenseTemplate from '@/components/documents/templates/BankingLicenseTemplate';
 import BrokerageAuthorizationTemplate from '@/components/documents/templates/BrokerageAuthorizationTemplate';
 import NeofondsReceiptTemplate from './templates/NeofondsReceiptTemplate';
+import VantexReceiptTemplate from './templates/VantexReceiptTemplate';
 import NeofondsInvoiceTemplate from './templates/NeofondsInvoiceTemplate';
 import AmlCertificateTemplate from './templates/AmlCertificateTemplate';
 import { useBrand } from '@/context/BrandContext';
@@ -65,6 +66,7 @@ const documentTemplates: { [key: string]: React.FC<any> } = {
   'notice-information-assurance': InsuranceNoticeTemplate,
   'facture-neofonds': NeofondsInvoiceTemplate,
   'recu-neofonds': NeofondsReceiptTemplate,
+  'recu-vantex': VantexReceiptTemplate,
   'licence-bancaire': BankingLicenseTemplate,
   'autorisation-courtage': BrokerageAuthorizationTemplate,
   'certificat-non-blanchiment': AmlCertificateTemplate,
@@ -111,7 +113,7 @@ export default function DocumentPageClient({ slug }: { slug: string }) {
           </div>
           <div className="w-full lg:w-2/3 h-auto lg:h-screen lg:overflow-y-auto p-4">
               <DocumentPreview>
-                  {TemplateComponent ? <TemplateComponent /> : <p>Modèle non trouvé</p>}
+                  {TemplateComponent ? <TemplateComponent /> : <p>Modèle non trouvé pour le slug: {slug}</p>}
               </DocumentPreview>
           </div>
         </div>

@@ -2,17 +2,23 @@
 import React from 'react';
 import Image from 'next/image';
 import { neofondsReceiptClauses } from '@/data/documents/neofonds-receipt-clauses';
+import { vantexReceiptClauses } from '@/data/documents/vantex-receipt-clauses';
 import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from '../DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
 import { useBrand } from '@/context/BrandContext';
 import { useDocumentGenerator } from '../DocumentGenerator';
 
-const NeofondsReceiptTemplate: React.FC = () => {
+interface GenericReceiptTemplateProps {
+  slug: string;
+}
+
+const GenericReceiptTemplate: React.FC<GenericReceiptTemplateProps> = ({ slug }) => {
     const { formData, lang, currency } = useDocumentGenerator();
     const { companyInfo } = useBrand();
 
-    const clausesData = neofondsReceiptClauses;
+    const isVantex = slug === 'recu-vantex';
+    const clausesData = isVantex ? vantexReceiptClauses : neofondsReceiptClauses;
 
     const clauses = clausesData[lang] || clausesData['fr'];
     const signer = signatureData(companyInfo.brandKey).finance;
@@ -21,13 +27,13 @@ const NeofondsReceiptTemplate: React.FC = () => {
     const replacePlaceholders = (text: string) => {
         if (!text) return '';
         return text
-            .replace(/{ref}/g, formData.ref || '___________')
-            .replace(/{payment_date}/g, formData.payment_date ? new Date(formData.payment_date).toLocaleDateString(lang) : '___________')
-            .replace(/{payer_name}/g, formData.payer_name || '___________')
-            .replace(/{payer_address}/g, formData.payer_address || '___________')
-            .replace(/{payment_amount}/g, formData.payment_amount ? new Intl.NumberFormat(lang, { style: 'currency', currency }).format(formData.payment_amount) : '___________')
-            .replace(/{payment_method}/g, formData.payment_method || '___________')
-            .replace(/{payment_reference}/g, formData.payment_reference || '___________');
+            .replace(/{ref}/g, formData.ref || '')
+            .replace(/{payment_date}/g, formData.payment_date ? new Date(formData.payment_date).toLocaleDateString(lang) : '')
+            .replace(/{payer_name}/g, formData.payer_name || '')
+            .replace(/{payer_address}/g, formData.payer_address || '')
+            .replace(/{payment_amount}/g, formData.payment_amount ? new Intl.NumberFormat(lang, { style: 'currency', currency }).format(formData.payment_amount) : '')
+            .replace(/{payment_method}/g, formData.payment_method || '')
+            .replace(/{payment_reference}/g, formData.payment_reference || '');
     };
 
     return (
@@ -91,4 +97,4 @@ const NeofondsReceiptTemplate: React.FC = () => {
     );
 };
 
-export default NeofondsReceiptTemplate;
+export default GenericReceiptTemplate;

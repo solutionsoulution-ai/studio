@@ -138,3 +138,4 @@ export const neofondsReceiptClauses: Clauses = {
         }
     }
 };
+

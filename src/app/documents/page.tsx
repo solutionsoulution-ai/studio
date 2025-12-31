@@ -14,6 +14,7 @@ const documents = [
   { slug: 'licence-bancaire', title: 'Licence Bancaire', description: 'Générez un certificat de licence d\'établissement de crédit.' },
   { slug: 'autorisation-courtage', title: 'Autorisation de Courtage', description: 'Générez une attestation d\'autorisation pour le courtage de prêt.' },
   { slug: 'recu-neofonds', title: 'Reçu de Paiement (Neofonds)', description: 'Version personnalisée pour l\'entreprise Neofonds.' },
+  { slug: 'recu-vantex', title: 'Reçu de Paiement (Vantex)', description: 'Version personnalisée pour l\'entreprise Vantex Bank.' },
   { slug: 'facture-neofonds', title: 'Facture (Neofonds)', description: 'Générez une facture aux couleurs de Neofonds.' },
   { slug: 'certificat-non-blanchiment', title: 'Certificat de Non-Blanchiment', description: 'Déclarez l\'origine légitime des fonds pour une transaction.' },
   { slug: 'document-vierge', title: 'Document Vierge', description: 'Partez d\'un modèle vierge avec en-tête de Neofonds.' },
