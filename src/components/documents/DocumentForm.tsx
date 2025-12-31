@@ -96,7 +96,7 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData }
     mode: 'onChange',
   });
 
-  const { handleSubmit, control, watch, reset } = methods;
+  const { handleSubmit, control, watch, reset, setValue } = methods;
 
   const watchedValues = watch();
   const [debouncedFormData] = useDebounce(watchedValues, 300);
@@ -111,6 +111,36 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData }
     }
   }, [debouncedFormData, setFormData]);
 
+  // Dynamic calculation for loan contract
+  useEffect(() => {
+    if (documentType === 'contrat-de-pret-personnel') {
+        const { loan_amount, loan_term, taeg } = debouncedFormData;
+
+        const amount = Number(loan_amount);
+        const term = Number(loan_term);
+        const annualRateStr = String(taeg || '0').replace('%', '').replace(',', '.');
+        const annualRate = parseFloat(annualRateStr) / 100;
+
+        if (amount > 0 && term > 0 && annualRate >= 0) {
+            const monthlyRate = annualRate / 12;
+            let monthlyPayment;
+
+            if (monthlyRate === 0) {
+                monthlyPayment = amount / term;
+            } else {
+                monthlyPayment = (amount * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -term));
+            }
+
+            const totalDue = monthlyPayment * term;
+            const totalCost = totalDue - amount;
+            
+            setValue('monthly_payment', Number(monthlyPayment.toFixed(2)), { shouldValidate: true });
+            setValue('total_cost', Number(totalCost.toFixed(2)), { shouldValidate: true });
+            setValue('total_due', Number(totalDue.toFixed(2)), { shouldValidate: true });
+        }
+    }
+  }, [debouncedFormData, documentType, setValue]);
+
 
   const onSubmit = () => {
     generatePDF({ elementId: 'pdf-content', fileName: `${documentType}.pdf` });
@@ -119,6 +149,7 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData }
   const renderField = (field: DocumentField) => {
     const currencySymbol = '€'; // Hardcode for now as currency selector is in this component
     const labelText = field.label['fr'];
+    const isReadOnly = (documentType === 'contrat-de-pret-personnel' && ['monthly_payment', 'total_cost', 'total_due'].includes(field.name));
 
     if (field.type === 'group') {
       return (
@@ -136,7 +167,7 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData }
     }
     return (
       <div key={field.name} className="space-y-2">
-        <Label htmlFor={field.name}>{`${labelText} ${field.type === 'number' && (field.name.includes('amount') || field.name.includes('price')) ? `(${currencySymbol})` : ''}`}</Label>
+        <Label htmlFor={field.name}>{`${labelText} ${field.type === 'number' && (field.name.includes('amount') || field.name.includes('price') || isReadOnly) ? `(${currencySymbol})` : ''}`}</Label>
         <Controller
           name={field.name}
           control={control}
@@ -145,7 +176,7 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData }
               {field.type === 'textarea' ? (
                 <Textarea {...controllerField} id={field.name} placeholder={field.placeholder?.['fr']} />
               ) : (
-                <Input {...controllerField} value={controllerField.value || ''} id={field.name} type={field.type} placeholder={field.placeholder?.['fr']} />
+                <Input {...controllerField} value={controllerField.value || ''} id={field.name} type={field.type} placeholder={field.placeholder?.['fr']} readOnly={isReadOnly} className={isReadOnly ? 'bg-muted/50' : ''}/>
               )}
               {fieldState.error && <p className="text-sm text-red-500">{fieldState.error.message}</p>}
             </>
