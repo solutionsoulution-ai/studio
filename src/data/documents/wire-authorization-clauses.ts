@@ -7,7 +7,7 @@ export const wireAuthorizationClauses = (companyName: string): Clauses => ({
             line1: "Service Financier",
             line2: "Unité des Opérations de Paiement",
         },
-        title: "Certificat d'Autorisation de Virement",
+        title: "Autorisation de Virement de Fonds",
         reference: "Autorisation N°: {ref}",
         date: "Date d'émission: {date}",
         parties: {
@@ -16,8 +16,8 @@ export const wireAuthorizationClauses = (companyName: string): Clauses => ({
         },
         articles: {
             authorization: {
-                title: "Article 1 : Ordre de Virement",
-                content: `Par la présente, ${companyName}, agissant en qualité de prêteur dans le cadre du contrat de prêt N° {loan_contract_ref}, autorise et ordonne irrévocablement le virement de la somme de {loan_amount} ({loan_amount_in_words}) au bénéfice de {borrower_name}.`,
+                title: "Article 1 : Ordre de Virement Irrévocable",
+                content: `Par la présente, ${companyName}, agissant en qualité de prêteur dans le cadre du contrat de prêt N° {loan_contract_ref}, autorise et ordonne irrévocablement le virement de la somme de {loan_amount} ({loan_amount_in_words}) au bénéfice de {borrower_name}, aux coordonnées bancaires ci-dessous.`,
             },
             bank_details: {
                 title: "Article 2 : Coordonnées Bancaires du Bénéficiaire",
@@ -26,17 +26,17 @@ export const wireAuthorizationClauses = (companyName: string): Clauses => ({
                 iban_label: "IBAN",
                 bic_swift_label: "Code BIC / SWIFT",
             },
-            source_of_funds: {
-                title: "Article 3 : Déclaration sur l'Origine des Fonds",
-                content: `${companyName} déclare que les fonds objet du présent virement proviennent de ses activités commerciales légitimes et de ses capitaux propres, en pleine conformité avec la réglementation en vigueur.`,
+            execution_terms: {
+                title: "Article 3 : Conditions d'Exécution",
+                content: "Ce virement sera exécuté sous 24 à 48 heures ouvrées à compter de la date de la présente autorisation. Le temps de traitement interbancaire peut varier. Cet ordre de paiement est ferme et définitif.",
             },
-            aml_compliance: {
-                title: "Article 4 : Conformité Anti-Blanchiment (LCB-FT)",
-                content: `Cette opération a fait l'objet de toutes les diligences requises en matière de lutte contre le blanchiment de capitaux et le financement du terrorisme (LCB-FT), conformément à la Directive (UE) 2015/849. ${companyName} atteste que les fonds ne proviennent pas d'activités illicites et sont tracés dans sa comptabilité.`,
+            liability: {
+                title: "Article 4 : Exonération de Responsabilité",
+                content: `Une fois les fonds virés aux coordonnées fournies par le bénéficiaire, ${companyName} est libérée de son obligation de mise à disposition des fonds. Toute erreur dans les coordonnées bancaires fournies relève de la seule responsabilité du bénéficiaire.`,
             },
-            execution: {
-                title: "Article 5 : Exécution",
-                content: `Ce virement sera exécuté dans les plus brefs délais à compter de la date de la présente autorisation. Ce document fait foi et peut être présenté à toute autorité compétente comme preuve de l'instruction de paiement et de la déclaration de conformité.`,
+            proof: {
+                title: "Article 5 : Justificatif de Transaction",
+                content: `Ce document constitue une instruction de paiement formelle et peut être présenté à toute autorité compétente ou institution financière comme preuve de l'ordre de virement initié par ${companyName}.`,
             },
         },
     },
@@ -45,7 +45,7 @@ export const wireAuthorizationClauses = (companyName: string): Clauses => ({
             line1: "Financial Service",
             line2: "Payment Operations Unit",
         },
-        title: "Wire Transfer Authorization Certificate",
+        title: "Fund Transfer Authorization",
         reference: "Authorization No: {ref}",
         date: "Issue Date: {date}",
         parties: {
@@ -54,8 +54,8 @@ export const wireAuthorizationClauses = (companyName: string): Clauses => ({
         },
         articles: {
             authorization: {
-                title: "Article 1: Transfer Order",
-                content: `Hereby, ${companyName}, acting as lender under the loan agreement No. {loan_contract_ref}, irrevocably authorizes and orders the transfer of the sum of {loan_amount} ({loan_amount_in_words}) to the benefit of {borrower_name}.`,
+                title: "Article 1: Irrevocable Transfer Order",
+                content: `Hereby, ${companyName}, acting as lender under the loan agreement No. {loan_contract_ref}, irrevocably authorizes and orders the transfer of the sum of {loan_amount} ({loan_amount_in_words}) to the benefit of {borrower_name}, to the bank details below.`,
             },
             bank_details: {
                 title: "Article 2: Beneficiary's Bank Details",
@@ -64,17 +64,17 @@ export const wireAuthorizationClauses = (companyName: string): Clauses => ({
                 iban_label: "IBAN",
                 bic_swift_label: "BIC / SWIFT Code",
             },
-            source_of_funds: {
-                title: "Article 3: Declaration on the Origin of Funds",
-                content: `${companyName} declares that the funds subject to this transfer originate from its legitimate business activities and equity, in full compliance with current regulations.`,
+            execution_terms: {
+                title: "Article 3: Execution Conditions",
+                content: "This transfer will be executed within 24 to 48 business hours from the date of this authorization. Interbank processing time may vary. This payment order is firm and final.",
             },
-            aml_compliance: {
-                title: "Article 4: Anti-Money Laundering (AML) Compliance",
-                content: `This operation has been subject to all required due diligence regarding the fight against money laundering and terrorist financing (AML/CFT), in accordance with Directive (EU) 2015/849. ${companyName} certifies that the funds do not originate from illicit activities and are traced in its accounting.`,
+            liability: {
+                title: "Article 4: Disclaimer of Liability",
+                content: `Once the funds are transferred to the coordinates provided by the beneficiary, ${companyName} is released from its obligation to make the funds available. Any error in the provided bank details is the sole responsibility of the beneficiary.`,
             },
-            execution: {
-                title: "Article 5: Execution",
-                content: `This transfer will be executed as soon as possible from the date of this authorization. This document serves as proof and may be presented to any competent authority as evidence of the payment instruction and compliance declaration.`,
+            proof: {
+                title: "Article 5: Proof of Transaction",
+                content: `This document constitutes a formal payment instruction and may be presented to any competent authority or financial institution as proof of the transfer order initiated by ${companyName}.`,
             },
         },
     },
@@ -82,5 +82,3 @@ export const wireAuthorizationClauses = (companyName: string): Clauses => ({
     lt: {},
     nl: {},
 });
-
-    

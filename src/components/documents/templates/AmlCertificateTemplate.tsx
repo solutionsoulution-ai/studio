@@ -53,6 +53,19 @@ const AmlCertificateTemplate: React.FC = () => {
                 </article>
 
                 <article>
+                    <ArticleHeader title={clauses.articles.source_justification.title} />
+                    <p className="text-xs italic">{clauses.articles.source_justification.content}</p>
+                    <div className="mt-2 space-y-1 text-xs">
+                        {clauses.articles.source_justification.options.map((option: string) => (
+                             <div key={option} className="flex items-center gap-2">
+                                <div className="w-3 h-3 border border-slate-400"></div>
+                                <span>{option}</span>
+                            </div>
+                        ))}
+                    </div>
+                </article>
+
+                <article>
                     <ArticleHeader title={clauses.articles.commitment.title} />
                     <p>{replacePlaceholders(clauses.articles.commitment.content)}</p>
                 </article>

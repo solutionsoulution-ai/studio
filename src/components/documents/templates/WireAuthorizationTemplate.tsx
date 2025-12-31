@@ -63,18 +63,18 @@ const WireAuthorizationTemplate: React.FC = () => {
                 </article>
                 
                 <article>
-                    <ArticleHeader title={clauses.articles.source_of_funds.title} />
-                    <p className="text-xs italic">{replacePlaceholders(clauses.articles.source_of_funds.content)}</p>
+                    <ArticleHeader title={clauses.articles.execution_terms.title} />
+                    <p className="text-xs italic">{replacePlaceholders(clauses.articles.execution_terms.content)}</p>
                 </article>
                 
                 <article>
-                    <ArticleHeader title={clauses.articles.aml_compliance.title} />
-                    <p className="text-xs italic">{replacePlaceholders(clauses.articles.aml_compliance.content)}</p>
+                    <ArticleHeader title={clauses.articles.liability.title} />
+                    <p className="text-xs italic">{replacePlaceholders(clauses.articles.liability.content)}</p>
                 </article>
 
                 <article>
-                    <ArticleHeader title={clauses.articles.execution.title} />
-                    <p>{replacePlaceholders(clauses.articles.execution.content)}</p>
+                    <ArticleHeader title={clauses.articles.proof.title} />
+                    <p>{replacePlaceholders(clauses.articles.proof.content)}</p>
                 </article>
             </section>
 
@@ -105,5 +105,3 @@ const WireAuthorizationTemplate: React.FC = () => {
 };
 
 export default WireAuthorizationTemplate;
-
-    
