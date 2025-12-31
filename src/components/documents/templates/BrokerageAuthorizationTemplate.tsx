@@ -8,8 +8,10 @@ import { useDocumentGenerator } from '../DocumentGenerator';
 
 const BrokerageAuthorizationTemplate: React.FC = () => {
     const { formData, lang } = useDocumentGenerator();
-    const clauses = brokerageAuthorizationClauses[lang] || brokerageAuthorizationClauses.fr;
-    const articles = brokerageAuthorizationClauses.articles;
+    const clausesData = brokerageAuthorizationClauses;
+    const clauses = clausesData[lang] || clausesData.fr;
+    const articlesData = brokerageAuthorizationClauses.articles;
+    const articles = articlesData; // assuming articles are not translated per language in this file structure
     const signer1 = { signatureUrl: "https://i.postimg.cc/HWfMw9wD/signature-8.png" };
     const signer2 = { signatureUrl: "https://i.postimg.cc/BQ4Sf8sD/signature-6.png" };
 

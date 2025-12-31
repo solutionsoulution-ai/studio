@@ -1,13 +1,14 @@
 
 import React from 'react';
 import { insuranceNoticeClauses } from '@/data/documents/insurance-notice-clauses';
-import DocumentWrapper from './DocumentWrapper';
+import DocumentWrapper from '../DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
 import { useDocumentGenerator } from '../DocumentGenerator';
 
 const InsuranceNoticeTemplate: React.FC = () => {
     const { lang } = useDocumentGenerator();
-    const clauses = insuranceNoticeClauses[lang] || insuranceNoticeClauses['fr'];
+    const clausesData = insuranceNoticeClauses;
+    const clauses = clausesData[lang] || clausesData['fr'];
 
     return (
         <DocumentWrapper 

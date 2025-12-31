@@ -10,7 +10,8 @@ import { useDocumentGenerator } from '../DocumentGenerator';
 const AmlCertificateTemplate: React.FC = () => {
     const { formData, lang } = useDocumentGenerator();
     const { companyInfo } = useBrand();
-    const clauses = amlCertificateClauses(companyInfo.name)[lang] || amlCertificateClauses(companyInfo.name)['fr'];
+    const clausesData = amlCertificateClauses(companyInfo.name);
+    const clauses = clausesData[lang] || clausesData['fr'];
     const complianceSigner = signatureData(companyInfo.brandKey).legal; 
 
     const replacePlaceholders = (text: string) => {

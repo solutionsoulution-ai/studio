@@ -6,7 +6,8 @@ import { useDocumentGenerator } from '../DocumentGenerator';
 
 const NeofondsInvoiceTemplate: React.FC = () => {
     const { formData, lang } = useDocumentGenerator();
-    const clauses = neofondsInvoiceClauses[lang] || neofondsInvoiceClauses['fr'];
+    const clausesData = neofondsInvoiceClauses;
+    const clauses = clausesData[lang] || clausesData['fr'];
 
     const getItemsFromFormData = (data: any) => {
         const items = [];

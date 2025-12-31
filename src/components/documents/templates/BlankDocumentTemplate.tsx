@@ -6,7 +6,8 @@ import { useDocumentGenerator } from '../DocumentGenerator';
 
 const BlankDocumentTemplate: React.FC = () => {
   const { lang } = useDocumentGenerator();
-  const clauses = blankDocumentClauses[lang] || blankDocumentClauses['fr'];
+  const clausesData = blankDocumentClauses;
+  const clauses = clausesData[lang] || clausesData['fr'];
 
   return (
     <DocumentWrapper title={clauses.title} department={clauses.department} lang={lang}>

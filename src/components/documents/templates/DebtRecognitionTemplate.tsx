@@ -10,7 +10,8 @@ import { useDocumentGenerator } from '../DocumentGenerator';
 const DebtRecognitionTemplate: React.FC = () => {
     const { formData, lang } = useDocumentGenerator();
     const { companyInfo } = useBrand();
-    const clauses = debtRecognitionClauses(companyInfo.name)[lang] || debtRecognitionClauses(companyInfo.name)['fr'];
+    const clausesData = debtRecognitionClauses(companyInfo.name);
+    const clauses = clausesData[lang] || clausesData['fr'];
     const signer = signatureData(companyInfo.brandKey).legal;
 
     const replacePlaceholders = (text: string) => {

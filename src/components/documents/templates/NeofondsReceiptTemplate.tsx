@@ -11,7 +11,8 @@ import { useDocumentGenerator } from '../DocumentGenerator';
 const NeofondsReceiptTemplate: React.FC = () => {
     const { formData, lang } = useDocumentGenerator();
     const { companyInfo } = useBrand();
-    const clauses = neofondsReceiptClauses[lang] || neofondsReceiptClauses['fr'];
+    const clausesData = neofondsReceiptClauses;
+    const clauses = clausesData[lang] || clausesData['fr'];
     const signer = signatureData(companyInfo.brandKey).finance;
 
     const replacePlaceholders = (text: string) => {

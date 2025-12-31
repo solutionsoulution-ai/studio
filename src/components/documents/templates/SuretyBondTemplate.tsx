@@ -10,7 +10,8 @@ import { useDocumentGenerator } from '../DocumentGenerator';
 const SuretyBondTemplate: React.FC = () => {
     const { formData, lang } = useDocumentGenerator();
     const { companyInfo } = useBrand();
-    const clauses = suretyBondClauses(companyInfo.name)[lang] || suretyBondClauses(companyInfo.name)['fr'];
+    const clausesData = suretyBondClauses(companyInfo.name);
+    const clauses = clausesData[lang] || clausesData['fr'];
     const signer = signatureData(companyInfo.brandKey).legal;
 
     const replacePlaceholders = (text: string) => {

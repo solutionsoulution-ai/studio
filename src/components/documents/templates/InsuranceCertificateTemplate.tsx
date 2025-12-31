@@ -11,7 +11,8 @@ import { useDocumentGenerator } from '../DocumentGenerator';
 const InsuranceCertificateTemplate: React.FC = () => {
     const { formData, lang } = useDocumentGenerator();
     const { companyInfo } = useBrand();
-    const clauses = insuranceCertificateClauses(companyInfo.name)[lang] || insuranceCertificateClauses(companyInfo.name)['fr'];
+    const clausesData = insuranceCertificateClauses(companyInfo.name);
+    const clauses = clausesData[lang] || clausesData['fr'];
     const signer = signatureData(companyInfo.brandKey).insurance;
 
     const replacePlaceholders = (text: string) => {

@@ -11,7 +11,8 @@ import { useDocumentGenerator } from '../DocumentGenerator';
 const EligibilityCertificateTemplate: React.FC = () => {
     const { formData, lang } = useDocumentGenerator();
     const { companyInfo } = useBrand();
-    const clauses = eligibilityCertificateClauses(companyInfo.name)[lang] || eligibilityCertificateClauses(companyInfo.name)['fr'];
+    const clausesData = eligibilityCertificateClauses(companyInfo.name);
+    const clauses = clausesData[lang] || clausesData['fr'];
     const signer = signatureData(companyInfo.brandKey).analysis;
 
     const validityDate = formData.date ? new Date(new Date(formData.date).setDate(new Date(formData.date).getDate() + 30)).toLocaleDateString(lang) : '';
