@@ -1,7 +1,7 @@
 
 "use client";
-import React, { useMemo } from 'react';
-import DocumentGenerator from "@/components/documents/DocumentGenerator";
+import React, { useMemo, useState } from 'react';
+import DocumentForm from "@/components/documents/DocumentForm";
 import DocumentPreview from "@/components/documents/DocumentPreview";
 import DebtRecognitionTemplate from '@/components/documents/templates/DebtRecognitionTemplate';
 import EligibilityCertificateTemplate from '@/components/documents/templates/EligibilityCertificateTemplate';
@@ -17,6 +17,7 @@ import NeofondsInvoiceTemplate from './templates/NeofondsInvoiceTemplate';
 import AmlCertificateTemplate from './templates/AmlCertificateTemplate';
 import { useBrand } from '@/context/BrandContext';
 import { documentFields } from '@/lib/document-fields';
+import type { Language } from '@/data/documents/languages';
 
 export type Currency = 'EUR' | 'USD';
 
@@ -81,20 +82,20 @@ export default function DocumentPageClient({ slug }: { slug: string }) {
 
 
   const TemplateComponent = documentTemplates[slug];
-
+  
   return (
-    <DocumentGenerator documentType={slug} initialData={initialData}>
-        <div className="flex flex-col lg:flex-row w-full min-h-screen bg-muted/20">
-          <div className="w-full lg:w-1/3 lg:h-screen lg:overflow-y-auto p-4">
-            {/* The form is now a child of DocumentGenerator but rendered here */}
-            <div />
-          </div>
-          <div className="w-full lg:w-2/3 h-auto lg:h-screen lg:overflow-y-auto p-4">
+      <div className="flex flex-col lg:flex-row w-full min-h-screen bg-muted/20">
+        <div className="w-full lg:w-1/3 lg:h-screen lg:overflow-y-auto p-4">
+            <DocumentForm documentType={slug} initialData={initialData}>
+                {/* This empty div will be replaced by the form content inside DocumentForm */}
+                <div />
+            </DocumentForm>
+        </div>
+        <div className="w-full lg:w-2/3 h-auto lg:h-screen lg:overflow-y-auto p-4">
             <DocumentPreview>
                 {TemplateComponent ? <TemplateComponent /> : <p>Modèle non trouvé</p>}
             </DocumentPreview>
-          </div>
         </div>
-    </DocumentGenerator>
+      </div>
   );
 }

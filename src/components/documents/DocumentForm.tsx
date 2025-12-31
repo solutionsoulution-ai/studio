@@ -1,7 +1,7 @@
 
 "use client";
-import React, { useEffect, useMemo, useState } from 'react';
-import { useForm, FormProvider, Controller } from 'react-hook-form';
+import React, { useEffect, useMemo, useState, createContext, useContext } from 'react';
+import { useForm, FormProvider, Controller, useFormContext } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
@@ -14,13 +14,32 @@ import { usePDFGenerator } from '@/hooks/use-pdf-generator';
 import { Loader2 } from 'lucide-react';
 import { documentFields, DocumentField } from '@/lib/document-fields';
 import type { Language } from '@/data/documents/languages';
-import { Currency } from './DocumentPageClient';
-import { DocumentGeneratorContext } from './DocumentGenerator';
+import { useDebounce } from 'use-debounce';
+
+export type Currency = 'EUR' | 'USD';
+
+// CONTEXT DEFINITION
+interface DocumentGeneratorContextType {
+    formData: any;
+    lang: Language;
+    currency: Currency;
+}
+
+const DocumentGeneratorContext = createContext<DocumentGeneratorContextType | null>(null);
+
+export const useDocumentGenerator = () => {
+    const context = useContext(DocumentGeneratorContext);
+    if (!context) {
+        throw new Error('useDocumentGenerator must be used within a DocumentGeneratorContext.Provider');
+    }
+    return context;
+};
+
 
 interface DocumentFormProps {
   documentType: string;
   initialData: any;
-  children: React.ReactNode; // To render the form in the correct layout position
+  children: React.ReactNode;
 }
 
 const buildSchema = (fields: DocumentField[]): z.ZodObject<any> => {
@@ -91,15 +110,14 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData, 
   const [lang, setLang] = useState<Language>('fr');
   const [currency, setCurrency] = useState<Currency>('EUR');
   
-  // The watched values from the form become the source of truth for the context
   const watchedValues = watch();
+  const [debouncedFormData] = useDebounce(watchedValues, 300);
 
-  // Reset form when initialData changes (e.g., brand or doc type changes)
   useEffect(() => {
     reset(initialData);
   }, [initialData, reset]);
 
-  const onSubmit = (data: any) => {
+  const onSubmit = () => {
     generatePDF({ elementId: 'pdf-content', fileName: `${documentType}.pdf` });
   };
   
@@ -143,21 +161,18 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData, 
   };
 
   const contextValue = useMemo(() => ({
-    formData: watchedValues,
+    formData: debouncedFormData,
     lang,
-    setLang,
     currency,
-    setCurrency,
-  }), [watchedValues, lang, currency]);
+  }), [debouncedFormData, lang, currency]);
   
-  // Replace the placeholder div with the actual form
   const childrenArray = React.Children.toArray(children);
   const formSlot = childrenArray[0];
 
   return (
     <DocumentGeneratorContext.Provider value={contextValue}>
         <FormProvider {...methods}>
-            {React.isValidElement(formSlot) ? React.cloneElement(formSlot as React.ReactElement, {
+            {React.isValidElement(formSlot) && React.cloneElement(formSlot as React.ReactElement, {
                 children: (
                     <Card className="h-full">
                         <CardHeader>
@@ -206,12 +221,8 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData, 
                         </CardContent>
                     </Card>
                 )
-            }) : null}
-
-            {childrenArray.slice(1)}
+            })}
         </FormProvider>
-        {/* The preview is passed as a child */}
-        {React.cloneElement(childrenArray[1] as React.ReactElement, {})}
     </DocumentGeneratorContext.Provider>
   );
 };
