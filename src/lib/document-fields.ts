@@ -69,11 +69,12 @@ export const documentFields: { [key: string]: DocumentField[] } = {
      { name: 'loan_amount_in_words_dollars', label: {fr: 'Montant en toutes lettres (Dollars)'}, type: 'text', validation: { type: 'string' } },
     { name: 'taeg', label: {fr: 'TAEG Fixe'}, type: 'text', defaultValue: '2.00%', validation: { type: 'string' } },
     { name: 'loan_term', label: {fr: 'Durée du prêt (mois)'}, type: 'number', validation: { type: 'number' } },
+    { name: 'availability_days', label: {fr: 'Jours avant mise à disposition'}, type: 'number', defaultValue: 10, validation: { type: 'number' } },
     { name: 'start_date', label: {fr: 'Date de 1ère échéance'}, type: 'date', validation: { type: 'date' } },
-    { name: 'end_date', label: {fr: 'Date de dernière échéance'}, type: 'date', validation: { type: 'date' } },
     { name: 'monthly_payment', label: {fr: 'Mensualité'}, type: 'number', validation: { type: 'number' } },
     { name: 'total_cost', label: {fr: 'Coût total du crédit'}, type: 'number', validation: { type: 'number' } },
     { name: 'total_due', label: {fr: 'Montant total dû'}, type: 'number', validation: { type: 'number' } },
+    { name: 'withdrawal_days', label: {fr: 'Jours de rétractation'}, type: 'number', defaultValue: 14, validation: { type: 'number' } },
   ],
   'acte-de-cautionnement-solidaire': [
     { name: 'type_of_loan', label: {fr: 'Type de prêt concerné', en: 'Concerned Loan Type', de: 'Betroffene Darlehensart'}, type: 'text', defaultValue: 'Prêt Personnel', validation: { type: 'string' } },

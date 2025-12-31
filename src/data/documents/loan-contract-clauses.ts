@@ -26,18 +26,18 @@ export const loanContractClauses = (companyCity: string): Clauses => ({
                 amount: "Montant du capital prêté : {loan_amount} ({loan_amount_in_words} euros).",
                 taeg: "Taux d'intérêt Annuel Effectif Global (TAEG) fixe : {taeg}.",
                 term: "Durée totale du remboursement : {loan_term} mois.",
-                availability: "Date de mise à disposition des fonds : Au plus tard 10 jours après l'expiration du délai de rétractation.",
+                availability: "Date de mise à disposition des fonds : Au plus tard {availability_days} jours après l'expiration du délai de rétractation.",
             },
             repayment: {
                 title: "Article 3 : Modalités de Remboursement",
-                intro: "L'Emprunteur s'engage à rembourser le capital et les intérêts en {loan_term} mensualités constantes. La première échéance interviendra le {start_date} et la dernière le {end_date}.",
+                intro: "L'Emprunteur s'engage à rembourser le capital et les intérêts en {loan_term} mensualités constantes. La première échéance interviendra le {start_date}.",
                 monthly_payment: "Mensualité (hors assurance) : {monthly_payment}. Ce montant sera prélevé le 5 de chaque mois.",
                 total_cost: "Le coût total du crédit (intérêts) s'élève à {total_cost}.",
                 total_due: "Montant total dû : {total_due} (Capital emprunté + coût total des intérêts).",
             },
             withdrawal: {
                 title: "Article 4 : Droit de Rétractation",
-                content: "L'Emprunteur dispose d'un délai de rétractation de quatorze (14) jours calendaires à compter de la date de signature de l'offre de contrat de crédit. Pour se rétracter, l'Emprunteur doit renvoyer le bordereau de rétractation joint à l'offre par lettre recommandée avec accusé de réception.",
+                content: "L'Emprunteur dispose d'un délai de rétractation de {withdrawal_days} jours calendaires à compter de la date de signature de l'offre de contrat de crédit. Pour se rétracter, l'Emprunteur doit renvoyer le bordereau de rétractation joint à l'offre par lettre recommandée avec accusé de réception.",
             },
             default: {
                 title: "Article 5 : Défaut de Paiement",
@@ -59,60 +59,62 @@ export const loanContractClauses = (companyCity: string): Clauses => ({
         signature_preamble: "Fait en deux exemplaires originaux, dont un pour chaque partie.",
     },
     vantex: {
-        header: {
-            line1: "Vantex Bank",
-            line2: "Département Crédits • Direction Générale",
-        },
-        title: "Contrat de Prêt",
-        reference: "Contrat N°: PR-88210",
-        location_and_date: ``,
-        parties: {
-            title: "Entre les soussignés :",
-            lender_label: "Le Prêteur :",
-            borrower_label: "L'Emprunteur :",
-            read_and_approved: "Lu et approuvé",
-        },
-        articles: {
-            object: {
-                title: "Article 1 : Objet du Contrat",
-                content: "Le Prêteur consent à l'Emprunteur, qui accepte, un prêt Prêt Personnel Amortissable amortissable pour un usage non-professionnel, régi par les dispositions du Code de la consommation et par les présentes conditions générales et particulières.",
+        fr: {
+             header: {
+                line1: "Vantex Bank",
+                line2: "Département Crédits • Direction Générale",
             },
-            characteristics: {
-                title: "Article 2 : Montant et Caractéristiques du Prêt",
-                amount: "Montant du capital prêté : 15000 € (15 mille euros).",
-                taeg: "Taux d'intérêt Annuel Effectif Global (TAEG) fixe : 4.5%.",
-                term: "Durée totale du remboursement : 48 mois.",
-                availability: "Date de mise à disposition des fonds : Au plus tard 10 jours après l'expiration du délai de rétractation.",
+            title: "Contrat de Prêt",
+            reference: "Contrat N°: PR-88210",
+            location_and_date: ``,
+            parties: {
+                title: "Entre les soussignés :",
+                lender_label: "Le Prêteur :",
+                borrower_label: "L'Emprunteur :",
+                read_and_approved: "Lu et approuvé",
             },
-            repayment: {
-                title: "Article 3 : Modalités de Remboursement",
-                intro: "L'Emprunteur s'engage à rembourser le capital et les intérêts en mensualités constantes. La première échéance interviendra le 2024-03-05.",
-                monthly_payment: "Mensualité (hors assurance) : 342.05 €. Ce montant sera prélevé le 5 de chaque mois.",
-                total_cost: "Le coût total du crédit (intérêts) s'élève à 1418.51 €.",
-                total_due: "Montant total dû : 16418.51 € (Capital emprunté + coût total des intérêts).",
+            articles: {
+                object: {
+                    title: "Article 1 : Objet du Contrat",
+                    content: "Le Prêteur consent à l'Emprunteur, qui accepte, un prêt Prêt Personnel Amortissable amortissable pour un usage non-professionnel, régi par les dispositions du Code de la consommation et par les présentes conditions générales et particulières.",
+                },
+                characteristics: {
+                    title: "Article 2 : Montant et Caractéristiques du Prêt",
+                    amount: "Montant du capital prêté : 15000 € (quinze mille euros).",
+                    taeg: "Taux d'intérêt Annuel Effectif Global (TAEG) fixe : 4.5%.",
+                    term: "Durée totale du remboursement : 48 mois.",
+                    availability: "Date de mise à disposition des fonds : Au plus tard 10 jours après l'expiration du délai de rétractation.",
+                },
+                repayment: {
+                    title: "Article 3 : Modalités de Remboursement",
+                    intro: "L'Emprunteur s'engage à rembourser le capital et les intérêts en 48 mensualités constantes. La première échéance interviendra le 05/03/2024.",
+                    monthly_payment: "Mensualité (hors assurance) : 342.05 €. Ce montant sera prélevé le 5 de chaque mois.",
+                    total_cost: "Le coût total du crédit (intérêts) s'élève à 1418.51 €.",
+                    total_due: "Montant total dû : 16418.51 € (Capital emprunté + coût total des intérêts).",
+                },
+                withdrawal: {
+                    title: "Article 4 : Droit de Rétractation",
+                    content: "L'Emprunteur dispose d'un délai de rétractation de quatorze (14) jours calendaires à compter de la date de signature de l'offre de contrat de crédit. Pour se rétracter, l'Emprunteur doit renvoyer le bordereau de rétractation joint à l'offre par lettre recommandée avec accusé de réception.",
+                },
+                default: {
+                    title: "Article 5 : Défaut de Paiement",
+                    content: "En cas de non-paiement d'une échéance à sa date, Le Prêteur pourra exiger le remboursement immédiat du capital restant dû, majoré des intérêts échus et non payés. Des indemnités de retard pourront être appliquées conformément à la législation en vigueur.",
+                },
+                early_repayment: {
+                    title: "Article 6 : Remboursement Anticipé",
+                    content: "L'Emprunteur a le droit, à tout moment, de rembourser par anticipation, en totalité ou en partie, le crédit qui lui a été consenti. Conformément à notre politique commerciale, aucune indemnité de remboursement anticipé ne sera exigée, quel que soit le montant. L'Emprunteur devra simplement notifier le Prêteur de son intention par écrit afin d'organiser les modalités pratiques du remboursement.",
+                },
+                data: {
+                    title: "Article 7 : Protection des Données Personnelles",
+                    content: "Les informations recueillies sont nécessaires au traitement de la demande de prêt. Elles sont traitées informatiquement et sont destinées aux services du Prêteur et de ses partenaires. Conformément au RGPD, l'Emprunteur dispose d'un droit d'accès, de rectification et de suppression de ses données personnelles en contactant le Prêteur.",
+                },
+                law: {
+                    title: "Article 8 : Droit Applicable et Litiges",
+                    content: "Le présent contrat est soumis au droit allemand. En cas de litige, les parties s'engagent à rechercher une solution amiable. À défaut, le tribunal compétent sera celui du lieu de domicile de l'Emprunteur.",
+                },
             },
-            withdrawal: {
-                title: "Article 4 : Droit de Rétractation",
-                content: "L'Emprunteur dispose d'un délai de rétractation de quatorze (14) jours calendaires à compter de la date de signature de l'offre de contrat de crédit. Pour se rétracter, l'Emprunteur doit renvoyer le bordereau de rétractation joint à l'offre par lettre recommandée avec accusé de réception.",
-            },
-            default: {
-                title: "Article 5 : Défaut de Paiement",
-                content: "En cas de non-paiement d'une échéance à sa date, Le Prêteur pourra exiger le remboursement immédiat du capital restant dû, majoré des intérêts échus et non payés. Des indemnités de retard pourront être appliquées conformément à la législation en vigueur.",
-            },
-            early_repayment: {
-                title: "Article 6 : Remboursement Anticipé",
-                content: "L'Emprunteur a le droit, à tout moment, de rembourser par anticipation, en totalité ou en partie, le crédit qui lui a été consenti. Conformément à notre politique commerciale, aucune indemnité de remboursement anticipé ne sera exigée, quel que soit le montant. L'Emprunteur devra simplement notifier le Prêteur de son intention par écrit afin d'organiser les modalités pratiques du remboursement.",
-            },
-            data: {
-                title: "Article 7 : Protection des Données Personnelles",
-                content: "Les informations recueillies sont nécessaires au traitement de la demande de prêt. Elles sont traitées informatiquement et sont destinées aux services du Prêteur et de ses partenaires. Conformément au RGPD, l'Emprunteur dispose d'un droit d'accès, de rectification et de suppression de ses données personnelles en contactant le Prêteur.",
-            },
-            law: {
-                title: "Article 8 : Droit Applicable et Litiges",
-                content: "Le présent contrat est soumis au droit allemand. En cas de litige, les parties s'engagent à rechercher une solution amiable. À défaut, le tribunal compétent sera celui du lieu de domicile de l'Emprunteur.",
-            },
-        },
-        signature_preamble: "",
+            signature_preamble: "",
+        }
     },
     en: {
         // English translations would go here
@@ -141,18 +143,18 @@ export const loanContractClauses = (companyCity: string): Clauses => ({
                 amount: "Geliehener Kapitalbetrag: {loan_amount} ({loan_amount_in_words} Euro).",
                 taeg: "Fester effektiver Jahreszins (TAEG): {taeg}.",
                 term: "Gesamte Rückzahlungsdauer: {loan_term} Monate.",
-                availability: "Datum der Mittelbereitstellung: Spätestens 10 Tage nach Ablauf der Widerrufsfrist.",
+                availability: "Datum der Mittelbereitstellung: Spätestens {availability_days} Tage nach Ablauf der Widerrufsfrist.",
             },
             repayment: {
                 title: "Artikel 3: Rückzahlungsmodalitäten",
-                intro: "Der Darlehensnehmer verpflichtet sich, das Kapital und die Zinsen in {loan_term} konstanten Monatsraten zurückzuzahlen. Die erste Rate ist am {start_date} fällig und die letzte am {end_date}.",
+                intro: "Der Darlehensnehmer verpflichtet sich, das Kapital und die Zinsen in {loan_term} konstanten Monatsraten zurückzuzahlen. Die erste Rate ist am {start_date} fällig.",
                 monthly_payment: "Monatliche Rate (ohne Versicherung): {monthly_payment}. Dieser Betrag wird am 5. eines jeden Monats abgebucht.",
                 total_cost: "Die Gesamtkosten des Kredits (Zinsen) belaufen sich auf {total_cost}.",
                 total_due: "Gesamter geschuldeter Betrag: {total_due} (Geliehenes Kapital + Gesamtkosten der Zinsen).",
             },
             withdrawal: {
                 title: "Artikel 4: Widerrufsrecht",
-                content: "Der Darlehensnehmer hat eine Widerrufsfrist von vierzehn (14) Kalendertagen ab dem Datum der Unterzeichnung des Kreditvertragsangebots. Um zu widerrufen, muss der Darlehensnehmer das dem Angebot beigefügte Widerrufsformular per Einschreiben mit Rückschein zurücksenden.",
+                content: "Der Darlehensnehmer hat eine Widerrufsfrist von {withdrawal_days} Kalendertagen ab dem Datum der Unterzeichnung des Kreditvertragsangebots. Um zu widerrufen, muss der Darlehensnehmer das dem Angebot beigefügte Widerrufsformular per Einschreiben mit Rückschein zurücksenden.",
             },
             default: {
                 title: "Artikel 5: Zahlungsverzug",
@@ -197,18 +199,18 @@ export const loanContractClauses = (companyCity: string): Clauses => ({
                 amount: "Paskolinto kapitalo suma: {loan_amount} ({loan_amount_in_words} eurų).",
                 taeg: "Fiksuota metinė bendra palūkanų norma (BVKKMN): {taeg}.",
                 term: "Bendra grąžinimo trukmė: {loan_term} mėnesių.",
-                availability: "Lėšų suteikimo data: Ne vėliau kaip per 10 dienų nuo atsisakymo teisės termino pabaigos.",
+                availability: "Lėšų suteikimo data: Ne vėliau kaip per {availability_days} dienas nuo atsisakymo teisės termino pabaigos.",
             },
             repayment: {
                 title: "3 straipsnis: Grąžinimo sąlygos",
-                intro: "Paskolos gavėjas įsipareigoja grąžinti kapitalą ir palūkanas per {loan_term} pastovių mėnesinių įmokų. Pirmoji įmoka mokama {start_date}, o paskutinė – {end_date}.",
+                intro: "Paskolos gavėjas įsipareigoja grąžinti kapitalą ir palūkanas per {loan_term} pastovių mėnesinių įmokų. Pirmoji įmoka mokama {start_date}.",
                 monthly_payment: "Mėnesinė įmoka (be draudimo): {monthly_payment}. Ši suma bus nuskaičiuojama kiekvieno mėnesio 5 dieną.",
                 total_cost: "Bendra kredito kaina (palūkanos) sudaro {total_cost}.",
                 total_due: "Bendra mokėtina suma: {total_due} (Paskolintas kapitalas + bendra palūkanų kaina).",
             },
             withdrawal: {
                 title: "4 straipsnis: Atsisakymo teisė",
-                content: "Paskolos gavėjas turi keturiolikos (14) kalendorinių dienų atsisakymo teisę nuo kredito sutarties pasiūlymo pasirašymo dienos. Norėdamas atsisakyti, Paskolos gavėjas turi išsiųsti pasiūlyme pridėtą atsisakymo formą registruotu laišku su gavimo patvirtinimu.",
+                content: "Paskolos gavėjas turi {withdrawal_days} kalendorinių dienų atsisakymo teisę nuo kredito sutarties pasiūlymo pasirašymo dienos. Norėdamas atsisakyti, Paskolos gavėjas turi išsiųsti pasiūlyme pridėtą atsisakymo formą registruotu laišku su gavimo patvirtinimu.",
             },
             default: {
                 title: "5 straipsnis: Mokėjimo nevykdymas",
@@ -253,18 +255,18 @@ export const loanContractClauses = (companyCity: string): Clauses => ({
                 amount: "Geleend kapitaalbedrag: {loan_amount} ({loan_amount_in_words} euro).",
                 taeg: "Vast Jaarlijks Kostenpercentage (JKP): {taeg}.",
                 term: "Totale aflossingsduur: {loan_term} maanden.",
-                availability: "Datum van terbeschikkingstelling van de fondsen: Uiterlijk 10 dagen na het verstrijken van de herroepingstermijn.",
+                availability: "Datum van terbeschikkingstelling van de fondsen: Uiterlijk {availability_days} dagen na het verstrijken van de herroepingstermijn.",
             },
             repayment: {
                 title: "Artikel 3: Aflossingsvoorwaarden",
-                intro: "De Kredietnemer verbindt zich ertoe het kapitaal en de rente terug te betalen in {loan_term} vaste maandelijkse termijnen. De eerste termijn is verschuldigd op {start_date} en de laatste op {end_date}.",
+                intro: "De Kredietnemer verbindt zich ertoe het kapitaal en de rente terug te betalen in {loan_term} vaste maandelijkse termijnen. De eerste termijn is verschuldigd op {start_date}.",
                 monthly_payment: "Maandelijkse aflossing (exclusief verzekering): {monthly_payment}. Dit bedrag wordt op de 5e van elke maand geïnd.",
                 total_cost: "De totale kosten van het krediet (rente) bedragen {total_cost}.",
                 total_due: "Totaal verschuldigd bedrag: {total_due} (Geleend kapitaal + totale rentekosten).",
             },
             withdrawal: {
                 title: "Artikel 4: Herroepingsrecht",
-                content: "De Kredietnemer beschikt over een herroepingstermijn van veertien (14) kalenderdagen vanaf de datum van ondertekening van het kredietaanbod. Om gebruik te maken van het herroepingsrecht, moet de Kredietnemer het bijgevoegde herroepingsformulier per aangetekende brief met ontvangstbevestiging terugsturen.",
+                content: "De Kredietnemer beschikt over een herroepingstermijn van {withdrawal_days} kalenderdagen vanaf de datum van ondertekening van het kredietaanbod. Om gebruik te maken van het herroepingsrecht, moet de Kredietnemer het bijgevoegde herroepingsformulier per aangetekende brief met ontvangstbevestiging terugsturen.",
             },
             default: {
                 title: "Artikel 5: Wanbetaling",

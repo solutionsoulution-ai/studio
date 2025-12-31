@@ -47,11 +47,12 @@ const LoanContractTemplate: React.FC = () => {
             .replace(/{loan_amount_in_words}/g, loanAmountInWords || '___________')
             .replace(/{taeg}/g, formData.taeg || '___________')
             .replace(/{loan_term}/g, formData.loan_term || '___________')
+            .replace(/{availability_days}/g, formData.availability_days || '10')
             .replace(/{start_date}/g, formData.start_date ? new Date(formData.start_date).toLocaleDateString(lang) : '___________')
-            .replace(/{end_date}/g, formData.end_date ? new Date(formData.end_date).toLocaleDateString(lang) : '___________')
             .replace(/{total_cost}/g, formData.total_cost ? formatCurrency(formData.total_cost) : '___________')
             .replace(/{monthly_payment}/g, formData.monthly_payment ? formatCurrency(formData.monthly_payment) : '___________')
             .replace(/{total_due}/g, formData.total_due ? formatCurrency(formData.total_due) : '___________')
+            .replace(/{withdrawal_days}/g, formData.withdrawal_days || '14')
             .replace(/{contact_email}/g, companyInfo.email);
     };
 
