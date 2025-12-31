@@ -74,7 +74,8 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
             fontWeight: 'bold',
             fontSize: '14px',
             lineHeight: '1.2',
-            textTransform: 'uppercase'
+            textTransform: 'uppercase',
+            color: 'hsl(var(--primary))'
           }}>{companyInfo.name}</div>
           <div style={{
             position: 'relative',
@@ -87,6 +88,7 @@ const DocumentWrapper: React.FC<DocumentWrapperProps> = ({ children, title, depa
             position: 'relative',
             fontSize: '9px',
             lineHeight: '1.1',
+            color: 'hsl(var(--primary))'
           }}>{companyInfo.city}</div>
         </div>
       ) : (
