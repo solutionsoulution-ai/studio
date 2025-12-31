@@ -1,6 +1,6 @@
 
 "use client";
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { useForm, FormProvider, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -77,6 +77,15 @@ const buildFieldSchema = (field: DocumentField): z.ZodType<any, any> => {
 const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData }) => {
   const { generatePDF, isLoading } = usePDFGenerator();
   const { setFormData, setLang, setCurrency } = useDocumentGenerator();
+  
+  const isMounted = useRef(true);
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
 
   const currentFields = useMemo(() => documentFields[documentType as keyof typeof documentFields] || [], [documentType]);
   const schema = useMemo(() => buildSchema(currentFields), [currentFields]);
@@ -97,7 +106,9 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData }
   }, [initialData, reset]);
 
   useEffect(() => {
-    setFormData(debouncedFormData);
+    if (isMounted.current) {
+        setFormData(debouncedFormData);
+    }
   }, [debouncedFormData, setFormData]);
 
 
