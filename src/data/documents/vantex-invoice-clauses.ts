@@ -1,0 +1,130 @@
+
+import type { Clauses } from "./languages";
+
+export const vantexInvoiceClauses: Clauses = {
+    fr: {
+        company: {
+            name: "Vantex Bank",
+            address: "66 Avenue des Champs-Élysées, 75008 Paris, France",
+            phone: "+84567056073",
+            emails: ["bankservices@vantex-bank.net"]
+        },
+        title: "Facture",
+        invoice_number_label: "Facture n°:",
+        date_label: "Date :",
+        bill_to_label: "Facturé à :",
+        table_headers: { "description": "Description", "quantity": "Qté", "unit_price": "P.U. HT", "amount": "Montant HT" },
+        subtotal_label: "Sous-total HT",
+        vat_label: "TVA ({vat_rate}%)",
+        total_label: "Net à Payer TTC",
+        payment_terms: {
+            "title": "Modalités de Paiement",
+            "instruction": "Paiement à réception de la facture.",
+            "proof_of_payment": "Pour toute question, veuillez nous contacter.",
+        },
+        footer: {
+            "thank_you": "Nous vous remercions de votre confiance.",
+            "contact_info": "Pour toute question, contactez notre service comptabilité à bankservices@vantex-bank.net"
+        }
+    },
+    en: {
+        company: {
+            name: "Vantex Bank",
+            address: "66 Avenue des Champs-Élysées, 75008 Paris, France",
+            phone: "+84567056073",
+            emails: ["bankservices@vantex-bank.net"]
+        },
+        title: "Invoice",
+        invoice_number_label: "Invoice #:",
+        date_label: "Date:",
+        bill_to_label: "Bill To:",
+        table_headers: { "description": "Description", "quantity": "Qty", "unit_price": "Unit Price (excl. VAT)", "amount": "Amount (excl. VAT)" },
+        subtotal_label: "Subtotal (excl. VAT)",
+        vat_label: "VAT ({vat_rate}%)",
+        total_label: "Net Payable (incl. VAT)",
+        payment_terms: {
+            "title": "Payment Terms",
+            "instruction": "Payment upon receipt of invoice.",
+            "proof_of_payment": "For any questions, please contact us.",
+        },
+        footer: {
+            "thank_you": "Thank you for your business.",
+            "contact_info": "For any questions, please contact our accounting department at bankservices@vantex-bank.net"
+        }
+    },
+    de: {
+        company: {
+            name: "Vantex Bank",
+            address: "66 Avenue des Champs-Élysées, 75008 Paris, Frankreich",
+            phone: "+84567056073",
+            emails: ["bankservices@vantex-bank.net"]
+        },
+        title: "Rechnung",
+        invoice_number_label: "Rechnung Nr.:",
+        date_label: "Datum:",
+        bill_to_label: "Rechnung an:",
+        table_headers: { "description": "Beschreibung", "quantity": "Menge", "unit_price": "Einzelpreis (exkl. MwSt.)", "amount": "Betrag (exkl. MwSt.)" },
+        subtotal_label: "Zwischensumme (exkl. MwSt.)",
+        vat_label: "MwSt. ({vat_rate}%)",
+        total_label: "Nettobetrag (inkl. MwSt.)",
+        payment_terms: {
+            "title": "Zahlungsbedingungen",
+            "instruction": "Zahlung bei Rechnungserhalt.",
+            "proof_of_payment": "Bei Fragen kontaktieren Sie uns bitte.",
+        },
+        footer: {
+            "thank_you": "Vielen Dank für Ihr Vertrauen.",
+            "contact_info": "Bei Fragen wenden Sie sich bitte an unsere Buchhaltung unter bankservices@vantex-bank.net"
+        }
+    },
+    lt: {
+        company: {
+            name: "Vantex Bank",
+            address: "66 Avenue des Champs-Élysées, 75008 Paryžius, Prancūzija",
+            phone: "+84567056073",
+            emails: ["bankservices@vantex-bank.net"]
+        },
+        title: "Sąskaita faktūra",
+        invoice_number_label: "Sąskaitos Nr.:",
+        date_label: "Data:",
+        bill_to_label: "Sąskaita išrašyta:",
+        table_headers: { "description": "Aprašymas", "quantity": "Kiekis", "unit_price": "Vieneto kaina (be PVM)", "amount": "Suma (be PVM)" },
+        subtotal_label: "Tarpinė suma (be PVM)",
+        vat_label: "PVM ({vat_rate}%)",
+        total_label: "Bendra mokėtina suma (su PVM)",
+        payment_terms: {
+            "title": "Mokėjimo sąlygos",
+            "instruction": "Apmokėjimas gavus sąskaitą.",
+            "proof_of_payment": "Jei turite klausimų, susisiekite su mumis.",
+        },
+        footer: {
+            "thank_you": "Dėkojame už jūsų pasitikėjimą.",
+            "contact_info": "Jei turite klausimų, susisiekite su mūsų buhalterija el. paštu bankservices@vantex-bank.net"
+        }
+    },
+    nl: {
+        company: {
+            name: "Vantex Bank",
+            address: "66 Avenue des Champs-Élysées, 75008 Parijs, Frankrijk",
+            phone: "+84567056073",
+            emails: ["bankservices@vantex-bank.net"]
+        },
+        title: "Factuur",
+        invoice_number_label: "Factuur nr:",
+        date_label: "Datum:",
+        bill_to_label: "Gefactureerd aan:",
+        table_headers: { "description": "Omschrijving", "quantity": "Aantal", "unit_price": "Eenheidsprijs (excl. BTW)", "amount": "Bedrag (excl. BTW)" },
+        subtotal_label: "Subtotaal (excl. BTW)",
+        vat_label: "BTW ({vat_rate}%)",
+        total_label: "Netto te betalen (incl. BTW)",
+        payment_terms: {
+            "title": "Betalingsvoorwaarden",
+            "instruction": "Betaling bij ontvangst van de factuur.",
+            "proof_of_payment": "Neem bij vragen contact met ons op.",
+        },
+        footer: {
+            "thank_you": "Dank u voor uw vertrouwen.",
+            "contact_info": "Voor vragen kunt u contact opnemen met onze boekhoudafdeling via bankservices@vantex-bank.net"
+        }
+    }
+};

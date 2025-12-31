@@ -16,6 +16,7 @@ import BrokerageAuthorizationTemplate from '@/components/documents/templates/Bro
 import NeofondsReceiptTemplate from './templates/NeofondsReceiptTemplate';
 import VantexReceiptTemplate from './templates/VantexReceiptTemplate';
 import NeofondsInvoiceTemplate from './templates/NeofondsInvoiceTemplate';
+import VantexInvoiceTemplate from './templates/VantexInvoiceTemplate';
 import AmlCertificateTemplate from './templates/AmlCertificateTemplate';
 import { useBrand } from '@/context/BrandContext';
 import { documentFields } from '@/lib/document-fields';
@@ -65,6 +66,7 @@ const documentTemplates: { [key: string]: React.FC<any> } = {
   'attestation-assurance-emprunteur': InsuranceCertificateTemplate,
   'notice-information-assurance': InsuranceNoticeTemplate,
   'facture-neofonds': NeofondsInvoiceTemplate,
+  'facture-vantex': VantexInvoiceTemplate,
   'recu-neofonds': NeofondsReceiptTemplate,
   'recu-vantex': VantexReceiptTemplate,
   'licence-bancaire': BankingLicenseTemplate,
