@@ -78,15 +78,6 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData }
   const { generatePDF, isLoading } = usePDFGenerator();
   const { setFormData, setLang, setCurrency } = useDocumentGenerator();
   
-  const isMounted = useRef(true);
-  useEffect(() => {
-    isMounted.current = true;
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
-
-
   const currentFields = useMemo(() => documentFields[documentType as keyof typeof documentFields] || [], [documentType]);
   const schema = useMemo(() => buildSchema(currentFields), [currentFields]);
   
@@ -106,9 +97,7 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData }
   }, [initialData, reset]);
 
   useEffect(() => {
-    if (isMounted.current) {
-        setFormData(debouncedFormData);
-    }
+    setFormData(debouncedFormData);
   }, [debouncedFormData, setFormData]);
 
   // Dynamic calculation for loan contract
