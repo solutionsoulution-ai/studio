@@ -21,7 +21,7 @@ const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, l
     const getClauses = () => {
         const allClauses = loanContractClauses(companyInfo.city);
         if (brand === 'vantex' && lang === 'fr') { // Only use vantex specific for french
-            return allClauses.vantex;
+            return allClauses.vantex[lang];
         }
         return allClauses[lang] || allClauses['fr'];
     }
