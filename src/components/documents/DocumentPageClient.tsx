@@ -1,6 +1,7 @@
 
 "use client";
 import React, { useMemo, useState } from 'react';
+import { DocumentGeneratorContext } from "@/components/documents/DocumentGenerator";
 import DocumentForm from "@/components/documents/DocumentForm";
 import DocumentPreview from "@/components/documents/DocumentPreview";
 import DebtRecognitionTemplate from '@/components/documents/templates/DebtRecognitionTemplate';
@@ -79,23 +80,37 @@ export default function DocumentPageClient({ slug }: { slug: string }) {
     }
     return getDefaultValuesForDoc(slug);
   }, [brand, slug]);
-
+  
+  const [formData, setFormData] = useState(initialData);
+  const [lang, setLang] = useState<Language>('fr');
+  const [currency, setCurrency] = useState<Currency>('EUR');
 
   const TemplateComponent = documentTemplates[slug];
+
+  const contextValue = useMemo(() => ({
+    formData,
+    lang,
+    currency,
+  }), [formData, lang, currency]);
   
   return (
-      <div className="flex flex-col lg:flex-row w-full min-h-screen bg-muted/20">
-        <div className="w-full lg:w-1/3 lg:h-screen lg:overflow-y-auto p-4">
-            <DocumentForm documentType={slug} initialData={initialData}>
-                {/* This empty div will be replaced by the form content inside DocumentForm */}
-                <div />
-            </DocumentForm>
+      <DocumentGeneratorContext.Provider value={contextValue}>
+        <div className="flex flex-col lg:flex-row w-full min-h-screen bg-muted/20">
+          <div className="w-full lg:w-1/3 lg:h-screen lg:overflow-y-auto p-4">
+              <DocumentForm 
+                  documentType={slug} 
+                  initialData={initialData}
+                  onFormChange={setFormData}
+                  onLangChange={setLang}
+                  onCurrencyChange={setCurrency}
+              />
+          </div>
+          <div className="w-full lg:w-2/3 h-auto lg:h-screen lg:overflow-y-auto p-4">
+              <DocumentPreview>
+                  {TemplateComponent ? <TemplateComponent /> : <p>Modèle non trouvé</p>}
+              </DocumentPreview>
+          </div>
         </div>
-        <div className="w-full lg:w-2/3 h-auto lg:h-screen lg:overflow-y-auto p-4">
-            <DocumentPreview>
-                {TemplateComponent ? <TemplateComponent /> : <p>Modèle non trouvé</p>}
-            </DocumentPreview>
-        </div>
-      </div>
+      </DocumentGeneratorContext.Provider>
   );
 }

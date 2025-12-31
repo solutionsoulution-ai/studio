@@ -1,7 +1,7 @@
 
 "use client";
-import React, { useEffect, useMemo, useState, createContext, useContext } from 'react';
-import { useForm, FormProvider, Controller, useFormContext } from 'react-hook-form';
+import React, { useEffect, useMemo } from 'react';
+import { useForm, FormProvider, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
@@ -14,32 +14,15 @@ import { usePDFGenerator } from '@/hooks/use-pdf-generator';
 import { Loader2 } from 'lucide-react';
 import { documentFields, DocumentField } from '@/lib/document-fields';
 import type { Language } from '@/data/documents/languages';
+import type { Currency } from './DocumentPageClient';
 import { useDebounce } from 'use-debounce';
-
-export type Currency = 'EUR' | 'USD';
-
-// CONTEXT DEFINITION
-interface DocumentGeneratorContextType {
-    formData: any;
-    lang: Language;
-    currency: Currency;
-}
-
-const DocumentGeneratorContext = createContext<DocumentGeneratorContextType | null>(null);
-
-export const useDocumentGenerator = () => {
-    const context = useContext(DocumentGeneratorContext);
-    if (!context) {
-        throw new Error('useDocumentGenerator must be used within a DocumentGeneratorContext.Provider');
-    }
-    return context;
-};
-
 
 interface DocumentFormProps {
   documentType: string;
   initialData: any;
-  children: React.ReactNode;
+  onFormChange: (data: any) => void;
+  onLangChange: (lang: Language) => void;
+  onCurrencyChange: (currency: Currency) => void;
 }
 
 const buildSchema = (fields: DocumentField[]): z.ZodObject<any> => {
@@ -93,7 +76,7 @@ const buildFieldSchema = (field: DocumentField): z.ZodType<any, any> => {
 };
 
 
-const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData, children }) => {
+const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData, onFormChange, onLangChange, onCurrencyChange }) => {
   const { generatePDF, isLoading } = usePDFGenerator();
 
   const currentFields = useMemo(() => documentFields[documentType as keyof typeof documentFields] || [], [documentType]);
@@ -107,9 +90,6 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData, 
 
   const { handleSubmit, control, watch, reset } = methods;
 
-  const [lang, setLang] = useState<Language>('fr');
-  const [currency, setCurrency] = useState<Currency>('EUR');
-  
   const watchedValues = watch();
   const [debouncedFormData] = useDebounce(watchedValues, 300);
 
@@ -117,13 +97,18 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData, 
     reset(initialData);
   }, [initialData, reset]);
 
+  useEffect(() => {
+    onFormChange(debouncedFormData);
+  }, [debouncedFormData, onFormChange]);
+
+
   const onSubmit = () => {
     generatePDF({ elementId: 'pdf-content', fileName: `${documentType}.pdf` });
   };
   
   const renderField = (field: DocumentField) => {
-    const currencySymbol = currency === 'USD' ? '$' : '€';
-    const labelText = field.label[lang] || field.label['fr'];
+    const currencySymbol = '€'; // Hardcode for now as currency selector is in this component
+    const labelText = field.label['fr'];
 
     if (field.type === 'group') {
       return (
@@ -148,9 +133,9 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData, 
           render={({ field: controllerField, fieldState }) => (
             <>
               {field.type === 'textarea' ? (
-                <Textarea {...controllerField} id={field.name} placeholder={field.placeholder?.[lang] || field.placeholder?.['fr']} />
+                <Textarea {...controllerField} id={field.name} placeholder={field.placeholder?.['fr']} />
               ) : (
-                <Input {...controllerField} value={controllerField.value || ''} id={field.name} type={field.type} placeholder={field.placeholder?.[lang] || field.placeholder?.['fr']} />
+                <Input {...controllerField} value={controllerField.value || ''} id={field.name} type={field.type} placeholder={field.placeholder?.['fr']} />
               )}
               {fieldState.error && <p className="text-sm text-red-500">{fieldState.error.message}</p>}
             </>
@@ -159,71 +144,56 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData, 
       </div>
     );
   };
-
-  const contextValue = useMemo(() => ({
-    formData: debouncedFormData,
-    lang,
-    currency,
-  }), [debouncedFormData, lang, currency]);
   
-  const childrenArray = React.Children.toArray(children);
-  const formSlot = childrenArray[0];
-
   return (
-    <DocumentGeneratorContext.Provider value={contextValue}>
-        <FormProvider {...methods}>
-            {React.isValidElement(formSlot) && React.cloneElement(formSlot as React.ReactElement, {
-                children: (
-                    <Card className="h-full">
-                        <CardHeader>
-                        <CardTitle>Générateur de Document</CardTitle>
-                        <CardDescription>Remplissez les champs pour générer votre document.</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-2">
-                                <Label>Langue</Label>
-                                <Select onValueChange={(v) => setLang(v as Language)} defaultValue={lang}>
-                                    <SelectTrigger>
-                                    <SelectValue placeholder="Sélectionner la langue" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                    <SelectItem value="fr">Français</SelectItem>
-                                    <SelectItem value="en">English</SelectItem>
-                                    <SelectItem value="de">Deutsch</SelectItem>
-                                    <SelectItem value="lt">Lietuvių</SelectItem>
-                                    <SelectItem value="nl">Nederlands</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                                </div>
-                                <div className="space-y-2">
-                                    <Label>Devise</Label>
-                                    <Select onValueChange={(v) => setCurrency(v as Currency)} defaultValue={currency}>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Sélectionner la devise" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="EUR">Euro (€)</SelectItem>
-                                            <SelectItem value="USD">Dollar ($)</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                            </div>
+    <FormProvider {...methods}>
+      <Card className="h-full">
+          <CardHeader>
+          <CardTitle>Générateur de Document</CardTitle>
+          <CardDescription>Remplissez les champs pour générer votre document.</CardDescription>
+          </CardHeader>
+          <CardContent>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                  <Label>Langue</Label>
+                  <Select onValueChange={(v) => onLangChange(v as Language)} defaultValue="fr">
+                      <SelectTrigger>
+                      <SelectValue placeholder="Sélectionner la langue" />
+                      </SelectTrigger>
+                      <SelectContent>
+                      <SelectItem value="fr">Français</SelectItem>
+                      <SelectItem value="en">English</SelectItem>
+                      <SelectItem value="de">Deutsch</SelectItem>
+                      <SelectItem value="lt">Lietuvių</SelectItem>
+                      <SelectItem value="nl">Nederlands</SelectItem>
+                      </SelectContent>
+                  </Select>
+                  </div>
+                  <div className="space-y-2">
+                      <Label>Devise</Label>
+                      <Select onValueChange={(v) => onCurrencyChange(v as Currency)} defaultValue="EUR">
+                          <SelectTrigger>
+                              <SelectValue placeholder="Sélectionner la devise" />
+                          </SelectTrigger>
+                          <SelectContent>
+                              <SelectItem value="EUR">Euro (€)</SelectItem>
+                              <SelectItem value="USD">Dollar ($)</SelectItem>
+                          </SelectContent>
+                      </Select>
+                  </div>
+              </div>
 
-                            {currentFields.map(field => renderField(field))}
-                            
-                            <Button type="submit" className="w-full" disabled={isLoading}>
-                            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                            {isLoading ? 'Génération en cours...' : 'Générer le PDF'}
-                            </Button>
-                        </form>
-                        </CardContent>
-                    </Card>
-                )
-            })}
-        </FormProvider>
-    </DocumentGeneratorContext.Provider>
+              {currentFields.map(field => renderField(field))}
+              
+              <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {isLoading ? 'Génération en cours...' : 'Générer le PDF'}
+              </Button>
+          </form>
+          </CardContent>
+      </Card>
+    </FormProvider>
   );
 };
 
