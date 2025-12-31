@@ -21,6 +21,9 @@ import AmlCertificateTemplate from './templates/AmlCertificateTemplate';
 import { useBrand } from '@/context/BrandContext';
 import { documentFields } from '@/lib/document-fields';
 import type { Language } from '@/data/documents/languages';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 
 export type Currency = 'EUR' | 'USD';
 
@@ -105,15 +108,23 @@ export default function DocumentPageClient({ slug }: { slug: string }) {
   
   return (
       <DocumentGeneratorContext.Provider value={contextValue}>
-        <div className="flex flex-col lg:flex-row w-full min-h-screen bg-muted/20">
-          <div className="w-full lg:w-1/3 lg:h-screen lg:overflow-y-auto p-4">
+        <div className="w-full p-4 bg-background border-b">
+            <Button asChild variant="outline" size="sm">
+                <Link href="/documents">
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Retour à la liste des documents
+                </Link>
+            </Button>
+        </div>
+        <div className="flex flex-col lg:flex-row w-full min-h-[calc(100vh-65px)] bg-muted/20">
+          <div className="w-full lg:w-1/3 lg:h-[calc(100vh-65px)] lg:overflow-y-auto p-4">
               <DocumentForm 
                   documentType={slug} 
                   initialData={initialData}
                   onFormChange={handleFormChange}
               />
           </div>
-          <div className="w-full lg:w-2/3 h-auto lg:h-screen lg:overflow-y-auto p-4">
+          <div className="w-full lg:w-2/3 h-auto lg:h-[calc(100vh-65px)] lg:overflow-y-auto p-4">
               <DocumentPreview>
                   {TemplateComponent ? <TemplateComponent /> : <p>Modèle non trouvé pour le slug: {slug}</p>}
               </DocumentPreview>
