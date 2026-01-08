@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,6 +12,7 @@ import { useBrand, BrandKey } from '@/context/BrandContext';
 const NEOFONDS_PASSWORD = process.env.NEXT_PUBLIC_NEOFONDS_PASSWORD || 'otp2020@';
 const FINARCY_PASSWORD = process.env.NEXT_PUBLIC_FINARCY_PASSWORD || 'saldoc2020@';
 const VANTEX_PASSWORD = process.env.NEXT_PUBLIC_VANTEX_PASSWORD || '1234';
+const VALIDATOR_PASSWORD = 'valideur';
 const COOKIE_NAME = 'doc-gen-auth-brand';
 
 export default function PasswordProtect({ children }: { children: React.ReactNode }) {
@@ -19,6 +21,7 @@ export default function PasswordProtect({ children }: { children: React.ReactNod
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     // Check for cookie on mount
@@ -27,10 +30,12 @@ export default function PasswordProtect({ children }: { children: React.ReactNod
       .find(row => row.startsWith(`${COOKIE_NAME}=`))
       ?.split('=')[1];
 
-    if (cookieValue === 'neofonds' || cookieValue === 'finarcy' || cookieValue === 'vantex') {
-      const brand = cookieValue as BrandKey;
-      setBrand(brand);
-      applyBrandColors(brand);
+    if (cookieValue === 'neofonds' || cookieValue === 'finarcy' || cookieValue === 'vantex' || cookieValue === 'validator') {
+      if (cookieValue !== 'validator') {
+        const brand = cookieValue as BrandKey;
+        setBrand(brand);
+        applyBrandColors(brand);
+      }
       setIsAuthenticated(true);
     }
     setIsLoading(false);
@@ -40,21 +45,26 @@ export default function PasswordProtect({ children }: { children: React.ReactNod
     e.preventDefault();
     setError('');
 
-    let brand: BrandKey | null = null;
+    let role: BrandKey | 'validator' | null = null;
     if (password === NEOFONDS_PASSWORD) {
-      brand = 'neofonds';
+      role = 'neofonds';
     } else if (password === FINARCY_PASSWORD) {
-      brand = 'finarcy';
+      role = 'finarcy';
     } else if (password === VANTEX_PASSWORD) {
-      brand = 'vantex';
+      role = 'vantex';
+    } else if (password === VALIDATOR_PASSWORD) {
+      role = 'validator';
     }
 
-    if (brand) {
-      // Set a session cookie
-      document.cookie = `${COOKIE_NAME}=${brand}; path=/; SameSite=Lax; Secure`;
-      setBrand(brand);
-      applyBrandColors(brand);
-      setIsAuthenticated(true);
+    if (role) {
+      document.cookie = `${COOKIE_NAME}=${role}; path=/; SameSite=Lax; Secure`;
+      if (role === 'validator') {
+        router.push('/validator');
+      } else {
+        setBrand(role);
+        applyBrandColors(role);
+        setIsAuthenticated(true);
+      }
     } else {
       setError('Mot de passe incorrect.');
     }

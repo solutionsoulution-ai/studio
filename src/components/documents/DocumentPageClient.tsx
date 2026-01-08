@@ -1,6 +1,6 @@
-
 "use client";
 import React, { useMemo, useState, useCallback } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import { DocumentGeneratorContext, DocumentGeneratorContextType } from "@/components/documents/DocumentGenerator";
 import DocumentForm from "@/components/documents/DocumentForm";
 import DocumentPreview from "@/components/documents/DocumentPreview";
@@ -82,6 +82,7 @@ const documentTemplates: { [key: string]: React.FC<any> } = {
 
 export default function DocumentPageClient({ slug }: { slug: string }) {
   const { brand } = useBrand();
+  const pathname = usePathname();
 
   const initialData = useMemo(() => {
     if (brand === 'vantex' && slug === 'contrat-de-pret-personnel') {
@@ -110,14 +111,16 @@ export default function DocumentPageClient({ slug }: { slug: string }) {
   
   return (
       <DocumentGeneratorContext.Provider value={contextValue}>
-        <div className="w-full p-4 bg-background border-b">
-            <Button asChild variant="outline" size="sm">
-                <Link href="/documents">
-                    <ArrowLeft className="mr-2 h-4 w-4" />
-                    Retour à la liste des documents
-                </Link>
-            </Button>
-        </div>
+        {pathname !== '/validator' && (
+            <div className="w-full p-4 bg-background border-b">
+                <Button asChild variant="outline" size="sm">
+                    <Link href="/documents">
+                        <ArrowLeft className="mr-2 h-4 w-4" />
+                        Retour à la liste des documents
+                    </Link>
+                </Button>
+            </div>
+        )}
         <div className="flex flex-col lg:flex-row w-full min-h-[calc(100vh-65px)] bg-muted/20">
           <div className="w-full lg:w-1/3 lg:h-[calc(100vh-65px)] lg:overflow-y-auto p-4">
               <DocumentForm 
@@ -135,5 +138,3 @@ export default function DocumentPageClient({ slug }: { slug: string }) {
       </DocumentGeneratorContext.Provider>
   );
 }
-
-    
