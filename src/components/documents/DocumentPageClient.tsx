@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useMemo, useState, useCallback } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -24,7 +25,9 @@ import { documentFields } from '@/lib/document-fields';
 import type { Language } from '@/data/documents/languages';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Languages, Landmark } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
 
 export type Currency = 'EUR' | 'USD';
 
@@ -111,25 +114,56 @@ export default function DocumentPageClient({ slug }: { slug: string }) {
   
   return (
       <DocumentGeneratorContext.Provider value={contextValue}>
-        {pathname !== '/validator' && (
-            <div className="w-full p-4 bg-background border-b">
+        <div className="w-full p-4 bg-background border-b flex justify-between items-center">
+            {pathname !== '/validator' ? (
                 <Button asChild variant="outline" size="sm">
                     <Link href="/documents">
                         <ArrowLeft className="mr-2 h-4 w-4" />
-                        Retour à la liste des documents
+                        Retour à la liste
                     </Link>
                 </Button>
+            ) : (
+                <div />
+            )}
+            <div className="flex items-center gap-4">
+                 <div className="space-y-1">
+                  <Label className="text-xs">Langue</Label>
+                  <Select onValueChange={(v) => setLang(v as Language)} defaultValue="fr">
+                      <SelectTrigger className="h-8 w-32">
+                        <SelectValue placeholder="Langue" />
+                      </SelectTrigger>
+                      <SelectContent>
+                      <SelectItem value="fr">Français</SelectItem>
+                      <SelectItem value="en">English</SelectItem>
+                      <SelectItem value="de">Deutsch</SelectItem>
+                      <SelectItem value="lt">Lietuvių</SelectItem>
+                      <SelectItem value="nl">Nederlands</SelectItem>
+                      </SelectContent>
+                  </Select>
+                  </div>
+                   <div className="space-y-1">
+                      <Label className="text-xs">Devise</Label>
+                      <Select onValueChange={(v) => setCurrency(v as Currency)} defaultValue="EUR">
+                          <SelectTrigger className="h-8 w-32">
+                              <SelectValue placeholder="Devise" />
+                          </SelectTrigger>
+                          <SelectContent>
+                              <SelectItem value="EUR">Euro (€)</SelectItem>
+                              <SelectItem value="USD">Dollar ($)</SelectItem>
+                          </SelectContent>
+                      </Select>
+                  </div>
             </div>
-        )}
-        <div className="flex flex-col lg:flex-row w-full min-h-[calc(100vh-65px)] bg-muted/20">
-          <div className="w-full lg:w-1/3 lg:h-[calc(100vh-65px)] lg:overflow-y-auto p-4">
+        </div>
+        <div className="flex flex-col lg:flex-row w-full min-h-[calc(100vh-81px)] bg-muted/20">
+          <div className="w-full lg:w-1/3 lg:h-[calc(100vh-81px)] lg:overflow-y-auto p-4">
               <DocumentForm 
                   documentType={slug} 
                   initialData={initialData}
                   onFormChange={handleFormChange}
               />
           </div>
-          <div className="w-full lg:w-2/3 h-auto lg:h-[calc(100vh-65px)] lg:overflow-y-auto p-4">
+          <div className="w-full lg:w-2/3 h-auto lg:h-[calc(100vh-81px)] lg:overflow-y-auto p-4">
               <DocumentPreview>
                   {TemplateComponent ? <TemplateComponent /> : <p>Modèle non trouvé pour le slug: {slug}</p>}
               </DocumentPreview>

@@ -7,15 +7,12 @@ import * as z from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { usePDFGenerator } from '@/hooks/use-pdf-generator';
 import { Loader2 } from 'lucide-react';
 import { documentFields, DocumentField } from '@/lib/document-fields';
 import { useDocumentGenerator } from './DocumentGenerator';
-import { Language } from '@/data/documents/languages';
-import { Currency } from './DocumentPageClient';
 
 interface DocumentFormProps {
   documentType: string;
@@ -76,7 +73,7 @@ const buildFieldSchema = (field: DocumentField): z.ZodType<any, any> => {
 
 const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData, onFormChange }) => {
   const { generatePDF, isLoading } = usePDFGenerator();
-  const { setLang, setCurrency } = useDocumentGenerator();
+  const { currency } = useDocumentGenerator();
   
   const currentFields = useMemo(() => documentFields[documentType as keyof typeof documentFields] || [], [documentType]);
   const schema = useMemo(() => buildSchema(currentFields), [currentFields]);
@@ -139,7 +136,7 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData, 
   };
   
   const renderField = (field: DocumentField) => {
-    const currencySymbol = '€'; // Hardcode for now as currency selector is in this component
+    const currencySymbol = currency === 'EUR' ? '€' : '$';
     const labelText = field.label['fr'];
     const isReadOnly = (documentType === 'contrat-de-pret-personnel' && ['monthly_payment', 'total_cost', 'total_due'].includes(field.name));
 
@@ -187,36 +184,6 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData, 
           </CardHeader>
           <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-              <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                  <Label>Langue</Label>
-                  <Select onValueChange={(v) => setLang(v as Language)} defaultValue="fr">
-                      <SelectTrigger>
-                      <SelectValue placeholder="Sélectionner la langue" />
-                      </SelectTrigger>
-                      <SelectContent>
-                      <SelectItem value="fr">Français</SelectItem>
-                      <SelectItem value="en">English</SelectItem>
-                      <SelectItem value="de">Deutsch</SelectItem>
-                      <SelectItem value="lt">Lietuvių</SelectItem>
-                      <SelectItem value="nl">Nederlands</SelectItem>
-                      </SelectContent>
-                  </Select>
-                  </div>
-                  <div className="space-y-2">
-                      <Label>Devise</Label>
-                      <Select onValueChange={(v) => setCurrency(v as Currency)} defaultValue="EUR">
-                          <SelectTrigger>
-                              <SelectValue placeholder="Sélectionner la devise" />
-                          </SelectTrigger>
-                          <SelectContent>
-                              <SelectItem value="EUR">Euro (€)</SelectItem>
-                              <SelectItem value="USD">Dollar ($)</SelectItem>
-                          </SelectContent>
-                      </Select>
-                  </div>
-              </div>
-
               {currentFields.map(field => renderField(field))}
               
               <Button type="submit" className="w-full" disabled={isLoading}>
