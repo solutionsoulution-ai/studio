@@ -42,10 +42,18 @@ const buildFieldSchema = (field: DocumentField): z.ZodType<any, any> => {
             if (field.validation.email) fieldSchema = fieldSchema.email({ message: "Adresse e-mail invalide." });
             break;
         case 'number':
-            fieldSchema = z.preprocess(
-                (val) => val === '' ? null : Number(String(val).replace(/,/g, '.')),
-                 z.number({invalid_type_error: "Doit être un nombre."}).min(0, { message: "Doit être un nombre positif." }).nullable()
-            );
+            const isLoanTerm = field.name === 'loan_term';
+            if (isLoanTerm) {
+                 fieldSchema = z.preprocess(
+                    (val) => val === '' ? null : parseInt(String(val), 10),
+                    z.number({invalid_type_error: "Doit être un nombre."}).int().min(1, { message: "Doit être supérieur à 0." }).nullable()
+                );
+            } else {
+                fieldSchema = z.preprocess(
+                    (val) => val === '' ? null : Number(String(val).replace(/,/g, '.')),
+                     z.number({invalid_type_error: "Doit être un nombre."}).min(0, { message: "Doit être un nombre positif." }).nullable()
+                );
+            }
             break;
         case 'date':
             fieldSchema = z.string().refine((val) => !isNaN(Date.parse(val)), {
