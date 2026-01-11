@@ -12,13 +12,61 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { usePDFGenerator } from '@/hooks/use-pdf-generator';
 import { Loader2 } from 'lucide-react';
 import { documentFields, DocumentField } from '@/lib/document-fields';
-import { useDocumentGenerator } from './DocumentGenerator';
 
 interface DocumentFormProps {
   documentType: string;
   initialData: any;
   onFormChange: (data: any) => void;
+  currency: 'EUR' | 'USD';
 }
+
+const isOptionalField = (fieldName: string) => {
+    return fieldName.includes('item') && !fieldName.includes('item1');
+};
+
+const buildFieldSchema = (field: DocumentField): z.ZodType<any, any> => {
+    let fieldSchema;
+
+    switch (field.validation.type) {
+        case 'string':
+            fieldSchema = z.string();
+            if (isOptionalField(field.name)) {
+                return fieldSchema.optional().nullable();
+            }
+            return fieldSchema.min(1, { message: "Ce champ est requis." });
+
+        case 'number': {
+            let numberSchema: z.ZodType<any> = z.preprocess(
+                (val) => String(val).replace(/,/g, '.'),
+                z.string().refine((val) => val === '' || !isNaN(parseFloat(val)), {
+                    message: "Doit être un nombre.",
+                })
+            );
+
+            if (isOptionalField(field.name)) {
+                return numberSchema.optional().nullable();
+            }
+            
+            return numberSchema;
+        }
+
+        case 'date': {
+            fieldSchema = z.string().refine((val) => !isNaN(Date.parse(val)), {
+                message: "Date invalide",
+            });
+             if (isOptionalField(field.name)) {
+                return fieldSchema.optional().nullable();
+            }
+            return fieldSchema;
+        }
+        
+        case 'any':
+             return z.any().optional();
+
+        default:
+            return z.any();
+    }
+};
 
 const buildSchema = (fields: DocumentField[]): z.ZodObject<any> => {
     const shape: any = {};
@@ -34,54 +82,9 @@ const buildSchema = (fields: DocumentField[]): z.ZodObject<any> => {
     return z.object(shape);
 };
 
-const buildFieldSchema = (field: DocumentField): z.ZodType<any, any> => {
-    let fieldSchema;
-    switch (field.validation.type) {
-        case 'string':
-            fieldSchema = z.string().min(1, { message: "Ce champ est requis." });
-            if (field.validation.email) fieldSchema = fieldSchema.email({ message: "Adresse e-mail invalide." });
-            break;
-        case 'number':
-            const isLoanTerm = field.name === 'loan_term';
-            if (isLoanTerm) {
-                 fieldSchema = z.preprocess(
-                    (val) => val === '' ? null : parseInt(String(val), 10),
-                    z.number({invalid_type_error: "Doit être un nombre."}).int().min(1, { message: "Doit être supérieur à 0." }).nullable()
-                );
-            } else {
-                fieldSchema = z.preprocess(
-                    (val) => val === '' ? null : Number(String(val).replace(/,/g, '.')),
-                     z.number({invalid_type_error: "Doit être un nombre."}).min(0, { message: "Doit être un nombre positif." }).nullable()
-                );
-            }
-            break;
-        case 'date':
-            fieldSchema = z.string().refine((val) => !isNaN(Date.parse(val)), {
-                message: "Date invalide",
-            });
-            break;
-        case 'any':
-             fieldSchema = z.any().optional();
-             break;
-        default:
-            fieldSchema = z.any();
-    }
-    
-    if (field.name.includes('item') && !field.name.includes('item1')) {
-       return fieldSchema.optional().nullable();
-    }
-    if (field.validation.type === 'string' && !field.name.includes('item1_description')) {
-        const schema = fieldSchema as z.ZodString;
-        if(field.name.includes('item')) return schema.optional().nullable();
-    }
 
-    return fieldSchema;
-};
-
-
-const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData, onFormChange }) => {
+const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData, onFormChange, currency }) => {
   const { generatePDF, isLoading } = usePDFGenerator();
-  const { currency } = useDocumentGenerator();
   
   const currentFields = useMemo(() => documentFields[documentType as keyof typeof documentFields] || [], [documentType]);
   const schema = useMemo(() => buildSchema(currentFields), [currentFields]);
@@ -93,8 +96,6 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData, 
   });
 
   const { handleSubmit, control, watch, reset, setValue } = methods;
-
-  const watchedValues = watch();
 
   useEffect(() => {
       const subscription = watch((value) => {
@@ -108,37 +109,6 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData, 
     reset(initialData);
   }, [initialData, reset]);
 
-  // Dynamic calculation for loan contract
-  useEffect(() => {
-    if (documentType === 'contrat-de-pret-personnel') {
-        const { loan_amount, loan_term, taeg } = watchedValues;
-
-        const amount = Number(loan_amount);
-        const term = Number(loan_term);
-        const annualRateStr = String(taeg || '0').replace('%', '').replace(',', '.');
-        const annualRate = parseFloat(annualRateStr) / 100;
-
-        if (amount > 0 && term > 0 && annualRate >= 0) {
-            const monthlyRate = annualRate / 12;
-            let monthlyPayment;
-
-            if (monthlyRate === 0) {
-                monthlyPayment = amount / term;
-            } else {
-                monthlyPayment = (amount * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -term));
-            }
-
-            const totalDue = monthlyPayment * term;
-            const totalCost = totalDue - amount;
-            
-            setValue('monthly_payment', Number(monthlyPayment.toFixed(2)), { shouldValidate: true, shouldDirty: true });
-            setValue('total_cost', Number(totalCost.toFixed(2)), { shouldValidate: true, shouldDirty: true });
-            setValue('total_due', Number(totalDue.toFixed(2)), { shouldValidate: true, shouldDirty: true });
-        }
-    }
-  }, [watchedValues, documentType, setValue]);
-
-
   const onSubmit = () => {
     generatePDF({ elementId: 'pdf-content', fileName: `${documentType}.pdf` });
   };
@@ -146,7 +116,7 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData, 
   const renderField = (field: DocumentField) => {
     const currencySymbol = currency === 'EUR' ? '€' : '$';
     const labelText = field.label['fr'];
-    const isReadOnly = (documentType === 'contrat-de-pret-personnel' && ['monthly_payment', 'total_cost', 'total_due'].includes(field.name));
+    const isReadOnly = false; // All fields are now manually editable
 
     if (field.type === 'group') {
       return (
@@ -164,7 +134,7 @@ const DocumentForm: React.FC<DocumentFormProps> = ({ documentType, initialData, 
     }
     return (
       <div key={field.name} className="space-y-2">
-        <Label htmlFor={field.name}>{`${labelText} ${field.type === 'number' && (field.name.includes('amount') || field.name.includes('price') || isReadOnly) ? `(${currencySymbol})` : ''}`}</Label>
+        <Label htmlFor={field.name}>{`${labelText} ${field.type === 'number' && (field.name.includes('amount') || field.name.includes('price') || field.name.includes('payment') || field.name.includes('cost') || field.name.includes('due') || field.name.includes('reimbursed_fees')) ? `(${currencySymbol})` : ''}`}</Label>
         <Controller
           name={field.name}
           control={control}
