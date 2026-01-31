@@ -36,7 +36,37 @@ export const debtRecognitionClauses = (companyName: string): Clauses => ({
         },
     },
     en: {
-        // ...
+        header: {
+            line1: "Financial Service",
+            line2: "Legal and Guarantees Department • Commitment Formalization Unit",
+        },
+        title: "Debt Acknowledgment for a Loan",
+        reference: "Document No: {ref}",
+        date: "Date: {date}",
+        parties: {
+            title: "Between the undersigned:",
+            creditor_label: "The Creditor:",
+            debtor_label: "The Debtor:",
+            read_and_approved: "Read and approved"
+        },
+        articles: {
+            recognition: {
+                title: "Article 1: Acknowledgment of Debt",
+                content: `I, the undersigned, {debtor_name}, residing at {debtor_address}, hereby acknowledge that I owe ${companyName}, acting on behalf of its financial partners, the sum of: {loan_amount} ({loan_amount_in_words}). This sum corresponds to the principal of a '{type_of_loan}' type loan that has been granted to me and of which I confirm receipt of the funds.`,
+            },
+            repayment: {
+                title: "Article 2: Repayment Terms",
+                content: "I undertake to repay this sum in full, as well as the associated interest and fees, in accordance with the deadlines and conditions defined in the loan agreement No. {loan_contract_ref} which I have signed separately. The agreed repayment period is {loan_term} months, except in the case of early repayment or a payment incident modifying the schedule.",
+            },
+            default: {
+                title: "Article 3: Default Clause",
+                content: "In the event of non-payment of one or more installments, I acknowledge that the Creditor may invoke the clauses provided for in the loan agreement, including the early demand for the entire outstanding principal, plus applicable interest and penalties.",
+            },
+            mention: {
+                title: "Article 4: Understanding the Commitment",
+                content: "The debtor acknowledges having read and understood the entire loan agreement to which this debt acknowledgment relates and having received a copy of each document. This acknowledges the importance of the commitment.",
+            }
+        },
     },
     de: {
         header: {
@@ -138,5 +168,3 @@ export const debtRecognitionClauses = (companyName: string): Clauses => ({
         },
     }
 });
-
-    

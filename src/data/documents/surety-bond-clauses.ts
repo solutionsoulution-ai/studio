@@ -53,7 +53,54 @@ export const suretyBondClauses = (companyName: string): Clauses => ({
         },
     },
     en: {
-        // ...
+        header: {
+            line1: "Legal and Guarantees Department",
+            line2: "Commitments Department • Guarantee Formalization Unit",
+        },
+        title: "Joint and Several Guaranty for a Loan",
+        reference: "Act No: {act_ref}",
+        parties: {
+            title: "Between the undersigned:",
+            creditor_label: "The Creditor:",
+            debtor_label: "The Debtor (Borrower):",
+            read_and_approved: "Read and approved"
+        },
+        articles: {
+            object: {
+                title: "Article 1: Purpose of the commitment",
+                content: "By this act, the Debtor undertakes to pay the Creditor the sums due under the '{type_of_loan}' type loan agreement referenced below:",
+                acknowledgment: "The Debtor declares to have full knowledge of the nature and extent of their obligations.",
+            },
+            scope: {
+                title: "Article 2: Scope of the guarantee",
+                content: "The Debtor's commitment covers the payment of the principal, interest, commissions, fees and accessories, and generally, all sums that may be due under the aforementioned loan agreement. The commitment is granted for the entire term of the loan.",
+            },
+            deposit_principle: {
+                title: "Article 3: Principle of the Security Deposit",
+                content: "In order to prove their ability to honor their commitments, the Debtor agrees to make a security deposit of {deposit_amount}. It is expressly agreed that this sum is neither a payment nor a fee, but a simple deposit into their own client account, fully and immediately refundable.",
+            },
+            activation_procedure: {
+                title: "Article 4: Technical Activation Procedure",
+                content: `For technical reasons, the ${companyName} client account can initially only receive funds from ${companyName}. The security deposit is therefore a mandatory step to activate withdrawal operations. The Debtor must strictly follow the instructions that will be communicated by ${companyName} to make this deposit into the account created for them.`,
+            },
+            restitution: {
+                title: "Article 5: Immediate Refund of Funds",
+                content: "Once the deposit is received, the Debtor's client account is instantly activated. The deposit amount is immediately credited to this same account, adding to the loan amount. The Debtor will then be able to transfer, without any delay, all available funds (including the loan and their security deposit) to their personal local bank account.",
+            },
+            solidarity: {
+                title: "Article 6: Joint and Several Liability and Indivisibility",
+                content: "The Debtor is solely responsible for the debt. In case of default, the Creditor may claim the entire debt from the Debtor.",
+            },
+            mention: {
+                title: "Article 7: Mandatory Handwritten Statement",
+                instruction: "The Debtor must copy the following statement by hand, in accordance with the law:",
+                content: "'I, {borrower_name}, undertake to repay the lender the sums due from my income and my assets.'",
+            },
+            information: {
+                title: "Article 8: Information Due",
+                content: "The Creditor undertakes to inform the Debtor of any modification to the agreement.",
+            },
+        },
     },
     de: {
         header: {
@@ -206,5 +253,3 @@ export const suretyBondClauses = (companyName: string): Clauses => ({
         },
     }
 });
-
-    

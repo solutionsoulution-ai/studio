@@ -63,7 +63,64 @@ export const loanContractClauses = (companyCity: string): Clauses => ({
         signature_preamble: "",
     },
     en: {
-        // English translations would go here
+        header: {
+            line1: "Vantex Bank",
+            line2: "Credit Department • General Management",
+        },
+        title: "Loan Agreement",
+        reference: "Agreement No: {contract_ref}",
+        location_and_date: `Issued in ${companyCity}, on {contract_date}`,
+        parties: {
+            title: "Between the undersigned:",
+            lender_label: "The Lender:",
+            borrower_label: "The Borrower:",
+            read_and_approved: "Read and approved",
+        },
+        articles: {
+            object: {
+                title: "Article 1: Purpose of the Agreement",
+                content: "The Lender grants to the Borrower, who accepts, a {type_of_loan} for non-professional use, governed by the provisions of the Consumer Code and by these general and special conditions.",
+            },
+            characteristics: {
+                title: "Article 2: Loan Amount and Characteristics",
+                amount: "Loan principal amount: {loan_amount} ({loan_amount_in_words}).",
+                taeg: "Fixed Annual Percentage Rate (APR): {taeg}.",
+                term: "Total repayment period: {loan_term} months.",
+                availability: "Date of funds availability: No later than {availability_days} days after the withdrawal period expires.",
+            },
+            repayment: {
+                title: "Article 3: Repayment Terms",
+                intro: "The Borrower agrees to repay the principal and interest in {loan_term} constant monthly installments. The first installment will be on {start_date}.",
+                monthly_payment: "Monthly payment (excluding insurance): {monthly_payment}. This amount will be debited on the 5th of each month.",
+                total_cost: "The total cost of the credit (interest) amounts to {total_cost}.",
+                total_due: "Total amount due: {total_due} (Borrowed capital + total interest cost + reimbursed fees).",
+            },
+            withdrawal: {
+                title: "Article 4: Right of Withdrawal",
+                content: "The Borrower has a withdrawal period of {withdrawal_days} calendar days from the date of signing the credit agreement offer. To withdraw, the Borrower must return the attached withdrawal form by registered letter with acknowledgment of receipt.",
+            },
+            default: {
+                title: "Article 5: Default in Payment",
+                content: "In the event of non-payment of an installment on its due date, the Lender may demand immediate repayment of the outstanding principal, plus accrued and unpaid interest. Late payment penalties may be applied in accordance with current legislation.",
+            },
+            early_repayment: {
+                title: "Article 6: Early Repayment",
+                content: "The Borrower has the right, at any time, to repay the credit granted to them in whole or in part, in advance. In accordance with our commercial policy, no early repayment penalty will be required, regardless of the amount. The Borrower must simply notify the Lender of their intention in writing to organize the practical arrangements for the repayment.",
+            },
+            data: {
+                title: "Article 7: Personal Data Protection",
+                content: "The information collected is necessary for processing the loan application. It is processed electronically and is intended for the services of the Lender and its partners. In accordance with the GDPR, the Borrower has the right to access, rectify, and delete their personal data by contacting the Lender.",
+            },
+            law: {
+                title: "Article 8: Applicable Law and Disputes",
+                content: "This agreement is subject to German law. In the event of a dispute, the parties agree to seek an amicable solution. Failing this, the competent court will be that of the Borrower's place of residence.",
+            },
+            reimbursement: {
+                title: "Article 9: Fee Reimbursement",
+                content: "The Lender agrees to reimburse the Borrower for the fees advanced during the loan approval process, estimated at {reimbursed_fees}. This amount will be added to the principal disbursed to the Borrower."
+            }
+        },
+        signature_preamble: "",
     },
     de: {
         header: {
@@ -132,5 +189,3 @@ export const loanContractClauses = (companyCity: string): Clauses => ({
         // Dutch translations would go here
     }
 });
-
-    
