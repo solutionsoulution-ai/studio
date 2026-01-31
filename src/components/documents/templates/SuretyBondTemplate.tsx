@@ -1,22 +1,62 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { suretyBondClauses } from '@/data/documents/surety-bond-clauses';
 import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from '../DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
 import { useBrand } from '@/context/BrandContext';
 import { Language } from '@/data/documents/languages';
+import { Copy, Check } from 'lucide-react';
+import type { Currency } from '../DocumentPageClient';
 
 interface SuretyBondTemplateProps {
     formData: any;
     lang: Language;
+    currency: Currency;
 }
 
-const SuretyBondTemplate: React.FC<SuretyBondTemplateProps> = ({ formData, lang }) => {
+const SuretyBondTemplate: React.FC<SuretyBondTemplateProps> = ({ formData, lang, currency }) => {
     const { companyInfo } = useBrand();
     const clausesData = suretyBondClauses(companyInfo.name);
     const clauses = clausesData[lang] || clausesData['fr'];
     const signer = signatureData().legal;
+    const [isCopied, setIsCopied] = useState(false);
+
+    const handleCopy = (textToCopy: string) => {
+        const fallbackCopy = (text: string) => {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.top = "0";
+            textArea.style.left = "0";
+            textArea.style.position = "fixed";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    setIsCopied(true);
+                    setTimeout(() => setIsCopied(false), 2000);
+                }
+            } catch (err) {
+                console.error('Fallback: Oops, unable to copy', err);
+            }
+            document.body.removeChild(textArea);
+        };
+
+        if (!navigator.clipboard) {
+            fallbackCopy(textToCopy);
+            return;
+        }
+
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            setIsCopied(true);
+            setTimeout(() => setIsCopied(false), 2000);
+        }, (err) => {
+            console.error('Async: Could not copy text: ', err);
+            fallbackCopy(textToCopy);
+        });
+    };
 
     const replacePlaceholders = (text: string) => {
         if (!text) return '';
@@ -28,10 +68,10 @@ const SuretyBondTemplate: React.FC<SuretyBondTemplateProps> = ({ formData, lang 
             .replace(/{borrower_address}/g, formData.borrower_address || '___________')
             .replace(/{borrower_id}/g, formData.borrower_id || '___________')
             .replace(/{loan_contract_ref}/g, formData.loan_contract_ref || '___________')
-            .replace(/{loan_amount}/g, formData.loan_amount ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.loan_amount) : '___________')
+            .replace(/{loan_amount}/g, formData.loan_amount ? new Intl.NumberFormat(lang, { style: 'currency', currency }).format(formData.loan_amount) : '___________')
             .replace(/{loan_amount_in_words}/g, formData.loan_amount_in_words || '___________')
             .replace(/{loan_term}/g, formData.loan_term || '___________')
-            .replace(/{deposit_amount}/g, formData.deposit_amount ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(formData.deposit_amount) : '___________');
+            .replace(/{deposit_amount}/g, formData.deposit_amount ? new Intl.NumberFormat(lang, { style: 'currency', currency }).format(formData.deposit_amount) : '___________');
     };
 
     return (
@@ -105,8 +145,15 @@ const SuretyBondTemplate: React.FC<SuretyBondTemplateProps> = ({ formData, lang 
                 <article className="border-l-4 border-destructive bg-destructive/10 p-3 rounded-r-md">
                     <ArticleHeader title={clauses.articles.mention.title} className="text-destructive" />
                     <p className="text-xs italic text-destructive mb-1">{clauses.articles.mention.instruction}</p>
-                    <div className="border border-dashed border-slate-400 p-2 min-h-[40px] bg-background">
-                       <p className="text-xs">{replacePlaceholders(clauses.articles.mention.content)}</p>
+                    <div className="border border-dashed border-slate-400 p-2 min-h-[40px] bg-background relative">
+                       <p className="text-xs pr-8">{replacePlaceholders(clauses.articles.mention.content)}</p>
+                        <button
+                            onClick={() => handleCopy(replacePlaceholders(clauses.articles.mention.content))}
+                            className="absolute top-1 right-1 p-1 text-slate-500 hover:text-slate-800"
+                            title={isCopied ? 'Copié !' : 'Copier'}
+                        >
+                            {isCopied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+                        </button>
                     </div>
                 </article>
 
