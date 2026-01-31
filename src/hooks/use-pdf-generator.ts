@@ -2,7 +2,6 @@
 "use client";
 
 import { useState } from 'react';
-import jsPDF from 'jspdf';
 
 export function usePDFGenerator() {
     const [isLoading, setIsLoading] = useState(false);
@@ -20,6 +19,8 @@ export function usePDFGenerator() {
         setIsLoading(true);
 
         try {
+            const { default: jsPDF } = await import('jspdf');
+
             const pdf = new jsPDF({
                 orientation: 'p',
                 unit: 'pt',
