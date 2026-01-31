@@ -1,3 +1,4 @@
+
 import type { Clauses } from "./languages";
 
 export const brokerageAuthorizationClauses = (companyName: string, authority: string, location: string): Clauses => ({
@@ -13,7 +14,7 @@ export const brokerageAuthorizationClauses = (companyName: string, authority: st
         signature_label_1: `Pour ${authority}, Le Président`,
         signature_label_2: "Le Directeur Exécutif"
     },
-    articles: {
+    articles: (companyName: string) => ({
         status: {
             title: "Article 1 - Catégorie d'Inscription",
             value: "Courtier en opérations de banque et en services de paiement (COBSP).",
@@ -39,12 +40,21 @@ export const brokerageAuthorizationClauses = (companyName: string, authority: st
             title: "Article 6 - Traitement des Réclamations",
             content: `${companyName} dispose d'une procédure de traitement des réclamations de la clientèle et a désigné un médiateur de la consommation compétent en cas de litige non résolu, dont les coordonnées sont accessibles sur son site internet.`
         }
-    },
+    }),
     en: {
         // ... (english translations will follow the same new structure)
     },
     de: {
-        // ... (german translations will follow the same new structure)
+        authority: "Bundesanstalt für Finanzdienstleistungsaufsicht (BaFin)",
+        title: "Registrierungsbescheinigung",
+        subtitle: "Vermittler von Bankgeschäften und Zahlungsdiensten",
+        intro: `Die zuständige Behörde bescheinigt gemäß den geltenden gesetzlichen Bestimmungen, dass die nachstehend genannte Einheit registriert und als Vermittler zugelassen ist:`,
+        company_name: companyName,
+        registration_number: "Bundesweite einheitliche Registriernummer: {ref}",
+        validity: "",
+        location_and_date: `Ausgestellt in Frankfurt am Main, am {issue_date}`,
+        signature_label_1: `Für die BaFin, Der Präsident`,
+        signature_label_2: "Der Exekutivdirektor"
     },
     lt: {
         authority: authority,
@@ -71,3 +81,5 @@ export const brokerageAuthorizationClauses = (companyName: string, authority: st
         signature_label_2: "De Uitvoerend Directeur"
     }
 });
+
+    

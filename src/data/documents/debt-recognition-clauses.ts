@@ -39,7 +39,37 @@ export const debtRecognitionClauses = (companyName: string): Clauses => ({
         // ...
     },
     de: {
-        // ...
+        header: {
+            line1: "Finanzabteilung",
+            line2: "Rechts- und Garantieabteilung • Abteilung für die Formalisierung von Verpflichtungen",
+        },
+        title: "Schuldanerkenntnis für ein Darlehen",
+        reference: "Dokument Nr.: {ref}",
+        date: "Datum: {date}",
+        parties: {
+            title: "Zwischen den Unterzeichnenden:",
+            creditor_label: "Der Gläubiger:",
+            debtor_label: "Der Schuldner:",
+            read_and_approved: "Gelesen und genehmigt"
+        },
+        articles: {
+            recognition: {
+                title: "Artikel 1: Anerkennung der Schuld",
+                content: `Ich, der/die Unterzeichnende, {debtor_name}, wohnhaft in {debtor_address}, erkenne hiermit an, ${companyName}, handelnd im Namen ihrer Finanzpartner, den Betrag von {loan_amount} ({loan_amount_in_words}) zu schulden. Dieser Betrag entspricht dem Kapital eines Darlehens vom Typ '{type_of_loan}', das mir gewährt wurde und dessen Mittel ich erhalten habe.`,
+            },
+            repayment: {
+                title: "Artikel 2: Rückzahlungsmodalitäten",
+                content: "Ich verpflichte mich, diesen Betrag vollständig zurückzuzahlen, zusammen mit den Zinsen und den damit verbundenen Kosten, gemäß den Fristen und Bedingungen, die im Darlehensvertrag Nr. {loan_contract_ref} festgelegt sind, den ich separat unterzeichnet habe. Die vereinbarte Rückzahlungsdauer beträgt {loan_term} Monate, außer im Falle einer vorzeitigen Rückzahlung oder eines Zahlungsausfalls, der den Zeitplan ändert.",
+            },
+            default: {
+                title: "Artikel 3: Verzugsklausel",
+                content: "Im Falle der Nichtzahlung einer oder mehrerer Raten erkenne ich an, dass der Gläubiger die im Darlehensvertrag vorgesehenen Klauseln geltend machen kann, einschließlich der sofortigen Fälligkeit des gesamten verbleibenden Kapitals, zuzüglich der anfallenden Zinsen und Strafen.",
+            },
+            mention: {
+                title: "Artikel 4: Verständnis der Verpflichtung",
+                content: "Der Schuldner bestätigt, den gesamten Darlehensvertrag, auf den sich dieses Schuldanerkenntnis bezieht, gelesen und verstanden zu haben und eine Kopie jedes Dokuments erhalten zu haben.",
+            }
+        },
     },
     lt: {
         header: {
@@ -108,3 +138,5 @@ export const debtRecognitionClauses = (companyName: string): Clauses => ({
         },
     }
 });
+
+    

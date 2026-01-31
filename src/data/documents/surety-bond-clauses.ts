@@ -56,7 +56,54 @@ export const suretyBondClauses = (companyName: string): Clauses => ({
         // ...
     },
     de: {
-        // ...
+        header: {
+            line1: "Rechts- und Garantieabteilung",
+            line2: "Abteilung für Verpflichtungen • Abteilung für die Formalisierung von Garantien",
+        },
+        title: "Akte der gesamtschuldnerischen Bürgschaft für ein Darlehen",
+        reference: "Akte Nr.: {act_ref}",
+        parties: {
+            title: "Zwischen den Unterzeichnenden:",
+            creditor_label: "Der Gläubiger:",
+            debtor_label: "Der Schuldner (Kreditnehmer):",
+            read_and_approved: "Gelesen und genehmigt"
+        },
+        articles: {
+            object: {
+                title: "Artikel 1: Gegenstand der Verpflichtung",
+                content: "Mit dieser Akte verpflichtet sich der Schuldner, dem Gläubiger die geschuldeten Beträge aus dem nachstehend genannten Darlehensvertrag des Typs '{type_of_loan}' zu zahlen:",
+                acknowledgment: "Der Schuldner erklärt, über Art und Umfang seiner Verpflichtungen vollumfänglich informiert zu sein.",
+            },
+            scope: {
+                title: "Artikel 2: Umfang der Garantie",
+                content: "Die Verpflichtung des Schuldners erstreckt sich auf die Zahlung von Hauptsumme, Zinsen, Provisionen, Gebühren und Nebenkosten sowie allgemein aller Beträge, die aus dem oben genannten Darlehensvertrag geschuldet sein könnten. Die Verpflichtung wird für die gesamte Laufzeit des Darlehens eingegangen.",
+            },
+            deposit_principle: {
+                title: "Artikel 3: Prinzip der Sicherheitsleistung",
+                content: "Um seine Fähigkeit zur Erfüllung seiner Verpflichtungen nachzuweisen, verpflichtet sich der Schuldner, eine Sicherheitsleistung in Höhe von {deposit_amount} zu leisten. Es wird ausdrücklich vereinbart, dass dieser Betrag weder eine Zahlung noch eine Gebühr ist, sondern lediglich eine Einlage auf seinem eigenen Kundenkonto, die vollständig und sofort zurückerstattet wird.",
+            },
+            activation_procedure: {
+                title: "Artikel 4: Technisches Aktivierungsverfahren",
+                content: `Aus technischen Gründen kann das Kundenkonto von ${companyName} anfangs nur Gelder von ${companyName} erhalten. Die Sicherheitsleistung ist daher ein obligatorischer Schritt, um Abhebungsvorgänge zu aktivieren. Der Schuldner muss die ihm von ${companyName} mitgeteilten Anweisungen strikt befolgen, um diese Einzahlung auf das für ihn erstellte Konto vorzunehmen.`,
+            },
+            restitution: {
+                title: "Artikel 5: Sofortige Rückgabe der Gelder",
+                content: "Sobald die Einzahlung eingegangen ist, wird das Kundenkonto des Schuldners sofort aktiviert. Der Betrag der Einzahlung wird sofort demselben Konto gutgeschrieben und zum Darlehensbetrag hinzugefügt. Der Schuldner kann dann unverzüglich alle verfügbaren Mittel (einschließlich des Darlehens und seiner Sicherheitsleistung) auf sein persönliches lokales Bankkonto überweisen.",
+            },
+            solidarity: {
+                title: "Artikel 6: Gesamtschuldnerische Haftung und Unteilbarkeit",
+                content: "Der Schuldner ist allein für die Schuld verantwortlich. Im Falle eines Ausfalls kann der Gläubiger die gesamte Schuld vom Schuldner einfordern.",
+            },
+            mention: {
+                title: "Artikel 7: Obligatorischer handschriftlicher Vermerk",
+                instruction: "Der Schuldner muss gemäß dem Gesetz den folgenden Vermerk handschriftlich kopieren:",
+                content: "'Ich, {borrower_name}, verpflichte mich, dem Kreditgeber die geschuldeten Beträge aus meinen Einkünften und meinem Vermögen zurückzuzahlen.'",
+            },
+            information: {
+                title: "Artikel 8: Geschuldete Informationen",
+                content: "Der Gläubiger verpflichtet sich, den Schuldner über jede Vertragsänderung zu informieren.",
+            },
+        },
     },
     lt: {
         header: {
@@ -159,3 +206,5 @@ export const suretyBondClauses = (companyName: string): Clauses => ({
         },
     }
 });
+
+    

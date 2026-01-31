@@ -66,7 +66,64 @@ export const loanContractClauses = (companyCity: string): Clauses => ({
         // English translations would go here
     },
     de: {
-        // German translations would go here
+        header: {
+            line1: "Vantex Bank",
+            line2: "Kreditabteilung • Geschäftsleitung",
+        },
+        title: "Darlehensvertrag",
+        reference: "Vertrag Nr.: {contract_ref}",
+        location_and_date: `Ausgestellt in ${companyCity}, am {contract_date}`,
+        parties: {
+            title: "Zwischen den Unterzeichnenden:",
+            lender_label: "Der Darlehensgeber:",
+            borrower_label: "Der Darlehensnehmer:",
+            read_and_approved: "Gelesen und genehmigt",
+        },
+        articles: {
+            object: {
+                title: "Artikel 1: Vertragsgegenstand",
+                content: "Der Darlehensgeber gewährt dem Darlehensnehmer, der annimmt, ein {type_of_loan} zur nicht-beruflichen Nutzung, das den Bestimmungen des Verbraucherschutzgesetzes und diesen allgemeinen und besonderen Bedingungen unterliegt.",
+            },
+            characteristics: {
+                title: "Artikel 2: Betrag und Merkmale des Darlehens",
+                amount: "Geliehener Kapitalbetrag: {loan_amount} ({loan_amount_in_words}).",
+                taeg: "Fester effektiver Jahreszinssatz (TAEG): {taeg}.",
+                term: "Gesamtrückzahlungsdauer: {loan_term} Monate.",
+                availability: "Datum der Bereitstellung der Mittel: Spätestens {availability_days} Tage nach Ablauf der Widerrufsfrist.",
+            },
+            repayment: {
+                title: "Artikel 3: Rückzahlungsmodalitäten",
+                intro: "Der Darlehensnehmer verpflichtet sich, das Kapital und die Zinsen in {loan_term} konstanten Monatsraten zurückzuzahlen. Die erste Rate wird am {start_date} fällig.",
+                monthly_payment: "Monatsrate (ohne Versicherung): {monthly_payment}. Dieser Betrag wird am 5. jedes Monats abgebucht.",
+                total_cost: "Die Gesamtkosten des Kredits (Zinsen) belaufen sich auf {total_cost}.",
+                total_due: "Geschuldeter Gesamtbetrag: {total_due} (Geliehenes Kapital + Gesamtkosten der Zinsen + erstattete Gebühren).",
+            },
+            withdrawal: {
+                title: "Artikel 4: Widerrufsrecht",
+                content: "Der Darlehensnehmer hat eine Widerrufsfrist von {withdrawal_days} Kalendertagen ab dem Datum der Unterzeichnung des Kreditvertragsangebots. Um zu widerrufen, muss der Darlehensnehmer das beigefügte Widerrufsformular per Einschreiben mit Rückschein zurücksenden.",
+            },
+            default: {
+                title: "Artikel 5: Zahlungsverzug",
+                content: "Bei Nichtzahlung einer Rate zum Fälligkeitsdatum kann der Darlehensgeber die sofortige Rückzahlung des ausstehenden Kapitals zuzüglich der fälligen und unbezahlten Zinsen verlangen. Verzugszinsen können gemäß der geltenden Gesetzgebung erhoben werden.",
+            },
+            early_repayment: {
+                title: "Artikel 6: Vorzeitige Rückzahlung",
+                content: "Der Darlehensnehmer hat jederzeit das Recht, den ihm gewährten Kredit ganz oder teilweise vorzeitig zurückzuzahlen. Gemäß unserer Geschäftspolitik wird keine Vorfälligkeitsentschädigung verlangt, unabhängig vom Betrag. Der Darlehensnehmer muss den Darlehensgeber lediglich schriftlich über seine Absicht informieren, um die praktischen Modalitäten der Rückzahlung zu organisieren.",
+            },
+            data: {
+                title: "Artikel 7: Schutz personenbezogener Daten",
+                content: "Die erhobenen Informationen sind für die Bearbeitung des Darlehensantrags erforderlich. Sie werden computergestützt verarbeitet und sind für die Abteilungen des Darlehensgebers und seiner Partner bestimmt. Gemäß der DSGVO hat der Darlehensnehmer ein Recht auf Zugang, Berichtigung und Löschung seiner personenbezogenen Daten, indem er den Darlehensgeber kontaktiert.",
+            },
+            law: {
+                title: "Artikel 8: Anwendbares Recht und Streitigkeiten",
+                content: "Dieser Vertrag unterliegt deutschem Recht. Im Streitfall verpflichten sich die Parteien, eine gütliche Lösung zu suchen. Andernfalls ist das zuständige Gericht das am Wohnsitz des Darlehensnehmers.",
+            },
+            reimbursement: {
+                title: "Artikel 9: Kostenerstattung",
+                content: "Der Darlehensgeber verpflichtet sich, dem Darlehensnehmer die während des Kreditgenehmigungsverfahrens verauslagten Kosten in Höhe von {reimbursed_fees} zu erstatten. Dieser Betrag wird dem an den Darlehensnehmer ausgezahlten Kapital hinzugefügt."
+            }
+        },
+        signature_preamble: "",
     },
     lt: {
         // Lithuanian translations would go here
@@ -75,3 +132,5 @@ export const loanContractClauses = (companyCity: string): Clauses => ({
         // Dutch translations would go here
     }
 });
+
+    

@@ -78,7 +78,46 @@ export const wireAuthorizationClauses = (companyName: string): Clauses => ({
             },
         },
     },
-    de: {},
+    de: {
+        header: {
+            line1: "Finanzabteilung",
+            line2: "Abteilung für Zahlungsverkehr",
+        },
+        title: "Überweisungsermächtigung",
+        reference: "Ermächtigung Nr.: {ref}",
+        date: "Ausstellungsdatum: {date}",
+        parties: {
+            issuer_label: "Aussteller des Überweisungsauftrags:",
+            beneficiary_label: "Begünstigter der Überweisung:",
+        },
+        articles: {
+            authorization: {
+                title: "Artikel 1: Unwiderruflicher Überweisungsauftrag",
+                content: `Hiermit ermächtigt und beauftragt ${companyName} als Darlehensgeber im Rahmen des Darlehensvertrags Nr. {loan_contract_ref} unwiderruflich die Überweisung des Betrags von {loan_amount} ({loan_amount_in_words}) an den Begünstigten {borrower_name} auf das unten angegebene Bankkonto.`,
+            },
+            bank_details: {
+                title: "Artikel 2: Bankverbindung des Begünstigten",
+                bank_name_label: "Name der Bank",
+                account_holder_label: "Kontoinhaber",
+                iban_label: "IBAN",
+                bic_swift_label: "BIC / SWIFT-Code",
+            },
+            execution_terms: {
+                title: "Artikel 3: Ausführungsbedingungen",
+                content: "Diese Überweisung wird innerhalb von 24 bis 48 Geschäftsstunden ab dem Datum dieser Ermächtigung ausgeführt. Die bankübergreifende Bearbeitungszeit kann variieren. Dieser Zahlungsauftrag ist verbindlich und endgültig.",
+            },
+            liability: {
+                title: "Artikel 4: Haftungsausschluss",
+                content: `Sobald die Gelder auf das vom Begünstigten angegebene Konto überwiesen sind, ist ${companyName} von seiner Verpflichtung zur Bereitstellung der Mittel befreit. Fehler in den angegebenen Bankdaten liegen in der alleinigen Verantwortung des Begünstigten.`,
+            },
+            proof: {
+                title: "Artikel 5: Transaktionsnachweis",
+                content: `Dieses Dokument stellt eine formelle Zahlungsanweisung dar und kann jeder zuständigen Behörde oder jedem Finanzinstitut als Nachweis für den von ${companyName} eingeleiteten Überweisungsauftrag vorgelegt werden.`,
+            },
+        },
+    },
     lt: {},
     nl: {},
 });
+
+    

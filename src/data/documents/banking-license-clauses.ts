@@ -50,7 +50,19 @@ export const bankingLicenseClauses = (companyName: string, companyAddress: strin
         // ... (english translations will follow the same new structure)
     },
     de: {
-        // ... (german translations will follow the same new structure)
+        authority: "Bundesanstalt für Finanzdienstleistungsaufsicht (BaFin)",
+        title: "Erlaubnis zum Betreiben von Bankgeschäften",
+        subtitle: "Gemäß § 32 des Kreditwesengesetzes (KWG)",
+        decision: "Erlaubnisbescheid Nr. {ref} der BaFin",
+        intro: "Nach Prüfung des vorgelegten Antrags erteilt die Bundesanstalt für Finanzdienstleistungsaufsicht (BaFin) nach Beratung folgenden Bescheid:",
+        grant_to: "Artikel 1: Erlaubnis",
+        company_name: companyName,
+        company_address: companyAddress,
+        status: `Der ${companyName} wird die Erlaubnis als Kreditinstitut erteilt, die sie berechtigt, sämtliche Bankgeschäfte im Gebiet der Europäischen Union durchzuführen.`,
+        validity: "Diese Erlaubnis wird auf unbestimmte Zeit erteilt, vorbehaltlich der ständigen Einhaltung der Erlaubnisvoraussetzungen und der geltenden Vorschriften. Sie kann von der BaFin bei schwerwiegenden Verstößen gegen gesetzliche und aufsichtsrechtliche Pflichten geändert, ausgesetzt oder widerrufen werden.",
+        location_and_date: "Ausgestellt in Frankfurt am Main, am {issue_date}",
+        signature_label_1: "Der Präsident der BaFin",
+        signature_label_2: "Der Exekutivdirektor Bankenaufsicht",
     },
     lt: {
         authority: "Prudencinės kontrolės ir pertvarkymo institucija (ACPR)",
@@ -83,3 +95,5 @@ export const bankingLicenseClauses = (companyName: string, companyAddress: strin
         signature_label_2: "De Secretaris-Generaal van de ACPR",
     }
 });
+
+    

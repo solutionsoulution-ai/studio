@@ -107,7 +107,56 @@ export const amlCertificateClauses = (companyName: string): Clauses => ({
         signature_label: "Declarant's Signature",
     },
     de: {
-        // ... (german translations)
+        header: {
+            line1: "Compliance-Abteilung",
+            line2: "Einheit zur Bekämpfung der Geldwäsche (AML/CFT)",
+        },
+        title: "Erklärung über die Herkunft der Mittel",
+        reference: "Erklärung Nr.: {ref}",
+        date: "Datum: {date}",
+        declarer: {
+            title: "Erklärender",
+        },
+        articles: {
+            declaration: {
+                title: "Artikel 1: Eidesstattliche Erklärung des Kunden",
+                content: "Ich, der/die Unterzeichnende, {client_name}, erkläre ehrenwörtlich, dass die Mittel, die für die Rückzahlung der Finanzierung im Rahmen der Transaktion {transaction_ref} sowie für jegliche persönliche Einlage verwendet werden, aus legitimen Quellen stammen und nicht aus kriminellen Aktivitäten oder Geldwäsche stammen, gemäß der Richtlinie (EU) 2015/849.",
+                origin_label: "Angegebene Herkunft der Mittel (bitte detaillieren):",
+            },
+            source_justification: {
+                title: "Artikel 2: Nachweis über die Herkunft der Mittel des Kunden",
+                content: "Ich verpflichte mich, auf Anfrage die Herkunft der Mittel durch geeignete Beweise nachzuweisen. Die Hauptquellen meiner Einnahmen und meines Vermögens sind:",
+                options: [
+                    "Berufseinkommen / Gehälter",
+                    "Erlöse aus dem Verkauf einer Immobilie",
+                    "Erbschaft / Schenkung",
+                    "Erlöse aus dem Verkauf eines Unternehmens oder von Vermögenswerten",
+                    "Langfristig gebildete persönliche Ersparnisse",
+                    "Sonstiges (bitte angeben)"
+                ]
+            },
+            commitment: {
+                title: "Artikel 3: Verpflichtung zur Transparenz",
+                content: `Ich verpflichte mich, ${companyName} auf einfache Anfrage alle Belege (Gehaltsabrechnungen, Steuerbescheide, notarielle Kaufverträge usw.) vorzulegen, die die oben angegebene Herkunft der Mittel belegen. Ich verstehe, dass diese Überprüfung für ${companyName} eine gesetzliche Verpflichtung ist.`,
+            },
+            warning: {
+                title: "Artikel 4: Warnung vor Falschaussagen",
+                content: `Ich bestätige, darüber informiert worden zu sein, dass jede Falschaussage strafrechtlich verfolgt werden kann, zur sofortigen Beendigung jeder Geschäftsbeziehung mit ${companyName} führen kann und eine Verdachtsmeldung bei den zuständigen Behörden (z. B. BaFin in Deutschland) nach sich zieht.`,
+            },
+            lender_declaration: {
+                title: "Artikel 5: Erklärung des Kreditgebers über die Herkunft der Mittel",
+                content: `Als reguliertes Finanzinstitut bescheinigt ${companyName}, dass die Kapitalien, die Gegenstand der dem Erklärenden gewährten Finanzierung sind, aus seinen legitimen Finanzgeschäften stammen und in voller Übereinstimmung mit den europäischen und nationalen Regulierungsrahmen zur Bekämpfung von Geldwäsche und Terrorismusfinanzierung stehen. Unsere Institution verpflichtet sich, eine absolute Nachverfolgbarkeit und Transparenz hinsichtlich der Herkunft ihrer finanziellen Ressourcen aufrechtzuerhalten.`
+            },
+            internal_control: {
+                title: "Artikel 6: Internes Kontrollsystem",
+                content: `${companyName} bestätigt, ein strenges internes Kontroll- und Risikomanagementsystem eingeführt zu haben, das darauf abzielt, Compliance-Risiken, einschließlich solcher im Zusammenhang mit Geldwäsche, zu identifizieren, zu bewerten und zu beherrschen. Unsere internen Verfahren werden regelmäßig geprüft und aktualisiert, um sie an die besten Praktiken des Finanzsektors und die regulatorischen Entwicklungen anzupassen.`
+            },
+            cooperation: {
+                title: "Artikel 7: Zusammenarbeit mit den Behörden",
+                content: `Aufgrund seiner gesetzlichen Verpflichtungen kooperiert ${companyName} uneingeschränkt mit den Aufsichtsbehörden und den Finanzinformationsstellen (wie z. B. BaFin). Jede Transaktion mit atypischem oder verdächtigem Charakter wird einer gründlichen Prüfung unterzogen und gegebenenfalls ordnungsgemäß gemeldet.`
+            }
+        },
+        signature_label: "Unterschrift des Erklärenden",
     },
     lt: {
         header: {
@@ -214,5 +263,7 @@ export const amlCertificateClauses = (companyName: string): Clauses => ({
         signature_label: "Handtekening van de Declarant",
     }
 });
+
+    
 
     
