@@ -1,6 +1,9 @@
 
+buildConfig:
+  buildCommand: npm run build
 runConfig:
   maxInstances: 1
   cpu: 1
   memoryMiB: 512
   timeoutSeconds: 120
+
