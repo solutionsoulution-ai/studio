@@ -6,15 +6,21 @@ import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from '../DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
 import { useBrand } from '@/context/BrandContext';
-import { useDocumentGenerator } from '../DocumentGenerator';
+import { Language } from '@/data/documents/languages';
+import { Currency } from '../DocumentPageClient';
 
-const VantexReceiptTemplate: React.FC = () => {
-    const { formData, lang, currency } = useDocumentGenerator();
+interface VantexReceiptTemplateProps {
+    formData: any;
+    lang: Language;
+    currency: Currency;
+}
+
+const VantexReceiptTemplate: React.FC<VantexReceiptTemplateProps> = ({ formData, lang, currency }) => {
     const { companyInfo } = useBrand();
     
     const clausesData = vantexReceiptClauses;
     const clauses = clausesData[lang] || clausesData['fr'];
-    const signer = signatureData(companyInfo.brandKey).finance;
+    const signer = signatureData().finance;
     const companyDetails = clauses.company;
 
     const replacePlaceholders = (text: string) => {

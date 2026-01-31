@@ -6,14 +6,18 @@ import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from '../DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
 import { useBrand } from '@/context/BrandContext';
-import { useDocumentGenerator } from '../DocumentGenerator';
+import { Language } from '@/data/documents/languages';
 
-const InsuranceCertificateTemplate: React.FC = () => {
-    const { formData, lang } = useDocumentGenerator();
+interface InsuranceCertificateTemplateProps {
+    formData: any;
+    lang: Language;
+}
+
+const InsuranceCertificateTemplate: React.FC<InsuranceCertificateTemplateProps> = ({ formData, lang }) => {
     const { companyInfo } = useBrand();
     const clausesData = insuranceCertificateClauses(companyInfo.name);
     const clauses = clausesData[lang] || clausesData['fr'];
-    const signer = signatureData(companyInfo.brandKey).insurance;
+    const signer = signatureData().insurance;
 
     const replacePlaceholders = (text: string) => {
         if (!text) return '';

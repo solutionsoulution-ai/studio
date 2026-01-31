@@ -4,11 +4,15 @@ import Image from 'next/image';
 import { bankingLicenseClauses } from '@/data/documents/banking-license-clauses';
 import DocumentWrapper from '../DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
-import { useDocumentGenerator } from '../DocumentGenerator';
 import { useBrand } from '@/context/BrandContext';
+import { Language } from '@/data/documents/languages';
 
-const BankingLicenseTemplate: React.FC = () => {
-    const { formData, lang } = useDocumentGenerator();
+interface BankingLicenseTemplateProps {
+    formData: any;
+    lang: Language;
+}
+
+const BankingLicenseTemplate: React.FC<BankingLicenseTemplateProps> = ({ formData, lang }) => {
     const { companyInfo } = useBrand();
 
     const clausesData = bankingLicenseClauses(companyInfo.name, companyInfo.address);

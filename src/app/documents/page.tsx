@@ -13,13 +13,11 @@ const documents = [
   { slug: 'notice-information-assurance', title: "Notice d'Information d'Assurance", description: 'Consultez les détails et exclusions d\'une assurance.' },
   { slug: 'licence-bancaire', title: 'Licence Bancaire', description: 'Générez un certificat de licence d\'établissement de crédit.' },
   { slug: 'autorisation-courtage', title: 'Autorisation de Courtage', description: 'Générez une attestation d\'autorisation pour le courtage de prêt.' },
-  { slug: 'recu-neofonds', title: 'Reçu de Paiement (Neofonds)', description: 'Version personnalisée pour l\'entreprise Neofonds.' },
   { slug: 'recu-vantex', title: 'Reçu de Paiement (Vantex)', description: 'Version personnalisée pour l\'entreprise Vantex Bank.' },
-  { slug: 'facture-neofonds', title: 'Facture (Neofonds)', description: 'Générez une facture aux couleurs de Neofonds.' },
   { slug: 'facture-vantex', title: 'Facture (Vantex)', description: 'Générez une facture aux couleurs de Vantex Bank.' },
   { slug: 'certificat-non-blanchiment', title: 'Certificat de Non-Blanchiment', description: 'Déclarez l\'origine légitime des fonds pour une transaction.' },
   { slug: 'autorisation-virement', title: 'Autorisation de Virement', description: 'Autorisez un virement de fonds et déclarez leur origine légitime.' },
-  { slug: 'document-vierge', title: 'Document Vierge', description: 'Partez d\'un modèle vierge avec en-tête de Neofonds.' },
+  { slug: 'document-vierge', title: 'Document Vierge', description: 'Partez d\'un modèle vierge avec en-tête Vantex.' },
 ];
 
 export default function DocumentsHomePage() {
@@ -59,5 +57,3 @@ export default function DocumentsHomePage() {
     </div>
   );
 }
-
-    

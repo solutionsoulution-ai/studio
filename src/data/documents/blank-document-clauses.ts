@@ -8,7 +8,7 @@ export const blankDocumentClauses = {
             description: "Ce document sert de modèle de base. Son importance sera définie par le contenu que vous y ajouterez."
         },
         placeholder: "Le contenu de ce document est en cours de définition.",
-        footer: "Neofonds © {current_year} - Tous droits réservés."
+        footer: "Vantex Bank © {current_year} - Tous droits réservés."
     },
     en: {
         title: "Document Title",
@@ -18,7 +18,7 @@ export const blankDocumentClauses = {
             description: "This document serves as a basic template. Its importance will be defined by the content you add to it."
         },
         placeholder: "The content of this document is being defined.",
-        footer: "Neofonds © {current_year} - All rights reserved."
+        footer: "Vantex Bank © {current_year} - All rights reserved."
     },
     de: {
         title: "Dokumententitel",
@@ -28,7 +28,7 @@ export const blankDocumentClauses = {
             description: "Dieses Dokument dient als Basisvorlage. Seine Bedeutung wird durch den Inhalt bestimmt, den Sie hinzufügen."
         },
         placeholder: "Der Inhalt dieses Dokuments wird gerade definiert.",
-        footer: "Neofonds © {current_year} - Alle Rechte vorbehalten."
+        footer: "Vantex Bank © {current_year} - Alle Rechte vorbehalten."
     },
     lt: {
         title: "Dokumento pavadinimas",
@@ -38,7 +38,7 @@ export const blankDocumentClauses = {
             description: "Šis dokumentas yra pagrindinis šablonas. Jo svarbą nulems turinys, kurį pridėsite."
         },
         placeholder: "Šio dokumento turinys yra ruošiamas.",
-        footer: "Neofonds © {current_year} - Visos teisės saugomos."
+        footer: "Vantex Bank © {current_year} - Visos teisės saugomos."
     },
     nl: {
         title: "Documenttitel",
@@ -48,6 +48,6 @@ export const blankDocumentClauses = {
             description: "Dit document dient als basissjabloon. Het belang ervan wordt bepaald door de inhoud die u eraan toevoegt."
         },
         placeholder: "De inhoud van dit document wordt momenteel opgesteld.",
-        footer: "Neofonds © {current_year} - Alle rechten voorbehouden."
+        footer: "Vantex Bank © {current_year} - Alle rechten voorbehouden."
     }
 };

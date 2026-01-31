@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -9,14 +10,12 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertTriangle, Lock } from 'lucide-react';
 import { useBrand, BrandKey } from '@/context/BrandContext';
 
-const NEOFONDS_PASSWORD = process.env.NEXT_PUBLIC_NEOFONDS_PASSWORD || 'otp2020@';
-const FINARCY_PASSWORD = process.env.NEXT_PUBLIC_FINARCY_PASSWORD || 'saldoc2020@';
 const VANTEX_PASSWORD = process.env.NEXT_PUBLIC_VANTEX_PASSWORD || '1234';
 const VALIDATOR_PASSWORD = 'valideur';
 const COOKIE_NAME = 'doc-gen-auth-brand';
 
 export default function PasswordProtect({ children }: { children: React.ReactNode }) {
-  const { setBrand, applyBrandColors } = useBrand();
+  const { applyBrandColors } = useBrand();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -30,27 +29,21 @@ export default function PasswordProtect({ children }: { children: React.ReactNod
       .find(row => row.startsWith(`${COOKIE_NAME}=`))
       ?.split('=')[1];
 
-    if (cookieValue === 'neofonds' || cookieValue === 'finarcy' || cookieValue === 'vantex' || cookieValue === 'validator') {
-      if (cookieValue !== 'validator') {
-        const brand = cookieValue as BrandKey;
-        setBrand(brand);
-        applyBrandColors(brand);
+    if (cookieValue === 'vantex' || cookieValue === 'validator') {
+      if (cookieValue === 'vantex') {
+        applyBrandColors('vantex');
       }
       setIsAuthenticated(true);
     }
     setIsLoading(false);
-  }, [setBrand, applyBrandColors]);
+  }, [applyBrandColors]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
     let role: BrandKey | 'validator' | null = null;
-    if (password === NEOFONDS_PASSWORD) {
-      role = 'neofonds';
-    } else if (password === FINARCY_PASSWORD) {
-      role = 'finarcy';
-    } else if (password === VANTEX_PASSWORD) {
+    if (password === VANTEX_PASSWORD) {
       role = 'vantex';
     } else if (password === VALIDATOR_PASSWORD) {
       role = 'validator';
@@ -61,7 +54,6 @@ export default function PasswordProtect({ children }: { children: React.ReactNod
       if (role === 'validator') {
         router.push('/validator');
       } else {
-        setBrand(role);
         applyBrandColors(role);
         setIsAuthenticated(true);
       }

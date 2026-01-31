@@ -1,8 +1,7 @@
 
 "use client";
 import React, { useMemo, useState, useCallback } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
-import { DocumentGeneratorContext, DocumentGeneratorContextType } from "@/components/documents/DocumentGenerator";
+import { usePathname } from 'next/navigation';
 import DocumentForm from "@/components/documents/DocumentForm";
 import DocumentPreview from "@/components/documents/DocumentPreview";
 import DebtRecognitionTemplate from '@/components/documents/templates/DebtRecognitionTemplate';
@@ -14,18 +13,15 @@ import InsuranceNoticeTemplate from '@/components/documents/templates/InsuranceN
 import BlankDocumentTemplate from '@/components/documents/templates/BlankDocumentTemplate';
 import BankingLicenseTemplate from '@/components/documents/templates/BankingLicenseTemplate';
 import BrokerageAuthorizationTemplate from '@/components/documents/templates/BrokerageAuthorizationTemplate';
-import NeofondsReceiptTemplate from './templates/NeofondsReceiptTemplate';
 import VantexReceiptTemplate from './templates/VantexReceiptTemplate';
-import NeofondsInvoiceTemplate from './templates/NeofondsInvoiceTemplate';
 import VantexInvoiceTemplate from './templates/VantexInvoiceTemplate';
 import AmlCertificateTemplate from './templates/AmlCertificateTemplate';
 import WireAuthorizationTemplate from './templates/WireAuthorizationTemplate';
-import { useBrand } from '@/context/BrandContext';
 import { documentFields } from '@/lib/document-fields';
 import type { Language } from '@/data/documents/languages';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowLeft, Languages, Landmark } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 
@@ -38,16 +34,18 @@ const vantexLoanDefaultValues = {
   borrower_name: 'Sophie Martin',
   borrower_address: '',
   borrower_id: '',
-  loan_amount: 15000,
-  loan_amount_in_words: 'quinze mille',
-  loan_amount_in_words_dollars: 'fifteen thousand',
-  taeg: '4.5%',
-  loan_term: 48,
+  loan_amount: 30000,
+  loan_amount_in_words: 'trente mille',
+  loan_amount_in_words_dollars: 'thirty thousand',
+  taeg: '2.00%',
+  loan_term: 120,
+  availability_days: 10,
   start_date: '2024-03-05',
-  end_date: '',
-  monthly_payment: 342.05,
-  total_cost: 1418.51,
-  total_due: 16418.51,
+  monthly_payment: 276.01,
+  total_cost: 3121.20,
+  total_due: 33648.20,
+  reimbursed_fees: 527,
+  withdrawal_days: 14,
 };
 
 const getDefaultValuesForDoc = (docSlug: string) => {
@@ -72,9 +70,7 @@ const documentTemplates: { [key: string]: React.FC<any> } = {
   'acte-de-cautionnement-solidaire': SuretyBondTemplate,
   'attestation-assurance-emprunteur': InsuranceCertificateTemplate,
   'notice-information-assurance': InsuranceNoticeTemplate,
-  'facture-neofonds': NeofondsInvoiceTemplate,
   'facture-vantex': VantexInvoiceTemplate,
-  'recu-neofonds': NeofondsReceiptTemplate,
   'recu-vantex': VantexReceiptTemplate,
   'licence-bancaire': BankingLicenseTemplate,
   'autorisation-courtage': BrokerageAuthorizationTemplate,
@@ -84,36 +80,27 @@ const documentTemplates: { [key: string]: React.FC<any> } = {
 };
 
 export default function DocumentPageClient({ slug }: { slug: string }) {
-  const { brand } = useBrand();
   const pathname = usePathname();
 
   const initialData = useMemo(() => {
-    if (brand === 'vantex' && slug === 'contrat-de-pret-personnel') {
+    if (slug === 'contrat-de-pret-personnel') {
       return vantexLoanDefaultValues;
     }
     return getDefaultValuesForDoc(slug);
-  }, [brand, slug]);
+  }, [slug]);
   
   const [formData, setFormData] = useState(initialData);
   const [lang, setLang] = useState<Language>('fr');
-  const [currency, setCurrency] = useState<Currency>('EUR');
+  const [currency, setCurrency] = useState<Currency>('USD');
 
   const TemplateComponent = documentTemplates[slug];
   
   const handleFormChange = useCallback((data: any) => {
     setFormData(data);
   }, []);
-
-  const contextValue: DocumentGeneratorContextType = useMemo(() => ({
-    formData,
-    lang,
-    setLang,
-    currency,
-    setCurrency,
-  }), [formData, lang, currency]);
   
   return (
-      <DocumentGeneratorContext.Provider value={contextValue}>
+      <>
         <div className="w-full p-4 bg-background border-b flex justify-between items-center">
             {pathname !== '/validator' ? (
                 <Button asChild variant="outline" size="sm">
@@ -143,7 +130,7 @@ export default function DocumentPageClient({ slug }: { slug: string }) {
                   </div>
                    <div className="space-y-1">
                       <Label className="text-xs">Devise</Label>
-                      <Select onValueChange={(v) => setCurrency(v as Currency)} defaultValue="EUR">
+                      <Select onValueChange={(v) => setCurrency(v as Currency)} defaultValue="USD">
                           <SelectTrigger className="h-8 w-32">
                               <SelectValue placeholder="Devise" />
                           </SelectTrigger>
@@ -161,14 +148,16 @@ export default function DocumentPageClient({ slug }: { slug: string }) {
                   documentType={slug} 
                   initialData={initialData}
                   onFormChange={handleFormChange}
+                  lang={lang}
+                  currency={currency}
               />
           </div>
           <div className="w-full lg:w-2/3 h-auto lg:h-[calc(100vh-81px)] lg:overflow-y-auto p-4">
               <DocumentPreview>
-                  {TemplateComponent ? <TemplateComponent /> : <p>Modèle non trouvé pour le slug: {slug}</p>}
+                  {TemplateComponent ? React.cloneElement(<TemplateComponent />, { formData, lang, currency }) : <p>Modèle non trouvé pour le slug: {slug}</p>}
               </DocumentPreview>
           </div>
         </div>
-      </DocumentGeneratorContext.Provider>
+      </>
   );
 }

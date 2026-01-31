@@ -5,14 +5,18 @@ import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from '../DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
 import { useBrand } from '@/context/BrandContext';
-import { useDocumentGenerator } from '../DocumentGenerator';
+import { Language } from '@/data/documents/languages';
 
-const DebtRecognitionTemplate: React.FC = () => {
-    const { formData, lang } = useDocumentGenerator();
+interface DebtRecognitionTemplateProps {
+    formData: any;
+    lang: Language;
+}
+
+const DebtRecognitionTemplate: React.FC<DebtRecognitionTemplateProps> = ({ formData, lang }) => {
     const { companyInfo } = useBrand();
     const clausesData = debtRecognitionClauses(companyInfo.name);
     const clauses = clausesData[lang] || clausesData['fr'];
-    const signer = signatureData(companyInfo.brandKey).legal;
+    const signer = signatureData().legal;
 
     const replacePlaceholders = (text: string) => {
         if (!text) return '';

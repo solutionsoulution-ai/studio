@@ -2,10 +2,13 @@
 import React from 'react';
 import { blankDocumentClauses } from '@/data/documents/blank-document-clauses';
 import DocumentWrapper from '../DocumentWrapper';
-import { useDocumentGenerator } from '../DocumentGenerator';
+import { Language } from '@/data/documents/languages';
 
-const BlankDocumentTemplate: React.FC = () => {
-  const { lang } = useDocumentGenerator();
+interface BlankDocumentTemplateProps {
+  lang: Language;
+}
+
+const BlankDocumentTemplate: React.FC<BlankDocumentTemplateProps> = ({ lang }) => {
   const clausesData = blankDocumentClauses;
   const clauses = clausesData[lang] || clausesData['fr'];
 

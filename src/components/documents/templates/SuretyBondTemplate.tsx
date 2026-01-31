@@ -5,14 +5,18 @@ import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from '../DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
 import { useBrand } from '@/context/BrandContext';
-import { useDocumentGenerator } from '../DocumentGenerator';
+import { Language } from '@/data/documents/languages';
 
-const SuretyBondTemplate: React.FC = () => {
-    const { formData, lang } = useDocumentGenerator();
+interface SuretyBondTemplateProps {
+    formData: any;
+    lang: Language;
+}
+
+const SuretyBondTemplate: React.FC<SuretyBondTemplateProps> = ({ formData, lang }) => {
     const { companyInfo } = useBrand();
     const clausesData = suretyBondClauses(companyInfo.name);
     const clauses = clausesData[lang] || clausesData['fr'];
-    const signer = signatureData(companyInfo.brandKey).legal;
+    const signer = signatureData().legal;
 
     const replacePlaceholders = (text: string) => {
         if (!text) return '';

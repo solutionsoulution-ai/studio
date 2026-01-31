@@ -1,25 +1,30 @@
+
 import React from 'react';
 import Image from 'next/image';
 import { brokerageAuthorizationClauses } from '@/data/documents/brokerage-authorization-clauses';
 import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from '../DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
-import { useDocumentGenerator } from '../DocumentGenerator';
 import { useBrand } from '@/context/BrandContext';
+import { Language } from '@/data/documents/languages';
 
-const BrokerageAuthorizationTemplate: React.FC = () => {
-    const { formData, lang } = useDocumentGenerator();
-    const { companyInfo, brand } = useBrand();
+interface BrokerageAuthorizationTemplateProps {
+    formData: any;
+    lang: Language;
+}
 
-    const authority = brand === 'neofonds' ? 'Bundesanstalt für Finanzdienstleistungsaufsicht (BaFin)' : 'Organisme pour le Registre Unique des Intermédiaires (ORIAS)';
-    const location = brand === 'neofonds' ? 'Frankfurt' : 'Paris';
+const BrokerageAuthorizationTemplate: React.FC<BrokerageAuthorizationTemplateProps> = ({ formData, lang }) => {
+    const { companyInfo } = useBrand();
+
+    const authority = 'Organisme pour le Registre Unique des Intermédiaires (ORIAS)';
+    const location = 'Paris';
 
     const clausesData = brokerageAuthorizationClauses(companyInfo.name, authority, location);
     const clauses = clausesData[lang] || clausesData.fr;
     const articles = clausesData.articles;
     
-    const ceoSigner = signatureData(brand).ceo;
-    const legalSigner = signatureData(brand).legal;
+    const ceoSigner = signatureData().ceo;
+    const legalSigner = signatureData().legal;
 
     const replacePlaceholders = (text: string) => {
         if (!text) return '';

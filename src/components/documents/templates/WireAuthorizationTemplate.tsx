@@ -5,15 +5,21 @@ import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from '../DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
 import { useBrand } from '@/context/BrandContext';
-import { useDocumentGenerator } from '../DocumentGenerator';
+import { Language } from '@/data/documents/languages';
+import { Currency } from '../DocumentPageClient';
 
-const WireAuthorizationTemplate: React.FC = () => {
-    const { formData, lang, currency } = useDocumentGenerator();
+interface WireAuthorizationTemplateProps {
+    formData: any;
+    lang: Language;
+    currency: Currency;
+}
+
+const WireAuthorizationTemplate: React.FC<WireAuthorizationTemplateProps> = ({ formData, lang, currency }) => {
     const { companyInfo } = useBrand();
     const clausesData = wireAuthorizationClauses(companyInfo.name);
     const clauses = clausesData[lang] || clausesData['fr'];
-    const financeSigner = signatureData(companyInfo.brandKey).finance;
-    const legalSigner = signatureData(companyInfo.brandKey).legal;
+    const financeSigner = signatureData().finance;
+    const legalSigner = signatureData().legal;
 
     const replacePlaceholders = (text: string) => {
         if (!text) return '';

@@ -33,25 +33,6 @@ const vantexInvoiceFields: DocumentField[] = [
   ]},
 ];
 
-const neofondsInvoiceFields: DocumentField[] = [
-  { name: 'ref', label: {fr:'N° de facture', en: 'Invoice No.', de: 'Rechnungs-Nr.'}, type: 'text', defaultValue: `NEOFACT-${new Date().getFullYear()}-`, validation: { type: 'string' } },
-  { name: 'date', label: {fr:'Date de facturation', en: 'Invoice Date', de: 'Rechnungsdatum'}, type: 'date', defaultValue: new Date().toISOString().split('T')[0], validation: { type: 'date' } },
-  { name: 'client_name', label: {fr:'Nom du client', en: 'Client Name', de: 'Kundenname'}, type: 'text', validation: { type: 'string' } },
-  { name: 'client_address', label: {fr:'Adresse du client', en: 'Client Address', de: 'Kundenadresse'}, type: 'textarea', validation: { type: 'string' } },
-  { name: 'vat_rate', label: {fr:'Taux de TVA (%)', en: 'VAT Rate (%)', de: 'MwSt.-Satz (%)'}, type: 'number', defaultValue: 19, validation: { type: 'number' } },
-  { name: 'items_group', label: {fr: "Détails de la facturation", en: "Billing Details", de: "Rechnungsdetails"}, type: 'group', validation: {type: 'any'}, fields: [
-    { name: 'item1_description', label: {fr: 'Article 1 - Description'}, type: 'text', validation: { type: 'string' } },
-    { name: 'item1_quantity', label: {fr: 'Article 1 - Quantité'}, type: 'number', defaultValue: 1, validation: { type: 'number' } },
-    { name: 'item1_unit_price', label: {fr: 'Article 1 - Prix U.'}, type: 'number', validation: { type: 'number' } },
-    { name: 'item2_description', label: {fr: 'Article 2 - Description'}, type: 'text', validation: { type: 'any' } },
-    { name: 'item2_quantity', label: {fr: 'Article 2 - Quantité'}, type: 'number', defaultValue: 1, validation: { type: 'any' } },
-    { name: 'item2_unit_price', label: {fr: 'Article 2 - Prix U.'}, type: 'number', validation: { type: 'any' } },
-    { name: 'item3_description', label: {fr: 'Article 3 - Description'}, type: 'text', validation: { type: 'any' } },
-    { name: 'item3_quantity', label: {fr: 'Article 3 - Quantité'}, type: 'number', defaultValue: 1, validation: { type: 'any' } },
-    { name: 'item3_unit_price', label: {fr: 'Article 3 - Prix U.'}, type: 'number', validation: { type: 'any' } },
-  ]},
-];
-
 const genericReceiptFields: DocumentField[] = [
   { name: 'ref', label: { fr: 'Référence du reçu' }, type: 'text', defaultValue: `RECU-${new Date().getFullYear()}-`, validation: { type: 'string' } },
   { name: 'payment_date', label: { fr: 'Date du paiement' }, type: 'date', defaultValue: new Date().toISOString().split('T')[0], validation: { type: 'date' } },
@@ -133,9 +114,7 @@ export const documentFields: { [key: string]: DocumentField[] } = {
     { name: 'monthly_premium', label: {fr:'Prime mensuelle', en: 'Monthly Premium', de: 'Monatliche Prämie'}, type: 'number', validation: { type: 'number' } },
   ],
   'notice-information-assurance': [],
-  'facture-neofonds': neofondsInvoiceFields,
   'facture-vantex': vantexInvoiceFields,
-  'recu-neofonds': genericReceiptFields,
   'recu-vantex': genericReceiptFields,
   'licence-bancaire': [
     { name: 'ref', label: {fr: 'Numéro de Licence'}, type: 'text', defaultValue: `LB-CE-${new Date().getFullYear()}-`, validation: { type: 'string' } },
@@ -169,5 +148,3 @@ export const documentFields: { [key: string]: DocumentField[] } = {
   ],
   'document-vierge': [],
 };
-
-    

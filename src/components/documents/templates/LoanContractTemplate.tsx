@@ -6,26 +6,20 @@ import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from '../DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
 import { useBrand } from '@/context/BrandContext';
-import { useDocumentGenerator } from '../DocumentGenerator';
+import { Language } from '@/data/documents/languages';
+import { Currency } from '../DocumentPageClient';
 
-const LoanContractTemplate: React.FC = () => {
-    const { formData, lang, currency } = useDocumentGenerator();
-    const { companyInfo, brand } = useBrand();
+interface LoanContractTemplateProps {
+    formData: any;
+    lang: Language;
+    currency: Currency;
+}
 
-    const getClauses = () => {
-        const allClauses = loanContractClauses(companyInfo.city);
-        
-        // Prioritize brand-specific clauses if they exist for the current language
-        if (allClauses[brand] && allClauses[brand][lang]) {
-            return allClauses[brand][lang];
-        }
+const LoanContractTemplate: React.FC<LoanContractTemplateProps> = ({ formData, lang, currency }) => {
+    const { companyInfo } = useBrand();
 
-        // Fallback to generic language clauses
-        return allClauses[lang] || allClauses['fr'];
-    }
-
-    const clauses = getClauses();
-    const signer = signatureData(companyInfo.brandKey).ceo;
+    const clauses = (loanContractClauses(companyInfo.city)[lang] || loanContractClauses(companyInfo.city)['fr']);
+    const signer = signatureData().ceo;
 
     const formatCurrency = (amount: number) => {
         if (isNaN(amount) || amount === null) return '';
@@ -75,26 +69,16 @@ const LoanContractTemplate: React.FC = () => {
                      <div>
                          <h3 className="font-semibold underline mb-1">{clauses.parties.lender_label}</h3>
                          <p>{companyInfo.name}</p>
-                         {brand !== 'vantex' && <p>{companyInfo.address}</p>}
                      </div>
                      <div>
                          <h3 className="font-semibold underline mb-1">{clauses.parties.borrower_label}</h3>
                          <p>Nom: {formData.borrower_name || ''}</p>
-                         { brand !== 'vantex' &&
-                           <>
-                            <p>Adresse: {formData.borrower_address || ''}</p>
-                            <p>ID: {formData.borrower_id || ''}</p>
-                           </>
-                         }
                      </div>
                  </div>
             </section>
 
              <section className="space-y-4 text-sm leading-relaxed">
                 {articles.map(([key, article]: [string, any]) => {
-                    if (key === 'reimbursement' && brand !== 'vantex') {
-                        return null; // Skip this article if not vantex
-                    }
                     return (
                         <article key={key}>
                             <ArticleHeader title={article.title} />

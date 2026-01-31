@@ -3,10 +3,13 @@ import React from 'react';
 import { insuranceNoticeClauses } from '@/data/documents/insurance-notice-clauses';
 import DocumentWrapper from '../DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
-import { useDocumentGenerator } from '../DocumentGenerator';
+import { Language } from '@/data/documents/languages';
 
-const InsuranceNoticeTemplate: React.FC = () => {
-    const { lang } = useDocumentGenerator();
+interface InsuranceNoticeTemplateProps {
+  lang: Language;
+}
+
+const InsuranceNoticeTemplate: React.FC<InsuranceNoticeTemplateProps> = ({ lang }) => {
     const clausesData = insuranceNoticeClauses;
     const clauses = clausesData[lang] || clausesData['fr'];
 

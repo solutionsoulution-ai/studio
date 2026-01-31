@@ -5,14 +5,20 @@ import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from '../DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
 import { useBrand } from '@/context/BrandContext';
-import { useDocumentGenerator } from '../DocumentGenerator';
+import { Language } from '@/data/documents/languages';
+import { Currency } from '../DocumentPageClient';
 
-const AmlCertificateTemplate: React.FC = () => {
-    const { formData, lang, currency } = useDocumentGenerator();
+interface AmlCertificateTemplateProps {
+    formData: any;
+    lang: Language;
+    currency: Currency;
+}
+
+const AmlCertificateTemplate: React.FC<AmlCertificateTemplateProps> = ({ formData, lang, currency }) => {
     const { companyInfo } = useBrand();
     const clausesData = amlCertificateClauses(companyInfo.name);
     const clauses = clausesData[lang] || clausesData['fr'];
-    const complianceSigner = signatureData(companyInfo.brandKey).legal; 
+    const complianceSigner = signatureData().legal; 
 
     const replacePlaceholders = (text: string) => {
         if (!text) return '';
@@ -113,5 +119,3 @@ const AmlCertificateTemplate: React.FC = () => {
 };
 
 export default AmlCertificateTemplate;
-
-    

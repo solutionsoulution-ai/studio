@@ -2,10 +2,14 @@
 import React from 'react';
 import { vantexInvoiceClauses } from '@/data/documents/vantex-invoice-clauses';
 import DocumentWrapper from '../DocumentWrapper';
-import { useDocumentGenerator } from '../DocumentGenerator';
+import { Language } from '@/data/documents/languages';
 
-const VantexInvoiceTemplate: React.FC = () => {
-    const { formData, lang } = useDocumentGenerator();
+interface VantexInvoiceTemplateProps {
+    formData: any;
+    lang: Language;
+}
+
+const VantexInvoiceTemplate: React.FC<VantexInvoiceTemplateProps> = ({ formData, lang }) => {
     const clausesData = vantexInvoiceClauses;
     const clauses = clausesData[lang] || clausesData['fr'];
 

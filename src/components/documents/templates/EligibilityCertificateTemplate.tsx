@@ -6,14 +6,18 @@ import { signatureData } from '@/data/documents/signature-data';
 import DocumentWrapper from '../DocumentWrapper';
 import ArticleHeader from './ArticleHeader';
 import { useBrand } from '@/context/BrandContext';
-import { useDocumentGenerator } from '../DocumentGenerator';
+import { Language } from '@/data/documents/languages';
 
-const EligibilityCertificateTemplate: React.FC = () => {
-    const { formData, lang } = useDocumentGenerator();
+interface EligibilityCertificateTemplateProps {
+    formData: any;
+    lang: Language;
+}
+
+const EligibilityCertificateTemplate: React.FC<EligibilityCertificateTemplateProps> = ({ formData, lang }) => {
     const { companyInfo } = useBrand();
     const clausesData = eligibilityCertificateClauses(companyInfo.name);
     const clauses = clausesData[lang] || clausesData['fr'];
-    const signer = signatureData(companyInfo.brandKey).analysis;
+    const signer = signatureData().analysis;
 
     const validityDate = formData.date ? new Date(new Date(formData.date).setDate(new Date(formData.date).getDate() + 30)).toLocaleDateString(lang) : '';
     
